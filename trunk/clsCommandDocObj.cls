@@ -288,9 +288,9 @@ Private Function getParameters(ByRef CommandNode As IXMLDOMNode) As Collection
             If (Not Parameter.Attributes.getNamedItem("type") Is Nothing) Then
                 .DataType = Parameter.Attributes.getNamedItem("type").Text
             End If
-            .MatchMessage = Parameter.selectSingleNode("match").getNamedItem("message").Text
+            .MatchMessage = Parameter.selectSingleNode("match").Attributes.getNamedItem("message").Text
             .MatchCaseSensitive = False
-            If (Parameter.selectSingleNode("match").getNamedItem("case-sensitive").Text = "1") Then
+            If (Parameter.selectSingleNode("match").Attributes.getNamedItem("case-sensitive").Text = "1") Then
                 .MatchCaseSensitive = True
             End If
             .MatchError = Parameter.selectSingleNode("error").Text
