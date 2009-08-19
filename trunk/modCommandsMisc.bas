@@ -15,7 +15,7 @@ Public Sub OnBMail(Command As clsCommandObj)
             .From = Command.Username
             .Message = Command.Argument("Message")
         End With
-        Command.Respond StringFormatA("Added mail for {0}.", temp.To)
+        Command.Respond StringFormat("Added mail for {0}.", temp.To)
         Call AddMail(temp)
     Else
         Command.Respond "Error: You must supply a recipient and a message."
@@ -27,7 +27,7 @@ Public Sub OnCheckMail(Command As clsCommandObj)
     
     Count = GetMailCount(IIf(Command.IsLocal, GetCurrentUsername, Command.Username))
     If (Count > 0) Then
-        Command.Respond StringFormatA("You have {0} new message{1}. Type {2}inbox to retrieve {3}.", _
+        Command.Respond StringFormat("You have {0} new message{1}. Type {2}inbox to retrieve {3}.", _
             Count, IIf(Count > 1, "s", vbNullString), IIf(Command.IsLocal, "/", BotVars.Trigger), _
             IIf(Count > 1, "them", "it"))
     Else
@@ -50,7 +50,7 @@ ERROR_HANDLER:
         
         If InStr(1, .Error.source, "compilation", vbBinaryCompare) > 0 Then ErrType = "parsing"
         
-        Command.Respond StringFormatA("Execution {0} error #{1}: {2}", ErrType, .Error.Number, .Error.description)
+        Command.Respond StringFormat("Execution {0} error #{1}: {2}", ErrType, .Error.Number, .Error.description)
         
         .Error.Clear
     End With
@@ -88,7 +88,7 @@ Public Sub OnMath(Command As clsCommandObj)
             sResult = frmChat.SCRestricted.Eval(sStatement)
             
             If (LenB(sResult) > 0) Then
-                Command.Respond StringFormatA("The statement {0}{1}{0} evaluates to: {2}.", Chr$(34), sStatement, sResult)
+                Command.Respond StringFormat("The statement {0}{1}{0} evaluates to: {2}.", Chr$(34), sStatement, sResult)
             Else
                 Command.Respond "Evaluation error."
             End If
@@ -128,7 +128,7 @@ Public Sub OnMMail(Command As clsCommandObj)
                     End If
                 End If
             Next I
-            Command.Respond StringFormatA("Mass mailing to users with rank {0} complete.", Rank)
+            Command.Respond StringFormat("Mass mailing to users with rank {0} complete.", Rank)
         Else
             Flags = Command.Argument("Criteria")
             For I = 0 To UBound(DB)
@@ -143,10 +143,10 @@ Public Sub OnMMail(Command As clsCommandObj)
                     Next X
                 End If
             Next I
-            Command.Respond StringFormatA("Mass mailing to users with any of the flags {0} complete.", Flags)
+            Command.Respond StringFormat("Mass mailing to users with any of the flags {0} complete.", Flags)
         End If
     Else
-        Command.Respond StringFormatA("Format: {0}mmail <flag(s)> <message> OR {0}mmail <access> <message>", IIf(Command.IsLocal, "/", BotVars.Trigger))
+        Command.Respond StringFormat("Format: {0}mmail <flag(s)> <message> OR {0}mmail <access> <message>", IIf(Command.IsLocal, "/", BotVars.Trigger))
     End If
 End Sub
 
@@ -164,7 +164,7 @@ Public Sub OnReadFile(Command As clsCommandObj)
         End If
         
         If (LenB(Dir$(sFilePath)) > 0) Then
-            Command.Respond StringFormatA("Contents of file {0}:", Replace$(sFilePath, App.Path & "\", vbNullString, , 1, vbTextCompare))
+            Command.Respond StringFormat("Contents of file {0}:", Replace$(sFilePath, App.Path & "\", vbNullString, , 1, vbTextCompare))
             
             iFile = FreeFile
             Open sFilePath For Input As #iFile
@@ -172,7 +172,7 @@ Public Sub OnReadFile(Command As clsCommandObj)
                     Line Input #iFile, sLine
                     If (LenB(sLine) > 0) Then
                         iLineNumber = iLineNumber + 1
-                        Command.Respond StringFormatA("Line {0}: {1}", iLineNumber, sLine)
+                        Command.Respond StringFormat("Line {0}: {1}", iLineNumber, sLine)
                     End If
                 Loop
             Close #iFile
@@ -203,7 +203,7 @@ Public Sub OnRoll(Command As clsCommandObj)
     Randomize
     Number = CLng(Rnd * maxValue)
     
-    Command.Respond StringFormatA("Random number (0-{0}): {1}", maxValue, Number)
+    Command.Respond StringFormat("Random number (0-{0}): {1}", maxValue, Number)
 End Sub
 
 

@@ -288,6 +288,12 @@ Private Function getParameters(ByRef CommandNode As IXMLDOMNode) As Collection
             If (Not Parameter.Attributes.getNamedItem("type") Is Nothing) Then
                 .DataType = Parameter.Attributes.getNamedItem("type").Text
             End If
+            .MatchMessage = Parameter.selectSingleNode("match").getNamedItem("message").Text
+            .MatchCaseSensitive = False
+            If (Parameter.selectSingleNode("match").getNamedItem("case-sensitive").Text = "1") Then
+                .MatchCaseSensitive = True
+            End If
+            .MatchError = Parameter.selectSingleNode("error").Text
             .description = Parameter.selectSingleNode("documentation/description").Text
             .SpecialNotes = Parameter.selectSingleNode("documentation/specialnotes").Text
         End With
@@ -400,6 +406,33 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
             Set newNode = m_database.createNode("element", "documentation", vbNullString)
             argumentNode.appendChild newNode
             
+            '// create the match element if necessary
+            If Len(Parameter.MatchMessage) <> 0 Then
+                '// add the match element
+                argumentNode.appendChild m_database.createNode("element", "match", vbNullString)
+            
+                '// match[@message]
+                Set newNode = m_database.createNode("attribute", "message", vbNullString)
+                newNode.Text = Parameter.MatchMessage
+                argumentNode.selectSingleNode("match").Attributes.setNamedItem newNode
+            
+            
+                '// match[@case-sensitive]
+                Set newNode = m_database.createNode("attribute", "case-sensitive", vbNullString)
+                newNode.Text = IIf(Parameter.MatchCaseSensitive, "1", "0")
+                argumentNode.selectSingleNode("match").Attributes.setNamedItem newNode
+            
+            End If
+            
+            '// create the error element if necessary
+            If Len(Parameter.MatchError) <> 0 Then
+                '// add the error element
+                Set newNode = m_database.createNode("element", "error", vbNullString)
+                newNode.Text = Parameter.MatchError
+                argumentNode.selectSingleNode("error").appendChild newNode
+            End If
+            
+            
             '// documentation/description
             Set newNode = m_database.createNode("element", "description", vbNullString)
             newNode.Text = Parameter.description
@@ -465,11 +498,35 @@ Private Function setRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef Restriction
             '// add the match element
             RestrictionNode.appendChild m_database.createNode("element", "match", vbNullString)
             
-            '// set he message attribute
+            '// set the message attribute
             Set newNode = m_database.createNode("attribute", "message", vbNullString)
             newNode.Text = Restriction.MatchMessage
             RestrictionNode.selectSingleNode("match").Attributes.setNamedItem newNode
+            
+            '// match[@message]
+            Set newNode = m_database.createNode("attribute", "message", vbNullString)
+            newNode.Text = Restriction.MatchMessage
+            RestrictionNode.selectSingleNode("match").Attributes.setNamedItem newNode
+        
+        
+            '// match[@case-sensitive]
+            Set newNode = m_database.createNode("attribute", "case-sensitive", vbNullString)
+            newNode.Text = IIf(Restriction.MatchCaseSensitive, "1", "0")
+            RestrictionNode.selectSingleNode("match").Attributes.setNamedItem newNode
+            
+            
         End If
+        
+        
+            
+        '// create the error element if necessary
+        If Len(Restriction.MatchError) <> 0 Then
+            '// add the error element
+            Set newNode = m_database.createNode("element", "error", vbNullString)
+            newNode.Text = Restriction.MatchError
+            RestrictionNode.selectSingleNode("error").appendChild newNode
+        End If
+        
         
         '// create the access node
         RestrictionNode.appendChild m_database.createNode("element", "access", vbNullString)
@@ -652,11 +709,11 @@ Private Function getSyntaxString() As String
     End If
     
     '// add the command name
-    retVal = StringFormatA("{0} ", Me.Name)
+    retVal = StringFormat("{0} ", Me.Name)
     
     '// add the parameters
     For Each P In Me.Parameters
-        retVal = StringFormatA("{0}{2}{1}{3} ", _
+        retVal = StringFormat("{0}{2}{1}{3} ", _
                     retVal, _
                     P.Name, _
                     IIf(P.IsOptional, "[", "<"), _
@@ -664,7 +721,7 @@ Private Function getSyntaxString() As String
     Next
     
     '// add the trigger
-    retVal = StringFormatA("{1}{0}", _
+    retVal = StringFormat("{1}{0}", _
         retVal, _
         IIf((Me.RequiredRank <> -1) Or (Len(Me.RequiredFlags) > 0), BotVars.Trigger, "/"))
     
@@ -678,7 +735,7 @@ Private Function getAliasString()
     Dim I As Integer
     If (aliases.Count > 0) Then
         For I = 1 To aliases.Count
-            retVal = StringFormatA("{0}{1}{2}", _
+            retVal = StringFormat("{0}{1}{2}", _
                 retVal, _
                 CStr(aliases.Item(I)), _
                 IIf(I = aliases.Count, vbNullString, ", "))
@@ -702,18 +759,18 @@ Private Function getRequirementsString(Optional bShort As Boolean = False)
         
         '// add access requirements if necessary
         If (Me.RequiredRank <> -1) Then
-            retVal = StringFormatA("{0} Requires rank {1}", retVal, Me.RequiredRank)
+            retVal = StringFormat("{0} Requires rank {1}", retVal, Me.RequiredRank)
             If (Len(Me.RequiredFlags) = 0) Then
-                retVal = StringFormatA("{0}.", retVal)
+                retVal = StringFormat("{0}.", retVal)
             End If
         End If
         
         '// add flag requirements, if necessary, taking into account the existinance of an access requirements
         If (Len(Me.RequiredFlags) <> 0) Then
             If (Me.RequiredRank <> -1) Then
-                retVal = StringFormatA("{0} or one of the following flags: {1}.", retVal, Me.RequiredFlags)
+                retVal = StringFormat("{0} or one of the following flags: {1}.", retVal, Me.RequiredFlags)
             Else
-                retVal = StringFormatA("{0} Requires one of the following flags: {1}.", retVal, Me.RequiredFlags)
+                retVal = StringFormat("{0} Requires one of the following flags: {1}.", retVal, Me.RequiredFlags)
             End If
         End If
     
@@ -721,7 +778,7 @@ Private Function getRequirementsString(Optional bShort As Boolean = False)
         '// console only, lets show the generic blurb
         retVal = "Command is only available to the console."
         If (Not bShort) Then
-            retVal = StringFormatA("{0} To allow other users to use this command, set the command's flags requirement or rank requirement.", retVal)
+            retVal = StringFormat("{0} To allow other users to use this command, set the command's flags requirement or rank requirement.", retVal)
         End If
     End If
 

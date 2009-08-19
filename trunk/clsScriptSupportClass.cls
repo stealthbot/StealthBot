@@ -431,7 +431,7 @@ End Function
 '// return the cumulative access of a particular user.  This includes both dynamic and static
 '// group memberships and all wildcard matches.  This function should almost always be used over
 '// GetDBEntry().
-'// The scripting control isn't the greatest.
+'// The scripting control isn't the greatest.If condition Then
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
 Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
@@ -1290,21 +1290,31 @@ End Sub
 '    Set CreateCommand = modCommandDocsObj.CreateCommand(strCommand)
 '
 'End Function
+'
+'Public Function IsCorrectSyntax(ByVal commandName As String, ByVal commandArgs As String, Optional scriptName As String = vbNullString) As Boolean
+'
+'    '// ...
+'    IsCorrectSyntax = modCommandCode.IsCorrectSyntax(commandName, commandArgs, scriptName)
+'
+'End Function
+'
+'Public Function HasAccess(ByVal Username As String, ByVal commandName As String, Optional ByVal commandArgs As _
+'    String = vbNullString, Optional scriptName As String = vbNullString) As Boolean
+'
+'    HasAccess = _
+'        modCommandCode.HasAccess(Username, commandName, commandArgs, scriptName)
+'
+'End Function
 
-Public Function IsCorrectSyntax(ByVal commandName As String, ByVal commandArgs As String, Optional scriptName As String = vbNullString) As Boolean
 
-    '// ...
-    IsCorrectSyntax = modCommandCode.IsCorrectSyntax(commandName, commandArgs, scriptName)
-    
+Public Function StringFormat(source As String, ParamArray params() As Variant) As String
+    Dim arr() As Variant
+    arr() = params
+    StringFormat = modOtherCode.StringFormatA(source, arr)
 End Function
 
-Public Function HasAccess(ByVal Username As String, ByVal commandName As String, Optional ByVal commandArgs As _
-    String = vbNullString, Optional scriptName As String = vbNullString) As Boolean
-    
-    HasAccess = _
-        modCommandCode.HasAccess(Username, commandName, commandArgs, scriptName)
-    
-End Function
+
+
 
 '// UTCNOW
 '// Returns the current UTC time and date value

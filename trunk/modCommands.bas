@@ -538,10 +538,10 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 End If
             Next j
             
-            tmpbuf(tmpCount) = StringFormatA("{0}, {1}", tmpbuf(tmpCount), g_Channel.Banlist(I).DisplayName)
+            tmpbuf(tmpCount) = StringFormat("{0}, {1}", tmpbuf(tmpCount), g_Channel.Banlist(I).DisplayName)
                     
             If (userCount > 1) Then
-                tmpbuf(tmpCount) = StringFormatA("{0} ({1})", tmpbuf(tmpCount), userCount)
+                tmpbuf(tmpCount) = StringFormat("{0} ({1})", tmpbuf(tmpCount), userCount)
             End If
                     
             If ((Len(tmpbuf(tmpCount)) > 90) And (I <> g_Channel.Banlist.Count)) Then
@@ -2441,18 +2441,18 @@ Private Function searchDatabase2(ByRef arrReturn() As String, Optional user As S
         gAcc = GetAccess(user, dbType)
         
         If ((Not gAcc.Type = "%") And (StrComp(gAcc.Type, "USER", vbTextCompare) <> 0)) Then
-            gAcc.Username = StringFormatA("{0} ({1})", gAcc.Username, gAcc.Type)
+            gAcc.Username = StringFormat("{0} ({1})", gAcc.Username, gAcc.Type)
         End If
         
         If (gAcc.Rank > 0) Then
             If (LenB(gAcc.Flags) > 0) Then
-                tmpbuf = StringFormatA("Found user {0}, who holds rank {1} and flags {2}.", _
+                tmpbuf = StringFormat("Found user {0}, who holds rank {1} and flags {2}.", _
                     gAcc.Username, gAcc.Rank, gAcc.Flags)
             Else
-                tmpbuf = StringFormatA("Found user {0} who holds rank {1}.", gAcc.Username, gAcc.Rank)
+                tmpbuf = StringFormat("Found user {0} who holds rank {1}.", gAcc.Username, gAcc.Rank)
             End If
         ElseIf (LenB(gAcc.Flags) > 0) Then
-            tmpbuf = StringFormatA("Found user {0}, with flags {1}.", gAcc.Username, gAcc.Flags)
+            tmpbuf = StringFormat("Found user {0}, with flags {1}.", gAcc.Username, gAcc.Flags)
         Else
             tmpbuf = "No such user(s) found."
         End If
@@ -2866,7 +2866,7 @@ Public Sub LoadDatabase()
     Dim gA     As udtDatabase
     
     Dim s      As String
-    Dim x()    As String
+    Dim X()    As String
     Dim Path   As String
     Dim I      As Integer
     Dim f      As Integer
@@ -2886,13 +2886,13 @@ Public Sub LoadDatabase()
                 Line Input #f, s
                 
                 If InStr(1, s, " ", vbTextCompare) > 0 Then
-                    x() = Split(s, " ", 10)
+                    X() = Split(s, " ", 10)
                     
-                    If UBound(x) > 0 Then
+                    If UBound(X) > 0 Then
                         ReDim Preserve DB(I)
                         
                         With DB(I)
-                            .Username = x(0)
+                            .Username = X(0)
                             
                             .Rank = 0
                             .AddedOn = Now
@@ -2904,11 +2904,11 @@ Public Sub LoadDatabase()
                             .ModifiedOn = Now
                             .Type = "USER"
                             
-                            If StrictIsNumeric(x(1)) Then
-                                .Rank = Val(x(1))
+                            If StrictIsNumeric(X(1)) Then
+                                .Rank = Val(X(1))
                             Else
-                                If x(1) <> "%" Then
-                                    .Flags = x(1)
+                                If X(1) <> "%" Then
+                                    .Flags = X(1)
                                     
                                     'If InStr(X(1), "S") > 0 Then
                                     '    AddToSafelist .Name
@@ -2917,37 +2917,37 @@ Public Sub LoadDatabase()
                                 End If
                             End If
                             
-                            If UBound(x) > 1 Then
-                                If StrictIsNumeric(x(2)) Then
-                                    .Rank = Int(x(2))
+                            If UBound(X) > 1 Then
+                                If StrictIsNumeric(X(2)) Then
+                                    .Rank = Int(X(2))
                                 Else
-                                    If x(2) <> "%" Then
-                                        .Flags = x(2)
+                                    If X(2) <> "%" Then
+                                        .Flags = X(2)
                                     End If
                                 End If
                                 
                                 '  0        1       2       3      4        5          6       7     8
                                 ' username access flags addedby addedon modifiedby modifiedon type banmsg
-                                If UBound(x) > 2 Then
-                                    .AddedBy = x(3)
+                                If UBound(X) > 2 Then
+                                    .AddedBy = X(3)
                                     
-                                    If UBound(x) > 3 Then
-                                        .AddedOn = CDate(Replace(x(4), "_", " "))
+                                    If UBound(X) > 3 Then
+                                        .AddedOn = CDate(Replace(X(4), "_", " "))
                                         
-                                        If UBound(x) > 4 Then
-                                            .ModifiedBy = x(5)
+                                        If UBound(X) > 4 Then
+                                            .ModifiedBy = X(5)
                                             
-                                            If UBound(x) > 5 Then
-                                                .ModifiedOn = CDate(Replace(x(6), "_", " "))
+                                            If UBound(X) > 5 Then
+                                                .ModifiedOn = CDate(Replace(X(6), "_", " "))
 
-                                                If UBound(x) > 6 Then
-                                                    .Type = x(7)
+                                                If UBound(X) > 6 Then
+                                                    .Type = X(7)
                                                     
-                                                    If UBound(x) > 7 Then
-                                                        .Groups = x(8)
+                                                    If UBound(X) > 7 Then
+                                                        .Groups = X(8)
                                                         
-                                                        If UBound(x) > 8 Then
-                                                            .BanMessage = x(9)
+                                                        If UBound(X) > 8 Then
+                                                            .BanMessage = X(9)
                                                         End If
                                                     End If
                                                 End If

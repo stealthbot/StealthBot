@@ -27,7 +27,7 @@ Public Sub OnChPw(Command As clsCommandObj)
                     BotVars.ChannelPassword = Command.Argument("Value")
                     If (BotVars.ChannelPasswordDelay <= 0) Then BotVars.ChannelPasswordDelay = 30
                     
-                    Command.Respond StringFormatA("Channel password protection enabled, delay set to {0}.", BotVars.ChannelPasswordDelay)
+                    Command.Respond StringFormat("Channel password protection enabled, delay set to {0}.", BotVars.ChannelPasswordDelay)
                 Else
                     Command.Respond "Error: You must supply a password."
                 End If
@@ -42,7 +42,7 @@ Public Sub OnChPw(Command As clsCommandObj)
                     Delay = Val(Command.Argument("Value"))
                     If ((Delay < 256) And (Delay > 0)) Then
                         BotVars.ChannelPasswordDelay = CByte(Delay)
-                        Command.Respond StringFormatA("Channel password delay set to {0}.", Delay)
+                        Command.Respond StringFormat("Channel password delay set to {0}.", Delay)
                     Else
                         Command.Respond "Error: Invalid channel delay."
                     End If
@@ -55,7 +55,7 @@ Public Sub OnChPw(Command As clsCommandObj)
                 If ((LenB(BotVars.ChannelPassword) = 0) Or (BotVars.ChannelPasswordDelay = 0)) Then
                     Command.Respond "Channel password protection is disabled."
                 Else
-                    Command.Respond StringFormatA("Channel password protection is enabled. Password [{0}], Delay [{1}].", _
+                    Command.Respond StringFormat("Channel password protection is enabled. Password [{0}], Delay [{1}].", _
                         BotVars.ChannelPassword, BotVars.ChannelPasswordDelay)
                 End If
         End Select
@@ -73,7 +73,7 @@ Public Sub OnD2LevelBan(Command As clsCommandObj)
         Level = Command.Argument("Level")
         If (Level > 0) Then
             If (Level < 256) Then
-                Command.Respond StringFormatA("Banning Diablo II users under level {0}.", Level)
+                Command.Respond StringFormat("Banning Diablo II users under level {0}.", Level)
                 BotVars.BanD2UnderLevel = CByte(Level)
             Else
                 Command.Respond "Error: Invalid level specified."
@@ -87,7 +87,7 @@ Public Sub OnD2LevelBan(Command As clsCommandObj)
         If (BotVars.BanD2UnderLevel = 0) Then
             Command.Respond "Currently not banning Diablo II users by level."
         Else
-            Command.Respond StringFormatA("Currently banning Diablo II users under level {0}.", BotVars.BanD2UnderLevel)
+            Command.Respond StringFormat("Currently banning Diablo II users under level {0}.", BotVars.BanD2UnderLevel)
         End If
     End If
 End Sub
@@ -96,10 +96,10 @@ Public Sub OnDes(Command As clsCommandObj)
     If (g_Channel.Self.IsOperator) Then
         If (LenB(Command.Argument("Username")) > 0) Then
             Call frmChat.AddQ("/designate " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
-            Command.Respond StringFormatA("I have designated {0}.", Command.Argument("Username"))
+            Command.Respond StringFormat("I have designated {0}.", Command.Argument("Username"))
         Else
             If (LenB(g_Channel.OperatorHeir) > 0) Then
-                Command.Respond StringFormatA("I have designated {0}.", g_Channel.OperatorHeir)
+                Command.Respond StringFormat("I have designated {0}.", g_Channel.OperatorHeir)
             Else
                 Command.Respond "No user has been designated."
             End If
@@ -224,9 +224,9 @@ Public Sub OnIPBan(Command As clsCommandObj)
                 ((InStr(1, dbTarget.Flags, "A", vbTextCompare) > 0) And (dbAccess.Rank < 101))) Then
                 Command.Respond "Error: You do not have enought access to do that."
             Else
-                Call frmChat.AddQ(StringFormatA("/ban {0} {1}", Command.Argument("Username"), Command.Argument("Message")), , Command.Username)
-                Call frmChat.AddQ(StringFormatA("/squelch {0}", Command.Argument("Username")), , Command.Username)
-                Command.Respond StringFormatA("User {0}{1}{0} IPBanned.", Chr$(34), Command.Argument("Username"))
+                Call frmChat.AddQ(StringFormat("/ban {0} {1}", Command.Argument("Username"), Command.Argument("Message")), , Command.Username)
+                Call frmChat.AddQ(StringFormat("/squelch {0}", Command.Argument("Username")), , Command.Username)
+                Command.Respond StringFormat("User {0}{1}{0} IPBanned.", Chr$(34), Command.Argument("Username"))
             End If
         End If
     End If
@@ -246,7 +246,7 @@ Public Sub OnIPBans(Command As clsCommandObj)
             Command.Respond "IP banning deactivated."
         
         Case Else:
-            Command.Respond StringFormatA("IP banning is currently {0}activated.", _
+            Command.Respond StringFormat("IP banning is currently {0}activated.", _
                 IIf(BotVars.IPBans, vbNullString, "de"))
     End Select
 End Sub
@@ -264,7 +264,7 @@ Public Sub OnKickOnYell(Command As clsCommandObj)
             Command.Respond "Kick-on-yell disabled."
         
         Case Else:
-            Command.Respond StringFormatA("Kick-on-yell is {0}.", _
+            Command.Respond StringFormat("Kick-on-yell is {0}.", _
                 IIf(BotVars.KickOnYell = 1, "enabled", "disabled"))
     End Select
 End Sub
@@ -276,7 +276,7 @@ Public Sub OnLevelBan(Command As clsCommandObj)
         Level = Command.Argument("Level")
         If (Level > 0) Then
             If (Level < 256) Then
-                Command.Respond StringFormatA("Banning Warcraft III users under level {0}.", Level)
+                Command.Respond StringFormat("Banning Warcraft III users under level {0}.", Level)
                 BotVars.BanUnderLevel = CByte(Level)
             Else
                 Command.Respond "Error: Invalid level specified."
@@ -290,7 +290,7 @@ Public Sub OnLevelBan(Command As clsCommandObj)
         If (BotVars.BanUnderLevel = 0) Then
             Command.Respond "Currently not banning Warcraft III users by level."
         Else
-            Command.Respond StringFormatA("Currently banning Warcraft III users under level {0}.", BotVars.BanUnderLevel)
+            Command.Respond StringFormat("Currently banning Warcraft III users under level {0}.", BotVars.BanUnderLevel)
         End If
     End If
 End Sub
@@ -312,7 +312,7 @@ Public Sub OnPeonBan(Command As clsCommandObj)
             Command.Respond "Peon banning deactivated."
         
         Case Else:
-            Command.Respond StringFormatA("The bot is currently {0}banning peons.", _
+            Command.Respond StringFormat("The bot is currently {0}banning peons.", _
                 IIf(BotVars.KickOnYell = 1, vbNullString, "not "))
     End Select
 End Sub
@@ -330,7 +330,7 @@ Public Sub OnPhraseBans(Command As clsCommandObj)
             Command.Respond "Phrasebans deactivated."
         
         Case Else:
-            Command.Respond StringFormatA("Phrasebans are currently {0}.", _
+            Command.Respond StringFormat("Phrasebans are currently {0}.", _
                 IIf(PhraseBans, "enabled", "disabled"))
     End Select
 End Sub
@@ -365,7 +365,7 @@ Public Sub OnPlugBan(Command As clsCommandObj)
             End If
         
         Case Else:
-            Command.Respond StringFormatA("The bot is currently {0}banning people with the UDP plug.", _
+            Command.Respond StringFormat("The bot is currently {0}banning people with the UDP plug.", _
                 IIf(BotVars.PlugBan, vbNullString, "not "))
     End Select
 End Sub
@@ -383,7 +383,7 @@ Public Sub OnPOn(Command As clsCommandObj)
 End Sub
 
 Public Sub OnPStatus(Command As clsCommandObj)
-    Command.Respond StringFormatA("Phrasebans are currently {0}.", _
+    Command.Respond StringFormat("Phrasebans are currently {0}.", _
         IIf(PhraseBans, "enabled", "disabled"))
 End Sub
 
@@ -405,7 +405,7 @@ Public Sub OnQuietTime(Command As clsCommandObj)
             Command.Respond "Quiet-time disabled."
         
         Case Else:
-            Command.Respond StringFormatA("The bot is currently {0}.", _
+            Command.Respond StringFormat("The bot is currently {0}.", _
                 IIf(BotVars.QuietTime, "enabled", "disabled"))
     End Select
 End Sub
@@ -428,10 +428,10 @@ Public Function OnShitAdd(Command As clsCommandObj)
         End If
         
         If (LenB(sArgs) = 0) Then sArgs = "+B"
-        sArgs = StringFormatA("{0} {1} --type USER", Command.Argument("Username"), sArgs)
+        sArgs = StringFormat("{0} {1} --type USER", Command.Argument("Username"), sArgs)
         
         If (LenB(Command.Argument("Message")) > 0) Then
-            sArgs = StringFormatA("{0} --banmsg {1}", sArgs, Command.Argument("Message"))
+            sArgs = StringFormat("{0} --banmsg {1}", sArgs, Command.Argument("Message"))
         End If
         
         Command.Args = sArgs
@@ -503,7 +503,7 @@ Public Sub OnUnIPBan(Command As clsCommandObj)
         If (g_Channel.Self.IsOperator) Then
             Call frmChat.AddQ("/unsquelch " & Command.Argument("Username"), , Command.Username)
             Call frmChat.AddQ("/unban " & Command.Argument("Username"), , Command.Username)
-            Command.Respond StringFormatA("User {0}{1}{0} has been Un-IPBanned.", Chr$(34), Command.Argument("Username"))
+            Command.Respond StringFormat("User {0}{1}{0} has been Un-IPBanned.", Chr$(34), Command.Argument("Username"))
         Else
             Command.Respond "Error: The bot is not currently a channel operator."
         End If
@@ -551,7 +551,7 @@ Public Function CacheChannelList(ByVal eMode As CacheChanneListEnum, ByRef Data 
                 Case enRetrieve ' RETRIEVE
                     ' Merge all the cache array items into one comma-delimited string
                     Do While colData.Count > 0
-                        sTemp = StringFormatA("{0}{1}, ", sTemp, colData.Item(1))
+                        sTemp = StringFormat("{0}{1}, ", sTemp, colData.Item(1))
                         colData.Remove 1
                     Loop
                     Data = sToken

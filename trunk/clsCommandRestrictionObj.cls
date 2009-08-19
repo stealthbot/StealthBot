@@ -18,64 +18,46 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private m_name      As String
-Private m_message   As String
 Private m_req_rank  As Integer
 Private m_req_flags As String
+Private m_matchmessage   As String
+Private m_casesensitive  As Boolean
+Private m_error          As String
 
 Public Property Get Name() As String
-
-    ' ...
     Name = m_name
-
 End Property
-
 Public Property Let Name(strName As String)
-
-    ' ...
     m_name = strName
-
 End Property
-
 Public Property Get RequiredRank() As Integer
-
-    ' ...
     RequiredRank = m_req_rank
-
 End Property
-
-Public Property Let RequiredRank(rank As Integer)
-
-    ' ...
-    m_req_rank = rank
-
+Public Property Let RequiredRank(Rank As Integer)
+    m_req_rank = Rank
 End Property
-
 Public Property Get RequiredFlags() As String
-
-    ' ...
     RequiredFlags = m_req_flags
-
 End Property
-
-Public Property Let RequiredFlags(flags As String)
-
-    ' ...
-    m_req_flags = flags
-
+Public Property Let RequiredFlags(Flags As String)
+    m_req_flags = Flags
 End Property
-
 Public Property Get MatchMessage() As String
-
-    ' ...
-    MatchMessage = m_message
-
+    MatchMessage = m_matchmessage
 End Property
-
-Public Property Let MatchMessage(strMessage As String)
-
-    ' ...
-    m_message = strMessage
-
+Public Property Let MatchMessage(str As String)
+    m_matchmessage = str
 End Property
-
+Public Property Get MatchError() As String
+    MatchError = m_error
+End Property
+Public Property Let MatchError(str As String)
+    m_error = str
+End Property
+Public Property Get MatchCaseSensitive() As Boolean
+    MatchCaseSensitive = m_casesensitive
+End Property
+Public Property Let MatchCaseSensitive(bln As Boolean)
+    m_casesensitive = bln
+End Property
 

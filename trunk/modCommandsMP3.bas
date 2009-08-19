@@ -52,7 +52,7 @@ Public Function OnMP3(Command As clsCommandObj) As Boolean
     
     If (MediaPlayer.IsLoaded()) Then
         If (LenB(MediaPlayer.TrackName) > 0) Then
-            Command.Respond StringFormatA("Current MP3 [{0}/{1}]: {2} ({3}/{4}{5})", _
+            Command.Respond StringFormat("Current MP3 [{0}/{1}]: {2} ({3}/{4}{5})", _
               MediaPlayer.PlaylistPosition, _
               MediaPlayer.PlaylistCount, _
               MediaPlayer.TrackName, _
@@ -153,7 +153,7 @@ Public Function OnSetVol(Command As clsCommandObj) As Boolean
             If (lngVolume > 100) Then lngVolume = 100
             
             MediaPlayer.Volume = lngVolume
-            Command.Respond StringFormatA("Volume set to {0}%.", lngVolume)
+            Command.Respond StringFormat("Volume set to {0}%.", lngVolume)
         Else
             Command.Respond MediaPlayer.Name & " is not loaded."
         End If

@@ -27,10 +27,15 @@ Sub Event_Load()
             Set Parameter = .NewParameter("word", False, "word")
             With Parameter
                 .Description = "The word you wish to calculate the soundex value of."
+				.MatchMessage = "[a-z]"
+				.MatchCaseSensitive = True
+				.MatchError = ""
             End With
             .Parameters.Add Parameter
             '// set the access level required to use this command
             .RequiredRank = 1
+			'// set a command description
+			.Description = "Calculate the soundex value of a word."
             '// save the command
             .Save
         End With
@@ -123,40 +128,32 @@ Sub TestDemo()
     'AddChat vbBlue, "TestDemo()"
 End Sub
 
-Sub Event_UserTalk(Username, Flags, Message, Ping)
-    HandleCommand Message, Username, 1
-End Sub
-Sub Event_WhisperFromUser(Username, Flags, Message, Ping)
-    HandleCommand Message, Username, 3
-End Sub
-Sub Event_PressedEnter(Text)
-    HandleCommand Text, GetCurrentUsername, 4
-End Sub
-
-
-Private Sub HandleCommand(strText, strUsername, Origin)
-
-    '// testing command stuff
-    Dim Cmd, Cmds
-    Set Cmds = IsCommand(strText, strUsername)
-    If Cmds.Count > 0 Then
-        For Each Cmd In Cmds
-            If (Origin = 3) Then Cmd.WasWhispered = True
-            If Cmd.HasAccess = True Then
-                If LCase(Cmd.Name) = "soundex" Then
-                    If Cmd.IsValid = True Then
-                        '// have the soundex command do something
-                        Cmd.Respond "The SoundEx for '" & Cmd.Argument("Word") & "' is " & SoundEx(Cmd.Argument("Word"))
+Sub Event_Command(Command)
+    If(Command.Docs.Owner = Script("Name")) Then 'Its one of our Commands
+        Select Case LCase(Command.Name)
+            Case "fibi":
+                If (Command.IsValid) Then
+                    If(Command.Argument("Number") < 1 Or Command.Argument("Number") > 10) Then
+                        Command.Respond "Fibinacci Command is limited to 1-10"
                     Else
-                        '//They Did not use a valid syntax for this command
-                        Cmd.Respond "The proper syntax for this command is: "  & BotVars.Trigger & "SoundEx <Word>"
+                        Command.Respond "The number at position " & Command.Argument("Number") & " in the Fibinacci sequance is: " & GetFibiIndex(Command.Argument("Number"), 1, 0, 1)
                     End If
+                Else
+                    Command.Respond "Proper syntax for this command is: .Fibi <Number>"
                 End If
-            End If
-        Next
+			Case "soundex"
+                If (Command.IsValid) Then
+                    Command.Respond StringFormat("The soundex value for {0} is {1}. ", Command.Argument("Word"), Soundex(Command.Argument("Word")))
+				Else
+					Cmd.Respond StringFormat("The proper syntax for this command is: {0}SoundEx <Word>", BotVars.Trigger)
+                End If
+        End Select
+    ElseIf (Command.Docs.Owner = vbNullString) Then 'Its a internal Command!
+        Command.Respond "Demo Event_Command Observer for internal command " & Command.Name
     End If
-
 End Sub
+
+
 
 Function Soundex(ByVal word)
     Dim result
@@ -185,6 +182,17 @@ Function Soundex(ByVal word)
     Next
 End Function
 
+
+Function GetFibiIndex(Index, Position, LastNumber, Number)
+    If (CInt(Index) = CInt(Position)) Then
+        GetFibiIndex = LastNumber
+    Else
+        GetFibiIndex = GetFibiIndex(Index, Position + 1, Number, LastNumber + Number)
+    End If
+End Function
+
+
+
 '// outputs detailed information about a command
 Sub DebugCommand(ByRef cmd)
 
@@ -207,32 +215,6 @@ Sub DebugCommand(ByRef cmd)
     Next
     AddChat f, vbCyan, "------------------------------------------------------"
 End Sub
-
-Sub Event_Command(Command)
-    If(Command.Docs.Owner = Script("Name")) Then 'Its one of our Commands
-        Select Case LCase(Command.Name)
-            Case "fibi":
-                If (Command.IsValid) Then
-                    If(Command.Argument("Number") < 1 Or Command.Argument("Number") > 10) Then
-                        Command.Respond "Fibinacci Command is limited to 1-10"
-                    Else
-                        Command.Respond "The number at position " & Command.Argument("Number") & " in the Fibinacci sequance is: " & GetFibiIndex(Command.Argument("Number"), 1, 0, 1)
-                    End If
-                Else
-                    Command.Respond "Proper syntax for this command is: .Fibi <Number>"
-                End If
-        End Select
-    ElseIf (Command.Docs.Owner = vbNullString) Then 'Its a internal Command!
-        Command.Respond "Demo Event_Command Observer for internal command " & Command.Name
-    End If
-End Sub
-Function GetFibiIndex(Index, Position, LastNumber, Number)
-    If (CInt(Index) = CInt(Position)) Then
-        GetFibiIndex = LastNumber
-    Else
-        GetFibiIndex = GetFibiIndex(Index, Position + 1, Number, LastNumber + Number)
-    End If
-End Function
 
 
 ' // demo class module

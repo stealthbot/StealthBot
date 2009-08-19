@@ -115,7 +115,7 @@ Public Sub OnSetHome(Command As clsCommandObj)
     If (Command.IsValid) Then
         Call WriteINI("Main", "HomeChan", Command.Argument("Channel"))
         BotVars.HomeChannel = Command.Argument("Channel")
-        Command.Respond StringFormatA("New home channel set to {0}{1}{0}.", Chr$(34), BotVars.HomeChannel)
+        Command.Respond StringFormat("New home channel set to {0}{1}{0}.", Chr$(34), BotVars.HomeChannel)
     Else
         Command.Respond "You must specify a channel."
     End If
@@ -176,9 +176,9 @@ End Sub
 
 Public Sub OnSetTrigger(Command As clsCommandObj)
     If (Command.IsValid) Then
-        Call WriteINI("Main", "Trigger", StringFormatA("{{0}}", Command.Argument("Trigger")))
+        Call WriteINI("Main", "Trigger", StringFormat("{{0}}", Command.Argument("Trigger")))
         BotVars.Trigger = Command.Argument("Trigger")
-        Command.Respond StringFormatA("The new trigger is {0}{1}{0}.", Chr$(34), BotVars.Trigger)
+        Command.Respond StringFormat("The new trigger is {0}{1}{0}.", Chr$(34), BotVars.Trigger)
     Else
         Command.Respond "You must specify a trigger."
     End If
@@ -186,7 +186,7 @@ End Sub
 
 Public Sub OnWhisperCmds(Command As clsCommandObj)
     If (StrComp(Command.Argument("SubCommand"), "status", vbTextCompare) = 0) Then
-        Command.Respond StringFormatA("Command responses will be {0}.", _
+        Command.Respond StringFormat("Command responses will be {0}.", _
             IIf(BotVars.WhisperCmds, "whispered back", "displayed publicly"))
     Else
         If (BotVars.WhisperCmds) Then

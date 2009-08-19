@@ -27,7 +27,7 @@ Public Sub OnAllSeen(Command As clsCommandObj)
     Else
         retVal = "Last 15 users seen: "
         For I = 1 To colLastSeen.Count
-            retVal = StringFormatA("{0}{1}{2}", _
+            retVal = StringFormat("{0}{1}{2}", _
                 retVal, colLastSeen.Item(I), _
                 IIf(I = colLastSeen.Count, vbNullString, ", "))
             If (I = 15) Then Exit For
@@ -45,12 +45,12 @@ Public Sub OnDetail(Command As clsCommandObj)
             With DB(I)
                 If (StrComp(Command.Argument("Username"), .Username, vbTextCompare) = 0) Then
                     If ((Not .AddedBy = "%") And (LenB(.AddedBy) > 0)) Then
-                        sRetAdd = StringFormatA("{0} was added by {1} on {2}.", .Username, .AddedBy, .AddedOn)
+                        sRetAdd = StringFormat("{0} was added by {1} on {2}.", .Username, .AddedBy, .AddedOn)
                     End If
                     
                     If ((Not .ModifiedBy = "%") And (LenB(.ModifiedBy) > 0)) Then
                         If ((Not .AddedOn = .ModifiedOn) Or (Not StrComp(.AddedBy, .ModifiedBy, vbTextCompare) = 0)) Then
-                            sRetMod = StringFormatA(" The entry was last modified by {0} on {1}.", .ModifiedBy, .ModifiedOn)
+                            sRetMod = StringFormat(" The entry was last modified by {0} on {1}.", .ModifiedBy, .ModifiedOn)
                         Else
                             sRetMod = " The entry has not been modified since it was added."
                         End If
@@ -153,13 +153,13 @@ Public Sub OnHelp(Command As clsCommandObj)
         Command.Respond "Sorry, but no related documentation could be found."
     Else
         If (docs.aliases.Count > 1) Then
-            Command.Respond StringFormatA("[{0} (Aliases: {4})]: {1} (Syntax: {2}). {3}", _
+            Command.Respond StringFormat("[{0} (Aliases: {4})]: {1} (Syntax: {2}). {3}", _
             docs.Name, docs.description, docs.SyntaxString, docs.RequirementsStringShort, docs.AliasString)
         ElseIf (docs.aliases.Count = 1) Then
-            Command.Respond StringFormatA("[{0} (Alias: {4})]: {1} (Syntax: {2}). {3}", _
+            Command.Respond StringFormat("[{0} (Alias: {4})]: {1} (Syntax: {2}). {3}", _
             docs.Name, docs.description, docs.SyntaxString, docs.RequirementsStringShort, docs.AliasString)
         Else
-            Command.Respond StringFormatA("[{0}]: {1} (Syntax: {2}). {3}", _
+            Command.Respond StringFormat("[{0}]: {1} (Syntax: {2}). {3}", _
             docs.Name, docs.description, docs.SyntaxString, docs.RequirementsStringShort)
         End If
     End If
@@ -215,11 +215,11 @@ Public Sub OnInfo(Command As clsCommandObj)
         
         If (UserIndex > 0) Then
             With g_Channel.Users(UserIndex)
-                Command.Respond StringFormatA("User {0} is logged on using {1} with {2}a ping time of {3}ms.", _
+                Command.Respond StringFormat("User {0} is logged on using {1} with {2}a ping time of {3}ms.", _
                     .displaayname, ProductCodeToFullName(.game), _
                     IIf(.IsOperator, "ops, and ", vbNullString), .Ping)
             
-                Command.Respond StringFormatA("He/she has been present in the channel for {0}.", ConvertTime(.TimeInChannel(), 1))
+                Command.Respond StringFormat("He/she has been present in the channel for {0}.", ConvertTime(.TimeInChannel(), 1))
             End With
         Else
             Command.Respond "No such user is present."
@@ -242,7 +242,7 @@ On Error GoTo ERROR_HANDLER
             Command.Respond "Could not find the script specified."
         Else
             If (Not StrComp(Script.CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 1) Then
-                Command.Respond StringFormatA("The Script {0} loaded in {1}ms.", _
+                Command.Respond StringFormat("The Script {0} loaded in {1}ms.", _
                     Script.CodeObject.Script("Name"), _
                     Script.CodeObject.Script("InitPerf"))
             Else
@@ -261,11 +261,11 @@ On Error GoTo ERROR_HANDLER
                 
                 If (Not StrComp(Script.CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 0) Then
                     If (Command.IsLocal And Not Command.PublicOutput) Then
-                        Command.Respond StringFormatA(" '{0}' loaded in {1}ms.", _
+                        Command.Respond StringFormat(" '{0}' loaded in {1}ms.", _
                             Script.CodeObject.Script("Name"), _
                             Script.CodeObject.Script("InitPerf"))
                     Else
-                        strRet = StringFormatA("{0} '{1}' {2}ms{3}", _
+                        strRet = StringFormat("{0} '{1}' {2}ms{3}", _
                             strRet, _
                             Script.CodeObject.Script("Name"), _
                             Script.CodeObject.Script("InitPerf"), _
@@ -287,7 +287,7 @@ End Sub
 
 Public Sub OnLastWhisper(Command As clsCommandObj)
     If (LenB(LastWhisper) > 0) Then
-        Command.Respond StringFormatA("The last whisper to this bot was from {0} at {1} on {2}.", _
+        Command.Respond StringFormat("The last whisper to this bot was from {0} at {1} on {2}.", _
             LastWhisper, _
             FormatDateTime(LastWhisperFromTime, vbLongTime), _
             FormatDateTime(LastWhisperFromTime, vbLongDate))
@@ -297,7 +297,7 @@ Public Sub OnLastWhisper(Command As clsCommandObj)
 End Sub
 
 Public Sub OnLocalIp(Command As clsCommandObj)
-    Command.Respond StringFormatA("{0} local IPv4 IP address is: {1}", IIf(Command.IsLocal, "Your", "My"), frmChat.sckBNet.LocalIP)
+    Command.Respond StringFormat("{0} local IPv4 IP address is: {1}", IIf(Command.IsLocal, "Your", "My"), frmChat.sckBNet.LocalIP)
 End Sub
 
 Public Sub OnOwner(Command As clsCommandObj)
@@ -371,7 +371,7 @@ On Error GoTo ERROR_HANDLER
             Dim VerTotal As Integer
             Dim Author   As String
             
-            Version = StringFormatA("{0}.{1} Revision {2}", _
+            Version = StringFormat("{0}.{1} Revision {2}", _
                 Script.CodeObject.Script("Major"), _
                 Script.CodeObject.Script("Minor"), _
                 Script.CodeObject.Script("Revision"))
@@ -383,10 +383,10 @@ On Error GoTo ERROR_HANDLER
             Author = Script.CodeObject.Script("Author")
             
             If ((LenB(Author) = 0) And (VerTotal = 0)) Then
-                Command.Respond StringFormatA("There is no additional information for the '{0}' script.", _
+                Command.Respond StringFormat("There is no additional information for the '{0}' script.", _
                     Script.CodeObject.Script("Name"))
             Else
-                Command.Respond StringFormatA("{0}{1}{2}", _
+                Command.Respond StringFormat("{0}{1}{2}", _
                     Script.CodeObject.Script("Name"), _
                     IIf(VerTotal > 0, " v" & Version, vbNullString), _
                     IIf(LenB(Author) > 0, " by " & Author, vbNullString))
@@ -412,7 +412,7 @@ On Error GoTo ERROR_HANDLER
             Name = modScripting.GetScriptName(CStr(I))
             Enabled = Not (StrComp(GetModuleByName(Name).CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 0)
                 
-            retVal = StringFormatA("{0}{1}{2}{3}{4}", _
+            retVal = StringFormat("{0}{1}{2}{3}{4}", _
                 retVal, _
                 IIf(Enabled, vbNullString, "("), _
                 Name, _
@@ -422,7 +422,7 @@ On Error GoTo ERROR_HANDLER
             Count = (Count + 1)
         Next I
         
-        Command.Respond StringFormatA("Loaded Scripts ({0}): {1}", Count, retVal)
+        Command.Respond StringFormat("Loaded Scripts ({0}): {1}", Count, retVal)
     Else
         Command.Respond "There are no scripts currently loaded."
     End If
@@ -453,16 +453,16 @@ End Sub
 
 Public Sub OnTrigger(Command As clsCommandObj)
     If (LenB(BotVars.TriggerLong) = 1) Then
-        Command.Respond StringFormatA("The bot's current trigger is {0} {1} {0} (Alt +0{2})", _
+        Command.Respond StringFormat("The bot's current trigger is {0} {1} {0} (Alt +0{2})", _
             Chr$(34), BotVars.TriggerLong, Asc(BotVars.TriggerLong))
     Else
-        Command.Respond StringFormatA("The bot's current trigger is {0} {1} {0} (Length: {2})", _
+        Command.Respond StringFormat("The bot's current trigger is {0} {1} {0} (Length: {2})", _
           Chr$(34), BotVars.TriggerLong, Len(BotVars.TriggerLong))
     End If
 End Sub
 
 Public Sub OnUptime(Command As clsCommandObj)
-    Command.Respond StringFormatA("System uptime {0}, connection uptime {1}.", ConvertTime(GetUptimeMS), ConvertTime(uTicks))
+    Command.Respond StringFormat("System uptime {0}, connection uptime {1}.", ConvertTime(GetUptimeMS), ConvertTime(uTicks))
 End Sub
 
 Public Sub OnWhere(Command As clsCommandObj)
@@ -470,7 +470,7 @@ Public Sub OnWhere(Command As clsCommandObj)
         Call frmChat.AddQ("/where " & Command.Args, PRIORITY.COMMAND_RESPONSE_MESSAGE, "(console)")
     End If
 
-    Command.Respond StringFormatA("I am currently in channel {0} ({1} users present)", g_Channel.Name, g_Channel.Users.Count)
+    Command.Respond StringFormat("I am currently in channel {0} ({1} users present)", g_Channel.Name, g_Channel.Users.Count)
 End Sub
 
 Public Sub OnWhoAmI(Command As clsCommandObj)
@@ -552,20 +552,20 @@ On Error GoTo ERROR_HANDLER
     If (LenB(Flags) > 0) Then
 
         For I = 1 To Len(Flags)
-            xpath = StringFormatA("{0}'{1}'{2}", _
+            xpath = StringFormat("{0}'{1}'{2}", _
                 xpath, _
                 IIf(Mid$(Flags, I, 1) = "\", "\\", Mid$(Flags, I, 1)), _
                 IIf(I = Len(Flags), vbNullString, " or "))
         Next I
         If (BotVars.CaseSensitiveFlags) Then
-            xpath = StringFormatA("./command/access/flags/flag[text()={0}]", xpath)
+            xpath = StringFormat("./command/access/flags/flag[text()={0}]", xpath)
         Else
-            xpath = StringFormatA("./command/access/flags/flag[" & _
+            xpath = StringFormat("./command/access/flags/flag[" & _
             "translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')={0}]", _
             LCase$(xpath))
         End If
     Else
-        xpath = StringFormatA("./command/access/rank[number() <= {0}]", Rank)
+        xpath = StringFormat("./command/access/rank[number() <= {0}]", Rank)
     End If
     
     xmldoc.Load GetFilePath("commands.xml")
@@ -581,7 +581,7 @@ On Error GoTo ERROR_HANDLER
             End If
             
             If (StrComp(thisCommand, lastCommand, vbTextCompare) <> 0) Then
-                tmpbuf = StringFormatA("{0}{1}, ", tmpbuf, thisCommand)
+                tmpbuf = StringFormat("{0}{1}, ", tmpbuf, thisCommand)
             End If
         
             lastCommand = thisCommand
@@ -704,9 +704,9 @@ Private Function SearchDatabase(ByRef arrReturn() As String, Optional Username A
                 If (res = True) Then
                     tmpbuf = tmpbuf & DB(I).Username
                     If (Not (DB(I).Type = "%") And (Not StrComp(DB(I).Type, "USER", vbTextCompare) = 0)) Then
-                        tmpbuf = StringFormatA("{0} ({1})", tmpbuf, LCase$(DB(I).Type))
+                        tmpbuf = StringFormat("{0} ({1})", tmpbuf, LCase$(DB(I).Type))
                     End If
-                    tmpbuf = StringFormatA("{0}{1}{2}, ", tmpbuf, _
+                    tmpbuf = StringFormat("{0}{1}{2}, ", tmpbuf, _
                         IIf(DB(I).Rank > 0, "\" & DB(I).Rank, vbNullString), _
                         IIf(LenB(DB(I).Flags) > 0, "\" & DB(I).Flags, vbNullString))
                     found = (found + 1)

@@ -25,9 +25,9 @@ Private m_description    As String
 Private m_special_notes  As String
 Private m_restrictions   As Collection
 Private m_data_type      As String
-Private m_data_min       As Integer
-Private m_data_max       As Integer
-Private m_data_pattern   As String
+Private m_matchmessage   As String
+Private m_casesensitive  As Boolean
+Private m_error          As String
 
 Private Sub Class_Initialize()
     
@@ -79,40 +79,47 @@ End Property
 Public Property Let SpecialNotes(str As String)
     m_special_notes = str
 End Property
-Public Property Get Pattern() As String
-    Pattern = m_data_pattern
-End Property
-Public Property Let Pattern(strPattern As String)
-    m_data_pattern = strPattern
-End Property
-Public Property Get min() As Long
-    min = m_data_min
-End Property
-Public Property Let min(Val As Long)
-    m_data_min = Val
-End Property
-Public Property Get Max() As Long
-    Max = m_data_max
-End Property
-Public Property Let Max(Val As Long)
-    m_data_max = Val
-End Property
-Public Property Get minLength() As Long
-    '// TODO
-End Property
-Public Property Let minLength(Val As Long)
-    '// TODO
-End Property
-Public Property Get maxLength() As Long
-    '// TODO
-End Property
-Public Property Let maxLength(Val As Long)
-    '// TODO
-End Property
 Public Property Get IsOptional() As Boolean
     IsOptional = m_optional
 End Property
-
 Public Property Let IsOptional(bln As Boolean)
     m_optional = bln
 End Property
+Public Property Get MatchMessage() As String
+    MatchMessage = m_matchmessage
+End Property
+Public Property Let MatchMessage(str As String)
+    m_matchmessage = str
+End Property
+Public Property Get MatchError() As String
+    MatchError = m_error
+End Property
+Public Property Let MatchError(str As String)
+    m_error = str
+End Property
+Public Property Get MatchCaseSensitive() As Boolean
+    MatchCaseSensitive = m_casesensitive
+End Property
+Public Property Let MatchCaseSensitive(bln As Boolean)
+    m_casesensitive = bln
+End Property
+
+
+'Public Property Get Pattern() As String
+'    Pattern = m_data_pattern
+'End Property
+'Public Property Let Pattern(strPattern As String)
+'    m_data_pattern = strPattern
+'End Property
+'Public Property Get min() As Long
+'    min = m_data_min
+'End Property
+'Public Property Let min(Val As Long)
+'    m_data_min = Val
+'End Property
+'Public Property Get Max() As Long
+'    Max = m_data_max
+'End Property
+'Public Property Let Max(Val As Long)
+'    m_data_max = Val
+'End Property

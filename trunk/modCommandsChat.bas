@@ -57,7 +57,7 @@ Public Function OnBlock(Command As clsCommandObj) As Boolean
                 Total = Int(ReadINI("BlockList", "Total", FiltersPath))
                 WriteINI "BlockList", "Filter" & (Total + 1), Command.Argument("Username"), FiltersPath
                 WriteINI "BlockList", "Total", Total + 1, FiltersPath
-                Command.Respond StringFormatA("Added {0}{1}{0} to the username block list.", Chr$(34), Command.Argument("Username"))
+                Command.Respond StringFormat("Added {0}{1}{0} to the username block list.", Chr$(34), Command.Argument("Username"))
             Else
                 Command.Respond "Your filters file has been edited manually and is no longer valid. Please delete it."
             End If
@@ -85,7 +85,7 @@ Public Function OnExpand(Command As clsCommandObj) As Boolean
     If (Command.IsValid) Then
         sMessage = Command.Argument("Message")
         For I = 1 To Len(sMessage)
-            tmpSend = StringFormatA("{0}{1}{2}", tmpSend, Mid$(sMessage, I, 1), IIf(I = Len(sMessage), vbNullString, Space$(1)))
+            tmpSend = StringFormat("{0}{1}{2}", tmpSend, Mid$(sMessage, I, 1), IIf(I = Len(sMessage), vbNullString, Space$(1)))
         Next I
         
         If (Len(tmpSend) > 223) Then
@@ -102,7 +102,7 @@ End Function
 Public Function OnFAdd(Command As clsCommandObj) As Boolean
     If (Command.IsValid) Then
         Call frmChat.AddQ("/f a " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
-        Command.Respond StringFormatA("Added user {0}{1}{0} to this account's friends list.", Chr$(34), Command.Argument("Username"))
+        Command.Respond StringFormat("Added user {0}{1}{0} to this account's friends list.", Chr$(34), Command.Argument("Username"))
     End If
 End Function
 
@@ -119,7 +119,7 @@ Public Function OnFilter(Command As clsCommandObj) As Boolean
                 Total = Int(ReadINI("TextFilters", "Total", FiltersPath))
                 WriteINI "TextFilters", "Filter" & (Total + 1), Command.Argument("Filter"), FiltersPath
                 WriteINI "TextFilters", "Total", Total + 1, FiltersPath
-                Command.Respond StringFormatA("Added {0}{1}{0} to the message filter list.", Chr$(34), Command.Argument("Filter"))
+                Command.Respond StringFormat("Added {0}{1}{0} to the message filter list.", Chr$(34), Command.Argument("Filter"))
             Else
                 Command.Respond "Your filters file has been edited manually and is no longer valid. Please delete it."
             End If
@@ -136,7 +136,7 @@ End Function
 Public Function OnFRem(Command As clsCommandObj) As Boolean
     If (Command.IsValid) Then
         Call frmChat.AddQ("/f r " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
-        Command.Respond StringFormatA("Removed user {0}{1}{0} from this account's friends list.", Chr$(34), Command.Argument("Username"))
+        Command.Respond StringFormat("Removed user {0}{1}{0} from this account's friends list.", Chr$(34), Command.Argument("Username"))
     End If
 End Function
 
@@ -147,7 +147,7 @@ End Function
 Public Function OnIgnore(Command As clsCommandObj) As Boolean
     If (Command.IsValid) Then
         If (Command.IsLocal) Then
-            Command.Respond StringFormatA("Ignoring messages from {0}{1}{0}.", Chr$(34), Command.Argument("Username"))
+            Command.Respond StringFormat("Ignoring messages from {0}{1}{0}.", Chr$(34), Command.Argument("Username"))
             frmChat.AddQ "/ignore " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE
         Else
             Dim dbTarget As udtGetAccessResponse
@@ -160,7 +160,7 @@ Public Function OnIgnore(Command As clsCommandObj) As Boolean
             ElseIf (dbTarget.Rank = dbCaller.Rank) Then
                 Command.Respond "That user has the same rank as you."
             Else
-                Command.Respond StringFormatA("Ignoring messages from {0}{1}{0}.", Chr$(34), Command.Argument("Username"))
+                Command.Respond StringFormat("Ignoring messages from {0}{1}{0}.", Chr$(34), Command.Argument("Username"))
                 frmChat.AddQ "/ignore " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE
             End If
         End If
@@ -192,7 +192,7 @@ Public Function OnUnBlock(Command As clsCommandObj) As Boolean
                 If (StrComp(Command.Argument("Username"), ReadINI("BlockList", "Filter" & I, FiltersPath), vbTextCompare) = 0) Then
                     Exit For
                 ElseIf (I = Total) Then
-                    Command.Respond StringFormatA("{0}{1}{0} is not blocked.", Chr(34), Command.Argument("Username"))
+                    Command.Respond StringFormat("{0}{1}{0} is not blocked.", Chr(34), Command.Argument("Username"))
                     Exit Function
                 End If
             Next I
@@ -202,7 +202,7 @@ Public Function OnUnBlock(Command As clsCommandObj) As Boolean
                     WriteINI "BlockList", "Filter" & I, ReadINI("BlockList", "Filter" & (I + 1), FiltersPath), FiltersPath
                 Next I
                 WriteINI "BlockList", "Total", (Total - 1), FiltersPath
-                Command.Respond StringFormatA("Removed {0}{1}{0} from the blocked users list.", Chr$(34), Command.Argument("Username"))
+                Command.Respond StringFormat("Removed {0}{1}{0} from the blocked users list.", Chr$(34), Command.Argument("Username"))
             End If
         Else
             Command.Respond "Your filters file has been edited manually and is no longer valid. Please delete it."
@@ -223,7 +223,7 @@ Public Function OnUnFilter(Command As clsCommandObj) As Boolean
                 If (StrComp(Command.Argument("Filter"), ReadINI("TextFilters", "Filter" & I, FiltersPath), vbTextCompare) = 0) Then
                     Exit For
                 ElseIf (I = Total) Then
-                    Command.Respond StringFormatA("{0}{1}{0} is not filtered.", Chr(34), Command.Argument("Filter"))
+                    Command.Respond StringFormat("{0}{1}{0} is not filtered.", Chr(34), Command.Argument("Filter"))
                     Exit Function
                 End If
             Next I
@@ -233,7 +233,7 @@ Public Function OnUnFilter(Command As clsCommandObj) As Boolean
                     WriteINI "TextFilters", "Filter" & I, ReadINI("TextFilters", "Filter" & (I + 1), FiltersPath), FiltersPath
                 Next I
                 WriteINI "TextFilters", "Total", (Total - 1), FiltersPath
-                Command.Respond StringFormatA("Removed {0}{1}{0} from the message filter list.", Chr$(34), Command.Argument("Filter"))
+                Command.Respond StringFormat("Removed {0}{1}{0} from the message filter list.", Chr$(34), Command.Argument("Filter"))
                 Call frmChat.LoadArray(LOAD_FILTERS, gFilters())
             End If
         Else
@@ -244,7 +244,7 @@ End Function
 
 Public Function OnUnIgnore(Command As clsCommandObj) As Boolean
     If (Command.IsValid) Then
-        Command.Respond StringFormatA("Receiving messages from {0}{1}{0}.", Chr$(34), Command.Argument("Username"))
+        Command.Respond StringFormat("Receiving messages from {0}{1}{0}.", Chr$(34), Command.Argument("Username"))
         frmChat.AddQ "/unignore " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE
     End If
 End Function
@@ -286,7 +286,7 @@ Public Function OnReconnect(Command As clsCommandObj) As Boolean
 End Function
 
 Public Function OnReJoin(Command As clsCommandObj) As Boolean
-    Call frmChat.AddQ(StringFormatA("/join {0} Rejoin", GetCurrentUsername), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+    Call frmChat.AddQ(StringFormat("/join {0} Rejoin", GetCurrentUsername), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
     Call frmChat.AddQ("/join " & g_Channel.Name, PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
 End Function
 

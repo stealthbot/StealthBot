@@ -424,7 +424,7 @@ Private Sub cmdDeleteCommand_Click()
     scriptName = Mid$(cboCommandGroup.Text, 1, InStr(1, cboCommandGroup.Text, "(") - 2)
 
 
-    If vbYes <> MsgBox(StringFormatA("Are you sure you want to delete the {0} command for the {1} script?", m_SelectedElement.commandName, scriptName), vbYesNo + vbQuestion, frmCommands.Caption) Then
+    If vbYes <> MsgBox(StringFormat("Are you sure you want to delete the {0} command for the {1} script?", m_SelectedElement.commandName, scriptName), vbYesNo + vbQuestion, frmCommands.Caption) Then
         Exit Sub
     End If
     
@@ -570,7 +570,7 @@ Private Sub PopulateOwnerComboBox()
     commandCount = commandDoc.GetCommandCount()
     options = Array(scriptName, commandCount)
     '// add the item
-    cboCommandGroup.AddItem StringFormat("{0} ({1})", options)
+    cboCommandGroup.AddItem StringFormatA("{0} ({1})", options)
     
     For I = 2 To frmChat.SControl.Modules.Count
         scriptName = _
@@ -585,7 +585,7 @@ Private Sub PopulateOwnerComboBox()
             If commandCount > 0 Then
                 options = Array(scriptName, commandCount)
                 '// add the item
-                cboCommandGroup.AddItem StringFormat("{0} ({1})", options)
+                cboCommandGroup.AddItem StringFormatA("{0} ({1})", options)
             End If
         End If
     Next I
@@ -621,7 +621,7 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     '// Counters
     Dim j                 As Integer
     Dim I                 As Integer
-    Dim x                 As Integer
+    Dim X                 As Integer
 
     '// reset the treeview
     If trvCommands.nodes.Count > 0 Then
@@ -635,7 +635,7 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
         xpath = "/commands/command[not(@owner)]"
         'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
     Else
-        xpath = StringFormatA("/commands/command[@owner='{0}']", strScriptOwner)
+        xpath = StringFormat("/commands/command[@owner='{0}']", strScriptOwner)
         'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
     End If
     
@@ -645,10 +645,10 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     
     
     '// read them 1 at a time and add them to an array
-    x = 0
+    X = 0
     For Each xmlCommand In m_CommandsDoc.documentElement.selectNodes(xpath)
-        commandNameArray(x) = xmlCommand.Attributes.getNamedItem("name").Text
-        x = x + 1
+        commandNameArray(X) = xmlCommand.Attributes.getNamedItem("name").Text
+        X = X + 1
     Next
     
     '// sort the command names
@@ -656,16 +656,16 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     
 
     '// loop through the sorted array and select the commands
-    For x = LBound(commandNameArray) To UBound(commandNameArray)
+    For X = LBound(commandNameArray) To UBound(commandNameArray)
 
-        commandName = commandNameArray(x)
+        commandName = commandNameArray(X)
         If Len(commandName) > 0 Then
             '// create xpath expression based on strScriptOwner
             If strScriptOwner = vbNullString Then
-                xpath = StringFormatA("/commands/command[@name='{0}' and not(@owner)]", commandName)
+                xpath = StringFormat("/commands/command[@name='{0}' and not(@owner)]", commandName)
                 'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
             Else
-                xpath = StringFormatA("/commands/command[@name='{0}' and @owner='{1}']", commandName, strScriptOwner)
+                xpath = StringFormat("/commands/command[@name='{0}' and @owner='{1}']", commandName, strScriptOwner)
                 'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
             End If
     
@@ -691,15 +691,15 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
                 ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").Text
                 If (Not xmlArgs(I).Attributes.getNamedItem("optional") Is Nothing) Then
                     If (xmlArgs(I).Attributes.getNamedItem("optional").Text = "1") Then
-                        ArgumentName = StringFormatA("[{0}]", ArgumentName)
+                        ArgumentName = StringFormat("[{0}]", ArgumentName)
                     End If
                 End If
                 
                 '// Add the datatype to the argument name
                 If (Not xmlArgs(I).Attributes.getNamedItem("type") Is Nothing) Then
-                    ArgumentName = StringFormatA("{0} ({1})", ArgumentName, xmlArgs(I).Attributes.getNamedItem("type").Text)
+                    ArgumentName = StringFormat("{0} ({1})", ArgumentName, xmlArgs(I).Attributes.getNamedItem("type").Text)
                 Else
-                    ArgumentName = StringFormatA("{0} ({1})", ArgumentName, "String")
+                    ArgumentName = StringFormat("{0} ({1})", ArgumentName, "String")
                 End If
                 
                 Set nArg = trvCommands.nodes.Add(nCommand, etvwChild, commandName & "." & ArgumentName, ArgumentName)
@@ -742,11 +742,11 @@ Private Function PromptToSaveChanges() As Boolean
         options = Array(.commandName, .ArgumentName, .restrictionName)
         Select Case .TheNodeType
             Case NodeType.nCommand
-                sMessage = StringFormat("You have not saved your changes to {0}. Do you want to save them now?", options)
+                sMessage = StringFormatA("You have not saved your changes to {0}. Do you want to save them now?", options)
             Case NodeType.nArgument
-                sMessage = StringFormat("You have not saved your changes to {1}. Do you want to save them now?", options)
+                sMessage = StringFormatA("You have not saved your changes to {1}. Do you want to save them now?", options)
             Case NodeType.nRestriction
-                sMessage = StringFormat("You have not saved your changes to {2}. Do you want to save them now?", options)
+                sMessage = StringFormatA("You have not saved your changes to {2}. Do you want to save them now?", options)
         End Select
         '// Get the user response
         Select Case MsgBox(sMessage, vbQuestion + vbYesNoCancel, Me.Caption)
@@ -805,11 +805,11 @@ Private Sub trvCommands_SelectedNodeChanged()
     
     Select Case nt
         Case NodeType.nCommand
-            xpath = StringFormat("/commands/command[@name='{0}']", options)
+            xpath = StringFormatA("/commands/command[@name='{0}']", options)
         Case NodeType.nArgument
-            xpath = StringFormat("/commands/command[@name='{0}']/arguments/argument[@name='{1}']", options)
+            xpath = StringFormatA("/commands/command[@name='{0}']/arguments/argument[@name='{1}']", options)
         Case NodeType.nRestriction
-            xpath = StringFormat("/commands/command[@name='{0}']/arguments/argument[@name='{1}']/restrictions/restriction[@name='{2}']", options)
+            xpath = StringFormatA("/commands/command[@name='{0}']/arguments/argument[@name='{1}']/restrictions/restriction[@name='{2}']", options)
     End Select
     
     '// Update m_SelectedElement so we know which element we are viewing
@@ -1130,8 +1130,8 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             End If
             
             '// custom captions
-            fraCommand.Caption = StringFormat("{0}", options)
-            chkDisable.Caption = StringFormat("Disable {0} command", options)
+            fraCommand.Caption = StringFormatA("{0}", options)
+            chkDisable.Caption = StringFormatA("Disable {0} command", options)
             
             If cboCommandGroup.ListIndex > 0 Then
                 cmdDeleteCommand.Enabled = True
@@ -1179,15 +1179,15 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             '// special captions
             If (Not xmlElement.Attributes.getNamedItem("optional") Is Nothing) Then
                 If (xmlElement.Attributes.getNamedItem("optional").Text = "1") Then
-                    fraCommand.Caption = StringFormat("{0} => {1} - Optional", options)
+                    fraCommand.Caption = StringFormatA("{0} => {1} - Optional", options)
                 End If
             Else
-                fraCommand.Caption = StringFormat("{0} => {1}", options)
+                fraCommand.Caption = StringFormatA("{0} => {1}", options)
             End If
             
             
             
-            chkDisable.Caption = StringFormat("Disable {1} argument", options)
+            chkDisable.Caption = StringFormatA("Disable {1} argument", options)
             
             
             
@@ -1233,13 +1233,13 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             '// special captions
             If (Not xmlElement.parentNode.parentNode.Attributes.getNamedItem("optional") Is Nothing) Then
                 If (xmlElement.parentNode.parentNode.Attributes.getNamedItem("optional").Text = "1") Then
-                    fraCommand.Caption = StringFormat("{0} => {1} - Optional => {2}", options)
+                    fraCommand.Caption = StringFormatA("{0} => {1} - Optional => {2}", options)
                 End If
             Else
-                fraCommand.Caption = StringFormat("{0} => {1} => {2}", options)
+                fraCommand.Caption = StringFormatA("{0} => {1} => {2}", options)
             End If
             
-            chkDisable.Caption = StringFormat("Disable {2} restriction", options)
+            chkDisable.Caption = StringFormatA("Disable {2} restriction", options)
             
     End Select
     

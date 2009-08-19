@@ -135,7 +135,7 @@ End Sub
 
 Public Sub OnMOTD(Command As clsCommandObj)
     If (LenB(g_Clan.Self.Name) > 0) Then
-        Command.Respond StringFormatA("Clan {0}'s MOTD: {1}", g_Clan.Name, g_Clan.MOTD)
+        Command.Respond StringFormat("Clan {0}'s MOTD: {1}", g_Clan.Name, g_Clan.MOTD)
     Else
         Command.Respond "Error: I am not a member of a clan."
     End If
