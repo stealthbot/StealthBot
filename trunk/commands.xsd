@@ -11,13 +11,13 @@
             </xsd:sequence>
           </xsd:complexType>
         </xsd:element>
-		 <xsd:element name="match" minOccurs="0" maxOccurs="1">
-		   <xsd:complexType>
-			 <xsd:attribute name="message" type="xsd:string"/>
-			 <xsd:attribute name="case-sensitive" type="xsd:string"/>
-		   </xsd:complexType>
-		 </xsd:element>       
-		 <xsd:element name="error" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="match" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:attribute name="message" type="xsd:string"/>
+            <xsd:attribute name="case-sensitive" type="xsd:string"/>
+          </xsd:complexType>
+        </xsd:element>       
+        <xsd:element name="error" minOccurs="0" maxOccurs="1" />
         <xsd:element name="restrictions" minOccurs="0" maxOccurs="1">
           <xsd:complexType>
             <xsd:sequence>
@@ -35,7 +35,7 @@
                      <xsd:element name="match" minOccurs="0" maxOccurs="1">
                        <xsd:complexType>
                          <xsd:attribute name="message" type="xsd:string"/>
-						 <xsd:attribute name="case-sensitive" type="xsd:string"/>
+                         <xsd:attribute name="case-sensitive" type="xsd:string"/>
                        </xsd:complexType>
                      </xsd:element>       
                      <xsd:element name="error" minOccurs="0" maxOccurs="1" />
@@ -132,7 +132,7 @@
               </xsd:element>
             </xsd:sequence>
             <xsd:attribute name="name" type="xsd:string" />
-			<xsd:attribute name="owner" type="xsd:string" />
+            <xsd:attribute name="owner" type="xsd:string" />
             <xsd:attribute name="token" type="xsd:string" />
             <xsd:attribute name="enabled" type="xsd:string" />
           </xsd:complexType>

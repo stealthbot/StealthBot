@@ -1267,7 +1267,7 @@
         <restrictions>
           <restriction name="COMMAND_USAGE">
             <match message="^[/]" />
-
+            <error>You are not allowed to use commands in your message.</error>
             <access>
               <rank>100</rank>
               <flags>
@@ -2385,7 +2385,7 @@
         </documentation>
       </argument>
       
-      <argument name="Message" type="String" Optional="1">
+      <argument name="Message" type="String" optional="1">
         <documentation>
           <description>The ban message to use when banning users who match this tag.</description>
         </documentation>
@@ -2811,11 +2811,11 @@
         </documentation>
       </argument>
       
-      <argument name="Message" type="String" Optional="1">
+      <argument name="Message" type="String" optional="1">
         <documentation>
           <description>
             The message to use when banning this client from the channel.
-          </descripton>
+          </description>
         </documentation>
       </argument>
     </arguments>
@@ -2935,7 +2935,7 @@
               </flags>
             </access>
           </restriction>
-        <restriction>
+        </restrictions>
       </argument>
     </arguments>
 

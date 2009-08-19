@@ -238,12 +238,29 @@ On Error GoTo ERROR_HANDLER
             Case "string":  sTemp = StripString(sArgs)
         End Select
         
+        If (LenB(Param.MatchMessage)) Then
+            If (Not CheckMatch(Param.MatchMessage, sTemp, Param.MatchCaseSensitive)) Then
+                If (LenB(Param.MatchError) > 0) Then
+                    Respond Param.MatchError
+                    IsValid = False
+                    Exit Sub
+                Else
+                    If (LCase$(Param.DataType) = "string") Then
+                        sArgs = StringFormat("{0}{1}{0} {2}", Chr$(34), sTemp, sArgs)
+                    Else
+                        sArgs = StringFormat("{0} {1}", sTemp, sArgs)
+                    End If
+                End If
+            End If
+        End If
+        
         For Each Restriction In Param.Restrictions 'Loop Through the Restrictions
             If (LenB(sTemp) > 0) Then
-                If (CheckMatch(Restriction.MatchMessage, sTemp)) Then 'If they match (regex)
+                If (CheckMatch(Restriction.MatchMessage, sTemp, Restriction.MatchCaseSensitive)) Then 'If they match (regex)
                     'If Rank = -1 It means it's missing, and it MUST have Flags. Or if Rank > User's Access
                     If (Restriction.RequiredRank = -1 Or Restriction.RequiredRank > dbAccess.Rank) Then
                         If (Not CheckForAnyFlags(Restriction.RequiredFlags, dbAccess.Flags)) Then
+                            If (LenB(Restriction.MatchError)) Then Respond Restriction.MatchError
                             m_hasaccess = False
                         End If
                     End If
@@ -345,11 +362,12 @@ ERROR_HANDLER:
     Call frmChat.AddChat(vbRed, "Error: #" & Err.Number & ": " & Err.description & " in clsCommandObj.Respond().")
 End Function
 
-Private Function CheckMatch(sExpression As String, sData As String) As Boolean
+Private Function CheckMatch(sExpression As String, sData As String, Optional CaseSensitive As Boolean = True) As Boolean
 On Error GoTo ERROR_HANDLER
     Dim mRegExp  As New RegExp
     mRegExp.Global = True
     mRegExp.Pattern = sExpression
+    mRegExp.IgnoreCase = (Not CaseSensitive)
     CheckMatch = mRegExp.Test(sData)
     
     Exit Function
