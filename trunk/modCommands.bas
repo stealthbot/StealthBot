@@ -44,12 +44,8 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     ' replace message variables
     Message = Replace(Message, "%me", IIf(IsLocal, GetCurrentUsername, Username), 1, -1, vbTextCompare)
     
-    ' ...
     If ((IsLocal) And (Left$(Message, 3) = "///")) Then
-        ' ...
         AddQ Mid$(Message, 3)
-        
-        ' ...
         Exit Function
     End If
 
@@ -218,7 +214,7 @@ Public Function DispatchCommand(Command As clsCommandObj)
         Case "watchoff":      Call modCommandsChat.OnWatchOff(Command)
         
         'Admin Commands
-        'Case "add":           Call modCommandsAdmin.OnAdd(Command)
+        Case "add":           Call modCommandsAdmin.OnAdd(Command)
         Case "clear":         Call modCommandsAdmin.OnClear(Command)
         Case "disable":       Call modCommandsAdmin.OnDisable(Command)
         Case "dump":          Call modCommandsAdmin.OnDump(Command)
@@ -240,7 +236,10 @@ Public Function DispatchCommand(Command As clsCommandObj)
         Case "clearbanlist":  Call modCommandsOps.OnClearBanList(Command)
         Case "d2levelban":    Call modCommandsOps.OnD2LevelBan(Command)
         Case "des":           Call modCommandsOps.OnDes(Command)
+        Case "exile":         Call modCommandsOps.OnExile(Command)
         Case "giveup":        Call modCommandsOps.OnGiveUp(Command)
+        Case "ipban":         Call modCommandsOps.OnIPBan(Command)
+        Case "ipbans":        Call modCommandsOps.OnIPBans(Command)
         Case "kickonyell":    Call modCommandsOps.OnKickOnYell(Command)
         Case "levelban":      Call modCommandsOps.OnLevelBan(Command)
         Case "peonban":       Call modCommandsOps.OnPeonBan(Command)
@@ -251,9 +250,13 @@ Public Function DispatchCommand(Command As clsCommandObj)
         Case "pstatus":       Call modCommandsOps.OnPStatus(Command)
         Case "quiettime":     Call modCommandsOps.OnQuietTime(Command)
         Case "resign":        Call modCommandsOps.OnResign(Command)
+        Case "shitadd":       Call modCommandsOps.OnShitAdd(Command)
+        Case "shitdel":       Call modCommandsOps.OnShitDel(Command)
         Case "sweepban":      Call modCommandsOps.OnSweepBan(Command)
         Case "sweepignore":   Call modCommandsOps.OnSweepIgnore(Command)
         Case "tally":         Call modCommandsOps.OnTally(Command)
+        Case "unexile":       Call modCommandsOps.OnUnExile(Command)
+        Case "unipban":       Call modCommandsOps.OnUnIPBan(Command)
         
         'Misc Commands
         Case "bmail":         Call modCommandsMisc.OnBMail(Command)
@@ -275,20 +278,16 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
     LogCommand IIf(InBot, vbNullString, Username), cmdName & Space(1) & msgData
     executeCommand = True
     Select Case (cmdName)
-        Case "add":           Call OnAddOld(Username, dbAccess, msgData, InBot, cmdRet())
+        'Case "add":           Call OnAddOld(Username, dbAccess, msgData, InBot, cmdRet())
         Case "idlebans":      Call OnIdleBans(Username, dbAccess, msgData, InBot, cmdRet())
         Case "clientbans":    Call OnClientBans(Username, dbAccess, msgData, InBot, cmdRet())
         Case "cadd":          Call OnCAdd(Username, dbAccess, msgData, InBot, cmdRet())
         Case "cdel":          Call OnCDel(Username, dbAccess, msgData, InBot, cmdRet())
         Case "banned":        Call OnBanned(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "ipbans":        Call OnIPBans(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "ipban":         Call OnIPBan(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "unipban":       Call OnUnIPBan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "protect":       Call OnProtect(Username, dbAccess, msgData, InBot, cmdRet())
         Case "rem":           Call OnRem(Username, dbAccess, msgData, InBot, cmdRet())
         Case "idletime":      Call OnIdleTime(Username, dbAccess, msgData, InBot, cmdRet())
         Case "idle":          Call OnIdle(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "shitdel":       Call OnShitDel(Username, dbAccess, msgData, InBot, cmdRet())
         Case "safedel":       Call OnSafeDel(Username, dbAccess, msgData, InBot, cmdRet())
         Case "tagdel":        Call OnTagDel(Username, dbAccess, msgData, InBot, cmdRet())
         Case "setidle":       Call OnSetIdle(Username, dbAccess, msgData, InBot, cmdRet())
@@ -301,11 +300,8 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "safelist":      Call OnSafeList(Username, dbAccess, msgData, InBot, cmdRet())
         Case "safeadd":       Call OnSafeAdd(Username, dbAccess, msgData, InBot, cmdRet())
         Case "safecheck":     Call OnSafeCheck(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "exile":         Call OnExile(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "unexile":       Call OnUnExile(Username, dbAccess, msgData, InBot, cmdRet())
         Case "shitlist":      Call OnShitList(Username, dbAccess, msgData, InBot, cmdRet())
         Case "tagbans":       Call OnTagBans(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "shitadd":       Call OnShitAdd(Username, dbAccess, msgData, InBot, cmdRet())
         Case "bancount":      Call OnBanCount(Username, dbAccess, msgData, InBot, cmdRet())
         Case "banlistcount":  Call OnBanListCount(Username, dbAccess, msgData, InBot, cmdRet())
         Case "tagcheck":      Call OnTagCheck(Username, dbAccess, msgData, InBot, cmdRet())
@@ -527,56 +523,32 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' redefine array size
     ReDim Preserve tmpbuf(0)
     
-    ' ...
     If (g_Channel.Banlist.Count = 0) Then
-        ' ...
         cmdRet(0) = "There are presently no users on the bot's internal banlist."
-    
-        ' ...
         Exit Function
     End If
 
-    ' ...
     tmpbuf(tmpCount) = "User(s) banned: "
     
-    ' ...
     For I = 1 To g_Channel.Banlist.Count
-        ' ...
         If (g_Channel.Banlist(I).IsDuplicateBan = False) Then
-            ' ...
             For j = 1 To g_Channel.Banlist.Count
-                ' ...
-                If (StrComp(g_Channel.Banlist(j).DisplayName, g_Channel.Banlist(I).DisplayName, _
-                        vbTextCompare) = 0) Then
-                
-                    ' ...
+                If (StrComp(g_Channel.Banlist(j).DisplayName, g_Channel.Banlist(I).DisplayName, vbTextCompare) = 0) Then
                     userCount = (userCount + 1)
                 End If
             Next j
             
-            ' ...
-            tmpbuf(tmpCount) = _
-                    tmpbuf(tmpCount) & ", " & g_Channel.Banlist(I).DisplayName
+            tmpbuf(tmpCount) = StringFormatA("{0}, {1}", tmpbuf(tmpCount), g_Channel.Banlist(I).DisplayName)
                     
-            ' ...
             If (userCount > 1) Then
-                tmpbuf(tmpCount) = _
-                        tmpbuf(tmpCount) & " (" & userCount & ") "
+                tmpbuf(tmpCount) = StringFormatA("{0} ({1})", tmpbuf(tmpCount), userCount)
             End If
                     
-            ' ...
             If ((Len(tmpbuf(tmpCount)) > 90) And (I <> g_Channel.Banlist.Count)) Then
-                ' increase array size
-                ReDim Preserve tmpbuf(tmpCount + 1)
-            
-                ' apply postfix to previous line
-                tmpbuf(tmpCount) = Replace(tmpbuf(tmpCount), " , ", Space$(1)) & " [more]"
-                
-                ' apply prefix to new line
-                tmpbuf(tmpCount + 1) = "User(s) banned: "
-                
-                ' incrememnt counter
-                tmpCount = (tmpCount + 1)
+                ReDim Preserve tmpbuf(tmpCount + 1) ' increase array size
+                tmpbuf(tmpCount) = Replace(tmpbuf(tmpCount), " , ", Space$(1)) & " [more]" ' apply postfix to previous line
+                tmpbuf(tmpCount + 1) = "User(s) banned: " ' apply prefix to new line
+                tmpCount = (tmpCount + 1) ' incrememnt counter
             End If
     
             tmpbuf(tmpCount) = Replace(tmpbuf(tmpCount), " , ", Space$(1))
@@ -585,169 +557,9 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
         ' ...
         userCount = 0
     Next I
-    
-    'For i = LBound(gBans) To UBound(gBans)
-    '    If (gBans(i).userName <> vbNullString) Then
-    '        tmpBuf(tmpCount) = tmpBuf(tmpCount) & ", " & gBans(i).userName
-    '
-    '        If ((Len(tmpBuf(tmpCount)) > 90) And (i <> UBound(gBans))) Then
-    '            ' increase array size
-    '            ReDim Preserve tmpBuf(tmpCount + 1)
-    '
-    '            ' apply postfix to previous line
-    '            tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", Space(1)) & " [more]"
-    '
-    '            ' apply prefix to new line
-    '            tmpBuf(tmpCount + 1) = "Banned users: "
-    '
-    '            ' incrememnt counter
-    '            tmpCount = (tmpCount + 1)
-    '        End If
-    '
-    '        ' incrememnt counter
-    '        BanCount = (BanCount + 1)
-    '    End If
-    'Next i
-    '
-    ' has anyone been banned?
-    'If (BanCount = 0) Then
-    '    tmpBuf(tmpCount) = "No users have been banned."
-    'Else
-    '    tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", Space(1))
-    'End If
-    
     ' return message
     cmdRet() = tmpbuf()
 End Function ' end function OnBanned
-
-' handle ipbans command
-Private Function OnIPBans(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim I      As Integer
-    Dim tmpbuf As String ' temporary output buffer
-    
-    ' ...
-    msgData = LCase$(msgData)
-
-    If (Left$(msgData, 2)) = "on" Then
-        BotVars.IPBans = True
-        
-        Call WriteINI("Other", "IPBans", "Y")
-        
-        tmpbuf = "IPBanning activated."
-        
-        Call g_Channel.CheckUsers
-        
-        'If ((MyFlags = 2) Or (MyFlags = 18)) Then
-        '    For i = 1 To colUsersInChannel.Count
-        '        Select Case colUsersInChannel.Item(i).Flags
-        '            Case 20, 30, 32, 48
-        '                Call AddQ("/ban " & colUsersInChannel.Item(i).Name & _
-        '                    " IPBanned.")
-        '        End Select
-        '    Next i
-        'End If
-    ElseIf (Left$(msgData, 3) = "off") Then
-        BotVars.IPBans = False
-        
-        Call WriteINI("Other", "IPBans", "N")
-        
-        tmpbuf = "IPBanning deactivated."
-        
-    ElseIf (Left$(msgData, 6) = "status") Then
-        If (BotVars.IPBans) Then
-            tmpbuf = "IPBanning is currently active."
-        Else
-            tmpbuf = "IPBanning is currently disabled."
-        End If
-    Else
-        tmpbuf = "Error: Unrecognized IPBan command. Use 'on', 'off' or 'status'."
-    End If
-        
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnIPBans
-
-' handle ipban command
-Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim gAcc   As udtGetAccessResponse
-
-    Dim tmpbuf As String ' temporary output buffer
-    Dim tmpAcc As String ' ...
-    
-    Dim msgFirstPart As String ' ...
-
-    ' Get the first part of the message. (the username given)
-    msgFirstPart = Split(msgData, " ")(0)
-    
-    ' ...
-    tmpAcc = StripInvalidNameChars(msgFirstPart)
-
-    ' ...
-    If (Len(tmpAcc) > 0) Then
-        ' ...
-        If (InStr(1, tmpAcc, "@") > 0) Then
-            tmpAcc = StripRealm(tmpAcc)
-        End If
-        
-        ' ...
-        If (dbAccess.Rank <= 100) Then
-            If ((GetSafelist(tmpAcc)) Or (GetSafelist(msgFirstPart))) Then
-                ' return message
-                cmdRet(0) = "Error: That user is safelisted."
-                
-                Exit Function
-            End If
-        End If
-        
-        ' ...
-        gAcc = GetAccess(msgFirstPart)
-        
-        ' ...
-        If ((gAcc.Rank >= dbAccess.Rank) Or _
-            ((InStr(gAcc.Flags, "A") > 0) And (dbAccess.Rank <= 100))) Then
-
-            tmpbuf = "Error: You do not have enough access to do that."
-        Else
-            Call AddQ("/ban " & msgData, , Username)
-            Call AddQ("/squelch " & msgFirstPart, , Username)
-        
-            tmpbuf = "User " & Chr(34) & msgFirstPart & Chr(34) & " IPBanned."
-        End If
-    Else
-        ' return message
-        tmpbuf = "Error: You do not have enough access to do that."
-    End If
-        
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnIPBan
-
-' handle unipban command
-Private Function OnUnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-
-    ' ...
-    If (LenB(msgData) > 0) Then
-        ' ...
-        Call AddQ("/unsquelch " & msgData, , Username)
-        
-        ' ...
-        Call AddQ("/unban " & msgData, , Username)
-        
-        ' ...
-        tmpbuf = "User " & Chr$(34) & msgData & Chr$(34) & _
-            " Un-IPBanned."
-    End If
-        
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnUnIPBan
 
 ' handle protect command
 Private Function OnProtect(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -975,28 +787,6 @@ Private Function OnIdle(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ' return message
     cmdRet(0) = tmpbuf
 End Function ' end function OnIdle
-
-' handle shitdel command
-Private Function OnShitDel(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-
-    Dim U        As String
-    Dim tmpbuf() As String ' temporary output buffer
-    
-    ' redefine array size
-    ReDim Preserve tmpbuf(0)
-    
-    If (InStr(1, msgData, Space(1), vbBinaryCompare) <> 0) Then
-        tmpbuf(0) = "Error: The specified username is invalid."
-    Else
-        ' remove user from shitlist using "add" command
-        Call OnAddOld(Username, dbAccess, msgData & " -B --type USER", _
-            True, tmpbuf())
-    End If
-    
-    ' return message
-    cmdRet() = tmpbuf()
-End Function ' end function OnShitDel
 
 ' handle safedel command
 Private Function OnSafeDel(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -1395,59 +1185,6 @@ Private Function OnSafeCheck(ByVal Username As String, ByRef dbAccess As udtGetA
     cmdRet(0) = tmpbuf
 End Function ' end function OnSafeCheck
 
-' handle exile command
-Private Function OnExile(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf     As String ' temporary output buffer
-    Dim saCmdRet() As String ' ...
-    Dim ibCmdRet() As String ' ...
-    Dim U          As String ' ...
-    Dim Y          As String ' ...
-    
-    ' ...
-    ReDim Preserve saCmdRet(0)
-    ReDim Preserve ibCmdRet(0)
-
-    ' ...
-    U = msgData
-    
-    ' ...
-    Call OnShitAdd(Username, dbAccess, U, InBot, saCmdRet())
-    
-    ' ...
-    Call OnIPBan(Username, dbAccess, U, InBot, ibCmdRet())
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnExile
-
-' handle unexile command
-Private Function OnUnExile(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf     As String ' temporary output buffer
-    Dim U          As String ' ...
-    Dim sdCmdRet() As String ' ...
-    Dim uiCmdRet() As String ' ...
-    
-    ' declare index zero of array
-    ReDim Preserve sdCmdRet(0)
-    ReDim Preserve uiCmdRet(0)
-
-    ' ...
-    U = msgData
-    
-    ' ...
-    Call OnShitDel(Username, dbAccess, U, InBot, sdCmdRet())
-    
-    ' ...
-    Call OnUnIPBan(Username, dbAccess, U, InBot, uiCmdRet())
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnUnExile
-
 ' handle shitlist command
 Private Function OnShitList(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -1479,69 +1216,6 @@ Private Function OnTagBans(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ' return message
     cmdRet() = tmpbuf()
 End Function ' end function OnTagBans
-
-' handle shitadd command
-Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf() As String  ' ...
-    Dim Index    As Integer ' ...
-    Dim shit_msg As String  ' ...
-    
-    ' redefine array size
-    ReDim Preserve tmpbuf(0)
-    
-    ' ...
-    If (BotVars.DefaultShitlistGroup <> vbNullString) Then
-        Dim default_group_access As udtGetAccessResponse
-        
-        ' ...
-        default_group_access = _
-                GetAccess(BotVars.DefaultShitlistGroup, "GROUP")
-        
-        ' ...
-        If (default_group_access.Username <> vbNullString) Then
-            shit_msg = " --group " & BotVars.DefaultShitlistGroup
-        End If
-    End If
-    
-    ' ...
-    If (shit_msg = vbNullString) Then
-        shit_msg = " +B"
-    End If
-    
-    ' ...
-    Index = InStr(1, msgData, Space(1), vbBinaryCompare)
-    
-    ' ...
-    If (Index) Then
-        Dim user As String ' ...
-        
-        ' ...
-        user = Mid$(msgData, 1, Index - 1)
-        
-        If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
-            tmpbuf(0) = "Error: The specified username is invalid."
-        Else
-            Dim Msg As String ' ...
-            
-            ' ...
-            Msg = Mid$(msgData, Index + 1)
-        
-            ' ...
-            shit_msg = user & shit_msg & " --type USER --banmsg " & Msg
-        End If
-    Else
-        ' ...
-        shit_msg = msgData & shit_msg & " --type USER"
-    End If
-    
-    ' ...
-    Call OnAddOld(Username, dbAccess, shit_msg, True, tmpbuf())
-    
-    ' return message
-    cmdRet() = tmpbuf()
-End Function ' end function OnShitAdd
 
 ' handle bancount command
 Private Function OnBanCount(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -3192,7 +2866,7 @@ Public Sub LoadDatabase()
     Dim gA     As udtDatabase
     
     Dim s      As String
-    Dim X()    As String
+    Dim x()    As String
     Dim Path   As String
     Dim I      As Integer
     Dim f      As Integer
@@ -3212,13 +2886,13 @@ Public Sub LoadDatabase()
                 Line Input #f, s
                 
                 If InStr(1, s, " ", vbTextCompare) > 0 Then
-                    X() = Split(s, " ", 10)
+                    x() = Split(s, " ", 10)
                     
-                    If UBound(X) > 0 Then
+                    If UBound(x) > 0 Then
                         ReDim Preserve DB(I)
                         
                         With DB(I)
-                            .Username = X(0)
+                            .Username = x(0)
                             
                             .Rank = 0
                             .AddedOn = Now
@@ -3230,11 +2904,11 @@ Public Sub LoadDatabase()
                             .ModifiedOn = Now
                             .Type = "USER"
                             
-                            If StrictIsNumeric(X(1)) Then
-                                .Rank = Val(X(1))
+                            If StrictIsNumeric(x(1)) Then
+                                .Rank = Val(x(1))
                             Else
-                                If X(1) <> "%" Then
-                                    .Flags = X(1)
+                                If x(1) <> "%" Then
+                                    .Flags = x(1)
                                     
                                     'If InStr(X(1), "S") > 0 Then
                                     '    AddToSafelist .Name
@@ -3243,37 +2917,37 @@ Public Sub LoadDatabase()
                                 End If
                             End If
                             
-                            If UBound(X) > 1 Then
-                                If StrictIsNumeric(X(2)) Then
-                                    .Rank = Int(X(2))
+                            If UBound(x) > 1 Then
+                                If StrictIsNumeric(x(2)) Then
+                                    .Rank = Int(x(2))
                                 Else
-                                    If X(2) <> "%" Then
-                                        .Flags = X(2)
+                                    If x(2) <> "%" Then
+                                        .Flags = x(2)
                                     End If
                                 End If
                                 
                                 '  0        1       2       3      4        5          6       7     8
                                 ' username access flags addedby addedon modifiedby modifiedon type banmsg
-                                If UBound(X) > 2 Then
-                                    .AddedBy = X(3)
+                                If UBound(x) > 2 Then
+                                    .AddedBy = x(3)
                                     
-                                    If UBound(X) > 3 Then
-                                        .AddedOn = CDate(Replace(X(4), "_", " "))
+                                    If UBound(x) > 3 Then
+                                        .AddedOn = CDate(Replace(x(4), "_", " "))
                                         
-                                        If UBound(X) > 4 Then
-                                            .ModifiedBy = X(5)
+                                        If UBound(x) > 4 Then
+                                            .ModifiedBy = x(5)
                                             
-                                            If UBound(X) > 5 Then
-                                                .ModifiedOn = CDate(Replace(X(6), "_", " "))
+                                            If UBound(x) > 5 Then
+                                                .ModifiedOn = CDate(Replace(x(6), "_", " "))
 
-                                                If UBound(X) > 6 Then
-                                                    .Type = X(7)
+                                                If UBound(x) > 6 Then
+                                                    .Type = x(7)
                                                     
-                                                    If UBound(X) > 7 Then
-                                                        .Groups = X(8)
+                                                    If UBound(x) > 7 Then
+                                                        .Groups = x(8)
                                                         
-                                                        If UBound(X) > 8 Then
-                                                            .BanMessage = X(9)
+                                                        If UBound(x) > 8 Then
+                                                            .BanMessage = x(9)
                                                         End If
                                                     End If
                                                 End If

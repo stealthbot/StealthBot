@@ -351,8 +351,7 @@ Public Function StripInvalidNameChars(ByVal Username As String) As String
                     Next j
                     
                     If (Not (ThisCharOK)) Then
-                        NewUsername = Replace(NewUsername, Chr(thisChar), _
-                            vbNullString)
+                        NewUsername = Replace(NewUsername, Chr(thisChar), vbNullString)
                     End If
                 End If
             End If

@@ -109,6 +109,15 @@ Public Sub OnDes(Command As clsCommandObj)
     End If
 End Sub
 
+Public Sub OnExile(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        Call OnShitAdd(Command)
+        Call OnIPBan(Command)
+    Else
+        Command.Respond "Error: You must specify a username."
+    End If
+End Sub
+
 Public Sub OnGiveUp(Command As clsCommandObj)
     ' This command will allow a user to designate a specified user using
     ' Battle.net's "designate" command, and will then make the bot resign
@@ -177,6 +186,69 @@ Public Sub OnGiveUp(Command As clsCommandObj)
             Command.Respond "Error: The specified user is not present within the channel."
         End If
     End If
+End Sub
+
+Public Sub OnIPBan(Command As clsCommandObj)
+    Dim dbAccess As udtGetAccessResponse
+    Dim dbTarget As udtGetAccessResponse
+    Dim sTarget  As String
+    
+    If (Command.IsValid) Then
+        
+        If (Not g_Channel.Self.IsOperator) Then
+            Command.Respond "The bot does not currently have ops."
+            Exit Sub
+        End If
+        
+        dbAccess = GetCumulativeAccess(BotVars.Username)
+        If (Command.IsLocal) Then
+            dbAccess.Rank = 201
+            dbAccess.Flags = "A"
+        End If
+        
+        sTarget = StripInvalidNameChars(Command.Argument("Username"))
+        
+        If (LenB(sTarget) > 0) Then
+            If (InStr(1, sTarget, "@") > 0) Then sTarget = StripRealm(sTarget)
+            
+            If (dbAccess.Rank < 101) Then
+                If (GetSafelist(sTarget) Or GetSafelist(Command.Argument("Username"))) Then
+                    Command.Respond "Error: That user is safelisted."
+                    Exit Sub
+                End If
+            End If
+            
+            dbTarget = GetCumulativeAccess(Command.Argument("Username"))
+            
+            If ((dbTarget.Rank >= dbAccess.Rank) Or _
+                ((InStr(1, dbTarget.Flags, "A", vbTextCompare) > 0) And (dbAccess.Rank < 101))) Then
+                Command.Respond "Error: You do not have enought access to do that."
+            Else
+                Call frmChat.AddQ(StringFormatA("/ban {0} {1}", Command.Argument("Username"), Command.Argument("Message")), , Command.Username)
+                Call frmChat.AddQ(StringFormatA("/squelch {0}", Command.Argument("Username")), , Command.Username)
+                Command.Respond StringFormatA("User {0}{1}{0} IPBanned.", Chr$(34), Command.Argument("Username"))
+            End If
+        End If
+    End If
+End Sub
+
+Public Sub OnIPBans(Command As clsCommandObj)
+    Select Case LCase$(Command.Argument("SubCommand"))
+        Case "on":
+            BotVars.IPBans = True
+            Call WriteINI("Other", "IPBans", "Y")
+            Command.Respond "IP banning activated."
+            g_Channel.CheckUsers
+            
+        Case "off":
+            BotVars.IPBans = False
+            Call WriteINI("Other", "IPBans", "N")
+            Command.Respond "IP banning deactivated."
+        
+        Case Else:
+            Command.Respond StringFormatA("IP banning is currently {0}activated.", _
+                IIf(BotVars.IPBans, vbNullString, "de"))
+    End Select
 End Sub
 
 Public Sub OnKickOnYell(Command As clsCommandObj)
@@ -343,6 +415,39 @@ Public Sub OnResign(Command As clsCommandObj)
     Call frmChat.AddQ("/resign", PRIORITY.SPECIAL_MESSAGE, Command.Username)
 End Sub
 
+Public Function OnShitAdd(Command As clsCommandObj)
+    Dim sArgs    As String
+    
+    If (Command.IsValid) Then
+        If (LenB(BotVars.DefaultShitlistGroup) > 0) Then
+            Dim dbAccess As udtGetAccessResponse
+            dbAccess = GetAccess(BotVars.DefaultShitlistGroup, "GROUP")
+            If (LenB(dbAccess.Username) > 0) Then
+                sArgs = "--group " & BotVars.DefaultShitlistGroup
+            End If
+        End If
+        
+        If (LenB(sArgs) = 0) Then sArgs = "+B"
+        sArgs = StringFormatA("{0} {1} --type USER", Command.Argument("Username"), sArgs)
+        
+        If (LenB(Command.Argument("Message")) > 0) Then
+            sArgs = StringFormatA("{0} --banmsg {1}", sArgs, Command.Argument("Message"))
+        End If
+        
+        Command.Args = sArgs
+        Call OnAdd(Command)
+    End If
+End Function
+
+Public Sub OnShitDel(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        Command.Args = Command.Argument("Username") & " -B --type USER"
+        Call OnAdd(Command)
+    Else
+        Command.Respond "Error: You must specify a username."
+    End If
+End Sub
+
 Public Sub OnSweepBan(Command As clsCommandObj)
     ' This command will grab the listing of users in the specified channel
     ' using Battle.net's "who" command, and will then begin banning each
@@ -381,6 +486,27 @@ Public Sub OnTally(Command As clsCommandObj)
         Command.Respond Voting(BVT_VOTE_TALLY)
     Else
         Command.Respond "No vote is currently in progress."
+    End If
+End Sub
+
+Public Sub OnUnExile(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        Call OnShitDel(Command)
+        Call OnUnIPBan(Command)
+    Else
+        Command.Respond "Error: You must specify a user to unban."
+    End If
+End Sub
+
+Public Sub OnUnIPBan(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        If (g_Channel.Self.IsOperator) Then
+            Call frmChat.AddQ("/unsquelch " & Command.Argument("Username"), , Command.Username)
+            Call frmChat.AddQ("/unban " & Command.Argument("Username"), , Command.Username)
+            Command.Respond StringFormatA("User {0}{1}{0} has been Un-IPBanned.", Chr$(34), Command.Argument("Username"))
+        Else
+            Command.Respond "Error: The bot is not currently a channel operator."
+        End If
     End If
 End Sub
 

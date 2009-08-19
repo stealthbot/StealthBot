@@ -1834,7 +1834,7 @@
     </access>
   </command>
 
-  <command name="ipban" token="operator">
+  <command name="ipban">
     <aliases />
 
     <documentation>
@@ -1847,7 +1847,7 @@
           <description>The user to be ipbanned.</description>
         </documentation>
       </argument>
-      <argument name="message" type="string">
+      <argument name="message" type="string" optional="1">
         <documentation>
           <description>The message to be used when banning the user.</description>
         </documentation>
@@ -1862,7 +1862,7 @@
     </access>
   </command>
 
-  <command name="ipbans" token="operator">
+  <command name="ipbans">
     <aliases>
       <alias>ipbanning</alias>
     </aliases>
@@ -1872,7 +1872,7 @@
     </documentation>
 
     <arguments>  
-      <argument name="subcommand" type="word">
+      <argument name="subcommand" type="word" optional="1">
         <documentation>
           <description>The sub-command to use. 'On', 'Off', or 'Status'</description>
         </documentation>
@@ -3018,7 +3018,7 @@
     </access>
   </command>
 
-  <command name="exile" token="operator">
+  <command name="exile">
     <aliases />
 
     <documentation>
@@ -3032,7 +3032,7 @@
         </documentation>
       </argument>
       
-      <argument name="reason" type="string" optional="1">
+      <argument name="Message" type="string" optional="1">
         <documentation>
           <description>The reason the user is being exiled.</description>
         </documentation>
@@ -3730,6 +3730,30 @@
         <flag>O</flag>
         <flag>R</flag>
         <flag>T</flag>
+      </flags>
+    </access>
+  </command>
+  
+  <command name="unipban">
+    <aliases />
+
+    <documentation>
+      <description>Unbans, and UnSquelches the selected user.</description>
+    </documentation>
+    
+    <arguments>  
+      <argument name="username" type="word">
+        <documentation>
+          <description>The user to unban and unsquelch.</description>
+        </documentation>
+      </argument>
+    </arguments>
+
+    <access>
+      <rank>70</rank>
+      <flags>
+        <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>

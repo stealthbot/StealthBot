@@ -3,6 +3,26 @@ Option Explicit
 'This module will hold all the commands that relate to Andmistering the bot, Changing settings
 'Editing the database, etc..
 
+'This is a stub function for now, it still calls the old uber complicated OnAddOld function, but hey :/
+Public Sub OnAdd(Command As clsCommandObj)
+    Dim dbAccess   As udtGetAccessResponse
+    Dim response() As String
+    Dim I          As Integer
+    ReDim Preserve response(0)
+    
+    dbAccess = GetCumulativeAccess(Command.Username)
+    If (Command.IsLocal) Then
+        dbAccess.Rank = 201
+        dbAccess.Flags = "A"
+    End If
+    
+    Call OnAddOld(Command.Username, dbAccess, Command.Args, Command.IsLocal, response())
+    
+    For I = LBound(response) To UBound(response)
+        Command.Respond response(I)
+    Next I
+End Sub
+
 Public Sub OnClear(Command As clsCommandObj)
     frmChat.mnuClear_Click
 End Sub
