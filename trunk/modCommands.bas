@@ -60,9 +60,8 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             Else
                 Call RunInSingle(modScripting.GetModuleByName(Command.docs.Owner), "Event_Command", Command)
             End If
-            
-            If (DisplayOutput) Then Command.SendResponse
         End If
+        If (DisplayOutput) Then Command.SendResponse
     Next
         
     If (IsLocal) Then

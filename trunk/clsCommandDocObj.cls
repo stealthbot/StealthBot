@@ -330,6 +330,11 @@ Private Function getRestrictions(ByRef parameterNode As IXMLDOMNode) As Collecti
         With temp
             .Name = getName(RestrictionNode)
             .MatchMessage = getMatchMessage(RestrictionNode)
+            .MatchError = RestrictionNode.selectSingleNode("error").Text
+            .MatchCaseSensitive = False
+            If (RestrictionNode.selectSingleNode("match").Attributes.getNamedItem("case-sensitive").Text = "1") Then
+                .MatchCaseSensitive = True
+            End If
             .RequiredFlags = getFlags(RestrictionNode)
             .RequiredRank = GetRank(RestrictionNode)
         End With
