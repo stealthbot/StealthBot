@@ -36,6 +36,70 @@ Public Sub OnAllSeen(Command As clsCommandObj)
     Command.Respond retVal
 End Sub
 
+Public Sub OnBanCount(Command As clsCommandObj)
+    If (g_Channel.BanCount = 0) Then
+        Command.Respond "No users have been banned since I joined this channel."
+    Else
+        Command.Respond StringFormat("Since I joined this channel, {0} user{1} have been banned.", g_Channel.BanCount, IIf(g_Channel.BanCount > 1, "s", vbNullString))
+    End If
+End Sub
+
+Public Sub OnBanListCount(Command As clsCommandObj)
+    If (g_Channel.Banlist.Count = 0) Then
+        Command.Respond "There are no users on the internal ban list."
+    Else
+        Command.Respond StringFormat("There {0} currently {1} user{1} on the internal ban list.", _
+            IIf(g_Channel.Banlist.Count > 1, "are", "is"), g_Channel.Banlist.Count, _
+            IIf(g_Channel.Banlist.Count > 1, "s", vbNullString))
+    End If
+End Sub
+
+Public Sub OnBanned(Command As clsCommandObj)
+    Dim sResult  As String
+    Dim I        As Integer
+    Dim j        As Integer
+    Dim BanCount As Integer
+    
+    If (g_Channel.Banlist.Count = 0) Then
+        Command.Respond "There are presently no users on the bot's internal banlist."
+    Else
+        sResult = "User(s) banned: "
+        For I = 1 To g_Channel.Banlist.Count
+            If (Not g_Channel.Banlist(I).IsDuplicateBan) Then
+                For j = 1 To g_Channel.Banlist.Count
+                    If (StrComp(g_Channel.Banlist(j).DisplayName, g_Channel.Banlist(I).DisplayName, vbTextCompare) = 0) Then
+                        BanCount = (BanCount + 1)
+                    End If
+                Next j
+                sResult = StringFormat("{0}, {1}", sResult, g_Channel.Banlist(I).DisplayName)
+                
+                If (BanCount > 1) Then sResult = StringFormat("{0} ({1})", sResult, BanCount)
+                      
+                If ((Len(sResult) > 90) And (Not I = g_Channel.Banlist.Count)) Then
+                    Command.Respond Replace(sResult, " , ", Space$(1))
+                    sResult = "Users(s) banned: "
+                End If
+            End If
+            BanCount = 0
+        Next I
+        If (LenB(sResult) > LenB("Users(s) banned: , ")) Then 'We don't want to send an empty line
+            Command.Respond Replace(sResult, " , ", Space$(1))
+        End If
+    End If
+End Sub
+
+Public Sub OnClientBans(Command As clsCommandObj)
+    Dim bufResponse() As String
+    Dim strResponse   As Variant
+    
+    If (Command.IsValid) Then
+        Call SearchDatabase(bufResponse(), , , , "GAME", , , "B")
+    End If
+    For Each strResponse In bufResponse
+        Command.Respond CStr(strResponse)
+    Next
+End Sub
+
 Public Sub OnDetail(Command As clsCommandObj)
     If (Command.IsValid) Then
         Dim sRetAdd As String, sRetMod As String
@@ -308,14 +372,38 @@ Public Sub OnOwner(Command As clsCommandObj)
     End If
 End Sub
 
+Public Sub OnPhrases(Command As clsCommandObj)
+    Dim sBuffer   As String
+    Dim aBuffer() As String
+    Dim I         As Integer
+    Dim found     As Integer
+    
+    For I = LBound(Phrases) To UBound(Phrases)
+        If (LenB(Trim$(Phrases(I))) > 0) Then
+            sBuffer = StringFormat("{0}{1}, ", sBuffer, Phrases(I))
+            found = found + 1
+        End If
+    Next I
+    
+    If (found > 0) Then
+        SplitByLen Left$(sBuffer, Len(sBuffer) - Len(", ")), 180, aBuffer, "Phrasebans: ", , ", "
+        For I = LBound(aBuffer) To UBound(aBuffer)
+            Command.Respond aBuffer(I)
+        Next I
+    Else
+        Command.Respond "There are no phrasebans."
+    End If
+End Sub
+
+
 Public Sub OnPing(Command As clsCommandObj)
     Dim Latency As Long
     If (Command.IsValid) Then
         Latency = GetPing(Command.Argument("Username"))
         If (Latency >= -1) Then
-            Command.Respond Command.Argument("Username") & "'s ping at login was " & Latency & "ms."
+            Command.Respond StringFormat("{0}'s ping at login was {1}ms.", Command.Argument("Username"), Latency)
         Else
-            Command.Respond "I can not see " & Command.Argument("Username") & " in the channel."
+            Command.Respond StringFormat("I can not see {0} in the channel.", Command.Argument("Username"))
         End If
     Else
         Command.Respond "Please specify a user to ping."
@@ -326,14 +414,14 @@ Public Sub OnPingMe(Command As clsCommandObj)
     Dim Latency As Long
     If (Command.IsLocal) Then
         If (g_Online) Then
-            Command.Respond "Your ping at login was " & GetPing(GetCurrentUsername) & "ms."
+            Command.Respond StringFormat("Your ping at login was {0}ms.", GetPing(GetCurrentUsername))
         Else
             Command.Respond "Error: You are not logged on."
         End If
     Else
         Latency = GetPing(Command.Username)
         If (Latency >= -1) Then
-            Command.Respond "Your ping at login was " & Latency & "ms."
+            Command.Respond StringFormat("Your ping at login was {0}ms.", Latency)
         Else
             Command.Respond "I can not see you in the channel."
         End If
@@ -355,6 +443,28 @@ Public Sub OnProfile(Command As clsCommandObj)
             frmProfile.PrepareForProfile Command.Argument("Username"), False
         End If
     End If
+End Sub
+
+Public Sub OnSafeCheck(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        If (GetSafelist(Command.Argument("Username"))) Then
+            Command.Respond StringFormat("{0} is on the bot's safelist.", Command.Argument("Username"))
+        Else
+            Command.Respond StringFormat("{0} is not on the bot's safelist.", Command.Argument("Username"))
+        End If
+    End If
+End Sub
+
+' handle safelist command
+Public Sub OnSafeList(Command As clsCommandObj)
+    Dim bufResponse() As String
+    Dim I             As Long
+    
+    Call SearchDatabase(bufResponse(), , , , , , , "S")
+    
+    For I = 0 To UBound(bufResponse)
+        Command.Respond bufResponse(I)
+    Next I
 End Sub
 
 Public Sub OnScriptDetail(Command As clsCommandObj)
@@ -432,7 +542,6 @@ ERROR_HANDLER:
     frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnScripts()."
 End Sub
 
-
 Public Sub OnServer(Command As clsCommandObj)
     Dim RemoteHost   As String
     Dim RemoteHostIP As String
@@ -445,6 +554,47 @@ Public Sub OnServer(Command As clsCommandObj)
     Else
         Command.Respond "I am currently connected to " & RemoteHost & " (" & RemoteHostIP & ")."
     End If
+End Sub
+
+Public Sub OnShitCheck(Command As clsCommandObj)
+    Dim dbAccess As udtGetAccessResponse
+    Dim compare  As VbCompareMethod
+    If (Command.IsValid) Then
+        dbAccess = GetCumulativeAccess(Command.Argument("Username"))
+        compare = IIf(BotVars.CaseSensitiveFlags, vbBinaryCompare, vbTextCompare)
+        If (Not InStr(1, dbAccess.Flags, "B", compare) = 0) Then
+            If (Not InStr(1, dbAccess.Flags, "S", compare) = 0) Then
+                Command.Respond Command.Argument("Username") & _
+                    "{0} is on the bot's shitlist; also on the safelist and will not be banned."
+            Else
+                Command.Respond Command.Argument("Username") & " is on the bot's shitlist."
+            End If
+        Else
+            Command.Respond Command.Argument("Username") & " is not on the bot's shitlist."
+        End If
+    End If
+End Sub
+
+Public Sub OnShitList(Command As clsCommandObj)
+    Dim bufResponse() As String
+    Dim I             As Integer
+    
+    Call SearchDatabase(bufResponse(), , "!*[*]*", , , , , "B")
+    
+    For I = 0 To UBound(bufResponse)
+        Command.Respond bufResponse(I)
+    Next I
+End Sub
+
+Public Sub OnTagBans(Command As clsCommandObj)
+    Dim bufResponse() As String
+    Dim I             As Integer
+    
+    Call SearchDatabase(bufResponse(), , "*[*]*", , , , , "B")
+    
+    For I = 0 To UBound(bufResponse)
+        Command.Respond bufResponse(I)
+    Next I
 End Sub
 
 Public Sub OnTime(Command As clsCommandObj)
@@ -608,10 +758,10 @@ Public Function GetPing(ByVal Username As String) As Long
     End If
 End Function
 
-Private Function SearchDatabase(ByRef arrReturn() As String, Optional Username As String = vbNullString, _
+Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As String = vbNullString, _
     Optional ByVal match As String = vbNullString, Optional Group As String = vbNullString, _
         Optional dbType As String = vbNullString, Optional lowerBound As Integer = -1, _
-            Optional upperBound As Integer = -1, Optional Flags As String = vbNullString) As Integer
+            Optional upperBound As Integer = -1, Optional Flags As String = vbNullString)
     
     On Error GoTo ERROR_HANDLER
     
@@ -724,8 +874,8 @@ Private Function SearchDatabase(ByRef arrReturn() As String, Optional Username A
         End If
     End If
     
-    Exit Function
+    Exit Sub
     
 ERROR_HANDLER:
     frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandCode.SearchDatabase()."
-End Function
+End Sub

@@ -2,7 +2,7 @@ Attribute VB_Name = "modCommandsMP3"
 Option Explicit
 'This module will house all commands related to manipluating the computer's Media player
 
-Public Function OnAllowMp3(Command As clsCommandObj) As Boolean
+Public Sub OnAllowMp3(Command As clsCommandObj)
     ' This command will enable or disable the use of media player-related commands.
     
     If (BotVars.DisableMP3Commands) Then
@@ -12,10 +12,10 @@ Public Function OnAllowMp3(Command As clsCommandObj) As Boolean
         Command.Respond "MP3 commands are now disabled."
         BotVars.DisableMP3Commands = True
     End If
-End Function
+End Sub
 
-Public Function OnFOS(Command As clsCommandObj) As Boolean
-    If (BotVars.DisableMP3Commands) Then Exit Function
+Public Sub OnFOS(Command As clsCommandObj)
+    If (BotVars.DisableMP3Commands) Then Exit Sub
     
     If (MediaPlayer.IsLoaded()) Then
         MediaPlayer.FadeOutToStop
@@ -23,23 +23,23 @@ Public Function OnFOS(Command As clsCommandObj) As Boolean
     Else
         Command.Respond MediaPlayer.Name & " is not loaded."
     End If
-End Function
+End Sub
 
-Public Function OnLoadWinamp(Command As clsCommandObj) As Boolean
+Public Sub OnLoadWinamp(Command As clsCommandObj)
     ' This command will run Winamp from the default directory, or the directory
     ' specified within the configuration file.
     Dim winamp As New clsWinamp
     
-    If (BotVars.DisableMP3Commands) Then Exit Function
+    If (BotVars.DisableMP3Commands) Then Exit Sub
     
     If (winamp.Start(ReadCfg("Other", "WinampPath"))) Then
         Command.Respond "Winamp loaded."
     Else
         Command.Respond "There was an error loading Winamp."
     End If
-End Function
+End Sub
 
-Public Function OnMP3(Command As clsCommandObj) As Boolean
+Public Sub OnMP3(Command As clsCommandObj)
 
     Dim tmpbuf       As String  ' temporary output buffer
     Dim TrackName    As String  ' ...
@@ -48,7 +48,7 @@ Public Function OnMP3(Command As clsCommandObj) As Boolean
     Dim TrackTime    As Long    ' ...
     Dim TrackLength  As Long    ' ...
     
-    If (BotVars.DisableMP3Commands) Then Exit Function
+    If (BotVars.DisableMP3Commands) Then Exit Sub
     
     If (MediaPlayer.IsLoaded()) Then
         If (LenB(MediaPlayer.TrackName) > 0) Then
@@ -66,10 +66,10 @@ Public Function OnMP3(Command As clsCommandObj) As Boolean
     Else
         Command.Respond MediaPlayer.Name & " is not loaded."
     End If
-End Function
+End Sub
 
-Public Function OnNext(Command As clsCommandObj) As Boolean
-    If (BotVars.DisableMP3Commands) Then Exit Function
+Public Sub OnNext(Command As clsCommandObj)
+    If (BotVars.DisableMP3Commands) Then Exit Sub
     
     If (MediaPlayer.IsLoaded()) Then
         Call MediaPlayer.NextTrack
@@ -77,10 +77,10 @@ Public Function OnNext(Command As clsCommandObj) As Boolean
     Else
         Command.Respond MediaPlayer.Name & " is not loaded."
     End If
-End Function
+End Sub
 
-Public Function OnPause(Command As clsCommandObj) As Boolean
-    If (BotVars.DisableMP3Commands) Then Exit Function
+Public Sub OnPause(Command As clsCommandObj)
+    If (BotVars.DisableMP3Commands) Then Exit Sub
     
     If (MediaPlayer.IsLoaded()) Then
         Call MediaPlayer.PausePlayback
@@ -88,10 +88,10 @@ Public Function OnPause(Command As clsCommandObj) As Boolean
     Else
         Command.Respond MediaPlayer.Name & " is not loaded."
     End If
-End Function
+End Sub
 
-Public Function OnPlay(Command As clsCommandObj) As Boolean
-    If (BotVars.DisableMP3Commands) Then Exit Function
+Public Sub OnPlay(Command As clsCommandObj)
+    If (BotVars.DisableMP3Commands) Then Exit Sub
     
     If (Not MediaPlayer.IsLoaded()) Then MediaPlayer.Start
     
@@ -106,10 +106,10 @@ Public Function OnPlay(Command As clsCommandObj) As Boolean
     Else
         Command.Respond "Error: Could not launch media player."
     End If
-End Function
+End Sub
 
-Public Function OnPrevious(Command As clsCommandObj) As Boolean
-    If (BotVars.DisableMP3Commands) Then Exit Function
+Public Sub OnPrevious(Command As clsCommandObj)
+    If (BotVars.DisableMP3Commands) Then Exit Sub
     
     If (MediaPlayer.IsLoaded()) Then
         MediaPlayer.PreviousTrack
@@ -117,13 +117,13 @@ Public Function OnPrevious(Command As clsCommandObj) As Boolean
     Else
         Command.Respond MediaPlayer.Name & " is not loaded."
     End If
-End Function
+End Sub
 
-Public Function OnRepeat(Command As clsCommandObj)
+Public Sub OnRepeat(Command As clsCommandObj)
     ' This command will toggle the usage of the selected media player's
     ' repeat feature.
     
-    If (BotVars.DisableMP3Commands) Then Exit Function
+    If (BotVars.DisableMP3Commands) Then Exit Sub
         
     If (MediaPlayer.IsLoaded()) Then
         If (MediaPlayer.Repeat) Then
@@ -136,15 +136,15 @@ Public Function OnRepeat(Command As clsCommandObj)
     Else
         Command.Respond MediaPlayer.Name & " is not loaded."
     End If
-End Function
+End Sub
 
-Public Function OnSetVol(Command As clsCommandObj) As Boolean
+Public Sub OnSetVol(Command As clsCommandObj)
     ' This command will set the volume of the media player to the level
     ' specified by the user.
     
     Dim lngVolume As Long
     
-    If (BotVars.DisableMP3Commands) Then Exit Function
+    If (BotVars.DisableMP3Commands) Then Exit Sub
     
     If (Command.IsValid) Then
         If (MediaPlayer.IsLoaded()) Then
@@ -160,13 +160,13 @@ Public Function OnSetVol(Command As clsCommandObj) As Boolean
     Else
         Command.Respond "Error: You must specify a volume level (0-100)."
     End If
-End Function
+End Sub
 
-Public Function OnShuffle(Command As clsCommandObj) As Boolean
+Public Sub OnShuffle(Command As clsCommandObj)
     ' This command will toggle the usage of the selected media player's
     ' shuffling feature.
     
-    If (BotVars.DisableMP3Commands) Then Exit Function
+    If (BotVars.DisableMP3Commands) Then Exit Sub
     
     If (MediaPlayer.IsLoaded()) Then
         If (MediaPlayer.Shuffle) Then
@@ -179,10 +179,10 @@ Public Function OnShuffle(Command As clsCommandObj) As Boolean
     Else
         Command.Respond MediaPlayer.Name & " is not loaded."
     End If
-End Function
+End Sub
 
-Public Function OnStop(Command As clsCommandObj) As Boolean
-    If (BotVars.DisableMP3Commands) Then Exit Function
+Public Sub OnStop(Command As clsCommandObj)
+    If (BotVars.DisableMP3Commands) Then Exit Sub
     
     If (MediaPlayer.IsLoaded()) Then
         Call MediaPlayer.QuitPlayback
@@ -190,25 +190,25 @@ Public Function OnStop(Command As clsCommandObj) As Boolean
     Else
         Command.Respond MediaPlayer.Name & " is not loaded."
     End If
-End Function
+End Sub
 
-Public Function OnUseiTunes(Command As clsCommandObj) As Boolean
-    If (BotVars.DisableMP3Commands) Then Exit Function
+Public Sub OnUseiTunes(Command As clsCommandObj)
+    If (BotVars.DisableMP3Commands) Then Exit Sub
     
     BotVars.MediaPlayer = "iTunes"
     Command.Respond "iTunes is ready."
     
     Call WriteINI("Other", "MediaPlayer", "iTunes")
-End Function
+End Sub
 
-Public Function OnUseWinamp(Command As clsCommandObj) As Boolean
-    If (BotVars.DisableMP3Commands) Then Exit Function
+Public Sub OnUseWinamp(Command As clsCommandObj)
+    If (BotVars.DisableMP3Commands) Then Exit Sub
     
     BotVars.MediaPlayer = "Winamp"
     Command.Respond "Winamp is ready."
     
     Call WriteINI("Other", "MediaPlayer", "Winamp")
-End Function
+End Sub
 
 Private Function SecondsToString(ByVal seconds As Long) As String
     Dim temp  As Long

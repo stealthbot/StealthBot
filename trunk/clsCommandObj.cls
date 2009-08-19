@@ -296,7 +296,7 @@ End Function
 
 'Adds a line to the response queue
 Public Sub Respond(strResponse As String)
-    m_response.Add strResponse
+    If (LenB(strResponse) > 0) Then m_response.Add strResponse
 End Sub
 
 'Cleares the response queue
@@ -347,7 +347,7 @@ End Function
 
 Private Function CheckMatch(sExpression As String, sData As String) As Boolean
 On Error GoTo ERROR_HANDLER
-    Dim mRegExp  As New regExp
+    Dim mRegExp  As New RegExp
     mRegExp.Global = True
     mRegExp.Pattern = sExpression
     CheckMatch = mRegExp.Test(sData)

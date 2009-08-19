@@ -88,6 +88,26 @@ Public Sub OnQuit(Command As clsCommandObj)
     Set frmChat = Nothing
 End Sub
 
+'This is a stub function for now, it still calls the old uber complicated OnRemOld function, but hey :/
+Public Sub OnRem(Command As clsCommandObj)
+    Dim dbAccess   As udtGetAccessResponse
+    Dim response() As String
+    Dim I          As Integer
+    ReDim Preserve response(0)
+    
+    dbAccess = GetCumulativeAccess(Command.Username)
+    If (Command.IsLocal) Then
+        dbAccess.Rank = 201
+        dbAccess.Flags = "A"
+    End If
+    
+    Call OnRemOld(Command.Username, dbAccess, Command.Args, Command.IsLocal, response())
+    
+    For I = LBound(response) To UBound(response)
+        Command.Respond response(I)
+    Next I
+End Sub
+
 Public Sub OnSetExpKey(Command As clsCommandObj)
     Dim strKey As String
     If (Command.IsValid) Then
@@ -164,6 +184,16 @@ Public Sub OnSetPass(Command As clsCommandObj)
     End If
 End Sub
 
+Public Sub OnSetPMsg(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        ProtectMsg = Command.Argument("Message")
+        Call WriteINI("Other", "ProtectMsg", Command.Argument("Message"))
+        Command.Respond "Channel protection message set."
+    Else
+        Command.Respond "You must specify a message."
+    End If
+End Sub
+
 Public Sub OnSetServer(Command As clsCommandObj)
     If (Command.IsValid) Then
         Call WriteINI("Main", "Server", Command.Argument("Server"))
@@ -200,6 +230,3 @@ Public Sub OnWhisperCmds(Command As clsCommandObj)
         End If
     End If
 End Sub
-
-
-

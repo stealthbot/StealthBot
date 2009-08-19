@@ -90,17 +90,11 @@ Attribute VB_Exposed = False
 ' *         Note: All integrated functions are backwards compatiable. No current calls need to be modified.
 ' *     - Added two new timer functions
 ' *         GetTimerInterval, TimeLeft()
-' *     - Added two new functions to work with plugins
-' *         PluginEnabled(), GetPluginEnabled()
 ' *     - Added six functions to work with the new Plugins menu
 ' *         AddMenuItem(), SetMenuItemCheck(), GetMenuItemCheck(), ToggleMenuItemCheck(),
 ' *         SetMenuItemEnabled(), and ReloadPluginMenus()
 ' *         For a more detailed explanation, see the function comments below, or visit:
 ' *            http://www.stealthbot.net/board/index.php?showtopic=29141
-' *     - Added new functions for creating UI forms
-' *         CreateForm(), DestroyForm(), AddFormObject(), GetUIObject()
-' *         For a detailed explination of each event and examples visit:
-' *            http://www.stealthbot.net/board/index.php?showtopic=27969
 ' *     - Added GetBotVersionNumber() function which returns only the numerical value of the bot version
 ' *     - VetoThisMessage() Now works in PacketSent, And PacketReceived, Will prevent it from being sent,
 ' *         or parsed, respectivly.
@@ -1178,85 +1172,6 @@ End Sub
 '
 '    SetMenuEnabled GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolEnabled
 'End Sub
-
-
-'// CREATEFORM
-'//    Written by Hdx. Creates a Form object that the user can use.
-'//    Returns true if the name/prefix combo is free, and the form is created
-'Public Function CreateForm(ByVal strPrefix As String, ByVal strName As String) As Boolean
-'    If (obScriptForms.Exists(strPrefix & "|" & strName)) Then
-'        CreateForm = False
-'        Exit Function
-'    Else
-'        Dim frmUI As New frmScriptUI
-'        frmUI.FillPrefixName strPrefix, strName
-'        Load frmUI
-'        Call obScriptForms.Add(strPrefix & "|" & strName, frmUI)
-'        DictionaryKeys = DictionaryKeys & strPrefix & "|" & strName & vbCrLf
-'        CreateForm = True
-'    End If
-'End Function
-
-'// DESTROYFORM
-'//   Writtin by Hdx - Will destroy a ScruptUI form, freeing up its name, and memory from the Dictionary
-'//   The Form calls this function upon successful "Unload()", Formes must be re-created after this is called.
-'Public Sub DestroyForm(ByVal strPrefix As String, ByVal strForm As String)
-'    If (obScriptForms.Exists(strPrefix & "|" & strForm)) Then
-'        Dim frmUI As frmScriptUI
-'        Set frmUI = obScriptForms.Item(strPrefix & "|" & strForm)
-'        frmUI.DestroyObjects
-'        Unload frmUI
-'        Set frmUI = Nothing
-'    End If
-'End Sub
-
-'// ADDFORMOBJECT
-'//    Writtin by Hdx - Adds an object of the selected type to a Script's form.
-'//    Returns False if the form does not exits, or the name is already taken
-'Public Function AddFormObject(ByVal strPrefix As String, ByVal strFormName As String, ByVal strName As String, ByVal btType As ControlTypes) As Boolean
-'    On Error Resume Next
-'    If (obScriptForms.Exists(strPrefix & "|" & strFormName)) Then
-'        Dim frmUI As frmScriptUI
-'        Set frmUI = obScriptForms.Item(strPrefix & "|" & strFormName)
-'        Select Case btType
-'            Case ControlTypes.btCommandBox:  AddFormObject = frmUI.AddCommandButton(strName)
-'            Case ControlTypes.btLabel:       AddFormObject = frmUI.AddLabel(strName)
-'            Case ControlTypes.btTextBox:     AddFormObject = frmUI.AddTextBox(strName)
-'            Case ControlTypes.btTimer:       AddFormObject = frmUI.AddTimer(strName)
-'            Case ControlTypes.btPictureBox:  AddFormObject = frmUI.AddPictureBox(strName)
-'            Case ControlTypes.btCheckBox:    AddFormObject = frmUI.AddCheckBox(strName)
-'            Case ControlTypes.btOptionBox:   AddFormObject = frmUI.AddOptionBox(strName)
-'            Case ControlTypes.btComboBox:    AddFormObject = frmUI.AddComboBox(strName)
-'            Case ControlTypes.btListBox:     AddFormObject = frmUI.AddListBox(strName)
-'            Case ControlTypes.btShape:       AddFormObject = frmUI.AddShape(strName)
-'            Case ControlTypes.btLine:        AddFormObject = frmUI.AddLine(strName)
-'            Case ControlTypes.btListView:    AddFormObject = frmUI.AddListView(strName)
-'            Case ControlTypes.btImageList:   AddFormObject = frmUI.AddImageList(strName)
-'            Case ControlTypes.btINet:        AddFormObject = frmUI.AddINet(strName)
-'            Case ControlTypes.btRichTextBox: AddFormObject = frmUI.AddRichTextBox(strName)
-'            Case Else: AddFormObject = False
-'        End Select
-'    Else
-'        AddFormObject = False
-'    End If
-'End Function
-
-'// GETUIOBJECT
-'//    Written by Hdx - Retrns the control/form the the specified name. Returns Null if not found.
-'Public Function GetUIObject(ByVal strPrefix As String, ByVal strForm As String, Optional ByVal strObject As String = vbNullString) As Object
-'    If (obScriptForms.Exists(strPrefix & "|" & strForm)) Then
-'        Dim frmUI As frmScriptUI
-'        Set frmUI = obScriptForms.Item(strPrefix & "|" & strForm)
-'        If (strObject = vbNullString) Then
-'            Set GetUIObject = frmUI
-'        Else
-'            Set GetUIObject = frmUI.GetControl(strObject)
-'        End If
-'        Set frmUI = Nothing
-'    Else
-'        Set GetUIObject = Nothing
-'    End If
-'End Function
 
 '// 07/08/2009 JSM
 '// These methods have been abstracted using the IOpenCommand, IDeleteCommand, iCreateCommand

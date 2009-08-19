@@ -4,7 +4,7 @@ Option Explicit
 'Things like Say, DND, Squelch, etc...
 Private m_AwayMessage As String
 
-Public Function OnAway(Command As clsCommandObj) As Boolean
+Public Sub OnAway(Command As clsCommandObj)
     If (LenB(m_AwayMessage) > 0) Then
         Call frmChat.AddQ("/away", PRIORITY.COMMAND_RESPONSE_MESSAGE)
         If (Not Command.IsLocal) Then
@@ -27,9 +27,9 @@ Public Function OnAway(Command As clsCommandObj) As Boolean
             If (Not Command.IsLocal) Then Call frmChat.AddQ("/me is away.")
         End If
     End If
-End Function
+End Sub
 
-Public Function OnBack(Command As clsCommandObj) As Boolean
+Public Sub OnBack(Command As clsCommandObj)
     If (LenB(m_AwayMessage) > 0) Then
         Call frmChat.AddQ("/away", PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
         
@@ -42,9 +42,9 @@ Public Function OnBack(Command As clsCommandObj) As Boolean
             m_AwayMessage = vbNullString
         End If
     End If
-End Function
+End Sub
 
-Public Function OnBlock(Command As clsCommandObj) As Boolean
+Public Sub OnBlock(Command As clsCommandObj)
     Dim FiltersPath As String
     Dim Total       As Integer
     
@@ -63,22 +63,22 @@ Public Function OnBlock(Command As clsCommandObj) As Boolean
             End If
         End If
     End If
-End Function
+End Sub
 
-Public Function OnConnect(Command As clsCommandObj) As Boolean
+Public Sub OnConnect(Command As clsCommandObj)
     frmChat.DoConnect
-End Function
+End Sub
 
-Public Function OnCQ(Command As clsCommandObj) As Boolean
+Public Sub OnCQ(Command As clsCommandObj)
     g_Queue.Clear
     Command.Respond "Queue cleared."
-End Function
+End Sub
 
-Public Function OnDisconnect(Command As clsCommandObj) As Boolean
+Public Sub OnDisconnect(Command As clsCommandObj)
     frmChat.DoDisconnect
-End Function
+End Sub
 
-Public Function OnExpand(Command As clsCommandObj) As Boolean
+Public Sub OnExpand(Command As clsCommandObj)
     Dim sMessage As String
     Dim tmpSend As String
     Dim I As Integer
@@ -97,16 +97,16 @@ Public Function OnExpand(Command As clsCommandObj) As Boolean
             Command.Respond tmpSend
         End If
     End If
-End Function
+End Sub
 
-Public Function OnFAdd(Command As clsCommandObj) As Boolean
+Public Sub OnFAdd(Command As clsCommandObj)
     If (Command.IsValid) Then
         Call frmChat.AddQ("/f a " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
         Command.Respond StringFormat("Added user {0}{1}{0} to this account's friends list.", Chr$(34), Command.Argument("Username"))
     End If
-End Function
+End Sub
 
-Public Function OnFilter(Command As clsCommandObj) As Boolean
+Public Sub OnFilter(Command As clsCommandObj)
     Dim FiltersPath As String
     Dim Total       As Integer
     
@@ -125,26 +125,26 @@ Public Function OnFilter(Command As clsCommandObj) As Boolean
             End If
         End If
     End If
-End Function
+End Sub
 
-Public Function OnForceJoin(Command As clsCommandObj) As Boolean
+Public Sub OnForceJoin(Command As clsCommandObj)
     If (Command.IsValid) Then
         Call FullJoin(Command.Argument("Channel"))
     End If
-End Function
+End Sub
 
-Public Function OnFRem(Command As clsCommandObj) As Boolean
+Public Sub OnFRem(Command As clsCommandObj)
     If (Command.IsValid) Then
         Call frmChat.AddQ("/f r " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
         Command.Respond StringFormat("Removed user {0}{1}{0} from this account's friends list.", Chr$(34), Command.Argument("Username"))
     End If
-End Function
+End Sub
 
-Public Function OnHome(Command As clsCommandObj) As Boolean
+Public Sub OnHome(Command As clsCommandObj)
     Call frmChat.AddQ("/join " & BotVars.HomeChannel, PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
-End Function
+End Sub
 
-Public Function OnIgnore(Command As clsCommandObj) As Boolean
+Public Sub OnIgnore(Command As clsCommandObj)
     If (Command.IsValid) Then
         If (Command.IsLocal) Then
             Command.Respond StringFormat("Ignoring messages from {0}{1}{0}.", Chr$(34), Command.Argument("Username"))
@@ -165,20 +165,20 @@ Public Function OnIgnore(Command As clsCommandObj) As Boolean
             End If
         End If
     End If
-End Function
+End Sub
 
-Public Function OnIgPriv(Command As clsCommandObj) As Boolean
+Public Sub OnIgPriv(Command As clsCommandObj)
     Call frmChat.AddQ("/o igpriv", PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
     Command.Respond "Ignoring messages from non-friends in private channels."
-End Function
+End Sub
 
-Public Function OnJoin(Command As clsCommandObj) As Boolean
+Public Sub OnJoin(Command As clsCommandObj)
     If (Command.IsValid) Then
         Call frmChat.AddQ("/join " & Command.Argument("Channel"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
     End If
-End Function
+End Sub
 
-Public Function OnUnBlock(Command As clsCommandObj) As Boolean
+Public Sub OnUnBlock(Command As clsCommandObj)
     
     Dim I           As Integer
     Dim Total       As Integer
@@ -193,7 +193,7 @@ Public Function OnUnBlock(Command As clsCommandObj) As Boolean
                     Exit For
                 ElseIf (I = Total) Then
                     Command.Respond StringFormat("{0}{1}{0} is not blocked.", Chr(34), Command.Argument("Username"))
-                    Exit Function
+                    Exit Sub
                 End If
             Next I
             
@@ -208,9 +208,9 @@ Public Function OnUnBlock(Command As clsCommandObj) As Boolean
             Command.Respond "Your filters file has been edited manually and is no longer valid. Please delete it."
         End If
     End If
-End Function
+End Sub
 
-Public Function OnUnFilter(Command As clsCommandObj) As Boolean
+Public Sub OnUnFilter(Command As clsCommandObj)
     Dim z As String
     Dim I As Integer
     Dim Total As Integer
@@ -224,7 +224,7 @@ Public Function OnUnFilter(Command As clsCommandObj) As Boolean
                     Exit For
                 ElseIf (I = Total) Then
                     Command.Respond StringFormat("{0}{1}{0} is not filtered.", Chr(34), Command.Argument("Filter"))
-                    Exit Function
+                    Exit Sub
                 End If
             Next I
     
@@ -240,25 +240,25 @@ Public Function OnUnFilter(Command As clsCommandObj) As Boolean
             Command.Respond "Your filters file has been edited manually and is no longer valid. Please delete it."
         End If
     End If
-End Function
+End Sub
 
-Public Function OnUnIgnore(Command As clsCommandObj) As Boolean
+Public Sub OnUnIgnore(Command As clsCommandObj)
     If (Command.IsValid) Then
         Command.Respond StringFormat("Receiving messages from {0}{1}{0}.", Chr$(34), Command.Argument("Username"))
         frmChat.AddQ "/unignore " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE
     End If
-End Function
+End Sub
 
-Public Function OnUnIgPriv(Command As clsCommandObj) As Boolean
+Public Sub OnUnIgPriv(Command As clsCommandObj)
     Call frmChat.AddQ("/o unigpriv", PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
     Command.Respond "Allowing messages from non-friends in private channels."
-End Function
+End Sub
 
-Public Function OnQuickRejoin(Command As clsCommandObj) As Boolean
+Public Sub OnQuickRejoin(Command As clsCommandObj)
     Call RejoinChannel(g_Channel.Name)
-End Function
+End Sub
 
-Public Function OnReconnect(Command As clsCommandObj) As Boolean
+Public Sub OnReconnect(Command As clsCommandObj)
     If (g_Online) Then
         Dim temp As String
         temp = BotVars.HomeChannel
@@ -283,14 +283,14 @@ Public Function OnReconnect(Command As clsCommandObj) As Boolean
         
         Call frmChat.DoConnect
     End If
-End Function
+End Sub
 
-Public Function OnReJoin(Command As clsCommandObj) As Boolean
+Public Sub OnReJoin(Command As clsCommandObj)
     Call frmChat.AddQ(StringFormat("/join {0} Rejoin", GetCurrentUsername), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
     Call frmChat.AddQ("/join " & g_Channel.Name, PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
-End Function
+End Sub
 
-Public Function OnSay(Command As clsCommandObj) As Boolean
+Public Sub OnSay(Command As clsCommandObj)
     Dim tmpSend As String
     
     If (Command.IsValid) Then
@@ -306,13 +306,13 @@ Public Function OnSay(Command As clsCommandObj) As Boolean
             Command.Respond tmpSend
         End If
     End If
-End Function
+End Sub
 
-Public Function OnSCQ(Command As clsCommandObj) As Boolean
+Public Sub OnSCQ(Command As clsCommandObj)
     g_Queue.Clear
-End Function
+End Sub
 
-Public Function OnShout(Command As clsCommandObj) As Boolean
+Public Sub OnShout(Command As clsCommandObj)
     Dim tmpSend As String
     
     If (Command.IsValid) Then
@@ -328,9 +328,9 @@ Public Function OnShout(Command As clsCommandObj) As Boolean
             Command.Respond tmpSend
         End If
     End If
-End Function
+End Sub
 
-Public Function OnWatch(Command As clsCommandObj) As Boolean
+Public Sub OnWatch(Command As clsCommandObj)
     If (Command.IsValid) Then
         WatchUser = Command.Argument("Username")
         Command.Respond "Now watching " & Command.Argument("Username")
@@ -340,15 +340,15 @@ Public Function OnWatch(Command As clsCommandObj) As Boolean
             WatchUser = vbNullString
         End If
     End If
-End Function
+End Sub
 
-Public Function OnWatchOff(Command As clsCommandObj) As Boolean
+Public Sub OnWatchOff(Command As clsCommandObj)
     If (LenB(WatchUser) > 0) Then
         Command.Respond "Stoped watching " & WatchUser
         WatchUser = vbNullString
     Else
         Command.Respond "Watch is disabled."
     End If
-End Function
+End Sub
 
 

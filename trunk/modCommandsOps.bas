@@ -2,6 +2,7 @@ Attribute VB_Name = "modCommandsOps"
 Option Explicit
 'This module will hold all commands that have to deal with holding operator over a channel
 
+Private Const ERROR_NOT_OPS As String = "Error: This command requires channel operator status."
 Public Enum CacheChanneListEnum
     enRetrieve = 0
     enAdd = 1
@@ -9,16 +10,89 @@ Public Enum CacheChanneListEnum
 End Enum
 
 
-Public Sub OnCancel(Command As clsCommandObj)
-    If (VoteDuration > 0) Then
-        Command.Respond Voting(BVT_VOTE_END, BVT_VOTE_CANCEL)
+Public Sub OnAddPhrase(Command As clsCommandObj)
+    Dim sPhrase As String
+    Dim I       As Integer
+    Dim iFile   As Integer
+    
+    ' grab free file handle
+    iFile = FreeFile
+    If (Command.IsValid) Then
+        sPhrase = Command.Argument("Phrase")
+        
+        For I = LBound(Phrases) To UBound(Phrases)
+            If (StrComp(sPhrase, Phrases(I), vbTextCompare) = 0) Then
+                Exit For
+            End If
+        Next I
+        
+        If (I > UBound(Phrases)) Then
+            'Thats a lot of crap.. It check if the last item in Phrases is not just whitespace
+            If (LenB(Trim$(Phrases(UBound(Phrases)))) > 0) Then
+                ReDim Preserve Phrases(0 To UBound(Phrases) + 1)
+            End If
+            
+            Phrases(UBound(Phrases)) = sPhrase
+            
+            Open GetFilePath("PhraseBans.txt") For Output As #iFile
+                For I = LBound(Phrases) To UBound(Phrases)
+                    If (LenB(Trim$(Phrases(I))) > 0) Then
+                        Print #iFile, Phrases(I)
+                    End If
+                Next I
+            Close #iFile
+            
+            Command.Respond StringFormat("Phraseban {0}{1}{0} added.", Chr$(34), sPhrase)
+        Else
+            Command.Respond "Error: That phrase is already banned."
+        End If
+    End If
+End Sub
+
+Public Sub OnBan(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        If (g_Channel.Self.IsOperator) Then
+            If (InStr(1, Command.Argument("Username"), "*", vbBinaryCompare) = 0) Then
+                If (Command.IsLocal) Then
+                    frmChat.AddQ "/ban " & Command.Args
+                Else
+                    Dim dbAccess As udtGetAccessResponse
+                    dbAccess = GetCumulativeAccess(Command.Username)
+                    
+                    Command.Respond Ban(Command.Args, dbAccess.Rank)
+                End If
+            Else
+                Command.Respond WildCardBan(Command.Argument("Username"), Command.Argument("Message"), 1)
+            End If
+        Else
+            Command.Respond ERROR_NOT_OPS
+        End If
     Else
-        Command.Respond "No vote in progress."
+        Command.Respond "Error: You must specify a username to ban."
+    End If
+End Sub
+
+Public Sub OnCAdd(Command As clsCommandObj)
+    Dim sArgs As String
+    If (Command.IsValid) Then
+        If (LenB(Command.Argument("Message")) > 0) Then
+            sArgs = "--banmsg " & Command.Argument("Message")
+        End If
+        
+        Command.Args = StringFormat("{0} +B --type GAME {1}", Command.Argument("Game"), sArgs)
+        Call OnAdd(Command)
+    End If
+End Sub
+
+Public Sub OnCDel(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        Command.Args = Command.Argument("Game") & " -B --type GAME"
+        Call OnAdd(Command)
     End If
 End Sub
 
 Public Sub OnChPw(Command As clsCommandObj)
-    Dim Delay As Integer
+    Dim delay As Integer
     If (Command.IsValid) Then
         Select Case (LCase$(Command.Argument("SubCommand")))
             Case "on", "set":
@@ -39,10 +113,10 @@ Public Sub OnChPw(Command As clsCommandObj)
             
             Case "time", "delay", "wait":
                 If (StrictIsNumeric(Command.Argument("Value"))) Then
-                    Delay = Val(Command.Argument("Value"))
-                    If ((Delay < 256) And (Delay > 0)) Then
-                        BotVars.ChannelPasswordDelay = CByte(Delay)
-                        Command.Respond StringFormat("Channel password delay set to {0}.", Delay)
+                    delay = Val(Command.Argument("Value"))
+                    If ((delay < 256) And (delay > 0)) Then
+                        BotVars.ChannelPasswordDelay = CByte(delay)
+                        Command.Respond StringFormat("Channel password delay set to {0}.", delay)
                     Else
                         Command.Respond "Error: Invalid channel delay."
                     End If
@@ -92,6 +166,38 @@ Public Sub OnD2LevelBan(Command As clsCommandObj)
     End If
 End Sub
 
+Public Sub OnDelPhrase(Command As clsCommandObj)
+    Dim iFile   As Integer
+    Dim sPhrase As String
+    Dim bFound  As Boolean
+    Dim I       As Integer
+    
+    If (Command.IsValid) Then
+        sPhrase = Command.Argument("Phrase")
+        
+        iFile = FreeFile
+        
+        Open GetFilePath("PhraseBans.txt") For Output As #iFile
+            For I = LBound(Phrases) To UBound(Phrases)
+                If (Not StrComp(Phrases(I), sPhrase, vbTextCompare) = 0) Then
+                    Print #iFile, Phrases(I)
+                Else
+                    bFound = True
+                End If
+            Next I
+        Close #iFile
+        
+        ReDim Phrases(0)
+        Call frmChat.LoadArray(LOAD_PHRASES, Phrases())
+        
+        If (bFound) Then
+            Command.Respond StringFormat("Phrase {0}{1}{0} deleted.", Chr$(34), sPhrase)
+        Else
+            Command.Respond "Error: That phrase is not banned."
+        End If
+    End If
+End Sub
+
 Public Sub OnDes(Command As clsCommandObj)
     If (g_Channel.Self.IsOperator) Then
         If (LenB(Command.Argument("Username")) > 0) Then
@@ -105,7 +211,7 @@ Public Sub OnDes(Command As clsCommandObj)
             End If
         End If
     Else
-        Command.Respond "The bot does not currently have ops."
+        Command.Respond ERROR_NOT_OPS
     End If
 End Sub
 
@@ -180,11 +286,69 @@ Public Sub OnGiveUp(Command As clsCommandObj)
                     g_Clan.Members(g_Clan.GetUserIndexEx(colUsers.Item(I))).Promote
                 Next I
             Else
-                Command.Respond "Error: This command requires channel operator status."
+                Command.Respond ERROR_NOT_OPS
             End If
         Else
             Command.Respond "Error: The specified user is not present within the channel."
         End If
+    End If
+End Sub
+
+Public Sub OnIdleBans(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        Select Case (LCase$(Command.Argument("SubCommand")))
+            Case "on":
+                BotVars.IB_On = BTRUE
+                
+                If (StrictIsNumeric(Command.Argument("Value"))) Then
+                    BotVars.IB_Wait = Val(Command.Argument("Value"))
+                    Command.Respond StringFormat("IdleBans activated, with a delay of {0}.", BotVars.IB_Wait)
+                Else
+                    BotVars.IB_Wait = 400
+                    Command.Respond "IdleBans activated, using the default delay of 400."
+                End If
+                
+                Call WriteINI("Other", "IdleBans", "Y")
+                Call WriteINI("Other", "IdleBanDelay", BotVars.IB_Wait)
+                
+            Case "off":
+                BotVars.IB_On = BFALSE
+                Call WriteINI("Other", "IdleBans", "N")
+                Command.Respond "IdleBans deactivated."
+            
+            Case "kick":
+                If (LenB(Command.Argument("Value")) > 0) Then
+                    Select Case LCase$(Command.Argument("Value"))
+                        Case "on":
+                            BotVars.IB_Kick = True
+                            Call WriteINI("Other", "KickIdle", "Y")
+                            Command.Respond "Idle users will now be kicked instead of banned."
+                        
+                        Case "off":
+                            BotVars.IB_Kick = False
+                            Call WriteINI("Other", "KickIdle", "N")
+                            Command.Respond "Idle users will now be banned instead of kicked."
+                    
+                    End Select
+                End If
+                
+            Case "wait", "delay":
+                If (StrictIsNumeric(Command.Argument("Value"))) Then
+                    BotVars.IB_Wait = CInt(Command.Argument("Value"))
+                    Call WriteINI("Other", "IdleBanDelay", BotVars.IB_Wait)
+                    Command.Respond StringFormat("IdleBan delay set to {0}.", BotVars.IB_Wait)
+                Else
+                    Command.Respond "Error: IdleBan delays require a numeric value."
+                End If
+                
+            Case "status":
+                If (BotVars.IB_On = BTRUE) Then
+                    Command.Respond StringFormat("Idle {0} is enabled with a delay of {1} seconds.", _
+                        IIf(BotVars.IB_Kick, "kicking", "banning"), BotVars.IB_Wait)
+                Else
+                    Command.Respond "Idlebans are disabled."
+                End If
+        End Select
     End If
 End Sub
 
@@ -228,6 +392,27 @@ Public Sub OnIPBan(Command As clsCommandObj)
                 Call frmChat.AddQ(StringFormat("/squelch {0}", Command.Argument("Username")), , Command.Username)
                 Command.Respond StringFormat("User {0}{1}{0} IPBanned.", Chr$(34), Command.Argument("Username"))
             End If
+        End If
+    End If
+End Sub
+
+Public Sub OnKick(Command As clsCommandObj)
+    Dim dbAccess As udtGetAccessResponse
+    If (Command.IsValid) Then
+        If (g_Channel.Self.IsOperator) Then
+            
+            If (InStr(1, Command.Argument("Username"), "*", vbTextCompare) > 0) Then
+                Command.Respond WildCardBan(Command.Argument("Username"), Command.Argument("Message"), 0)
+            Else
+                If (Command.IsLocal) Then
+                    frmChat.AddQ "/kick " & Command.Args
+                Else
+                    dbAccess = GetCumulativeAccess(Command.Username)
+                    Command.Respond Ban(Command.Args, dbAccess.Rank, 1)
+                End If
+            End If
+        Else
+            Command.Respond ERROR_NOT_OPS
         End If
     End If
 End Sub
@@ -382,6 +567,39 @@ Public Sub OnPOn(Command As clsCommandObj)
     Command.Respond "Phrasebans activated."
 End Sub
 
+Public Sub OnProtect(Command As clsCommandObj)
+    Select Case (LCase$(Command.Argument("SubCommand")))
+        Case "on":
+            If (g_Channel.Self.IsOperator) Then
+                Protect = True
+                
+                Call WildCardBan("*", ProtectMsg, 1)
+                Call WriteINI("Main", "Protect", "Y")
+                
+                If (LenB(Command.Username) > 0) Then
+                    Command.Respond StringFormat("Lockdown activated by {0}.", Command.Username)
+                Else
+                    Command.Respond "Lockdown activated."
+                End If
+            Else
+                Command.Respond ERROR_NOT_OPS
+            End If
+        
+        Case "off":
+            If (Protect) Then
+                Protect = False
+                
+                Call WriteINI("Main", "Protect", "N")
+                Command.Respond "Lockdown deactivated."
+            Else
+                Command.Respond "Lockdown was not enabled."
+            End If
+            
+        Case Else:
+            Command.Respond StringFormat("Lockdown is currently {0}active.", IIf(Protect, vbNullString, "not "))
+    End Select
+End Sub
+
 Public Sub OnPStatus(Command As clsCommandObj)
     Command.Respond StringFormat("Phrasebans are currently {0}.", _
         IIf(PhraseBans, "enabled", "disabled"))
@@ -415,7 +633,37 @@ Public Sub OnResign(Command As clsCommandObj)
     Call frmChat.AddQ("/resign", PRIORITY.SPECIAL_MESSAGE, Command.Username)
 End Sub
 
-Public Function OnShitAdd(Command As clsCommandObj)
+Public Sub OnSafeAdd(Command As clsCommandObj)
+    Dim sArgs As String
+    If (Command.IsValid) Then
+        If (LenB(BotVars.DefaultSafelistGroup) > 0) Then
+            Dim dbAccess As udtGetAccessResponse
+            dbAccess = GetAccess(BotVars.DefaultSafelistGroup, "GROUP")
+            
+            If (LenB(dbAccess.Username) > 0) Then sArgs = "--group " & BotVars.DefaultSafelistGroup
+        End If
+        
+        If (LenB(sArgs) = 0) Then sArgs = "+S"
+        sArgs = StringFormat("{0} {1} --type USER", Command.Argument("Username"), sArgs)
+        
+        Command.Args = sArgs
+        Call OnAdd(Command)
+    Else
+        Command.Respond "Error: You must specify a username."
+    End If
+End Sub
+
+Public Sub OnSafeDel(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        Command.Args = Command.Argument("Username") & " -S --type USER"
+        Command.IsLocal = True
+        Call OnAdd(Command)
+    Else
+        Command.Respond "Error: You must supply a username."
+    End If
+End Sub
+
+Public Sub OnShitAdd(Command As clsCommandObj)
     Dim sArgs    As String
     
     If (Command.IsValid) Then
@@ -437,7 +685,7 @@ Public Function OnShitAdd(Command As clsCommandObj)
         Command.Args = sArgs
         Call OnAdd(Command)
     End If
-End Function
+End Sub
 
 Public Sub OnShitDel(Command As clsCommandObj)
     If (Command.IsValid) Then
@@ -459,7 +707,7 @@ Public Sub OnSweepBan(Command As clsCommandObj)
             Call CacheChannelList(enReset, "ban ")
             Call frmChat.AddQ("/who " & Command.Argument("Channel"), PRIORITY.CHANNEL_MODERATION_MESSAGE, Command.Username, "request_receipt")
         Else
-            Command.Respond "Error: The bot is not currently a channel operator."
+            Command.Respond ERROR_NOT_OPS
         End If
     End If
 End Sub
@@ -481,11 +729,71 @@ Public Sub OnSweepIgnore(Command As clsCommandObj)
     End If
 End Sub
 
-Public Sub OnTally(Command As clsCommandObj)
-    If (VoteDuration > 0) Then
-        Command.Respond Voting(BVT_VOTE_TALLY)
-    Else
-        Command.Respond "No vote is currently in progress."
+Public Sub OnTagAdd(Command As clsCommandObj)
+    Dim sArgs As String
+    If (Command.IsValid) Then
+        If (LenB(BotVars.DefaultTagbansGroup) > 0) Then
+            Dim dbAccess As udtGetAccessResponse
+            dbAccess = GetAccess(BotVars.DefaultTagbansGroup, "GROUP")
+            
+            If (LenB(dbAccess.Username) > 0) Then
+                sArgs = "--group " & BotVars.DefaultTagbansGroup
+            End If
+        End If
+        
+        If (LenB(sArgs) = 0) Then sArgs = "+B"
+        
+        If (LenB(Command.Argument("Message")) > 0) Then
+            sArgs = StringFormat("{0} --banmsg {1}", sArgs, Command.Argument("Message"))
+        End If
+        
+        If (InStr(Command.Argument("Tag"), "*") = 0) Then
+            sArgs = StringFormat("{0} {1} --type CLAN", Command.Argument("Tag"), sArgs)
+        Else
+            sArgs = StringFormat("{0} {1} --type USER", Command.Argument("Tag"), sArgs)
+        End If
+        
+        Command.Args = sArgs
+        Call OnAdd(Command)
+    End If
+End Sub
+
+Public Sub OnTagDel(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        If (Not InStr(Command.Argument("Tag"), "*") = 0) Then
+            Command.Args = Command.Argument("Tag") & " -B --Type USER"
+            Call OnAdd(Command)
+            Command.Args = Command.Argument("Tag") & " -B --Type CLAN"
+            Call OnAdd(Command)
+        Else
+            Command.Args = StringFormat("*{0}* -B --Type USER", Command.Argument("Tag"))
+            Call OnAdd(Command)
+            Command.Args = StringFormat("*{0}* -B --Type CLAN", Command.Argument("Tag"))
+            Call OnAdd(Command)
+        End If
+    End If
+End Sub
+
+Public Sub OnUnBan(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        If (g_Channel.Self.IsOperator) Then
+            
+            ' what the hell is a flood cap?
+            If (bFlood) Then
+                If (floodCap < 45) Then
+                    floodCap = (floodCap + 15)
+                    Call frmChat.AddQ("/unban " & Command.Argument("UserName"), , Command.Username)
+                End If
+            Else
+                If (InStr(1, Command.Argument("Username"), "*", vbBinaryCompare) <> 0) Then
+                    Call WildCardBan(Command.Argument("Username"), vbNullString, 2)
+                Else
+                    Call frmChat.AddQ("/unban " & Command.Argument("Username"), PRIORITY.CHANNEL_MODERATION_MESSAGE, Command.Username)
+                End If
+            End If
+        Else
+            Command.Respond ERROR_NOT_OPS
+        End If
     End If
 End Sub
 
@@ -505,8 +813,64 @@ Public Sub OnUnIPBan(Command As clsCommandObj)
             Call frmChat.AddQ("/unban " & Command.Argument("Username"), , Command.Username)
             Command.Respond StringFormat("User {0}{1}{0} has been Un-IPBanned.", Chr$(34), Command.Argument("Username"))
         Else
-            Command.Respond "Error: The bot is not currently a channel operator."
+            Command.Respond ERROR_NOT_OPS
         End If
+    End If
+End Sub
+
+Public Sub OnVoteBan(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        If (VoteDuration = -1) Then
+            If (g_Channel.Self.IsOperator) Then
+                Call Voting(BVT_VOTE_START, BVT_VOTE_BAN, Command.Argument("Username"))
+                VoteDuration = 30
+                If (Command.IsLocal) Then
+                    With VoteInitiator
+                        .Rank = 201
+                        .Flags = "A"
+                        .Username = "(Console)"
+                    End With
+                Else
+                    VoteInitiator = GetCumulativeAccess(Command.Username)
+                End If
+            
+                Command.Respond StringFormat("30-second VoteBan vote started. Type YES to kick {0}, NO to acquit him/her.", Command.Argument("Username"))
+            Else
+                Command.Respond ERROR_NOT_OPS
+            End If
+        Else
+            Command.Respond "A vote is currently in progress."
+        End If
+    Else
+        Command.Respond "You must specify a user to kick."
+    End If
+End Sub
+
+Public Sub OnVoteKick(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        If (VoteDuration = -1) Then
+            If (g_Channel.Self.IsOperator) Then
+                Call Voting(BVT_VOTE_START, BVT_VOTE_KICK, Command.Argument("Username"))
+                VoteDuration = 30
+                If (Command.IsLocal) Then
+                    With VoteInitiator
+                        .Rank = 201
+                        .Flags = "A"
+                        .Username = "(Console)"
+                    End With
+                Else
+                    VoteInitiator = GetCumulativeAccess(Command.Username)
+                End If
+            
+                Command.Respond StringFormat("30-second VoteKick vote started. Type YES to kick {0}, NO to acquit him/her.", Command.Argument("Username"))
+            Else
+                Command.Respond ERROR_NOT_OPS
+            End If
+        Else
+            Command.Respond "A vote is currently in progress."
+        End If
+    Else
+        Command.Respond "You must specify a user to kick."
     End If
 End Sub
 
@@ -563,3 +927,72 @@ Public Function CacheChannelList(ByVal eMode As CacheChanneListEnum, ByRef Data 
     End If
 End Function
 
+'This must be public becase The old OnAdd command uses it -.-
+Public Function WildCardBan(ByVal sMatch As String, ByVal sBanMsg As String, ByVal Banning As Byte) As String
+    'Values for Banning byte:
+    '0 = Kick
+    '1 = Ban
+    '2 = Unban
+    
+    Dim I        As Integer
+    Dim iSafe    As Integer
+    Dim sCommand As String
+    Dim sName    As String
+    
+    If (g_Channel.Self.IsOperator) Then
+        If (g_Channel.Users.Count < 1) Then Exit Function
+        
+        If (LenB(sBanMsg) = 0) Then sBanMsg = sMatch
+        
+        sMatch = PrepareCheck(sMatch)
+        
+        Select Case (Banning)
+            Case 1: sCommand = "/ban "
+            Case 2: sCommand = "/unban "
+            Case Else: sCommand = "/kick "
+        End Select
+        
+        If (Dii) Then sCommand = sCommand & "*"
+        
+        If (Not Banning = 2) Then
+            ' Kicking or Banning
+            For I = 1 To g_Channel.Users.Count
+                With g_Channel.Users(I)
+                    If (Not StrComp(.DisplayName, GetCurrentUsername, vbBinaryCompare) = 0) Then
+                        sName = PrepareCheck(.DisplayName)
+                        
+                        If (sName Like sMatch) Then
+                            If (GetSafelist(.DisplayName) = False) Then
+                                If (Not .IsOperator) Then
+                                    Call frmChat.AddQ(StringFormat("{0}{1} {2}", sCommand, .DisplayName, sBanMsg))
+                                End If
+                            Else
+                                iSafe = (iSafe + 1)
+                            End If
+                        End If
+                    End If
+                End With
+            Next I
+            
+            If (iSafe > 0) Then
+                If (StrComp(sBanMsg, ProtectMsg, vbTextCompare) <> 0) Then
+                    WildCardBan = StringFormat("Encountered {0} safelisted user{1}.", iSafe, IIf(iSafe > 1, "s", vbNullString))
+                End If
+            End If
+            
+        Else
+            For I = 1 To g_Channel.Banlist.Count
+                With g_Channel.Banlist(I)
+                    If ((.IsActive) And (LenB(.DisplayName) > 0)) Then
+                        If (sMatch = "*") Then
+                            Call frmChat.AddQ(sCommand & .DisplayName)
+                        Else
+                            sName = PrepareCheck(.DisplayName)
+                            If (sName Like sMatch) Then Call frmChat.AddQ(sCommand & .DisplayName)
+                        End If
+                    End If
+                End With
+            Next I
+        End If
+    End If
+End Function

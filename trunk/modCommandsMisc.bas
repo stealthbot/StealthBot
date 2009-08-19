@@ -2,6 +2,18 @@ Attribute VB_Name = "modCommandsMisc"
 Option Explicit
 'This modules holds all other command code that i couldnt think of which catergory it fell info :P
 
+Public Sub OnAddQuote(Command As clsCommandObj)
+    If (g_Quotes Is Nothing) Then
+        Set g_Quotes = New Collection
+    End If
+    If (Command.IsValid) Then
+        g_Quotes.Add Command.Argument("Quote")
+        Command.Respond "Quote added!"
+    Else
+        Command.Respond "You must provide a quote to add."
+    End If
+End Sub
+
 Public Sub OnBMail(Command As clsCommandObj)
     Dim temp       As udtMail
     Dim strArray() As String
@@ -19,6 +31,14 @@ Public Sub OnBMail(Command As clsCommandObj)
         Call AddMail(temp)
     Else
         Command.Respond "Error: You must supply a recipient and a message."
+    End If
+End Sub
+
+Public Sub OnCancel(Command As clsCommandObj)
+    If (VoteDuration > 0) Then
+        Command.Respond Voting(BVT_VOTE_END, BVT_VOTE_CANCEL)
+    Else
+        Command.Respond "No vote in progress."
     End If
 End Sub
 
@@ -58,6 +78,138 @@ End Sub
 
 Public Sub OnFlip(Command As clsCommandObj)
     Command.Respond IIf(((Rnd * 1000) Mod 2) = 0, "Heads.", "Tails.")
+End Sub
+
+Public Sub OnGreet(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        Select Case LCase$(Command.Argument("SubCommand"))
+            Case "on":
+                BotVars.UseGreet = True
+                Call WriteINI("Other", "UseGreets", "Y")
+                Command.Respond "Greet messages enabled."
+                
+            Case "off":
+                BotVars.UseGreet = False
+                Call WriteINI("Other", "UseGreets", "N")
+                Command.Respond "Gree messages diabled."
+            
+            Case "whisper":
+                Select Case (LCase$(Command.Argument("Value")))
+                    Case "on":
+                        BotVars.WhisperGreet = True
+                        Call WriteINI("Other", "WhisperGreet", "Y")
+                        Command.Respond "Greet messages will now be whispered."
+                        
+                    Case "off":
+                        BotVars.WhisperGreet = False
+                        Call WriteINI("Other", "WhisperGreet", "N")
+                        Command.Respond "Gree messages will no longer be whispered."
+                End Select
+                
+            Case "status":
+                If (BotVars.UseGreet) Then
+                    If (BotVars.WhisperGreet) Then
+                        Command.Respond "Greet messages are currently enabled, and whispered."
+                    Else
+                        Command.Respond "Greet messages are currently enabled, and public."
+                    End If
+                Else
+                    Command.Respond "Greet messages are currently disabled."
+                End If
+            
+            Case "set":
+                If (LenB(Command.Argument("Value")) > 0) Then
+                    BotVars.GreetMsg = Command.Argument("Value")
+                    Call WriteINI("Other", "GreetMsg", BotVars.GreetMsg)
+                Else
+                    Command.Respond "You must supply a greet message."
+                End If
+        End Select
+    End If
+End Sub
+
+Public Sub OnIdle(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        Select Case LCase$(Command.Argument("Enable"))
+            Case "on", "true":
+                Call WriteINI("Main", "Idles", "Y")
+                Command.Respond "Idles activated."
+            
+            Case "off", "false":
+                Call WriteINI("Main", "Idles", "N")
+                Command.Respond "Idles deactivated."
+        End Select
+    End If
+End Sub
+
+Public Sub OnIdleTime(Command As clsCommandObj)
+    Dim delay As Integer
+    If (Command.IsValid) Then
+        delay = Val(Command.Argument("Delay"))
+        Call WriteINI("Main", "IdleWait", 2 * delay)
+        Command.Respond StringFormat("Idle wait time set to {0} minute{1}.", delay, IIf(delay > 1, "s", vbNullString))
+    Else
+        Command.Respond "You must supply a delay when setting the idle time."
+    End If
+End Sub
+
+Public Sub OnIdleType(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        Select Case (LCase$(Command.Argument("Type")))
+            Case "msg", "message":
+                Call WriteINI("Main", "IdleType", "msg")
+                Command.Respond "Idle type set to [ msg ]"
+                
+            Case "quote", "quotes":
+                Call WriteINI("Main", "IdleType", "quote")
+                Command.Respond "Idle type set to [ quote ]"
+                
+            Case "uptime":
+                Call WriteINI("Main", "IdleType", "uptime")
+                Command.Respond "Idle type set to [ uptime ]"
+                
+            Case "mp3":
+                Call WriteINI("Main", "IdleType", "p3")
+                Command.Respond "Idle type set to [ MP3 ]"
+            
+            Case Else:
+                Command.Respond "Unknown Idle type, Type must be: Msg, Quote, Uptime, or MP3"
+        End Select
+    Else
+        Command.Respond "You must specify an idle type."
+    End If
+End Sub
+
+Public Sub OnInbox(Command As clsCommandObj)
+    Dim Msg      As udtMail
+    Dim mcount   As Integer
+    Dim Index    As Integer
+    Dim dbAccess As udtGetAccessResponse
+    
+    If (Command.IsLocal) Then
+        Command.Username = IIf(g_Online, GetCurrentUsername, BotVars.Username)
+        dbAccess.Rank = 201
+        dbAccess.Flags = "A"
+    Else
+        dbAccess = GetCumulativeAccess(Command.Username)
+    End If
+    
+    If (GetMailCount(Command.Username) > 0) Then
+        Do
+            GetMailMessage Command.Username, Msg
+            If (Len(RTrim$(Msg.To)) > 0) Then
+                Command.Respond StringFormat("Message from: {0}: {1}", Trim$(Msg.From), Trim$(Msg.Message))
+            End If
+        Loop While (GetMailCount(Command.Username) > 0)
+    Else
+        If (dbAccess.Rank > 0) Then
+            Command.Respond "You do not currently have any messages in your inbox."
+        End If
+    End If
+    
+    If (Not Command.IsLocal) Then
+        Command.WasWhispered = True
+    End If
 End Sub
 
 Public Sub OnMath(Command As clsCommandObj)
@@ -150,6 +302,17 @@ Public Sub OnMMail(Command As clsCommandObj)
     End If
 End Sub
 
+Public Sub OnQuote(Command As clsCommandObj)
+    Dim tmpQuote As String
+    tmpQuote = "Quote: " & g_Quotes.GetRandomQuote
+    
+    If (Len(tmpQuote) < 8) Then
+        Command.Respond "Error reading your quotes, or no quote file exists."
+    Else
+        Command.Respond tmpQuote
+    End If
+End Sub
+
 Public Sub OnReadFile(Command As clsCommandObj)
     On Error GoTo ERROR_HANDLER
     Dim sFilePath   As String
@@ -204,6 +367,48 @@ Public Sub OnRoll(Command As clsCommandObj)
     Number = CLng(Rnd * maxValue)
     
     Command.Respond StringFormat("Random number (0-{0}): {1}", maxValue, Number)
+End Sub
+
+Public Sub OnSetIdle(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        Call WriteINI("Main", "IdleMsg", Command.Argument("Message"))
+        Command.Respond "Idle message set."
+    End If
+End Sub
+
+Public Sub OnTally(Command As clsCommandObj)
+    If (VoteDuration > 0) Then
+        Command.Respond Voting(BVT_VOTE_TALLY)
+    Else
+        Command.Respond "No vote is currently in progress."
+    End If
+End Sub
+
+Public Sub OnVote(Command As clsCommandObj)
+    Dim Duration As Integer
+    If (Command.IsValid) Then
+        If (VoteDuration = -1) Then
+            Duration = Val(Command.Argument("Duration"))
+            If ((Duration > 0) And (Duration < 32000)) Then
+                VoteDuration = Duration
+                If (Command.IsLocal) Then
+                    With VoteInitiator
+                        .Rank = 201
+                        .Flags = "A"
+                        .Username = "(Console)"
+                    End With
+                Else
+                    VoteInitiator = GetCumulativeAccess(Command.Username)
+                End If
+            Else
+                Command.Respond "Vote durations must be between 1 and 32000"
+            End If
+        Else
+            Command.Respond "A vote is currently in progress."
+        End If
+    Else
+        Command.Respond "Please enter a number of seconds for your vote to last."
+    End If
 End Sub
 
 

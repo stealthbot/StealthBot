@@ -1698,9 +1698,10 @@
     </access>
   </command>
 
-  <command name="slcheck">
+  <command name="shitcheck">
     <aliases>
-      <alias>shitcheck</alias>
+      <alias>slcheck</alias>
+      <alias>tagcheck</alias>
     </aliases>
 
     <documentation>
@@ -1813,7 +1814,7 @@
     </access>
   </command>
 
-  <command name="kick" token="operator">
+  <command name="kick">
     <aliases />
 
     <documentation>
@@ -1823,7 +1824,7 @@
     </documentation>
 
     <arguments>
-      <argument name="username" type="word">
+      <argument name="UserName" type="word">
         <documentation>
           <description>
             The user to remove from the channel.
@@ -1835,7 +1836,7 @@
         </documentation>
       </argument>
 
-      <argument name="reason" type="string" optional="1">
+      <argument name="Message" type="String" optional="1">
         <documentation>
           <description>
             The reason why this user was removed from the channel.
@@ -1852,7 +1853,7 @@
     </access>
   </command>
 
-  <command name="ban" token="operator">
+  <command name="ban">
     <aliases />
 
     <documentation>
@@ -1862,7 +1863,7 @@
     </documentation>
 
     <arguments>
-      <argument name="username" type="word">
+      <argument name="UserName" type="word">
         <documentation>
           <description>
             The name of the user to be banned.
@@ -1874,7 +1875,7 @@
         </documentation>
       </argument>
 
-      <argument name="reason" type="string" optional="1">
+      <argument name="Message" type="string" optional="1">
         <documentation>
           <description>
             The reason why this user was removed from the channel.
@@ -2277,7 +2278,7 @@
     </documentation>
 
     <arguments>
-      <argument name="user" type="word">
+      <argument name="UserName" type="word">
         <documentation>
           <description>
             The username or group to add to the safelist.
@@ -2383,6 +2384,12 @@
           </description>
         </documentation>
       </argument>
+      
+      <argument name="Message" type="String" Optional="1">
+        <documentation>
+          <description>The ban message to use when banning users who match this tag.</description>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -2404,7 +2411,7 @@
     </documentation>
 
     <arguments>
-      <argument name="tag" type="word">
+      <argument name="Tag" type="word">
         <documentation>
           <description>
             The tag to remove from the ban list.
@@ -2474,7 +2481,7 @@
     </documentation>
 
     <arguments>
-      <argument name="subcommand" type="word">
+      <argument name="SubCommand" type="word" optional="1">
         <documentation>
           <description>
             The subcommand to use, must be: 'on', 'off', or 'status'
@@ -2501,7 +2508,7 @@
     </documentation>
 
     <arguments>
-      <argument name="subcommand1" type="word">
+      <argument name="SubCommand" type="word">
         <documentation>
           <description>
             The subcommand to use, must be: 'on', 'off', or 'whisper'
@@ -2509,7 +2516,7 @@
         </documentation>
       </argument>
 
-      <argument name="subcommand2" type="word">
+      <argument name="Value" type="word" optional="1">
         <documentation>
           <description>
             The whisper subcommand to use, must be: 'on', or 'off'
@@ -2803,6 +2810,14 @@
           </specialnotes>
         </documentation>
       </argument>
+      
+      <argument name="Message" type="String" Optional="1">
+        <documentation>
+          <description>
+            The message to use when banning this client from the channel.
+          </descripton>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -2906,9 +2921,21 @@
       <argument name="message" type="string">
         <documentation>
           <description>
-            The message to be used, Leading '/'s will be stripped.
+            The message to be used.
           </description>
         </documentation>
+
+        <restrictions>
+          <restriction name="COMMAND_USAGE">
+            <match message="^[/]" />
+            <access>
+              <rank>100</rank>
+              <flags>
+                <flag>T</flag>
+              </flags>
+            </access>
+          </restriction>
+        <restriction>
       </argument>
     </arguments>
 
@@ -3181,7 +3208,7 @@
     </documentation>
 
     <arguments>
-      <argument name="subcommand" type="word">
+      <argument name="Enable" type="word">
         <documentation>
           <description>
             'On' or 'Off', to enable or disable the idle.

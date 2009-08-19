@@ -11,12 +11,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-Public Sub Class_Initialize()
-    
-End Sub
-
-
-
+Option Explicit
 
 '// This function returns a clsCommandObj that is populated with instance of the command
 '// object.
@@ -238,7 +233,6 @@ ERROR_HANDLER:
 End Function
 
 
-
 '// This function will split a message into separate commands. This message should NOT
 '// have any triggers. This will return a collection of command strings that can be used
 '// to create an instance of a command.
@@ -264,7 +258,6 @@ Private Function SplitCompleteCommandString(ByVal completeCommandString As Strin
     Next I
 
 End Function
-
 
 '// this function takes the raw args string (everything after the command) and returns a
 '// collection of strings. Each string is a argument that is parsed using the new
