@@ -156,12 +156,6 @@ Public Sub LoadScripts()
                         Exit Sub
                     End If
                 End If
-                
-                ' ...
-                'If (res = False) Then
-                '    CurrentModule.AddCode GetDefaultModuleProcs(CurrentModule.Name, _
-                '        Paths(I))
-                'End If
             End If
         Next I
     End If
@@ -1319,43 +1313,57 @@ End Function
 
 Public Sub SC_Error()
     
-    Dim Name    As String
-    Dim ErrType As String
+    Dim Name        As String
+    Dim ErrType     As String
+    Dim Number      As Long
+    Dim description As String
+    Dim line        As Long
+    Dim Column      As Long
+    Dim source      As String
+    Dim Text        As String
     
     With m_sc_control
-        ErrType = "runtime"
-        If m_ExecutingMdl Is Nothing Then
-            Exit Sub ' exec error handler will handle this
-        Else
-            Name = GetScriptName(m_ExecutingMdl.Name)
-            If Name = m_ExecutingMdl.Name Then Name = m_TempMdlName
-            Name = Name & " script"
-        End If
-        
-        ' check if its a parsing error
-        If InStr(1, .Error.source, "compilation", vbBinaryCompare) > 0 Then
-            ErrType = "parsing"
-        Else
-            ' check if the script is planning to handle errors itself, if Script("HandleErrors") = True, then call event_error
-            If ((StrComp(m_ExecutingMdl.CodeObject.Script("HandleErrors"), _
-                         "True", vbTextCompare) = 0) And _
-                         (m_IsEventError = False)) Then
-                ' call Event_Error(ErrObj)
-                RunInSingle m_ExecutingMdl, "Event_Error", .Error
-                
-                ' if cleared, exit
-                If .Error.Number = 0 Then Exit Sub
-            End If
-        End If
-        
-        ' display error
-        frmChat.AddChat RTBColors.ErrorMessageText, _
-            "Scripting " & ErrType & " error " & Chr(39) & .Error.Number & Chr(39) & _
-            " in " & Name & ": (line " & .Error.line & "; column " & .Error.Column & ")"
-        frmChat.AddChat RTBColors.ErrorMessageText, .Error.description
-        frmChat.AddChat RTBColors.ErrorMessageText, "Offending line: >> " & .Error.Text
-        .Error.Clear
+        Number = .Error.Number
+        description = .Error.description
+        line = .Error.line
+        Column = .Error.Column
+        source = .Error.source
+        Text = .Error.Text
     End With
+    
+    ErrType = "runtime"
+    If m_ExecutingMdl Is Nothing Then
+        Exit Sub ' exec error handler will handle this
+    Else
+        Name = GetScriptName(m_ExecutingMdl.Name)
+        If LenB(Name) = 0 Then Name = m_TempMdlName
+        Name = Name & " script"
+    End If
+    
+    ' check if its a parsing error
+    If InStr(1, source, "compilation", vbBinaryCompare) > 0 Then
+        ErrType = "parsing"
+    End If
+    
+    ' check if the script is planning to handle errors itself, if Script("HandleErrors") = True, then call event_error
+    If ((StrComp(m_ExecutingMdl.CodeObject.Script("HandleErrors"), _
+                 "True", vbTextCompare) = 0) And _
+                 (m_IsEventError = False)) Then
+        ' call Event_Error(Number, Description, Line, Column, Text, Source)
+        If (RunInSingle(m_ExecutingMdl, "Event_Error", Number, description, line, Column, Text, source) = True) Then
+            ' if vetoed, exit
+            Exit Sub
+        End If
+    End If
+    
+    ' display error
+    frmChat.AddChat RTBColors.ErrorMessageText, _
+        "Scripting " & ErrType & " error " & Chr(39) & Number & Chr(39) & _
+        " in " & Name & ": (line " & line & "; column " & Column & ")"
+    frmChat.AddChat RTBColors.ErrorMessageText, description
+    frmChat.AddChat RTBColors.ErrorMessageText, "Offending line: >> " & Text
+    
+    m_sc_control.Error.Clear
     
 End Sub
 

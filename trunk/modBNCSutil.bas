@@ -123,6 +123,8 @@ Public Declare Sub nls_get_A Lib "BNCSutil.dll" _
     (ByVal NLS As Long, ByVal Out As String)
 Public Declare Sub nls_get_M1 Lib "BNCSutil.dll" _
     (ByVal NLS As Long, ByVal Out As String, ByVal b As String, ByVal Salt As String)
+Public Declare Sub nls_get_v Lib "BNCSutil.dll" _
+    (ByVal NLS As Long, ByVal Out As String, ByVal Salt As String)
 Public Declare Function nls_check_M2 Lib "BNCSutil.dll" _
     (ByVal NLS As Long, ByVal M2 As String, ByVal b As String, ByVal Salt As String) As Long
 Public Declare Function nls_check_signature Lib "BNCSutil.dll" _

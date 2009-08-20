@@ -84,17 +84,6 @@ Attribute VB_Exposed = False
 ' *     - Added DoStatstringParse() which allows you to parse a statstring from GetInternalData() out
 ' *         just like the bot does (thanks ZergMasterI)
 ' *     - Added a number of Windows API function mirrors (thanks FiftyToo)
-' *     - Rewrote and integrated several Plugin System functions
-' *         Dsp(), SharedScriptSupport.GetSetting(), SetSetting(), TimerInterval(), TimerEnabled(),
-' *         GetTimerEnabled(), GetTimeLeft(), and GetTimerWaiting()
-' *         Note: All integrated functions are backwards compatiable. No current calls need to be modified.
-' *     - Added two new timer functions
-' *         GetTimerInterval, TimeLeft()
-' *     - Added six functions to work with the new Plugins menu
-' *         AddMenuItem(), SetMenuItemCheck(), GetMenuItemCheck(), ToggleMenuItemCheck(),
-' *         SetMenuItemEnabled(), and ReloadPluginMenus()
-' *         For a more detailed explanation, see the function comments below, or visit:
-' *            http://www.stealthbot.net/board/index.php?showtopic=29141
 ' *     - Added GetBotVersionNumber() function which returns only the numerical value of the bot version
 ' *     - VetoThisMessage() Now works in PacketSent, And PacketReceived, Will prevent it from being sent,
 ' *         or parsed, respectivly.
@@ -256,55 +245,8 @@ Public Sub Command(ByVal Username As String, ByVal Message As String, Optional B
 End Sub
 
 
-'// COMMANDEX
-'// Calls StealthBot's command processor, allowing YOU to specify the user's access
-'// Messages passed to the processor will be evaluated as commands
-'// Public Function Commands(ByRef dbAccess As udtGetAccessResponse, Username As String, _
-'//     Message As String, InBot As Boolean, Optional CC As Byte = 0) As String
 
-'// RETURNS: The response string, or an empty string if there is no response
-
-'// Description of each variable:
-'//     All variables not mentioned are the same as above
-'//     uAccess: access to grant this user
-'//     uFlags:  flags to grant this user
-'//  *** I will NOT be checking your flags for sanity.
-'//  *** Please ensure that your flags are in a string format, "ABCDEF",
-'//         ALL uppercase and with no repeating letters, or the bot will become
-'//         somewhat confused.
-'//Removed 08/18/09 - Hdx This is no longer needed use ObserveScript(), or Command()
-'Public Function CommandEx(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
-'    False) As String
-'
-'    Dim dbAccess           As udtGetAccessResponse
-'    Dim command_response() As String
-'    Dim bln                As Boolean
-'
-'    ' ...
-'    If (IsLocal) Then
-'        ' ...
-'        Username = "(console)"
-'
-'        ' ...
-'        With dbAccess
-'            .Rank = 200
-'            .Flags = "A"
-'        End With
-'    Else
-'        ' ...
-'        dbAccess = GetCumulativeAccess(Username)
-'    End If
-'
-'    ' execute command
-'    bln = executeCommand(Username, dbAccess, Message, IsLocal, command_response)
-'
-'    ' ...
-'    CommandEx = Join(command_response, Chr$(0))
-'End Function
-
-
-
-'// PING
+'// PINGBYNAME
 '// Returns the cached ping of the specified user.
 '// If the user is not present in the channel, it returns -3.
 Public Function PingByName(ByVal Username As String) As Long
@@ -425,7 +367,7 @@ End Function
 '// return the cumulative access of a particular user.  This includes both dynamic and static
 '// group memberships and all wildcard matches.  This function should almost always be used over
 '// GetDBEntry().
-'// The scripting control isn't the greatest.If condition Then
+'// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
 Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
@@ -641,13 +583,13 @@ End Function
 '// GETNAMEBYPOSITION
 '// Returns the name of the person at position X in the channel list.
 '// Positions are 1-based. Returns an empty string if the user isn't present
-Public Function GetNameByPosition(ByVal X As Integer) As String
+Public Function GetNameByPosition(ByVal iPosition As Integer) As String
     
     With frmChat.lvChannel.ListItems
-        If X > 0 And X <= .Count Then
-            GetNameByPosition = .Item(X).Text
+        If iPosition > 0 And iPosition <= .Count Then
+            GetNameByPosition = .Item(iPosition).Text
         Else
-            GetNameByPosition = ""
+            GetNameByPosition = vbNullString
         End If
     End With
     
@@ -665,7 +607,7 @@ End Function
 
 '// GETBOTVERSIONNUMBER
 '// Returns numerical value of the current StealthBot version.
-Function GetBotVersionNumber()
+Public Function GetBotVersionNumber() As Double
    Dim strVersion() As String
    
    strVersion = Split(GetBotVersion(), Space(1))
@@ -673,10 +615,10 @@ Function GetBotVersionNumber()
    If (UBound(strVersion)) Then
       If (strVersion(1) = "Beta") Then
          If (UBound(strVersion) > 1) Then
-            GetBotVersionNumber = Mid$(strVersion(2), 2)
+            GetBotVersionNumber = Val(Mid$(strVersion(2), 2))
          End If
       Else
-         GetBotVersionNumber = Mid$(strVersion(1), 2)
+         GetBotVersionNumber = Val(Mid$(strVersion(1), 2))
       End If
    End If
 End Function
@@ -1068,167 +1010,14 @@ Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVa
 End Sub
 
 
-'// RELOADPLUGINMENUS
-'//   Reloads the all plugin menus. All user-added items will be cleared.
-'Public Sub ReloadPluginMenus()
-'
-'    Call DeletePluginMenus
-'    Call RegisterPluginMenus
-'End Sub
-
-
-'// REMOVEPLUGINMENU
-'//   Removes an entire plugin menu.
-'Public Sub RemoveMenuItem(ByVal strPrefix As String, Optional ByVal strName As String)
-'
-'    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
-'
-'    DeleteMenuItemByID GetPluginMenu(strPrefix)
-'End Sub
-
-
-'// ADDMENUITEM
-'//   Written by Swent. Allows users to add custom items to a plugin's menu.
-'//   Syntax: AddMenuItem "prefix", "item name", [boolSeparator], [boolDisabled], [Checkmark]
-'//     If boolSeparator is True, this item is a separator and all other arguments are ignored.
-'//     If boolDisabled is True, this item is greyed out and can't be clicked.
-'//     If boolCheckmark is True, this item has a checkmark
-'//   Add the following sub to your plugin which will be called when any user-added item is clicked:
-'//     Sub <prefix>_Menu_Callback(ItemName)
-'Public Sub AddMenuItem(ByVal strPrefix As String, ByVal strName As String, Optional ByVal boolSeparator As Boolean, _
-'                Optional ByVal boolDisabled As Boolean, Optional ByVal boolCheckmark As Boolean)
-'
-'    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
-'
-'    Dim strCallback As String
-'    Dim lngMenu As Long, lngItem As Long, intItemCount As Integer
-'
-'    lngMenu = GetPluginMenu(strPrefix)
-'    intItemCount = GetMenuItemCount(lngMenu)
-'
-'    '// Insert a separator and warning if this is the first user-added item
-'    If intItemCount < 7 Then
-'        AddScriptMenuItem lngMenu, 0, 0, 1
-'        'AddScriptMenuItem lngMenu, "(use at your own risk)", 0, , 1
-'    End If
-'
-'    '// Create the initial callback sub
-'    strCallback = strPrefix & "_item" & intItemCount + 1 & "_callback"
-'    frmChat.SControl.Modules(1).AddCode "Sub " & strCallback & ":" & strPrefix & "_Menu_Callback """ & strName & """:End " & "Sub"
-'
-'    '// Add the menu item
-'    lngItem = AddScriptMenuItem(lngMenu, strName, strCallback, boolSeparator, boolDisabled, boolCheckmark)
-'
-'    RegisterPluginItem strPrefix, strName, lngItem
-'End Sub
-
-
-'// SETMENUITEMCHECK
-'//   Changes checked status of an item in a plugin menu.
-'Public Sub SetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String, ByVal boolChecked As Boolean)
-'
-'    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
-'
-'    SetMenuCheck GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolChecked
-'End Sub
-
-
-'// GETMENUITEMCHECK
-'//   Get's the checked status of an item in a plugin menu.
-'//   Returns True (checked), False (unchecked), or -1 if it's not a checkmark item
-'Public Function GetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
-'
-'    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Function
-'
-'    Dim intChange As Integer
-'    intChange = SetMenuCheck(GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), True)
-'
-'    If intChange = 0 Then
-'        SetMenuCheck GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), False
-'        GetMenuItemCheck = False
-'    ElseIf intChange = 1 Then
-'        GetMenuItemCheck = True
-'    Else
-'        GetMenuItemCheck = -1
-'    End If
-'End Function
-
-
-'// TOGGLEMENUITEMCHECK
-'//   Reverses the checked status of a plugin menu item.
-'Public Sub ToggleMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
-'
-'    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
-'
-'    SetMenuItemCheck strPrefix, strName, Not GetMenuItemCheck(strPrefix, strName)
-'End Sub
-
-
-'// SETMENUITEMENABLED
-'//   Enables or disables a plugin menu item. Disabled items are greyed out and not clickable.
-'Public Sub SetMenuItemEnabled(ByVal strPrefix As String, ByVal strName As String, ByVal boolEnabled As Boolean)
-'
-'    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
-'
-'    SetMenuEnabled GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolEnabled
-'End Sub
-
-'// 07/08/2009 JSM
-'// These methods have been abstracted using the IOpenCommand, IDeleteCommand, iCreateCommand
-'// and IIsCommand. The implementation is inside modScripting, which creates dynamic functions
-'// that automatically pass the script name.
-' // ...
-'Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional IsLocal As Boolean = False) _
-'    As Object
-'
-'    Set IsCommand = modOtherCode.IsCommand(str, IsLocal)
-'
-'End Function
-'
-'Public Function OpenCommand(ByVal strCommand As String) As Object
-'
-'    '// ...
-'    Set OpenCommand = modCommandDocsObj.OpenCommand(strCommand)
-'
-'End Function
-'
-'// 06/13/2009 JSM - Created Function
-'Public Function DeleteCommand(ByVal strCommand As String) As Object
-'
-'    Set DeleteCommand = modCommandDocsObj.DeleteCommand(strCommand)
-'
-'End Function
-'
-'Public Function CreateCommand(ByVal strCommand As String) As Object
-'
-'    '// ...
-'    Set CreateCommand = modCommandDocsObj.CreateCommand(strCommand)
-'
-'End Function
-'
-'Public Function IsCorrectSyntax(ByVal commandName As String, ByVal commandArgs As String, Optional scriptName As String = vbNullString) As Boolean
-'
-'    '// ...
-'    IsCorrectSyntax = modCommandCode.IsCorrectSyntax(commandName, commandArgs, scriptName)
-'
-'End Function
-'
-'Public Function HasAccess(ByVal Username As String, ByVal commandName As String, Optional ByVal commandArgs As _
-'    String = vbNullString, Optional scriptName As String = vbNullString) As Boolean
-'
-'    HasAccess = _
-'        modCommandCode.HasAccess(Username, commandName, commandArgs, scriptName)
-'
-'End Function
-
-
+'// STRINGFORMAT
+'// Replaces {#} parameters in source with the elements passed after it.
+'// EX: StringFormat("Hello {1}, your ping is {2}ms", Username, Ping)
 Public Function StringFormat(source As String, ParamArray params() As Variant) As String
     Dim arr() As Variant
     arr() = params
     StringFormat = modOtherCode.StringFormatA(source, arr)
 End Function
-
-
 
 
 '// UTCNOW
@@ -1403,6 +1192,36 @@ Public Function XSHA1(ByRef str As String, Optional ByVal inHex As Boolean = Fal
         Next
         XSHA1 = s
     End If
+End Function
+
+'// CREATENLS
+'// Creates an NLS object to log on with a WarCraft III account
+Public Function CreateNls(ByVal Username As String, ByVal Password As String) As clsNLS
+
+    Dim nls As clsNLS
+    
+    Set nls = New clsNLS
+    
+    If nls.Initialize(Username, Password) Then
+        Set CreateNls = nls
+    End If
+    
+    Set nls = Nothing
+
+End Function
+
+'// VERIFYSERVERSIGNATURE
+'// Verifies a WarCraft III server signature to be for the passed IP address
+Public Function VerifyServerSignature(ByVal IPAddress As String, ByVal ServerSignature As String) As Boolean
+
+    Dim nls As clsNLS
+    
+    Set nls = New clsNLS
+    
+    VerifyServerSignature = nls.VerifyServerSignature(IPAddress, ServerSignature)
+    
+    Set nls = Nothing
+
 End Function
 
 '// GETSCRIPTMODULE
@@ -1627,20 +1446,29 @@ Public Function IsCommand(ByVal commandText As String, ByVal strUsername As Stri
     
 End Function
 
+'// OBSERVESCRIPT
 '// Add the currently runnign script as an Observer of the Specified script
 '// The current script will have all events of the observed script duplicated and executed
 Public Sub ObserveScript(ByVal Script As String)
+    
     modScripting.AddScriptObserver modScripting.GetScriptName, Script
+    
 End Sub
 
+'// GETOBSERVED
 '// Returns a collection of script names that this script is observing
 Public Function GetObserved() As Collection
+    
     Set GetObserved = modScripting.GetScriptObservers(modScripting.GetScriptName, True)
+    
 End Function
 
+'// GETOBSERVERS
 '// Returns a collection of script names that are observing this script
 Public Function GetObservers() As Collection
+    
     Set GetObservers = modScripting.GetScriptObservers(modScripting.GetScriptName, False)
+    
 End Function
 
 '// GETSETTINGSENTRY
@@ -1839,6 +1667,16 @@ End Function
 '// Will return the current username for the bot, as Battle.net sees it
 Public Function GetCurrentUsername()
     GetCurrentUsername = modGlobals.CurrentUsername
+End Function
+
+'// GETCURRENTSERVERIP
+'// Returns the IP of the server the bot is currently connected to.
+Public Function GetCurrentServerIP()
+    If modGlobals.g_Online Then
+        GetCurrentServerIP = frmChat.sckBNet.RemoteHostIP
+    Else
+        GetCurrentServerIP = vbNullString
+    End If
 End Function
 
 'Class_Terminate doesn't run when a UI form is created via a script. I made this sub so the bot's Unload sub can explicitly _
