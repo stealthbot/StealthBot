@@ -26,7 +26,7 @@ Public Function GetMailCount(ByVal sUser As String) As Long
         For I = 1 To CurrentRecord
             Get #CurrentOpenFile, I, mTemp
             
-            If (StrComp(sUser, RTrim(mTemp.To), vbBinaryCompare) = 0) Then
+            If (StrComp(sUser, RTrim(mTemp.To), vbTextCompare) = 0) Then
                 Count = Count + 1
             End If
         Next I
@@ -49,7 +49,7 @@ Public Sub GetMailMessage(ByVal sUser As String, ByRef theMessage As udtMail)
         For I = 1 To CurrentRecord
             Get #CurrentOpenFile, I, msgTemp
             
-            If (StrComp(sUser, RTrim(msgTemp.To), vbBinaryCompare) = 0) Then
+            If (StrComp(sUser, RTrim(msgTemp.To), vbTextCompare) = 0) Then
                 theMessage = msgTemp
                 
                 ' Trim off the buffer space from the message.

@@ -192,6 +192,16 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
             End If
         End If
         
+        '// check for ?trigger and !inbox
+        If StrComp(Message, "?trigger", vbBinaryCompare) Or _
+            StrComp(Message, "!inbox", vbBinaryCompare) Then
+            
+            PublicOutput = True
+            cropLen = 2
+            hasTrigger = True
+        End If
+            
+        
         '// if we have not found a trigger, lets get out of here
         If (hasTrigger = False) Then
             '// Not a command
