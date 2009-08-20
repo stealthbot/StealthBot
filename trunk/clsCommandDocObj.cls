@@ -94,7 +94,24 @@ ERROR_HANDLER:
     
 End Function
 
-
+Private Function GetCommandXPath(ByVal strCommand As String, Optional ByVal strScriptOwner As String = vbNullString) As String
+    Dim AZ As String
+    AZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    
+    strCommand = Replace$(strCommand, "'", "&apos;")
+    strScriptOwner = Replace$(strScriptOwner, "'", "&apos;")
+    
+    If strScriptOwner = vbNullString Then
+        GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}' and not(@owner)]", _
+            UCase$(AZ), LCase$(AZ), LCase$(strCommand))
+    ElseIf strScriptOwner = Chr$(0) Then
+        GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}']", _
+            UCase$(AZ), LCase$(AZ), LCase$(strCommand))
+    Else
+        GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}' and translate(@name, '{0}', '{1}')='{3}']", _
+            UCase$(AZ), LCase$(AZ), LCase$(strCommand), LCase$(strScriptOwner))
+    End If
+End Function
 
 '// this function will open a clsCommandDocObj and attempt to seek to the specified command
 Public Function OpenCommand(ByVal strCommand As String, Optional ByVal strScriptOwner As String = vbNullString) As Boolean
@@ -118,22 +135,19 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal strScript
         Exit Function
     End If
     
-    strCommand = Replace(strCommand, "'", "&apos;")
-    
-    If strScriptOwner = vbNullString Then
-        xpath = "./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "' and " & _
-                          "not(@owner)]"
-    ElseIf strScriptOwner = Chr$(0) Then
-        xpath = "./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "']"
-    Else
-        xpath = "./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "' and " & _
-                          "translate(@owner, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') = '" & LCase(strScriptOwner) & "']"
-    End If
+    xpath = GetCommandXPath(strCommand, strScriptOwner)
     
     Set m_command_node = m_command_node.selectSingleNode(xpath)
     
     If (m_command_node Is Nothing) Then
-        Exit Function
+        'Lets try an alias
+        xpath = GetCommandXPath(convertAlias(strCommand), strScriptOwner)
+        Set m_command_node = m_database.documentElement.selectSingleNode(xpath)
+        
+        If (m_command_node Is Nothing) Then
+            OpenCommand = False
+            Exit Function
+        End If
     End If
     
     Set m_aliases = getAliases(m_command_node)
