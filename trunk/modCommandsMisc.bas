@@ -27,7 +27,7 @@ Public Sub OnBMail(Command As clsCommandObj)
             .From = Command.Username
             .Message = Command.Argument("Message")
         End With
-        Command.Respond StringFormat("Added mail for {0}.", temp.To)
+        Command.Respond StringFormat("Added mail for {0}.", Trim(temp.To))
         Call AddMail(temp)
     Else
         Command.Respond "Error: You must supply a recipient and a message."

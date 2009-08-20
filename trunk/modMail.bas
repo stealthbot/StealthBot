@@ -5,10 +5,11 @@ Option Explicit
 Private CurrentOpenFile As Integer
 Private CurrentRecord   As Long
 
+Private MailFile        As String
+
 Public Sub AddMail(ByRef tsMsg As udtMail)
     Call OpenMailFile
     
-    tsMsg.To = LCase(tsMsg.To)
     Put #CurrentOpenFile, CurrentRecord + 1, tsMsg
     
     Call CloseMailFile
@@ -16,21 +17,19 @@ End Sub
 
 Public Function GetMailCount(ByVal sUser As String) As Long
     Dim mTemp As udtMail
-    Dim i     As Long
+    Dim I     As Long
     Dim Count As Long
     
     Call OpenMailFile
     
-    sUser = LCase$(sUser)
-    
     If (CurrentRecord > 0) Then
-        For i = 1 To CurrentRecord
-            Get #CurrentOpenFile, i, mTemp
+        For I = 1 To CurrentRecord
+            Get #CurrentOpenFile, I, mTemp
             
-            If (StrComp(sUser, RTrim(mTemp.To), vbTextCompare) = 0) Then
+            If (StrComp(sUser, RTrim(mTemp.To), vbBinaryCompare) = 0) Then
                 Count = Count + 1
             End If
-        Next i
+        Next I
         
         GetMailCount = Count
     Else
@@ -42,28 +41,31 @@ End Function
 
 Public Sub GetMailMessage(ByVal sUser As String, ByRef theMessage As udtMail)
     Dim msgTemp As udtMail
-    Dim i       As Long
+    Dim I       As Long
     
     Call OpenMailFile
     
-    sUser = LCase$(sUser)
-    
     If (CurrentRecord > 0) Then
-        For i = 1 To CurrentRecord
-            Get #CurrentOpenFile, i, msgTemp
+        For I = 1 To CurrentRecord
+            Get #CurrentOpenFile, I, msgTemp
             
-            If (StrComp(sUser, RTrim(msgTemp.To), vbTextCompare) = 0) Then
+            If (StrComp(sUser, RTrim(msgTemp.To), vbBinaryCompare) = 0) Then
                 theMessage = msgTemp
+                
+                ' Trim off the buffer space from the message.
+                theMessage.To = Trim(theMessage.To)
+                theMessage.From = Trim(theMessage.From)
+                theMessage.Message = Trim(theMessage.Message)
                 
                 With msgTemp
                     .To = vbNullString
                 End With
                 
-                Put #CurrentOpenFile, i, msgTemp
+                Put #CurrentOpenFile, I, msgTemp
                 
                 Exit For
             End If
-        Next i
+        Next I
     Else
         With theMessage
             .To = vbNullString
@@ -78,30 +80,33 @@ End Sub
 Public Sub OpenMailFile()
     On Error GoTo ERROR_HANDLER
 
-    Dim Temp As udtMail
+    Dim temp As udtMail
     Dim f    As Integer
-    Dim i    As Long
+    Dim I    As Long
     
     f = FreeFile
     
-    If (LenB(Dir$(GetFilePath("mail.dat"))) = 0) Then
-        Open GetFilePath("mail.dat") For Output As #f
+    MailFile = ReadCfg("FilePaths", "mail.dat")
+    If LenB(MailFile) = 0 Then MailFile = GetFilePath("mail.dat")
+    
+    If (LenB(Dir$(MailFile)) = 0) Then
+        Open MailFile For Output As #f
         Close #f
     End If
     
-    Open GetFilePath("mail.dat") For Random As #f Len = LenB(Temp)
+    Open MailFile For Random As #f Len = LenB(temp)
     
     If (LOF(f) > 0) Then
-        i = LOF(f) \ LenB(Temp)
+        I = LOF(f) \ LenB(temp)
         
-        If (LOF(f) Mod LenB(Temp) <> 0) Then
-            i = (i + 1)
+        If (LOF(f) Mod LenB(temp) <> 0) Then
+            I = (I + 1)
         End If
     Else
-        i = 0
+        I = 0
     End If
     
-    CurrentRecord = i
+    CurrentRecord = I
     CurrentOpenFile = f
     
     Exit Sub
@@ -120,7 +125,7 @@ End Sub
 Public Sub CleanUpMailFile()
     Dim tMail() As udtMail
     Dim tTemp   As udtMail
-    Dim i       As Long
+    Dim I       As Long
     Dim c       As Long
     
     Call OpenMailFile
@@ -131,31 +136,31 @@ Public Sub CleanUpMailFile()
         If (LOF(CurrentOpenFile) > 0) Then
             ' mail in the mail file
             ' collect valid entries and rewrite it
-            For i = 1 To CurrentRecord
-                Get #CurrentOpenFile, i, tTemp
+            For I = 1 To CurrentRecord
+                Get #CurrentOpenFile, I, tTemp
                 
-                tMail(i) = tTemp
-            Next i
+                tMail(I) = tTemp
+            Next I
         End If
         
         Call CloseMailFile
         
         ' Zap the old file
-        Call Kill(GetFilePath("mail.dat"))
+        Call Kill(MailFile)
         
         ' Write a new mail file
         Call OpenMailFile
         
         c = 1
 
-        For i = 1 To UBound(tMail)
-            If (Len(Trim(tMail(i).To)) > 0) Then
-                Put #CurrentOpenFile, c, tMail(i)
+        For I = 1 To UBound(tMail)
+            If (Len(Trim(tMail(I).To)) > 0) Then
+                Put #CurrentOpenFile, c, tMail(I)
                 
                 ' ...
                 c = (c + 1)
             End If
-        Next i
+        Next I
     End If
 
     Call CloseMailFile
