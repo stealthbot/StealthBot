@@ -39,9 +39,9 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Set commands = clsCommandObj.IsCommand(Message, IIf(IsLocal, modGlobals.CurrentUsername, Username), Chr$(0))
 
     For Each Command In commands
+        Command.WasWhispered = WasWhispered
         
         If (Command.HasAccess) Then
-            Command.WasWhispered = WasWhispered
             If (IsLocal) Then
                 With dbAccess
                     .Rank = 201

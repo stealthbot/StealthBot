@@ -231,6 +231,7 @@ On Error GoTo ERROR_HANDLER
     IsValid = True
     
     For Each Param In Me.docs.Parameters
+    
         Select Case LCase(Param.DataType)
             Case "word":    sTemp = StripWord(sArgs)
             Case "numeric": sTemp = StripNumeric(sArgs)

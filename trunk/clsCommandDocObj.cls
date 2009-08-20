@@ -330,11 +330,10 @@ Private Function getRestrictions(ByRef parameterNode As IXMLDOMNode) As Collecti
         With temp
             .Name = getName(RestrictionNode)
             .MatchMessage = getMatchMessage(RestrictionNode)
-            .MatchError = RestrictionNode.selectSingleNode("error").Text
-            .MatchCaseSensitive = False
-            If (RestrictionNode.selectSingleNode("match").Attributes.getNamedItem("case-sensitive").Text = "1") Then
-                .MatchCaseSensitive = True
+            If (Not RestrictionNode.selectSingleNode("error") Is Nothing) Then
+                .MatchError = RestrictionNode.selectSingleNode("error").Text
             End If
+            .MatchCaseSensitive = getMatchCase(RestrictionNode)
             .RequiredFlags = getFlags(RestrictionNode)
             .RequiredRank = GetRank(RestrictionNode)
         End With
@@ -642,6 +641,28 @@ Private Function getMatchMessage(ByRef AnyNode As IXMLDOMNode) As String
 
 End Function
 
+Private Function getMatchCase(ByRef AnyNode As IXMLDOMNode) As Boolean
+
+    Dim temp As IXMLDOMNode
+    getMatchCase = False
+    
+    If (AnyNode Is Nothing) Then
+        Exit Function
+    End If
+    
+    Set temp = AnyNode.selectSingleNode("match")
+    If (temp Is Nothing) Then
+        Exit Function
+    End If
+    
+    Set temp = temp.Attributes.getNamedItem("case-sensitive")
+    If (temp Is Nothing) Then
+        Exit Function
+    End If
+    
+    getMatchCase = (temp.Text = "1")
+
+End Function
 
 Private Function getEnabled(ByRef AnyNode As IXMLDOMNode) As Boolean
 
