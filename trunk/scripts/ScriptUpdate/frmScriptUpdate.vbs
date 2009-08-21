@@ -163,7 +163,7 @@ Sub bind_ddCategories()
 		
 		With ilCategories.ListImages
 			Call .Add(,categoryNode.SelectSingleNode("@LookupCode").Text,_
-					   LoadPicture(StringFormat("{0}images\{1}", Array(GetWorkingDirectory(), categoryNode.SelectSingleNode("@ImagePath").Text))))
+					   LoadPicture(StringFormat("{0}images\{1}", GetWorkingDirectory(), categoryNode.SelectSingleNode("@ImagePath").Text)))
 		End With
 	Next
 	
@@ -202,8 +202,8 @@ Sub bind_lvScripts(sbscriptNodeList)
 			Next
 			lvi.SubItems(3) = authors
 			'// Avg./Total Rating
-			lvi.SubItems(4) = StringFormat("{0} / {1}",Array(sbscriptNode.SelectSingleNode("@AverageRating").Text, _
-													         sbscriptNode.SelectSingleNode("@TotalRatings").Text))
+			lvi.SubItems(4) = StringFormat("{0} / {1}", sbscriptNode.SelectSingleNode("@AverageRating").Text, _
+													    sbscriptNode.SelectSingleNode("@TotalRatings").Text)
 			'// Description
 			lvi.SubItems(5) = sbscriptNode.SelectSingleNode("Description").Text
 		End With		
@@ -240,7 +240,7 @@ Sub frmScriptUpdate_btnSearch_Click()
 		plural = "s"
 	End If
 		
-	frmScriptUpdate.Caption = StringFormat("Online Script Repository - Searching Complete - {0} script{1} found.", Array(xmlResponse.SelectNodes("/ScriptUpdate/Response/SBScripts/SBScript").Length, plural))
+	frmScriptUpdate.Caption = StringFormat("Online Script Repository - Searching Complete - {0} script{1} found.", xmlResponse.SelectNodes("/ScriptUpdate/Response/SBScripts/SBScript").Length, plural)
 
 	'// clean up
 	Set xmlResponse = Nothing

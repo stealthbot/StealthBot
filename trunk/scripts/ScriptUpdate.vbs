@@ -2,9 +2,6 @@
 #include "\ScriptUpdate\frmScriptUpdate.vbs"
 #include "\ScriptUpdate\frmScriptDownloadWizard.vbs"
 #include "\lib\XMLTextWriter\XMLTextWriter.vbs"
-#include "\lib\RssReader\RssReader.vbs"
-#include "\lib\libFiftyToo\Functions.vbs"
-#include "\lib\libFiftyToo\Color.vbs"
 
 
 
@@ -22,6 +19,8 @@ Script("Minor") = 1           		' script minor version
 Script("Revision") = 0        		' script version revision   
 
 Sub Event_Load()
+
+	Call CreateScriptCommands()
 	
 	'// Create our Updater instance
 	Set Updater = New ut_Updater
@@ -42,7 +41,18 @@ Sub Event_Load()
 End Sub
 
 Sub mnuScriptUpdate_Click()
+	Call ShowUpdateForm()
+End Sub
 
+Sub Event_Command(cmd)
+	Select Case LCase(cmd.Name)
+		Case "updates":
+			Call ShowUpdateForm()
+	End Select
+End Sub
+
+
+Sub ShowUpdateForm()
 	'// Create forms
 	If (frmScriptUpdate Is Nothing) = True Then
 		Call CreateObj("Form", "frmScriptUpdate")
@@ -50,16 +60,28 @@ Sub mnuScriptUpdate_Click()
 	End If
 	
 	Call frmScriptUpdate.Show()
-	
-End Sub
-
-Sub Event_PressedEnter(Text)
-
 End Sub
 
 
-Sub Event_UserTalk(Username, Flags, Message, Ping)
+Sub CreateScriptCommands()
+
+	Dim Command
+
+    '// UPDATES
+    Set Command = OpenCommand("updates")
+    If Command Is Nothing Then
+        '// It does not, lets create the command
+        Set Command = CreateCommand("updates")
+        With Command
+			'// set a command description
+			.Description = "Shows the script update form."
+            '// save the command
+            .Save
+        End With
+    End If
+
 
 End Sub
+
 
      

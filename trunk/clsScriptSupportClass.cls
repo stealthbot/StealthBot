@@ -828,6 +828,11 @@ Public Sub SetSCTimeout(ByVal newValue As Long)
 End Sub
 
 
+'// COLOR
+'//   Gets a reference to the clsColor object. This object has properties that represent the CSS color constants
+Public Function Color() As clsColor
+    Set Color = New clsColor
+End Function
 
 '// GetScriptControl
 '// Returns the Script Control as an object
