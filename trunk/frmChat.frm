@@ -1538,7 +1538,7 @@ Private Sub Form_Load()
         strBeta = vbNullString
     #End If
     
-    CVERSION = StringFormat("StealthBot {0}v{1}.{2} - Build {3}", strBeta, App.Major, App.Minor, ZeroOffsetEx(App.REVISION, 4))
+    CVERSION = StringFormat("StealthBot {0}v{1}.{2} - Build {3}", strBeta, App.Major, App.Minor, App.REVISION, 4)
     
     #If (COMPILE_RELEASE = 1) Then
         If (Not ValidateExecutable) Then
