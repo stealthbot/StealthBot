@@ -193,8 +193,8 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         End If
         
         '// check for ?trigger and !inbox
-        If StrComp(Message, "?trigger", vbBinaryCompare) Or _
-            StrComp(Message, "!inbox", vbBinaryCompare) Then
+        If (StrComp(Message, "?trigger", vbBinaryCompare) = 0) Or _
+            (StrComp(Message, "!inbox", vbBinaryCompare) = 0) Then
             
             PublicOutput = True
             cropLen = 2
@@ -251,7 +251,7 @@ End Function
 '// Fix logic to allow "; " inside a quoted argument.
 Private Function SplitCompleteCommandString(ByVal completeCommandString As String) As Collection
 
-    Dim I As Integer
+    Dim i As Integer
     Dim commandString As String
     Dim commandStrings() As String
     
@@ -260,12 +260,12 @@ Private Function SplitCompleteCommandString(ByVal completeCommandString As Strin
     '// use "; " as a delimiter for commands. Allows for /; to escape a command split
     completeCommandString = Replace(completeCommandString, "\;", Chr(0))
     commandStrings = Split(completeCommandString, "; ")
-    For I = LBound(commandStrings) To UBound(commandStrings)
+    For i = LBound(commandStrings) To UBound(commandStrings)
         '// make sure these some actual text for this command, otherwise skip it
-        If Len(commandStrings(I)) > 0 Then
-            SplitCompleteCommandString.Add Replace(commandStrings(I), Chr(0), ";")
+        If Len(commandStrings(i)) > 0 Then
+            SplitCompleteCommandString.Add Replace(commandStrings(i), Chr(0), ";")
         End If
-    Next I
+    Next i
 
 End Function
 
@@ -278,7 +278,7 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
 
     On Error GoTo ERROR_HANDLER
 
-    Dim I           As Integer   '// counter
+    Dim i           As Integer   '// counter
     Dim L, r        As String    '// temp vars to store the left and right characters
     Dim tmp()       As String    '// array of words
     Dim Word        As String    '// stores the word
@@ -320,8 +320,8 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
     
     '// loop through each element and group the arguments
     tmp = Split(strArgString)
-    For I = LBound(tmp) To UBound(tmp)
-        Word = tmp(I)
+    For i = LBound(tmp) To UBound(tmp)
+        Word = tmp(i)
         '// allow for escaping quotes
         Word = Replace(Word, "\""", Chr(0))
         
@@ -413,7 +413,7 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
             
         End If
     
-    Next I
+    Next i
     
     '// final test
     If insideArg = True Then
