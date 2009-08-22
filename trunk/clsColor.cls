@@ -13,6 +13,208 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+
+Dim namedColor As Scripting.Dictionary
+
+
+Public Sub Class_Terminate()
+    Set namedColor = Nothing
+End Sub
+
+Public Function Hex(hexcolor) As Long
+    Dim r, g, b, os
+    If Left(hexcolor, 1) = "#" Then os = 1
+    r = "&H" & Mid(hexcolor, 1 + os, 2)
+    g = "&H" & Mid(hexcolor, 3 + os, 2)
+    b = "&H" & Mid(hexcolor, 5 + os, 2)
+    Hex = RGB(CInt(r), CInt(g), CInt(b))
+End Function
+
+'// shows a list of all the colors in the chat window
+Public Sub List()
+
+    Dim prm(0 To 1) As Variant
+    Dim sColor, a, i
+
+    If namedColor Is Nothing Then
+        Call CreateDictionary
+    End If
+
+    
+    a = namedColor.Keys
+    For i = 0 To namedColor.Count - 1
+        frmChat.AddChat CSS(a(i)), StringFormat("{0}{2}{2}({1})", a(i), CSS(a(i)), vbTab)
+    Next i
+
+End Sub
+
+'// returns the value of a color from the dictionary
+Private Function CSS(colorName) As Long
+    
+    Call CreateDictionary
+        
+    If namedColor.Exists(colorName) Then
+        CSS = Hex(namedColor.Item(colorName))
+    Else
+        CSS = vbWhite
+    End If
+    
+End Function
+
+Private Sub CreateDictionary()
+
+    If Not (namedColor Is Nothing) Then
+        '// already created
+        Exit Sub
+    End If
+
+    '// create the dictionary
+    Set namedColor = CreateObject("Scripting.Dictionary")
+    namedColor.CompareMode = 1
+
+    namedColor.Add "AliceBlue", "#F0F8FF"
+    namedColor.Add "AntiqueWhite", "#FAEBD7"
+    namedColor.Add "Aqua", "#00FFFF"
+    namedColor.Add "Aquamarine", "#7FFFD4"
+    namedColor.Add "Azure", "#F0FFFF"
+    namedColor.Add "Beige", "#F5F5DC"
+    namedColor.Add "Bisque", "#FFE4C4"
+    namedColor.Add "Black", "#000000"
+    namedColor.Add "BlanchedAlmond", "#FFEBCD"
+    namedColor.Add "Blue", "#0000FF"
+    namedColor.Add "BlueViolet", "#8A2BE2"
+    namedColor.Add "Brown", "#A52A2A"
+    namedColor.Add "BurlyWood", "#DEB887"
+    namedColor.Add "CadetBlue", "#5F9EA0"
+    namedColor.Add "Chartreuse", "#7FFF00"
+    namedColor.Add "Chocolate", "#D2691E"
+    namedColor.Add "Coral", "#FF7F50"
+    namedColor.Add "CornflowerBlue", "#6495ED"
+    namedColor.Add "Cornsilk", "#FFF8DC"
+    namedColor.Add "Crimson", "#DC143C"
+    namedColor.Add "Cyan", "#00FFFF"
+    namedColor.Add "DarkBlue", "#00008B"
+    namedColor.Add "DarkCyan", "#008B8B"
+    namedColor.Add "DarkGoldenRod", "#B8860B"
+    namedColor.Add "DarkGray", "#A9A9A9"
+    namedColor.Add "DarkGreen", "#006400"
+    namedColor.Add "DarkKhaki", "#BDB76B"
+    namedColor.Add "DarkMagenta", "#8B008B"
+    namedColor.Add "DarkOliveGreen", "#556B2F"
+    namedColor.Add "Darkorange", "#FF8C00"
+    namedColor.Add "DarkOrchid", "#9932CC"
+    namedColor.Add "DarkRed", "#8B0000"
+    namedColor.Add "DarkSalmon", "#E9967A"
+    namedColor.Add "DarkSeaGreen", "#8FBC8F"
+    namedColor.Add "DarkSlateBlue", "#483D8B"
+    namedColor.Add "DarkSlateGray", "#2F4F4F"
+    namedColor.Add "DarkTurquoise", "#00CED1"
+    namedColor.Add "DarkViolet", "#9400D3"
+    namedColor.Add "DeepPink", "#FF1493"
+    namedColor.Add "DeepSkyBlue", "#00BFFF"
+    namedColor.Add "DimGray", "#696969"
+    namedColor.Add "DodgerBlue", "#1E90FF"
+    namedColor.Add "FireBrick", "#B22222"
+    namedColor.Add "FloralWhite", "#FFFAF0"
+    namedColor.Add "ForestGreen", "#228B22"
+    namedColor.Add "Fuchsia", "#FF00FF"
+    namedColor.Add "Gainsboro", "#DCDCDC"
+    namedColor.Add "GhostWhite", "#F8F8FF"
+    namedColor.Add "Gold", "#FFD700"
+    namedColor.Add "GoldenRod", "#DAA520"
+    namedColor.Add "Gray", "#808080"
+    namedColor.Add "Green", "#008000"
+    namedColor.Add "GreenYellow", "#ADFF2F"
+    namedColor.Add "HoneyDew", "#F0FFF0"
+    namedColor.Add "HotPink", "#FF69B4"
+    namedColor.Add "IndianRed ", "#CD5C5C"
+    namedColor.Add "Indigo ", "#4B0082"
+    namedColor.Add "Ivory", "#FFFFF0"
+    namedColor.Add "Khaki", "#F0E68C"
+    namedColor.Add "Lavender", "#E6E6FA"
+    namedColor.Add "LavenderBlush", "#FFF0F5"
+    namedColor.Add "LawnGreen", "#7CFC00"
+    namedColor.Add "LemonChiffon", "#FFFACD"
+    namedColor.Add "LightBlue", "#ADD8E6"
+    namedColor.Add "LightCoral", "#F08080"
+    namedColor.Add "LightCyan", "#E0FFFF"
+    namedColor.Add "LightGoldenRodYellow", "#FAFAD2"
+    namedColor.Add "LightGray", "#D3D3D3"
+    namedColor.Add "LightGreen", "#90EE90"
+    namedColor.Add "LightPink", "#FFB6C1"
+    namedColor.Add "LightSalmon", "#FFA07A"
+    namedColor.Add "LightSeaGreen", "#20B2AA"
+    namedColor.Add "LightSkyBlue", "#87CEFA"
+    namedColor.Add "LightSlateGray", "#778899"
+    namedColor.Add "LightSteelBlue", "#B0C4DE"
+    namedColor.Add "LightYellow", "#FFFFE0"
+    namedColor.Add "Lime", "#00FF00"
+    namedColor.Add "LimeGreen", "#32CD32"
+    namedColor.Add "Linen", "#FAF0E6"
+    namedColor.Add "Magenta", "#FF00FF"
+    namedColor.Add "Maroon", "#800000"
+    namedColor.Add "MediumAquaMarine", "#66CDAA"
+    namedColor.Add "MediumBlue", "#0000CD"
+    namedColor.Add "MediumOrchid", "#BA55D3"
+    namedColor.Add "MediumPurple", "#9370D8"
+    namedColor.Add "MediumSeaGreen", "#3CB371"
+    namedColor.Add "MediumSlateBlue", "#7B68EE"
+    namedColor.Add "MediumSpringGreen", "#00FA9A"
+    namedColor.Add "MediumTurquoise", "#48D1CC"
+    namedColor.Add "MediumVioletRed", "#C71585"
+    namedColor.Add "MidnightBlue", "#191970"
+    namedColor.Add "MintCream", "#F5FFFA"
+    namedColor.Add "MistyRose", "#FFE4E1"
+    namedColor.Add "Moccasin", "#FFE4B5"
+    namedColor.Add "NavajoWhite", "#FFDEAD"
+    namedColor.Add "Navy", "#000080"
+    namedColor.Add "OldLace", "#FDF5E6"
+    namedColor.Add "Olive", "#808000"
+    namedColor.Add "OliveDrab", "#6B8E23"
+    namedColor.Add "Orange", "#FFA500"
+    namedColor.Add "OrangeRed", "#FF4500"
+    namedColor.Add "Orchid", "#DA70D6"
+    namedColor.Add "PaleGoldenRod", "#EEE8AA"
+    namedColor.Add "PaleGreen", "#98FB98"
+    namedColor.Add "PaleTurquoise", "#AFEEEE"
+    namedColor.Add "PaleVioletRed", "#D87093"
+    namedColor.Add "PapayaWhip", "#FFEFD5"
+    namedColor.Add "PeachPuff", "#FFDAB9"
+    namedColor.Add "Peru", "#CD853F"
+    namedColor.Add "Pink", "#FFC0CB"
+    namedColor.Add "Plum", "#DDA0DD"
+    namedColor.Add "PowderBlue", "#B0E0E6"
+    namedColor.Add "Purple", "#800080"
+    namedColor.Add "Red", "#FF0000"
+    namedColor.Add "RosyBrown", "#BC8F8F"
+    namedColor.Add "RoyalBlue", "#4169E1"
+    namedColor.Add "SaddleBrown", "#8B4513"
+    namedColor.Add "Salmon", "#FA8072"
+    namedColor.Add "SandyBrown", "#F4A460"
+    namedColor.Add "SeaGreen", "#2E8B57"
+    namedColor.Add "SeaShell", "#FFF5EE"
+    namedColor.Add "Sienna", "#A0522D"
+    namedColor.Add "Silver", "#C0C0C0"
+    namedColor.Add "SkyBlue", "#87CEEB"
+    namedColor.Add "SlateBlue", "#6A5ACD"
+    namedColor.Add "SlateGray", "#708090"
+    namedColor.Add "Snow", "#FFFAFA"
+    namedColor.Add "SpringGreen", "#00FF7F"
+    namedColor.Add "SteelBlue", "#4682B4"
+    namedColor.Add "Tan", "#D2B48C"
+    namedColor.Add "Teal", "#008080"
+    namedColor.Add "Thistle", "#D8BFD8"
+    namedColor.Add "Tomato", "#FF6347"
+    namedColor.Add "Turquoise", "#40E0D0"
+    namedColor.Add "Violet", "#EE82EE"
+    namedColor.Add "Wheat", "#F5DEB3"
+    namedColor.Add "White", "#FFFFFF"
+    namedColor.Add "WhiteSmoke", "#F5F5F5"
+    namedColor.Add "Yellow", "#FFFF00"
+    namedColor.Add "YellowGreen", "#9ACD32"
+End Sub
+
+'// properties do not use the internal dictionary
 Public Property Get AliceBlue() As Long
     AliceBlue = 16775408
 End Property
