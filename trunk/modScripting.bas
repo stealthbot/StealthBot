@@ -16,9 +16,17 @@ Public Type scObj
     obj      As Object
 End Type
 
+Public Type scInc
+    SCModule  As Module
+    IncName   As String
+    lineCount As Integer
+End Type
+
 Private m_srootmenu     As New clsMenuObj
 Private m_arrObjs()     As scObj
 Private m_objCount      As Integer
+Private m_arrIncs()     As scInc
+Private m_incCount      As Integer
 Private m_sc_control    As ScriptControl
 Private m_is_reloading  As Boolean
 Private m_ExecutingMdl  As Module
@@ -94,9 +102,9 @@ Public Sub LoadScripts()
 
     
     ' ensure scripts folder exists
-    If (Dir(strPath) <> vbNullString) Then
+    If (LenB(Dir$(strPath)) > 0) Then
         ' grab initial script file name
-        filename = Dir(strPath)
+        filename = Dir$(strPath)
         
         ' grab script files
         ' note: if we don't enumerate this list prior to script loading,
@@ -106,7 +114,7 @@ Public Sub LoadScripts()
             Paths.Add filename
         
             ' grab next script file name
-            filename = Dir()
+            filename = Dir$()
         Loop
 
         ' Cycle through each of the files.
@@ -173,7 +181,7 @@ ERROR_HANDLER:
 
     ' ...
     frmChat.AddChat vbRed, _
-        "Error (" & Err.Number & "): " & Err.description & " in LoadScripts()."
+        "Error (" & Err.Number & "): " & Err.Description & " in LoadScripts()."
 
 End Sub
 
@@ -182,20 +190,27 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
     On Error GoTo ERROR_HANDLER
 
     Static strContent    As String  ' ...
-
-    Dim includes         As New Collection
+    Static includes      As Collection
+    
     Dim strLine          As String  ' ...
     Dim f                As Integer ' ...
     Dim blnCheckOperands As Boolean
     Dim blnKeepLine      As Boolean
     Dim blnScriptData    As Boolean
     Dim I                As Integer
+    Dim lineCount        As Integer
+    Dim blnIncIsValid    As Boolean
+    Dim strInclude       As String
 
     ' ...
     blnCheckOperands = True
     
     ' ...
     f = FreeFile
+    
+    If (defaults) Then
+        Set includes = New Collection
+    End If
 
     ' ...
     Open filePath For Input As #f
@@ -205,7 +220,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
             Line Input #f, strLine
             
             ' ...
-            strLine = Trim(strLine)
+            strLine = Trim$(strLine)
             
             ' default to keep line
             blnKeepLine = True
@@ -224,19 +239,42 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
     
                             If (strCommand = "include") Then
                                 If (Len(strLine) >= 12) Then
-                                    Dim tmp As String ' ...
+                                    Dim strPath As String ' ...
+                                    Dim strFullPath As String
                                     
                                     ' ...
-                                    tmp = _
-                                        LCase$(Mid$(strLine, 11, Len(strLine) - 11))
+                                    strPath = _
+                                        Mid$(strLine, 11, Len(strLine) - 11)
                                     
                                     ' ...
-                                    If (Left$(tmp, 1) = "\") Then
-                                       tmp = App.Path & "\scripts" & tmp
+                                    If (Left$(strPath, 1) = "\") Then
+                                        strFullPath = App.Path & "\Scripts" & strPath
+                                    Else
+                                        strFullPath = strPath
                                     End If
-
-                                    ' ...
-                                    includes.Add tmp
+                                    
+                                    blnIncIsValid = True
+                                    
+                                    ' check if file exists to include
+                                    If LenB(Dir$(strFullPath)) = 0 Then
+                                        frmChat.AddChat vbRed, "Scripting warning: " & Dir$(filePath) & " is trying to include " & _
+                                            "a file that does not exist: " & strPath
+                                        blnIncIsValid = False
+                                    End If
+                                    
+                                    ' check if file is already included by this script
+                                    For I = 1 To includes.Count
+                                        If StrComp(includes(I), strFullPath, vbTextCompare) = 0 Then
+                                            frmChat.AddChat vbRed, "Scripting warning: " & Dir$(filePath) & " is trying to include " & _
+                                                "a file that has already been included: " & strPath
+                                            blnIncIsValid = False
+                                        End If
+                                    Next I
+                                    
+                                    If blnIncIsValid Then
+                                        ' store the file path to an include
+                                        includes.Add strFullPath
+                                    End If
                                 End If
                             End If
                         End If
@@ -249,7 +287,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
                          (StrComp(Left$(strLine, 3), "rem", vbTextCompare) <> 0) And _
                          (InStr(1, Mid$(strLine, 4, 1), "abcdefghijklmnopqrstuvwxyz01243567890_", vbTextCompare) = 0))) _
                        Then
-                    ' this line is not a comment or blank line, disable #include
+                    ' this line is not a comment or blank line, stop checking for #include
                     blnCheckOperands = False
                 End If
             End If
@@ -264,6 +302,9 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
                 strContent = _
                     strContent & vbCrLf
             End If
+            
+            ' increment counter
+            lineCount = lineCount + 1
             
             ' clean up
             strLine = vbNullString
@@ -287,10 +328,22 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
         ' set the path Script() value
         ScriptModule.CodeObject.Script("Path") = filePath
         
+        ' add this as the "first" include for this script, with no name so that later it is changed to "scriptname"
+        AddInclude ScriptModule, vbNullString, lineCount
+        
         ' add includes to end of code, process the same for includes in includes
-        For I = 1 To includes.Count
+        I = 1
+        Do While I <= includes.Count
             FileToModule ScriptModule, includes(I), False
-        Next I
+            I = I + 1
+        Loop
+        
+        ' store the position in the arrInc array where this script's line number information starts
+        ' the line number information will be in order of #include directives
+        ' the error handler will use this information to continually subtract linecounts until
+        ' the line number is in the bounds of the include information where the file actually is
+        ' so that we know what include is causing an error
+        ScriptModule.CodeObject.Script("IncludeLBound") = m_incCount - includes.Count - 1
         
         ' add content
         ScriptModule.AddCode strContent
@@ -300,6 +353,9 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
         
         ' clean up content for next call to this function
         strContent = vbNullString
+    Else
+        ' this is an #include, store our information
+        AddInclude ScriptModule, "#" & Mid$(filePath, InStrRev(filePath, "\", -1, vbBinaryCompare) + 1), lineCount
     End If
     
     FileToModule = True
@@ -310,11 +366,37 @@ ERROR_HANDLER:
 
     ' ...
     strContent = vbNullString
+    
+    Set includes = Nothing
 
     FileToModule = False
 
 End Function
 
+' stores information about an include for more accurate error handling!
+Private Sub AddInclude(ByRef SCModule As Module, ByVal Name As String, ByVal Lines As Integer)
+    Dim inc As scInc
+    
+    ' redefine array size
+    If (m_incCount) Then
+        ReDim Preserve m_arrIncs(0 To m_incCount)
+    Else
+        ReDim m_arrIncs(0)
+    End If
+    
+    ' store our #include name, path, and length
+    inc.IncName = Name
+    inc.lineCount = Lines
+
+    ' store our module handle
+    Set inc.SCModule = SCModule
+    
+    ' store our inc
+    m_arrIncs(m_incCount) = inc
+    
+    ' increment include counter
+    m_incCount = (m_incCount + 1)
+End Sub
 
 Private Function GetDefaultModuleProcs() As String
 
@@ -399,7 +481,6 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
     Dim str          As String  ' ...
     Dim tmp          As String  ' ...
     Dim nameDisallow As String
-    Dim I            As Integer
     
     ' ...
     str = GetScriptName(CurrentModule.Name)
@@ -682,7 +763,7 @@ ERROR_HANDLER:
         Exit Sub
     End If
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in CallByNameEx()."
         
     Set oTLI = Nothing
@@ -898,7 +979,7 @@ Public Sub DestroyObjs(Optional ByVal SCModule As Object = Nothing)
 ERROR_HANDLER:
     
     frmChat.AddChat vbRed, _
-        "Error (#" & Err.Number & "): " & Err.description & " in DestroyObjs()."
+        "Error (#" & Err.Number & "): " & Err.Description & " in DestroyObjs()."
         
     Resume Next
     
@@ -1012,7 +1093,7 @@ ERROR_HANDLER:
     End If
 
     frmChat.AddChat vbRed, _
-        "Error (#" & Err.Number & "): " & Err.description & " in DestroyObj()."
+        "Error (#" & Err.Number & "): " & Err.Description & " in DestroyObj()."
         
     Resume Next
     
@@ -1144,7 +1225,7 @@ Public Function InitMenus()
         
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in InitMenus()."
 
     Err.Clear
@@ -1177,7 +1258,7 @@ Public Function DestroyMenus()
     
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in DestroyMenus()."
 
     Err.Clear
@@ -1316,32 +1397,52 @@ Public Sub SC_Error()
     Dim Name        As String
     Dim ErrType     As String
     Dim Number      As Long
-    Dim description As String
-    Dim line        As Long
+    Dim Description As String
+    Dim Line        As Long
     Dim Column      As Long
-    Dim source      As String
+    Dim Source      As String
     Dim Text        As String
+    Dim IncIndex    As Integer
+    Dim I           As Integer
     
     With m_sc_control
         Number = .Error.Number
-        description = .Error.description
-        line = .Error.line
+        Description = .Error.Description
+        Line = .Error.Line
         Column = .Error.Column
-        source = .Error.source
+        Source = .Error.Source
         Text = .Error.Text
     End With
     
-    ErrType = "runtime"
     If m_ExecutingMdl Is Nothing Then
         Exit Sub ' exec error handler will handle this
     Else
-        Name = GetScriptName(m_ExecutingMdl.Name)
-        If LenB(Name) = 0 Then Name = m_TempMdlName
-        Name = Name & " script"
+        ' start at the stored include index
+        IncIndex = m_ExecutingMdl.CodeObject.Script("IncludeLBound")
+        ' loop until we have reached a line number within this include's bounds
+        For I = IncIndex To UBound(m_arrIncs)
+            If Not m_ExecutingMdl Is m_arrIncs(I).SCModule Then
+                ' we are no longer looping through this script's includes-- line number is too large or index is invalid
+                Name = GetScriptName(m_ExecutingMdl.Name)
+                Exit For
+            ElseIf Line <= m_arrIncs(I).lineCount Then
+                ' it is this script which is erroring
+                Name = GetScriptName(m_ExecutingMdl.Name) & m_arrIncs(I).IncName
+                Exit For
+            Else
+                ' this include did not contain this line
+                ' decrease the line number the error was found by this include's line count
+                Line = Line - m_arrIncs(I).lineCount
+            End If
+        Next I
+        If LenB(Name) = 0 Or Left$(Name, 1) = "#" Then Name = m_TempMdlName & Name
     End If
     
+    ' default to runtime error
+    ErrType = "runtime"
+    
     ' check if its a parsing error
-    If InStr(1, source, "compilation", vbBinaryCompare) > 0 Then
+    If InStr(1, Source, "compilation", vbBinaryCompare) > 0 Then
         ErrType = "parsing"
     End If
     
@@ -1350,18 +1451,17 @@ Public Sub SC_Error()
                  "True", vbTextCompare) = 0) And _
                  (m_IsEventError = False)) Then
         ' call Event_Error(Number, Description, Line, Column, Text, Source)
-        If (RunInSingle(m_ExecutingMdl, "Event_Error", Number, description, line, Column, Text, source) = True) Then
+        If (RunInSingle(m_ExecutingMdl, "Event_Error", Number, Description, Line, Column, Text, Source) = True) Then
             ' if vetoed, exit
             Exit Sub
         End If
     End If
     
     ' display error
-    frmChat.AddChat RTBColors.ErrorMessageText, _
-        "Scripting " & ErrType & " error " & Chr(39) & Number & Chr(39) & _
-        " in " & Name & ": (line " & line & "; column " & Column & ")"
-    frmChat.AddChat RTBColors.ErrorMessageText, description
-    frmChat.AddChat RTBColors.ErrorMessageText, "Offending line: >> " & Text
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Scripting {0} error '{1}' in {2}: (line {3}; column {4})", _
+        ErrType, Number, Name, Line, Column)
+    frmChat.AddChat RTBColors.ErrorMessageText, Description
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Offending line: >> {0}", Text)
     
     m_sc_control.Error.Clear
     
@@ -1395,7 +1495,7 @@ Public Function GetScriptModule(Optional ByVal scriptName As String = vbNullStri
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in GetScriptModule()."
 
     Err.Clear
@@ -1438,7 +1538,7 @@ Public Function GetModuleID(Optional ByVal scriptName As String = vbNullString) 
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in GetModuleID()."
 
     Err.Clear
@@ -1475,7 +1575,7 @@ Public Function GetScriptName(Optional ByVal ModuleID As String = vbNullString) 
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in GetScriptName()."
 
     Err.Clear
@@ -1511,7 +1611,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modScripting.AddScriptObserver()"
+    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.AddScriptObserver()"
 End Sub
 
 'Returns a collection of scripts that the passed script is currently observing, or being observed by
@@ -1541,5 +1641,5 @@ On Error GoTo ERROR_HANDLER
 
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modScripting.GetScriptObservers()"
+    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.GetScriptObservers()"
 End Function
