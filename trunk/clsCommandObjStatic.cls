@@ -122,7 +122,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         '// EXAMPLE COMMAND STRING
         '// all: add SammyHagar 200
         If (hasTrigger = False) And (messageLen > 5) Then
-            If (Not StrComp(Left$(Message, 3), "all", vbTextCompare)) And (Mid$(Message, 4, 2) = ": " Or Mid$(Message, 4, 2) = ", ") Then
+            If (StrComp(Left$(Message, 3), "all", vbTextCompare) = 0) And (Mid$(Message, 4, 2) = ": " Or Mid$(Message, 4, 2) = ", ") Then
                 PublicOutput = True
                 cropLen = 6
                 hasTrigger = True
@@ -133,7 +133,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         '// EXAMPLE COMMAND STRING
         '// ops: add SammyHagar 200
         If (hasTrigger = False) And (messageLen > 5) Then
-            If (Not StrComp(Left$(Message, 3), "ops", vbTextCompare)) And (Mid$(Message, 4, 2) = ": " Or Mid$(Message, 4, 2) = ", ") Then
+            If (StrComp(Left$(Message, 3), "ops", vbTextCompare) = 0) And (Mid$(Message, 4, 2) = ": " Or Mid$(Message, 4, 2) = ", ") Then
                 If (g_Channel.Self.IsOperator) Then
                     PublicOutput = True
                     cropLen = 6
