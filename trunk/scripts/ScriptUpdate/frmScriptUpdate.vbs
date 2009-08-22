@@ -253,19 +253,13 @@ End Sub
 
 Sub frmScriptUpdate_lvScripts_ColumnClick(ByVal column)
 
-	Dim oCH
-	
-	For Each oCH In lvScripts.ColumnHeaders
-		If oCH.Text = column Then
-			Set column = oCH
-		End If
-	Next
-	
 	If lvScripts.SortKey <> column.Index Then
 		lvScripts.SortKey = column.Index
 		lvScripts.SortOrder = 0
 	Else
 		lvScripts.SortOrder = lvScripts.SortOrder Xor 1
 	End If
+	
+	AddChat Color.Tomato, column.Text
 
 End Sub
