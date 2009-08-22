@@ -1,7 +1,7 @@
 #include "\ScriptUpdate\ut_Updater.vbs"
 #include "\ScriptUpdate\frmScriptUpdate.vbs"
 #include "\ScriptUpdate\frmScriptDownloadWizard.vbs"
-#include "\lib\XMLTextWriter\XMLTextWriter.vbs"
+#include "\lib\Stealthbot\XMLTextWriter.vbs"
 
 
 

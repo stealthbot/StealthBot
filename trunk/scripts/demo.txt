@@ -7,7 +7,10 @@ Script("Author") = "Eric[nK]"
 Script("Major") = 1
 Script("Minor") = 0
 Script("Revision") = 1
-ObserveScript("") 'Lets Observe the Internal bot events
+
+'Lets Observe the Internal bot events. This will cause Event_Command
+'to fire whenever commands for that script occur.
+ObserveScript("")
 
 ' // create instance of demo class
 Dim cls
