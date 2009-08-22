@@ -12,7 +12,7 @@ End Enum
 
 Public Sub OnAddPhrase(Command As clsCommandObj)
     Dim sPhrase As String
-    Dim I       As Integer
+    Dim i       As Integer
     Dim iFile   As Integer
     
     ' grab free file handle
@@ -20,13 +20,13 @@ Public Sub OnAddPhrase(Command As clsCommandObj)
     If (Command.IsValid) Then
         sPhrase = Command.Argument("Phrase")
         
-        For I = LBound(Phrases) To UBound(Phrases)
-            If (StrComp(sPhrase, Phrases(I), vbTextCompare) = 0) Then
+        For i = LBound(Phrases) To UBound(Phrases)
+            If (StrComp(sPhrase, Phrases(i), vbTextCompare) = 0) Then
                 Exit For
             End If
-        Next I
+        Next i
         
-        If (I > UBound(Phrases)) Then
+        If (i > UBound(Phrases)) Then
             'Thats a lot of crap.. It check if the last item in Phrases is not just whitespace
             If (LenB(Trim$(Phrases(UBound(Phrases)))) > 0) Then
                 ReDim Preserve Phrases(0 To UBound(Phrases) + 1)
@@ -35,11 +35,11 @@ Public Sub OnAddPhrase(Command As clsCommandObj)
             Phrases(UBound(Phrases)) = sPhrase
             
             Open GetFilePath("PhraseBans.txt") For Output As #iFile
-                For I = LBound(Phrases) To UBound(Phrases)
-                    If (LenB(Trim$(Phrases(I))) > 0) Then
-                        Print #iFile, Phrases(I)
+                For i = LBound(Phrases) To UBound(Phrases)
+                    If (LenB(Trim$(Phrases(i))) > 0) Then
+                        Print #iFile, Phrases(i)
                     End If
-                Next I
+                Next i
             Close #iFile
             
             Command.Respond StringFormat("Phraseban {0}{1}{0} added.", Chr$(34), sPhrase)
@@ -170,7 +170,7 @@ Public Sub OnDelPhrase(Command As clsCommandObj)
     Dim iFile   As Integer
     Dim sPhrase As String
     Dim bFound  As Boolean
-    Dim I       As Integer
+    Dim i       As Integer
     
     If (Command.IsValid) Then
         sPhrase = Command.Argument("Phrase")
@@ -178,13 +178,13 @@ Public Sub OnDelPhrase(Command As clsCommandObj)
         iFile = FreeFile
         
         Open GetFilePath("PhraseBans.txt") For Output As #iFile
-            For I = LBound(Phrases) To UBound(Phrases)
-                If (Not StrComp(Phrases(I), sPhrase, vbTextCompare) = 0) Then
-                    Print #iFile, Phrases(I)
+            For i = LBound(Phrases) To UBound(Phrases)
+                If (Not StrComp(Phrases(i), sPhrase, vbTextCompare) = 0) Then
+                    Print #iFile, Phrases(i)
                 Else
                     bFound = True
                 End If
-            Next I
+            Next i
         Close #iFile
         
         ReDim Phrases(0)
@@ -230,7 +230,7 @@ Public Sub OnGiveUp(Command As clsCommandObj)
     ' its status as a channel moderator.  This command is useful if you are
     ' lazy and you just wish to designate someone as quickly as possible.
     
-    Dim I         As Integer
+    Dim i         As Integer
     Dim opsCount  As Integer
     Dim sUsername As String
     Dim colUsers  As New Collection
@@ -244,21 +244,21 @@ Public Sub OnGiveUp(Command As clsCommandObj)
                 If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
                     If (g_Clan.Self.Rank >= 4) Then
                         'Lets get a count of Shamans that are in the channel
-                        For I = 1 To g_Clan.Shamans.Count
-                            If (g_Channel.GetUserIndexEx(g_Clan.Shamans(I).Name) > 0) Then
-                                colUsers.Add g_Clan.Shamans(I).Name
+                        For i = 1 To g_Clan.Shamans.Count
+                            If (g_Channel.GetUserIndexEx(g_Clan.Shamans(i).Name) > 0) Then
+                                colUsers.Add g_Clan.Shamans(i).Name
                             End If
-                        Next I
+                        Next i
                         
-                        If (opsCount > colUsers.Count) Then
+                        If (opsCount > (colUsers.Count + 1)) Then 'colUser.Count is present shamans, +1 for the bot being ops
                             Command.Respond "Error: There is currently a channel moderator present that cannot be removed from his or her position."
                             Exit Sub
                         End If
                         
                         'Lets demote the shamans
-                        For I = 1 To colUsers.Count
-                            g_Clan.Members(g_Clan.GetMemberIndexEx(colUsers.Item(I))).Demote
-                        Next I
+                        For i = 1 To colUsers.Count
+                            g_Clan.Members(g_Clan.GetMemberIndexEx(colUsers.Item(i))).Demote
+                        Next i
                         
                         opsCount = GetOpsCount
                     End If
@@ -282,9 +282,9 @@ Public Sub OnGiveUp(Command As clsCommandObj)
                 Call Pause(2)
                 Call bnetSend("/resign")
                 
-                For I = 1 To colUsers.Count
-                    g_Clan.Members(g_Clan.GetUserIndexEx(colUsers.Item(I))).Promote
-                Next I
+                For i = 1 To colUsers.Count
+                    g_Clan.Members(g_Clan.GetUserIndexEx(colUsers.Item(i))).Promote
+                Next i
             Else
                 Command.Respond ERROR_NOT_OPS
             End If
@@ -875,12 +875,12 @@ Public Sub OnVoteKick(Command As clsCommandObj)
 End Sub
 
 Private Function GetOpsCount(Optional strIgnore As String = vbNullString) As Integer
-    Dim I As Integer
-    For I = 1 To g_Channel.Users.Count
-        If (Not StrComp(g_Channel.Users(I).DisplayName, strIgnore, vbBinaryCompare) = 0) Then
-            If (g_Channel.Users(I).IsOperator) Then GetOpsCount = GetOpsCount + 1
+    Dim i As Integer
+    For i = 1 To g_Channel.Users.Count
+        If (Not StrComp(g_Channel.Users(i).DisplayName, strIgnore, vbBinaryCompare) = 0) Then
+            If (g_Channel.Users(i).IsOperator) Then GetOpsCount = GetOpsCount + 1
         End If
-    Next I
+    Next i
 End Function
 
 
@@ -934,7 +934,7 @@ Public Function WildCardBan(ByVal sMatch As String, ByVal sBanMsg As String, ByV
     '1 = Ban
     '2 = Unban
     
-    Dim I        As Integer
+    Dim i        As Integer
     Dim iSafe    As Integer
     Dim sCommand As String
     Dim sName    As String
@@ -956,8 +956,8 @@ Public Function WildCardBan(ByVal sMatch As String, ByVal sBanMsg As String, ByV
         
         If (Not Banning = 2) Then
             ' Kicking or Banning
-            For I = 1 To g_Channel.Users.Count
-                With g_Channel.Users(I)
+            For i = 1 To g_Channel.Users.Count
+                With g_Channel.Users(i)
                     If (Not StrComp(.DisplayName, GetCurrentUsername, vbBinaryCompare) = 0) Then
                         sName = PrepareCheck(.DisplayName)
                         
@@ -972,7 +972,7 @@ Public Function WildCardBan(ByVal sMatch As String, ByVal sBanMsg As String, ByV
                         End If
                     End If
                 End With
-            Next I
+            Next i
             
             If (iSafe > 0) Then
                 If (StrComp(sBanMsg, ProtectMsg, vbTextCompare) <> 0) Then
@@ -981,8 +981,8 @@ Public Function WildCardBan(ByVal sMatch As String, ByVal sBanMsg As String, ByV
             End If
             
         Else
-            For I = 1 To g_Channel.Banlist.Count
-                With g_Channel.Banlist(I)
+            For i = 1 To g_Channel.Banlist.Count
+                With g_Channel.Banlist(i)
                     If ((.IsActive) And (LenB(.DisplayName) > 0)) Then
                         If (sMatch = "*") Then
                             Call frmChat.AddQ(sCommand & .DisplayName)
@@ -992,7 +992,7 @@ Public Function WildCardBan(ByVal sMatch As String, ByVal sBanMsg As String, ByV
                         End If
                     End If
                 End With
-            Next I
+            Next i
         End If
     End If
 End Function
