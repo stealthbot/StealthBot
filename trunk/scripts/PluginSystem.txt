@@ -237,15 +237,15 @@ Sub psLoadPlugin(Prefix, Version, Path, Content, ByVal Lines)
    psArgsAdded = False
    psEvents.Item(Prefix) = "|"
    For i = 0 to UBound(Lines)
-      curLine = Lines(i)
+      curLine = RTrim(Lines(i))
 
+      j = 0
       '// Check for a split line
-      If Right(curLine, 1) = "_" And i < UBound(Lines) Then
-        curLine = curLine & Lines(i + 1)
-        intLine = i + 1
-      Else
-        intLine = i
-      End If
+      Do While Right(curLine, 1) = "_" And i < UBound(Lines)
+        j = j + 1
+        curLine = RTrim(Left(curLine, Len(curLine) - 1)) & " " & Trim(Lines(i + j))
+      Loop
+      intLine = i + j
 
       If Instr(1, curLine, "event_", 1) > 0 Then
 
@@ -348,6 +348,7 @@ End Sub
 
 Sub psAddArg(Prefix, Index, EventName, LastArg, NewArg, Lines, Path)
 
+   ' overwrite this line to insert new args
    Lines(Index) = Replace(Lines(Index), LastArg, LastArg & ", " & NewArg, 1, -1, 1)
    
    psNewContent = Join(Lines, vbCrLf)
@@ -401,13 +402,24 @@ Sub psCheckSetSetting(Prefix, Index, ByVal LineText, Lines, Path)
       Exit Sub
    End If
    
+   ' overwrite this line to fix SetSetting required arguments problems
    Lines(Index) = LineText
+   
+   ' overwrite lines before this one that were "combined" with this one on the basis of _,
+   ' so that we don't have "ghosting" of the old lines
+   For I = Index - 1 To 0 Step -1
+      If Right(RTrim(Lines(I)), 1) = "_" Then
+         Lines(I) = vbNullString
+      Else
+         Exit For
+      End If
+   Next
    
    psNewContent = Join(Lines, vbCrLf)
    
-   'Set pFile = psFSO.OpenTextFile(Path, 2, 1)
-   'pFile.WriteLine psNewContent
-   'pFile.Close
+   Set pFile = psFSO.OpenTextFile(Path, 2, 1)
+   pFile.WriteLine psNewContent
+   pFile.Close
    
    psArgsAdded = True
 End Sub
