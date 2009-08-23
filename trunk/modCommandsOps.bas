@@ -947,12 +947,11 @@ Public Function WildCardBan(ByVal sMatch As String, ByVal sBanMsg As String, ByV
         sMatch = PrepareCheck(sMatch)
         
         Select Case (Banning)
-            Case 1: sCommand = "/ban "
-            Case 2: sCommand = "/unban "
-            Case Else: sCommand = "/kick "
+            Case 1: sCommand = "/ban"
+            Case 2: sCommand = "/unban"
+            Case Else: sCommand = "/kick"
         End Select
         
-        If (Dii) Then sCommand = sCommand & "*"
         
         If (Not Banning = 2) Then
             ' Kicking or Banning
@@ -964,7 +963,7 @@ Public Function WildCardBan(ByVal sMatch As String, ByVal sBanMsg As String, ByV
                         If (sName Like sMatch) Then
                             If (GetSafelist(.DisplayName) = False) Then
                                 If (Not .IsOperator) Then
-                                    Call frmChat.AddQ(StringFormat("{0}{1} {2}", sCommand, .DisplayName, sBanMsg))
+                                    Call frmChat.AddQ(StringFormat("{0} {1} {2}", sCommand, .DisplayName, sBanMsg))
                                 End If
                             Else
                                 iSafe = (iSafe + 1)
@@ -975,7 +974,7 @@ Public Function WildCardBan(ByVal sMatch As String, ByVal sBanMsg As String, ByV
             Next i
             
             If (iSafe > 0) Then
-                If (StrComp(sBanMsg, ProtectMsg, vbTextCompare) <> 0) Then
+                If (Not StrComp(sBanMsg, ProtectMsg, vbTextCompare) = 0) Then
                     WildCardBan = StringFormat("Encountered {0} safelisted user{1}.", iSafe, IIf(iSafe > 1, "s", vbNullString))
                 End If
             End If
@@ -985,10 +984,12 @@ Public Function WildCardBan(ByVal sMatch As String, ByVal sBanMsg As String, ByV
                 With g_Channel.Banlist(i)
                     If ((.IsActive) And (LenB(.DisplayName) > 0)) Then
                         If (sMatch = "*") Then
-                            Call frmChat.AddQ(sCommand & .DisplayName)
+                            Call frmChat.AddQ(StringFormat("{0} {1}", sCommand, .DisplayName))
                         Else
                             sName = PrepareCheck(.DisplayName)
-                            If (sName Like sMatch) Then Call frmChat.AddQ(sCommand & .DisplayName)
+                            If (sName Like sMatch) Then
+                                Call frmChat.AddQ(StringFormat("{0} {1}", sCommand, .DisplayName))
+                            End If
                         End If
                     End If
                 End With
