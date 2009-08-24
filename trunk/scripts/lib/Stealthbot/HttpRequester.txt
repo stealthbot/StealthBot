@@ -1,0 +1,657 @@
+' this "scripting API" library allows an "asynchronous" HTTP GET of multiple files with callbacks for progress and completion
+' #include "\lib\StealthBot\HttpRequester.txt"
+' author Ribose
+' version 0.9.20090823
+'
+' how to initialize:
+' the <requesterobj> variable used below must be declared globally
+' Set <requesterobj> = New HttpDownloader
+' <requesterobj>.Initialize "<ProgressCallback>", "<CompleteCallback>", "<ErrorCallback>", "<requesterobj>"
+' the first argument specifies the subroutine to call for Progress events
+' the second argument specifies the subroutine to call for Complete events
+' the third argument specifies the subroutine to call for Error events
+' the fourth argument supplies the name of the variable where the object itself is (for reflection purposes)
+'
+' how to queue downloads:
+' <requesterobj>.QueueDownload(FilePath, Url)
+' the first argument specifies where to save to
+'   pass vbNullString to not save the downloaded file
+' the second argument specifies where to download from
+'
+' recommended to clean up during Event_Close, and/or at a place when you know all files have completed downloading:
+' (doing so prematurely is not a problem, however, if that's what you want to do)
+' Set <requesterobj> = Nothing
+' 
+' callback events:
+' - Progress, happens for each 8-KB "chunk" of the download
+'   the FileObj argument provides a HttpDownloaderItem for which progress was made
+' Sub <ProgressCallback>(FileObj)
+'     put code here
+' End Sub
+'
+' - Complete, happens when a file download has completed
+'   the FileObj argument provides a HttpDownloaderItem which was completed
+' Sub <CompleteCallback>(FileObj)
+'     put code here
+' End Sub
+'
+' - Error, happens when a file download has ended in error
+'   the FileObj argument provides the HttpDownloaderItem for which an error occured
+'   this argument will be Nothing if the error occured when no currently downloading file applies
+'   ErrorMessage provides the message containing the problem that occured
+' Sub <ErrorCallback>(FileObj, ErrorMessage)
+'     put code here
+' End Sub
+' 
+' object properties and methods:
+' HttpDownloader:
+'   .Initialize ProgressCallback, CompleteCallback, ErrorCallback, SelfName
+'    see above
+'   .QueueDownload FilePath, Url
+'    see above
+'   .GetFile(Index)
+'    gets a HttpDownloaderItem for the specified index or download item name
+'    returns Nothing if not found
+'   .State
+'    returns HTTP_DLER_STATE_READY (0) when no items are in queue,
+'    or HTTP_DLER_STATE_GETTING (1) when at least one item is in queue
+'   .FileCount
+'    returns the number of downloads stored - this counts queued, downloading, and completed items
+' 
+' HttpDownloaderItem:
+'   .Name
+'    gets the download name, which is the file name without the extension or full path
+'    returns vbNullString if no path was specified
+'   .Path
+'    gets the download path, which is where the file will be saved
+'    returns vbNullString if no path was specified
+'   .Domain
+'    gets the domain name (such as www.stealthbot.net) where the file is downloading from
+'   .Url
+'    gets the URL excluding the domain name (such as /sb/update/script/?id=1) where the files is downloading from
+'   .Percent
+'    calculates the percent of the file that has been downloaded to four decimal places
+'    returns 0 if in queue and 100 if complete
+'   .Progress
+'    gets the number of bytes that have been downloaded
+'    returns -1 if in queue
+'   .FullLength
+'    gets the number of bytes total the file is
+'    returns -1 if not known in queue
+'   .FullContent
+'    gets a string containing the entire contents of the file
+'   .IsComplete
+'    gets a boolean telling whether the file is completely downloaded
+'   .IsStarted
+'    gets a boolean telling whether the file has started downloading
+'   .Abort
+'    stops the download and generates an error event
+'   .Pause
+'    pauses the download
+'    calling this while not started or already completed does nothing
+'   .Resume
+'    resumes the download
+'    calling this while not started or already completed does nothing
+
+' winsock state constatns
+Private Const sckClosed             = 0
+Private Const sckOpen               = 1
+Private Const sckListening          = 2
+Private Const sckConnectionPending  = 3
+Private Const sckResolvingHost      = 4
+Private Const sckHostResolved       = 5
+Private Const sckConnecting         = 6
+Private Const sckConnected          = 7
+Private Const sckClosing            = 8
+Private Const sckError              = 9
+
+' http constants
+Private Const HTTP_PORT                     = 80
+Private Const HTTP_VER                      = "HTTP/1.1"
+Private Const HTTP_REQUEST_HEAD             = "HEAD"
+Private Const HTTP_REQUEST_GET              = "GET"
+Private Const HTTP_STATUS_PARTIAL_CONTENT   = 206
+
+' http downloader constants
+' part settings
+Private Const HTTP_DLER_PART_LENGTH         = 8192 ' eight kilobytes
+Private Const HTTP_DLER_PART_INTERVAL       = 500 ' one half second
+
+' state
+Private Const HTTP_DLER_STATE_READY         = 0
+Private Const HTTP_DLER_STATE_GETTING       = 1
+
+Class HttpDownloader
+    Private ProgressCb, CompleteCb, ErrorCb
+    Private Files, FileIndex, m_State
+    
+    Public Property Get State()
+        State = m_State
+    End Property
+    
+    Public Property Get FileCount()
+        FileCount = UBound(Files) + 1
+    End Property
+    
+    ' returns the file at the index, or by file.name
+    Public Function GetFile(Index)
+        Dim File
+        If IsNumeric(Index) Then
+            Set GetFile = Files(Index)
+        Else
+            For Each File In Files
+                If File.Name = Index Then
+                    Set GetFile = File
+                    Exit Function
+                End If
+            Next
+            Set GetFile = Nothing
+        End If
+    End Function
+    
+    Private Sub Class_Terminate()
+        Dim I
+        For I = 0 To UBound(Files)
+            Set Files(I) = Nothing
+        Next
+        ReDim Files(-1)
+        If sckHttpGetFile <> Empty Then sckHttpGetFile.Close
+        If tmrHttpGetPartial <> Empty Then tmrHttpGetPartial.Enabled = False
+    End Sub
+
+    Public Sub Initialize(ProgressCallback, CompleteCallback, ErrorCallback, SelfName)
+        ProgressCb = ProgressCallback
+        CompleteCb = CompleteCallback
+        ErrorCb = ErrorCallback
+        
+        FileIndex = -1
+        
+        ReDim Files(-1)
+        
+        ' create winsock
+        CreateObj "Winsock", "sckHttpGetFile"
+        
+        ' create timer
+        CreateObj "Timer", "tmrHttpGetPartial"
+        
+        ExecuteGlobal _
+            "Public Sub tmrHttpGetPartial_Timer()" & vbCrLf & _
+            "    " & SelfName & ".tmrHttpGetPartial_Timer" & vbCrLf & _
+            "End " & "Sub" & vbCrLf & _
+            "Public Sub sckHttpGetFile_Connect()" & vbCrLf & _
+            "    " & SelfName & ".sckHttpGetFile_Connect" & vbCrLf & _
+            "End " & "Sub" & vbCrLf & _
+            "Public Sub sckHttpGetFile_Error(Number, Description, Scode, Source, HelpFile, HelpContext, CancelDisplay)" & vbCrLf & _
+            "    " & SelfName & ".sckHttpGetFile_Error Number, Description" & vbCrLf & _
+            "End " & "Sub" & vbCrLf & _
+            "Public Sub sckHttpGetFile_DataArrival(Bytes)" & vbCrLf & _
+            "    " & SelfName & ".sckHttpGetFile_DataArrival Bytes" & vbCrLf & _
+            "End " & "Sub"
+        
+        m_State = HTTP_DLER_STATE_READY
+    End Sub
+    
+    Public Sub QueueDownload(FilePath, Url)
+        Dim FileCount
+        
+        FileCount = UBound(Files) + 1
+        
+        ReDim Preserve Files(FileCount)
+        
+        Set Files(FileCount) = New HttpDownloaderItem
+        
+        Files(FileCount).Initialize FilePath, Url, Me
+        
+        If m_State = HTTP_DLER_STATE_READY Then
+            m_State = HTTP_DLER_STATE_GETTING
+            RequestNextFile
+        End If
+    End Sub
+    
+    Private Sub RequestNextFile()
+        FileIndex = FileIndex + 1
+        If FileIndex > UBound(Files) Then
+            tmrHttpGetPartial.Enabled = False
+            m_State = HTTP_DLER_STATE_READY
+            Exit Sub
+        End If
+        Files(FileIndex).BeginRequest
+    End Sub
+    
+    Public Sub Callback_Progress(FileObj)
+        Execute "Call " & ProgressCb & "(FileObj)"
+    End Sub
+    
+    Public Sub Callback_Complete(FileObj)
+        Execute "Call " & CompleteCb & "(FileObj)"
+        ' get next file
+        RequestNextFile
+    End Sub
+    
+    Public Sub Callback_Error(FileObj, ErrorMessage)
+        Execute "Call " & ErrorCb & "(FileObj, ErrorMessage)"
+        ' make sure we dont keep requesting parts
+        tmrHttpGetPartial.Enabled = False
+        ' if we were getting a file, get the next file
+        If m_State = HTTP_DLER_STATE_GETTING Then RequestNextFile
+    End Sub
+    
+    Public Sub tmrHttpGetPartial_Timer()
+        Files(FileIndex).RequestNextPart
+    End Sub
+    
+    Public Sub sckHttpGetFile_Connect()
+        'addchat vbgreen, "Connected!"
+        Files(FileIndex).RequestNextPart
+    End Sub
+    
+    Public Sub sckHttpGetFile_DataArrival(Bytes)
+        Files(FileIndex).DataArrival Bytes
+    End Sub
+    
+    Public Sub sckHttpGetFile_Error(Number, Description)
+        Callback_Error Nothing, "Connection error #" & Number & ": " & Description
+    End Sub
+End Class
+
+
+Class HttpDownloaderItem
+    Private m_Name, m_Path, m_Domain, m_Url, m_DownloaderObj
+    Private Headers, PartStart, PartEnd, RecievedLastRequest
+    Private ContentStart, ContentLength, EntityLength
+    Private Incoming, Header, Content, Entity
+    Private Fso, File
+    
+    Public Property Get Name()
+        Name = m_Name
+    End Property
+    
+    Public Property Get Path()
+        Path = m_Path
+    End Property
+    
+    Public Property Get Domain()
+        Domain = m_Domain
+    End Property
+    
+    Public Property Get Url()
+        Url = m_Url
+    End Property
+    
+    Public Property Get Percent()
+        Percent = CDbl(CCur(Progress() / FullLength() * 100))
+        If Not IsStarted() Then Percent = 0
+    End Property
+    
+    Public Property Get Progress()
+        Progress = ContentLength + 1
+    End Property
+    
+    Public Property Get FullLength()
+        FullLength = EntityLength
+    End Property
+    
+    Public Property Get FullContent()
+        FullContent = Entity
+    End Property
+    
+    Public Property Get IsComplete()
+        IsComplete = (ContentLength = EntityLength And IsStarted())
+    End Property
+    
+    Public Property Get IsStarted()
+        IsStarted = (EntityLength >= 0)
+    End Property
+    
+    Public Sub Abort()
+        RequestFailed "Mission aborted"
+    End Sub
+    
+    Public Sub Pause()
+        If IsStarted() And Not IsComplete() Then EndGetPartTimer
+    End Sub
+    
+    Public Sub [Resume]()
+        If IsStarted() And Not IsComplete() Then BeginGetPartTimer
+    End Sub
+    
+    Private Sub Class_Terminate()
+        Set Headers = Nothing
+        If Not File Is Nothing Then File.Close
+        Set File = Nothing
+        Set Fso = Nothing
+        Set m_DownloaderObj = Nothing
+    End Sub
+    
+    Public Sub Initialize(Path, Url, DownloaderObj)
+        Dim UrlPathPos
+        
+        Set m_DownloaderObj = DownloaderObj
+        
+        If InStr(Path, "\") > 0 Then
+            m_Name = Mid(Path, InStrRev(Path, "\") + 1)
+        Else
+            m_Name = Path
+        End If
+        If InStr(m_Name, ".") > 0 Then
+            m_Name = Left(m_Name, InStrRev(m_Name, ".") - 1)
+        End If
+        m_Path = Path
+        
+        If Left(LCase(Url), 7) = "http://" Then Url = Mid(Url, 8)
+        
+        UrlPathPos = InStr(Url, "/")
+        If UrlPathPos > 0 Then
+            m_Url = Mid(Url, UrlPathPos)
+            m_Domain = Left(Url, UrlPathPos - 1)
+        Else
+            RequestFailed "URL not valid. Must contain a domain followed by a / followed by a path to a file"
+            Exit Sub
+        End If
+        
+        PartStart = -1
+        PartEnd = -1
+        
+        RecievedLastRequest = True
+        
+        ContentStart = -1
+        ContentLength = -1
+        EntityLength = -1
+        
+        Incoming = vbNullString
+        Content = vbNullString
+        Entity = vbNullString
+        
+        Set Headers = CreateObject("Scripting.Dictionary")
+        Headers.CompareMode = vbTextCompare
+        
+        Set Fso = CreateObject("Scripting.FileSystemObject")
+        If Len(m_Path) > 0 Then 
+            If Fso.FileExists(BotPath() & m_Path) Then
+                Fso.DeleteFile BotPath() & m_Path
+            End If
+        End If
+        Set File = Nothing
+    End Sub
+
+    Public Sub BeginRequest()
+        'Addchat vbYellow, "Beginning transfer of " & m_Name & " from " & m_Domain & m_Url
+        
+        If Len(m_Path) > 0 Then
+            On Error Resume Next
+            Set File = Fso.OpenTextFile(BotPath() & m_Path, 8, True)
+            
+            If Err.Number <> 0 Then
+                RequestFailed "Error opening file for append #" & Err.Number & ": " & Err.Description
+                Err.Clear
+                Exit Sub
+            End If
+            On Error GoTo 0
+        End If
+        
+        ' check connection to this domain
+        If sckHttpGetFile.State <> sckConnected Then
+            ConnectToHost
+            Exit Sub
+        End If
+        
+        If sckHttpGetFile.RemoteHostIP <> ResolveHostName(m_Domain) Then
+            ConnectToHost
+            Exit Sub
+        End If
+        
+        RequestNextPart
+    End Sub
+    
+    Private Sub BeginGetPartTimer()
+        ' begin partial GET timer
+        With tmrHttpGetPartial
+            If Not .Enabled Then
+                .Interval = HTTP_DLER_PART_INTERVAL
+                .Enabled = True
+            End If
+        End With
+    End Sub
+    
+    Private Sub EndGetPartTimer()
+        tmrHttpGetPartial.Enabled = False
+    End Sub
+    
+    Public Sub RequestNextPart()
+        Dim Successful
+        If PartStart < 0 Then
+            PartStart = 0
+        Else
+            PartStart = PartStart + HTTP_DLER_PART_LENGTH
+        End If
+        PartEnd = PartEnd + HTTP_DLER_PART_LENGTH
+        
+        ' check if we are out of range
+        If PartStart > EntityLength And EntityLength >= 0 Then Exit Sub
+        
+        Headers.RemoveAll
+        
+        SetStandardSendHeaders
+        SetHeader "Range", "bytes=" & PartStart & "-" & PartEnd
+        
+        Successful = SendHttpRequest(HTTP_REQUEST_GET)
+        
+        RecievedLastRequest = False
+        
+        If Not Successful Then
+            If PartStart = 0 Then
+                PartStart = -1
+            Else
+                PartStart = PartStart - HTTP_DLER_PART_LENGTH
+            End If
+            PartEnd = PartEnd - HTTP_DLER_PART_LENGTH
+        End If
+    End Sub
+    
+    Public Sub DataArrival(Bytes)
+        Dim Data
+        sckHttpGetFile.GetData Data, vbString, Bytes
+        Incoming = Incoming & Data
+        If ParseHttpHeader() Then
+            'Addchat vbYellow, "Received HTTP Response:" & vbCrLf & Header
+            
+            Incoming = vbNullString
+            Entity = Entity & Content
+            
+            If Len(m_Path) > 0 Then
+                If Not File Is Nothing Then File.Write Content
+            End If
+            
+            RequestProgress
+        End If
+    End Sub
+    
+    Private Function ParseHttpHeader()
+        Dim ContentSplit
+        Dim LineSplit, StatusSplit, HeaderSplit
+        Dim HttpVersion, StatusCode, ReasonStated
+        Dim HeaderLine, HeaderParts
+        Dim ContentRange, ContentRangeSplit, ContentStartSplit
+        
+        ContentSplit = Split(Incoming, vbCrLf & vbCrLf, 2)
+        Header = ContentSplit(0)
+        Content = ContentSplit(1)
+        
+        LineSplit = Split(Header, vbCrLf, 2)
+        
+        StatusSplit = Split(LineSplit(0), " ", 3)
+        HeaderSplit = Split(LineSplit(1), vbCrLf)
+        
+        HttpVersion = StatusSplit(0)
+        StatusCode = StatusSplit(1)
+        ReasonStated = StatusSplit(2)
+        
+        If HttpVersion <> HTTP_VER Then
+            RequestFailed "Incorrect HTTP version value: '" & HttpVersion & "'"
+            Exit Function
+        End If
+        
+        If Not IsNumeric(StatusCode) Then
+            RequestFailed "HTTP status code is invalid: '" & StatusCode & "'"
+            Exit Function
+        End If
+        
+        StatusCode = CInt(StatusCode)
+        
+        If StatusCode <> HTTP_STATUS_PARTIAL_CONTENT Then
+            RequestFailed "Response '" & StatusCode & " " & ReasonStated & "' unexpected"
+            Exit Function
+        End If
+        
+        Headers.RemoveAll
+        
+        For Each HeaderLine In HeaderSplit
+            HeaderParts = Split(HeaderLine, ":", 2)
+            SetHeader HeaderParts(0), Trim(HeaderParts(1))
+        Next
+        
+        'Content-Range: bytes 0-8191/231424
+        If Headers.Exists("Content-Range") Then
+            ContentRange = Headers("Content-Range")
+            
+            If Left(ContentRange, 6) <> "bytes " Then
+                RequestFailed "Content-Range '" & ContentRange & "' not valid byte range"
+                Exit Function
+            End If
+            
+            ContentRangeSplit = Split(Mid(ContentRange, 7), "/", 2)
+            
+            If UBound(ContentRangeSplit) <> 1 Then
+                RequestFailed "Content-Range '" & ContentRange & "' not valid byte range"
+                Exit Function
+            ElseIf Not IsNumeric(ContentRangeSplit(1)) Then
+                RequestFailed "Content-Range '" & ContentRange & "' not valid byte range"
+                Exit Function
+            End If
+            
+            ContentStart = ContentRangeSplit(0)
+            EntityLength = Clng(ContentRangeSplit(1))
+            
+            ContentStartSplit = Split(ContentStart, "-", 2)
+            
+            If UBound(ContentStartSplit) <> 1 Then
+                RequestFailed "Content-Range '" & ContentRange & "' not valid byte range"
+                Exit Function
+            ElseIf Not IsNumeric(ContentStartSplit(0)) Or Not IsNumeric(ContentStartSplit(1)) Then
+                RequestFailed "Content-Range '" & ContentRange & "' not valid byte range"
+                Exit Function
+            End If
+            
+            ContentStart = Clng(ContentStartSplit(0))
+            ContentLength = Clng(ContentStartSplit(1))
+        End If
+        
+        'HttpGetFileTester.Callback_Progress m_Name, Len(Entity), EntityLength
+        
+        If Len(Content) = ContentLength - ContentStart + 1 Then
+            ParseHttpHeader = True
+        End If
+        
+        RecievedLastRequest = True
+    End Function
+    
+    Private Sub SetStandardSendHeaders()
+        SetHeader "Host", m_Domain
+        SetHeader "User-Agent", "HttpRequester/1.0 StealthBot/2.7"
+        SetHeader "Accept", "*"
+        SetHeader "Accept-Language", "en-us,en;q=0.5"
+        SetHeader "Accept-Encoding", "identity"
+        SetHeader "Accept-Charset", "ISO-8859-1"
+        SetHeader "Keep-Alive", "300"
+        SetHeader "Connection", "keep-alive"
+    End Sub
+    
+    Private Sub SetHeader(Key, Value)
+        Headers(Key) = Value
+    End Sub
+    
+    Private Function SendHttpRequest(ReqName)
+        Dim Request, HeaderKey, HeaderValue
+        SendHttpRequest = False
+        
+        Request = ReqName & " " & m_Url & " " & HTTP_VER & vbCrLf
+        
+        For Each HeaderKey In Headers.Keys()
+            HeaderValue = Headers(HeaderKey)
+            Request = Request & HeaderKey & ": " & HeaderValue & vbCrLf
+        Next
+        
+        Request = Request & vbCrLf
+        
+        'Addchat vbYellow, "Sending HTTP Request:" & vbCrLf & Request
+        
+        If Not RecievedLastRequest Then Exit Function
+        
+        With sckHttpGetFile
+            If .State = sckConnected Then
+                .SendData Request
+                SendHttpRequest = True
+            ElseIf .State = sckClosed Then
+                ConnectToHost
+            End If
+        End With
+    End Function
+    
+    Private Sub ConnectToHost()
+        Dim Port
+        'Addchat vbyellow, "Connecting to host at " & m_domain & "..."
+        
+        If InStr(m_Domain, ":") > 0 Then
+            Port = Mid(m_Domain, InStrRev(m_Domain, ":") + 1)
+            If IsNumeric(Port) Then
+                Port = CInt(PorT)
+            Else
+                Port = HTTP_PORT
+            End If
+            m_Domain = Left(m_Domain, InStrRev(m_Domain, ":"))
+        Else
+            Port = HTTP_PORT
+        End If
+        
+        With sckHttpGetFile
+            If .State <> sckClosed Then .Close
+            .RemotePort = Port
+            .RemoteHost = ResolveHostName(m_Domain)
+            .Connect
+        End With
+    End Sub
+    
+    Private Sub RequestProgress()
+        m_DownloaderObj.Callback_Progress Me
+        
+        If Len(Entity) = EntityLength Then
+            RequestComplete
+        Else
+            BeginGetPartTimer
+        End If
+    End Sub
+    
+    Private Sub RequestComplete()
+        If Len(m_Path) > 0 Then
+            File.Close
+            Set File = Nothing
+            Set Fso = Nothing
+        End If
+        
+        EndGetPartTimer
+        
+        m_DownloaderObj.Callback_Complete Me
+    End Sub
+    
+    Private Sub RequestFailed(ErrorMessage)
+        tmrHttpGetPartial.Enabled = False
+        
+        If Len(m_Path) > 0 Then
+            If Not File Is Nothing Then File.Close
+            Set File = Nothing
+            Set Fso = Nothing
+        End If
+        
+        m_DownloaderObj.Callback_Error Me, ErrorMessage
+    End Sub
+End Class
