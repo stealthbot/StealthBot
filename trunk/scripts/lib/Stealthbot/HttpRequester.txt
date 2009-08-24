@@ -16,6 +16,8 @@
 ' <requesterobj>.QueueDownload(FilePath, Url)
 ' the first argument specifies where to save to
 '   pass vbNullString to not save the downloaded file
+'   start with \ and it will be downloaded to GetWorkingDirectory() & FilePath
+'   otherwise it will download to FilePath
 ' the second argument specifies where to download from
 '
 ' recommended to clean up during Event_Close, and/or at a place when you know all files have completed downloading:
@@ -337,6 +339,9 @@ Class HttpDownloaderItem
             m_Name = Left(m_Name, InStrRev(m_Name, ".") - 1)
         End If
         m_Path = Path
+        If Left(m_Path, 1) = "\" Then
+            m_Path = GetWorkingDirectory() & Mid(m_Path, 2)
+        End If
         
         If Left(LCase(Url), 7) = "http://" Then Url = Mid(Url, 8)
         
@@ -367,8 +372,8 @@ Class HttpDownloaderItem
         
         Set Fso = CreateObject("Scripting.FileSystemObject")
         If Len(m_Path) > 0 Then 
-            If Fso.FileExists(BotPath() & m_Path) Then
-                Fso.DeleteFile BotPath() & m_Path
+            If Fso.FileExists(m_Path) Then
+                Fso.DeleteFile m_Path
             End If
         End If
         Set File = Nothing
@@ -379,7 +384,7 @@ Class HttpDownloaderItem
         
         If Len(m_Path) > 0 Then
             On Error Resume Next
-            Set File = Fso.OpenTextFile(BotPath() & m_Path, 8, True)
+            Set File = Fso.OpenTextFile(m_Path, 8, True)
             
             If Err.Number <> 0 Then
                 RequestFailed "Error opening file for append #" & Err.Number & ": " & Err.Description
