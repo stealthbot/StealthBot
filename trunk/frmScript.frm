@@ -21,6 +21,19 @@ Begin VB.Form frmScript
    ScaleHeight     =   3090
    ScaleWidth      =   4680
    StartUpPosition =   3  'Windows Default
+   Begin MSComctlLib.ProgressBar prg 
+      Height          =   255
+      Index           =   0
+      Left            =   1680
+      TabIndex        =   11
+      Top             =   360
+      Visible         =   0   'False
+      Width           =   255
+      _ExtentX        =   450
+      _ExtentY        =   450
+      _Version        =   393216
+      Appearance      =   1
+   End
    Begin MSComctlLib.TreeView trv 
       Height          =   615
       Index           =   0
@@ -379,6 +392,13 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
             
             Set obj.obj = pic(ObjCount(ObjType))
         
+        Case "PROGRESSBAR"
+            If (ObjCount(ObjType) > 0) Then
+                Load prg(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = prg(ObjCount(ObjType))
+        
         Case "RICHTEXTBOX"
             If (ObjCount(ObjType) > 0) Then
                 Load rtb(ObjCount(ObjType))
@@ -401,6 +421,7 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
             End If
             
             Set obj.obj = trv(ObjCount(ObjType))
+            
     End Select
     
     ' ...
@@ -546,6 +567,16 @@ Public Sub DestroyObj(ByVal ObjName As String)
                 pic(0).Visible = False
             End If
         
+        Case "PROGRESSBAR"
+            If (m_arrObjs(Index).obj.Index > 0) Then
+                Unload prg(m_arrObjs(Index).obj.Index)
+            Else
+                With prg(0)
+                    .Value = 0
+                    .Visible = False
+                End With
+            End If
+        
         Case "RICHTEXTBOX"
             If (m_arrObjs(Index).obj.Index > 0) Then
                 Unload rtb(m_arrObjs(Index).obj.Index)
@@ -575,6 +606,7 @@ Public Sub DestroyObj(ByVal ObjName As String)
                     .Visible = False
                 End With
             End If
+        
     End Select
     
     ' ...
@@ -671,7 +703,10 @@ Public Sub ClearObjs()
 
             Case "PICTUREBOX"
                 pic(m_arrObjs(I).obj.Index).Picture = Nothing
-
+            
+            Case "PROGRESSBAR"
+                prg(m_arrObjs(I).obj.Index).Value = 0
+            
             Case "RICHTEXTBOX"
                 rtb(m_arrObjs(I).obj.Index).Text = ""
                 
@@ -679,6 +714,10 @@ Public Sub ClearObjs()
                 
             Case "TEXTBOX"
                 txt(m_arrObjs(I).obj.Index).Text = ""
+            
+            Case "TREEVIEW"
+                trv(m_arrObjs(I).obj.Index).nodes.Clear
+            
         End Select
     Next I
 
@@ -2446,6 +2485,54 @@ Private Sub trv_AfterLabelEdit(Index As Integer, Cancel As Integer, NewString As
     
     ' ...
     RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_AfterLabelEdit", Cancel, NewString
+
+End Sub
+
+Private Sub prg_Click(Index As Integer)
+    
+    On Error Resume Next
+    
+    Dim obj As scObj
+    
+    obj = GetScriptObjByIndex("ProgressBar", Index)
+    
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+
+End Sub
+
+Private Sub prg_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
+
+    On Error Resume Next
+    
+    Dim obj As scObj
+    
+    obj = GetScriptObjByIndex("ProgressBar", Index)
+    
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
+
+End Sub
+
+Private Sub prg_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
+
+    On Error Resume Next
+    
+    Dim obj As scObj
+    
+    obj = GetScriptObjByIndex("ProgressBar", Index)
+    
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
+
+End Sub
+
+Private Sub prg_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
+
+    On Error Resume Next
+    
+    Dim obj As scObj
+    
+    obj = GetScriptObjByIndex("ProgressBar", Index)
+    
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
 
 End Sub
 
