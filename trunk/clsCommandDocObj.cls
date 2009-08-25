@@ -108,7 +108,7 @@ Private Function GetCommandXPath(ByVal strCommand As String, Optional ByVal strS
         GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}']", _
             UCase$(AZ), LCase$(AZ), LCase$(strCommand))
     Else
-        GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}' and translate(@name, '{0}', '{1}')='{3}']", _
+        GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}' and translate(@owner, '{0}', '{1}')='{3}']", _
             UCase$(AZ), LCase$(AZ), LCase$(strCommand), LCase$(strScriptOwner))
     End If
 End Function
