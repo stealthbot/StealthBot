@@ -10,7 +10,7 @@ Script("Revision") = 1
 
 'Lets Observe the Internal bot events. This will cause Event_Command
 'to fire whenever commands for that script occur.
-ObserveScript("")
+'ObserveScript("")
 
 ' // create instance of demo class
 Dim cls

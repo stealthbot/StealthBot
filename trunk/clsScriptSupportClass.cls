@@ -320,7 +320,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     Optional ByRef EntryType As String = "USER") As Object
 
     Dim temp   As udtGetAccessResponse
-    Dim I      As Integer
+    Dim i      As Integer
     Dim Splt() As String
     
     temp = GetCumulativeAccess(Username, EntryType)
@@ -354,9 +354,9 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
             Splt(0) = temp.Groups
         End If
     
-        For I = LBound(Splt) To UBound(Splt)
-            GetDBEntry.Groups.Add GetDBEntry(Splt(I), , , "GROUP")
-        Next I
+        For i = LBound(Splt) To UBound(Splt)
+            GetDBEntry.Groups.Add GetDBEntry(Splt(i), , , "GROUP")
+        Next i
     End If
 End Function
 
@@ -498,11 +498,11 @@ End Function
 '//  See lDataType constants in GetInternalData() below
 Public Function GetInternalDataByUsername(ByVal sUser As String, ByVal lDataType As Long) As Variant
 
-    Dim I As Integer
+    Dim i As Integer
     
-    I = Channel.GetUserIndex(sUser)
+    i = Channel.GetUserIndex(sUser)
     
-    GetInternalDataByUsername = GetInternalData(I, lDataType)
+    GetInternalDataByUsername = GetInternalData(i, lDataType)
 
 End Function
 
@@ -1112,15 +1112,15 @@ End Function
 '// Returns a collection of friends objects
 Public Function Friends() As Object
     
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     ' ...
     Set Friends = New Collection
     
     ' ...
-    For I = 1 To g_Friends.Count
-        Friends.Add g_Friends(I).Clone()
-    Next I
+    For i = 1 To g_Friends.Count
+        Friends.Add g_Friends(i).Clone()
+    Next i
     
 End Function
 
@@ -1169,31 +1169,31 @@ End Function
 Public Function Sha1(ByRef Data As String, Optional ByVal inHex As Boolean = False) As String
 
     Dim a As Long
-    Dim b As Long
+    Dim B As Long
     Dim c As Long
     Dim d As Long
     Dim e As Long
     
-    Call modSHA1.DefaultSHA1(StrConv(Data, vbFromUnicode), a, b, c, d, e)
+    Call modSHA1.DefaultSHA1(StrConv(Data, vbFromUnicode), a, B, c, d, e)
     
     If inHex Then
-        Sha1 = LCase(Hex(a) & Hex(b) & Hex(c) & Hex(d) & Hex(e))
+        Sha1 = LCase(Hex(a) & Hex(B) & Hex(c) & Hex(d) & Hex(e))
     Else
-        Sha1 = LongToStr(a) & LongToStr(b) & LongToStr(c) & LongToStr(d) & LongToStr(e)
+        Sha1 = LongToStr(a) & LongToStr(B) & LongToStr(c) & LongToStr(d) & LongToStr(e)
     End If
 End Function
 
 '// XSHA1
 '// Returns the result of a non-standard Battle.net "broken" Sha-1 hash
 Public Function XSHA1(ByRef str As String, Optional ByVal inHex As Boolean = False) As String
-    Dim I As Integer
+    Dim i As Integer
     Dim s As String
     
     XSHA1 = modBNCSutil.hashPassword(str)
     
     If inHex Then
-        For I = 1 To Len(XSHA1)
-            s = s & LCase(Hex(Asc(Mid(XSHA1, I, 1))))
+        For i = 1 To Len(XSHA1)
+            s = s & LCase(Hex(Asc(Mid(XSHA1, i, 1))))
         Next
         XSHA1 = s
     End If
@@ -1203,15 +1203,15 @@ End Function
 '// Creates an NLS object to log on with a WarCraft III account
 Public Function CreateNls(ByVal Username As String, ByVal Password As String) As clsNLS
 
-    Dim nls As clsNLS
+    Dim NLS As clsNLS
     
-    Set nls = New clsNLS
+    Set NLS = New clsNLS
     
-    If nls.Initialize(Username, Password) Then
-        Set CreateNls = nls
+    If NLS.Initialize(Username, Password) Then
+        Set CreateNls = NLS
     End If
     
-    Set nls = Nothing
+    Set NLS = Nothing
 
 End Function
 
@@ -1219,13 +1219,13 @@ End Function
 '// Verifies a WarCraft III server signature to be for the passed IP address
 Public Function VerifyServerSignature(ByVal IPAddress As String, ByVal ServerSignature As String) As Boolean
 
-    Dim nls As clsNLS
+    Dim NLS As clsNLS
     
-    Set nls = New clsNLS
+    Set NLS = New clsNLS
     
-    VerifyServerSignature = nls.VerifyServerSignature(IPAddress, ServerSignature)
+    VerifyServerSignature = NLS.VerifyServerSignature(IPAddress, ServerSignature)
     
-    Set nls = Nothing
+    Set NLS = Nothing
 
 End Function
 
@@ -1425,6 +1425,7 @@ Public Function DeleteCommand(ByVal commandName As String, Optional ByVal script
     
 End Function
 
+'// 08/23/2009 52 - Obsoleted in favor of the new Command Event
 '// ISCOMMAND
 '// Pass a message a user sent
 '// Returns a Command instance object specifying whether they have access to the command
@@ -1436,20 +1437,20 @@ End Function
 '//                   vbNullString to get internal commands
 '//                   Chr(0) to get commands from any script
 '//                   if ommitted, this function will check for commands created in the currently executing script
-Public Function IsCommand(ByVal commandText As String, ByVal strUsername As String, Optional ByVal scriptName As String) As Collection
-
-    Dim commands As Collection
-    
-    If IsMissing(scriptName) Then scriptName = modScripting.GetScriptName
-    
-    ' 08/17/2009 - 52 - using static class method
-    Set commands = clsCommandObj.IsCommand(commandText, strUsername, scriptName)
-    
-    Set IsCommand = commands
-    
-    Set commands = Nothing
-    
-End Function
+'Public Function IsCommand(ByVal commandText As String, ByVal strUsername As String, Optional ByVal scriptName As String) As Collection
+'
+'    Dim commands As Collection
+'
+'    If IsMissing(scriptName) Then scriptName = modScripting.GetScriptName
+'
+'    ' 08/17/2009 - 52 - using static class method
+'    Set commands = clsCommandObj.IsCommand(commandText, strUsername, scriptName)
+'
+'    Set IsCommand = commands
+'
+'    Set commands = Nothing
+'
+'End Function
 
 '// OBSERVESCRIPT
 '// Add the currently runnign script as an Observer of the Specified script

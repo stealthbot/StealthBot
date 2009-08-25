@@ -248,7 +248,7 @@ Sub frmScriptUpdate_btnSearch_Click()
 End Sub
 
 Sub frmScriptUpdate_lvScripts_DblClick()
-	frmScriptUpdate.ShowMsgBox "The SBScriptID is " & lvScripts.SelectedItem.Tag, vbOkOnly Or vbInformation, "Script Update"
+	Call Updater.FetchScriptAndDependencies(lvScripts.SelectedItem.Tag)
 End Sub
 
 Sub frmScriptUpdate_lvScripts_ColumnClick(ByVal column)
@@ -259,7 +259,5 @@ Sub frmScriptUpdate_lvScripts_ColumnClick(ByVal column)
 	Else
 		lvScripts.SortOrder = lvScripts.SortOrder Xor 1
 	End If
-	
-	AddChat Color.Tomato, column.Text
 
 End Sub
