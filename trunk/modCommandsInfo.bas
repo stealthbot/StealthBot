@@ -262,7 +262,7 @@ On Error GoTo ERROR_HANDLER
     Dim tmpbuf      As String
     
     If (Command.IsValid) Then
-        If (Command.Argument("Rank") > -1) Then
+        If (CInt(Command.Argument("Rank")) > -1) Then
             tmpbuf = GetAllCommandsFor(Command.Argument("Rank"))
             If (LenB(tmpbuf) > 0) Then
                 Command.Respond "Commands available to specified rank: " & tmpbuf
@@ -730,7 +730,6 @@ On Error GoTo ERROR_HANDLER
     Else
         xpath = StringFormat("./command/access/rank[number() <= {0}]", Rank)
     End If
-    frmChat.AddChat vbYellow, "XPath: ", vbWhite, xpath
     
     xmldoc.Load GetFilePath("commands.xml")
     
