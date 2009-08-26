@@ -262,11 +262,15 @@ On Error GoTo ERROR_HANDLER
     Dim tmpbuf      As String
     
     If (Command.IsValid) Then
-        tmpbuf = GetAllCommandsFor(Command.Argument("Rank"))
-        If (LenB(tmpbuf) > 0) Then
-            Command.Respond "Commands available to specified rank: " & tmpbuf
+        If (Command.Argument > -1) Then
+            tmpbuf = GetAllCommandsFor(Command.Argument("Rank"))
+            If (LenB(tmpbuf) > 0) Then
+                Command.Respond "Commands available to specified rank: " & tmpbuf
+            Else
+                Command.Respond "No commands are available to the given rank."
+            End If
         Else
-            Command.Respond "No commands are available to the given rank."
+            Command.Respond "The specified rank must be greater or equal to zero."
         End If
     End If
     
