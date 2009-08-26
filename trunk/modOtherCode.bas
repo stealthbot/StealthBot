@@ -1559,14 +1559,19 @@ Public Function HTMLToRGBColor(ByVal s As String) As Long
         Val("&H" & Mid$(s, 5, 2)))
 End Function
 
-Public Function StrictIsNumeric(ByVal sCheck As String) As Boolean
+Public Function StrictIsNumeric(ByVal sCheck As String, Optional AllowNegatives As Boolean = False) As Boolean
     Dim i As Long
     
     StrictIsNumeric = True
     
     If (Len(sCheck) > 0) Then
         For i = 1 To Len(sCheck)
-            If (Not ((Asc(Mid$(sCheck, i, 1)) >= 48) And _
+            If ((Asc(Mid$(sCheck, i, 1)) = 45)) Then
+                If ((Not AllowNegatives) Or (i > 1)) Then
+                    StrictIsNumeric = False
+                    Exit Function
+                End If
+            ElseIf (Not ((Asc(Mid$(sCheck, i, 1)) >= 48) And _
                      (Asc(Mid$(sCheck, i, 1)) <= 57))) Then
                 
                 StrictIsNumeric = False

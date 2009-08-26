@@ -24,7 +24,7 @@ Option Explicit
 Private m_valid        As Boolean
 Private m_command_docs As clsCommandDocObj
 Private m_name         As String
-Private m_username     As String
+Private m_Username     As String
 Private m_args         As String
 Private m_arguments    As Collection
 Private m_local        As Boolean
@@ -36,10 +36,10 @@ Private m_waswhispered As Boolean
 Private m_response     As Collection
 
 Public Property Get Username() As String
-    Username = m_username
+    Username = m_Username
 End Property
 Public Property Let Username(strName As String)
-    m_username = strName
+    m_Username = strName
 End Property
 Public Property Get Name() As String
     Name = m_name
@@ -95,7 +95,7 @@ Public Sub Class_Initialize()
     m_valid = False
     Set m_command_docs = New clsCommandDocObj
     m_name = vbNullString
-    m_username = vbNullString
+    m_Username = vbNullString
     m_args = vbNullString
     Set m_arguments = New Collection
     m_local = False
@@ -141,12 +141,11 @@ Public Property Let docs(ByRef cmd As clsCommandDocObj)
     Set m_command_docs = cmd
 End Property
 
-
 'Strips (removes) and returns a Numeric argument from the passed string
 Private Function StripNumeric(ByRef sString As String) As String
     Dim sTemp As String
     sTemp = StripWord(sString)
-    If (StrictIsNumeric(sTemp)) Then
+    If (StrictIsNumeric(sTemp, True)) Then
         StripNumeric = sTemp
     ElseIf LenB(sTemp) > 0 Then
         sString = sTemp & Space(1) & sString
@@ -155,11 +154,11 @@ End Function
 
 'Strips (removes) and returns a Word argument from the passed string
 Private Function StripWord(ByRef sString As String) As String
-    Dim I As Integer
-    I = InStr(sString, Space(1))
-    If (I > 0) Then
-        StripWord = Left$(sString, I - 1)
-        sString = Mid$(sString, I + 1)
+    Dim i As Integer
+    i = InStr(sString, Space(1))
+    If (i > 0) Then
+        StripWord = Left$(sString, i - 1)
+        sString = Mid$(sString, i + 1)
     ElseIf Len(sString) > 0 Then
         StripWord = sString
         sString = vbNullString
@@ -175,16 +174,16 @@ End Function
 '"This is a \\\"String\"" -> This is a \"String"
 '"This is a \String" -> This is a \String
 Private Function StripString(ByRef sString As String) As String
-    Dim I As Integer
+    Dim i As Integer
     If (Left$(sString, 1) = Chr$(34)) Then
         sString = Replace$(sString, "\\", Chr$(1))
         sString = Replace$(sString, "\" & Chr(34), Chr$(2))
-        I = InStr(2, sString, Chr$(34))
-        If (I > 2) Then
+        i = InStr(2, sString, Chr$(34))
+        If (i > 2) Then
             sString = Replace$(sString, Chr$(1), "\")
             sString = Replace$(sString, Chr$(2), Chr$(34))
-            StripString = Left$(Mid$(sString, 2), I - 2)
-            sString = Mid$(sString, I + 1)
+            StripString = Left$(Mid$(sString, 2), i - 2)
+            sString = Mid$(sString, i + 1)
         Else
             sString = Replace$(sString, Chr$(1), "\")
             sString = Replace$(sString, Chr$(2), Chr$(34))
@@ -206,7 +205,7 @@ End Function
 Private Sub SplitArguments()
 On Error GoTo ERROR_HANDLER
     Dim sArgs       As String
-    Dim I           As Integer
+    Dim i           As Integer
     Dim Param       As clsCommandParamsObj
     Dim Restriction As clsCommandRestrictionObj
     Dim sTemp       As String
@@ -295,13 +294,13 @@ End Function
 
 Private Function CheckForAnyFlags(sNeeded As String, sHave As String) As Boolean
 On Error GoTo ERROR_HANDLER
-    Dim I As Integer
+    Dim i As Integer
     CheckForAnyFlags = False
     
     If (LenB(sHave) = 0) Then Exit Function
     
-    For I = 1 To Len(sNeeded)
-        If (InStr(1, sHave, Mid(sNeeded, I, 1), vbTextCompare) > 0) Then
+    For i = 1 To Len(sNeeded)
+        If (InStr(1, sHave, Mid(sNeeded, i, 1), vbTextCompare) > 0) Then
             CheckForAnyFlags = True
             Exit Function
         End If
@@ -334,26 +333,26 @@ End Function
 'If your response MUST be a specific style, Use AddQ or DSP
 Public Function SendResponse()
 On Error GoTo ERROR_HANDLER
-    Dim I As Integer
+    Dim i As Integer
     If (IsLocal) Then
         If (PublicOutput) Then
-            For I = 1 To m_response.Count
-                frmChat.AddQ m_response.Item(I), PRIORITY.CONSOLE_MESSAGE
-            Next I
+            For i = 1 To m_response.Count
+                frmChat.AddQ m_response.Item(i), PRIORITY.CONSOLE_MESSAGE
+            Next i
         Else
-            For I = 1 To m_response.Count
-                frmChat.AddChat RTBColors.ConsoleText, m_response.Item(I)
-            Next I
+            For i = 1 To m_response.Count
+                frmChat.AddChat RTBColors.ConsoleText, m_response.Item(i)
+            Next i
         End If
     Else
         If ((BotVars.WhisperCmds) Or (WasWhispered)) Then
-            For I = 1 To m_response.Count
-                frmChat.AddQ "/w " & Username & Space$(1) & m_response.Item(I), PRIORITY.COMMAND_RESPONSE_MESSAGE
-            Next I
+            For i = 1 To m_response.Count
+                frmChat.AddQ "/w " & Username & Space$(1) & m_response.Item(i), PRIORITY.COMMAND_RESPONSE_MESSAGE
+            Next i
         Else
-            For I = 1 To m_response.Count
-                frmChat.AddQ m_response.Item(I), PRIORITY.COMMAND_RESPONSE_MESSAGE
-            Next I
+            For i = 1 To m_response.Count
+                frmChat.AddQ m_response.Item(i), PRIORITY.COMMAND_RESPONSE_MESSAGE
+            Next i
         End If
     End If
     ClearResponse
