@@ -720,6 +720,7 @@ On Error GoTo ERROR_HANDLER
         For i = 1 To Len(Flags)
             Flag = IIf(Mid$(Flags, i, 1) = "\", "\\", Mid$(Flags, i, 1))
             If (Not BotVars.CaseSensitiveFlags) Then Flag = LCase$(Flag)
+            If (Flag = "'") Then Flag = "&apos;"
             
             xpath = StringFormat("{0}{1}{2}", _
                 xpath, _
