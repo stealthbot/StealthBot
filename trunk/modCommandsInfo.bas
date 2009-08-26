@@ -289,7 +289,7 @@ Public Sub OnInfo(Command As clsCommandObj)
         If (UserIndex > 0) Then
             With g_Channel.Users(UserIndex)
                 Command.Respond StringFormat("User {0} is logged on using {1} with {2}a ping time of {3}ms.", _
-                    .displaayname, ProductCodeToFullName(.game), _
+                    .DisplayName, ProductCodeToFullName(.game), _
                     IIf(.IsOperator, "ops, and ", vbNullString), .Ping)
             
                 Command.Respond StringFormat("He/she has been present in the channel for {0}.", ConvertTime(.TimeInChannel(), 1))
