@@ -198,10 +198,12 @@ Public Sub OnFindGrp(Command As clsCommandObj)
     
     If (Command.IsValid) Then
         Call SearchDatabase(bufResponse(), , , Command.Argument("Group"))
+        For Each strResponse In bufResponse
+            Command.Respond CStr(strResponse)
+        Next
+    Else
+        Command.Respond "You must specify a group to find."
     End If
-    For Each strResponse In bufResponse
-        Command.Respond CStr(strResponse)
-    Next
 End Sub
 
 Public Sub OnHelp(Command As clsCommandObj)
@@ -773,6 +775,7 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
     Dim i        As Integer
     Dim found    As Integer
     Dim tmpbuf   As String
+    ReDim arrReturn(0)
     
     If (LenB(Username) > 0) Then
         Dim dbAccess As udtGetAccessResponse
