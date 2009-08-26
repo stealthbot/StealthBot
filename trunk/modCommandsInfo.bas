@@ -94,10 +94,11 @@ Public Sub OnClientBans(Command As clsCommandObj)
     
     If (Command.IsValid) Then
         Call SearchDatabase(bufResponse(), , , , "GAME", , , "B")
+        
+        For Each strResponse In bufResponse
+            Command.Respond CStr(strResponse)
+        Next
     End If
-    For Each strResponse In bufResponse
-        Command.Respond CStr(strResponse)
-    Next
 End Sub
 
 Public Sub OnDetail(Command As clsCommandObj)
@@ -186,10 +187,12 @@ Public Sub OnFindAttr(Command As clsCommandObj)
     
     If (Command.IsValid) Then
         Call SearchDatabase(bufResponse(), , , , , , , Command.Argument("Attributes"))
+        For Each strResponse In bufResponse
+            Command.Respond CStr(strResponse)
+        Next
+    Else
+        Command.Respond "You must specify flag(s) to search for."
     End If
-    For Each strResponse In bufResponse
-        Command.Respond CStr(strResponse)
-    Next
 End Sub
 
 Public Sub OnFindGrp(Command As clsCommandObj)
