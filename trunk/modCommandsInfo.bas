@@ -262,7 +262,7 @@ On Error GoTo ERROR_HANDLER
     Dim tmpbuf      As String
     
     If (Command.IsValid) Then
-        If (Command.Argument > -1) Then
+        If (Command.Argument("Rank") > -1) Then
             tmpbuf = GetAllCommandsFor(Command.Argument("Rank"))
             If (LenB(tmpbuf) > 0) Then
                 Command.Respond "Commands available to specified rank: " & tmpbuf
