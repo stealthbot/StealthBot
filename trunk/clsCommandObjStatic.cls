@@ -193,8 +193,8 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         End If
         
         '// check for ?trigger and !inbox
-        If (StrComp(Message, "?trigger", vbBinaryCompare) = 0) Or _
-            (StrComp(Message, "!inbox", vbBinaryCompare) = 0) Then
+        If (StrComp(Message, "?trigger", vbTextCompare) = 0) Or _
+            (StrComp(Message, "!inbox", vbTextCompare) = 0) Then
             
             PublicOutput = True
             cropLen = 2
