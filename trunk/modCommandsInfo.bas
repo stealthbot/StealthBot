@@ -20,18 +20,18 @@ End Sub
 ' handle allseen command
 Public Sub OnAllSeen(Command As clsCommandObj)
     Dim retVal As String
-    Dim I      As Integer
+    Dim i      As Integer
 
     If (colLastSeen.Count = 0) Then
         retVal = "I have not seen anyone yet."
     Else
         retVal = "Last 15 users seen: "
-        For I = 1 To colLastSeen.Count
+        For i = 1 To colLastSeen.Count
             retVal = StringFormat("{0}{1}{2}", _
-                retVal, colLastSeen.Item(I), _
-                IIf(I = colLastSeen.Count, vbNullString, ", "))
-            If (I = 15) Then Exit For
-        Next I
+                retVal, colLastSeen.Item(i), _
+                IIf(i = colLastSeen.Count, vbNullString, ", "))
+            If (i = 15) Then Exit For
+        Next i
     End If
     Command.Respond retVal
 End Sub
@@ -56,7 +56,7 @@ End Sub
 
 Public Sub OnBanned(Command As clsCommandObj)
     Dim sResult  As String
-    Dim I        As Integer
+    Dim i        As Integer
     Dim j        As Integer
     Dim BanCount As Integer
     
@@ -64,24 +64,24 @@ Public Sub OnBanned(Command As clsCommandObj)
         Command.Respond "There are presently no users on the bot's internal banlist."
     Else
         sResult = "User(s) banned: "
-        For I = 1 To g_Channel.Banlist.Count
-            If (Not g_Channel.Banlist(I).IsDuplicateBan) Then
+        For i = 1 To g_Channel.Banlist.Count
+            If (Not g_Channel.Banlist(i).IsDuplicateBan) Then
                 For j = 1 To g_Channel.Banlist.Count
-                    If (StrComp(g_Channel.Banlist(j).DisplayName, g_Channel.Banlist(I).DisplayName, vbTextCompare) = 0) Then
+                    If (StrComp(g_Channel.Banlist(j).DisplayName, g_Channel.Banlist(i).DisplayName, vbTextCompare) = 0) Then
                         BanCount = (BanCount + 1)
                     End If
                 Next j
-                sResult = StringFormat("{0}, {1}", sResult, g_Channel.Banlist(I).DisplayName)
+                sResult = StringFormat("{0}, {1}", sResult, g_Channel.Banlist(i).DisplayName)
                 
                 If (BanCount > 1) Then sResult = StringFormat("{0} ({1})", sResult, BanCount)
                       
-                If ((Len(sResult) > 90) And (Not I = g_Channel.Banlist.Count)) Then
+                If ((Len(sResult) > 90) And (Not i = g_Channel.Banlist.Count)) Then
                     Command.Respond Replace(sResult, " , ", Space$(1))
                     sResult = "Users(s) banned: "
                 End If
             End If
             BanCount = 0
-        Next I
+        Next i
         If (LenB(sResult) > LenB("Users(s) banned: , ")) Then 'We don't want to send an empty line
             Command.Respond Replace(sResult, " , ", Space$(1))
         End If
@@ -103,10 +103,10 @@ End Sub
 Public Sub OnDetail(Command As clsCommandObj)
     If (Command.IsValid) Then
         Dim sRetAdd As String, sRetMod As String
-        Dim I As Integer
+        Dim i As Integer
         
-        For I = 0 To UBound(DB)
-            With DB(I)
+        For i = 0 To UBound(DB)
+            With DB(i)
                 If (StrComp(Command.Argument("Username"), .Username, vbTextCompare) = 0) Then
                     If ((Not .AddedBy = "%") And (LenB(.AddedBy) > 0)) Then
                         sRetAdd = StringFormat("{0} was added by {1} on {2}.", .Username, .AddedBy, .AddedOn)
@@ -133,7 +133,7 @@ Public Sub OnDetail(Command As clsCommandObj)
                     Exit Sub
                 End If
             End With
-        Next I
+        Next i
         
         Command.Respond "That user was not found in the database."
     End If
@@ -296,7 +296,7 @@ On Error GoTo ERROR_HANDLER
     
     Dim ModName As String
     Dim Name    As String
-    Dim I       As Integer
+    Dim i       As Integer
     Dim strRet  As String
     Dim Script  As Module
     
@@ -320,8 +320,8 @@ On Error GoTo ERROR_HANDLER
             Else
                 strRet = "Script initialization performance:"
             End If
-            For I = 2 To frmChat.SControl.Modules.Count
-                Set Script = frmChat.SControl.Modules(I)
+            For i = 2 To frmChat.SControl.Modules.Count
+                Set Script = frmChat.SControl.Modules(i)
                 
                 If (Not StrComp(Script.CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 0) Then
                     If (Command.IsLocal And Not Command.PublicOutput) Then
@@ -333,10 +333,10 @@ On Error GoTo ERROR_HANDLER
                             strRet, _
                             Script.CodeObject.Script("Name"), _
                             Script.CodeObject.Script("InitPerf"), _
-                            IIf(I = frmChat.SControl.Modules.Count, vbNullString, ","))
+                            IIf(i = frmChat.SControl.Modules.Count, vbNullString, ","))
                     End If
                 End If
-            Next I
+            Next i
             
             If (LenB(strRet)) Then Command.Respond strRet
         Else
@@ -375,21 +375,21 @@ End Sub
 Public Sub OnPhrases(Command As clsCommandObj)
     Dim sBuffer   As String
     Dim aBuffer() As String
-    Dim I         As Integer
+    Dim i         As Integer
     Dim found     As Integer
     
-    For I = LBound(Phrases) To UBound(Phrases)
-        If (LenB(Trim$(Phrases(I))) > 0) Then
-            sBuffer = StringFormat("{0}{1}, ", sBuffer, Phrases(I))
+    For i = LBound(Phrases) To UBound(Phrases)
+        If (LenB(Trim$(Phrases(i))) > 0) Then
+            sBuffer = StringFormat("{0}{1}, ", sBuffer, Phrases(i))
             found = found + 1
         End If
-    Next I
+    Next i
     
     If (found > 0) Then
         SplitByLen Left$(sBuffer, Len(sBuffer) - Len(", ")), 180, aBuffer, "Phrasebans: ", , ", "
-        For I = LBound(aBuffer) To UBound(aBuffer)
-            Command.Respond aBuffer(I)
-        Next I
+        For i = LBound(aBuffer) To UBound(aBuffer)
+            Command.Respond aBuffer(i)
+        Next i
     Else
         Command.Respond "There are no phrasebans."
     End If
@@ -458,13 +458,13 @@ End Sub
 ' handle safelist command
 Public Sub OnSafeList(Command As clsCommandObj)
     Dim bufResponse() As String
-    Dim I             As Long
+    Dim i             As Long
     
     Call SearchDatabase(bufResponse(), , , , , , , "S")
     
-    For I = 0 To UBound(bufResponse)
-        Command.Respond bufResponse(I)
-    Next I
+    For i = 0 To UBound(bufResponse)
+        Command.Respond bufResponse(i)
+    Next i
 End Sub
 
 Public Sub OnScriptDetail(Command As clsCommandObj)
@@ -512,14 +512,14 @@ Public Sub OnScripts(Command As clsCommandObj)
 On Error GoTo ERROR_HANDLER
     
     Dim retVal  As String
-    Dim I       As Integer
+    Dim i       As Integer
     Dim Enabled As Boolean
     Dim Name    As String
     Dim Count   As Integer
     
     If (frmChat.SControl.Modules.Count > 1) Then
-        For I = 2 To frmChat.SControl.Modules.Count
-            Name = modScripting.GetScriptName(CStr(I))
+        For i = 2 To frmChat.SControl.Modules.Count
+            Name = modScripting.GetScriptName(CStr(i))
             Enabled = Not (StrComp(GetModuleByName(Name).CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 0)
                 
             retVal = StringFormat("{0}{1}{2}{3}{4}", _
@@ -527,10 +527,10 @@ On Error GoTo ERROR_HANDLER
                 IIf(Enabled, vbNullString, "("), _
                 Name, _
                 IIf(Enabled, vbNullString, ")"), _
-                IIf(I = frmChat.SControl.Modules.Count, vbNullString, ", "))
+                IIf(i = frmChat.SControl.Modules.Count, vbNullString, ", "))
                 
             Count = (Count + 1)
-        Next I
+        Next i
         
         Command.Respond StringFormat("Loaded Scripts ({0}): {1}", Count, retVal)
     Else
@@ -577,24 +577,24 @@ End Sub
 
 Public Sub OnShitList(Command As clsCommandObj)
     Dim bufResponse() As String
-    Dim I             As Integer
+    Dim i             As Integer
     
     Call SearchDatabase(bufResponse(), , "!*[*]*", , , , , "B")
     
-    For I = 0 To UBound(bufResponse)
-        Command.Respond bufResponse(I)
-    Next I
+    For i = 0 To UBound(bufResponse)
+        Command.Respond bufResponse(i)
+    Next i
 End Sub
 
 Public Sub OnTagBans(Command As clsCommandObj)
     Dim bufResponse() As String
-    Dim I             As Integer
+    Dim i             As Integer
     
     Call SearchDatabase(bufResponse(), , "*[*]*", , , , , "B")
     
-    For I = 0 To UBound(bufResponse)
-        Command.Respond bufResponse(I)
-    Next I
+    For i = 0 To UBound(bufResponse)
+        Command.Respond bufResponse(i)
+    Next i
 End Sub
 
 Public Sub OnTime(Command As clsCommandObj)
@@ -681,18 +681,20 @@ Public Sub OnWhoIs(Command As clsCommandObj)
     End If
 End Sub
 
-
 Private Function GetAllCommandsFor(Optional Rank As Integer = -1, Optional Flags As String = vbNullString) As String
 On Error GoTo ERROR_HANDLER
     
     Dim tmpbuf      As String
-    Dim I           As Integer
+    Dim i           As Integer
     Dim xmldoc      As New DOMDocument60
     Dim commands    As IXMLDOMNodeList
     Dim xpath       As String
     Dim lastCommand As String
     Dim thisCommand As String
-    
+    Dim xFunction   As String
+    Dim AZ          As String
+    Dim Flag        As String
+    AZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
     If (Dir$(GetFilePath("commands.xml")) = vbNullString) Then
         Command.Respond "Error: The XML database could not be found in the working directory."
@@ -700,34 +702,37 @@ On Error GoTo ERROR_HANDLER
     End If
 
     If (LenB(Flags) > 0) Then
-
-        For I = 1 To Len(Flags)
-            xpath = StringFormat("{0}'{1}'{2}", _
-                xpath, _
-                IIf(Mid$(Flags, I, 1) = "\", "\\", Mid$(Flags, I, 1)), _
-                IIf(I = Len(Flags), vbNullString, " or "))
-        Next I
         If (BotVars.CaseSensitiveFlags) Then
-            xpath = StringFormat("./command/access/flags/flag[text()={0}]", xpath)
+            xFunction = "text()='{0}'"
         Else
-            xpath = StringFormat("./command/access/flags/flag[" & _
-            "translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')={0}]", _
-            LCase$(xpath))
+            xFunction = StringFormat("translate(text(), '{0}', '{1}')='{2}'", UCase$(AZ), LCase$(AZ), "{0}")
         End If
+        
+        For i = 1 To Len(Flags)
+            Flag = IIf(Mid$(Flags, i, 1) = "\", "\\", Mid$(Flags, i, 1))
+            If (Not BotVars.CaseSensitiveFlags) Then Flag = LCase$(Flag)
+            
+            xpath = StringFormat("{0}{1}{2}", _
+                xpath, _
+                StringFormat(xFunction, Flag), _
+                IIf(i = Len(Flags), vbNullString, " or "))
+        Next i
+        xpath = StringFormat("./command/access/flags/flag[{0}]", xpath)
     Else
         xpath = StringFormat("./command/access/rank[number() <= {0}]", Rank)
     End If
+    frmChat.AddChat vbYellow, "XPath: ", vbWhite, xpath
     
     xmldoc.Load GetFilePath("commands.xml")
     
     Set commands = xmldoc.documentElement.selectNodes(xpath)
 
     If (commands.length > 0) Then
-        For I = 0 To commands.length - 1
+        For i = 0 To commands.length - 1
             If (LenB(Flags) > 0) Then
-                thisCommand = commands(I).parentNode.parentNode.parentNode.Attributes.getNamedItem("name").Text
+                thisCommand = commands(i).parentNode.parentNode.parentNode.Attributes.getNamedItem("name").Text
             Else
-                thisCommand = commands(I).parentNode.parentNode.Attributes.getNamedItem("name").Text
+                thisCommand = commands(i).parentNode.parentNode.Attributes.getNamedItem("name").Text
             End If
             
             If (StrComp(thisCommand, lastCommand, vbTextCompare) <> 0) Then
@@ -735,7 +740,7 @@ On Error GoTo ERROR_HANDLER
             End If
         
             lastCommand = thisCommand
-        Next I
+        Next i
         
         tmpbuf = Left$(tmpbuf, Len(tmpbuf) - 2)
     End If
@@ -747,12 +752,12 @@ ERROR_HANDLER:
 End Function
 
 Public Function GetPing(ByVal Username As String) As Long
-    Dim I As Integer
+    Dim i As Integer
     
-    I = g_Channel.GetUserIndex(Username)
+    i = g_Channel.GetUserIndex(Username)
     
-    If I > 0 Then
-        GetPing = g_Channel.Users(I).Ping
+    If i > 0 Then
+        GetPing = g_Channel.Users(i).Ping
     Else
         GetPing = -3
     End If
@@ -765,7 +770,7 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
     
     On Error GoTo ERROR_HANDLER
     
-    Dim I        As Integer
+    Dim i        As Integer
     Dim found    As Integer
     Dim tmpbuf   As String
     
@@ -786,22 +791,22 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
             tmpbuf = "No such user(s) found."
         End If
     Else
-        For I = LBound(DB) To UBound(DB)
+        For i = LBound(DB) To UBound(DB)
             Dim res        As Boolean
             Dim blnChecked As Boolean
         
-            If (LenB(DB(I).Username) > 0) Then
+            If (LenB(DB(i).Username) > 0) Then
                 If (LenB(match) > 0) Then
                     If (Left$(match, 1) = "!") Then
-                        res = (Not (LCase$(PrepareCheck(DB(I).Username)) Like (LCase$(Mid$(match, 2)))))
+                        res = (Not (LCase$(PrepareCheck(DB(i).Username)) Like (LCase$(Mid$(match, 2)))))
                     Else
-                        res = (LCase$(PrepareCheck(DB(I).Username)) Like (LCase$(match)))
+                        res = (LCase$(PrepareCheck(DB(i).Username)) Like (LCase$(match)))
                     End If
                     blnChecked = True
                 End If
                 
                 If (LenB(Group) > 0) Then
-                    If (StrComp(DB(I).Groups, Group, vbTextCompare) = 0) Then
+                    If (StrComp(DB(i).Groups, Group, vbTextCompare) = 0) Then
                         res = IIf(blnChecked, res, True)
                     Else
                         res = False
@@ -810,7 +815,7 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
                 End If
 
                 If (LenB(dbType) > 0) Then
-                    If (StrComp(DB(I).Type, dbType, vbTextCompare) = 0) Then
+                    If (StrComp(DB(i).Type, dbType, vbTextCompare) = 0) Then
                         res = IIf(blnChecked, res, True)
                     Else
                         res = False
@@ -819,14 +824,14 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
                 End If
                 
                 If ((lowerBound >= 0) And (upperBound >= 0)) Then
-                    If ((DB(I).Rank >= lowerBound) And (DB(I).Rank <= upperBound)) Then
+                    If ((DB(i).Rank >= lowerBound) And (DB(i).Rank <= upperBound)) Then
                         res = IIf(blnChecked, res, True)
                     Else
                         res = False
                     End If
                     blnChecked = True
                 ElseIf (lowerBound >= 0) Then
-                    If (DB(I).Rank = lowerBound) Then
+                    If (DB(i).Rank = lowerBound) Then
                         res = IIf(blnChecked, res, True)
                     Else
                         res = False
@@ -838,7 +843,7 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
                     Dim j As Integer
                 
                     For j = 1 To Len(Flags)
-                        If (InStr(1, DB(I).Flags, Mid$(Flags, j, 1), vbBinaryCompare) = 0) Then
+                        If (InStr(1, DB(i).Flags, Mid$(Flags, j, 1), vbBinaryCompare) = 0) Then
                             Exit For
                         End If
                     Next j
@@ -852,20 +857,20 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
                 End If
                 
                 If (res = True) Then
-                    tmpbuf = tmpbuf & DB(I).Username
-                    If (Not (DB(I).Type = "%") And (Not StrComp(DB(I).Type, "USER", vbTextCompare) = 0)) Then
-                        tmpbuf = StringFormat("{0} ({1})", tmpbuf, LCase$(DB(I).Type))
+                    tmpbuf = tmpbuf & DB(i).Username
+                    If (Not (DB(i).Type = "%") And (Not StrComp(DB(i).Type, "USER", vbTextCompare) = 0)) Then
+                        tmpbuf = StringFormat("{0} ({1})", tmpbuf, LCase$(DB(i).Type))
                     End If
                     tmpbuf = StringFormat("{0}{1}{2}, ", tmpbuf, _
-                        IIf(DB(I).Rank > 0, "\" & DB(I).Rank, vbNullString), _
-                        IIf(LenB(DB(I).Flags) > 0, "\" & DB(I).Flags, vbNullString))
+                        IIf(DB(i).Rank > 0, "\" & DB(i).Rank, vbNullString), _
+                        IIf(LenB(DB(i).Flags) > 0, "\" & DB(i).Flags, vbNullString))
                     found = (found + 1)
                 End If
             End If
             
             res = False
             blnChecked = False
-        Next I
+        Next i
 
         If (found = 0) Then
             arrReturn(0) = "No such user(s) found."
