@@ -223,13 +223,13 @@ Public Sub OnHelp(Command As clsCommandObj)
     Else
         If (docs.aliases.Count > 1) Then
             Command.Respond StringFormat("[{0} (Aliases: {4})]: {1} (Syntax: {2}). {3}", _
-            docs.Name, docs.description, docs.SyntaxString, docs.RequirementsStringShort, docs.AliasString)
+            docs.Name, docs.description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort, docs.AliasString)
         ElseIf (docs.aliases.Count = 1) Then
             Command.Respond StringFormat("[{0} (Alias: {4})]: {1} (Syntax: {2}). {3}", _
-            docs.Name, docs.description, docs.SyntaxString, docs.RequirementsStringShort, docs.AliasString)
+            docs.Name, docs.description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort, docs.AliasString)
         Else
             Command.Respond StringFormat("[{0}]: {1} (Syntax: {2}). {3}", _
-            docs.Name, docs.description, docs.SyntaxString, docs.RequirementsStringShort)
+            docs.Name, docs.description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort)
         End If
     End If
     Set docs = Nothing

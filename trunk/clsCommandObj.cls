@@ -209,6 +209,7 @@ On Error GoTo ERROR_HANDLER
     Dim Param       As clsCommandParamsObj
     Dim Restriction As clsCommandRestrictionObj
     Dim sTemp       As String
+    Dim sError      As String
     Dim dbAccess    As udtGetAccessResponse
     dbAccess = GetCumulativeAccess(Me.Username)
     sArgs = Me.Args
@@ -241,7 +242,13 @@ On Error GoTo ERROR_HANDLER
         If (LenB(Param.MatchMessage)) Then
             If (Not CheckMatch(Param.MatchMessage, sTemp, Param.MatchCaseSensitive)) Then
                 If (LenB(Param.MatchError) > 0) Then
-                    Respond Param.MatchError
+                
+                    sError = Replace$(Param.MatchError, "%Value", sTemp)
+                    sError = Replace$(sError, "%Rank", dbAccess.Rank)
+                    sError = Replace$(sError, "%Flags", dbAccess.Flags)
+                    
+                    Respond sError
+                    
                     IsValid = False
                     Exit Sub
                 Else
@@ -260,8 +267,15 @@ On Error GoTo ERROR_HANDLER
                     'If Rank = -1 It means it's missing, and it MUST have Flags. Or if Rank > User's Access
                     If (Restriction.RequiredRank = -1 Or Restriction.RequiredRank > dbAccess.Rank) Then
                         If (Not CheckForAnyFlags(Restriction.RequiredFlags, dbAccess.Flags)) Then
-                            If (LenB(Restriction.MatchError)) Then Respond Restriction.MatchError
+                            If (LenB(Restriction.MatchError)) Then
+                                sError = Replace$(Restriction.MatchError, "%Value", sTemp)
+                                sError = Replace$(sError, "%Rank", dbAccess.Rank)
+                                sError = Replace$(sError, "%Flags", dbAccess.Flags)
+                                
+                                Respond sError
+                            End If
                             m_hasaccess = False
+                            Exit For
                         End If
                     End If
                 End If

@@ -738,7 +738,7 @@ Private Function getDescription(ByRef AnyNode As IXMLDOMNode) As String
 End Function
 
 'Syntax: .add <username> [rank] [attributes]
-Private Function getSyntaxString() As String
+Private Function getSyntaxString(Optional IsLocal As Boolean = False) As String
 
     Dim retVal As String
     Dim P As clsCommandParamsObj
@@ -762,7 +762,8 @@ Private Function getSyntaxString() As String
     '// add the trigger
     retVal = StringFormat("{1}{0}", _
         retVal, _
-        IIf((Me.RequiredRank <> -1) Or (Len(Me.RequiredFlags) > 0), BotVars.Trigger, "/"))
+        IIf((Me.RequiredRank <> -1) Or (Len(Me.RequiredFlags) > 0), _
+            IIf(IsLocal, "/", BotVars.Trigger), "/"))
     
     getSyntaxString = Trim$(retVal)
 
@@ -1085,11 +1086,11 @@ Public Property Let description(ByVal strDescription As String)
 
 End Property
 
-Public Property Get SyntaxString() As String
+Public Function SyntaxString(Optional IsLocal As Boolean = False) As String
     
-    SyntaxString = getSyntaxString()
+    SyntaxString = getSyntaxString(IsLocal)
     
-End Property
+End Function
 
 Public Property Get AliasString() As String
     
