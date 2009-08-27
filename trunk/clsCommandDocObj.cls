@@ -391,7 +391,7 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
     Dim node                          As IXMLDOMNode
     Dim Parameter                     As clsCommandParamsObj
     Dim Restriction                   As clsCommandRestrictionObj
-    Dim I                             As Integer
+    Dim i                             As Integer
     
     If (AnyNode Is Nothing) Then
         Exit Function
@@ -409,9 +409,9 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
     If ParameterCol.Count > 0 Then
         
         '// loop through the parameters
-        For I = 1 To ParameterCol.Count
+        For i = 1 To ParameterCol.Count
             
-            Set Parameter = ParameterCol(I)
+            Set Parameter = ParameterCol(i)
             
             Set argumentNode = m_database.createNode("element", "argument", vbNullString)
             
@@ -445,9 +445,8 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
             '// create the error element if necessary
             If Len(Parameter.MatchError) <> 0 Then
                 '// add the error element
-                Set newNode = m_database.createNode("element", "error", vbNullString)
-                newNode.Text = Parameter.MatchError
-                argumentNode.selectSingleNode("error").appendChild newNode
+                argumentNode.appendChild m_database.createNode("element", "error", vbNullString)
+                argumentNode.selectSingleNode("error").Text = Parameter.MatchError
             End If
             
             
@@ -490,7 +489,7 @@ Private Function setRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef Restriction
     Dim newNode                          As IXMLDOMNode
     Dim node                             As IXMLDOMNode
     Dim Restriction                      As clsCommandRestrictionObj
-    Dim I                                As Integer
+    Dim i                                As Integer
     
     If (AnyNode Is Nothing) Then
         Exit Function
@@ -557,11 +556,11 @@ Private Function setRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef Restriction
         RestrictionNode.selectSingleNode("access").appendChild m_database.createNode("element", "flags", vbNullString)
         
         '// add a flag element for each flag
-        For I = 1 To Len(Restriction.RequiredFlags)
+        For i = 1 To Len(Restriction.RequiredFlags)
             Set newNode = m_database.createNode("element", "flag", vbNullString)
-            newNode.Text = Mid(Restriction.RequiredFlags, I, 1)
+            newNode.Text = Mid(Restriction.RequiredFlags, i, 1)
             RestrictionNode.selectSingleNode("access/flags").appendChild newNode
-        Next I
+        Next i
                         
     Next Restriction
     
@@ -575,7 +574,7 @@ Private Function setAliases(ByRef AnyNode As IXMLDOMNode, ByRef AliasCol As Coll
 
     Dim Alias   As IXMLDOMNode
     Dim aliases As IXMLDOMNodeList
-    Dim I       As Integer
+    Dim i       As Integer
     
     If (AnyNode Is Nothing) Then
         Exit Function
@@ -591,12 +590,12 @@ Private Function setAliases(ByRef AnyNode As IXMLDOMNode, ByRef AliasCol As Coll
         Next
     End If
     
-    For I = 1 To AliasCol.Count
+    For i = 1 To AliasCol.Count
         '// 09/03/2008 JSM - Modified code to use the <aliases> element
         Set Alias = _
             AnyNode.selectSingleNode("aliases").appendChild(m_database.createNode("element", "alias", vbNullString))
         
-        Alias.Text = AliasCol(I)
+        Alias.Text = AliasCol(i)
     Next
     
     'Call Save
@@ -772,14 +771,14 @@ End Function
 'alias1, alias2, alias3
 Private Function getAliasString()
     Dim retVal As String
-    Dim I As Integer
+    Dim i As Integer
     If (aliases.Count > 0) Then
-        For I = 1 To aliases.Count
+        For i = 1 To aliases.Count
             retVal = StringFormat("{0}{1}{2}", _
                 retVal, _
-                CStr(aliases.Item(I)), _
-                IIf(I = aliases.Count, vbNullString, ", "))
-        Next I
+                CStr(aliases.Item(i)), _
+                IIf(i = aliases.Count, vbNullString, ", "))
+        Next i
     End If
     getAliasString = retVal
 End Function
@@ -946,7 +945,7 @@ End Function
 Private Function getFlags(ByRef AnyNode As IXMLDOMNode) As String
 
     Dim temp As IXMLDOMNodeList
-    Dim flag As IXMLDOMNode
+    Dim Flag As IXMLDOMNode
     
     If (AnyNode Is Nothing) Then
         Exit Function
@@ -958,8 +957,8 @@ Private Function getFlags(ByRef AnyNode As IXMLDOMNode) As String
         Exit Function
     End If
     
-    For Each flag In temp
-        getFlags = getFlags & flag.Text
+    For Each Flag In temp
+        getFlags = getFlags & Flag.Text
     Next
     
 End Function
@@ -967,8 +966,8 @@ End Function
 Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String) As String
 
     Dim temp As IXMLDOMNode
-    Dim flag As IXMLDOMNode
-    Dim I    As Integer
+    Dim Flag As IXMLDOMNode
+    Dim i    As Integer
     
     If (AnyNode Is Nothing) Then
         Exit Function
@@ -983,16 +982,16 @@ Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String) A
             temp.appendChild(m_database.createNode("element", "flags", vbNullString))
     End If
     
-    For I = temp.childNodes.length - 1 To 0 Step -1
-        temp.removeChild temp.childNodes(I)
-    Next I
+    For i = temp.childNodes.length - 1 To 0 Step -1
+        temp.removeChild temp.childNodes(i)
+    Next i
     
-    For I = 1 To Len(Flags)
-        Set flag = _
+    For i = 1 To Len(Flags)
+        Set Flag = _
             temp.appendChild(m_database.createNode("element", "flag", vbNullString))
         
-        flag.Text = Mid$(Flags, I, 1)
-    Next I
+        Flag.Text = Mid$(Flags, i, 1)
+    Next i
     
     Call Save
     
