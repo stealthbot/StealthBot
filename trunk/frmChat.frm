@@ -7213,43 +7213,50 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = ReadCfg(OV, "QueueMaxCredits")
     If StrictIsNumeric(s) And Val(s) > 0 Then
         BotVars.QueueMaxCredits = Val(s)
-        g_BNCSQueue.MaxCredits = Val(s)
+    Else
+        BotVars.QueueMaxCredits = g_BNCSQueue.DefaultMaxCredits
     End If
     
     s = ReadCfg(OV, "QueueCostPerPacket")
     If StrictIsNumeric(s) And Val(s) > 0 Then
         BotVars.QueueCostPerPacket = Val(s)
-        g_BNCSQueue.CostPerPacket = Val(s)
+    Else
+        BotVars.QueueCostPerPacket = g_BNCSQueue.DefaultCostPerPacket
     End If
     
     s = ReadCfg(OV, "QueueCostPerByte")
     If StrictIsNumeric(s) And Val(s) > 0 Then
         BotVars.QueueCostPerByte = Val(s)
-        g_BNCSQueue.CostPerByte = Val(s)
+    Else
+        BotVars.QueueCostPerByte = g_BNCSQueue.DefaultCostPerByte
     End If
     
     s = ReadCfg(OV, "QueueCostPerByteOverThreshhold")
     If StrictIsNumeric(s) And Val(s) > 0 Then
         BotVars.QueueCostPerByteOverThreshhold = Val(s)
-        g_BNCSQueue.CostPerByteOverThreshhold = Val(s)
+    Else
+        BotVars.QueueCostPerByteOverThreshhold = g_BNCSQueue.DefaultCostPerByteOverThreshhold
     End If
     
     s = ReadCfg(OV, "QueueStartingCredits")
     If StrictIsNumeric(s) And Val(s) > 0 Then
         BotVars.QueueStartingCredits = Val(s)
-        g_BNCSQueue.StartingCredits = Val(s)
+    Else
+        BotVars.QueueStartingCredits = g_BNCSQueue.DefaultStartingCredits
     End If
     
     s = ReadCfg(OV, "QueueThreshholdBytes")
     If StrictIsNumeric(s) And Val(s) > 0 Then
         BotVars.QueueThreshholdBytes = Val(s)
-        g_BNCSQueue.ThreshholdBytes = Val(s)
+    Else
+        BotVars.QueueThreshholdBytes = g_BNCSQueue.DefaultThreshholdBytes
     End If
     
     s = ReadCfg(OV, "QueueCreditRate")
     If StrictIsNumeric(s) And Val(s) > 0 Then
         BotVars.QueueCreditRate = Val(s)
-        g_BNCSQueue.CreditRate = Val(s)
+    Else
+        BotVars.QueueCreditRate = g_BNCSQueue.DefaultCreditRate
     End If
 
     s = ReadCfg(MN, "UseRealm")

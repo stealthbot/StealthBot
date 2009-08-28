@@ -14,9 +14,9 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Public Function Hex(ByVal hexcolor As String) As Long
-    Dim r As String
-    Dim g As String
-    Dim b As String
+    Dim r As String * 4
+    Dim g As String * 4
+    Dim b As String * 4
     Dim os As Integer
     If Left$(hexcolor, 1) = "#" Then os = 1
     r = "&H" & Mid$(hexcolor, 1 + os, 2)

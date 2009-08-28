@@ -1215,7 +1215,7 @@ End Property
 
 Public Property Let QueueCreditRate(ByVal lCreditRate As Long)
 
-    QueueCreditRate = lCreditRate
+    m_lCreditRate = lCreditRate
 
 End Property
 ' ############## END QUEUE VARIABLES

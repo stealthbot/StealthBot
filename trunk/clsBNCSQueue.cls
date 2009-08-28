@@ -35,13 +35,6 @@ Attribute VB_Exposed = False
 '        p.put("threshold bytes", "This is the length of a message that triggers the treshold (extra delay).");
 '        p.put("max credits", "This is the maximum number of credits that the bot can have.");
 '        p.put("credit rate", "This is the amount of time (in milliseconds) it takes to earn one credit.");
-Private m_lMaxCredits As Long
-Private m_lCostPerPacket As Long
-Private m_lCostPerByte As Long
-Private m_lCostPerByteOverThreshhold As Long
-Private m_lStartingCredits As Long
-Private m_lThreshholdBytes As Long
-Private m_lCreditRate As Long
 
 ' PRIVATE VARIABLES
 Private LastSent As Long
@@ -56,14 +49,14 @@ Public Function GetDelay(ByVal sText As String) As Long
     Dim ThisByteDelay As Long, ThisPacketCost As Long
     Dim byteCost As Long, RequiredDelay As Long
     
-    byteCost = m_lCostPerByte
+    byteCost = BotVars.QueueCostPerByte
     
-    If Credits < m_lMaxCredits Then
+    If Credits < BotVars.QueueMaxCredits Then
         ' Adjust credits up
-        Credits = Credits + ((GetTickCount() - LastSent) / CreditRate)
+        Credits = Credits + ((GetTickCount() - LastSent) / BotVars.QueueCreditRate)
         
-        If Credits > m_lMaxCredits Then
-            Credits = m_lMaxCredits
+        If Credits > BotVars.QueueMaxCredits Then
+            Credits = BotVars.QueueMaxCredits
         End If
     End If
     
@@ -71,11 +64,11 @@ Public Function GetDelay(ByVal sText As String) As Long
     '        int thisByteDelay = byteCost;
     ThisByteDelay = byteCost
     
-    If (Len(sText) > m_lThreshholdBytes) Then
-        byteCost = Me.CostPerByteOverThreshhold
+    If (Len(sText) > BotVars.QueueThreshholdBytes) Then
+        byteCost = BotVars.QueueCostPerByteOverThreshhold
     End If
     
-    ThisPacketCost = Me.CostPerPacket + (ThisByteDelay * Len(sText))
+    ThisPacketCost = BotVars.QueueCostPerPacket + (ThisByteDelay * Len(sText))
     Debug.Print "Cost for this packet: " & ThisPacketCost
     
     '// Check how long this packet will have to wait
@@ -106,105 +99,50 @@ End Sub
 '//            out.putLocalSetting(getName(), "threshold bytes", "65");
 '//            out.putLocalSetting(getName(), "max credits", "750");
 '//            out.putLocalSetting(getName(), "credit rate", "8");
-Private Sub Class_Initialize()
-    ' Set defaults for public variables
-    Me.StartingCredits = 750
-    Me.ThreshholdBytes = 65
-    Me.CostPerByte = 12
-    Me.CostPerPacket = 190
-    Me.CostPerByteOverThreshhold = 15
-    Me.MaxCredits = 750
-    Me.CreditRate = 8
-End Sub
+'Private Sub Class_Initialize()
+'    ' Set defaults for public variables
+'    BotVars.QueueStartingCredits = DefaultStartingCredits                       '750
+'    BotVars.QueueThreshholdBytes = DefaultThreshholdBytes                       '65
+'    BotVars.QueueCostPerByte = DefaultCostPerByte                               '12
+'    BotVars.QueueCostPerPacket = DefaultCostPerPacket                           '190
+'    BotVars.QueueCostPerByteOverThreshhold = DefaultCostPerByteOverThreshhold   '15
+'    BotVars.QueueMaxCredits = DefaultMaxCredits                                 '750
+'    BotVars.QueueCreditRate = DefaultCreditRate                                 '8
+'End Sub
+
+Public Property Get DefaultStartingCredits()
+    DefaultStartingCredits = 200
+End Property
+
+Public Property Get DefaultThreshholdBytes()
+    DefaultThreshholdBytes = 200
+End Property
+
+Public Property Get DefaultCostPerByte()
+    DefaultCostPerByte = 7
+End Property
+
+Public Property Get DefaultCostPerPacket()
+    DefaultCostPerPacket = 200
+End Property
+
+Public Property Get DefaultCostPerByteOverThreshhold()
+    DefaultCostPerByteOverThreshhold = 8
+End Property
+
+Public Property Get DefaultMaxCredits()
+    DefaultMaxCredits = 600
+End Property
+
+Public Property Get DefaultCreditRate()
+    DefaultCreditRate = 7
+End Property
 
 '#########################################################################################
 '#########################################################################################
 ' PROPERTIES
 '#########################################################################################
 '#########################################################################################
-Public Property Get MaxCredits() As Long
-
-    MaxCredits = m_lMaxCredits
-
-End Property
-
-Public Property Let MaxCredits(ByVal lMaxCredits As Long)
-
-    m_lMaxCredits = lMaxCredits
-
-End Property
-
-Public Property Get CostPerPacket() As Long
-
-    CostPerPacket = m_lCostPerPacket
-
-End Property
-
-Public Property Let CostPerPacket(ByVal lCostPerPacket As Long)
-
-    m_lCostPerPacket = lCostPerPacket
-
-End Property
-
-Public Property Get CostPerByte() As Long
-
-    CostPerByte = m_lCostPerByte
-
-End Property
-
-Public Property Let CostPerByte(ByVal lCostPerByte As Long)
-
-    m_lCostPerByte = lCostPerByte
-
-End Property
-
-Public Property Get CostPerByteOverThreshhold() As Long
-
-    CostPerByteOverThreshhold = m_lCostPerByteOverThreshhold
-
-End Property
-
-Public Property Let CostPerByteOverThreshhold(ByVal lCostPerByteOverThreshhold As Long)
-
-    m_lCostPerByteOverThreshhold = lCostPerByteOverThreshhold
-
-End Property
-
-Public Property Get StartingCredits() As Long
-
-    StartingCredits = m_lStartingCredits
-
-End Property
-
-Public Property Let StartingCredits(ByVal lStartingCredits As Long)
-
-    m_lStartingCredits = lStartingCredits
-
-End Property
-
-Public Property Get ThreshholdBytes() As Long
-
-    ThreshholdBytes = m_lThreshholdBytes
-
-End Property
-
-Public Property Let ThreshholdBytes(ByVal lThreshholdBytes As Long)
-
-    m_lThreshholdBytes = lThreshholdBytes
-
-End Property
-
-Public Property Get CreditRate() As Long
-
-    CreditRate = m_lCreditRate
-
-End Property
-
-Public Property Let CreditRate(ByVal lCreditRate As Long)
-
-    m_lCreditRate = lCreditRate
-
-End Property
 
 Public Function BanDelay() As Long
     ' define default error handler

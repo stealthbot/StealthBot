@@ -269,4 +269,10 @@ Public Sub Clear()
     ' ...
     m_objCount = 0
     
+    KillTimer 0&, QueueTimerID
+    
+    QueueTimerID = 0
+    
+    g_BNCSQueue.ClearQueue
+    
 End Sub ' end sub Clear
