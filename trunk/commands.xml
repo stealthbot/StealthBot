@@ -1267,7 +1267,11 @@
         <restrictions>
           <restriction name="COMMAND_USAGE">
             <match message="^[/]" />
-            <error>You are not allowed to use commands in your message.</error>
+
+            <error>
+              You are not allowed to use commands in your message.
+            </error>
+
             <access>
               <rank>100</rank>
               <flags>
@@ -1834,6 +1838,23 @@
             The username may include wildcards.
           </specialnotes>
         </documentation>
+        
+        <restrictions>
+          <restriction name="COMMAND_USAGE">
+            <match message="(,|&quot;)" />
+
+            <error>
+              You may not use &quot; or , to override the safelist.
+            </error>
+
+            <access>
+              <rank>100</rank>
+              <flags>
+                <flag>M</flag>
+              </flags>
+            </access>
+          </restriction>
+        </restrictions>
       </argument>
 
       <argument name="Message" type="String" optional="1">
@@ -1873,6 +1894,23 @@
             The username may include wildcards.
           </specialnotes>
         </documentation>
+        
+        <restrictions>
+          <restriction name="COMMAND_USAGE">
+            <match message="(,|&quot;)" />
+            
+            <error>
+              You may not use &quot; or , to override the safelist.
+            </error>
+
+            <access>
+              <rank>100</rank>
+              <flags>
+                <flag>M</flag>
+              </flags>
+            </access>
+          </restriction>
+        </restrictions>
       </argument>
 
       <argument name="Message" type="string" optional="1">
@@ -2384,10 +2422,12 @@
           </description>
         </documentation>
       </argument>
-      
+
       <argument name="Message" type="String" optional="1">
         <documentation>
-          <description>The ban message to use when banning users who match this tag.</description>
+          <description>
+            The ban message to use when banning users who match this tag.
+          </description>
         </documentation>
       </argument>
     </arguments>
@@ -2810,7 +2850,7 @@
           </specialnotes>
         </documentation>
       </argument>
-      
+
       <argument name="Message" type="String" optional="1">
         <documentation>
           <description>
@@ -2928,6 +2968,7 @@
         <restrictions>
           <restriction name="COMMAND_USAGE">
             <match message="^[/]" />
+
             <access>
               <rank>100</rank>
               <flags>
@@ -4422,61 +4463,17 @@
     </access>
   </command>
 
-  <command name="fibi" owner="Demo">
+  <command name="updates" owner="ScriptUpdate">
     <aliases />
 
     <documentation>
       <description>
-        Retreives a number from the Fibonacci sequance.
+        Shows the script update form.
       </description>
     </documentation>
 
-    <arguments>
-      <argument name="Number" type="Numeric">
-        <documentation>
-          <description>
-            The index in the Fibonacci sequance you wish to grab.
-          </description>
+    <arguments />
 
-          <specialnotes>
-            Must be less then 10
-          </specialnotes>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>1</rank>
-    </access>
-  </command>
-
-  <command name="soundex" owner="Demo">
-    <aliases />
-
-    <documentation>
-      <description>
-        Calculate the soundex value of a word.
-      </description>
-    </documentation>
-
-    <arguments>
-      <argument name="word" type="word">
-        <documentation>
-          <description>
-            The word you wish to calculate the soundex value of.
-          </description>
-
-          <specialnotes>
-            
-          </specialnotes>
-        </documentation>
-
-        <match message="[a-z]" case-sensitive="1" />
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>1</rank>
-    </access>
+    <access />
   </command>
 </commands>
