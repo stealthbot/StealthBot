@@ -603,6 +603,7 @@
               </flags>
             </access>
           </restriction>
+        </restrictions>
       </argument>
 
       <argument name="rank" type="numeric" optional="1">
@@ -1017,6 +1018,7 @@
               </flags>
             </access>
           </restriction>
+        </restrictions>
       </argument>
     </arguments>
 
@@ -1060,6 +1062,7 @@
               </flags>
             </access>
           </restriction>
+        </restrictions>
       </argument>
     </arguments>
 
@@ -1452,6 +1455,7 @@
               </flags>
             </access>
           </restriction>
+        </restrictions>
       </argument>
     </arguments>
 
@@ -2271,6 +2275,7 @@
               </flags>
             </access>
           </restriction>
+        </restrictions>
       </argument>
 
       <argument name="message" type="string" optional="1">
@@ -2587,6 +2592,7 @@
               </flags>
             </access>
           </restriction>
+        </restrictions>
       </argument>
 
       <argument name="message" type="string" optional="1">
@@ -3222,6 +3228,7 @@
               </flags>
             </access>
           </restriction>
+        </restrictions>
       </argument>
     </arguments>
 
@@ -3729,6 +3736,7 @@
               </flags>
             </access>
           </restriction>
+        </restrictions>
       </argument>
 
       <argument name="Message" type="string" optional="1">
@@ -4283,6 +4291,7 @@
               </flags>
             </access>
           </restriction>
+        </restrictions>
       </argument>
     </arguments>
 
