@@ -1002,23 +1002,6 @@
             The username to initiate a tally for.
           </description>
         </documentation>
-        
-        <restrictions>
-          <restriction name="SAFELIST_BYPASS">
-            <match message="(,|&quot;)" />
-            
-            <error>
-              You may not use &quot; or , to override the safelist.
-            </error>
-
-            <access>
-              <rank>100</rank>
-              <flags>
-                <flag>M</flag>
-              </flags>
-            </access>
-          </restriction>
-        </restrictions>
       </argument>
     </arguments>
 
@@ -1046,23 +1029,6 @@
             The username to initiate a tally for.
           </description>
         </documentation>
-        
-        <restrictions>
-          <restriction name="SAFELIST_BYPASS">
-            <match message="(,|&quot;)" />
-            
-            <error>
-              You may not use &quot; or , to override the safelist.
-            </error>
-
-            <access>
-              <rank>100</rank>
-              <flags>
-                <flag>M</flag>
-              </flags>
-            </access>
-          </restriction>
-        </restrictions>
       </argument>
     </arguments>
 
