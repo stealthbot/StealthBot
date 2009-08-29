@@ -587,6 +587,7 @@
             The name of the user/group to modify.
           </description>
         </documentation>
+      </argument>
 
       <argument name="rank" type="numeric" optional="1">
         <documentation>
