@@ -242,21 +242,9 @@ Public Function Save() As Boolean
     setAliases m_command_node, m_aliases
     setParameters m_command_node, m_params
     
+    '// 08/302009 52 - getting rid of the clsXML class since it didnt write valid XML
+    Call m_database.Save(App.Path & "\commands.xml")
 
-    Dim XML As clsXML ' ...
-    
-    ' ...
-    Set XML = New clsXML
-    
-    ' ...
-    XML.Path = App.Path & "\commands.xml"
-    
-    ' ...
-    XML.WriteNode m_database
-    
-    ' ...
-    Set XML = Nothing
-    
 End Function
 
 Public Sub Delete()
