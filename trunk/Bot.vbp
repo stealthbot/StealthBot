@@ -87,7 +87,6 @@ Class=clsUserStats; clsUserStats.cls
 Class=clsUserEventObj; clsUserEventObj.cls
 Module=modDateTime; modDateTime.bas
 Class=clsLogger; clsLogger.cls
-Class=clsXML; clsXML.cls
 Module=modSHA1; modSHA1.bas
 Form=frmDBType.frm
 Class=clsConfiguration; clsConfiguration.cls
