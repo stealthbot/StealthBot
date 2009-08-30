@@ -441,7 +441,7 @@ Private Function GetDefaultModuleProcs() As String
 
     ' WriteSettingsEntry() module-level function
     str = str & "Sub WriteSettingsEntry(EntryName, EntryValue)" & vbNewLine
-    str = str & "   SSC.WriteSettingsEntry EntryName, EntryValue, Script(""Name"")" & vbNewLine
+    str = str & "   SSC.WriteSettingsEntry EntryName, EntryValue, , Script(""Name"")" & vbNewLine
     str = str & "End Sub" & vbNewLine
 
     ' CreateCommand() module-level function
