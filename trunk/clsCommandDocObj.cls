@@ -281,22 +281,6 @@ Public Function Save() As Boolean
 
 End Function
 
-Private Sub ShowXMLErrors(ByRef colErrorList As Collection)
-    
-    Dim i As Integer
-    Dim msg As String
-    
-    msg = StringFormat("The following errors were detected with commands.xml...{0}{0}", vbNewLine)
-    
-    For i = 1 To colErrorList.Count
-        msg = StringFormat("{0}{1}{2}", msg, colErrorList(i), vbNewLine)
-    Next i
-    
-    frmChat.AddChat vbRed, msg
-    
-End Sub
-
-
 
 Public Sub Delete()
     

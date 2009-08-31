@@ -493,6 +493,8 @@ Private Sub Form_Load()
 
     On Error GoTo ErrorHandler
 
+    Dim colErrorList As Collection
+
     '// Load commands.xml
     Set m_CommandsDoc = New DOMDocument60
     
@@ -509,8 +511,12 @@ Private Sub Form_Load()
         Exit Sub
     End If
     
-    
     Call m_CommandsDoc.Load(App.Path & "\commands.xml")
+    
+    If Not clsCommandDocObj.CommandsSanityCheck(m_CommandsDoc) Then
+        Exit Sub
+    End If
+    
     
     'Change tree view background and foreground color.
     ' // (REMOVED 8/9/09: changed to a better treeview -Pyro)

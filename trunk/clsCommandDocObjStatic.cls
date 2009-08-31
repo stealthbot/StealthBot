@@ -92,18 +92,21 @@ Public Function ValidateXMLFromStrings(ByVal strXML As String, ByVal strXSD As S
     If objErr.errorCode <> 0 Then
         Err.Raise 1, "ValidateXML", "Error (#" & objErr.errorCode & ") on Line " & objErr.line & ": " & objErr.Reason
     End If
+    
+    Exit Function
 
 ERROR_HANDLER:
     
     Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObjStatic.ValidateXMLFromStrings().")
-
+    ValidateXMLFromStrings = False
+    
 End Function
 
 
 '//
-Public Function CommandsSanityCheck(ByRef doc As DOMDocument60, ByRef colErrorList As Collection) As Boolean
+Public Function CommandsSanityCheck(ByRef doc As DOMDocument60, Optional ByRef colErrorList As Collection) As Boolean
     
-    On Error GoTo ERROR_HANDLER
+    'On Error GoTo ERROR_HANDLER
     
     Set colErrorList = New Collection
     
@@ -215,8 +218,8 @@ Public Function CommandsSanityCheck(ByRef doc As DOMDocument60, ByRef colErrorLi
                     
                     '// make sure match message is ok if present
                     If Not (oArgument.selectSingleNode("match") Is Nothing) Then
-                        If Not (oArgument.selectSingleNode("match").Attributes.getNamedItem("message")) Then
-                            If Len(oArgument.selectSingleNode("match").Attributes.getNamedItem("message")) = 0 Then
+                        If Not (oArgument.selectSingleNode("match").Attributes.getNamedItem("message") Is Nothing) Then
+                            If Len(oArgument.selectSingleNode("match").Attributes.getNamedItem("message").Text) = 0 Then
                                 colErrorList.Add "If present, the message attribute of the match element for an argument must have a value."
                                 Exit Do
                             End If
@@ -259,9 +262,11 @@ Public Function CommandsSanityCheck(ByRef doc As DOMDocument60, ByRef colErrorLi
                                 Exit Do
                             End If
                             uniqueEnabledRestrictions.Add restrictionName, argumentName
+                            
+                            Exit Do
                         Loop
-                        
                     Next oRestriction
+                    
                     Exit Do
                 Loop
             Next oArgument
@@ -271,16 +276,31 @@ Public Function CommandsSanityCheck(ByRef doc As DOMDocument60, ByRef colErrorLi
     Next oCommand
     
     If colErrorList.Count > 0 Then
+        ShowXMLErrors colErrorList
         CommandsSanityCheck = False
     Else
         CommandsSanityCheck = True
     End If
 
-
-
+    Exit Function
+    
 ERROR_HANDLER:
     
     Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObjStatic.CommandsSanityCheck().")
 
 End Function
 
+Private Sub ShowXMLErrors(ByRef colErrorList As Collection)
+    
+    Dim i As Integer
+    Dim msg As String
+    
+    msg = StringFormat("The following errors were detected with commands.xml...{0}{0}", vbNewLine)
+    
+    For i = 1 To colErrorList.Count
+        msg = StringFormat("{0}{1}{2}", msg, colErrorList(i), vbNewLine)
+    Next i
+    
+    frmChat.AddChat vbRed, msg
+    
+End Sub
