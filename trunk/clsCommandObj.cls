@@ -292,7 +292,7 @@ On Error GoTo ERROR_HANDLER
                                 
                                 Respond sError
                             End If
-                            m_hasaccess = False
+                                m_hasaccess = False
                             Exit For
                         End If
                     End If

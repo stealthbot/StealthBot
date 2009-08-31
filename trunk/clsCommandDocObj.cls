@@ -105,7 +105,7 @@ Private Function GetCommandXPath(ByVal strCommand As String, Optional ByVal strS
         GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}' and not(@owner)]", _
             UCase$(AZ), LCase$(AZ), LCase$(strCommand))
     ElseIf strScriptOwner = Chr$(0) Then
-        GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}']", _
+        GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}' and not(@enabled = 'false')]", _
             UCase$(AZ), LCase$(AZ), LCase$(strCommand))
     Else
         GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}' and translate(@owner, '{0}', '{1}')='{3}']", _
