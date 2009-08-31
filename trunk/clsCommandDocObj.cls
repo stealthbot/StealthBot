@@ -105,7 +105,7 @@ Private Function GetCommandXPath(ByVal strCommand As String, Optional ByVal strS
         GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}' and not(@owner)]", _
             UCase$(AZ), LCase$(AZ), LCase$(strCommand))
     ElseIf strScriptOwner = Chr$(0) Then
-        GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}' and not(@enabled = 'false')]", _
+        GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}']", _
             UCase$(AZ), LCase$(AZ), LCase$(strCommand))
     Else
         GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}' and translate(@owner, '{0}', '{1}')='{3}']", _
@@ -264,12 +264,10 @@ Public Function Save() As Boolean
     
     If clsCommandDocObj.ValidateXMLFromStrings(m_database.xml, GetXSD()) Then
         If Not clsCommandDocObj.CommandsSanityCheck(m_database, colErrorList) Then
-            ShowXMLErrors colErrorList
             Save = False
             Exit Function
         End If
     Else
-        ShowXMLErrors colErrorList
         Save = False
         Exit Function
     End If
