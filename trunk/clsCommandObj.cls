@@ -89,14 +89,14 @@ Public Property Let WasWhispered(bValue As Boolean)
     m_waswhispered = bValue
 End Property
 
-Public Property Get Source() As Integer
+Public Property Get source() As Integer
     If m_local = True Then
-        Source = 4
+        source = 4
     Else
         If m_waswhispered = True Then
-            Source = 3
+            source = 3
         Else
-            Source = 1
+            source = 1
         End If
     End If
 End Property
@@ -186,17 +186,22 @@ End Function
 '"This is a \"String\"" -> This is a "String"
 '"This is a \\\"String\"" -> This is a \"String"
 '"This is a \String" -> This is a \String
-Private Function StripString(ByRef sString As String) As String
+Private Function StripString(ByRef sString As String, IsLastArgument As Boolean) As String
     Dim i As Integer
+    If (IsLastArgument) Then
+        StripString = sString
+        sString = vbNullString
+        Exit Function
+    End If
     If (Left$(sString, 1) = Chr$(34)) Then
         sString = Replace$(sString, "\\", Chr$(1))
         sString = Replace$(sString, "\" & Chr(34), Chr$(2))
-        i = InStr(2, sString, Chr$(34))
+        i = InStr(2, sString & " ", Chr$(34) & " ")
         If (i > 2) Then
             sString = Replace$(sString, Chr$(1), "\")
             sString = Replace$(sString, Chr$(2), Chr$(34))
             StripString = Left$(Mid$(sString, 2), i - 2)
-            sString = Mid$(sString, i + 1)
+            sString = Mid$(sString, i + 2)
         Else
             sString = Replace$(sString, Chr$(1), "\")
             sString = Replace$(sString, Chr$(2), Chr$(34))
@@ -249,7 +254,7 @@ On Error GoTo ERROR_HANDLER
             Case "word":    sTemp = StripWord(sArgs)
             Case "numeric": sTemp = StripNumeric(sArgs)
             Case "number":  sTemp = StripNumeric(sArgs)
-            Case "string":  sTemp = StripString(sArgs)
+            Case "string":  sTemp = StripString(sArgs, (Param.Name = Me.docs.Parameters.Item(Me.docs.Parameters.Count).Name))
         End Select
         
         If (LenB(Param.MatchMessage)) Then
@@ -339,8 +344,8 @@ ERROR_HANDLER:
 End Function
 
 'Adds a line to the response queue
-Public Sub Respond(strResponse As String)
-    If (LenB(strResponse) > 0) Then m_response.Add strResponse
+Public Sub Respond(strResponse As Variant)
+    If (LenB(strResponse) > 0) Then m_response.Add CStr(strResponse)
 End Sub
 
 'Cleares the response queue
