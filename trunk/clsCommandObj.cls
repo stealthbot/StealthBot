@@ -89,6 +89,19 @@ Public Property Let WasWhispered(bValue As Boolean)
     m_waswhispered = bValue
 End Property
 
+Public Property Get Source() As Integer
+    If m_local = True Then
+        Source = 4
+    Else
+        If m_waswhispered = True Then
+            Source = 3
+        Else
+            Source = 1
+        End If
+    End If
+End Property
+
+
 Public Sub Class_Initialize()
     
     '// initialize values
