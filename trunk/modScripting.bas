@@ -462,13 +462,6 @@ Private Function GetDefaultModuleProcs() As String
     str = str & "         SSC.DeleteCommand(commandName, Script(""Name""))" & vbNewLine
     str = str & "End Function" & vbNewLine
 
-    ' 08/23/2009 52 - Obsoleted in favor of the new Event Command
-    ' IsCommand() module-level function
-    'str = str & "Function IsCommand(commandText, username)" & vbNewLine
-    'str = str & "   Set IsCommand = _ " & vbNewLine
-    'str = str & "         SSC.IsCommand(commandText, username, Script(""Name""))" & vbNewLine
-    'str = str & "End Function" & vbNewLine
-
     ' store module-level coding
     GetDefaultModuleProcs = str
 

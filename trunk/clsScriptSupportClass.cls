@@ -953,7 +953,7 @@ Public Sub GetWinCursorPos(ByRef lCursorX As Long, ByRef lCursorY As Long)
     GetCursorPos PAPI
     
     lCursorX = PAPI.X
-    lCursorY = PAPI.Y
+    lCursorY = PAPI.y
 End Sub
 
 
@@ -1424,33 +1424,6 @@ Public Function DeleteCommand(ByVal commandName As String, Optional ByVal script
     Set Command = Nothing
     
 End Function
-
-'// 08/23/2009 52 - Obsoleted in favor of the new Command Event
-'// ISCOMMAND
-'// Pass a message a user sent
-'// Returns a Command instance object specifying whether they have access to the command
-'// and whether it has the correct syntax among other things
-'// PARAMETERS
-'//     commandText - the sent message
-'//     strUsername - the user's username
-'//     ScriptName -  if provided, this function will check for commands created in the specified script
-'//                   vbNullString to get internal commands
-'//                   Chr(0) to get commands from any script
-'//                   if ommitted, this function will check for commands created in the currently executing script
-'Public Function IsCommand(ByVal commandText As String, ByVal strUsername As String, Optional ByVal scriptName As String) As Collection
-'
-'    Dim commands As Collection
-'
-'    If IsMissing(scriptName) Then scriptName = modScripting.GetScriptName
-'
-'    ' 08/17/2009 - 52 - using static class method
-'    Set commands = clsCommandObj.IsCommand(commandText, strUsername, scriptName)
-'
-'    Set IsCommand = commands
-'
-'    Set commands = Nothing
-'
-'End Function
 
 '// OBSERVESCRIPT
 '// Add the currently runnign script as an Observer of the Specified script
