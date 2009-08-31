@@ -885,7 +885,7 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
         If (found = 0) Then
             arrReturn(0) = "No such user(s) found."
         Else
-            Call SplitByLen(Mid$(tmpbuf, 1, Len(tmpbuf) - Len(", ")), 180, arrReturn(), "User(s) found: ", " [more]", ", ")
+            Call SplitByLen(Mid$(tmpbuf, 1, Len(tmpbuf) - Len(", ")), 180, arrReturn(), "User(s) found: ", , ", ")
         End If
     End If
     

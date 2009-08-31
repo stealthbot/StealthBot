@@ -4,7 +4,7 @@ Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
@@ -892,6 +892,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -917,6 +918,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1549,7 +1551,7 @@ Private Sub Form_Load()
         End If
     #End If
 
-    #If (COMPILE_DEBUG = 0) Then
+    #If (compile_debug = 0) Then
         HookWindowProc frmChat.hWnd
     #End If
     
@@ -1804,7 +1806,7 @@ Private Sub Form_Load()
         End If
     '#End If
     
-    #If COMPILE_DEBUG = 0 Then
+    #If compile_debug = 0 Then
         If ReadCfg("Main", "MinimizeOnStartup") = "Y" Then
             frmChat.WindowState = vbMinimized
             Call Form_Resize
@@ -2377,7 +2379,7 @@ Sub Form_Resize()
     
     If Me.WindowState = vbMinimized Then
         If Not BotVars.NoTray Then
-            #If Not COMPILE_DEBUG = 1 Then
+            #If Not compile_debug = 1 Then
                 Me.Hide
                 
                 With nid
@@ -3095,6 +3097,7 @@ Sub Form_Unload(Cancel As Integer)
     Unload frmQuickChannel
     Unload frmRealm
     'Unload frmScriptUI
+    Unload frmScript
     Unload frmSettings
     Unload frmSplash
     'Unload frmUserManager
@@ -3106,7 +3109,7 @@ Sub Form_Unload(Cancel As Integer)
     '   in modAPI...
     ' added preprocessor check; the bot was ending the VB6 IDE's process too! - ribose
     ' if it was compiled with the debugger, we don't allow minimizing to tray anyway
-    #If Not COMPILE_DEBUG = 1 Then
+    #If Not compile_debug = 1 Then
         Call ExitProcess(0)
     #End If
 End Sub
@@ -6414,6 +6417,8 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
     Dim j              As Integer     ' ...
     Dim delay          As Integer     ' ...
     Dim Index          As Long        ' ...
+    Dim s              As String      ' temp string for settings
+    Dim MaxLength      As Integer     ' stores max length for split (with override)
     '
     Static LastGTC  As Double
     Static BanCount As Integer
@@ -6613,9 +6618,16 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             End Select
         End If
         
+        ' check for custom maxlength
+        s = ReadCfg("Override", "AddQMaxLength")
+        If Val(s) > 0 And Val(s) < BNET_MSG_LENGTH Then
+            MaxLength = Val(s)
+        Else
+            MaxLength = BNET_MSG_LENGTH
+        End If
+        
         ' ...
-        Call SplitByLen(strTmp, (BNET_MSG_LENGTH - Len(Command)), Splt(), vbNullString, _
-            " [more]", OversizeDelimiter)
+        Call SplitByLen(strTmp, (MaxLength - Len(Command)), Splt(), vbNullString, , OversizeDelimiter)
 
         ' ...
         ReDim Preserve Splt(0 To UBound(Splt))

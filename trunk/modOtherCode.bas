@@ -2660,8 +2660,9 @@ End Function
 
 ' This procedure splits a message by a specified Length, with optional line LinePostfixes
 ' and split delimiters.
-Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef StringRet() As String, Optional LinePrefix As String = _
-    vbNullString, Optional LinePostfix As String = " [more]", Optional OversizeDelimiter As String = " ") As Long
+' No longer puts a delim before [more] if it wasn't split by the delim -Ribose/2009-08-30
+Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Long, ByRef StringRet() As String, Optional ByVal LinePrefix As String = _
+    vbNullString, Optional ByVal LinePostfix As String, Optional ByVal OversizeDelimiter As String = " ") As Long
     
     ' ...
     On Error GoTo ERROR_HANDLER
@@ -2674,6 +2675,19 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     Dim strTmp    As String  ' stores working copy of StringSplit
     Dim length    As Long    ' stores Length after LinePostfix
     Dim bln       As Boolean ' stores result of delimiter split
+    Dim s         As String  ' stores temp string for settings
+    
+    ' check for custom line postfix
+    s = ReadCfg("Override", "AddQLinePostfix")
+    If LenB(s) > 0 Then
+        If Left$(s, 1) = "{" And Right$(s, 1) = "}" Then
+            LinePostfix = Mid$(s, 2, Len(s) - 2)
+        Else
+            LinePostfix = s
+        End If
+    Else
+        LinePostfix = "[more]"
+    End If
     
     ' initialize our array
     ReDim StringRet(0)
@@ -2734,12 +2748,12 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' accordingly.
             If ((pos) And (pos >= Round(length / 2))) Then
                 ' truncate message
-                strTmp = Mid$(strTmp, 1, pos - 1)
+                strTmp = Mid$(strTmp, 1, pos)
                 
                 ' indicate that an additional
                 ' character will require removal
                 ' from official copy
-                bln = True
+                'bln = (Not KeepDelim)
             Else
                 ' truncate message
                 strTmp = Mid$(strTmp, 1, length)
@@ -2754,9 +2768,9 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
         
         ' if we need to remove an additional
         ' character, lets do so now.
-        If (bln) Then
-            StringSplit = Mid$(StringSplit, Len(OversizeDelimiter) + 1)
-        End If
+        'If (bln) Then
+        '    StringSplit = Mid$(StringSplit, Len(OversizeDelimiter) + 1)
+        'End If
             
         ' increment line counter
         lineCount = (lineCount + 1)
