@@ -412,62 +412,6 @@ ERROR_HANDLER:
 End Function
 
 
-'// http://www.nonhostile.com/howto-validate-xml-xsd-in-vb6.asp
-'// 08/31/2008 JSM - Created
-Public Function ValidateXML(ByVal strXMLPath As String, ByVal strXSDPath As String) As Boolean
-
-    Dim objSchemas As XMLSchemaCache60
-    Dim objXML As DOMDocument60
-    Dim objXSD As DOMDocument60
-    Dim objErr As IXMLDOMParseError
-
-    ' load XSD as DOM to populate in Schema Cache
-    Set objXSD = New DOMDocument60
-    
-    objXSD.async = False
-    objXSD.validateOnParse = False
-    objXSD.resolveExternals = False
-    
-    If Not objXSD.Load(strXSDPath) Then
-        Err.Raise 1, "Validate", "Load XSD failed: " & objXSD.parseError.Reason
-    End If
-   
-    ' populate schema cache
-    Set objSchemas = New XMLSchemaCache60
-
-    ' ERROR!
-    objSchemas.Add "", objXSD
-   
-    ' load XML file (without validation - that comes later)
-    Set objXML = New DOMDocument60
-    
-    objXML.async = False
-    objXML.validateOnParse = False
-    objXML.resolveExternals = False
-   
-    ' load XML, without any validation
-    If Not objXML.Load(strXMLPath) Then
-        Err.Raise 1, "Validate", "Load XML failed: " & objXML.parseError.Reason
-    End If
-   
-    ' bind Schema Cache to DOM
-    Set objXML.schemas = objSchemas
-   
-    ' does this XML measure up?
-    Set objErr = objXML.Validate()
-   
-    ' any good?
-    ValidateXML = (objErr.errorCode = 0)
-    If objErr.errorCode <> 0 Then
-        MsgBox "Error (#" & objErr.errorCode & ") on Line " & objErr.line & ": " & _
-            objErr.Reason, vbOKOnly, "ValidateXML"
-            
-        'Err.Raise 1, "ValidateXML", objErr.Reason
-    End If
-
-End Function
-
-
 
 Public Function StripRealm(ByVal Username As String) As String
     If (InStr(1, Username, "@", vbBinaryCompare) > 0) Then

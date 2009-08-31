@@ -317,7 +317,7 @@ Private Type SelectedElement
     TheXMLElement As IXMLDOMElement
     IsDirty As Boolean
     commandName As String
-    ArgumentName As String
+    argumentName As String
     restrictionName As String
 End Type
 
@@ -434,7 +434,6 @@ Private Sub cmdDeleteCommand_Click()
     
     Call doc.OpenCommand(m_SelectedElement.commandName, scriptName)
     Call doc.Delete
-    Call doc.Save
     Set doc = Nothing
     
     m_SelectedElement.IsDirty = False
@@ -506,7 +505,7 @@ Private Sub Form_Load()
     End If
     
     
-    If Not ValidateXML(App.Path & "\commands.xml", App.Path & "\commands.xsd") Then
+    If Not clsCommandDocObj.ValidateXMLFromFiles(App.Path & "\commands.xml", App.Path & "\commands.xsd") Then
         Exit Sub
     End If
     
@@ -538,8 +537,8 @@ ErrorHandler:
     MsgBox Err.description, vbCritical + vbOKOnly, Me.Caption
     Call ResetForm
     '// Disable our buttons
-    cmdSave.Enabled = False
-    cmdDiscard.Enabled = False
+    cmdSave.enabled = False
+    cmdDiscard.enabled = False
     Exit Sub
     
 End Sub
@@ -612,7 +611,7 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     Dim nArgRestriction   As cTreeViewNode
     
     Dim commandName       As String
-    Dim ArgumentName      As String
+    Dim argumentName      As String
     Dim restrictionName   As String
     
     '// 08/30/2008 JSM - used to get the first command alphabetically
@@ -688,27 +687,27 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
             '//                  something, even if nothing matches the XPath expression.
             For i = 0 To (xmlArgs.length - 1)
             
-                ArgumentName = xmlArgs(i).Attributes.getNamedItem("name").Text
+                argumentName = xmlArgs(i).Attributes.getNamedItem("name").Text
                 If (Not xmlArgs(i).Attributes.getNamedItem("optional") Is Nothing) Then
                     If (xmlArgs(i).Attributes.getNamedItem("optional").Text = "1") Then
-                        ArgumentName = StringFormat("[{0}]", ArgumentName)
+                        argumentName = StringFormat("[{0}]", argumentName)
                     End If
                 End If
                 
                 '// Add the datatype to the argument name
                 If (Not xmlArgs(i).Attributes.getNamedItem("type") Is Nothing) Then
-                    ArgumentName = StringFormat("{0} ({1})", ArgumentName, xmlArgs(i).Attributes.getNamedItem("type").Text)
+                    argumentName = StringFormat("{0} ({1})", argumentName, xmlArgs(i).Attributes.getNamedItem("type").Text)
                 Else
-                    ArgumentName = StringFormat("{0} ({1})", ArgumentName, "String")
+                    argumentName = StringFormat("{0} ({1})", argumentName, "String")
                 End If
                 
-                Set nArg = trvCommands.nodes.Add(nCommand, etvwChild, commandName & "." & ArgumentName, ArgumentName)
+                Set nArg = trvCommands.nodes.Add(nCommand, etvwChild, commandName & "." & argumentName, argumentName)
                 
                 Set xmlArgRestricions = xmlArgs(i).selectNodes("restrictions/restriction")
                 
                 For j = 0 To (xmlArgRestricions.length - 1)
                     restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
-                    Set nArgRestriction = trvCommands.nodes.Add(nArg, etvwChild, commandName & "." & ArgumentName & "." & restrictionName, restrictionName)
+                    Set nArgRestriction = trvCommands.nodes.Add(nArg, etvwChild, commandName & "." & argumentName & "." & restrictionName, restrictionName)
                 Next j
             Next i
         End If '// Len(commandName) > 0
@@ -739,7 +738,7 @@ Private Function PromptToSaveChanges() As Boolean
         End If
         
         '// Get the message for the prompt
-        options = Array(.commandName, .ArgumentName, .restrictionName)
+        options = Array(.commandName, .argumentName, .restrictionName)
         Select Case .TheNodeType
             Case NodeType.nCommand
                 sMessage = StringFormatA("You have not saved your changes to {0}. Do you want to save them now?", options)
@@ -775,7 +774,7 @@ Private Sub trvCommands_SelectedNodeChanged()
     Dim node As cTreeViewNode
     Dim nt As NodeType
     Dim commandName As String
-    Dim ArgumentName As String
+    Dim argumentName As String
     Dim restrictionName As String
     Dim options() As Variant '// <-- boo
     
@@ -797,11 +796,11 @@ Private Sub trvCommands_SelectedNodeChanged()
     End If
     
     '// figure out what type of node was clicked on
-    nt = GetNodeInfo(node, commandName, ArgumentName, restrictionName)
+    nt = GetNodeInfo(node, commandName, argumentName, restrictionName)
     '// create an array for the StringFormat function, this function will replace
     '// the {0} {1} and {2} with their respective Values() found below
     '//                {0}           {1}             {2}
-    options = Array(commandName, ArgumentName, restrictionName)
+    options = Array(commandName, argumentName, restrictionName)
     
     Select Case nt
         Case NodeType.nCommand
@@ -814,7 +813,7 @@ Private Sub trvCommands_SelectedNodeChanged()
     
     '// Update m_SelectedElement so we know which element we are viewing
     Let m_SelectedElement.commandName = commandName
-    Let m_SelectedElement.ArgumentName = ArgumentName
+    Let m_SelectedElement.argumentName = argumentName
     Let m_SelectedElement.restrictionName = restrictionName
     
     '// grab the node from the xpath
@@ -833,14 +832,14 @@ End Sub
 '// 08/30/2008 JSM - Created
 Private Sub FormIsDirty()
     m_SelectedElement.IsDirty = True
-    cmdSave.Enabled = True
-    cmdDiscard.Enabled = True
+    cmdSave.enabled = True
+    cmdDiscard.enabled = True
 End Sub
 
 
 '// Checks the hiarchy of the treenodes to determine what type of node it is.
 '// 08/29/2008 JSM - Created
-Private Function GetNodeInfo(node As cTreeViewNode, ByRef commandName As String, ByRef ArgumentName As String, ByRef restrictionName As String) As NodeType
+Private Function GetNodeInfo(node As cTreeViewNode, ByRef commandName As String, ByRef argumentName As String, ByRef restrictionName As String) As NodeType
     Dim s() As String
     
     If LenB(node.Key) > 0 Then
@@ -848,26 +847,26 @@ Private Function GetNodeInfo(node As cTreeViewNode, ByRef commandName As String,
         Select Case UBound(s)
             Case 0
                 commandName = s(0)
-                ArgumentName = vbNullString
+                argumentName = vbNullString
                 restrictionName = vbNullString
                 GetNodeInfo = nCommand
             Case 1
                 commandName = s(0)
-                ArgumentName = s(1)
+                argumentName = s(1)
                 restrictionName = vbNullString
                 GetNodeInfo = nArgument
             Case 2
                 commandName = s(0)
-                ArgumentName = s(1)
+                argumentName = s(1)
                 restrictionName = s(2)
                 GetNodeInfo = nRestriction
         End Select
         '// strip the [ ] around optional parameters
-        If Left$(ArgumentName, 1) = "[" Then
-            ArgumentName = Mid$(ArgumentName, 2, InStr(1, ArgumentName, "]") - 2)
+        If Left$(argumentName, 1) = "[" Then
+            argumentName = Mid$(argumentName, 2, InStr(1, argumentName, "]") - 2)
         End If
-        If (InStr(1, ArgumentName, "(") >= 0 And Right$(ArgumentName, 1) = ")") Then
-            ArgumentName = Mid$(ArgumentName, 1, InStr(1, ArgumentName, "(") - 2)
+        If (InStr(1, argumentName, "(") >= 0 And Right$(argumentName, 1) = ")") Then
+            argumentName = Mid$(argumentName, 1, InStr(1, argumentName, "(") - 2)
         End If
     End If
 End Function
@@ -1011,6 +1010,7 @@ Private Sub SaveForm()
         End If
         
         '// 08/302009 52 - getting rid of the clsXML class since it didnt write valid XML
+		'// TODO: this needs to validate!!!
         Call m_CommandsDoc.Save(App.Path & "\commands.xml")
         
         'Call m_CommandsDoc.Save(App.Path & "\commands.xml")
@@ -1068,15 +1068,15 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
     
     
     
-    options = Array(m_SelectedElement.commandName, m_SelectedElement.ArgumentName, m_SelectedElement.restrictionName)
+    options = Array(m_SelectedElement.commandName, m_SelectedElement.argumentName, m_SelectedElement.restrictionName)
     
     
     
     Select Case nt
         Case NodeType.nCommand
             '// txtRank
-            txtRank.Enabled = True
-            lblRank.Enabled = True
+            txtRank.enabled = True
+            lblRank.enabled = True
             Set xmlNode = xmlElement.selectSingleNode("access/rank")
             If Not (xmlNode Is Nothing) Then
                 txtRank.Text = xmlNode.Text
@@ -1084,18 +1084,18 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
                 txtRank.Text = vbNullString
             End If
             '// cboAlias
-            cboAlias.Enabled = True
-            lblAlias.Enabled = True
-            cmdAliasAdd.Enabled = True
-            cmdAliasRemove.Enabled = True
+            cboAlias.enabled = True
+            lblAlias.enabled = True
+            cmdAliasAdd.enabled = True
+            cmdAliasRemove.enabled = True
             For Each xmlNode In xmlElement.selectNodes("aliases/alias")
                 cboAlias.AddItem xmlNode.Text
             Next xmlNode
             '// cboFlags
-            cboFlags.Enabled = True
-            lblFlags.Enabled = True
-            cmdFlagAdd.Enabled = True
-            cmdFlagRemove.Enabled = True
+            cboFlags.enabled = True
+            lblFlags.enabled = True
+            cmdFlagAdd.enabled = True
+            cmdFlagRemove.enabled = True
             For Each xmlNode In xmlElement.selectNodes("access/flags/flag")
                 cboFlags.AddItem xmlNode.Text
             Next xmlNode
@@ -1104,21 +1104,21 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             End If
             
             '// txtDescription
-            txtDescription.Enabled = True
-            lblDescription.Enabled = True
+            txtDescription.enabled = True
+            lblDescription.enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/description")
             If Not (xmlNode Is Nothing) Then
                 txtDescription.Text = PrepString(xmlNode.Text)
             End If
             '// txtSpecialNotes
-            txtSpecialNotes.Enabled = True
-            lblSpecialNotes.Enabled = True
+            txtSpecialNotes.enabled = True
+            lblSpecialNotes.enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/specialnotes")
             If Not (xmlNode Is Nothing) Then
                 txtSpecialNotes.Text = PrepString(xmlNode.Text)
             End If
             '// chkDisable
-            chkDisable.Enabled = True
+            chkDisable.enabled = True
             chkDisable.Visible = True
             If LCase(xmlElement.getAttribute("enabled")) = "false" Then
                 chkDisable.Value = 1
@@ -1131,7 +1131,7 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             chkDisable.Caption = StringFormatA("Disable {0} command", options)
             
             If cboCommandGroup.ListIndex > 0 Then
-                cmdDeleteCommand.Enabled = True
+                cmdDeleteCommand.enabled = True
             End If
             
         Case NodeType.nArgument
@@ -1155,15 +1155,15 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             '    cboFlags.AddItem xmlNode.text
             'Next xmlNode
             '// txtDescription
-            txtDescription.Enabled = True
-            lblDescription.Enabled = True
+            txtDescription.enabled = True
+            lblDescription.enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/description")
             If Not (xmlNode Is Nothing) Then
                 txtDescription.Text = PrepString(xmlNode.Text)
             End If
             '// txtSpecialNotes
-            txtSpecialNotes.Enabled = True
-            lblSpecialNotes.Enabled = True
+            txtSpecialNotes.enabled = True
+            lblSpecialNotes.enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/specialnotes")
             If Not (xmlNode Is Nothing) Then
                 txtSpecialNotes.Text = PrepString(xmlNode.Text)
@@ -1191,8 +1191,8 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             
         Case NodeType.nRestriction
             '// txtRank
-            txtRank.Enabled = True
-            lblRank.Enabled = True
+            txtRank.enabled = True
+            lblRank.enabled = True
             Set xmlNode = xmlElement.selectSingleNode("access/rank")
             If Not (xmlNode Is Nothing) Then
                 txtRank.Text = xmlNode.Text
@@ -1204,14 +1204,14 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             '    cboAlias.AddItem xmlNode.text
             'Next xmlNode
             '// cboFlags
-            cboFlags.Enabled = True
-            lblFlags.Enabled = True
+            cboFlags.enabled = True
+            lblFlags.enabled = True
             For Each xmlNode In xmlElement.selectNodes("access/flags/flag")
                 cboFlags.AddItem xmlNode.Text
             Next xmlNode
             '// txtDescription
-            txtDescription.Enabled = True
-            lblDescription.Enabled = True
+            txtDescription.enabled = True
+            lblDescription.enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/description")
             If Not (xmlNode Is Nothing) Then
                 txtDescription.Text = PrepString(xmlNode.Text)
@@ -1246,8 +1246,8 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
     Let m_SelectedElement.IsDirty = False
     
     '// Disable our buttons
-    cmdSave.Enabled = False
-    cmdDiscard.Enabled = False
+    cmdSave.enabled = False
+    cmdDiscard.enabled = False
 
 End Sub
 
@@ -1263,31 +1263,31 @@ Private Sub ResetForm()
     fraCommand.Caption = ""
     chkDisable.Value = 0
     
-    txtRank.Enabled = False
-    cboAlias.Enabled = False
-    cboFlags.Enabled = False
-    txtDescription.Enabled = False
-    txtSpecialNotes.Enabled = False
-    chkDisable.Enabled = False
+    txtRank.enabled = False
+    cboAlias.enabled = False
+    cboFlags.enabled = False
+    txtDescription.enabled = False
+    txtSpecialNotes.enabled = False
+    chkDisable.enabled = False
     
-    lblRank.Enabled = False
-    lblAlias.Enabled = False
-    lblFlags.Enabled = False
-    lblDescription.Enabled = False
-    lblSpecialNotes.Enabled = False
+    lblRank.enabled = False
+    lblAlias.enabled = False
+    lblFlags.enabled = False
+    lblDescription.enabled = False
+    lblSpecialNotes.enabled = False
     
-    cmdAliasAdd.Enabled = False
-    cmdAliasRemove.Enabled = False
-    cmdFlagAdd.Enabled = False
-    cmdFlagRemove.Enabled = False
+    cmdAliasAdd.enabled = False
+    cmdAliasRemove.enabled = False
+    cmdFlagAdd.enabled = False
+    cmdFlagRemove.enabled = False
     
     chkDisable.Visible = False
     
     
     m_SelectedElement.IsDirty = False
-    cmdSave.Enabled = False
-    cmdDiscard.Enabled = False
-    cmdDeleteCommand.Enabled = False
+    cmdSave.enabled = False
+    cmdDiscard.enabled = False
+    cmdDeleteCommand.enabled = False
     
     lblSyntax.Caption = ""
     lblSyntax.ForeColor = RTBColors.ConsoleText

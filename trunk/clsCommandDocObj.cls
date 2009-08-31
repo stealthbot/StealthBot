@@ -212,7 +212,7 @@ Public Function NewParameter(argName As String, argIsOptional As Boolean, Option
     With Param
         .Name = argName
         .IsOptional = argIsOptional
-        .DataType = argDataType
+        .datatype = argDataType
     End With
     
     Set NewParameter = Param
@@ -237,15 +237,66 @@ Public Function NewRestriction(argName As String, argRequiredRank As Integer, ar
 End Function
 
 
+Private Function GetXSD() As String
+    Dim oFSO As FileSystemObject, oTS As TextStream
+    Dim strXSD As String
+    
+    Set oFSO = New FileSystemObject
+        
+    '// read the xsd file
+    Set oTS = oFSO.OpenTextFile(App.Path & "\commands.xsd", ForReading, False)
+    strXSD = oTS.ReadAll()
+    Call oTS.Close
+    
+    Set oFSO = Nothing
+    Set oTS = Nothing
+    
+    GetXSD = strXSD
+    
+End Function
+
 Public Function Save() As Boolean
+
+    Dim colErrorList As Collection
 
     setAliases m_command_node, m_aliases
     setParameters m_command_node, m_params
     
+    If clsCommandDocObj.ValidateXMLFromStrings(m_database.xml, GetXSD()) Then
+        If Not clsCommandDocObj.CommandsSanityCheck(m_database, colErrorList) Then
+            ShowXMLErrors colErrorList
+            Save = False
+            Exit Function
+        End If
+    Else
+        ShowXMLErrors colErrorList
+        Save = False
+        Exit Function
+    End If
+    
     '// 08/302009 52 - getting rid of the clsXML class since it didnt write valid XML
     Call m_database.Save(App.Path & "\commands.xml")
+    
+    Save = True
 
 End Function
+
+Private Sub ShowXMLErrors(ByRef colErrorList As Collection)
+    
+    Dim i As Integer
+    Dim msg As String
+    
+    msg = StringFormat("The following errors were detected with commands.xml...{0}{0}", vbNewLine)
+    
+    For i = 1 To colErrorList.Count
+        msg = StringFormat("{0}{1}{2}", msg, colErrorList(i), vbNewLine)
+    Next i
+    
+    frmChat.AddChat vbRed, msg
+    
+End Sub
+
+
 
 Public Sub Delete()
     
@@ -286,9 +337,9 @@ Private Function getParameters(ByRef CommandNode As IXMLDOMNode) As Collection
                     .IsOptional = True
                 End If
             End If
-            .DataType = "String"
+            .datatype = "String"
             If (Not Parameter.Attributes.getNamedItem("type") Is Nothing) Then
-                .DataType = Parameter.Attributes.getNamedItem("type").Text
+                .datatype = Parameter.Attributes.getNamedItem("type").Text
             End If
             .MatchMessage = Parameter.selectSingleNode("match").Attributes.getNamedItem("message").Text
             .MatchCaseSensitive = False
@@ -459,9 +510,9 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
                 argumentNode.Attributes.setNamedItem newNode
             End If
             
-            If (Not StrComp(Parameter.DataType, "string", vbTextCompare) = 0) Then
+            If (Not StrComp(Parameter.datatype, "string", vbTextCompare) = 0) Then
                 Set newNode = m_database.createNode("attribute", "type", vbNullString)
-                newNode.Text = Parameter.DataType
+                newNode.Text = Parameter.datatype
                 argumentNode.Attributes.setNamedItem newNode
             End If
             
@@ -685,7 +736,7 @@ Private Function getEnabled(ByRef AnyNode As IXMLDOMNode) As Boolean
 
 End Function
 
-Private Function setEnabled(ByRef AnyNode As IXMLDOMNode, ByVal Enabled As Boolean)
+Private Function setEnabled(ByRef AnyNode As IXMLDOMNode, ByVal enabled As Boolean)
 
     Dim temp As IXMLDOMNode
     Dim attr As IXMLDOMAttribute
@@ -699,7 +750,7 @@ Private Function setEnabled(ByRef AnyNode As IXMLDOMNode, ByVal Enabled As Boole
         Set temp = AnyNode.Attributes.setNamedItem(m_database.createAttribute("enabled"))
     End If
 
-    If (Enabled = True) Then
+    If (enabled = True) Then
         temp.Text = "true"
     Else
         temp.Text = "false"

@@ -114,6 +114,7 @@ Module=modCommandsMisc; modCommandsMisc.bas
 Module=modCommandsOps; modCommandsOps.bas
 Class=clsColor; clsColor.cls
 Class=clsNLS; clsNLS.cls
+Class=clsCommandDocObjStatic; clsCommandDocObjStatic.cls
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""
