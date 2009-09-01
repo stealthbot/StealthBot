@@ -52,7 +52,7 @@ End Sub
 Public Function OpenDatabase(Optional ByVal DatabasePath As String = vbNullString, Optional ByVal forceLoad As Boolean = False)
 
     If (DatabasePath = vbNullString) Then
-        DatabasePath = App.Path & "\commands.xml"
+        DatabasePath = GetFilePath("Commands.xml")
     End If
     
     If forceLoad = True Or m_database.childNodes.length = 0 Then
@@ -244,7 +244,7 @@ Private Function GetXSD() As String
     Set oFSO = New FileSystemObject
         
     '// read the xsd file
-    Set oTS = oFSO.OpenTextFile(App.Path & "\commands.xsd", ForReading, False)
+    Set oTS = oFSO.OpenTextFile(StringFormat("{0}\Commands.xsd", App.Path), ForReading, False)
     strXSD = oTS.ReadAll()
     Call oTS.Close
     
@@ -273,7 +273,7 @@ Public Function Save() As Boolean
     End If
     
     '// 08/302009 52 - getting rid of the clsXML class since it didnt write valid XML
-    Call m_database.Save(App.Path & "\commands.xml")
+    Call m_database.Save(GetFilePath("Commands.xml"))
     
     Save = True
 

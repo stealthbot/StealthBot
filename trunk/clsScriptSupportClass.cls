@@ -675,7 +675,7 @@ Public Function GetConfigEntry(ByVal sSection As String, ByVal sEntryName As Str
     
     sFileName = GetFilePath(sFileName)
 
-    If (StrComp(sFileName, App.Path & "\access.ini", vbTextCompare) = 0) Then
+    If (StrComp(sFileName, StringFormat("{0}\Access.ini", CurDir$()), vbTextCompare) = 0) Then
         If (StrComp(sSection, "Flags", vbTextCompare) = 0) Then
             GetConfigEntry = OpenCommand(sEntryName).RequiredFlags
         ElseIf (StrComp(sSection, "Numeric", vbTextCompare) = 0) Then
@@ -709,7 +709,7 @@ Public Sub WriteConfigEntry(ByVal sSection As String, ByVal sEntryName As String
     
     sFileName = GetFilePath(sFileName)
     
-    If (StrComp(sFileName, App.Path & "\access.ini", vbTextCompare) = 0) Then
+    If (StrComp(sFileName, StringFormat("{0}\Access.ini", CurDir$()), vbTextCompare) = 0) Then
         Dim cmdObj As Object
         
         Set cmdObj = OpenCommand(sEntryName)
@@ -745,7 +745,7 @@ End Sub
 '// Currently you are restricted to placing files in the StealthBot install directory only
 Public Sub PrintURLToFile(ByVal sFileName As String, ByVal sURL As String)
     
-    sFileName = App.Path & "\" & sFileName
+    sFileName = StringFormat("{0}\{1}", CurDir$(), sFileName)
     
     URLDownloadToFile 0, sURL, sFileName, 0, 0
     
@@ -1464,29 +1464,21 @@ Public Function GetSettingsEntry(ByVal sEntryName As String, Optional ByVal scri
     
     If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
 
-    ' ...
-    Path = ReadCfg("FilePaths", "Scripts.ini")
-    If (Path = vbNullString) Then
-        Path = App.Path & "\scripts\scripts.ini"
-    End If
-
-    ' ...
+    Path = GetFilePath("Scripts.ini", "Scripts")
+    
     If (LenB(Dir(Path)) = 0) Then
         Open Path For Output As #1
         Close #1
     End If
     
-    ' ...
     GetSettingsEntry = ReadINI(scriptName, sEntryName, Path)
     
-    ' ...
-    If (InStr(1, GetSettingsEntry, " ;") <> 0) Then
+    If (Not InStr(1, GetSettingsEntry, " ;") = 0) Then
         GetSettingsEntry = _
             Mid$(GetSettingsEntry, 1, (InStr(1, GetSettingsEntry, " ;") - 1))
     End If
     
-    ' ...
-    If (InStr(1, GetSettingsEntry, " #") <> 0) Then
+    If (Not InStr(1, GetSettingsEntry, " #") = 0) Then
         GetSettingsEntry = _
             Mid$(GetSettingsEntry, 1, (InStr(1, GetSettingsEntry, " #") - 1))
     End If
@@ -1508,19 +1500,13 @@ Public Sub WriteSettingsEntry(ByVal sEntryName As String, ByVal sValue As String
     
     If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
-    ' ...
-    Path = ReadCfg("FilePaths", "Scripts.ini")
-    If (Path = vbNullString) Then
-        Path = App.Path & "\scripts\scripts.ini"
-    End If
+    Path = GetFilePath("Scripts.ini", "Scripts")
 
-    ' ...
     If (LenB(Dir(Path)) = 0) Then
         Open Path For Output As #1
         Close #1
     End If
     
-    ' ...
     WriteINI scriptName, sEntryName, sValue & _
         IIf(Len(sDescription), " ; " & sDescription, ""), Path
 
@@ -1535,7 +1521,7 @@ ERROR_HANDLER:
     If (ReadCfg("FilePaths", "Scripts") = vbNullString) Then
         On Error Resume Next
         
-        MkDir App.Path & "\scripts\"
+        MkDir StringFormat("{0}\scripts\", CurDir$())
         
         On Error GoTo ERROR_HANDLER
     Else

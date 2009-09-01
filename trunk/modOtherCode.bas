@@ -174,8 +174,8 @@ Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Inte
             Case "SEXP": GetVerByte = &HD3
             Case "D2DV": GetVerByte = &HC
             Case "D2XP": GetVerByte = &HC
-            Case "W3XP": GetVerByte = &H17
-            Case "WAR3": GetVerByte = &H17
+            Case "W3XP": GetVerByte = &H18
+            Case "WAR3": GetVerByte = &H18
         End Select
     Else
         GetVerByte = _
@@ -192,18 +192,18 @@ Public Function GetGamePath(ByVal Client As String) As String
     If (LenB(ReadCfg("Override", Key & "Hashes")) > 0) Then
         GetGamePath = ReadCfg("Override", Key & "Hashes")
         
-        If (Right$(GetGamePath, 1) <> "\") Then
+        If (Not Right$(GetGamePath, 1) = "\") Then
             GetGamePath = GetGamePath & "\"
         End If
     Else
-        Select Case (StrReverse$(UCase$(Client)))
-            Case "W2BN": GetGamePath = App.Path & "\W2BN\"
-            Case "STAR": GetGamePath = App.Path & "\STAR\"
-            Case "SEXP": GetGamePath = App.Path & "\STAR\"
-            Case "D2DV": GetGamePath = App.Path & "\D2DV\"
-            Case "D2XP": GetGamePath = App.Path & "\D2XP\"
-            Case "W3XP": GetGamePath = App.Path & "\WAR3\"
-            Case "WAR3": GetGamePath = App.Path & "\WAR3\"
+        Select Case (UCase$(Client))
+            Case "W2BN", "NB2W": GetGamePath = StringFormat("{0}\W2BN\", App.Path)
+            Case "STAR", "RATS": GetGamePath = StringFormat("{0}\STAR\", App.Path)
+            Case "SEXP", "PXES": GetGamePath = StringFormat("{0}\STAR\", App.Path)
+            Case "D2DV", "VD2D": GetGamePath = StringFormat("{0}\D2DV\", App.Path)
+            Case "D2XP", "PX2D": GetGamePath = StringFormat("{0}\D2XP\", App.Path)
+            Case "W3XP", "PX3W": GetGamePath = StringFormat("{0}\WAR3\", App.Path)
+            Case "WAR3", "3RAW": GetGamePath = StringFormat("{0}\WAR3\", App.Path)
             
             Case Else
                 frmChat.AddChat RTBColors.ErrorMessageText, _
@@ -1757,17 +1757,21 @@ Public Function GetConfigFilePath() As String
     End If
     
     If (InStr(1, filePath, "\", vbBinaryCompare) = 0) Then
-        filePath = App.Path & "\" & filePath
+        filePath = StringFormat("{0}\{1}", CurDir$(), filePath)
     End If
     
     GetConfigFilePath = filePath
 End Function
 
-Public Function GetFilePath(ByVal filename As String) As String
+Public Function GetFilePath(ByVal filename As String, Optional SubDirectory As String = vbNullString) As String
     Dim s As String
     
     If (InStr(filename, "\") = 0) Then
-        GetFilePath = GetProfilePath() & filename
+        If (LenB(SubDirectory) = 0) Then
+            GetFilePath = StringFormat("{0}{1}", GetProfilePath(), filename)
+        Else
+            GetFilePath = StringFormat("{0}{1}\{2}", GetProfilePath(), SubDirectory, filename)
+        End If
         
         s = ReadCfg("FilePaths", filename)
         
@@ -1861,7 +1865,7 @@ Public Function GetProfilePath(Optional ByVal ProfileIndex As Integer) As String
         If LenB(LastPath) > 0 Then
             GetProfilePath = LastPath
         Else
-            GetProfilePath = App.Path & "\"
+            GetProfilePath = StringFormat("{0}\", CurDir$())
         End If
 '    End If
     
@@ -2831,12 +2835,11 @@ Public Function UsernameRegex(ByVal Username As String, ByVal sPattern As String
     UsernameRegex = (prepName Like prepPatt)
 End Function
 
-' ...
 Public Function convertAlias(ByVal cmdName As String) As String
-    ' ...
     On Error GoTo ERROR_HANDLER
+    Dim sCommandsPath As String
+    sCommandsPath = GetFilePath("Commands.xml")
 
-    ' ...
     If (Len(cmdName) > 0) Then
         Dim commands As DOMDocument60
         Dim Alias    As IXMLDOMNode
@@ -2845,7 +2848,7 @@ Public Function convertAlias(ByVal cmdName As String) As String
         Set commands = New DOMDocument60
         
         ' ...
-        If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
+        If (Dir$(sCommandsPath) = vbNullString) Then
             Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
                 "working directory.")
                 
@@ -2853,7 +2856,7 @@ Public Function convertAlias(ByVal cmdName As String) As String
         End If
         
         ' ...
-        Call commands.Load(App.Path & "\commands.xml")
+        Call commands.Load(sCommandsPath)
         
         ' ...
         If (InStr(1, cmdName, "'", vbBinaryCompare) > 0) Then

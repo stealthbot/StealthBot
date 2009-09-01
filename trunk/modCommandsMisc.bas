@@ -181,7 +181,7 @@ Public Sub OnIdleType(Command As clsCommandObj)
 End Sub
 
 Public Sub OnInbox(Command As clsCommandObj)
-    Dim Msg      As udtMail
+    Dim msg      As udtMail
     Dim mcount   As Integer
     Dim Index    As Integer
     Dim dbAccess As udtGetAccessResponse
@@ -196,9 +196,9 @@ Public Sub OnInbox(Command As clsCommandObj)
     
     If (GetMailCount(Command.Username) > 0) Then
         Do
-            GetMailMessage Command.Username, Msg
-            If (Len(RTrim$(Msg.To)) > 0) Then
-                Command.Respond StringFormat("Message from: {0}: {1}", Trim$(Msg.From), Trim$(Msg.Message))
+            GetMailMessage Command.Username, msg
+            If (Len(RTrim$(msg.To)) > 0) Then
+                Command.Respond StringFormat("Message from: {0}: {1}", Trim$(msg.From), Trim$(msg.Message))
             End If
         Loop While (GetMailCount(Command.Username) > 0)
     Else
@@ -256,7 +256,7 @@ Public Sub OnMMail(Command As clsCommandObj)
     Dim temp     As udtMail
     Dim Rank     As Long
     Dim Flags    As String
-    Dim I        As Integer
+    Dim i        As Integer
     Dim X        As Integer
     Dim dbAccess As udtGetAccessResponse
     
@@ -271,30 +271,30 @@ Public Sub OnMMail(Command As clsCommandObj)
         If (StrictIsNumeric(Command.Argument("Criteria"))) Then
             Rank = Val(Command.Argument("Criteria"))
             
-            For I = 0 To UBound(DB)
-                If (StrComp(DB(I).Type, "USER", vbTextCompare) = 0) Then
-                    dbAccess = GetCumulativeAccess(DB(I).Username)
+            For i = 0 To UBound(DB)
+                If (StrComp(DB(i).Type, "USER", vbTextCompare) = 0) Then
+                    dbAccess = GetCumulativeAccess(DB(i).Username)
                     If (dbAccess.Rank = Rank) Then
-                        temp.To = DB(I).Username
+                        temp.To = DB(i).Username
                         Call AddMail(temp)
                     End If
                 End If
-            Next I
+            Next i
             Command.Respond StringFormat("Mass mailing to users with rank {0} complete.", Rank)
         Else
             Flags = Command.Argument("Criteria")
-            For I = 0 To UBound(DB)
-                If (StrComp(DB(I).Type, "USER", vbTextCompare) = 0) Then
-                    dbAccess = GetCumulativeAccess(DB(I).Username)
+            For i = 0 To UBound(DB)
+                If (StrComp(DB(i).Type, "USER", vbTextCompare) = 0) Then
+                    dbAccess = GetCumulativeAccess(DB(i).Username)
                     For X = 1 To Len(Flags)
                         If (InStr(1, dbAccess.Flags, Mid$(Flags, X, 1), IIf(BotVars.CaseSensitiveFlags, vbBinaryCompare, vbTextCompare)) > 0) Then
-                            temp.To = DB(I).Username
+                            temp.To = DB(i).Username
                             Call AddMail(temp)
                             Exit For
                         End If
                     Next X
                 End If
-            Next I
+            Next i
             Command.Respond StringFormat("Mass mailing to users with any of the flags {0} complete.", Flags)
         End If
     Else
@@ -323,11 +323,11 @@ Public Sub OnReadFile(Command As clsCommandObj)
     If (Command.IsValid) Then
         sFilePath = Command.Argument("File")
         If ((Not Mid$(sFilePath, 2, 2) = ":\") And (Not Mid$(sFilePath, 2, 2) = ":/")) Then
-            sFilePath = App.Path & "\" & sFilePath
+            sFilePath = StringFormat("{0}\{1}", CurDir$(), sFilePath)
         End If
         
         If (LenB(Dir$(sFilePath)) > 0) Then
-            Command.Respond StringFormat("Contents of file {0}:", Replace$(sFilePath, App.Path & "\", vbNullString, , 1, vbTextCompare))
+            Command.Respond StringFormat("Contents of file {0}:", Replace$(sFilePath, StringFormat("{0}\", CurDir$()), vbNullString, , 1, vbTextCompare))
             
             iFile = FreeFile
             Open sFilePath For Input As #iFile

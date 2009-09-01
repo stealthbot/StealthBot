@@ -440,7 +440,7 @@ Private Sub cmdDeleteCommand_Click()
     
     Set m_CommandsDoc = Nothing
     Set m_CommandsDoc = New DOMDocument60
-    Call m_CommandsDoc.Load(App.Path & "\commands.xml")
+    Call m_CommandsDoc.Load(GetFilePath("Commands.xml"))
     
     Call PopulateOwnerComboBox
     Call ResetForm
@@ -498,20 +498,20 @@ Private Sub Form_Load()
     '// Load commands.xml
     Set m_CommandsDoc = New DOMDocument60
     
-    If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
+    If (Dir$(GetFilePath("Commands.xml")) = vbNullString) Then
         Exit Sub
     End If
     '// 08/31/2008 JSM - ensure schema file is present
-    If (Dir$(App.Path & "\commands.xsd") = vbNullString) Then
+    If (Dir$(StringFormat("{0}\Commands.xsd", App.Path)) = vbNullString) Then
         Exit Sub
     End If
     
     
-    If Not clsCommandDocObj.ValidateXMLFromFiles(App.Path & "\commands.xml", App.Path & "\commands.xsd") Then
+    If Not clsCommandDocObj.ValidateXMLFromFiles(GetFilePath("Commands.xml"), StringFormat("{0}\Commands.xsd", App.Path)) Then
         Exit Sub
     End If
     
-    Call m_CommandsDoc.Load(App.Path & "\commands.xml")
+    Call m_CommandsDoc.Load(GetFilePath("Commands.xml"))
     
     If Not clsCommandDocObj.CommandsSanityCheck(m_CommandsDoc) Then
         Exit Sub
@@ -1016,8 +1016,8 @@ Private Sub SaveForm()
         End If
         
         '// 08/302009 52 - getting rid of the clsXML class since it didnt write valid XML
-		'// TODO: this needs to validate!!!
-        Call m_CommandsDoc.Save(App.Path & "\commands.xml")
+                '// TODO: this needs to validate!!!
+        Call m_CommandsDoc.Save(GetFilePath("Commands.xml"))
         
         'Call m_CommandsDoc.Save(App.Path & "\commands.xml")
         Call PrepareForm(.TheNodeType, .TheXMLElement)

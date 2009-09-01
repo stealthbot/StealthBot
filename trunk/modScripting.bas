@@ -46,7 +46,7 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
 
     ' ...
     frmChat.INet.Cancel
-    frmChat.scTimer.Enabled = False
+    frmChat.scTimer.enabled = False
     
     ' ...
     DestroyObjs
@@ -93,11 +93,10 @@ Public Sub LoadScripts()
     ' ********************************
     
     ' set script folder path
-    strPath = ReadCfg("FilePaths", "Scripts")
-    If (strPath = vbNullString) Then
-        strPath = App.Path & "\scripts\"
-    ElseIf (Not (Right$(strPath, 1) = "\")) Then
-        strPath = strPath & "\"
+    strPath = GetFilePath("Scripts")
+    
+    If (Not (Right$(strPath, 1) = "\")) Then
+        strPath = StringFormat("{0}\", strPath)
     End If
 
     
@@ -248,7 +247,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
                                     
                                     ' ...
                                     If (Left$(strPath, 1) = "\") Then
-                                        strFullPath = App.Path & "\Scripts" & strPath
+                                        strFullPath = StringFormat("{0}\Scripts{1}", CurDir$(), strPath)
                                     Else
                                         strFullPath = strPath
                                     End If
@@ -1018,14 +1017,14 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
             If (m_arrObjs(Index).obj.Index > 0) Then
                 Unload frmChat.tmrScript(m_arrObjs(Index).obj.Index)
             Else
-                frmChat.tmrScript(0).Enabled = False
+                frmChat.tmrScript(0).enabled = False
             End If
             
         Case "LONGTIMER"
             If (m_arrObjs(Index).obj.Index > 0) Then
                 Unload frmChat.tmrScriptLong(m_arrObjs(Index).obj.Index)
             Else
-                frmChat.tmrScriptLong(0).Enabled = False
+                frmChat.tmrScriptLong(0).enabled = False
             End If
             
         Case "WINSOCK"

@@ -3635,7 +3635,11 @@ Private Sub mnuCatchPhrases_Click()
 End Sub
 
 Private Sub mnuOpenScriptFolder_Click()
-    Shell "explorer.exe " & App.Path & "\scripts", vbNormalFocus
+    Dim sPath As String
+    sPath = StringFormat("{0}\scripts", CurDir$())
+    If (LenB(Dir$(sPath, vbDirectory)) > 0) Then
+        Shell StringFormat("explorer.exe {0}", sPath), vbNormalFocus
+    End If
 End Sub
 
 Private Sub mnuPublicChannels_Click(Index As Integer)
@@ -3701,7 +3705,7 @@ Private Sub mnuDisconnect2_Click()
 End Sub
 
 Private Sub mnuEditAccessFlags_Click()
-    ShellExecute frmChat.hWnd, "Open", App.Path & "\commands.xml", &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("commands.xml"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditCaught_Click()
@@ -3884,26 +3888,8 @@ Private Sub mnuLog2_Click()
     'mnuLog3.Checked = False
 End Sub
 
-'Private Sub mnuLog3_Click()
-'    BotVars.Logging = 3
-'    WriteINI "Other", "Logging", "3"
-'    AddChat RTBColors.InformationText, "Logging disabled."
-'    mnuLog1.Checked = False
-'    mnuLog0.Checked = False
-'    mnuLog2.Checked = False
-'    mnuLog3.Checked = True
-'End Sub
-
-'Private Sub mnuMonitor_Click()
-'    If Not MonitorExists Then
-'        InitMonitor
-'    End If
-'
-'    MonitorForm.Show
-'End Sub
-
 Private Sub mnuOpenBotFolder_Click()
-    Shell "explorer.exe " & App.Path, vbNormalFocus
+    Shell StringFormat("explorer.exe {0}", CurDir$()), vbNormalFocus
 End Sub
 
 

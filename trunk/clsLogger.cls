@@ -36,7 +36,10 @@ Private Sub Class_Initialize()
     ' ...
     Set m_logsCreated = New Collection
     
-    m_logPath = App.Path & "\logs\"
+    m_logPath = GetFilePath("Logs")
+    If (Not (Right$(m_logPath, 1) = "\")) Then
+        m_logPath = StringFormat("{0}\", m_logPath)
+    End If
 
 End Sub
 
@@ -56,8 +59,8 @@ Public Property Get LogPath() As String
     LogPath = m_logPath
 End Property
 
-Public Property Let LogPath(ByVal value As String)
-    m_logPath = value
+Public Property Let LogPath(ByVal Value As String)
+    m_logPath = Value
     
     If (Not (Right$(m_logPath, 1) = "\")) Then
         m_logPath = m_logPath & "\"
@@ -243,7 +246,7 @@ Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Inte
     Static failed_attempts As Integer
     
     Dim f As Integer ' ...
-    Dim I As Double  ' ...
+    Dim i As Double  ' ...
     
     ' ...
     f = FreeFile
@@ -265,14 +268,14 @@ Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Inte
         
         ' ...
         If ((ltype = CHAT_MSG) Or (ltype = WHISPER_MSG)) Then
-            For I = 1 To m_logsCreated.Count
-                If (StrComp(m_logsCreated(I), Path, vbTextCompare) = 0) Then
+            For i = 1 To m_logsCreated.Count
+                If (StrComp(m_logsCreated(i), Path, vbTextCompare) = 0) Then
                     Exit For
                 End If
-            Next I
+            Next i
             
             ' ...
-            If (I >= m_logsCreated.Count + 1) Then
+            If (i >= m_logsCreated.Count + 1) Then
                 m_logsCreated.Add Path
             End If
         End If
@@ -307,21 +310,21 @@ Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Inte
             Dim bytes  As Integer ' ...
             
             ' ...
-            For I = UBound(arr) To 0 Step -1
-                bytes = (bytes + Len(arr(I)))
+            For i = UBound(arr) To 0 Step -1
+                bytes = (bytes + Len(arr(i)))
                 
                 If (bytes >= BotVars.MaxLogFileSize) Then
-                    offset = I
+                    offset = i
                     
                     Exit For
                 End If
-            Next I
+            Next i
         
             ' ...
             Open Path For Output As #f
-                For I = offset + 1 To UBound(arr)
-                    Print #f, arr(I)
-                Next I
+                For i = offset + 1 To UBound(arr)
+                    Print #f, arr(i)
+                Next i
             Close #f
         End If
         
@@ -357,12 +360,12 @@ Public Sub RemoveLogsCreated()
 
     On Error Resume Next
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
     
     ' ...
-    For I = 1 To m_logsCreated.Count
-        Kill m_logsCreated(I)
-    Next I
+    For i = 1 To m_logsCreated.Count
+        Kill m_logsCreated(i)
+    Next i
 
 End Sub
 

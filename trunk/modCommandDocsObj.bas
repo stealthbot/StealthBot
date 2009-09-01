@@ -75,7 +75,7 @@ Public Function GetCommands(Optional ByVal DatabasePath As String = vbNullString
     Set GetCommands = New Collection
   
     If (DatabasePath = vbNullString) Then
-        DatabasePath = App.Path & "\commands.xml"
+        DatabasePath = GetFilePath("Commands.xml")
     End If
     
     m_database.Load DatabasePath
