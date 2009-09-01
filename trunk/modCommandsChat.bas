@@ -128,6 +128,7 @@ Public Sub OnFilter(Command As clsCommandObj)
                 WriteINI "TextFilters", "Filter" & (Total + 1), Command.Argument("Filter"), FiltersPath
                 WriteINI "TextFilters", "Total", Total + 1, FiltersPath
                 Command.Respond StringFormat("Added {0}{1}{0} to the message filter list.", Chr$(34), Command.Argument("Filter"))
+                Call frmChat.LoadArray(LOAD_FILTERS, gFilters())
             Else
                 Command.Respond "Your filters file has been edited manually and is no longer valid. Please delete it."
             End If
@@ -202,7 +203,7 @@ Public Sub OnUnBlock(Command As clsCommandObj)
         If (StrictIsNumeric(TotalString)) Then
             Total = Int(TotalString)
             For i = 0 To Total
-                If (StrComp(Command.Argument("Username"), ReadINI("BlockList", "Filter" & i, FiltersPath), vbTextCompare) = 0) Then
+                If (StrComp(Command.Argument("Username"), ReadINI("BlockList", "Filter" & (i + 1), FiltersPath), vbTextCompare) = 0) Then
                     Exit For
                 ElseIf (i = Total) Then
                     Command.Respond StringFormat("{0}{1}{0} is not blocked.", Chr(34), Command.Argument("Username"))
@@ -212,7 +213,7 @@ Public Sub OnUnBlock(Command As clsCommandObj)
             
             If (i < Total) Then
                 For i = i To (Total - 1)
-                    WriteINI "BlockList", "Filter" & i, ReadINI("BlockList", "Filter" & (i + 1), FiltersPath), FiltersPath
+                    WriteINI "BlockList", "Filter" & (i + 1), ReadINI("BlockList", "Filter" & (i + 2), FiltersPath), FiltersPath
                 Next i
                 WriteINI "BlockList", "Total", (Total - 1), FiltersPath
                 Command.Respond StringFormat("Removed {0}{1}{0} from the blocked users list.", Chr$(34), Command.Argument("Username"))
@@ -232,13 +233,13 @@ Public Sub OnUnFilter(Command As clsCommandObj)
     If (Command.IsValid) Then
         FiltersPath = GetFilePath("Filters.ini")
         
-        TotalString = ReadINI("BlockList", "Total", FiltersPath)
+        TotalString = ReadINI("TextFilters", "Total", FiltersPath)
         If (LenB(TotalString) = 0) Then TotalString = "0"
         
         If (StrictIsNumeric(TotalString)) Then
             Total = Int(TotalString)
             For i = 0 To Total
-                If (StrComp(Command.Argument("Filter"), ReadINI("TextFilters", "Filter" & i, FiltersPath), vbTextCompare) = 0) Then
+                If (StrComp(Command.Argument("Filter"), ReadINI("TextFilters", "Filter" & (i + 1), FiltersPath), vbTextCompare) = 0) Then
                     Exit For
                 ElseIf (i = Total) Then
                     Command.Respond StringFormat("{0}{1}{0} is not filtered.", Chr(34), Command.Argument("Filter"))
@@ -248,7 +249,7 @@ Public Sub OnUnFilter(Command As clsCommandObj)
     
             If (i < Total) Then
                 For i = i To (Total - 1)
-                    WriteINI "TextFilters", "Filter" & i, ReadINI("TextFilters", "Filter" & (i + 1), FiltersPath), FiltersPath
+                    WriteINI "TextFilters", "Filter" & (i + 1), ReadINI("TextFilters", "Filter" & (i + 2), FiltersPath), FiltersPath
                 Next i
                 WriteINI "TextFilters", "Total", (Total - 1), FiltersPath
                 Command.Respond StringFormat("Removed {0}{1}{0} from the message filter list.", Chr$(34), Command.Argument("Filter"))
