@@ -120,8 +120,7 @@ Startup="frmChat"
 HelpFile=""
 Title="StealthBot"
 ExeName32="StealthBot v2.7 Release Candidate 2.exe"
-Path32="..\SBTest"
-Command32="-addpath "c:\users\lex\desktop\Hdx-SVN\Launcher""
+Command32=""
 Name="StealthBot"
 HelpContextID="0"
 Description="StealthBot"
@@ -135,7 +134,7 @@ VersionCompanyName="Andy T (Stealth@USEast)"
 VersionFileDescription="StealthBot v2.7"
 VersionLegalCopyright="(c) 2002-2007 Andy T. (Stealth@USEast)"
 VersionProductName="StealthBot v2.7"
-CondComp="DEV_RELEASE = 2"
+CondComp="BETA = 1 : DEV_RELEASE = 2"
 CompilationType=0
 OptimizationType=0
 FavorPentiumPro(tm)=-1

@@ -293,7 +293,7 @@ Public Sub Delete()
     
     If (LenB(Me.Owner) = 0) Then
         frmChat.AddChat RTBColors.ErrorMessageText, "Error: You can not delete an internal command."
-        Exit Function
+        Exit Sub
     End If
     
     m_command_node.parentNode.removeChild m_command_node
