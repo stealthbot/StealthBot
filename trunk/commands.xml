@@ -4564,4 +4564,25 @@
       </flags>
     </access>
   </command>
+  
+  <command name="setcommandline">
+    <aliases>
+      <alias>setcl</alias>
+    </aliases>
+    <documentation>
+      <description>
+        Changes the command line for the bot's instance.
+      </description>
+    </documentation>
+    <arguments>
+      <argument name="CommandLine" type="string" optional="1">
+        <documentation>
+          <description>
+            The full command line you wish to set. CPath will not work.
+          </description>
+        </documentation>
+      </argument>
+    </arguments>
+    <access/>
+  </command>
 </commands>

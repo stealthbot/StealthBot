@@ -1,5 +1,7 @@
 Attribute VB_Name = "modOtherCode"
 Option Explicit
+Private Declare Function GetEnvironmentVariable Lib "kernel32" Alias "GetEnvironmentVariableA" (ByVal lpName As String, ByVal lpBuffer As String, ByVal nSize As Long) As Long
+Private Declare Function SetEnvironmentVariable Lib "kernel32" Alias "SetEnvironmentVariableA" (ByVal lpName As String, ByVal lpValue As String) As Long
 
 Public Type COMMAND_DATA
     Name         As String
@@ -1368,7 +1370,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         
     With frmChat.lvChannel
         ' ...
-        .Enabled = False
+        .enabled = False
         
         ' ...
         .ListItems.Add isPriority, , Username, , i
@@ -1389,7 +1391,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         End If
         
         ' ...
-        .Enabled = True
+        .enabled = True
         
         ' ...
         .Refresh
@@ -1430,24 +1432,24 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
     End If
 End Function
 
-Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
+Public Function CheckMsg(ByVal msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
         Long) As Boolean
     
     Dim i As Integer ' ...
     
-    Msg = PrepareCheck(Msg)
+    msg = PrepareCheck(msg)
     
     For i = 0 To UBound(gFilters)
         If (Len(gFilters(i)) > 0) Then
             If (InStr(1, gFilters(i), "%", vbBinaryCompare) > 0) Then
-                If (Msg Like PrepareCheck(DoReplacements(gFilters(i), Username, Ping))) Then
+                If (msg Like PrepareCheck(DoReplacements(gFilters(i), Username, Ping))) Then
                     
                     CheckMsg = True
                     
                     Exit Function
                 End If
             Else
-                If (Msg Like gFilters(i)) Then
+                If (msg Like gFilters(i)) Then
                     CheckMsg = True
                     
                     Exit Function
@@ -1591,20 +1593,6 @@ End Sub
 Public Sub EnableSO_KEEPALIVE(ByVal lSocketHandle As Long)
     Call SetSockOpt(lSocketHandle, IPPROTO_TCP, SO_KEEPALIVE, True, 4) 'thanks Eric
 End Sub
-
-'Function MonitorExists() As Boolean
-'    MonitorExists = (Not (MonitorForm Is Nothing))
-'End Function
-
-'Sub InitMonitor()
-'    If (MonitorExists) Then
-'        frmChat.DeconstructMonitor
-'    End If
-'
-'    Set MonitorForm = New frmMonitor
-'
-'    Call frmMonitor.Hide
-'End Sub
 
 Public Function ProductCodeToFullName(ByVal pCode As String) As String
     Select Case (pCode)
@@ -1922,7 +1910,7 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
     'frmChat.AddChat vbRed, tmp & "*" & " : " & tmp & strGateway & "*"
 End Sub
 
-Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boolean
+Public Function AllowedToTalk(ByVal sUser As String, ByVal msg As String) As Boolean
     Dim i As Integer
     
     ' default to true
@@ -1947,7 +1935,7 @@ Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boo
     ' ...
     If (Filters) Then
         ' ...
-        If ((CheckBlock(sUser)) Or (CheckMsg(Msg, sUser, -5))) Then
+        If ((CheckBlock(sUser)) Or (CheckMsg(msg, sUser, -5))) Then
             AllowedToTalk = False
         End If
     End If
@@ -2224,7 +2212,103 @@ End Function
 'Returns TRUE if the specified argument was a command line switch,
 ' such as -debug
 Public Function MDebug(ByVal sArg As String) As Boolean
-    MDebug = InStr(1, CommandLine, "-" & sArg, vbTextCompare) > 0
+    MDebug = InStr(1, CommandLine, StringFormat("-{0} ", sArg), vbTextCompare) > 0
+End Function
+
+Public Sub SetCommandLine(sCommandLine As String)
+    Dim sTemp    As String
+    Dim sSetting As String
+    Dim sValue   As String
+    
+    CommandLine = vbNullString
+    sTemp = sCommandLine
+    
+    Do While Left$(sTemp, 1) = "-"
+        sSetting = Split(Mid$(sTemp, 2) & Space$(1), Space$(1))(0)
+        sTemp = Mid$(sTemp, Len(sSetting) + 3)
+        Select Case LCase$(sSetting)
+        
+            Case "cpath":
+                If (Left$(sTemp, 1) = Chr$(34)) Then
+                    If (InStr(2, sTemp, Chr$(34), vbTextCompare) > 0) Then
+                        sValue = Mid$(sTemp, 2, InStr(2, sTemp, Chr$(34), vbTextCompare) - 2)
+                        sTemp = Mid$(sTemp, Len(sValue) + 4)
+                    Else
+                        sValue = Mid$(Split(sTemp & " -", " -")(0), 2)
+                        sTemp = Mid$(sTemp, Len(sValue) + 3)
+                    End If
+                Else
+                    sValue = Split(sTemp & " -", " -")(0)
+                    sTemp = Mid$(sTemp, Len(sValue) + 2)
+                End If
+                
+                If (LenB(sValue) > 0) Then
+                    ConfigOverride = sValue
+                    If (LenB(GetConfigFilePath()) = 0) Then
+                        ConfigOverride = vbNullString
+                    Else
+                        CommandLine = StringFormat("{0}-cpath {1}{2}{1} ", CommandLine, Chr$(34), sValue)
+                    End If
+                End If
+                
+            Case "addpath":
+                If (Left$(sTemp, 1) = Chr$(34)) Then
+                    If (InStr(2, sTemp, Chr$(34), vbTextCompare) > 0) Then
+                        sValue = Mid$(sTemp, 2, InStr(2, sTemp, Chr$(34), vbTextCompare) - 2)
+                        sTemp = Mid$(sTemp, Len(sValue) + 4)
+                    Else
+                        sValue = Mid$(Split(sTemp & " -", " -")(0), 2)
+                        sTemp = Mid$(sTemp, Len(sValue) + 3)
+                    End If
+                Else
+                    sValue = Split(sTemp & " -", " -")(0)
+                    sTemp = Mid$(sTemp, Len(sValue) + 2)
+                End If
+                
+                AddEnvPath sValue
+                
+                CommandLine = StringFormat("{0}-addpath {1}{2}{1} ", CommandLine, Chr$(34), sValue)
+                
+            Case Else:
+                CommandLine = StringFormat("{0}-{1} ", CommandLine, sSetting)
+        End Select
+    Loop
+    
+    If MDebug("debug") Then
+        frmChat.AddChat RTBColors.ServerInfoText, " * Program executed in debug mode; unhandled packet information will be displayed."
+    End If
+End Sub
+
+Private Function AddEnvPath(sPath As String) As Boolean
+On Error GoTo ERROR_HANDLER:
+    Dim sTemp As String
+    Dim lRet  As Long
+    AddEnvPath = False
+    
+    sTemp = String$(1024, Chr$(0))
+    lRet = GetEnvironmentVariable("PATH", sTemp, Len(sTemp))
+        
+    If (Not lRet = 0) Then
+        If (InStr(1, sTemp, sPath, vbTextCompare) = 0) Then
+            lRet = SetEnvironmentVariable("PATH", StringFormat("{0};{1}", sTemp, sPath))
+            AddEnvPath = (lRet = 0)
+            If (MDebug("debug")) Then
+                frmChat.AddChat RTBColors.ConsoleText, "AddEnvPath failed: Set"
+                frmChat.AddChat RTBColors.ConsoleText, StringFormat("PATH: {0}", sTemp)
+                frmChat.AddChat RTBColors.ConsoleText, StringFormat("ADD:  {0}", sPath)
+            End If
+        End If
+    Else
+        If (MDebug("debug")) Then
+            frmChat.AddChat RTBColors.ConsoleText, "AddEnvPath failed: Get"
+            frmChat.AddChat RTBColors.ConsoleText, StringFormat("Ret: {0}", lRet)
+        End If
+    End If
+
+    Exit Function
+ERROR_HANDLER:
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.{3}()", Err.Number, Err.description, "modOtherCode", "AddEnvPath")
+    Err.Clear
 End Function
 
 'Returns system uptime in milliseconds
@@ -2281,7 +2365,7 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
 End Function
 
 
-Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mType As Byte)
+Public Sub CheckPhrase(ByRef Username As String, ByRef msg As String, ByVal mType As Byte)
     Dim i As Integer
     
     If UBound(Catch) = 0 Then
@@ -2290,8 +2374,8 @@ Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mTyp
     
     For i = LBound(Catch) To UBound(Catch)
         If (Catch(i) <> vbNullString) Then
-            If (InStr(1, LCase(Msg), Catch(i), vbTextCompare) <> 0) Then
-                Call CaughtPhrase(Username, Msg, Catch(i), mType)
+            If (InStr(1, LCase(msg), Catch(i), vbTextCompare) <> 0) Then
+                Call CaughtPhrase(Username, msg, Catch(i), mType)
                 
                 Exit Sub
             End If
@@ -2300,7 +2384,7 @@ Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mTyp
 End Sub
 
 
-Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phrase As String, ByVal mType As Byte)
+Public Sub CaughtPhrase(ByVal Username As String, ByVal msg As String, ByVal Phrase As String, ByVal mType As Byte)
     Dim i As Integer
     Dim s As String
     
@@ -2331,12 +2415,12 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phr
             Open GetProfilePath() & "\caughtphrases.htm" For Output As #i
         End If
         
-        Msg = Replace(Msg, "<", "&lt;", 1)
-        Msg = Replace(Msg, ">", "&gt;", 1)
+        msg = Replace(msg, "<", "&lt;", 1)
+        msg = Replace(msg, ">", "&gt;", 1)
         
         Print #i, "<B>" & Format(Date, "MM-dd-yyyy") & " - " & Time & _
             " - " & s & Space(1) & Username & ": </B>" & _
-                Replace(Msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
+                Replace(msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
                     "<br>"
     Close #i
 End Sub

@@ -3,8 +3,8 @@ Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
@@ -1557,21 +1557,7 @@ Private Sub Form_Load()
     
     SendMessage frmChat.cboSend.hWnd, CB_LIMITTEXT, 0, 0
     
-    ' 4/10/06:
-    ' CHECK FOR CONFIG.INI PATH HACK
-    L = InStr(Command(), "-cpath ")
-    
-    If L > 0 And Len(Command()) > (L + 7) Then
-        ConfigOverride = Mid$(Command(), L + 7)
-        
-        If InStr(ConfigOverride, " ") > 0 Then
-            ConfigOverride = Split(ConfigOverride, " ")(0)
-        End If
-        
-        If LenB(GetConfigFilePath()) = 0 Then
-            ConfigOverride = ""
-        End If
-    End If
+    SetCommandLine Command()
     
     ' SPLASH SCREEN
     If ReadCfg("Main", "ShowSplash") <> "N" Then
@@ -1599,7 +1585,7 @@ Private Sub Form_Load()
     
     With mnuTrayCaption
         .Caption = CVERSION
-        .Enabled = False
+        .enabled = False
     End With
     
     mail = True
@@ -1766,12 +1752,6 @@ Private Sub Form_Load()
             "the terms of the End-User License Agreement available at http://eula.stealthbot.net."
     End If
     
-    CommandLine = Command()
-    
-    If MDebug("debug") Then _
-        AddChat RTBColors.ServerInfoText, " * Program executed in debug mode; unhandled packet " & _
-            "information will be displayed."
-    
     Randomize
  
     ID_TASKBARICON = (Rnd * 100)
@@ -1887,7 +1867,7 @@ Public Sub cacheTimer_Timer()
         Next c
     End If
     
-    cacheTimer.Enabled = False
+    cacheTimer.enabled = False
 End Sub
 
 Private Sub ChatQueueTimer_Timer()
@@ -3464,14 +3444,14 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, 
             If aInx > 0 Then
                 sProd = g_Channel.Users(aInx).game
 
-                mnuPopWebProfile.Enabled = (sProd = "W3XP" Or sProd = "WAR3")
-                mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And g_Clan.Self.Rank >= 3)
-                mnuPopKick.Enabled = (MyFlags = 2 Or MyFlags = 18)
-                mnuPopDes.Enabled = (MyFlags = 2 Or MyFlags = 18)
-                mnuPopBan.Enabled = (MyFlags = 2 Or MyFlags = 18)
+                mnuPopWebProfile.enabled = (sProd = "W3XP" Or sProd = "WAR3")
+                mnuPopInvite.enabled = (mnuPopWebProfile.enabled And g_Clan.Self.Rank >= 3)
+                mnuPopKick.enabled = (MyFlags = 2 Or MyFlags = 18)
+                mnuPopDes.enabled = (MyFlags = 2 Or MyFlags = 18)
+                mnuPopBan.enabled = (MyFlags = 2 Or MyFlags = 18)
             End If
         Else
-            mnuPopWebProfile.Enabled = False
+            mnuPopWebProfile.enabled = False
         End If
         
         mnuPopup.Tag = lvChannel.SelectedItem.Text 'Record which user is selected at time of right-clicking. - FrOzeN
@@ -3632,9 +3612,9 @@ Private Sub mnuBot_Click()
     Dim i As Integer
 
     If IsW3 And g_Connected Then
-        mnuIgnoreInvites.Enabled = True
+        mnuIgnoreInvites.enabled = True
     Else
-        mnuIgnoreInvites.Enabled = False
+        mnuIgnoreInvites.enabled = False
     End If
     
     ' ...
@@ -3955,7 +3935,7 @@ Private Sub mnuPopAddLeft_Click()
     On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    If txtPre.Enabled Then 'fix for topic 25290 -a
+    If txtPre.enabled Then 'fix for topic 25290 -a
         If Dii Then txtPre.Text = "/w *" Else txtPre.Text = "/w "
         
         txtPre.Text = txtPre.Text & GetSelectedUser & " "
@@ -4766,7 +4746,7 @@ End Sub
 
 Private Sub tmrAccountLock_Timer()
     
-    tmrAccountLock.Enabled = False
+    tmrAccountLock.enabled = False
     
     If (Not g_Online) Then
         Exit Sub
@@ -5934,7 +5914,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
         End If
     
         ' ...
-        tmrSilentChannel(0).Enabled = False
+        tmrSilentChannel(0).enabled = False
     ElseIf (Index = 1) Then
         ' ...
         If (mnuDisableVoidView.Checked = False) Then
@@ -7279,7 +7259,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     s = ReadCfg(OT, "DisablePrefix")
     If s = "Y" Then txtPre.Visible = False Else txtPre.Visible = True
-    mnuPopAddLeft.Enabled = txtPre.Visible
+    mnuPopAddLeft.enabled = txtPre.Visible
     
     s = ReadCfg(OT, "DisableSuffix")
     If s = "Y" Then txtPost.Visible = False Else txtPost.Visible = True
@@ -8072,55 +8052,55 @@ Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, X As Single,
             If Not (lvClanList.SelectedItem Is Nothing) Then
                 If lvClanList.SelectedItem.Index < 0 Then
                     
-                    mnuPopDem.Enabled = False
-                    mnuPopPro.Enabled = False
-                    mnuPopBNProfile.Enabled = False
-                    mnuPopRem.Enabled = False
+                    mnuPopDem.enabled = False
+                    mnuPopPro.enabled = False
+                    mnuPopBNProfile.enabled = False
+                    mnuPopRem.enabled = False
                     
                 Else
                 
-                    mnuPopRem.Enabled = False
-                    mnuPopDem.Enabled = False
-                    mnuPopPro.Enabled = False
+                    mnuPopRem.enabled = False
+                    mnuPopDem.enabled = False
+                    mnuPopPro.enabled = False
                     
                     If g_Clan.Self.Rank > 2 Then
                             
-                        mnuPopBNProfile.Enabled = True
+                        mnuPopBNProfile.enabled = True
                         
                         Select Case lvClanList.SelectedItem.SmallIcon
                         
                             Case 4
-                                mnuPopDem.Enabled = False
-                                mnuPopRem.Enabled = False
-                                mnuPopPro.Enabled = False
+                                mnuPopDem.enabled = False
+                                mnuPopRem.enabled = False
+                                mnuPopPro.enabled = False
                                 
                             Case 3
                                 
-                                mnuPopPro.Enabled = False
+                                mnuPopPro.enabled = False
                                 
                                 If g_Clan.Self.Rank = 4 Then
                                     
-                                    mnuPopDem.Enabled = True
-                                    mnuPopRem.Enabled = True
+                                    mnuPopDem.enabled = True
+                                    mnuPopRem.enabled = True
                                     
                                 Else
                                     
-                                    mnuPopDem.Enabled = False
-                                    mnuPopRem.Enabled = False
+                                    mnuPopDem.enabled = False
+                                    mnuPopRem.enabled = False
                                 
                                 End If
                             
                             Case 2
                                 
-                                mnuPopDem.Enabled = True
-                                mnuPopPro.Enabled = True
-                                mnuPopRem.Enabled = True
+                                mnuPopDem.enabled = True
+                                mnuPopPro.enabled = True
+                                mnuPopRem.enabled = True
                                 
                             Case 1
                                 
-                                mnuPopDem.Enabled = False
-                                mnuPopPro.Enabled = True
-                                mnuPopRem.Enabled = True
+                                mnuPopDem.enabled = False
+                                mnuPopPro.enabled = True
+                                mnuPopRem.enabled = True
                                 
                         End Select
                     
@@ -8254,7 +8234,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
     Dim i As Integer
     
     If (Not (UserCancelledConnect)) Then
-        tmrAccountLock.Enabled = False
+        tmrAccountLock.enabled = False
     
         SetTitle "Disconnected"
         

@@ -89,179 +89,180 @@ Public Function DispatchCommand(Command As clsCommandObj)
     DispatchCommand = True
     Select Case LCase(Command.Name)
         'Bot information commands
-        Case "about":         Call modCommandsInfo.OnAbout(Command)
-        Case "accountinfo":   Call modCommandsInfo.OnAccountInfo(Command)
-        Case "allseen":       Call modCommandsInfo.OnAllSeen(Command)
-        Case "bancount":      Call modCommandsInfo.OnBanCount(Command)
-        Case "banlistcount":  Call modCommandsInfo.OnBanListCount(Command)
-        Case "banned":        Call modCommandsInfo.OnBanned(Command)
-        Case "clientbans":    Call modCommandsInfo.OnClientBans(Command)
-        Case "detail":        Call modCommandsInfo.OnDetail(Command)
-        Case "find":          Call modCommandsInfo.OnFind(Command)
-        Case "findattr":      Call modCommandsInfo.OnFindAttr(Command)
-        Case "findgrp":       Call modCommandsInfo.OnFindGrp(Command)
-        Case "help":          Call modCommandsInfo.OnHelp(Command)
-        Case "helpattr":      Call modCommandsInfo.OnHelpAttr(Command)
-        Case "helprank":      Call modCommandsInfo.OnHelpRank(Command)
-        Case "info":          Call modCommandsInfo.OnInfo(Command)
-        Case "initperf":      Call modCommandsInfo.OnInitPerf(Command)
-        Case "lastwhisper":   Call modCommandsInfo.OnLastWhisper(Command)
-        Case "localip":       Call modCommandsInfo.OnLocalIp(Command)
-        Case "owner":         Call modCommandsInfo.OnOwner(Command)
-        Case "phrases":       Call modCommandsInfo.OnPhrases(Command)
-        Case "ping":          Call modCommandsInfo.OnPing(Command)
-        Case "pingme":        Call modCommandsInfo.OnPingMe(Command)
-        Case "profile":       Call modCommandsInfo.OnProfile(Command)
-        Case "safecheck":     Call modCommandsInfo.OnSafeCheck(Command)
-        Case "safelist":      Call modCommandsInfo.OnSafeList(Command)
-        Case "scriptdetail":  Call modCommandsInfo.OnScriptDetail(Command)
-        Case "scripts":       Call modCommandsInfo.OnScripts(Command)
-        Case "server":        Call modCommandsInfo.OnServer(Command)
-        Case "shitcheck":     Call modCommandsInfo.OnShitCheck(Command)
-        Case "shitlist":      Call modCommandsInfo.OnShitList(Command)
-        Case "tagbans":       Call modCommandsInfo.OnTagBans(Command)
-        Case "time":          Call modCommandsInfo.OnTime(Command)
-        Case "trigger":       Call modCommandsInfo.OnTrigger(Command)
-        Case "uptime":        Call modCommandsInfo.OnUptime(Command)
-        Case "where":         Call modCommandsInfo.OnWhere(Command)
-        Case "whoami":        Call modCommandsInfo.OnWhoAmI(Command)
-        Case "whois":         Call modCommandsInfo.OnWhoIs(Command)
+        Case "about":          Call modCommandsInfo.OnAbout(Command)
+        Case "accountinfo":    Call modCommandsInfo.OnAccountInfo(Command)
+        Case "allseen":        Call modCommandsInfo.OnAllSeen(Command)
+        Case "bancount":       Call modCommandsInfo.OnBanCount(Command)
+        Case "banlistcount":   Call modCommandsInfo.OnBanListCount(Command)
+        Case "banned":         Call modCommandsInfo.OnBanned(Command)
+        Case "clientbans":     Call modCommandsInfo.OnClientBans(Command)
+        Case "detail":         Call modCommandsInfo.OnDetail(Command)
+        Case "find":           Call modCommandsInfo.OnFind(Command)
+        Case "findattr":       Call modCommandsInfo.OnFindAttr(Command)
+        Case "findgrp":        Call modCommandsInfo.OnFindGrp(Command)
+        Case "help":           Call modCommandsInfo.OnHelp(Command)
+        Case "helpattr":       Call modCommandsInfo.OnHelpAttr(Command)
+        Case "helprank":       Call modCommandsInfo.OnHelpRank(Command)
+        Case "info":           Call modCommandsInfo.OnInfo(Command)
+        Case "initperf":       Call modCommandsInfo.OnInitPerf(Command)
+        Case "lastwhisper":    Call modCommandsInfo.OnLastWhisper(Command)
+        Case "localip":        Call modCommandsInfo.OnLocalIp(Command)
+        Case "owner":          Call modCommandsInfo.OnOwner(Command)
+        Case "phrases":        Call modCommandsInfo.OnPhrases(Command)
+        Case "ping":           Call modCommandsInfo.OnPing(Command)
+        Case "pingme":         Call modCommandsInfo.OnPingMe(Command)
+        Case "profile":        Call modCommandsInfo.OnProfile(Command)
+        Case "safecheck":      Call modCommandsInfo.OnSafeCheck(Command)
+        Case "safelist":       Call modCommandsInfo.OnSafeList(Command)
+        Case "scriptdetail":   Call modCommandsInfo.OnScriptDetail(Command)
+        Case "scripts":        Call modCommandsInfo.OnScripts(Command)
+        Case "server":         Call modCommandsInfo.OnServer(Command)
+        Case "shitcheck":      Call modCommandsInfo.OnShitCheck(Command)
+        Case "shitlist":       Call modCommandsInfo.OnShitList(Command)
+        Case "tagbans":        Call modCommandsInfo.OnTagBans(Command)
+        Case "time":           Call modCommandsInfo.OnTime(Command)
+        Case "trigger":        Call modCommandsInfo.OnTrigger(Command)
+        Case "uptime":         Call modCommandsInfo.OnUptime(Command)
+        Case "where":          Call modCommandsInfo.OnWhere(Command)
+        Case "whoami":         Call modCommandsInfo.OnWhoAmI(Command)
+        Case "whois":          Call modCommandsInfo.OnWhoIs(Command)
         
         'Clan related commands
-        Case "clan":          Call modCommandsClan.OnClan(Command)
-        Case "demote":        Call modCommandsClan.OnDemote(Command)
-        Case "disbandclan":   Call modCommandsClan.OnDisbandClan(Command)
-        Case "invite":        Call modCommandsClan.OnInvite(Command)
-        Case "makechieftain": Call modCommandsClan.OnMakeChieftain(Command)
-        Case "motd":          Call modCommandsClan.OnMOTD(Command)
-        Case "promote":       Call modCommandsClan.OnPromote(Command)
-        Case "setmotd":       Call modCommandsClan.OnSetMOTD(Command)
+        Case "clan":           Call modCommandsClan.OnClan(Command)
+        Case "demote":         Call modCommandsClan.OnDemote(Command)
+        Case "disbandclan":    Call modCommandsClan.OnDisbandClan(Command)
+        Case "invite":         Call modCommandsClan.OnInvite(Command)
+        Case "makechieftain":  Call modCommandsClan.OnMakeChieftain(Command)
+        Case "motd":           Call modCommandsClan.OnMOTD(Command)
+        Case "promote":        Call modCommandsClan.OnPromote(Command)
+        Case "setmotd":        Call modCommandsClan.OnSetMOTD(Command)
         
         'Media Player comands
-        Case "allowmp3":      Call modCommandsMP3.OnAllowMp3(Command)
-        Case "fos":           Call modCommandsMP3.OnFOS(Command)
-        Case "loadwinamp":    Call modCommandsMP3.OnLoadWinamp(Command)
-        Case "mp3":           Call modCommandsMP3.OnMP3(Command)
-        Case "next":          Call modCommandsMP3.OnNext(Command)
-        Case "pause":         Call modCommandsMP3.OnPause(Command)
-        Case "play":          Call modCommandsMP3.OnPlay(Command)
-        Case "previous":      Call modCommandsMP3.OnPrevious(Command)
-        Case "repeat":        Call modCommandsMP3.OnRepeat(Command)
-        Case "setvol":        Call modCommandsMP3.OnSetVol(Command)
-        Case "shuffle":       Call modCommandsMP3.OnShuffle(Command)
-        Case "stop":          Call modCommandsMP3.OnStop(Command)
-        Case "useitunes":     Call modCommandsMP3.OnUseiTunes(Command)
-        Case "usewinamp":     Call modCommandsMP3.OnUseWinamp(Command)
+        Case "allowmp3":       Call modCommandsMP3.OnAllowMp3(Command)
+        Case "fos":            Call modCommandsMP3.OnFOS(Command)
+        Case "loadwinamp":     Call modCommandsMP3.OnLoadWinamp(Command)
+        Case "mp3":            Call modCommandsMP3.OnMP3(Command)
+        Case "next":           Call modCommandsMP3.OnNext(Command)
+        Case "pause":          Call modCommandsMP3.OnPause(Command)
+        Case "play":           Call modCommandsMP3.OnPlay(Command)
+        Case "previous":       Call modCommandsMP3.OnPrevious(Command)
+        Case "repeat":         Call modCommandsMP3.OnRepeat(Command)
+        Case "setvol":         Call modCommandsMP3.OnSetVol(Command)
+        Case "shuffle":        Call modCommandsMP3.OnShuffle(Command)
+        Case "stop":           Call modCommandsMP3.OnStop(Command)
+        Case "useitunes":      Call modCommandsMP3.OnUseiTunes(Command)
+        Case "usewinamp":      Call modCommandsMP3.OnUseWinamp(Command)
         
         'Chat Commands
-        Case "away":          Call modCommandsChat.OnAway(Command)
-        Case "back":          Call modCommandsChat.OnBack(Command)
-        Case "block":         Call modCommandsChat.OnBlock(Command)
-        Case "connect":       Call modCommandsChat.OnConnect(Command)
-        Case "cq":            Call modCommandsChat.OnCQ(Command)
-        Case "disconnect":    Call modCommandsChat.OnDisconnect(Command)
-        Case "expand":        Call modCommandsChat.OnExpand(Command)
-        Case "fadd":          Call modCommandsChat.OnFAdd(Command)
-        Case "filter":        Call modCommandsChat.OnFilter(Command)
-        Case "forcejoin":     Call modCommandsChat.OnForceJoin(Command)
-        Case "frem":          Call modCommandsChat.OnFRem(Command)
-        Case "home":          Call modCommandsChat.OnHome(Command)
-        Case "ignore":        Call modCommandsChat.OnIgnore(Command)
-        Case "igpriv":        Call modCommandsChat.OnIgPriv(Command)
-        Case "join":          Call modCommandsChat.OnJoin(Command)
-        Case "unblock":       Call modCommandsChat.OnUnBlock(Command)
-        Case "unfilter":      Call modCommandsChat.OnUnFilter(Command)
-        Case "unignore":      Call modCommandsChat.OnUnIgnore(Command)
-        Case "unigpriv":      Call modCommandsChat.OnUnIgPriv(Command)
-        Case "quickrejoin":   Call modCommandsChat.OnQuickRejoin(Command)
-        Case "reconnect":     Call modCommandsChat.OnReconnect(Command)
-        Case "rejoin":        Call modCommandsChat.OnReJoin(Command)
-        Case "say":           Call modCommandsChat.OnSay(Command)
-        Case "scq":           Call modCommandsChat.OnSCQ(Command)
-        Case "shout":         Call modCommandsChat.OnShout(Command)
-        Case "watch":         Call modCommandsChat.OnWatch(Command)
-        Case "watchoff":      Call modCommandsChat.OnWatchOff(Command)
+        Case "away":           Call modCommandsChat.OnAway(Command)
+        Case "back":           Call modCommandsChat.OnBack(Command)
+        Case "block":          Call modCommandsChat.OnBlock(Command)
+        Case "connect":        Call modCommandsChat.OnConnect(Command)
+        Case "cq":             Call modCommandsChat.OnCQ(Command)
+        Case "disconnect":     Call modCommandsChat.OnDisconnect(Command)
+        Case "expand":         Call modCommandsChat.OnExpand(Command)
+        Case "fadd":           Call modCommandsChat.OnFAdd(Command)
+        Case "filter":         Call modCommandsChat.OnFilter(Command)
+        Case "forcejoin":      Call modCommandsChat.OnForceJoin(Command)
+        Case "frem":           Call modCommandsChat.OnFRem(Command)
+        Case "home":           Call modCommandsChat.OnHome(Command)
+        Case "ignore":         Call modCommandsChat.OnIgnore(Command)
+        Case "igpriv":         Call modCommandsChat.OnIgPriv(Command)
+        Case "join":           Call modCommandsChat.OnJoin(Command)
+        Case "unblock":        Call modCommandsChat.OnUnBlock(Command)
+        Case "unfilter":       Call modCommandsChat.OnUnFilter(Command)
+        Case "unignore":       Call modCommandsChat.OnUnIgnore(Command)
+        Case "unigpriv":       Call modCommandsChat.OnUnIgPriv(Command)
+        Case "quickrejoin":    Call modCommandsChat.OnQuickRejoin(Command)
+        Case "reconnect":      Call modCommandsChat.OnReconnect(Command)
+        Case "rejoin":         Call modCommandsChat.OnReJoin(Command)
+        Case "say":            Call modCommandsChat.OnSay(Command)
+        Case "scq":            Call modCommandsChat.OnSCQ(Command)
+        Case "shout":          Call modCommandsChat.OnShout(Command)
+        Case "watch":          Call modCommandsChat.OnWatch(Command)
+        Case "watchoff":       Call modCommandsChat.OnWatchOff(Command)
         
         'Admin Commands
-        Case "add":           Call modCommandsAdmin.OnAdd(Command)
-        Case "clear":         Call modCommandsAdmin.OnClear(Command)
-        Case "disable":       Call modCommandsAdmin.OnDisable(Command)
-        Case "dump":          Call modCommandsAdmin.OnDump(Command)
-        Case "enable":        Call modCommandsAdmin.OnEnable(Command)
-        Case "locktext":      Call modCommandsAdmin.OnLockText(Command)
-        Case "quit":          Call modCommandsAdmin.OnQuit(Command)
-        Case "rem":           Call modCommandsAdmin.OnRem(Command)
-        Case "setexpkey":     Call modCommandsAdmin.OnSetExpKey(Command)
-        Case "sethome":       Call modCommandsAdmin.OnSetHome(Command)
-        Case "setkey":        Call modCommandsAdmin.OnSetKey(Command)
-        Case "setname":       Call modCommandsAdmin.OnSetName(Command)
-        Case "setpass":       Call modCommandsAdmin.OnSetPass(Command)
-        Case "setpmsg":       Call modCommandsAdmin.OnSetPMsg(Command)
-        Case "setserver":     Call modCommandsAdmin.OnSetServer(Command)
-        Case "settrigger":    Call modCommandsAdmin.OnSetTrigger(Command)
-        Case "whispercmds":   Call modCommandsAdmin.OnWhisperCmds(Command)
+        Case "add":            Call modCommandsAdmin.OnAdd(Command)
+        Case "clear":          Call modCommandsAdmin.OnClear(Command)
+        Case "disable":        Call modCommandsAdmin.OnDisable(Command)
+        Case "dump":           Call modCommandsAdmin.OnDump(Command)
+        Case "enable":         Call modCommandsAdmin.OnEnable(Command)
+        Case "locktext":       Call modCommandsAdmin.OnLockText(Command)
+        Case "quit":           Call modCommandsAdmin.OnQuit(Command)
+        Case "rem":            Call modCommandsAdmin.OnRem(Command)
+        Case "setcommandline": Call modCommandsAdmin.OnSetCommandLine(Command)
+        Case "setexpkey":      Call modCommandsAdmin.OnSetExpKey(Command)
+        Case "sethome":        Call modCommandsAdmin.OnSetHome(Command)
+        Case "setkey":         Call modCommandsAdmin.OnSetKey(Command)
+        Case "setname":        Call modCommandsAdmin.OnSetName(Command)
+        Case "setpass":        Call modCommandsAdmin.OnSetPass(Command)
+        Case "setpmsg":        Call modCommandsAdmin.OnSetPMsg(Command)
+        Case "setserver":      Call modCommandsAdmin.OnSetServer(Command)
+        Case "settrigger":     Call modCommandsAdmin.OnSetTrigger(Command)
+        Case "whispercmds":    Call modCommandsAdmin.OnWhisperCmds(Command)
         
         'Ops Commands
-        Case "addphrase":     Call modCommandsOps.OnAddPhrase(Command)
-        Case "ban":           Call modCommandsOps.OnBan(Command)
-        Case "cadd":          Call modCommandsOps.OnCAdd(Command)
-        Case "cdel":          Call modCommandsOps.OnCDel(Command)
-        Case "chpw":          Call modCommandsOps.OnChPw(Command)
-        Case "clearbanlist":  Call modCommandsOps.OnClearBanList(Command)
-        Case "d2levelban":    Call modCommandsOps.OnD2LevelBan(Command)
-        Case "des":           Call modCommandsOps.OnDes(Command)
-        Case "delphrase":     Call modCommandsOps.OnDelPhrase(Command)
-        Case "exile":         Call modCommandsOps.OnExile(Command)
-        Case "giveup":        Call modCommandsOps.OnGiveUp(Command)
-        Case "idlebans":      Call modCommandsOps.OnIdleBans(Command)
-        Case "ipban":         Call modCommandsOps.OnIPBan(Command)
-        Case "ipbans":        Call modCommandsOps.OnIPBans(Command)
-        Case "kick":          Call modCommandsOps.OnKick(Command)
-        Case "kickonyell":    Call modCommandsOps.OnKickOnYell(Command)
-        Case "levelban":      Call modCommandsOps.OnLevelBan(Command)
-        Case "peonban":       Call modCommandsOps.OnPeonBan(Command)
-        Case "phrasebans":    Call modCommandsOps.OnPhraseBans(Command)
-        Case "plugban":       Call modCommandsOps.OnPlugBan(Command)
-        Case "poff":          Call modCommandsOps.OnPOff(Command)
-        Case "pon":           Call modCommandsOps.OnPOn(Command)
-        Case "protect":       Call modCommandsOps.OnProtect(Command)
-        Case "pstatus":       Call modCommandsOps.OnPStatus(Command)
-        Case "quiettime":     Call modCommandsOps.OnQuietTime(Command)
-        Case "resign":        Call modCommandsOps.OnResign(Command)
-        Case "safeadd":       Call modCommandsOps.OnSafeAdd(Command)
-        Case "safedel":       Call modCommandsOps.OnSafeDel(Command)
-        Case "shitadd":       Call modCommandsOps.OnShitAdd(Command)
-        Case "shitdel":       Call modCommandsOps.OnShitDel(Command)
-        Case "sweepban":      Call modCommandsOps.OnSweepBan(Command)
-        Case "sweepignore":   Call modCommandsOps.OnSweepIgnore(Command)
-        Case "tagadd":        Call modCommandsOps.OnTagAdd(Command)
-        Case "tagdel":        Call modCommandsOps.OnTagDel(Command)
-        Case "unban":         Call modCommandsOps.OnUnBan(Command)
-        Case "unexile":       Call modCommandsOps.OnUnExile(Command)
-        Case "unipban":       Call modCommandsOps.OnUnIPBan(Command)
-        Case "voteban":       Call modCommandsOps.OnVoteBan(Command)
-        Case "votekick":      Call modCommandsOps.OnVoteKick(Command)
+        Case "addphrase":      Call modCommandsOps.OnAddPhrase(Command)
+        Case "ban":            Call modCommandsOps.OnBan(Command)
+        Case "cadd":           Call modCommandsOps.OnCAdd(Command)
+        Case "cdel":           Call modCommandsOps.OnCDel(Command)
+        Case "chpw":           Call modCommandsOps.OnChPw(Command)
+        Case "clearbanlist":   Call modCommandsOps.OnClearBanList(Command)
+        Case "d2levelban":     Call modCommandsOps.OnD2LevelBan(Command)
+        Case "des":            Call modCommandsOps.OnDes(Command)
+        Case "delphrase":      Call modCommandsOps.OnDelPhrase(Command)
+        Case "exile":          Call modCommandsOps.OnExile(Command)
+        Case "giveup":         Call modCommandsOps.OnGiveUp(Command)
+        Case "idlebans":       Call modCommandsOps.OnIdleBans(Command)
+        Case "ipban":          Call modCommandsOps.OnIPBan(Command)
+        Case "ipbans":         Call modCommandsOps.OnIPBans(Command)
+        Case "kick":           Call modCommandsOps.OnKick(Command)
+        Case "kickonyell":     Call modCommandsOps.OnKickOnYell(Command)
+        Case "levelban":       Call modCommandsOps.OnLevelBan(Command)
+        Case "peonban":        Call modCommandsOps.OnPeonBan(Command)
+        Case "phrasebans":     Call modCommandsOps.OnPhraseBans(Command)
+        Case "plugban":        Call modCommandsOps.OnPlugBan(Command)
+        Case "poff":           Call modCommandsOps.OnPOff(Command)
+        Case "pon":            Call modCommandsOps.OnPOn(Command)
+        Case "protect":        Call modCommandsOps.OnProtect(Command)
+        Case "pstatus":        Call modCommandsOps.OnPStatus(Command)
+        Case "quiettime":      Call modCommandsOps.OnQuietTime(Command)
+        Case "resign":         Call modCommandsOps.OnResign(Command)
+        Case "safeadd":        Call modCommandsOps.OnSafeAdd(Command)
+        Case "safedel":        Call modCommandsOps.OnSafeDel(Command)
+        Case "shitadd":        Call modCommandsOps.OnShitAdd(Command)
+        Case "shitdel":        Call modCommandsOps.OnShitDel(Command)
+        Case "sweepban":       Call modCommandsOps.OnSweepBan(Command)
+        Case "sweepignore":    Call modCommandsOps.OnSweepIgnore(Command)
+        Case "tagadd":         Call modCommandsOps.OnTagAdd(Command)
+        Case "tagdel":         Call modCommandsOps.OnTagDel(Command)
+        Case "unban":          Call modCommandsOps.OnUnBan(Command)
+        Case "unexile":        Call modCommandsOps.OnUnExile(Command)
+        Case "unipban":        Call modCommandsOps.OnUnIPBan(Command)
+        Case "voteban":        Call modCommandsOps.OnVoteBan(Command)
+        Case "votekick":       Call modCommandsOps.OnVoteKick(Command)
         
         'Misc Commands
-        Case "addquote":      Call modCommandsMisc.OnAddQuote(Command)
-        Case "bmail":         Call modCommandsMisc.OnBMail(Command)
-        Case "cancel":        Call modCommandsMisc.OnCancel(Command)
-        Case "checkmail":     Call modCommandsMisc.OnCheckMail(Command)
-        Case "exec":          Call modCommandsMisc.OnExec(Command)
-        Case "flip":          Call modCommandsMisc.OnFlip(Command)
-        Case "greet":         Call modCommandsMisc.OnGreet(Command)
-        Case "idle":          Call modCommandsMisc.OnIdle(Command)
-        Case "idletime":      Call modCommandsMisc.OnIdleTime(Command)
-        Case "idletype":      Call modCommandsMisc.OnIdleType(Command)
-        Case "inbox":         Call modCommandsMisc.OnInbox(Command)
-        Case "math":          Call modCommandsMisc.OnMath(Command)
-        Case "mmail":         Call modCommandsMisc.OnMMail(Command)
-        Case "quote":         Call modCommandsMisc.OnQuote(Command)
-        Case "roll":          Call modCommandsMisc.OnRoll(Command)
-        Case "readfile":      Call modCommandsMisc.OnReadFile(Command)
-        Case "setidle":       Call modCommandsMisc.OnSetIdle(Command)
-        Case "tally":         Call modCommandsMisc.OnTally(Command)
-        Case "vote":          Call modCommandsMisc.OnVote(Command)
+        Case "addquote":       Call modCommandsMisc.OnAddQuote(Command)
+        Case "bmail":          Call modCommandsMisc.OnBMail(Command)
+        Case "cancel":         Call modCommandsMisc.OnCancel(Command)
+        Case "checkmail":      Call modCommandsMisc.OnCheckMail(Command)
+        Case "exec":           Call modCommandsMisc.OnExec(Command)
+        Case "flip":           Call modCommandsMisc.OnFlip(Command)
+        Case "greet":          Call modCommandsMisc.OnGreet(Command)
+        Case "idle":           Call modCommandsMisc.OnIdle(Command)
+        Case "idletime":       Call modCommandsMisc.OnIdleTime(Command)
+        Case "idletype":       Call modCommandsMisc.OnIdleType(Command)
+        Case "inbox":          Call modCommandsMisc.OnInbox(Command)
+        Case "math":           Call modCommandsMisc.OnMath(Command)
+        Case "mmail":          Call modCommandsMisc.OnMMail(Command)
+        Case "quote":          Call modCommandsMisc.OnQuote(Command)
+        Case "roll":           Call modCommandsMisc.OnRoll(Command)
+        Case "readfile":       Call modCommandsMisc.OnReadFile(Command)
+        Case "setidle":        Call modCommandsMisc.OnSetIdle(Command)
+        Case "tally":          Call modCommandsMisc.OnTally(Command)
+        Case "vote":           Call modCommandsMisc.OnVote(Command)
         
         Case Else: DispatchCommand = False
     End Select
@@ -277,7 +278,7 @@ Public Function OnRemOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
     Dim Index      As Long    ' ...
     Dim params     As String  ' ...
     Dim strArray() As String  ' ...
-    Dim I          As Integer ' ...
+    Dim i          As Integer ' ...
 
     ' check for presence of optional add command parameters
     Index = InStr(1, msgData, " --", vbBinaryCompare)
@@ -293,16 +294,16 @@ Public Function OnRemOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
         strArray() = Split(params, " --") ' split message by paramter
         
         ' loop through paramter list
-        For I = 1 To UBound(strArray)
+        For i = 1 To UBound(strArray)
             Dim Parameter As String ' ...
             Dim pmsg      As String ' ...
             
-            Index = InStr(1, strArray(I), Space(1), vbBinaryCompare)
+            Index = InStr(1, strArray(i), Space(1), vbBinaryCompare)
             If (Index > 0) Then
-                Parameter = Mid$(strArray(I), 1, Index - 1)
-                pmsg = Mid$(strArray(I), Index + 1)
+                Parameter = Mid$(strArray(i), 1, Index - 1)
+                pmsg = Mid$(strArray(i), Index + 1)
             Else
-                Parameter = strArray(I)
+                Parameter = strArray(i)
             End If
             
             Parameter = LCase$(Parameter)
@@ -321,7 +322,7 @@ Public Function OnRemOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                         dbType = UCase$(pmsg)
                     End If
             End Select
-        Next I
+        Next i
     End If
 
     sUsername = msgData
@@ -363,7 +364,7 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
     Dim gAcc       As udtGetAccessResponse
 
     Dim strArray() As String  ' ...
-    Dim I          As Integer ' ...
+    Dim i          As Integer ' ...
     Dim tmpbuf     As String  ' temporary output buffer
     Dim dbPath     As String  ' ...
     Dim user       As String  ' ...
@@ -435,23 +436,23 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
             strArray() = Split(params, " --")
             
             ' loop through paramter list
-            For I = 1 To UBound(strArray)
+            For i = 1 To UBound(strArray)
                 Dim Parameter As String ' ...
                 Dim pmsg      As String ' ...
                 
                 ' check message for a space
-                Index = InStr(1, strArray(I), Space(1), vbBinaryCompare)
+                Index = InStr(1, strArray(i), Space(1), vbBinaryCompare)
                 
                 ' did our search find a space?
                 If (Index > 0) Then
                     ' grab parameter
-                    Parameter = Mid$(strArray(I), 1, Index - 1)
+                    Parameter = Mid$(strArray(i), 1, Index - 1)
                     
                     ' grab parameter message
-                    pmsg = Mid$(strArray(I), Index + 1)
+                    pmsg = Mid$(strArray(i), Index + 1)
                 Else
                     ' grab parameter
-                    Parameter = strArray(I)
+                    Parameter = strArray(i)
                 End If
                 
                 ' convert parameter to lowercase
@@ -591,7 +592,7 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                             End If
                         End If
                 End Select
-            Next I
+            Next i
         End If
         
         ' we want to ensure that we have a default
@@ -648,8 +649,8 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                     ' ...
                     If (Len(Flags) > 0) Then
                         ' set user flags & check for duplicate entries
-                        For I = 1 To Len(Flags)
-                            currentCharacter = Mid$(Flags, I, 1)
+                        For i = 1 To Len(Flags)
+                            currentCharacter = Mid$(Flags, i, 1)
                         
                             ' is flag valid (alphabetic)?
                             If (((Asc(currentCharacter) >= Asc("A")) And (Asc(currentCharacter) <= Asc("Z"))) Or _
@@ -659,7 +660,7 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                                     gAcc.Flags = gAcc.Flags & currentCharacter
                                 End If
                             End If
-                        Next I
+                        Next i
                         
                         ' ...
                         If (Len(gAcc.Flags) = 0) Then
@@ -699,10 +700,10 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                             End If
                             
                             ' remove specified flags
-                            For I = 1 To Len(tmpFlags)
-                                gAcc.Flags = Replace(gAcc.Flags, Mid$(tmpFlags, I, 1), _
+                            For i = 1 To Len(tmpFlags)
+                                gAcc.Flags = Replace(gAcc.Flags, Mid$(tmpFlags, i, 1), _
                                     vbNullString)
-                            Next I
+                            Next i
                         Else
                             ' return message
                             cmdRet(0) = "Error: You must specify at least one flag " & _
@@ -749,8 +750,8 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                     gAcc.Rank = Rank
                 
                     ' set user flags & check for duplicate entries
-                    For I = 1 To Len(Flags)
-                        currentCharacter = Mid$(Flags, I, 1)
+                    For i = 1 To Len(Flags)
+                        currentCharacter = Mid$(Flags, i, 1)
                     
                         ' is flag valid (alphabetic)?
                         If (((Asc(currentCharacter) >= Asc("A")) And (Asc(currentCharacter) <= Asc("Z"))) Or _
@@ -760,7 +761,7 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                                 gAcc.Flags = gAcc.Flags & currentCharacter
                             End If
                         End If
-                    Next I
+                    Next i
                     
                     ' ...
                     If (Len(gAcc.Flags) = 0) Then
@@ -786,12 +787,12 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
             dbPath = GetFilePath("users.txt")
 
             ' does user already exist in database?
-            For I = LBound(DB) To UBound(DB)
-                If ((StrComp(DB(I).Username, user, vbTextCompare) = 0) And _
-                    (StrComp(DB(I).Type, gAcc.Type, vbTextCompare) = 0)) Then
+            For i = LBound(DB) To UBound(DB)
+                If ((StrComp(DB(i).Username, user, vbTextCompare) = 0) And _
+                    (StrComp(DB(i).Type, gAcc.Type, vbTextCompare) = 0)) Then
                     
                     ' modify database entry
-                    With DB(I)
+                    With DB(i)
                         .Username = user
                         .Rank = gAcc.Rank
                         .Flags = gAcc.Flags
@@ -807,8 +808,8 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                     
                     ' log actions
                     If (BotVars.LogDBActions) Then
-                        Call LogDBAction(ModEntry, IIf(InBot, "console", Username), DB(I).Username, _
-                            DB(I).Type, DB(I).Rank, DB(I).Flags, DB(I).Groups)
+                        Call LogDBAction(ModEntry, IIf(InBot, "console", Username), DB(i).Username, _
+                            DB(i).Type, DB(i).Rank, DB(i).Flags, DB(i).Groups)
                     End If
                     
                     ' we have found the
@@ -817,7 +818,7 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                     
                     Exit For
                 End If
-            Next I
+            Next i
             
             ' did we find a matching entry or not?
             If (found = False) Then
@@ -967,15 +968,15 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
     
     On Error GoTo ERROR_HANDLER
 
-    Dim I     As Integer ' ...
+    Dim i     As Integer ' ...
     Dim found As Boolean ' ...
     
-    For I = LBound(DB) To UBound(DB)
-        If (StrComp(DB(I).Username, entry, vbTextCompare) = 0) Then
+    For i = LBound(DB) To UBound(DB)
+        If (StrComp(DB(i).Username, entry, vbTextCompare) = 0) Then
             Dim bln As Boolean ' ...
         
             If (Len(dbType)) Then
-                If (StrComp(DB(I).Type, dbType, vbTextCompare) = 0) Then
+                If (StrComp(DB(i).Type, dbType, vbTextCompare) = 0) Then
                     bln = True
                 End If
             Else
@@ -990,7 +991,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
         End If
         
         bln = False
-    Next I
+    Next i
     
     If (found) Then
         Dim bak As udtDatabase ' ...
@@ -998,7 +999,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
         Dim j   As Integer ' ...
         
         ' ...
-        bak = DB(I)
+        bak = DB(i)
 
         ' we aren't removing the last array
         ' element, are we?
@@ -1019,7 +1020,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
             End With
         Else
             ' ...
-            For j = I To UBound(DB) - 1
+            For j = i To UBound(DB) - 1
                 DB(j) = DB(j + 1)
             Next j
             
@@ -1043,13 +1044,13 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                 
                     ' loop through database checking for users that
                     ' were members of the group that we just removed
-                    For I = LBound(DB) To UBound(DB)
-                        If (Len(DB(I).Groups) And DB(I).Groups <> "%") Then
-                            If (InStr(1, DB(I).Groups, ",", vbBinaryCompare) <> 0) Then
+                    For i = LBound(DB) To UBound(DB)
+                        If (Len(DB(i).Groups) And DB(i).Groups <> "%") Then
+                            If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
                                 Dim Splt()     As String ' ...
                                 Dim innerfound As Boolean ' ...
                                 
-                                Splt() = Split(DB(I).Groups, ",")
+                                Splt() = Split(DB(i).Groups, ",")
                                 
                                 For j = LBound(Splt) To UBound(Splt)
                                     If (StrComp(bak.Username, Splt(j), vbTextCompare) = 0) Then
@@ -1060,25 +1061,25 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                                 Next j
                             
                                 If (innerfound) Then
-                                    Dim k As Integer ' ...
+                                    Dim K As Integer ' ...
                                     
-                                    For k = (j + 1) To UBound(Splt)
-                                        Splt(k - 1) = Splt(k)
-                                    Next k
+                                    For K = (j + 1) To UBound(Splt)
+                                        Splt(K - 1) = Splt(K)
+                                    Next K
                                     
                                     ReDim Preserve Splt(UBound(Splt) - 1)
                                     
-                                    DB(I).Groups = Join(Splt(), vbNullString)
+                                    DB(i).Groups = Join(Splt(), vbNullString)
                                 End If
                             Else
-                                If (StrComp(bak.Username, DB(I).Groups, vbTextCompare) = 0) Then
-                                    res = DB_remove(DB(I).Username, DB(I).Type)
+                                If (StrComp(bak.Username, DB(i).Groups, vbTextCompare) = 0) Then
+                                    res = DB_remove(DB(i).Username, DB(i).Type)
                                     
                                     Exit For
                                 End If
                             End If
                         End If
-                    Next I
+                    Next i
                 Loop While (res)
             End If
         End If
@@ -1103,7 +1104,7 @@ End Function
 ' requires public
 Public Function GetSafelist(ByVal Username As String) As Boolean
 
-    Dim I As Long ' ...
+    Dim i As Long ' ...
     
     If (bFlood = False) Then
         Dim gAcc As udtGetAccessResponse
@@ -1116,12 +1117,12 @@ Public Function GetSafelist(ByVal Username As String) As Boolean
             GetSafelist = True
         End If
     Else
-        For I = 0 To (UBound(gFloodSafelist) - 1)
-            If PrepareCheck(Username) Like gFloodSafelist(I) Then
+        For i = 0 To (UBound(gFloodSafelist) - 1)
+            If PrepareCheck(Username) Like gFloodSafelist(i) Then
                 GetSafelist = True
                 Exit For
             End If
-        Next I
+        Next i
     End If
     
 End Function
@@ -1191,7 +1192,7 @@ Public Sub LoadDatabase()
     Dim s      As String
     Dim X()    As String
     Dim Path   As String
-    Dim I      As Integer
+    Dim i      As Integer
     Dim f      As Integer
     Dim found  As Boolean
     Dim SaveDB As Boolean
@@ -1212,9 +1213,9 @@ Public Sub LoadDatabase()
                     X() = Split(s, " ", 10)
                     
                     If UBound(X) > 0 Then
-                        ReDim Preserve DB(I)
+                        ReDim Preserve DB(i)
                         
-                        With DB(I)
+                        With DB(i)
                             .Username = X(0)
                             
                             .Rank = 0
@@ -1291,7 +1292,7 @@ Public Sub LoadDatabase()
                             SaveDB = (.AddedOn = Now) Or SaveDB
                         End With
 
-                        I = I + 1
+                        i = i + 1
                     End If
                 End If
                 
@@ -1303,13 +1304,13 @@ Public Sub LoadDatabase()
 
     ' 9/13/06: Add the bot owner 200
     If (LenB(BotVars.BotOwner) > 0) Then
-        For I = 0 To UBound(DB)
-            If (StrComp(DB(I).Username, BotVars.BotOwner, vbTextCompare) = 0) Then
+        For i = 0 To UBound(DB)
+            If (StrComp(DB(i).Username, BotVars.BotOwner, vbTextCompare) = 0) Then
                 found = True
                 
                 Exit For
             End If
-        Next I
+        Next i
         
         If (found = False) Then
             If (UBound(DB)) Then
@@ -1401,29 +1402,29 @@ End Sub
 ' Updated 9/13/06 for new features
 Public Sub WriteDatabase(ByVal U As String)
     Dim f As Integer
-    Dim I As Integer
+    Dim i As Integer
     
     On Error GoTo WriteDatabase_Exit
 
     f = FreeFile
     
     Open U For Output As #f
-        For I = LBound(DB) To UBound(DB)
+        For i = LBound(DB) To UBound(DB)
             ' ...
-            If (LenB(DB(I).Username) > 0) Then
-                Print #f, DB(I).Username;
-                Print #f, " " & DB(I).Rank;
-                Print #f, " " & IIf(Len(DB(I).Flags) > 0, DB(I).Flags, "%");
-                Print #f, " " & IIf(Len(DB(I).AddedBy) > 0, DB(I).AddedBy, "%");
-                Print #f, " " & IIf(DB(I).AddedOn > 0, DateCleanup(DB(I).AddedOn), "%");
-                Print #f, " " & IIf(Len(DB(I).ModifiedBy) > 0, DB(I).ModifiedBy, "%");
-                Print #f, " " & IIf(DB(I).ModifiedOn > 0, DateCleanup(DB(I).ModifiedOn), "%");
-                Print #f, " " & IIf(Len(DB(I).Type) > 0, DB(I).Type, "USER");
-                Print #f, " " & IIf(Len(DB(I).Groups) > 0, DB(I).Groups, "%");
-                Print #f, " " & IIf(Len(DB(I).BanMessage) > 0, DB(I).BanMessage, "%");
+            If (LenB(DB(i).Username) > 0) Then
+                Print #f, DB(i).Username;
+                Print #f, " " & DB(i).Rank;
+                Print #f, " " & IIf(Len(DB(i).Flags) > 0, DB(i).Flags, "%");
+                Print #f, " " & IIf(Len(DB(i).AddedBy) > 0, DB(i).AddedBy, "%");
+                Print #f, " " & IIf(DB(i).AddedOn > 0, DateCleanup(DB(i).AddedOn), "%");
+                Print #f, " " & IIf(Len(DB(i).ModifiedBy) > 0, DB(i).ModifiedBy, "%");
+                Print #f, " " & IIf(DB(i).ModifiedOn > 0, DateCleanup(DB(i).ModifiedOn), "%");
+                Print #f, " " & IIf(Len(DB(i).Type) > 0, DB(i).Type, "USER");
+                Print #f, " " & IIf(Len(DB(i).Groups) > 0, DB(i).Groups, "%");
+                Print #f, " " & IIf(Len(DB(i).BanMessage) > 0, DB(i).BanMessage, "%");
                 Print #f, vbCr
             End If
-        Next I
+        Next i
 
 WriteDatabase_Exit:
     Close #f
@@ -1449,7 +1450,7 @@ End Function
 
 Private Function CheckUser(ByVal user As String, Optional ByVal allow_illegal As Boolean = False) As Boolean
     
-    Dim I       As Integer ' ...
+    Dim i       As Integer ' ...
     Dim bln     As Boolean ' ...
     Dim illegal As Boolean ' ...
     Dim invalid As Boolean ' ...
@@ -1481,9 +1482,9 @@ Private Function CheckUser(ByVal user As String, Optional ByVal allow_illegal As
         ' 48 (0)
         ' 57 (9)
     
-        For I = 1 To Len(user)
+        For i = 1 To Len(user)
             Dim currentCharacter As String
-            currentCharacter = Mid$(user, I, 1)
+            currentCharacter = Mid$(user, i, 1)
 
             ' is the character between A-Z or a-z?
             If (Asc(currentCharacter) < Asc("A")) Or (Asc(currentCharacter) > Asc("z")) Then
@@ -1530,7 +1531,7 @@ Private Function CheckUser(ByVal user As String, Optional ByVal allow_illegal As
                     End If
                 End If
             End If
-        Next I
+        Next i
     End If
     
     ' is our user valid?

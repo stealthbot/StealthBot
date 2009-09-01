@@ -7,7 +7,7 @@ Option Explicit
 Public Sub OnAdd(Command As clsCommandObj)
     Dim dbAccess   As udtGetAccessResponse
     Dim response() As String
-    Dim I          As Integer
+    Dim i          As Integer
     ReDim Preserve response(0)
     
     dbAccess = GetCumulativeAccess(Command.Username)
@@ -18,9 +18,9 @@ Public Sub OnAdd(Command As clsCommandObj)
     
     Call OnAddOld(Command.Username, dbAccess, Command.Args, Command.IsLocal, response())
     
-    For I = LBound(response) To UBound(response)
-        Command.Respond response(I)
-    Next I
+    For i = LBound(response) To UBound(response)
+        Command.Respond response(i)
+    Next i
 End Sub
 
 Public Sub OnClear(Command As clsCommandObj)
@@ -92,7 +92,7 @@ End Sub
 Public Sub OnRem(Command As clsCommandObj)
     Dim dbAccess   As udtGetAccessResponse
     Dim response() As String
-    Dim I          As Integer
+    Dim i          As Integer
     ReDim Preserve response(0)
     
     dbAccess = GetCumulativeAccess(Command.Username)
@@ -103,9 +103,22 @@ Public Sub OnRem(Command As clsCommandObj)
     
     Call OnRemOld(Command.Username, dbAccess, Command.Args, Command.IsLocal, response())
     
-    For I = LBound(response) To UBound(response)
-        Command.Respond response(I)
-    Next I
+    For i = LBound(response) To UBound(response)
+        Command.Respond response(i)
+    Next i
+End Sub
+
+Public Sub OnSetCommandLine(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        Call SetCommandLine(Command.Argument("CommandLine"))
+        If (LenB(CommandLine) > 0) Then
+            Command.Respond StringFormat("Command Line set to: {0}", CommandLine)
+        Else
+            Command.Respond "Command Line cleared."
+        End If
+    Else
+        Command.Respond "You must specify a new command line."
+    End If
 End Sub
 
 Public Sub OnSetExpKey(Command As clsCommandObj)
