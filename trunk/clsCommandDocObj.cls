@@ -166,11 +166,6 @@ Public Function CreateCommand(ByVal strCommand As String, Optional ByVal strScri
     Dim l_description         As IXMLDOMElement
     Dim l_Parameters          As IXMLDOMElement
     Dim l_Access              As IXMLDOMElement
-    
-    If ((LenB(strScriptOwner) = 0) Or strScriptOwner = Chr$(0)) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "Error: You can not create a command without an owner."
-        Exit Function
-    End If
         
     Call OpenDatabase
     

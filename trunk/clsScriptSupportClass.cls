@@ -1365,6 +1365,11 @@ Public Function CreateCommand(ByVal commandName As String, Optional ByVal script
     
     If IsMissing(scriptName) Then scriptName = modScripting.GetScriptName
     
+    If ((LenB(scriptName) = 0) Or scriptName = Chr$(0)) Then
+        frmChat.AddChat RTBColors.ErrorMessageText, "Error: You can not create a command without an owner."
+        Exit Function
+    End If
+    
     Set Command = New clsCommandDocObj
     
     Call Command.CreateCommand(commandName, scriptName)
