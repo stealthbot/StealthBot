@@ -93,13 +93,8 @@ Public Sub LoadScripts()
     ' ********************************
     
     ' set script folder path
-    strPath = GetFilePath("Scripts")
-    
-    If (Not (Right$(strPath, 1) = "\")) Then
-        strPath = StringFormat("{0}\", strPath)
-    End If
-
-    
+    strPath = GetFolderPath("Scripts")
+       
     ' ensure scripts folder exists
     If (LenB(Dir$(strPath)) > 0) Then
         ' grab initial script file name

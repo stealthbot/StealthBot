@@ -1409,8 +1409,8 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
     Dim s As String
     Dim i As Integer
     
-    If (Dir$(GetFilePath("filters.ini")) <> vbNullString) Then
-        s = ReadINI("BlockList", "Total", GetFilePath("filters.ini"))
+    If (LenB(Dir$(GetFilePath("Filters.ini"))) > 0) Then
+        s = ReadINI("BlockList", "Total", GetFilePath("Filters.ini"))
         
         If (StrictIsNumeric(s)) Then
             i = s
@@ -1421,7 +1421,7 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
         Username = PrepareCheck(Username)
         
         For i = 0 To i
-            s = ReadINI("BlockList", "Filter" & i, GetFilePath("filters.ini"))
+            s = ReadINI("BlockList", "Filter" & i, GetFilePath("Filters.ini"))
             
             If (Username Like PrepareCheck(s)) Then
                 CheckBlock = True

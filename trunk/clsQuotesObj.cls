@@ -136,12 +136,12 @@ End Function
 ' gets the items in the collection
 Public Property Get Items() As Collection
     
-    Dim I As Long
+    Dim i As Long
     
     ' clone the collection - modification to this collection ignored
     Set Items = New Collection
-    For I = 1 To m_Quotes.Count
-        Items.Add m_Quotes(I)
+    For i = 1 To m_Quotes.Count
+        Items.Add m_Quotes(i)
     Next
     
 End Property
@@ -161,13 +161,13 @@ Public Function GetIndexOf(ByVal QuoteStr As String) As Long
 
     On Error Resume Next
     
-    Dim I As Long
+    Dim i As Long
     
-    For I = 1 To m_Quotes.Count
+    For i = 1 To m_Quotes.Count
     
-        If StrComp(m_Quotes.Item(I), QuoteStr, vbTextCompare) = 0 Then
+        If StrComp(m_Quotes.Item(i), QuoteStr, vbTextCompare) = 0 Then
             
-            GetIndexOf = I
+            GetIndexOf = i
             
             Exit Function
             
@@ -186,7 +186,7 @@ Public Function GetRandomQuote() As String
 
     Dim Rand      As Integer
     
-	If m_Quotes.Count = 0 Then
+        If m_Quotes.Count = 0 Then
         GetRandomQuote = vbNullString
         Exit Function
     End If
@@ -220,7 +220,7 @@ Private Sub LoadQuotes()
     
     m_blnIsLoaded = False
     
-    strPath = GetFilePath("quotes.txt")
+    strPath = GetFilePath("Quotes.txt")
 
     Set m_Quotes = New Collection
     
@@ -254,18 +254,18 @@ Private Sub SaveQuotes()
     On Error GoTo ERROR_HANDLER
 
     Dim f As Integer
-    Dim I As Long
+    Dim i As Long
     Dim strPath As String
     
-    strPath = GetFilePath("quotes.txt")
+    strPath = GetFilePath("Quotes.txt")
     
     If (LenB(Dir$(strPath)) > 0) Then
         f = FreeFile
         
         Open (strPath) For Output As #f
             ' print each quote
-            For I = 1 To m_Quotes.Count
-                Print #f, m_Quotes.Item(I)
+            For i = 1 To m_Quotes.Count
+                Print #f, m_Quotes.Item(i)
             Next
         Close #f
     End If
@@ -284,10 +284,10 @@ Private Sub AppendQuote(ByVal QuoteStr As String)
     On Error GoTo ERROR_HANDLER
 
     Dim f As Integer
-    Dim I As Long
+    Dim i As Long
     Dim strPath As String
     
-    strPath = GetFilePath("quotes.txt")
+    strPath = GetFilePath("Quotes.txt")
     
     f = FreeFile
     

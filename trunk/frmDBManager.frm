@@ -446,7 +446,7 @@ Private Sub cbxGroups_Click()
     Next i
     
     ' enable entry save command
-    btnSave(1).Enabled = True
+    btnSave(1).enabled = True
     
     m_group_change = True
 End Sub
@@ -549,7 +549,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
     ElseIf ((dbType = 1) Or (dbType = 2)) Then
         
         Dim user As String
-        Dim Msg  As String
+        Dim msg  As String
     
         Open strPath For Input As #f
             Do While (EOF(f) = False)
@@ -559,7 +559,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                     If (Not InStr(1, buf, Space$(1), vbBinaryCompare) = 0) Then
                         user = Left$(buf, InStr(1, buf, Space$(1), vbBinaryCompare) - 1)
                         
-                        Msg = Mid$(buf, Len(user) + 1)
+                        msg = Mid$(buf, Len(user) + 1)
                     Else
                         user = buf
                     End If
@@ -608,7 +608,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                             .ModifiedBy = "(console)"
                             .ModifiedOn = Now
                             .Flags = "B"
-                            .BanMessage = Msg
+                            .BanMessage = msg
                             
                             If (Not (trvUsers.DropHighlight Is Nothing)) Then
                                 If (StrComp(trvUsers.DropHighlight.Tag, "Group", vbTextCompare) = 0) Then
@@ -945,7 +945,7 @@ Private Sub btnSave_Click(Index As Integer)
         Next i
         
         ' disable entry save command
-        btnSave(1).Enabled = False
+        btnSave(1).enabled = False
         
         ' ...
         If (m_group_change) Then
@@ -958,7 +958,7 @@ Private Sub btnSave_Click(Index As Integer)
         DB() = m_DB()
         
         ' save database
-        Call WriteDatabase(GetFilePath("users.txt"))
+        Call WriteDatabase(GetFilePath("Users.txt"))
         
         ' check channel to find potential banned users
         Call g_Channel.CheckUsers
@@ -987,7 +987,7 @@ Private Sub lvGroups_Click()
     Next i
     
     ' enable entry save command
-    btnSave(1).Enabled = True
+    btnSave(1).enabled = True
     
     Set trvUsers.DropHighlight = Nothing
     Set lvGroups.SelectedItem = Nothing
@@ -1192,7 +1192,7 @@ Private Sub tbsTabs_Click()
             Next i
             
             ' enable create user button
-            btnCreateUser.Enabled = True
+            btnCreateUser.enabled = True
             
         Case 2: ' Clans
             ' loop through database searching for clans
@@ -1213,7 +1213,7 @@ Private Sub tbsTabs_Click()
             Next i
 
             ' disable create user button
-            btnCreateUser.Enabled = False
+            btnCreateUser.enabled = False
             
         Case 3: ' Games
             ' loop through database searching for games
@@ -1234,7 +1234,7 @@ Private Sub tbsTabs_Click()
             Next i
             
             ' disable create user button
-            btnCreateUser.Enabled = False
+            btnCreateUser.enabled = False
     End Select
     
     ' does our treeview contain any nodes?  hope so...
@@ -1278,22 +1278,22 @@ Private Sub LockGUI()
     End With
 
     ' disable & clear rank
-    txtRank.Enabled = False
+    txtRank.enabled = False
     txtRank.Text = vbNullString
     
     ' disable & clear flags
-    txtFlags.Enabled = False
+    txtFlags.enabled = False
     txtFlags.Text = vbNullString
     
     ' loop through listbox and clear selected items
     Call ClearGroupList
     
     ' disable group lists
-    lvGroups.Enabled = False
-    cbxGroups.Enabled = False
+    lvGroups.enabled = False
+    cbxGroups.enabled = False
     
     ' disable & clear ban message
-    txtBanMessage.Enabled = False
+    txtBanMessage.enabled = False
     txtBanMessage.Text = vbNullString
     
     ' reset created on & modified on labels
@@ -1305,8 +1305,8 @@ Private Sub LockGUI()
     lblModifiedBy.Caption = vbNullString
     
     ' disable entry buttons
-    btnSave(1).Enabled = False
-    btnDelete.Enabled = False
+    btnSave(1).enabled = False
+    btnDelete.enabled = False
 End Sub
 
 Private Sub ClearGroupList()
@@ -1327,23 +1327,23 @@ Private Sub UnlockGUI()
     Dim i As Integer ' ...
 
     ' enable rank field
-    txtRank.Enabled = True
+    txtRank.enabled = True
 
     ' enable flags field
-    txtFlags.Enabled = True
+    txtFlags.enabled = True
     
     ' enable ban message field
-    txtBanMessage.Enabled = True
+    txtBanMessage.enabled = True
     
     ' disable entry save button
-    btnSave(1).Enabled = False
+    btnSave(1).enabled = False
     
     ' enable entry delete button
-    btnDelete.Enabled = True
+    btnDelete.enabled = True
     
     ' enable group lists
-    lvGroups.Enabled = True
-    cbxGroups.Enabled = True
+    lvGroups.enabled = True
+    cbxGroups.enabled = True
 End Sub
 
 ' handle node collapse
@@ -1479,15 +1479,15 @@ Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, y
         If (Not (trvUsers.SelectedItem Is Nothing)) Then
             If (trvUsers.SelectedItem.Index > 1) Then
                 If (StrComp(trvUsers.SelectedItem.Tag, "Group", vbTextCompare) = 0) Then
-                    mnuRename.Enabled = True
+                    mnuRename.enabled = True
                 Else
-                    mnuRename.Enabled = False
+                    mnuRename.enabled = False
                 End If
                 
-                mnuDelete.Enabled = True
+                mnuDelete.enabled = True
             Else
-                mnuRename.Enabled = False
-                mnuDelete.Enabled = False
+                mnuRename.enabled = False
+                mnuDelete.enabled = False
             End If
             
             Call Me.PopupMenu(mnuContext)
@@ -1802,7 +1802,7 @@ End Function
 
 Private Sub txtBanMessage_Change()
     ' enable entry save button
-    btnSave(1).Enabled = True
+    btnSave(1).enabled = True
 End Sub
 
 Private Sub txtFlags_Change()
@@ -1812,7 +1812,7 @@ Private Sub txtFlags_Change()
     End If
 
     ' enable entry save button
-    btnSave(1).Enabled = True
+    btnSave(1).enabled = True
 End Sub
 
 Private Sub txtRank_Change()
@@ -1821,7 +1821,7 @@ Private Sub txtRank_Change()
     End If
 
     ' enable entry save button
-    btnSave(1).Enabled = True
+    btnSave(1).enabled = True
 End Sub
 
 ' ...
@@ -1987,7 +1987,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
         End If
         
         ' commit modifications
-        'Call WriteDatabase(GetFilePath("users.txt"))
+        'Call WriteDatabase(GetFilePath("Users.txt"))
         
         DB_remove = True
         

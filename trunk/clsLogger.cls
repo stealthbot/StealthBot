@@ -36,10 +36,7 @@ Private Sub Class_Initialize()
     ' ...
     Set m_logsCreated = New Collection
     
-    m_logPath = GetFilePath("Logs")
-    If (Not (Right$(m_logPath, 1) = "\")) Then
-        m_logPath = StringFormat("{0}\", m_logPath)
-    End If
+    m_logPath = GetFolderPath("Logs")
 
 End Sub
 

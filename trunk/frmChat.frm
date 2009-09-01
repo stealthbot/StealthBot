@@ -9,8 +9,8 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   165
-   ClientTop       =   735
+   ClientLeft      =   225
+   ClientTop       =   825
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -3665,15 +3665,15 @@ Private Sub mnuDisconnect2_Click()
 End Sub
 
 Private Sub mnuEditAccessFlags_Click()
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("commands.xml"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("Commands.xml"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditCaught_Click()
-    If Dir$(GetFilePath("caughtphrases.htm")) = vbNullString Then
+    If Dir$(GetFilePath("CaughtPhrases.htm")) = vbNullString Then
         MsgBox "The bot has not caught any phrases yet."
         Exit Sub
     Else
-        ShellExecute Me.hWnd, "Open", GetFilePath("caughtphrases.htm"), 0&, 0&, 0&
+        ShellExecute Me.hWnd, "Open", GetFilePath("CaughtPhrases.htm"), 0&, 0&, 0&
     End If
 End Sub
 
@@ -3682,33 +3682,11 @@ Private Sub mnuEditChangelog_Click()
 End Sub
 
 Private Sub mnuEditPhrasebans_Click()
-    'Shell "notepad " & GetFilePath("phrasebans.txt"), vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("phrasebans.txt"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("PhraseBans.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditQCini_Click()
-    'Shell "notepad " & GetFilePath("quickchannels.ini"), vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("quickchannels.ini"), &H0, &H0, vbNormalFocus
-End Sub
-
-Private Sub mnuEditSafelist_Click()
-    'Shell "notepad " & GetFilePath("safelist.txt"), vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("safelist.txt"), &H0, &H0, vbNormalFocus
-End Sub
-
-Private Sub mnuEditScript_Click()
-    'Shell "notepad " & GetFilePath("script.txt"), vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("script.txt"), &H0, &H0, vbNormalFocus
-End Sub
-
-Private Sub mnuEditShitlist_Click()
-    'Shell "notepad " & GetFilePath("autobans.txt"), vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("autobans.txt"), &H0, &H0, vbNormalFocus
-End Sub
-
-Private Sub mnuEditTagbans_Click()
-    'Shell "notepad " & GetFilePath("tagbans.txt"), vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("tagbans.txt"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("QuickChannels.ini"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuFlash_Click()
@@ -4101,8 +4079,8 @@ End Sub
 Private Sub mnuRepairDataFiles_Click()
     If MsgBox("Are you sure? This action will delete your mail.dat (Bot mail database) and commands.dat (custom command database) files.", vbYesNo, "Repair data files") = vbYes Then
         On Error Resume Next
-        Kill GetFilePath("mail.dat")
-        Kill GetFilePath("commands.dat")
+        Kill GetFilePath("Mail.dat")
+        Kill GetFilePath("Commands.dat")
         AddChat RTBColors.SuccessText, "The bot's DAT data files have been removed."
     End If
 End Sub
@@ -4171,28 +4149,19 @@ Private Sub mnuWhisperCleared_Click()
 End Sub
 
 Private Sub mnuEditConfig_Click()
-    'Shell "notepad " & GetConfigFilePath(), vbNormalFocus
     ShellExecute frmChat.hWnd, "Open", GetConfigFilePath(), &H0, &H0, vbNormalFocus
 End Sub
 
-Private Sub mnuEditDefinitions_Click()
-    'Shell "notepad " & GetFilePath("definitions.ini"), vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("definitions.ini"), &H0, &H0, vbNormalFocus
-End Sub
-
 Private Sub mnuEditFilters_Click()
-    'Shell "notepad " & GetFilePath("filters.ini"), vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("filters.ini"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("Filters.ini"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditQuotes_Click()
-    'Shell "notepad " & GetFilePath("quotes.txt"), vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("quotes.txt"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("Quotes.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditUsers_Click()
-    'Shell "notepad " & GetFilePath("users.txt"), vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("quotes.txt"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("Users.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuFListRefresh_Click()
@@ -4202,10 +4171,10 @@ End Sub
 
 Private Sub mnuEditScriptINI_Click()
     If (ReadCfg("Override", "ScriptViewer") = vbNullString) Then
-        ShellExecute frmChat.hWnd, "Open", GetFilePath("scripts\scripts.ini"), 0&, 0&, _
+        ShellExecute frmChat.hWnd, "Open", GetFilePath("Scripts.ini", GetFolderPath("Scripts")), 0&, 0&, _
             vbNormalFocus
     Else
-        Shell Chr(34) & ReadCfg("Override", "ScriptViewer") & Chr(34) & Space(1) & Chr(34) & GetFilePath("scripts\scripts.ini") & Chr(34)
+        Shell StringFormat("{0}{1}{0} {0}{2}{0}", Chr$(34), ReadCfg("Override", "ScriptViewer"), GetFilePath("Scripts.ini", GetFolderPath("Scripts")))
     End If
 End Sub
 

@@ -4591,7 +4591,7 @@ Private Function SaveSettings() As Boolean
                 End With
                 
                 ' commit modifications
-                Call WriteDatabase(GetFilePath("users.txt"))
+                Call WriteDatabase(GetFilePath("Users.txt"))
                 
                 ' log actions
                 If (BotVars.LogDBActions) Then
@@ -4618,7 +4618,7 @@ Private Function SaveSettings() As Boolean
                             End If
                             
                             ' commit modifications
-                            Call WriteDatabase(GetFilePath("users.txt"))
+                            Call WriteDatabase(GetFilePath("Users.txt"))
                             
                             ' break loop
                             Exit For
@@ -4652,7 +4652,7 @@ Private Function SaveSettings() As Boolean
                             End If
                             
                             ' commit modifications
-                            Call WriteDatabase(GetFilePath("users.txt"))
+                            Call WriteDatabase(GetFilePath("Users.txt"))
                         Else
                             Call RemoveItem(Clients(i), "users", _
                                 "GAME")
@@ -4788,7 +4788,7 @@ Private Sub cmdDefaults_Click()
     If MsgBox("Are you sure you want to restore the default Values()?" & vbCrLf & _
             "(All current color data will be lost unless exported)", vbYesNo + vbExclamation) = vbYes Then
             
-        If Dir$(GetFilePath("Colors.sclf")) <> vbNullString Then
+        If LenB(Dir$(GetFilePath("Colors.sclf"))) > 0 Then
             Kill GetFilePath("Colors.sclf")
             Call GetColorLists
             Call LoadColors

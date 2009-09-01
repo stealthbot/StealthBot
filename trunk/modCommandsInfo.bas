@@ -147,7 +147,7 @@ Public Sub OnFind(Command As clsCommandObj)
     
     If (Not Command.IsValid) Then Exit Sub
     
-    If (Dir$(GetFilePath("users.txt")) = vbNullString) Then
+    If (LenB(Dir$(GetFilePath("Users.txt"))) = 0) Then
        Command.Respond "No userlist available. Place a users.txt file in the bot's root directory."
        Exit Sub
     End If
@@ -522,20 +522,20 @@ On Error GoTo ERROR_HANDLER
     
     Dim retVal  As String
     Dim i       As Integer
-    Dim Enabled As Boolean
+    Dim enabled As Boolean
     Dim Name    As String
     Dim Count   As Integer
     
     If (frmChat.SControl.Modules.Count > 1) Then
         For i = 2 To frmChat.SControl.Modules.Count
             Name = modScripting.GetScriptName(CStr(i))
-            Enabled = Not (StrComp(GetModuleByName(Name).CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 0)
+            enabled = Not (StrComp(GetModuleByName(Name).CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 0)
                 
             retVal = StringFormat("{0}{1}{2}{3}{4}", _
                 retVal, _
-                IIf(Enabled, vbNullString, "("), _
+                IIf(enabled, vbNullString, "("), _
                 Name, _
-                IIf(Enabled, vbNullString, ")"), _
+                IIf(enabled, vbNullString, ")"), _
                 IIf(i = frmChat.SControl.Modules.Count, vbNullString, ", "))
                 
             Count = (Count + 1)
@@ -705,7 +705,7 @@ On Error GoTo ERROR_HANDLER
     Dim Flag        As String
     AZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
-    If (Dir$(GetFilePath("commands.xml")) = vbNullString) Then
+    If (LenB(Dir$(GetFilePath("Commands.xml"))) = 0) Then
         Command.Respond "Error: The XML database could not be found in the working directory."
         Exit Function
     End If
@@ -732,7 +732,7 @@ On Error GoTo ERROR_HANDLER
         xpath = StringFormat("./command/access/rank[number() <= {0}]", Rank)
     End If
     
-    xmldoc.Load GetFilePath("commands.xml")
+    xmldoc.Load GetFilePath("Commands.xml")
     
     Set commands = xmldoc.documentElement.selectNodes(xpath)
 
