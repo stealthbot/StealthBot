@@ -37,6 +37,8 @@ Attribute VB_Exposed = False
 '        p.put("credit rate", "This is the amount of time (in milliseconds) it takes to earn one credit.");
 
 ' PRIVATE VARIABLES
+Option Explicit
+
 Private LastSent As Long
 Private Credits As Long
 
@@ -73,7 +75,7 @@ Public Function GetDelay(ByVal sText As String) As Long
     
     '// Check how long this packet will have to wait
     If (Credits < 0) Then
-        RequiredDelay = (-1 * Credits) * CreditRate
+        RequiredDelay = (-1 * Credits) * BotVars.QueueCreditRate
     End If
     
     If (ThisPacketCost > Credits) Then

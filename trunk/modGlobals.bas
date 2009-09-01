@@ -1,5 +1,6 @@
 Attribute VB_Name = "modGlobals"
 'modGlobals - global variables and constants
+Option Explicit
 
 'CONSTANTS
 Public CVERSION As String
