@@ -847,7 +847,7 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
             
             ' check for errors & create message
             If (gAcc.Rank > 0) Then
-                tmpbuf = Chr(34) & user & Chr(34) & " has been given access " & _
+                tmpbuf = Chr(34) & user & Chr(34) & " has been given rank " & _
                     gAcc.Rank
                 
                 ' was the user given the specified flags, too?
