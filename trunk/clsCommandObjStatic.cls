@@ -15,7 +15,9 @@ Option Explicit
 
 '// This function returns a clsCommandObj that is populated with instance of the command
 '// object.
-Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, Optional ByVal strScriptOwner As String = vbNullString) As Collection
+Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, _
+    ByVal IsLocal As Boolean, ByVal WasWhispered As Boolean, _
+    Optional ByVal strScriptOwner As String = vbNullString) As Collection
     
     On Error GoTo ERROR_HANDLER
     
@@ -35,7 +37,6 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
     Dim commandString  As String
     Dim commandStrings As Collection
     Dim PublicOutput   As Boolean '// if true, then the output should be sent to the channel
-    Dim IsLocal        As Boolean '// if true, then this command was enter via the chat window
     
     
     Set IsCommand = New Collection
@@ -52,9 +53,8 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
     botUsername = modGlobals.CurrentUsername
     botRawUsername = modOtherCode.GetCurrentUsername()
     
-    '// if strUsername matches the bot username, it must have been entered from within the bot
-    IsLocal = (0 = StrComp(strUsername, botUsername, vbTextCompare))
-                
+    If (WasWhispered And (StrComp(botUsername, strUsername, vbTextCompare) = 0)) Then Exit Function
+    
     hasTrigger = False
     Message = strText
     messageLen = Len(Message)
@@ -68,7 +68,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
     If (IsLocal = True) Then
     
         '// commands entered through the bot should use a /
-        If (Left$(Message, 1) <> "/") Then
+        If (Not Left$(Message, 1) = "/") Then
             '// Not a command
             Exit Function
         End If
@@ -225,6 +225,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
             If Command.docs.IsEnabled = True Then
                 Command.PublicOutput = PublicOutput
                 Command.IsLocal = IsLocal
+                Command.WasWhispered = WasWhispered
                 IsCommand.Add Command
             End If
         End If

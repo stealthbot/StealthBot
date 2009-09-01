@@ -25,7 +25,6 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     
     Dim commands         As Collection
     Dim Command          As clsCommandObj
-    Dim dbAccess         As udtGetAccessResponse
     
     ' replace message variables
     Message = Replace(Message, "%me", IIf(IsLocal, GetCurrentUsername, Username), 1, -1, vbTextCompare)
@@ -35,26 +34,15 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         Exit Function
     End If
 
-    ' 08/17/2009 - 52 - using static class method
-    Set commands = clsCommandObj.IsCommand(Message, IIf(IsLocal, modGlobals.CurrentUsername, Username), Chr$(0))
+    Set commands = clsCommandObj.IsCommand(Message, IIf(IsLocal, modGlobals.CurrentUsername, Username), _
+            IsLocal, WasWhispered, Chr$(0))
 
     For Each Command In commands
-        Command.WasWhispered = WasWhispered
-        
         If (Command.HasAccess) Then
-            If (IsLocal) Then
-                With dbAccess
-                    .Rank = 201
-                    .Flags = "A"
-                End With
-            Else
-                dbAccess = GetCumulativeAccess(Username)
-            End If
-            
             'this is eww but i'll change it later
             LogCommand IIf(Command.IsLocal, vbNullString, Username), Command.IsLocal & Space(1) & Command.Args
             
-            If (LenB(Command.docs.Owner) = 0) Then 'Is it a built in command?
+            If (LenB(Command.docs.Owner) = 0) Then
                 Call DispatchCommand(Command)
                 Call RunInSingle(Nothing, "Event_Command", Command)
             Else
