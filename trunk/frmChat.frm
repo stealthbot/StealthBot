@@ -1557,6 +1557,13 @@ Private Sub Form_Load()
     
     SendMessage frmChat.cboSend.hWnd, CB_LIMITTEXT, 0, 0
     
+    Set colWhisperWindows = New Collection
+    Set colLastSeen = New Collection
+    Set GErrorHandler = New clsErrorHandler
+    Set BotVars = New clsBotVars
+    Set colQueue = New Collection
+    Set colSafelist = New Collection
+    
     SetCommandLine Command()
     
     ' SPLASH SCREEN
@@ -1568,13 +1575,6 @@ Private Sub Form_Load()
     ' EVERYTHING ELSE
     rtbWhispers.Visible = False 'default
     rtbWhispersVisible = False
-    
-    Set colWhisperWindows = New Collection
-    Set colLastSeen = New Collection
-    Set GErrorHandler = New clsErrorHandler
-    Set BotVars = New clsBotVars
-    Set colQueue = New Collection
-    Set colSafelist = New Collection
 
     'Set dictTimerInterval = New Dictionary
     'Set dictTimerEnabled = New Dictionary

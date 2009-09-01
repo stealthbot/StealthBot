@@ -2223,7 +2223,6 @@ Public Sub SetCommandLine(sCommandLine As String)
     Dim sTemp    As String
     Dim sSetting As String
     Dim sValue   As String
-    
     CommandLine = vbNullString
     sTemp = sCommandLine
     
@@ -2294,6 +2293,7 @@ On Error GoTo ERROR_HANDLER:
         
     If (Not lRet = 0) Then
         If (InStr(1, sTemp, sPath, vbTextCompare) = 0) Then
+            sTemp = Left$(sTemp, lRet)
             lRet = SetEnvironmentVariable("PATH", StringFormat("{0};{1}", sTemp, sPath))
             AddEnvPath = (lRet = 0)
             If (MDebug("debug")) Then
