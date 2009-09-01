@@ -166,6 +166,11 @@ Public Function CreateCommand(ByVal strCommand As String, Optional ByVal strScri
     Dim l_description         As IXMLDOMElement
     Dim l_Parameters          As IXMLDOMElement
     Dim l_Access              As IXMLDOMElement
+    
+    If ((LenB(strScriptOwner) = 0) Or strScriptOwner = Chr$(0)) Then
+        frmChat.AddChat RTBColors.ErrorMessageText, "Error: You can not create a command without an owner."
+        Exit Function
+    End If
         
     Call OpenDatabase
     
@@ -285,7 +290,12 @@ Public Sub Delete()
     If (m_command_node Is Nothing) Then
         Exit Sub
     End If
-
+    
+    If (LenB(Me.Owner) = 0) Then
+        frmChat.AddChat RTBColors.ErrorMessageText, "Error: You can not delete an internal command."
+        Exit Function
+    End If
+    
     m_command_node.parentNode.removeChild m_command_node
     
     Call Save
