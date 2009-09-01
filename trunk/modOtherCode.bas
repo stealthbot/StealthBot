@@ -1749,10 +1749,7 @@ Public Function GetConfigFilePath() As String
         If ((LenB(ConfigOverride) > 0)) Then
             filePath = ConfigOverride
         Else
-            filePath = GetProfilePath()
-            
-            filePath = filePath & _
-                IIf(Right$(filePath, 1) = "\", "", "\") & "config.ini"
+            filePath = StringFormat("{0}Config.ini", GetProfilePath())
         End If
     End If
     
@@ -1763,14 +1760,14 @@ Public Function GetConfigFilePath() As String
     GetConfigFilePath = filePath
 End Function
 
-Public Function GetFilePath(ByVal filename As String, Optional SubDirectory As String = vbNullString) As String
+Public Function GetFilePath(ByVal filename As String, Optional DefaultPath As String = vbNullString) As String
     Dim s As String
     
     If (InStr(filename, "\") = 0) Then
-        If (LenB(SubDirectory) = 0) Then
+        If (LenB(DefaultPath) = 0) Then
             GetFilePath = StringFormat("{0}{1}", GetProfilePath(), filename)
         Else
-            GetFilePath = StringFormat("{0}{1}\{2}", GetProfilePath(), SubDirectory, filename)
+            GetFilePath = StringFormat("{0}{1}", DefaultPath, filename)
         End If
         
         s = ReadCfg("FilePaths", filename)
@@ -1783,6 +1780,18 @@ Public Function GetFilePath(ByVal filename As String, Optional SubDirectory As S
     Else
         GetFilePath = filename
     End If
+End Function
+
+Public Function GetFolderPath(ByVal sFolderName As String) As String
+On Error GoTo ERROR_HANDLER:
+    Dim sPath As String
+    sPath = GetFilePath(sFolderName)
+    If (Not Right$(sPath, 1) = "\") Then sPath = sPath & "\"
+    GetFolderPath = sPath
+    
+    Exit Function
+ERROR_HANDLER:
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.{3}()", Err.Number, Err.description, "modOtherCode", "GetFolderPath")
 End Function
 
 'Public Function OKToDoAutocompletion(ByRef sText As String, ByVal KeyAscii As Integer) As Boolean
@@ -1876,10 +1885,6 @@ Public Sub OpenReadme()
     ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/sb/redir/readme/", 0, 0, 0
     frmChat.AddChat RTBColors.SuccessText, "You are being taken to the StealthBot Online Readme."
 End Sub
-
-Public Function GetReadmePath() As String
-    GetReadmePath = GetProfilePath() & "readme.chm"
-End Function
 
 'Checks the queue for duplicate bans
 Public Sub RemoveBanFromQueue(ByVal sUser As String)
@@ -2404,19 +2409,19 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal msg As String, ByVal Phr
         Case CPWHISPER: s = "WHISPER"
     End Select
     
-    If (Dir$(GetProfilePath() & "\caughtphrases.htm") = vbNullString) Then
-        Open GetProfilePath() & "\caughtphrases.htm" For Output As #i
+    If (Dir$(GetFilePath("CaughtPhrases.htm")) = vbNullString) Then
+        Open GetFilePath("CaughtPhrases.htm") For Output As #i
             Print #i, "<html>"
         Close #i
     End If
     
-    Open GetProfilePath() & "\caughtphrases.htm" For Append As #i
+    Open GetFilePath("CaughtPhrases.htm") For Append As #i
         If (LOF(i) > 10000000) Then
             Close #i
             
-            Call Kill(GetProfilePath() & "\caughtphrases.htm")
+            Call Kill(GetFilePath("CaughtPhrases.htm"))
             
-            Open GetProfilePath() & "\caughtphrases.htm" For Output As #i
+            Open GetFilePath("CaughtPhrases.htm") For Output As #i
         End If
         
         msg = Replace(msg, "<", "&lt;", 1)

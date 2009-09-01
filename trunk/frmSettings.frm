@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
-Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.0#0"; "vbalTreeView6.ocx"
+Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.1#0"; "vbalTreeView6.ocx"
 Begin VB.Form frmSettings 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -3943,11 +3943,11 @@ End Enum
 Private Sub chkGameConventions_Click(Index As Integer)
     If (Index = 0) Then
         If (chkGameConventions(Index).Value = 0) Then
-            chkGameConventions(1).Enabled = False
-            chkGameConventions(2).Enabled = False
+            chkGameConventions(1).enabled = False
+            chkGameConventions(2).enabled = False
         Else
-            chkGameConventions(1).Enabled = True
-            chkGameConventions(2).Enabled = True
+            chkGameConventions(1).enabled = True
+            chkGameConventions(2).enabled = True
         End If
     End If
 End Sub
@@ -3962,7 +3962,7 @@ Private Sub Form_Load()
     Dim lMouseOver As Long
     Dim s As String
     Dim serverList() As String
-    Dim I As Long, j As Long, k As Long
+    Dim i As Long, j As Long, K As Long
     
     '##########################################
     ' TREEVIEW INITIALIZATION CODE
@@ -4065,11 +4065,11 @@ Private Sub Form_Load()
         
         If LenB(Dir$(GetFilePath("AdditionalBNLSservers.txt"))) > 0 Then
             With cboBNLSServer
-                I = FreeFile
+                i = FreeFile
                 
-                Open GetFilePath("AdditionalBNLSservers.txt") For Input As #I
-                    While Not EOF(I)
-                        Line Input #I, s
+                Open GetFilePath("AdditionalBNLSservers.txt") For Input As #i
+                    While Not EOF(i)
+                        Line Input #i, s
                         
                         For j = 0 To .ListCount
                             If StrComp(.List(j), s, vbTextCompare) = 0 Then
@@ -4082,7 +4082,7 @@ Private Sub Form_Load()
                             .AddItem s
                         End If
                     Wend
-                Close #I
+                Close #i
             End With
         End If
         
@@ -4093,8 +4093,8 @@ Private Sub Form_Load()
         End If
         If ((LenB(s) > 0) And (Right(s, 2) = vbCrLf)) Then
             serverList = Split(s, vbCrLf)
-            For k = 0 To (UBound(serverList) - 1)
-                s = serverList(k)
+            For K = 0 To (UBound(serverList) - 1)
+                s = serverList(K)
                 
                 ' Why doesn't combo box have an exists() method? ><
                 For j = 0 To .ListCount
@@ -4299,17 +4299,17 @@ Private Sub Form_Unload(Cancel As Integer)
 End Sub
 
 Sub lblAddCurrentKey_Click()
-    Dim I As Integer
+    Dim i As Integer
     Dim s As String
     
     s = CDKeyReplacements(cboCDKey.Text)
     
     If cboCDKey.ListCount > -1 Then
-        For I = 0 To cboCDKey.ListCount
-            If StrComp(cboCDKey.List(I), s, vbTextCompare) = 0 Then
+        For i = 0 To cboCDKey.ListCount
+            If StrComp(cboCDKey.List(i), s, vbTextCompare) = 0 Then
                 Exit Sub
             End If
-        Next I
+        Next i
     End If
     
     cboCDKey.AddItem s
@@ -4380,7 +4380,7 @@ End Function
 Private Function SaveSettings() As Boolean
     Dim s As String
     Dim Clients(6) As String
-    Dim I As Long, j As Long
+    Dim i As Long, j As Long
     
     '// First, CDKey Length check and corresponding stuff that needs to run first:
     Select Case True
@@ -4403,7 +4403,7 @@ Private Function SaveSettings() As Boolean
         End If
     End If
     
-    If txtExpKey.Enabled And Not DoCDKeyLengthCheck(txtExpKey.Text, s) Then
+    If txtExpKey.enabled And Not DoCDKeyLengthCheck(txtExpKey.Text, s) Then
         If MsgBox("Your expansion CD key is of an invalid Length for the product you have chosen. Do you want to anyway?", vbInformation + vbYesNo, "StealthBot Settings") = vbNo Then
             ShowPanel spConnectionConfig
             txtExpKey.SetFocus
@@ -4435,17 +4435,17 @@ Private Function SaveSettings() As Boolean
         Next j
         
         If j >= 0 Or .ListCount > BNLS_SERVER_COUNT Then
-            I = FreeFile
+            i = FreeFile
             
-            Open GetFilePath("AdditionalBNLSservers.txt") For Output As #I
+            Open GetFilePath("AdditionalBNLSservers.txt") For Output As #i
                 s = cboBNLSServer.Text
                         
-                Print #I, .Text
+                Print #i, .Text
                 
                 For j = BNLS_SERVER_COUNT To .ListCount
-                    Print #I, .List(j)
+                    Print #i, .List(j)
                 Next j
-            Close #I
+            Close #i
         End If
     End With
     ' there is WINI and WriteINI? =\
@@ -4523,21 +4523,21 @@ Private Function SaveSettings() As Boolean
         If StrictIsNumeric(s) Then
             If Val(s) < 60000 Then
                 If Val(s) > 0 Then
-                    I = Val(s)
+                    i = Val(s)
                 Else
-                    I = 1000
+                    i = 1000
                 End If
             Else
-                I = 60000
+                i = 60000
             End If
         Else
-            I = 1000
+            i = 1000
         End If
     Else
-        I = 1000
+        i = 1000
     End If
     
-    WINI "ReconnectDelay", CStr(I), secMain
+    WINI "ReconnectDelay", CStr(i), secMain
     
     '// Interface Settings
     WINI "ChatFont", txtChatFont.Text, secOther
@@ -4572,16 +4572,16 @@ Private Function SaveSettings() As Boolean
     Clients(W3X) = "W3XP"
     Clients(W2) = "W2BN"
 
-    For I = 0 To 6
-        If (chkCBan(I).Value = 1) Then
-            If (GetAccess(Clients(I), "GAME").Username = _
+    For i = 0 To 6
+        If (chkCBan(i).Value = 1) Then
+            If (GetAccess(Clients(i), "GAME").Username = _
                 vbNullString) Then
                 
                 ' redefine array size
                 ReDim Preserve DB(UBound(DB) + 1)
                 
                 With DB(UBound(DB))
-                    .Username = Clients(I)
+                    .Username = Clients(i)
                     .Flags = "B"
                     .ModifiedBy = "(console)"
                     .ModifiedOn = Now
@@ -4600,12 +4600,12 @@ Private Function SaveSettings() As Boolean
                 End If
             Else
                 For j = LBound(DB) To UBound(DB)
-                    If ((StrComp(DB(j).Username, Clients(I), vbTextCompare) = 0) And _
+                    If ((StrComp(DB(j).Username, Clients(i), vbTextCompare) = 0) And _
                         (StrComp(DB(j).Type, "GAME", vbTextCompare) = 0)) Then
                         
                         If (InStr(1, DB(j).Flags, "B", vbBinaryCompare) = 0) Then
                             With DB(j)
-                                .Username = Clients(I)
+                                .Username = Clients(i)
                                 .Flags = "B" & .Flags
                                 .ModifiedBy = "(console)"
                                 .ModifiedOn = Now
@@ -4627,11 +4627,11 @@ Private Function SaveSettings() As Boolean
                 Next j
             End If
         Else
-            If (GetAccess(Clients(I), "GAME").Username <> _
+            If (GetAccess(Clients(i), "GAME").Username <> _
                 vbNullString) Then
 
                 For j = LBound(DB) To UBound(DB)
-                    If ((StrComp(DB(j).Username, Clients(I), vbTextCompare) = 0) And _
+                    If ((StrComp(DB(j).Username, Clients(i), vbTextCompare) = 0) And _
                         (StrComp(DB(j).Type, "GAME", vbTextCompare) = 0)) Then
                         
                         If ((Len(DB(j).Flags) > 1) Or _
@@ -4639,7 +4639,7 @@ Private Function SaveSettings() As Boolean
                             (Len(DB(j).Groups) > 1)) Then
 
                             With DB(j)
-                                .Username = Clients(I)
+                                .Username = Clients(i)
                                 .Flags = Replace(.Flags, "B", vbNullString)
                                 .ModifiedBy = "(console)"
                                 .ModifiedOn = Now
@@ -4654,7 +4654,7 @@ Private Function SaveSettings() As Boolean
                             ' commit modifications
                             Call WriteDatabase(GetFilePath("users.txt"))
                         Else
-                            Call RemoveItem(Clients(I), "users", _
+                            Call RemoveItem(Clients(i), "users", _
                                 "GAME")
                                 
                             ' log actions
@@ -4673,7 +4673,7 @@ Private Function SaveSettings() As Boolean
                 Next j
             End If
         End If
-    Next I
+    Next i
     
     WINI "QuietTime", Cv(chkQuiet.Value), secMain
     WINI "KickOnYell", Cv(chkKOY.Value), secOther
@@ -4788,8 +4788,8 @@ Private Sub cmdDefaults_Click()
     If MsgBox("Are you sure you want to restore the default Values()?" & vbCrLf & _
             "(All current color data will be lost unless exported)", vbYesNo + vbExclamation) = vbYes Then
             
-        If Dir$(GetProfilePath() & "\colors.sclf") <> vbNullString Then
-            Kill GetProfilePath() & "\colors.sclf"
+        If Dir$(GetFilePath("Colors.sclf")) <> vbNullString Then
+            Kill GetFilePath("Colors.sclf")
             Call GetColorLists
             Call LoadColors
         End If
@@ -4798,18 +4798,18 @@ End Sub
 
 Private Sub SaveColors(Optional sPath As String)
     Dim f As Integer
-    Dim I As Integer
+    Dim i As Integer
     
     f = FreeFile
     
-    If LenB(sPath) = 0 Then sPath = GetProfilePath() & "\colors.sclf"
+    If LenB(sPath) = 0 Then sPath = GetFilePath("Colors.sclf")
     
     Open sPath For Random As #f Len = 4
     
-    For I = LBound(mColors) To UBound(mColors)
-        Put #f, I + 1, CLng(mColors(I))
+    For i = LBound(mColors) To UBound(mColors)
+        Put #f, i + 1, CLng(mColors(i))
         'Debug.Print "Putting color; " & i & ":" & mColors(i)
-    Next I
+    Next i
     
     Close #f
 End Sub
@@ -4869,102 +4869,102 @@ End Sub
 '##########################################
 
 Private Sub chkUseProxies_Click()
-    txtProxyIP.Enabled = chkUseProxies.Value
-    txtProxyPort.Enabled = chkUseProxies.Value
-    optSocks4.Enabled = chkUseProxies.Value
-    optSocks5.Enabled = chkUseProxies.Value
+    txtProxyIP.enabled = chkUseProxies.Value
+    txtProxyPort.enabled = chkUseProxies.Value
+    optSocks4.enabled = chkUseProxies.Value
+    optSocks5.enabled = chkUseProxies.Value
 End Sub
 
 Private Sub chkBackup_Click()
-    txtBackupChan.Enabled = chkBackup.Value
+    txtBackupChan.enabled = chkBackup.Value
 End Sub
 
 Private Sub chkIdlebans_click()
-    chkIdleKick.Enabled = chkIdlebans.Value
-    txtIdleBanDelay.Enabled = chkIdlebans.Value
+    chkIdleKick.enabled = chkIdlebans.Value
+    txtIdleBanDelay.enabled = chkIdlebans.Value
 End Sub
 
 Private Sub chkIdles_Click()
-    optMsg.Enabled = chkIdles.Value
-    optUptime.Enabled = chkIdles.Value
-    optMP3.Enabled = chkIdles.Value
-    optQuote.Enabled = chkIdles.Value
-    txtIdleWait.Enabled = chkIdles.Value
-    txtIdleMsg.Enabled = (optMsg.Enabled And optMsg.Value)
+    optMsg.enabled = chkIdles.Value
+    optUptime.enabled = chkIdles.Value
+    optMP3.enabled = chkIdles.Value
+    optQuote.enabled = chkIdles.Value
+    txtIdleWait.enabled = chkIdles.Value
+    txtIdleMsg.enabled = (optMsg.enabled And optMsg.Value)
 End Sub
 
 Private Sub optMsg_Click()
-    txtIdleMsg.Enabled = True
+    txtIdleMsg.enabled = True
 End Sub
 
 Private Sub optUptime_Click()
-    txtIdleMsg.Enabled = False
+    txtIdleMsg.enabled = False
 End Sub
 
 Private Sub optMP3_Click()
-    txtIdleMsg.Enabled = False
+    txtIdleMsg.enabled = False
 End Sub
 
 Private Sub optQuote_Click()
-    txtIdleMsg.Enabled = False
+    txtIdleMsg.enabled = False
 End Sub
 
 Sub optSTAR_Click()
-    txtExpKey.Enabled = False
-    chkUseRealm.Enabled = False
+    txtExpKey.enabled = False
+    chkUseRealm.enabled = False
     lblHashPath.Caption = GetGamePath("RATS")
-    chkUDP.Enabled = True
+    chkUDP.enabled = True
 End Sub
 
 Sub optWAR3_Click()
-    txtExpKey.Enabled = False
-    chkUseRealm.Enabled = False
+    txtExpKey.enabled = False
+    chkUseRealm.enabled = False
     lblHashPath.Caption = GetGamePath("3RAW")
-    chkUDP.Enabled = False
+    chkUDP.enabled = False
 End Sub
 
 Sub optD2DV_Click()
-    txtExpKey.Enabled = False
-    chkUseRealm.Enabled = True
+    txtExpKey.enabled = False
+    chkUseRealm.enabled = True
     lblHashPath.Caption = GetGamePath("VD2D")
-    chkUDP.Enabled = False
+    chkUDP.enabled = False
 End Sub
 
 Sub optW2BN_Click()
-    txtExpKey.Enabled = False
-    chkUseRealm.Enabled = False
+    txtExpKey.enabled = False
+    chkUseRealm.enabled = False
     lblHashPath.Caption = GetGamePath("NB2W")
-    chkUDP.Enabled = True
+    chkUDP.enabled = True
 End Sub
 
 Sub optSEXP_Click()
-    txtExpKey.Enabled = False
-    chkUseRealm.Enabled = False
+    txtExpKey.enabled = False
+    chkUseRealm.enabled = False
     lblHashPath.Caption = GetGamePath("RATS")
-    chkUDP.Enabled = True
+    chkUDP.enabled = True
 End Sub
 
 Sub optD2XP_Click()
-    txtExpKey.Enabled = True
-    chkUseRealm.Enabled = True
+    txtExpKey.enabled = True
+    chkUseRealm.enabled = True
     lblHashPath.Caption = GetGamePath("PX2D")
-    chkUDP.Enabled = False
+    chkUDP.enabled = False
 End Sub
 
 Sub optW3XP_Click()
-    txtExpKey.Enabled = True
-    chkUseRealm.Enabled = False
+    txtExpKey.enabled = True
+    chkUseRealm.enabled = False
     lblHashPath.Caption = GetGamePath("PX3W")
-    chkUDP.Enabled = False
+    chkUDP.enabled = False
 End Sub
 
 Private Sub chkGreetMsg_Click()
-    chkWhisperGreet.Enabled = chkGreetMsg.Value
-    txtGreetMsg.Enabled = chkGreetMsg.Value
+    chkWhisperGreet.enabled = chkGreetMsg.Value
+    txtGreetMsg.enabled = chkGreetMsg.Value
 End Sub
 
 Private Sub chkProtect_Click()
-    txtProtectMsg.Enabled = chkProtect.Value
+    txtProtectMsg.enabled = chkProtect.Value
 End Sub
 
 '##########################################
@@ -5124,10 +5124,10 @@ Private Sub InitBasicConfig()
         
         .Text = s
         
-        If LenB(Dir$(GetFilePath("servers.txt"))) > 0 Then
+        If LenB(Dir$(GetFilePath("Servers.txt"))) > 0 Then
             f = FreeFile
             
-            Open GetFilePath("servers.txt") For Input As #f
+            Open GetFilePath("Servers.txt") For Input As #f
                 
                 If LOF(f) > 0 Then
                     Do
@@ -5379,8 +5379,8 @@ Private Function YesToTrue(ByVal s As String, ByVal bDefault As Integer) As Inte
     End If
 End Function
 
-Private Function Cv(ByVal I As Integer) As String
-    Select Case I
+Private Function Cv(ByVal i As Integer) As String
+    Select Case i
         Case 0: Cv = "N"
         Case 1: Cv = "Y"
     End Select

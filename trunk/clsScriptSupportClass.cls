@@ -1464,7 +1464,7 @@ Public Function GetSettingsEntry(ByVal sEntryName As String, Optional ByVal scri
     
     If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
 
-    Path = GetFilePath("Scripts.ini", "Scripts")
+    Path = GetFilePath("Scripts.ini", GetFolderPath("Scripts"))
     
     If (LenB(Dir(Path)) = 0) Then
         Open Path For Output As #1
@@ -1500,7 +1500,7 @@ Public Sub WriteSettingsEntry(ByVal sEntryName As String, ByVal sValue As String
     
     If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
-    Path = GetFilePath("Scripts.ini", "Scripts")
+    Path = GetFilePath("Scripts.ini", GetFolderPath("Scripts"))
 
     If (LenB(Dir(Path)) = 0) Then
         Open Path For Output As #1
@@ -1518,19 +1518,11 @@ ERROR_HANDLER:
     
     f = FreeFile
 
-    If (ReadCfg("FilePaths", "Scripts") = vbNullString) Then
-        On Error Resume Next
+    On Error Resume Next
         
-        MkDir StringFormat("{0}\scripts\", CurDir$())
+    MkDir GetFolderPath("Scripts")
         
-        On Error GoTo ERROR_HANDLER
-    Else
-        On Error Resume Next
-        
-        MkDir ReadCfg("FilePaths", "Scripts")
-        
-        On Error GoTo ERROR_HANDLER
-    End If
+    On Error GoTo ERROR_HANDLER
     
     Open Path For Output As #f
     

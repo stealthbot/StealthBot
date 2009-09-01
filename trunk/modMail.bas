@@ -17,19 +17,19 @@ End Sub
 
 Public Function GetMailCount(ByVal sUser As String) As Long
     Dim mTemp As udtMail
-    Dim I     As Long
+    Dim i     As Long
     Dim Count As Long
     
     Call OpenMailFile
     
     If (CurrentRecord > 0) Then
-        For I = 1 To CurrentRecord
-            Get #CurrentOpenFile, I, mTemp
+        For i = 1 To CurrentRecord
+            Get #CurrentOpenFile, i, mTemp
             
             If (StrComp(sUser, RTrim(mTemp.To), vbTextCompare) = 0) Then
                 Count = Count + 1
             End If
-        Next I
+        Next i
         
         GetMailCount = Count
     Else
@@ -41,13 +41,13 @@ End Function
 
 Public Sub GetMailMessage(ByVal sUser As String, ByRef theMessage As udtMail)
     Dim msgTemp As udtMail
-    Dim I       As Long
+    Dim i       As Long
     
     Call OpenMailFile
     
     If (CurrentRecord > 0) Then
-        For I = 1 To CurrentRecord
-            Get #CurrentOpenFile, I, msgTemp
+        For i = 1 To CurrentRecord
+            Get #CurrentOpenFile, i, msgTemp
             
             If (StrComp(sUser, RTrim(msgTemp.To), vbTextCompare) = 0) Then
                 theMessage = msgTemp
@@ -61,11 +61,11 @@ Public Sub GetMailMessage(ByVal sUser As String, ByRef theMessage As udtMail)
                     .To = vbNullString
                 End With
                 
-                Put #CurrentOpenFile, I, msgTemp
+                Put #CurrentOpenFile, i, msgTemp
                 
                 Exit For
             End If
-        Next I
+        Next i
     Else
         With theMessage
             .To = vbNullString
@@ -82,12 +82,11 @@ Public Sub OpenMailFile()
 
     Dim temp As udtMail
     Dim f    As Integer
-    Dim I    As Long
+    Dim i    As Long
     
     f = FreeFile
     
-    MailFile = ReadCfg("FilePaths", "mail.dat")
-    If LenB(MailFile) = 0 Then MailFile = GetFilePath("mail.dat")
+    MailFile = GetFilePath("Mail.dat")
     
     If (LenB(Dir$(MailFile)) = 0) Then
         Open MailFile For Output As #f
@@ -97,16 +96,16 @@ Public Sub OpenMailFile()
     Open MailFile For Random As #f Len = LenB(temp)
     
     If (LOF(f) > 0) Then
-        I = LOF(f) \ LenB(temp)
+        i = LOF(f) \ LenB(temp)
         
         If (LOF(f) Mod LenB(temp) <> 0) Then
-            I = (I + 1)
+            i = (i + 1)
         End If
     Else
-        I = 0
+        i = 0
     End If
     
-    CurrentRecord = I
+    CurrentRecord = i
     CurrentOpenFile = f
     
     Exit Sub
@@ -125,7 +124,7 @@ End Sub
 Public Sub CleanUpMailFile()
     Dim tMail() As udtMail
     Dim tTemp   As udtMail
-    Dim I       As Long
+    Dim i       As Long
     Dim c       As Long
     
     Call OpenMailFile
@@ -136,11 +135,11 @@ Public Sub CleanUpMailFile()
         If (LOF(CurrentOpenFile) > 0) Then
             ' mail in the mail file
             ' collect valid entries and rewrite it
-            For I = 1 To CurrentRecord
-                Get #CurrentOpenFile, I, tTemp
+            For i = 1 To CurrentRecord
+                Get #CurrentOpenFile, i, tTemp
                 
-                tMail(I) = tTemp
-            Next I
+                tMail(i) = tTemp
+            Next i
         End If
         
         Call CloseMailFile
@@ -153,14 +152,14 @@ Public Sub CleanUpMailFile()
         
         c = 1
 
-        For I = 1 To UBound(tMail)
-            If (Len(Trim(tMail(I).To)) > 0) Then
-                Put #CurrentOpenFile, c, tMail(I)
+        For i = 1 To UBound(tMail)
+            If (Len(Trim(tMail(i).To)) > 0) Then
+                Put #CurrentOpenFile, c, tMail(i)
                 
                 ' ...
                 c = (c + 1)
             End If
-        Next I
+        Next i
     End If
 
     Call CloseMailFile

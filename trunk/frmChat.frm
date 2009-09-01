@@ -1724,20 +1724,6 @@ Private Sub Form_Load()
     AddChat RTBColors.ConsoleText, "-> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net"
 
     On Error Resume Next
-
-    'If BotVars.Logging < 2 Then
-    '    MakeLoggingDirectory
-    '
-    '    If (dir$(GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") = vbNullString) Then
-    '        Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt" For Output As #1
-    '        Close #1
-    '    End If
-    '
-    '    If (dir$(GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt") = vbNullString) Then
-    '        Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt" For Output As #1
-    '        Close #1
-    '    End If
-    'End If
     
     VoteDuration = -1
     
@@ -1945,7 +1931,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
         'If ((BotVars.MaxBacklogSize) And (Len(rtbWhispers.text) >= BotVars.MaxBacklogSize)) Then
             If BotVars.Logging < 2 Then
                 Close #1
-                Open (GetProfilePath() & "\Logs\" & Format(Date, "YYYY-MM-DD") & "-WHISPERS.txt") For Append As #1
+                Open (StringFormat("{0}{1}-WHISPERS.txt", GetFolderPath("Logs"), Format(Date, "YYYY-MM-DD"))) For Append As #1
             End If
             
             With rtbWhispers
@@ -2935,15 +2921,12 @@ End Sub
 
 Public Function GetLogFilePath() As String
 
-    Dim Path As String  ' ...
-    Dim f    As Integer ' ...
+    Dim Path As String
+    Dim f    As Integer
     
-    ' ...
     f = FreeFile
     
-    ' ...
-    Path = _
-        GetProfilePath() & "\Logs\" & Format(Date, "YYYY-MM-DD") & ".txt"
+    Path = StringFormat("{0}{1}.txt", GetFolderPath("Logs"), Format(Date, "YYYY-MM-DD"))
 
     If (Dir$(Path) = vbNullString) Then
         Open Path For Output As #f
@@ -2994,29 +2977,6 @@ Sub Form_Unload(Cancel As Integer)
     RunInAll "Event_Shutdown"
     
     On Error GoTo 0
-    
-    If BotVars.Logging = 1 Then
-        'Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt" For Append As #1
-        '    If LOF(1) < BotVars.MaxLogFileSize Then
-        '        Print #1, "Bot application closed, dumping chat screen."
-        '        Print #1, rtbChat.text
-        '    End If
-        'Close #1
-        
-        'Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt" For Append As #1
-        '    If LOF(1) < BotVars.MaxLogFileSize Then
-        '        Print #1, "Bot application closed, dumping whisper screen."
-        '        Print #1, rtbWhispers.text
-        '    End If
-        'Close #1
-    ElseIf BotVars.Logging = 2 Then
-        'Kill GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt"
-        'Kill GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt"
-    End If
-    
-    'If ReconnectTimerID > 0 Then
-    '    KillTimer 0, ReconnectTimerID
-    'End If
     
     If ExReconnectTimerID > 0 Then
         KillTimer 0, ExReconnectTimerID
@@ -4080,8 +4040,7 @@ Private Sub mnuPopWebProfileW3XP_Click()
 End Sub
 
 Private Sub mnuClearedTxt_Click()
-    'Shell "notepad " & GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt", vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", g_Logger.LogPath & Format(Date, "yyyy-MM-dd") & ".txt", _
+    ShellExecute frmChat.hWnd, "Open", StringFormat("{0}{1}.txt", g_Logger.LogPath, Format(Date, "yyyy-MM-dd")), _
         &H0, &H0, vbNormalFocus
 End Sub
 
@@ -4207,8 +4166,7 @@ Private Sub mnuUpdateVerbytes_Click()
 End Sub
 
 Private Sub mnuWhisperCleared_Click()
-    'Shell "notepad " & GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt", vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", g_Logger.LogPath & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt" & ".txt", _
+    ShellExecute frmChat.hWnd, "Open", StringFormat("{0}{1}-WHISPERS.txt", g_Logger.LogPath, Format(Date, "yyyy-MM-dd")), _
         &H0, &H0, vbNormalFocus
 End Sub
 
@@ -5695,15 +5653,8 @@ Private Sub Timer_Timer()
     Static iCounter As Integer, UDP As Byte
      
     If iCounter >= 32760 Then iCounter = 0
-    
-    'If LenB(Dir$(GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt")) = 0 Then
-    '    'On Error Resume Next
-    '    Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt" For Output As #1
-    '    Close #1
-    'End If
-    
+
     If ReadCfg("Other", "ProfileAmp") = "Y" And g_Online Then Call UpdateProfile
-    
     
     BotVars.JoinWatch = 0
     
@@ -7349,10 +7300,10 @@ Sub LoadOutFilters()
         End If
     Next i
     
-    If (Dir$(GetFilePath("catchphrases.txt")) <> vbNullString) Then
+    If (Dir$(GetFilePath("CatchPhrases.txt")) <> vbNullString) Then
         i = FreeFile
         
-        Open GetFilePath("catchphrases.txt") For Input As #i
+        Open GetFilePath("CatchPhrases.txt") For Input As #i
         
             If (LOF(i) < 2) Then
                 Close #i
@@ -7550,11 +7501,11 @@ Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
     
     Select Case Mode
         Case LOAD_FILTERS
-            Path = GetFilePath("filters.ini")
+            Path = GetFilePath("Filters.ini")
         Case LOAD_PHRASES
-            Path = GetFilePath("phrasebans.txt")
+            Path = GetFilePath("PhraseBans.txt")
         Case LOAD_DB
-            Path = GetFilePath("users.txt")
+            Path = GetFilePath("Users.txt")
             Exit Sub
     End Select
     
@@ -8352,7 +8303,7 @@ End Sub
 
 Public Sub MakeLoggingDirectory()
     On Error Resume Next
-    MkDir GetProfilePath() & "\Logs\"
+    MkDir GetFolderPath("Logs")
 End Sub
 
 ' Called from several points to keep accurate tabs on the user's prior selection
