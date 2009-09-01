@@ -352,10 +352,10 @@ End Sub
 Public Sub OnWatch(Command As clsCommandObj)
     If (Command.IsValid) Then
         WatchUser = Command.Argument("Username")
-        Command.Respond "Now watching " & Command.Argument("Username")
+        Command.Respond StringFormat("Now watching {0}{1}{0}.", Chr$(34), Command.Argument("Username"))
     Else
         If (LenB(WatchUser) > 0) Then
-            Command.Respond "Stoped watching " & WatchUser
+            Command.Respond StringFormat("Stopped watching {0}{1}{0}.", Chr$(34), WatchUser)
             WatchUser = vbNullString
         End If
     End If
@@ -363,7 +363,7 @@ End Sub
 
 Public Sub OnWatchOff(Command As clsCommandObj)
     If (LenB(WatchUser) > 0) Then
-        Command.Respond "Stoped watching " & WatchUser
+        Command.Respond StringFormat("Stopped watching {0}{1}{0}.", Chr$(34), WatchUser)
         WatchUser = vbNullString
     Else
         Command.Respond "Watch is disabled."
