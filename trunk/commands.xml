@@ -349,6 +349,29 @@
     </access>
   </command>
 
+  <command name="checkmail">
+    <aliases />
+
+    <documentation>
+      <description>
+        Returns the number of pending mail the user has.
+      </description>
+      <specialnotes />
+    </documentation>
+
+    <access>
+      <rank>20</rank>
+      <flags>
+        <flag>A</flag>
+        <flag>J</flag>
+        <flag>M</flag>
+        <flag>O</flag>
+        <flag>R</flag>
+        <flag>T</flag>
+      </flags>
+    </access>
+  </command>
+
   <command name="whois">
     <aliases />
 
