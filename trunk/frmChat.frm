@@ -5530,6 +5530,8 @@ Private Sub sckBNet_Connect()
     If MDebug("all") Then
         AddChat COLOR_BLUE, "BNET CONNECT"
     End If
+    
+    Call modWarden.WardenCleanup(WardenInstance)
     WardenInstance = modWarden.WardenInitilize(sckBNet.SocketHandle)
         
     If (Not (BotVars.UseProxy)) Then
