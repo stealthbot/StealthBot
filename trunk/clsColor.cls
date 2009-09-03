@@ -13,40 +13,209 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+Private Named As Scripting.Dictionary
+
+Private Sub Class_Terminate()
+    Set Named = Nothing
+End Sub
+
 Public Function Hex(ByVal hexcolor As String) As Long
     Dim r As String * 4
     Dim g As String * 4
-    Dim b As String * 4
+    Dim B As String * 4
     Dim os As Integer
     If Left$(hexcolor, 1) = "#" Then os = 1
     r = "&H" & Mid$(hexcolor, 1 + os, 2)
     g = "&H" & Mid$(hexcolor, 3 + os, 2)
-    b = "&H" & Mid$(hexcolor, 5 + os, 2)
-    Hex = RGB(CInt(r), CInt(g), CInt(b))
+    B = "&H" & Mid$(hexcolor, 5 + os, 2)
+    Hex = RGB(CInt(r), CInt(g), CInt(B))
 End Function
 
 '// shows a list of all the colors in the chat window
 Public Sub List()
     
-    Dim IInfo   As InterfaceInfo
-    Dim MInfo   As MemberInfo
-    Dim Color   As Long
-    Dim Name    As String
+    Dim Keys() As Variant
+    Dim i      As Integer
+    Dim Co     As Long
     
-    Set IInfo = TLI.InterfaceInfoFromObject(Me)
+    If Named Is Nothing Then PopulateList
     
-    For Each MInfo In IInfo.Members
-        If MInfo.InvokeKind = INVOKE_PROPERTYGET Then
-            Name = MInfo.Name
-            Color = CallByName(Me, MInfo.Name, VbGet)
-            frmChat.AddChat Color, StringFormat("{0}{2}{2}({1})", Name, Color, vbTab)
-        End If
+    Keys() = Named.Keys()
+    For i = 0 To Named.Count - 1
+        Co = CSS(Keys(i))
+        frmChat.AddChat Co, StringFormat("{0}{2}{2}({1})", Keys(i), Co, vbTab)
         DoEvents
-    Next MInfo
+    Next i
+
+End Sub
+
+'// returns the value of a color from the dictionary
+Private Function CSS(colorName) As Long
     
-    Set MInfo = Nothing
-    Set IInfo = Nothing
+    If Named.Exists(colorName) Then
+        CSS = Hex(Named.Item(colorName))
+    Else
+        CSS = vbWhite
+    End If
     
+End Function
+
+Private Sub PopulateList()
+
+    If Not (Named Is Nothing) Then
+        '// already created
+        Exit Sub
+    End If
+
+    '// create the dictionary
+    Set Named = New Scripting.Dictionary
+    
+    With Named
+        .CompareMode = 1
+        
+        .Add "AliceBlue", "#F0F8FF"
+        .Add "AntiqueWhite", "#FAEBD7"
+        .Add "Aqua", "#00FFFF"
+        .Add "Aquamarine", "#7FFFD4"
+        .Add "Azure", "#F0FFFF"
+        .Add "Beige", "#F5F5DC"
+        .Add "Bisque", "#FFE4C4"
+        .Add "Black", "#000000"
+        .Add "BlanchedAlmond", "#FFEBCD"
+        .Add "Blue", "#0000FF"
+        .Add "BlueViolet", "#8A2BE2"
+        .Add "Brown", "#A52A2A"
+        .Add "BurlyWood", "#DEB887"
+        .Add "CadetBlue", "#5F9EA0"
+        .Add "Chartreuse", "#7FFF00"
+        .Add "Chocolate", "#D2691E"
+        .Add "Coral", "#FF7F50"
+        .Add "CornflowerBlue", "#6495ED"
+        .Add "Cornsilk", "#FFF8DC"
+        .Add "Crimson", "#DC143C"
+        .Add "Cyan", "#00FFFF"
+        .Add "DarkBlue", "#00008B"
+        .Add "DarkCyan", "#008B8B"
+        .Add "DarkGoldenRod", "#B8860B"
+        .Add "DarkGray", "#A9A9A9"
+        .Add "DarkGreen", "#006400"
+        .Add "DarkKhaki", "#BDB76B"
+        .Add "DarkMagenta", "#8B008B"
+        .Add "DarkOliveGreen", "#556B2F"
+        .Add "Darkorange", "#FF8C00"
+        .Add "DarkOrchid", "#9932CC"
+        .Add "DarkRed", "#8B0000"
+        .Add "DarkSalmon", "#E9967A"
+        .Add "DarkSeaGreen", "#8FBC8F"
+        .Add "DarkSlateBlue", "#483D8B"
+        .Add "DarkSlateGray", "#2F4F4F"
+        .Add "DarkTurquoise", "#00CED1"
+        .Add "DarkViolet", "#9400D3"
+        .Add "DeepPink", "#FF1493"
+        .Add "DeepSkyBlue", "#00BFFF"
+        .Add "DimGray", "#696969"
+        .Add "DodgerBlue", "#1E90FF"
+        .Add "FireBrick", "#B22222"
+        .Add "FloralWhite", "#FFFAF0"
+        .Add "ForestGreen", "#228B22"
+        .Add "Fuchsia", "#FF00FF"
+        .Add "Gainsboro", "#DCDCDC"
+        .Add "GhostWhite", "#F8F8FF"
+        .Add "Gold", "#FFD700"
+        .Add "GoldenRod", "#DAA520"
+        .Add "Gray", "#808080"
+        .Add "Green", "#008000"
+        .Add "GreenYellow", "#ADFF2F"
+        .Add "HoneyDew", "#F0FFF0"
+        .Add "HotPink", "#FF69B4"
+        .Add "IndianRed ", "#CD5C5C"
+        .Add "Indigo ", "#4B0082"
+        .Add "Ivory", "#FFFFF0"
+        .Add "Khaki", "#F0E68C"
+        .Add "Lavender", "#E6E6FA"
+        .Add "LavenderBlush", "#FFF0F5"
+        .Add "LawnGreen", "#7CFC00"
+        .Add "LemonChiffon", "#FFFACD"
+        .Add "LightBlue", "#ADD8E6"
+        .Add "LightCoral", "#F08080"
+        .Add "LightCyan", "#E0FFFF"
+        .Add "LightGoldenRodYellow", "#FAFAD2"
+        .Add "LightGray", "#D3D3D3"
+        .Add "LightGreen", "#90EE90"
+        .Add "LightPink", "#FFB6C1"
+        .Add "LightSalmon", "#FFA07A"
+        .Add "LightSeaGreen", "#20B2AA"
+        .Add "LightSkyBlue", "#87CEFA"
+        .Add "LightSlateGray", "#778899"
+        .Add "LightSteelBlue", "#B0C4DE"
+        .Add "LightYellow", "#FFFFE0"
+        .Add "Lime", "#00FF00"
+        .Add "LimeGreen", "#32CD32"
+        .Add "Linen", "#FAF0E6"
+        .Add "Magenta", "#FF00FF"
+        .Add "Maroon", "#800000"
+        .Add "MediumAquaMarine", "#66CDAA"
+        .Add "MediumBlue", "#0000CD"
+        .Add "MediumOrchid", "#BA55D3"
+        .Add "MediumPurple", "#9370D8"
+        .Add "MediumSeaGreen", "#3CB371"
+        .Add "MediumSlateBlue", "#7B68EE"
+        .Add "MediumSpringGreen", "#00FA9A"
+        .Add "MediumTurquoise", "#48D1CC"
+        .Add "MediumVioletRed", "#C71585"
+        .Add "MidnightBlue", "#191970"
+        .Add "MintCream", "#F5FFFA"
+        .Add "MistyRose", "#FFE4E1"
+        .Add "Moccasin", "#FFE4B5"
+        .Add "NavajoWhite", "#FFDEAD"
+        .Add "Navy", "#000080"
+        .Add "OldLace", "#FDF5E6"
+        .Add "Olive", "#808000"
+        .Add "OliveDrab", "#6B8E23"
+        .Add "Orange", "#FFA500"
+        .Add "OrangeRed", "#FF4500"
+        .Add "Orchid", "#DA70D6"
+        .Add "PaleGoldenRod", "#EEE8AA"
+        .Add "PaleGreen", "#98FB98"
+        .Add "PaleTurquoise", "#AFEEEE"
+        .Add "PaleVioletRed", "#D87093"
+        .Add "PapayaWhip", "#FFEFD5"
+        .Add "PeachPuff", "#FFDAB9"
+        .Add "Peru", "#CD853F"
+        .Add "Pink", "#FFC0CB"
+        .Add "Plum", "#DDA0DD"
+        .Add "PowderBlue", "#B0E0E6"
+        .Add "Purple", "#800080"
+        .Add "Red", "#FF0000"
+        .Add "RosyBrown", "#BC8F8F"
+        .Add "RoyalBlue", "#4169E1"
+        .Add "SaddleBrown", "#8B4513"
+        .Add "Salmon", "#FA8072"
+        .Add "SandyBrown", "#F4A460"
+        .Add "SeaGreen", "#2E8B57"
+        .Add "SeaShell", "#FFF5EE"
+        .Add "Sienna", "#A0522D"
+        .Add "Silver", "#C0C0C0"
+        .Add "SkyBlue", "#87CEEB"
+        .Add "SlateBlue", "#6A5ACD"
+        .Add "SlateGray", "#708090"
+        .Add "Snow", "#FFFAFA"
+        .Add "SpringGreen", "#00FF7F"
+        .Add "SteelBlue", "#4682B4"
+        .Add "Tan", "#D2B48C"
+        .Add "Teal", "#008080"
+        .Add "Thistle", "#D8BFD8"
+        .Add "Tomato", "#FF6347"
+        .Add "Turquoise", "#40E0D0"
+        .Add "Violet", "#EE82EE"
+        .Add "Wheat", "#F5DEB3"
+        .Add "White", "#FFFFFF"
+        .Add "WhiteSmoke", "#F5F5F5"
+        .Add "Yellow", "#FFFF00"
+        .Add "YellowGreen", "#9ACD32"
+        
+        ' put internal colors now
+    End With
 End Sub
 
 '// properties do not use the internal dictionary
@@ -493,8 +662,8 @@ Public Property Get SendBoxesText() As Long
     SendBoxesText = FormColors.SendBoxesText
 End Property
 
-Public Property Get Carots() As Long
-    Carots = RTBColors.Carats
+Public Property Get Carats() As Long
+    Carats = RTBColors.Carats
 End Property
 Public Property Get ConsoleText() As Long
     ConsoleText = RTBColors.ConsoleText
@@ -544,8 +713,8 @@ End Property
 Public Property Get TimeStamps() As Long
     TimeStamps = RTBColors.TimeStamps
 End Property
-Public Property Get WhisperCarots() As Long
-    WhisperCarots = RTBColors.WhisperCarats
+Public Property Get WhisperCarats() As Long
+    WhisperCarats = RTBColors.WhisperCarats
 End Property
 Public Property Get WhisperText() As Long
     WhisperText = RTBColors.WhisperText
