@@ -149,11 +149,11 @@ End Sub
 'End Function
 
 Private Function ToHex(Data As String) As String
-    Dim I As Integer
+    Dim i As Integer
     
-    For I = 1 To Len(Data)
-        ToHex = ToHex & Right("00" & hex(Asc(Mid(Data, I, 1))), 2)
-    Next I
+    For i = 1 To Len(Data)
+        ToHex = ToHex & Right("00" & Hex(Asc(Mid(Data, i, 1))), 2)
+    Next i
 End Function
 
 
