@@ -3,8 +3,8 @@ Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
@@ -892,7 +892,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -918,7 +917,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1551,7 +1549,7 @@ Private Sub Form_Load()
         End If
     #End If
 
-    #If (compile_debug = 0) Then
+    #If (COMPILE_DEBUG = 0) Then
         HookWindowProc frmChat.hWnd
     #End If
     
@@ -1772,7 +1770,7 @@ Private Sub Form_Load()
         End If
     '#End If
     
-    #If compile_debug = 0 Then
+    #If COMPILE_DEBUG = 0 Then
         If ReadCfg("Main", "MinimizeOnStartup") = "Y" Then
             frmChat.WindowState = vbMinimized
             Call Form_Resize
@@ -2345,7 +2343,7 @@ Sub Form_Resize()
     
     If Me.WindowState = vbMinimized Then
         If Not BotVars.NoTray Then
-            #If Not compile_debug = 1 Then
+            #If Not COMPILE_DEBUG = 1 Then
                 Me.Hide
                 
                 With nid
@@ -3049,7 +3047,7 @@ Sub Form_Unload(Cancel As Integer)
     '   in modAPI...
     ' added preprocessor check; the bot was ending the VB6 IDE's process too! - ribose
     ' if it was compiled with the debugger, we don't allow minimizing to tray anyway
-    #If Not compile_debug = 1 Then
+    #If Not COMPILE_DEBUG = 1 Then
         Call ExitProcess(0)
     #End If
 End Sub
@@ -5023,11 +5021,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 
             Case KEY_B
                 If (Shift = S_CTRL) Then
-                    With cboSend
-                        .SelText = "ÿcb"
-                        .selLength = 0
-                        .selStart = .selStart + 3
-                    End With
+                    cboSend.SelText = "ÿcb"
                 End If
                 
             'Case KEY_J
@@ -5037,20 +5031,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 
             Case KEY_U
                 If (Shift = S_CTRL) Then
-                    With cboSend
-                        .SelText = "ÿcu"
-                        .selLength = 0
-                        .selStart = .selStart + 3
-                    End With
+                    cboSend.SelText = "ÿcu"
                 End If
                 
             Case KEY_I
                 If (Shift = S_CTRL) Then
-                    With cboSend
-                        .SelText = "ÿci"
-                        .selLength = 0
-                        .selStart = .selStart + 3
-                    End With
+                    cboSend.SelText = "ÿci"
                 End If
                 
             Case KEY_DELETE
