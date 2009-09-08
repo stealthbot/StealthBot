@@ -302,14 +302,14 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         ' update message using Battle.net's unignore command.
         If (frmChat.mnuDisableVoidView.Checked = False) Then
             ' ...
-            frmChat.tmrSilentChannel(1).Enabled = True
+            frmChat.tmrSilentChannel(1).enabled = True
         
             ' ...
             frmChat.AddQ "/unignore " & GetCurrentUsername
         End If
     Else
         ' ...
-        frmChat.tmrSilentChannel(1).Enabled = False
+        frmChat.tmrSilentChannel(1).enabled = False
     End If
 
     ' lets update our configuration file with the
@@ -565,13 +565,13 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
         .AddChat RTBColors.InformationText, "[BNET] Logged on as ", RTBColors.SuccessText, Username, _
             RTBColors.InformationText, "."
             
-        .tmrAccountLock.Enabled = False
+        .tmrAccountLock.enabled = False
         
         .UpTimer.Interval = 1000
         
         .Timer.Interval = 30000
     
-        .tmrClanUpdate.Enabled = True
+        .tmrClanUpdate.enabled = True
     
         'If (Not (DisableMonitor)) Then
         '    .AddChat RTBColors.SuccessText, "User monitor initialized."
@@ -634,7 +634,7 @@ Public Sub Event_LogonEvent(ByVal Message As Byte, Optional ByVal ExtraInfo As S
             
             sMessage = "Login successful."
             
-            frmChat.tmrAccountLock.Enabled = False
+            frmChat.tmrAccountLock.enabled = False
             
         Case 3:
             lColor = RTBColors.InformationText
@@ -1327,6 +1327,12 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     If (Len(Username) < 1) Then
         Exit Sub
     End If
+
+    ' if this is the public channel before the home channel,
+    ' skip userjoin events for quick loading! -Ribose/2009-09-08
+    If m_skipUICEvents Then
+        Exit Sub
+    End If
     
     ' ...
     UserIndex = _
@@ -1582,6 +1588,12 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim Holder()  As Variant
     Dim pos       As Integer
     Dim bln       As Boolean
+
+    ' if this is the public channel before the home channel,
+    ' skip userleaves events for quick loading! -Ribose/2009-09-08
+    If m_skipUICEvents Then
+        Exit Sub
+    End If
     
     ' ...
     UserIndex = _
@@ -2071,14 +2083,14 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         '####### Mail check
         If (mail) Then
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim Msg As udtMail
+                Dim msg As udtMail
                 
                 If (GetMailCount(Username) > 0) Then
-                    Call GetMailMessage(Username, Msg)
+                    Call GetMailMessage(Username, msg)
                     
-                    If (Len(RTrim(Msg.To)) > 0) Then
+                    If (Len(RTrim(msg.To)) > 0) Then
                         frmChat.AddQ "/w " & Username & " Message from " & _
-                            RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
+                            RTrim$(msg.From) & ": " & RTrim$(msg.Message)
                     End If
                 End If
             End If

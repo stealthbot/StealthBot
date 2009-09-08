@@ -433,6 +433,11 @@ Private Function GetDefaultModuleProcs() As String
     str = str & "   GetSettingsEntry = SSC.GetSettingsEntry(EntryName, Script(""Name""))" & vbNewLine
     str = str & "End Function" & vbNewLine
 
+    ' IsEnabled() module-level function
+    str = str & "Function IsEnabled()" & vbNewLine
+    str = str & "   IsEnabled = (LCase(GetSettingsEntry(""Enabled"")) <> ""false"")" & vbNewLine
+    str = str & "End Function" & vbNewLine
+
     ' WriteSettingsEntry() module-level function
     str = str & "Sub WriteSettingsEntry(EntryName, EntryValue)" & vbNewLine
     str = str & "   SSC.WriteSettingsEntry EntryName, EntryValue, , Script(""Name"")" & vbNewLine
@@ -1392,6 +1397,7 @@ Public Sub SC_Error()
     Dim Text        As String
     Dim IncIndex    As Integer
     Dim i           As Integer
+    Dim tmp         As String
     
     With m_sc_control
         Number = .Error.Number
@@ -1445,11 +1451,20 @@ Public Sub SC_Error()
         End If
     End If
     
-    ' display error
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Scripting {0} error '{1}' in {2}: (line {3}; column {4})", _
-        ErrType, Number, Name, line, Column)
-    frmChat.AddChat RTBColors.ErrorMessageText, description
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Offending line: >> {0}", Text)
+    ' display error if script enabled
+    If InStr(Name, "#") > 0 Then
+        tmp = Left$(Name, InStr(Name, "#") - 1)
+    Else
+        tmp = Name
+    End If
+    tmp = SharedScriptSupport.GetSettingsEntry("Enabled", CleanFileName(tmp))
+    
+    If (StrComp(tmp, "False", vbTextCompare) <> 0) Then
+        frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Scripting {0} error '{1}' in {2}: (line {3}; column {4})", _
+            ErrType, Number, Name, line, Column)
+        frmChat.AddChat RTBColors.ErrorMessageText, description
+        frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Offending line: >> {0}", Text)
+    End If
     
     m_sc_control.Error.Clear
     
