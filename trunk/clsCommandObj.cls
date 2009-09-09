@@ -225,7 +225,7 @@ On Error GoTo ERROR_HANDLER
     Dim sArgs       As String
     Dim i           As Integer
     Dim Param       As clsCommandParamsObj
-    Dim Restriction As clsCommandRestrictionObj
+    Dim restriction As clsCommandRestrictionObj
     Dim sTemp       As String
     Dim sError      As String
     Dim dbAccess    As udtGetAccessResponse
@@ -250,7 +250,7 @@ On Error GoTo ERROR_HANDLER
     
     For Each Param In Me.docs.Parameters
     
-        Select Case LCase(Param.DataType)
+        Select Case LCase(Param.datatype)
             Case "word":    sTemp = StripWord(sArgs)
             Case "numeric": sTemp = StripNumeric(sArgs)
             Case "number":  sTemp = StripNumeric(sArgs)
@@ -259,7 +259,7 @@ On Error GoTo ERROR_HANDLER
         
         If (LenB(Param.MatchMessage)) Then
             If (Not CheckMatch(Param.MatchMessage, sTemp, Param.MatchCaseSensitive)) Then
-                If (LenB(Param.MatchError) > 0) Then
+                If (LenB(Param.MatchError) > 0) And (m_hasaccess) Then
                 
                     sError = Replace$(Param.MatchError, "%Value", sTemp)
                     sError = Replace$(sError, "%Rank", dbAccess.Rank)
@@ -270,7 +270,7 @@ On Error GoTo ERROR_HANDLER
                     IsValid = False
                     Exit Sub
                 Else
-                    If (LCase$(Param.DataType) = "string") Then
+                    If (LCase$(Param.datatype) = "string") Then
                         sArgs = StringFormat("{0}{1}{0} {2}", Chr$(34), sTemp, sArgs)
                     Else
                         sArgs = StringFormat("{0} {1}", sTemp, sArgs)
@@ -279,20 +279,20 @@ On Error GoTo ERROR_HANDLER
             End If
         End If
         
-        For Each Restriction In Param.Restrictions 'Loop Through the Restrictions
+        For Each restriction In Param.Restrictions 'Loop Through the Restrictions
             If (LenB(sTemp) > 0) Then
-                If (CheckMatch(Restriction.MatchMessage, sTemp, Restriction.MatchCaseSensitive)) Then 'If they match (regex)
+                If (CheckMatch(restriction.MatchMessage, sTemp, restriction.MatchCaseSensitive)) Then 'If they match (regex)
                     'If Rank = -1 It means it's missing, and it MUST have Flags. Or if Rank > User's Access
-                    If (Restriction.RequiredRank = -1 Or Restriction.RequiredRank > dbAccess.Rank) Then
-                        If (Not CheckForAnyFlags(Restriction.RequiredFlags, dbAccess.Flags)) Then
-                            If (LenB(Restriction.MatchError)) Then
-                                sError = Replace$(Restriction.MatchError, "%Value", sTemp)
+                    If (restriction.RequiredRank = -1 Or restriction.RequiredRank > dbAccess.Rank) Then
+                        If (Not CheckForAnyFlags(restriction.RequiredFlags, dbAccess.Flags)) Then
+                            If (LenB(restriction.MatchError)) And (m_hasaccess) Then
+                                sError = Replace$(restriction.MatchError, "%Value", sTemp)
                                 sError = Replace$(sError, "%Rank", dbAccess.Rank)
                                 sError = Replace$(sError, "%Flags", dbAccess.Flags)
                                 
                                 Respond sError
                             End If
-                                m_hasaccess = False
+                            m_hasaccess = False
                             Exit For
                         End If
                     End If
