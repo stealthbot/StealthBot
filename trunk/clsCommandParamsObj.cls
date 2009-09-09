@@ -41,16 +41,35 @@ Private Sub Class_Terminate()
 
 End Sub
 
+
+Public Function GetRestrictionByName(ByVal sRestrictionName As String) As clsCommandRestrictionObj
+    
+    Dim r As clsCommandRestrictionObj
+    Dim col As Collection
+    Dim i As Integer
+    
+    Set col = Me.Restrictions
+        
+    For i = 1 To col.Count
+        Set r = col(i)
+        If StrComp(sRestrictionName, r.Name, vbTextCompare) = 0 Then
+            Set GetRestrictionByName = r
+            Exit Function
+        End If
+    Next i
+    
+End Function
+
 Public Property Get Restrictions() As Collection
     Set Restrictions = m_restrictions
 End Property
 Public Property Let Restrictions(col As Collection)
     Set m_restrictions = col
 End Property
-Public Property Get DataType() As String
-    DataType = m_data_type
+Public Property Get datatype() As String
+    datatype = m_data_type
 End Property
-Public Property Let DataType(strType As String)
+Public Property Let datatype(strType As String)
     Select Case LCase(strType)
         Case "string"
         Case "number", "numeric"

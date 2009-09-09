@@ -300,7 +300,8 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private m_CommandsDoc As DOMDocument60
+Private m_Commands As clsCommandDocObj
+'Private m_CommandsDoc As DOMDocument60
 Private m_SelectedElement As SelectedElement
 Private m_ClearingNodes As Boolean
 
@@ -314,50 +315,18 @@ End Enum
 '// Stores information about the selected node in the treeview
 Private Type SelectedElement
     TheNodeType As NodeType
-    TheXMLElement As IXMLDOMElement
     IsDirty As Boolean
     commandName As String
     argumentName As String
     restrictionName As String
 End Type
 
-
-'Private Declare Function SendMessageLong Lib "user32" Alias "SendMessageA" _
-'    (ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam As Long, _
-'    ByVal lParam As Long) As Long
-'Private Const WM_SETREDRAW As Long = &HB
-'Private Const TV_FIRST As Long = &H1100
-'Private Const TVM_GETNEXTITEM As Long = (TV_FIRST + 10)
-'Private Const TVM_DELETEITEM As Long = (TV_FIRST + 1)
-'Private Const TVGN_ROOT As Long = &H0
-
-
-' Quicky clear the treeview identified by the hWnd parameter
 Sub ClearTreeViewNodes(ByRef trv As vbalTreeView)
     
     m_ClearingNodes = True
     trv.nodes.Clear
     m_ClearingNodes = False
-    
-    '// Below code is no longer necesarry thanks to a better treeview. :) -Pyro
-    'Dim hWnd As Long
-    'Dim hItem As Long
-    '
-    'hWnd = trv.hWnd
-    '
-    '
-    '' lock the window update to avoid flickering
-    'SendMessageLong hWnd, WM_SETREDRAW, False, &O0
-    '
-    '' clear the treeview
-    'Do
-    '    hItem = SendMessageLong(hWnd, TVM_GETNEXTITEM, TVGN_ROOT, 0)
-    '    If hItem <= 0 Then Exit Do
-    '    SendMessageLong hWnd, TVM_DELETEITEM, &O0, hItem
-    'Loop
-    '
-    '' unlock the window
-    'SendMessageLong hWnd, WM_SETREDRAW, True, &O0
+
 End Sub
 
 
@@ -378,34 +347,51 @@ Private Sub cboCommandGroup_Click()
     
 End Sub
 
+Private Sub cmdFlagAdd_Click()
+
+    cboFlags.AddItem cboFlags.Text
+    cboFlags.Text = ""
+    Call FormIsDirty
+
+End Sub
+
+
+Private Sub cmdFlagRemove_Click()
+
+    Dim i As Integer
+    
+    For i = 0 To cboFlags.ListCount - 1
+        If (StrComp(cboFlags.Text, cboFlags.List(i), vbBinaryCompare) = 0) Then
+            cboFlags.RemoveItem i
+            Exit For
+        End If
+    Next i
+    
+    cboFlags.Text = ""
+    Call FormIsDirty
+
+End Sub
+
 Private Sub cmdAliasAdd_Click()
 
-    ' ...
     cboAlias.AddItem cboAlias.Text
-    
-    ' ...
     cboAlias.Text = ""
-    
     Call FormIsDirty
 
 End Sub
 
 Private Sub cmdAliasRemove_Click()
 
-    Dim i As Integer ' ...
+    Dim i As Integer
     
-    ' ...
     For i = 0 To cboAlias.ListCount - 1
         If (StrComp(cboAlias.Text, cboAlias.List(i), vbTextCompare) = 0) Then
             cboAlias.RemoveItem i
-            
             Exit For
         End If
     Next i
     
-    ' ...
     cboAlias.Text = ""
-    
     Call FormIsDirty
 
 End Sub
@@ -413,13 +399,16 @@ End Sub
 
 '// 08/30/2008 JSM - Created
 Private Sub cmdDiscard_Click()
-    Call PrepareForm(m_SelectedElement.TheNodeType, m_SelectedElement.TheXMLElement)
+
+    Call PrepareForm(m_SelectedElement.TheNodeType)
+    
 End Sub
+
+
 
 Private Sub cmdDeleteCommand_Click()
     
     Dim scriptName As String
-    Dim doc As clsCommandDocObj
 
     scriptName = Mid$(cboCommandGroup.Text, 1, InStr(1, cboCommandGroup.Text, "(") - 2)
 
@@ -428,61 +417,17 @@ Private Sub cmdDeleteCommand_Click()
         Exit Sub
     End If
     
-    
-    
-    Set doc = New clsCommandDocObj
-    
-    Call doc.OpenCommand(m_SelectedElement.commandName, scriptName)
-    Call doc.Delete
-    Set doc = Nothing
+    Call m_Commands.OpenCommand(m_SelectedElement.commandName, scriptName)
+    Call m_Commands.Delete
     
     m_SelectedElement.IsDirty = False
-    
-    Set m_CommandsDoc = Nothing
-    Set m_CommandsDoc = New DOMDocument60
-    Call m_CommandsDoc.Load(GetFilePath("Commands.xml"))
     
     Call PopulateOwnerComboBox
     Call ResetForm
     Call PopulateTreeView(scriptName)
-    
-    
 
 End Sub
 
-
-
-Private Sub cmdFlagAdd_Click()
-
-    ' ...
-    cboFlags.AddItem cboFlags.Text
-    
-    ' ...
-    cboFlags.Text = ""
-    
-    Call FormIsDirty
-
-End Sub
-
-Private Sub cmdFlagRemove_Click()
-
-    Dim i As Integer ' ...
-    
-    ' ...
-    For i = 0 To cboFlags.ListCount - 1
-        If (StrComp(cboFlags.Text, cboFlags.List(i), vbBinaryCompare) = 0) Then
-            cboFlags.RemoveItem i
-            
-            Exit For
-        End If
-    Next i
-    
-    ' ...
-    cboFlags.Text = ""
-    
-    Call FormIsDirty
-
-End Sub
 
 '// 08/30/2008 JSM - Created
 Private Sub cmdSave_Click()
@@ -496,41 +441,17 @@ Private Sub Form_Load()
     Dim colErrorList As Collection
 
     '// Load commands.xml
-    Set m_CommandsDoc = New DOMDocument60
+    Set m_Commands = New clsCommandDocObj
     
-    If (Dir$(GetFilePath("Commands.xml")) = vbNullString) Then
-        Exit Sub
-    End If
-    '// 08/31/2008 JSM - ensure schema file is present
-    If (Dir$(StringFormat("{0}\Commands.xsd", App.Path)) = vbNullString) Then
-        Exit Sub
-    End If
+    'If Not clsCommandDocObj.ValidateXMLFromFiles(App.Path & "\commands.xml", App.Path & "\commands.xsd") Then
+    '    Exit Sub
+    'End If
     
+    'Call m_CommandsDoc.Load(App.Path & "\commands.xml")
     
-    If Not clsCommandDocObj.ValidateXMLFromFiles(GetFilePath("Commands.xml"), StringFormat("{0}\Commands.xsd", App.Path)) Then
-        Exit Sub
-    End If
-    
-    Call m_CommandsDoc.Load(GetFilePath("Commands.xml"))
-    
-    If Not clsCommandDocObj.CommandsSanityCheck(m_CommandsDoc) Then
-        Exit Sub
-    End If
-    
-    
-    'Change tree view background and foreground color.
-    ' // (REMOVED 8/9/09: changed to a better treeview -Pyro)
-    'Dim lStyle As Long
-    'Dim tNode As node
-    
-    'For Each tNode In trvCommands.nodes
-    '    tNode.BackColor = txtRank.BackColor
-    'Next
-    
-    'SendMessage trvCommands.hWnd, 4381&, 0, txtRank.BackColor
-    'lStyle = GetWindowLong(trvCommands.hWnd, -16&)
-    'SetWindowLong trvCommands.hWnd, -16&, lStyle And (Not 2&)
-    'SetWindowLong trvCommands.hWnd, -16&, lStyle
+    'If Not clsCommandDocObj.CommandsSanityCheck(m_CommandsDoc) Then
+    '    Exit Sub
+    'End If
     
     Call ResetForm
     Call PopulateOwnerComboBox
@@ -550,7 +471,7 @@ ErrorHandler:
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
-    Set m_CommandsDoc = Nothing
+    Set m_Commands = Nothing
 End Sub
 
 
@@ -562,35 +483,27 @@ Private Sub PopulateOwnerComboBox()
     Dim str As String
     Dim commandCount As Integer
     Dim scriptName As String
-    Dim commandDoc As clsCommandDocObj
-    Dim options() As Variant '// <-- boo
-    
-    Set commandDoc = New clsCommandDocObj
 
     cboCommandGroup.Clear
     
-    
     '// get the script name and number of commands
     scriptName = "Internal Bot Commands"
-    commandCount = commandDoc.GetCommandCount()
-    options = Array(scriptName, commandCount)
+    commandCount = m_Commands.GetCommandCount()
+
     '// add the item
-    cboCommandGroup.AddItem StringFormatA("{0} ({1})", options)
+    cboCommandGroup.AddItem StringFormat("{0} ({1})", scriptName, commandCount)
     
     For i = 2 To frmChat.SControl.Modules.Count
-        scriptName = _
-            modScripting.GetScriptName(CStr(i))
-        str = _
-            SharedScriptSupport.GetSettingsEntry("Public", scriptName)
+        scriptName = modScripting.GetScriptName(CStr(i))
+        str = SharedScriptSupport.GetSettingsEntry("Public", scriptName)
         
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
             '// get the script name and number of commands
-            commandCount = commandDoc.GetCommandCount(scriptName)
+            commandCount = m_Commands.GetCommandCount(scriptName)
             '// only add the commands if there is at least 1 command to show
             If commandCount > 0 Then
-                options = Array(scriptName, commandCount)
                 '// add the item
-                cboCommandGroup.AddItem StringFormatA("{0} ({1})", options)
+                cboCommandGroup.AddItem StringFormat("{0} ({1})", scriptName, commandCount)
             End If
         End If
     Next i
@@ -601,6 +514,20 @@ End Sub
 
 
 Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
+    
+    Dim colCommands As Collection
+    
+    Call ClearTreeViewNodes(trvCommands)
+    
+    Set colCommands = clsCommandDocObj.GetCommands(strScriptOwner)
+    
+    
+        
+End Sub
+    
+    
+Private Sub PopulateTreeViewOld()
+    
     
     Dim commandNodes      As IXMLDOMNodeList
     Dim totalCommands     As Integer
@@ -635,97 +562,97 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     
     Call ClearTreeViewNodes(trvCommands)
     
-    '// create xpath expression based on strScriptOwner
-    If strScriptOwner = vbNullString Then
-        xpath = "/commands/command[not(@owner)]"
-        'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
-    Else
-        xpath = StringFormat("/commands/command[@owner='{0}']", strScriptOwner)
-        'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
-    End If
+    
+    
+    
+    
+    
     
     '// get a list of all the commands
-    Set commandNodes = m_CommandsDoc.documentElement.selectNodes(xpath)
-    ReDim commandNameArray(commandNodes.length)
     
+   
     
+    'Set commandNodes = m_CommandsDoc.documentElement.selectNodes(xpath)
+    'ReDim commandNameArray(commandNodes.length)
+    '
+    '
     '// read them 1 at a time and add them to an array
-    X = 0
-    For Each xmlCommand In m_CommandsDoc.documentElement.selectNodes(xpath)
-        commandNameArray(X) = xmlCommand.Attributes.getNamedItem("name").Text
-        X = X + 1
-    Next
-    
-    '// sort the command names
-    Call BubbleSort1(commandNameArray)
-    
-
-    '// loop through the sorted array and select the commands
-    For X = LBound(commandNameArray) To UBound(commandNameArray)
-
-        commandName = commandNameArray(X)
-        If Len(commandName) > 0 Then
-            '// create xpath expression based on strScriptOwner
-            If strScriptOwner = vbNullString Then
-                xpath = StringFormat("/commands/command[@name='{0}' and not(@owner)]", commandName)
-                'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
-            Else
-                xpath = StringFormat("/commands/command[@name='{0}' and @owner='{1}']", commandName, strScriptOwner)
-                'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
-            End If
-    
-            Set xmlCommand = m_CommandsDoc.documentElement.selectSingleNode(xpath)
-        
-            commandName = xmlCommand.Attributes.getNamedItem("name").Text
-            Set nCommand = trvCommands.nodes.Add(trvCommands.nodes.Parent, etvwChild, commandName, commandName)
-            
-            '// 08/30/2008 JSM - check if this command is the first alphabetically
-            If defaultNode Is Nothing Then
-                Set defaultNode = nCommand
-            Else
-                If StrComp(defaultNode.Text, nCommand.Text) > 0 Then
-                    Set defaultNode = nCommand
-                End If
-            End If
-            
-            Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
-            '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
-            '//                  something, even if nothing matches the XPath expression.
-            For i = 0 To (xmlArgs.length - 1)
-            
-                argumentName = xmlArgs(i).Attributes.getNamedItem("name").Text
-                If (Not xmlArgs(i).Attributes.getNamedItem("optional") Is Nothing) Then
-                    If (xmlArgs(i).Attributes.getNamedItem("optional").Text = "1") Then
-                        argumentName = StringFormat("[{0}]", argumentName)
-                    End If
-                End If
-                
-                '// Add the datatype to the argument name
-                If (Not xmlArgs(i).Attributes.getNamedItem("type") Is Nothing) Then
-                    argumentName = StringFormat("{0} ({1})", argumentName, xmlArgs(i).Attributes.getNamedItem("type").Text)
-                Else
-                    argumentName = StringFormat("{0} ({1})", argumentName, "String")
-                End If
-                
-                Set nArg = trvCommands.nodes.Add(nCommand, etvwChild, commandName & "." & argumentName, argumentName)
-                
-                Set xmlArgRestricions = xmlArgs(i).selectNodes("restrictions/restriction")
-                
-                For j = 0 To (xmlArgRestricions.length - 1)
-                    restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
-                    Set nArgRestriction = trvCommands.nodes.Add(nArg, etvwChild, commandName & "." & argumentName & "." & restrictionName, restrictionName)
-                Next j
-            Next i
-        End If '// Len(commandName) > 0
-    Next
-    
+   'X = 0
+    'For Each xmlCommand In m_CommandsDoc.documentElement.selectNodes(xpath)
+'        commandNameArray(X) = xmlCommand.Attributes.getNamedItem("name").Text
+        'X = X + 1
+    'Next
+'
+    ''// sort the command names
+    'Call BubbleSort1(commandNameArray)
+'
+'
+    ''// loop through the sorted array and select the commands
+    'For X = LBound(commandNameArray) To UBound(commandNameArray)
+'
+        'commandName = commandNameArray(X)
+        'If Len(commandName) > 0 Then
+            ''// create xpath expression based on strScriptOwner
+            'If strScriptOwner = vbNullString Then
+                'xpath = StringFormat("/commands/command[@name='{0}' and not(@owner)]", commandName)
+                ''Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
+            'Else
+                'xpath = StringFormat("/commands/command[@name='{0}' and @owner='{1}']", commandName, strScriptOwner)
+                ''Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
+            'End If
+'
+            'Set xmlCommand = m_CommandsDoc.documentElement.selectSingleNode(xpath)
+'
+            'commandName = xmlCommand.Attributes.getNamedItem("name").Text
+            'Set nCommand = trvCommands.nodes.Add(trvCommands.nodes.Parent, etvwChild, commandName, commandName)
+'
+            ''// 08/30/2008 JSM - check if this command is the first alphabetically
+            'If defaultNode Is Nothing Then
+                'Set defaultNode = nCommand
+            'Else
+                'If StrComp(defaultNode.Text, nCommand.Text) > 0 Then
+                    'Set defaultNode = nCommand
+                'End If
+            'End If
+'
+            'Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
+            ''// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
+            ''//                  something, even if nothing matches the XPath expression.
+            'For i = 0 To (xmlArgs.length - 1)
+'
+                'argumentName = xmlArgs(i).Attributes.getNamedItem("name").Text
+                'If (Not xmlArgs(i).Attributes.getNamedItem("optional") Is Nothing) Then
+                    'If (xmlArgs(i).Attributes.getNamedItem("optional").Text = "1") Then
+                        'argumentName = StringFormat("[{0}]", argumentName)
+                    'End If
+                'End If
+'
+                ''// Add the datatype to the argument name
+                'If (Not xmlArgs(i).Attributes.getNamedItem("type") Is Nothing) Then
+                    'argumentName = StringFormat("{0} ({1})", argumentName, xmlArgs(i).Attributes.getNamedItem("type").Text)
+                'Else
+                    'argumentName = StringFormat("{0} ({1})", argumentName, "String")
+                'End If
+'
+                'Set nArg = trvCommands.nodes.Add(nCommand, etvwChild, commandName & "." & argumentName, argumentName)
+'
+                'Set xmlArgRestricions = xmlArgs(i).selectNodes("restrictions/restriction")
+'
+                'For j = 0 To (xmlArgRestricions.length - 1)
+                    'restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
+                    'Set nArgRestriction = trvCommands.nodes.Add(nArg, etvwChild, commandName & "." & argumentName & "." & restrictionName, restrictionName)
+                'Next j
+            'Next i
+        'End If '// Len(commandName) > 0
+    'Next
+'
     '// 08/30/2008 JSM - click the first command alphabetically
     ' fixed to work with SelectedNodeChanged() -Ribose/2009-08-10
-    If Not (defaultNode Is Nothing) Then
-        defaultNode.Selected = True
-    Else
-        trvCommands_SelectedNodeChanged
-    End If
+   ' If Not (defaultNode Is Nothing) Then
+   '     defaultNode.Selected = True
+   ' Else
+   '     trvCommands_SelectedNodeChanged
+   ' End If
     
 End Sub
 
@@ -734,7 +661,6 @@ End Sub
 Private Function PromptToSaveChanges() As Boolean
     
     Dim sMessage As String
-    Dim options() As Variant '// <-- boo
 
     '// If the current form is dirty, lets show a save dialog
     With m_SelectedElement
@@ -744,15 +670,15 @@ Private Function PromptToSaveChanges() As Boolean
         End If
         
         '// Get the message for the prompt
-        options = Array(.commandName, .argumentName, .restrictionName)
         Select Case .TheNodeType
             Case NodeType.nCommand
-                sMessage = StringFormatA("You have not saved your changes to {0}. Do you want to save them now?", options)
+                sMessage = StringFormat("You have not saved your changes to {0}. Do you want to save them now?", .commandName, .argumentName, .restrictionName)
             Case NodeType.nArgument
-                sMessage = StringFormatA("You have not saved your changes to {1}. Do you want to save them now?", options)
+                sMessage = StringFormat("You have not saved your changes to {1}. Do you want to save them now?", .commandName, .argumentName, .restrictionName)
             Case NodeType.nRestriction
-                sMessage = StringFormatA("You have not saved your changes to {2}. Do you want to save them now?", options)
+                sMessage = StringFormat("You have not saved your changes to {2}. Do you want to save them now?", .commandName, .argumentName, .restrictionName)
         End Select
+        
         '// Get the user response
         Select Case MsgBox(sMessage, vbQuestion + vbYesNoCancel, Me.Caption)
             Case vbYes:
@@ -782,10 +708,8 @@ Private Sub trvCommands_SelectedNodeChanged()
     Dim commandName As String
     Dim argumentName As String
     Dim restrictionName As String
-    Dim options() As Variant '// <-- boo
     
     Dim xpath As String
-    Dim xmlElement As IXMLDOMElement
     
     If m_ClearingNodes Then Exit Sub
     
@@ -803,34 +727,16 @@ Private Sub trvCommands_SelectedNodeChanged()
     
     '// figure out what type of node was clicked on
     nt = GetNodeInfo(node, commandName, argumentName, restrictionName)
-    '// create an array for the StringFormat function, this function will replace
-    '// the {0} {1} and {2} with their respective Values() found below
-    '//                {0}           {1}             {2}
-    options = Array(commandName, argumentName, restrictionName)
-    
-    Select Case nt
-        Case NodeType.nCommand
-            xpath = StringFormatA("/commands/command[@name='{0}']", options)
-        Case NodeType.nArgument
-            xpath = StringFormatA("/commands/command[@name='{0}']/arguments/argument[@name='{1}']", options)
-        Case NodeType.nRestriction
-            xpath = StringFormatA("/commands/command[@name='{0}']/arguments/argument[@name='{1}']/restrictions/restriction[@name='{2}']", options)
-    End Select
     
     '// Update m_SelectedElement so we know which element we are viewing
-    Let m_SelectedElement.commandName = commandName
-    Let m_SelectedElement.argumentName = argumentName
-    Let m_SelectedElement.restrictionName = restrictionName
+    m_SelectedElement.commandName = commandName
+    m_SelectedElement.argumentName = argumentName
+    m_SelectedElement.restrictionName = restrictionName
     
-    '// grab the node from the xpath
-    Set xmlElement = m_CommandsDoc.selectSingleNode(xpath)
-    
+    '// load the command and set up the form
+    Call m_Commands.OpenCommand(commandName, IIf(cboCommandGroup.ListIndex = 0, vbNullString, cboCommandGroup.Text))
     Call ResetForm
-    
-    '// if there are no comment elements then we do not need to prepare the form
-    If Not (xmlElement Is Nothing) Then
-        Call PrepareForm(nt, xmlElement)
-    End If
+    Call PrepareForm(nt)
     
 End Sub
 
@@ -877,155 +783,72 @@ Private Function GetNodeInfo(node As cTreeViewNode, ByRef commandName As String,
     End If
 End Function
 
+Private Function getFlags()
+
+    Dim i As Integer
+    Dim sTmp As String
+
+    sTmp = ""
+    For i = 0 To cboFlags.ListCount - 1
+        sTmp = sTmp & cboFlags.List(i)
+    Next i
+    getFlags = sTmp
+
+End Function
+
 
 '// Saves the selected treeview node in the commands.xml
 '// 08/30/2008 JSM - Created
 Private Sub SaveForm()
     
-    Dim xmlNode As IXMLDOMNode
-    Dim xmlNewNode As IXMLDOMNode
-
-    Dim i As Integer
+    Dim parameter As clsCommandParamsObj
+    Dim restriction As clsCommandRestrictionObj
     
-    With m_SelectedElement
-        '// txtRank
-        If .TheNodeType = NodeType.nCommand Or .TheNodeType = NodeType.nRestriction Then
-            Set xmlNode = .TheXMLElement.selectSingleNode("access/rank")
-            If xmlNode Is Nothing Then
-                Set xmlNode = .TheXMLElement.selectSingleNode("access")
-                If xmlNode Is Nothing Then
-                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "access", "")
-                    .TheXMLElement.appendChild xmlNewNode
-                    Set xmlNode = xmlNewNode.cloneNode(True)
-                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "rank", "")
-                    xmlNode.appendChild xmlNewNode
-                Else
-                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "rank", "")
-                    xmlNode.appendChild xmlNewNode
-                End If
-                Set xmlNode = .TheXMLElement.selectSingleNode("access/rank")
-            End If
-            
-            If (txtRank.Text <> vbNullString) Then
-                xmlNode.Text = txtRank.Text
-            Else
-                For i = 0 To xmlNode.childNodes.length - 1
-                    xmlNode.removeChild xmlNode.childNodes(i)
+    Dim i
+
+    Select Case m_SelectedElement.TheNodeType
+        Case NodeType.nCommand:
+            '// saving the command
+            With m_Commands
+                .description = txtDescription.Text
+                .SpecialNotes = txtSpecialNotes.Text
+                .RequiredRank = txtRank.Text
+                .RequiredFlags = getFlags()
+                While .aliases.Count <> 0
+                    .aliases.Remove 1
+                Wend
+                For i = 0 To cboAlias.ListCount - 1
+                    .aliases.Add cboAlias.List(i)
                 Next i
-            End If
-        End If
-        
-        '// txtDescription
-        If .TheNodeType = NodeType.nCommand Or .TheNodeType = NodeType.nArgument Then
-            Set xmlNode = .TheXMLElement.selectSingleNode("documentation/description")
-            If xmlNode Is Nothing Then
-                Set xmlNode = .TheXMLElement.selectSingleNode("documentation")
-                If xmlNode Is Nothing Then
-                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "documentation", "")
-                    .TheXMLElement.appendChild xmlNewNode
-                    Set xmlNode = xmlNewNode.cloneNode(True)
-                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "description", "")
-                    xmlNode.appendChild xmlNewNode
-                Else
-                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "description", "")
-                    xmlNode.appendChild xmlNewNode
-                End If
-                Set xmlNode = .TheXMLElement.selectSingleNode("documentation/description")
-            End If
-            xmlNode.Text = txtDescription.Text
-        End If
-        
-        '// txtSpecialNotes
-        If .TheNodeType = NodeType.nCommand Or .TheNodeType = NodeType.nArgument Then
-            Set xmlNode = .TheXMLElement.selectSingleNode("documentation/specialnotes")
-            If xmlNode Is Nothing Then
-                Set xmlNode = .TheXMLElement.selectSingleNode("documentation")
-                If xmlNode Is Nothing Then
-                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "documentation", "")
-                    .TheXMLElement.appendChild xmlNewNode
-                    Set xmlNode = xmlNewNode.cloneNode(True)
-                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "specialnotes", "")
-                    xmlNode.appendChild xmlNewNode
-                Else
-                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "specialnotes", "")
-                    xmlNode.appendChild xmlNewNode
-                End If
-                Set xmlNode = .TheXMLElement.selectSingleNode("documentation/specialnotes")
-            End If
-            xmlNode.Text = txtSpecialNotes.Text
-        End If
-
-        '// cboAlias
-        If .TheNodeType = NodeType.nCommand Then
-            For Each xmlNode In .TheXMLElement.selectNodes("aliases/alias")
-                .TheXMLElement.selectSingleNode("aliases").removeChild xmlNode
-            Next xmlNode
-            For i = 0 To cboAlias.ListCount - 1
-                Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "alias", "")
-                xmlNewNode.Text = cboAlias.List(i)
-                .TheXMLElement.selectSingleNode("aliases").appendChild xmlNewNode
-            Next i
-        End If
-        
-        '// cboFlags
-        If .TheNodeType = NodeType.nCommand Or .TheNodeType = NodeType.nRestriction Then
+            End With
+       
+        Case NodeType.nArgument
+            '// saving the parameter
+            With m_Commands
+                Set parameter = .GetParameterByName(m_SelectedElement.argumentName)
+                With parameter
+                    .description = txtDescription.Text
+                    .SpecialNotes = txtSpecialNotes.Text
+                End With
+            End With
             
-            '// remove existing flags
-            For Each xmlNode In .TheXMLElement.selectNodes("access/flags")
-                .TheXMLElement.selectSingleNode("access").removeChild xmlNode
-            Next xmlNode
-            
-            '// make sue the access element exists
-            Set xmlNode = .TheXMLElement.selectSingleNode("access")
-            If xmlNode Is Nothing Then
-                Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "access", "")
-                Set xmlNode = .TheXMLElement.appendChild(xmlNewNode)
-            End If
-            
-            Set xmlNode = .TheXMLElement.selectSingleNode("access/flags")
-            If xmlNode Is Nothing Then
-                Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "flags", "")
-                Set xmlNode = _
-                    .TheXMLElement.selectSingleNode("access").appendChild(xmlNewNode)
-            End If
-
-            If (cboFlags.ListCount > 0) Then
-                '// loop through cboFlags and add the text
-                For i = 0 To cboFlags.ListCount - 1
-                    Set xmlNewNode = xmlNode.selectSingleNode("flag[text()='" & cboFlags.List(i) & "']")
-                    
-                    If (xmlNewNode Is Nothing) Then
-                        Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "flag", "")
-                        xmlNewNode.Text = cboFlags.List(i)
-                        xmlNode.appendChild xmlNewNode
-                    End If
-                Next i
-            End If
-        End If
-        
-        
-        '// chkDisable
-        If .TheNodeType = NodeType.nCommand Then
-            If chkDisable.Value = 1 Then
-                Call .TheXMLElement.setAttribute("enabled", "false")
-            Else
-                If (.TheXMLElement.getAttribute("enabled") <> vbNullString) Then
-                    Call .TheXMLElement.setAttribute("enabled", "true")
-                End If
-            End If
-        End If
-        
-        '// 08/302009 52 - getting rid of the clsXML class since it didnt write valid XML
-                '// TODO: this needs to validate!!!
-        Call m_CommandsDoc.Save(GetFilePath("Commands.xml"))
-        
-        'Call m_CommandsDoc.Save(App.Path & "\commands.xml")
-        Call PrepareForm(.TheNodeType, .TheXMLElement)
-        
-    End With
+        Case NodeType.nRestriction
+            '// saving the restriction
+            With m_Commands
+                Set parameter = m_Commands.GetParameterByName(m_SelectedElement.argumentName)
+                With parameter
+                    Set restriction = parameter.GetRestrictionByName(m_SelectedElement.restrictionName)
+                    With restriction
+                        .RequiredRank = txtRank.Text
+                        .RequiredFlags = getFlags()
+                    End With
+                End With
+            End With
     
-
+    End Select
     
+    Call m_Commands.Save
+    Call PrepareForm(m_SelectedElement.TheNodeType)
     
 End Sub
 
@@ -1053,203 +876,111 @@ End Function
 '// When a node in the treeview is clicked, it should locate the XML element that was
 '// used to create the node and call this method to populate appropriate form controls.
 '// 08/29/2008 JSM - Created
-Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
+Private Sub PrepareForm(nt As NodeType)
     
-    Dim xmlNode As IXMLDOMNode
-    Dim options() As Variant '// <-- boo
+    Dim parameter As clsCommandParamsObj
+    Dim restriction As clsCommandRestrictionObj
+    
     Dim requirements As String
+    Dim sItem As String
+    Dim i As Integer
     
-    
-    Dim cmd As clsCommandDocObj
-    Set cmd = New clsCommandDocObj
-    
-    Call cmd.OpenCommand(m_SelectedElement.commandName, getScriptOwner())
-    
-    '// lblSyntax
-    lblSyntax.Caption = cmd.SyntaxString
-    
-    '// lblRequirements
-    lblRequirements.Caption = cmd.RequirementsString
-    
-    
-    
-    
-    options = Array(m_SelectedElement.commandName, m_SelectedElement.argumentName, m_SelectedElement.restrictionName)
-    
-    
-    
-    Select Case nt
-        Case NodeType.nCommand
-            '// txtRank
-            txtRank.enabled = True
-            lblRank.enabled = True
-            Set xmlNode = xmlElement.selectSingleNode("access/rank")
-            If Not (xmlNode Is Nothing) Then
-                txtRank.Text = xmlNode.Text
-            Else
-                txtRank.Text = vbNullString
-            End If
-            '// cboAlias
-            cboAlias.enabled = True
-            lblAlias.enabled = True
-            cmdAliasAdd.enabled = True
-            cmdAliasRemove.enabled = True
-            For Each xmlNode In xmlElement.selectNodes("aliases/alias")
-                cboAlias.AddItem xmlNode.Text
-            Next xmlNode
-            '// cboFlags
-            cboFlags.enabled = True
-            lblFlags.enabled = True
-            cmdFlagAdd.enabled = True
-            cmdFlagRemove.enabled = True
-            For Each xmlNode In xmlElement.selectNodes("access/flags/flag")
-                cboFlags.AddItem xmlNode.Text
-            Next xmlNode
-            If (cboFlags.ListCount) Then
-                cboFlags.Text = cboFlags.List(0)
-            End If
-            
-            '// txtDescription
-            txtDescription.enabled = True
-            lblDescription.enabled = True
-            Set xmlNode = xmlElement.selectSingleNode("documentation/description")
-            If Not (xmlNode Is Nothing) Then
-                txtDescription.Text = PrepString(xmlNode.Text)
-            End If
-            '// txtSpecialNotes
-            txtSpecialNotes.enabled = True
-            lblSpecialNotes.enabled = True
-            Set xmlNode = xmlElement.selectSingleNode("documentation/specialnotes")
-            If Not (xmlNode Is Nothing) Then
-                txtSpecialNotes.Text = PrepString(xmlNode.Text)
-            End If
-            '// chkDisable
-            chkDisable.enabled = True
-            chkDisable.Visible = True
-            If LCase(xmlElement.getAttribute("enabled")) = "false" Then
-                chkDisable.Value = 1
-            Else
-                chkDisable.Value = 0
-            End If
-            
-            '// custom captions
-            fraCommand.Caption = StringFormatA("{0}", options)
-            chkDisable.Caption = StringFormatA("Disable {0} command", options)
-            
-            If cboCommandGroup.ListIndex > 0 Then
-                cmdDeleteCommand.enabled = True
-            End If
-            
-        Case NodeType.nArgument
-            '// txtRank
-            'txtRank.Enabled = True
-            'lblRank.Enabled = True
-            'Set xmlNode = xmlElement.selectSingleNode("access/rank")
-            'If Not (xmlNode Is Nothing) Then
-            '    txtRank.text = xmlNode.text
-            'End If
-            '// cboAlias
-            'cboAlias.Enabled = True
-            'lblAlias.Enabled = True
-            'For Each xmlNode In xmlElement.selectNodes("aliases/alias")
-            '    cboAlias.AddItem xmlNode.text
-            'Next xmlNode
-            '// cboFlags
-            'cboFlags.Enabled = True
-            'lblFlags.Enabled = True
-            'For Each xmlNode In xmlElement.selectNodes("access/flag")
-            '    cboFlags.AddItem xmlNode.text
-            'Next xmlNode
-            '// txtDescription
-            txtDescription.enabled = True
-            lblDescription.enabled = True
-            Set xmlNode = xmlElement.selectSingleNode("documentation/description")
-            If Not (xmlNode Is Nothing) Then
-                txtDescription.Text = PrepString(xmlNode.Text)
-            End If
-            '// txtSpecialNotes
-            txtSpecialNotes.enabled = True
-            lblSpecialNotes.enabled = True
-            Set xmlNode = xmlElement.selectSingleNode("documentation/specialnotes")
-            If Not (xmlNode Is Nothing) Then
-                txtSpecialNotes.Text = PrepString(xmlNode.Text)
-            End If
+    With m_SelectedElement
 
-            '// chkDisable
-            'chkDisable.Enabled = True
-            'chkDisable.Visible = True
-            
-            '// special captions
-            If (Not xmlElement.Attributes.getNamedItem("optional") Is Nothing) Then
-                If (xmlElement.Attributes.getNamedItem("optional").Text = "1") Then
-                    fraCommand.Caption = StringFormatA("{0} => {1} - Optional", options)
+        Call m_Commands.OpenCommand(.commandName, getScriptOwner())
+        
+        '// lblSyntax
+        lblSyntax.Caption = m_Commands.SyntaxString
+        '// lblRequirements
+        lblRequirements.Caption = m_Commands.RequirementsString
+    
+        Select Case nt
+            Case NodeType.nCommand
+                '// txtRank
+                txtRank.enabled = True
+                lblRank.enabled = True
+                txtRank.Text = m_Commands.RequiredRank
+                '// cboAlias
+                cboAlias.enabled = True
+                lblAlias.enabled = True
+                cmdAliasAdd.enabled = True
+                cmdAliasRemove.enabled = True
+                For i = 1 To m_Commands.aliases.Count
+                    cboAlias.AddItem m_Commands.aliases(i)
+                Next i
+                '// cboFlags
+                cboFlags.enabled = True
+                lblFlags.enabled = True
+                cmdFlagAdd.enabled = True
+                cmdFlagRemove.enabled = True
+                For i = 1 To Len(m_Commands.RequiredFlags)
+                    cboFlags.AddItem Mid$(m_Commands.RequiredFlags, i, 1)
+                Next i
+                If (cboFlags.ListCount) Then
+                    cboFlags.Text = cboFlags.List(0)
                 End If
-            Else
-                fraCommand.Caption = StringFormatA("{0} => {1}", options)
-            End If
-            
-            
-            
-            chkDisable.Caption = StringFormatA("Disable {1} argument", options)
-            
-            
-            
-            
-        Case NodeType.nRestriction
-            '// txtRank
-            txtRank.enabled = True
-            lblRank.enabled = True
-            Set xmlNode = xmlElement.selectSingleNode("access/rank")
-            If Not (xmlNode Is Nothing) Then
-                txtRank.Text = xmlNode.Text
-            End If
-            '// cboAlias
-            'cboAlias.Enabled = True
-            'lblAlias.Enabled = True
-            'For Each xmlNode In xmlElement.selectNodes("aliases/alias")
-            '    cboAlias.AddItem xmlNode.text
-            'Next xmlNode
-            '// cboFlags
-            cboFlags.enabled = True
-            lblFlags.enabled = True
-            For Each xmlNode In xmlElement.selectNodes("access/flags/flag")
-                cboFlags.AddItem xmlNode.Text
-            Next xmlNode
-            '// txtDescription
-            txtDescription.enabled = True
-            lblDescription.enabled = True
-            Set xmlNode = xmlElement.selectSingleNode("documentation/description")
-            If Not (xmlNode Is Nothing) Then
-                txtDescription.Text = PrepString(xmlNode.Text)
-            End If
-            '// txtSpecialNotes
-            'txtSpecialNotes.Enabled = True
-            'lblSpecialNotes.Enabled = True
-            'Set xmlNode = xmlElement.selectSingleNode("documentation/specialnotes")
-            'If Not (xmlNode Is Nothing) Then
-            '    txtSpecialNotes.text = xmlNode.text
-            'End If
-            '// chkDisable
-            'chkDisable.Enabled = True
-            'chkDisable.Visible = True
-            
-            '// special captions
-            If (Not xmlElement.parentNode.parentNode.Attributes.getNamedItem("optional") Is Nothing) Then
-                If (xmlElement.parentNode.parentNode.Attributes.getNamedItem("optional").Text = "1") Then
-                    fraCommand.Caption = StringFormatA("{0} => {1} - Optional => {2}", options)
+                '// txtDescription
+                txtDescription.enabled = True
+                lblDescription.enabled = True
+                txtDescription.Text = PrepString(m_Commands.description)
+                '// txtSpecialNotes
+                txtSpecialNotes.enabled = True
+                lblSpecialNotes.enabled = True
+                txtSpecialNotes.Text = PrepString(m_Commands.SpecialNotes)
+                '// chkDisable
+                chkDisable.enabled = True
+                chkDisable.Visible = True
+                chkDisable.Value = m_Commands.IsEnabled
+                '// custom captions
+                fraCommand.Caption = StringFormat("{0}", .commandName, .argumentName, .restrictionName)
+                chkDisable.Caption = StringFormat("Disable {0} command", .commandName, .argumentName, .restrictionName)
+                '// only allow deleting script commands
+                If cboCommandGroup.ListIndex > 0 Then
+                    cmdDeleteCommand.enabled = True
                 End If
-            Else
-                fraCommand.Caption = StringFormatA("{0} => {1} => {2}", options)
-            End If
+                
+            Case NodeType.nArgument
+                Set parameter = m_Commands.GetParameterByName(.argumentName)
             
-            chkDisable.Caption = StringFormatA("Disable {2} restriction", options)
+                '// txtDescription
+                txtDescription.enabled = True
+                lblDescription.enabled = True
+                txtDescription.Text = PrepString(parameter.description)
+                '// txtSpecialNotes
+                txtSpecialNotes.enabled = True
+                lblSpecialNotes.enabled = True
+                txtSpecialNotes.Text = PrepString(parameter.SpecialNotes)
+                '// custom captions
+                fraCommand.Caption = StringFormat("{0} => {1}{3}", .commandName, .argumentName, .restrictionName, IIf(parameter.IsOptional, " - Optional", ""))
+                chkDisable.Caption = StringFormat("Disable {1} argument", .commandName, .argumentName, .restrictionName)
+                
+            Case NodeType.nRestriction
             
-    End Select
+                Set parameter = m_Commands.GetParameterByName(.argumentName)
+                Set restriction = parameter.GetRestrictionByName(.restrictionName)
+            
+                '// txtRank
+                txtRank.enabled = True
+                lblRank.enabled = True
+                txtRank.Text = restriction.RequiredRank
+                '// cboFlags
+                cboFlags.enabled = True
+                lblFlags.enabled = True
+                For i = 1 To Len(restriction.RequiredFlags)
+                    cboFlags.AddItem Mid$(restriction.RequiredFlags, i, 1)
+                Next i
+                If (cboFlags.ListCount) Then
+                    cboFlags.Text = cboFlags.List(0)
+                End If
+                '// special captions
+                fraCommand.Caption = StringFormat("{0} => {1}{3} => {2}", .commandName, .argumentName, .restrictionName, IIf(parameter.IsOptional, " - Optional", ""))
+                chkDisable.Caption = StringFormat("Disable {2} restriction", .commandName, .argumentName, .restrictionName)
+        End Select
+    End With
     
     '// Update m_SelectedElement so we know which element we are viewing
-    Set m_SelectedElement.TheXMLElement = xmlElement
-    Let m_SelectedElement.TheNodeType = nt
-    Let m_SelectedElement.IsDirty = False
+    m_SelectedElement.TheNodeType = nt
+    m_SelectedElement.IsDirty = False
     
     '// Disable our buttons
     cmdSave.enabled = False

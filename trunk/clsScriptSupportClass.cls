@@ -1018,10 +1018,10 @@ End Sub
 '// STRINGFORMAT
 '// Replaces {#} parameters in source with the elements passed after it.
 '// EX: StringFormat("Hello {1}, your ping is {2}ms", Username, Ping)
-Public Function StringFormat(source As String, ParamArray params() As Variant) As String
+Public Function StringFormat(Source As String, ParamArray params() As Variant) As String
     Dim arr() As Variant
     arr() = params
-    StringFormat = modOtherCode.StringFormatA(source, arr)
+    StringFormat = modOtherCode.StringFormatA(Source, arr)
 End Function
 
 
@@ -1381,13 +1381,29 @@ Public Function CreateCommand(ByVal commandName As String, Optional ByVal script
     
 End Function
 
+
+'// GETCOMMANDS
+'// Gets a collection of stored commands
+'// PARAMETERS
+'//     ScriptName -  if provided, this function will get the command for the specified script
+'//                   vbNullString to get internal commands
+'//                   Chr(0) to get commands from any script that is enabled
+'//                   if ommitted, this function will get the command for the currently executing script
+Public Function GetCommands(ByVal scriptName As String) As Collection
+
+    If IsMissing(scriptName) Then scriptName = modScripting.GetScriptName
+
+    Set GetCommands = clsCommandDocObj.GetCommands(scriptName)
+    
+End Function
+
 '// OPENCOMMAND
 '// Returns the CommandDocs object of a script command
 '// PARAMETERS
 '//     commandName - the name of the command
 '//     ScriptName -  if provided, this function will get the command for the specified script
 '//                   vbNullString to get internal commands
-'//                   Chr(0) to get commands from any script
+'//                   Chr(0) to get commands from any script that is enabled
 '//                   if ommitted, this function will get the command for the currently executing script
 Public Function OpenCommand(ByVal commandName As String, Optional ByVal scriptName As String) As Object
     
@@ -1429,6 +1445,33 @@ Public Function DeleteCommand(ByVal commandName As String, Optional ByVal script
     Set Command = Nothing
     
 End Function
+
+'// 08/23/2009 52 - Obsoleted in favor of the new Command Event
+'// ISCOMMAND
+'// Pass a message a user sent
+'// Returns a Command instance object specifying whether they have access to the command
+'// and whether it has the correct syntax among other things
+'// PARAMETERS
+'//     commandText - the sent message
+'//     strUsername - the user's username
+'//     ScriptName -  if provided, this function will check for commands created in the specified script
+'//                   vbNullString to get internal commands
+'//                   Chr(0) to get commands from any script
+'//                   if ommitted, this function will check for commands created in the currently executing script
+'Public Function IsCommand(ByVal commandText As String, ByVal strUsername As String, Optional ByVal scriptName As String) As Collection
+'
+'    Dim commands As Collection
+'
+'    If IsMissing(scriptName) Then scriptName = modScripting.GetScriptName
+'
+'    ' 08/17/2009 - 52 - using static class method
+'    Set commands = clsCommandObj.IsCommand(commandText, strUsername, scriptName)
+'
+'    Set IsCommand = commands
+'
+'    Set commands = Nothing
+'
+'End Function
 
 '// OBSERVESCRIPT
 '// Add the currently runnign script as an Observer of the Specified script
@@ -1592,12 +1635,6 @@ End Function
 Public Sub ForceBNCSPacketParse(ByVal PacketData As String)
     Call BNCSParsePacket(PacketData)
 End Sub
-
-'// GETCOMMANDS
-'// Gets a collection of stored commands
-Public Function GetCommands(Optional ByVal Database As String = vbNullString) As Collection
-    Set GetCommands = modCommandDocsObj.GetCommands(Database)
-End Function
 
 '// GETUSERDATABASE
 '// Gets a collection of users in the database
