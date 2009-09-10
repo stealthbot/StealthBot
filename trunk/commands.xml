@@ -2980,6 +2980,16 @@
       </description>
     </documentation>
 
+    <arguments>
+      <argument name="subcommand" type="word" optional="1">
+        <documentation>
+          <description>
+            The sub-command to use. 'On', 'Off', or 'Status'
+          </description>
+        </documentation>
+      </argument>
+    </arguments>
+
     <access>
       <rank>80</rank>
       <flags>
