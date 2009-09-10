@@ -24,12 +24,12 @@ Public Declare Function GetUserDefaultLCID Lib "kernel32" () As Long
 Public Declare Function GetUserDefaultLangID Lib "kernel32" () As Long
 Public Declare Function GetLocaleInfo Lib "kernel32" Alias "GetLocaleInfoA" (ByVal locale As Long, ByVal LCType As Long, ByVal lpLCData As String, ByVal cchData As Long) As Long
 
-Public Declare Function SetTimer Lib "user32" (ByVal hwnd As Long, ByVal nIDEvent As Long, ByVal uElapse As Long, ByVal lpTimerFunc As Long) As Long
-Public Declare Function KillTimer Lib "user32" (ByVal hwnd As Long, ByVal nIDEvent As Long) As Long
+Public Declare Function SetTimer Lib "user32" (ByVal hWnd As Long, ByVal nIDEvent As Long, ByVal uElapse As Long, ByVal lpTimerFunc As Long) As Long
+Public Declare Function KillTimer Lib "user32" (ByVal hWnd As Long, ByVal nIDEvent As Long) As Long
 
 Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 
-Public Declare Function ShowScrollBar Lib "user32" (ByVal hwnd As Long, ByVal wBar As Long, ByVal bShow As Long) As Long
+Public Declare Function ShowScrollBar Lib "user32" (ByVal hWnd As Long, ByVal wBar As Long, ByVal bShow As Long) As Long
 
 'Public Declare Function z Lib "bnetauth.dll" Alias "Z" (ByVal FileExe As String, ByVal FileStormDll As String, ByVal FileBnetDll As String, ByVal HashText As String, ByRef Version As Long, ByRef Checksum As Long, ByVal EXEInfo As String, ByVal mpqName As String) As Long
 'Public Declare Function c Lib "bnetauth.dll" Alias "C" (ByVal outbuf As String, ByVal serverhash As Long, ByVal prodid As Long, ByVal val1 As Long, ByVal val2 As Long, ByVal Seed As Long) As Long '
@@ -64,7 +64,7 @@ Public Declare Function URLDownloadToFile Lib "urlmon" _
 Public Declare Function CallWindowProc Lib "user32" _
    Alias "CallWindowProcA" _
   (ByVal lpPrevWndFunc As Long, _
-   ByVal hwnd As Long, _
+   ByVal hWnd As Long, _
    ByVal msg As Long, _
    ByVal wParam As Long, _
    ByVal lParam As Long) As Long
@@ -77,26 +77,26 @@ Public Declare Function GlobalLock Lib "kernel32" (ByVal hMem As Long) As Long
 Public Declare Function GlobalUnlock Lib "kernel32" (ByVal hMem As Long) As Long
 
 Public Declare Function FindWindow Lib "user32" Alias "FindWindowA" (ByVal lpClassName As String, ByVal lpWindowName As String) As Long
-Public Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-Public Declare Function SendMessageAny Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
-Public Declare Function IsWindow Lib "user32" (ByVal hwnd As Long) As Long
-Public Declare Function GetWindowText Lib "user32" Alias "GetWindowTextA" (ByVal hwnd As Long, ByVal lpString As String, ByVal cch As Long) As Long
-Public Declare Function GetWindowTextLength Lib "user32" Alias "GetWindowTextLengthA" (ByVal hwnd As Long) As Long
-Public Declare Function PostMessage Lib "user32" Alias "PostMessageA" (ByVal hwnd As Long, ByVal wMsg As Integer, ByVal wParam As Long, ByVal lParam As Long) As Integer
-Public Declare Function SendMessageByString Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As String) As Long
-Public Declare Function SetForegroundWindow Lib "user32" (ByVal hwnd As Long) As Long
+Public Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Declare Function SendMessageAny Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
+Public Declare Function IsWindow Lib "user32" (ByVal hWnd As Long) As Long
+Public Declare Function GetWindowText Lib "user32" Alias "GetWindowTextA" (ByVal hWnd As Long, ByVal lpString As String, ByVal cch As Long) As Long
+Public Declare Function GetWindowTextLength Lib "user32" Alias "GetWindowTextLengthA" (ByVal hWnd As Long) As Long
+Public Declare Function PostMessage Lib "user32" Alias "PostMessageA" (ByVal hWnd As Long, ByVal wMsg As Integer, ByVal wParam As Long, ByVal lParam As Long) As Integer
+Public Declare Function SendMessageByString Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As String) As Long
+Public Declare Function SetForegroundWindow Lib "user32" (ByVal hWnd As Long) As Long
 
 Public Declare Function FindWindowEx Lib "user32" Alias "FindWindowExA" (ByVal hWnd1 As Long, ByVal hWnd2 As Long, ByVal lpsz1 As String, ByVal lpsz2 As String) As Long
 
 Public Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
-Public Declare Function SetCursorPos Lib "user32" (ByVal X As Long, ByVal Y As Long) As Long
+Public Declare Function SetCursorPos Lib "user32" (ByVal X As Long, ByVal y As Long) As Long
 
 Public Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" ( _
-    ByVal hwnd As Long, _
+    ByVal hWnd As Long, _
     ByVal nIndex As Long, _
     ByVal dwNewLong As Long) As Long
     
-Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hwnd _
+Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hWnd _
     As Long, ByVal nIndex As Long) As Long
     
 Public Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" ( _
@@ -105,7 +105,7 @@ Public Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" ( _
     ByVal length As Long)
     
 Public Declare Function ShellExecute Lib "shell32" Alias "ShellExecuteA" ( _
-    ByVal hwnd As Long, _
+    ByVal hWnd As Long, _
     ByVal lpOperation As String, _
     ByVal lpFile As String, _
     ByVal lpParameters As String, _
@@ -113,10 +113,10 @@ Public Declare Function ShellExecute Lib "shell32" Alias "ShellExecuteA" ( _
     ByVal nShowCmd As Long) As Long
 
 ' Needed for the RTB scroll lock
-Public Declare Function GetScrollRange Lib "user32" (ByVal hwnd As Long, ByVal nBar As Integer, ByRef lpMinPos As Integer, ByRef lpMaxPos As Integer) As Boolean
+Public Declare Function GetScrollRange Lib "user32" (ByVal hWnd As Long, ByVal nBar As Integer, ByRef lpMinPos As Integer, ByRef lpMaxPos As Integer) As Boolean
 Public Declare Function LockWindowUpdate Lib "user32" (ByVal hwndLock As Long) As Long
 
-Public Declare Function SetActiveWindow Lib "user32" (ByVal hwnd As Long) As Long
+Public Declare Function SetActiveWindow Lib "user32" (ByVal hWnd As Long) As Long
 
 'Public Declare Sub SRP_Init Lib "SRPx86.dll" Alias "srp_initialize" (ByRef SRP As SRP_TYPE, ByVal Username As String, ByVal Password As String)
 '
@@ -158,8 +158,7 @@ Public Const LOCALE_SNATIVECTRYNAME As Long = &H8
 
 ' some stuff needed for warden
 Public Declare Sub ZeroMemory Lib "kernel32" Alias "RtlZeroMemory" (ByRef Destination As Any, ByVal numBytes As Long)
-Public Declare Function CallWindowProcA Lib "user32" (ByVal lpPrevWndFunc As Long, ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-Public Declare Function uncompress Lib "zlib" (ByRef dest As Any, ByRef destLen As Long, ByRef src As Any, ByRef srcLen As Long) As Long
+Public Declare Function CallWindowProcA Lib "user32" (ByVal lpPrevWndFunc As Long, ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Public Declare Function LoadLibraryA Lib "kernel32" (ByVal strFilePath As String) As Long
 Public Declare Function GetProcAddress Lib "kernel32" (ByVal hModule As Long, ByVal lpProcName As String) As Long
 
