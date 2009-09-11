@@ -461,7 +461,7 @@ Private Sub Form_Load()
     
 ErrorHandler:
 
-    MsgBox Err.description, vbCritical + vbOKOnly, Me.Caption
+    frmChat.AddChat RTBColors.ErrorMessageText, Err.description
     Call ResetForm
     '// Disable our buttons
     cmdSave.enabled = False
@@ -511,23 +511,7 @@ Private Sub PopulateOwnerComboBox()
     
 End Sub
 
-
-
 Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
-    
-    Dim colCommands As Collection
-    
-    Call ClearTreeViewNodes(trvCommands)
-    
-    Set colCommands = clsCommandDocObj.GetCommands(strScriptOwner)
-    
-    
-        
-End Sub
-    
-    
-Private Sub PopulateTreeViewOld()
-    
     
     Dim commandNodes      As IXMLDOMNodeList
     Dim totalCommands     As Integer
@@ -562,99 +546,100 @@ Private Sub PopulateTreeViewOld()
     
     Call ClearTreeViewNodes(trvCommands)
     
-    
-    
-    
-    
-    
+    '// create xpath expression based on strScriptOwner
+    If strScriptOwner = vbNullString Then
+        xpath = "/commands/command[not(@owner)]"
+        'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
+    Else
+        xpath = StringFormat("/commands/command[@owner='{0}']", strScriptOwner)
+        'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
+    End If
     
     '// get a list of all the commands
+    Set commandNodes = m_Commands.XMLDocument.documentElement.selectNodes(xpath)
+    ReDim commandNameArray(commandNodes.length)
     
-   
     
-    'Set commandNodes = m_CommandsDoc.documentElement.selectNodes(xpath)
-    'ReDim commandNameArray(commandNodes.length)
-    '
-    '
     '// read them 1 at a time and add them to an array
-   'X = 0
-    'For Each xmlCommand In m_CommandsDoc.documentElement.selectNodes(xpath)
-'        commandNameArray(X) = xmlCommand.Attributes.getNamedItem("name").Text
-        'X = X + 1
-    'Next
-'
-    ''// sort the command names
-    'Call BubbleSort1(commandNameArray)
-'
-'
-    ''// loop through the sorted array and select the commands
-    'For X = LBound(commandNameArray) To UBound(commandNameArray)
-'
-        'commandName = commandNameArray(X)
-        'If Len(commandName) > 0 Then
-            ''// create xpath expression based on strScriptOwner
-            'If strScriptOwner = vbNullString Then
-                'xpath = StringFormat("/commands/command[@name='{0}' and not(@owner)]", commandName)
-                ''Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
-            'Else
-                'xpath = StringFormat("/commands/command[@name='{0}' and @owner='{1}']", commandName, strScriptOwner)
-                ''Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
-            'End If
-'
-            'Set xmlCommand = m_CommandsDoc.documentElement.selectSingleNode(xpath)
-'
-            'commandName = xmlCommand.Attributes.getNamedItem("name").Text
-            'Set nCommand = trvCommands.nodes.Add(trvCommands.nodes.Parent, etvwChild, commandName, commandName)
-'
-            ''// 08/30/2008 JSM - check if this command is the first alphabetically
-            'If defaultNode Is Nothing Then
-                'Set defaultNode = nCommand
-            'Else
-                'If StrComp(defaultNode.Text, nCommand.Text) > 0 Then
-                    'Set defaultNode = nCommand
-                'End If
-            'End If
-'
-            'Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
-            ''// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
-            ''//                  something, even if nothing matches the XPath expression.
-            'For i = 0 To (xmlArgs.length - 1)
-'
-                'argumentName = xmlArgs(i).Attributes.getNamedItem("name").Text
-                'If (Not xmlArgs(i).Attributes.getNamedItem("optional") Is Nothing) Then
-                    'If (xmlArgs(i).Attributes.getNamedItem("optional").Text = "1") Then
-                        'argumentName = StringFormat("[{0}]", argumentName)
-                    'End If
-                'End If
-'
-                ''// Add the datatype to the argument name
-                'If (Not xmlArgs(i).Attributes.getNamedItem("type") Is Nothing) Then
-                    'argumentName = StringFormat("{0} ({1})", argumentName, xmlArgs(i).Attributes.getNamedItem("type").Text)
-                'Else
-                    'argumentName = StringFormat("{0} ({1})", argumentName, "String")
-                'End If
-'
-                'Set nArg = trvCommands.nodes.Add(nCommand, etvwChild, commandName & "." & argumentName, argumentName)
-'
-                'Set xmlArgRestricions = xmlArgs(i).selectNodes("restrictions/restriction")
-'
-                'For j = 0 To (xmlArgRestricions.length - 1)
-                    'restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
-                    'Set nArgRestriction = trvCommands.nodes.Add(nArg, etvwChild, commandName & "." & argumentName & "." & restrictionName, restrictionName)
-                'Next j
-            'Next i
-        'End If '// Len(commandName) > 0
-    'Next
-'
+    X = 0
+    For Each xmlCommand In m_Commands.XMLDocument.documentElement.selectNodes(xpath)
+        commandNameArray(X) = xmlCommand.Attributes.getNamedItem("name").Text
+        X = X + 1
+    Next
+    
+    '// sort the command names
+    Call BubbleSort1(commandNameArray)
+    
+
+    '// loop through the sorted array and select the commands
+    For X = LBound(commandNameArray) To UBound(commandNameArray)
+
+        commandName = commandNameArray(X)
+        If Len(commandName) > 0 Then
+            '// create xpath expression based on strScriptOwner
+            If strScriptOwner = vbNullString Then
+                xpath = StringFormat("/commands/command[@name='{0}' and not(@owner)]", commandName)
+                'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
+            Else
+                xpath = StringFormat("/commands/command[@name='{0}' and @owner='{1}']", commandName, strScriptOwner)
+                'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
+            End If
+    
+            Set xmlCommand = m_Commands.XMLDocument.documentElement.selectSingleNode(xpath)
+        
+            commandName = xmlCommand.Attributes.getNamedItem("name").Text
+            Set nCommand = trvCommands.nodes.Add(trvCommands.nodes.Parent, etvwChild, commandName, commandName)
+            
+            '// 08/30/2008 JSM - check if this command is the first alphabetically
+            If defaultNode Is Nothing Then
+                Set defaultNode = nCommand
+            Else
+                If StrComp(defaultNode.Text, nCommand.Text) > 0 Then
+                    Set defaultNode = nCommand
+                End If
+            End If
+            
+            Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
+            '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
+            '//                  something, even if nothing matches the XPath expression.
+            For i = 0 To (xmlArgs.length - 1)
+            
+                argumentName = xmlArgs(i).Attributes.getNamedItem("name").Text
+                If (Not xmlArgs(i).Attributes.getNamedItem("optional") Is Nothing) Then
+                    If (xmlArgs(i).Attributes.getNamedItem("optional").Text = "1") Then
+                        argumentName = StringFormat("[{0}]", argumentName)
+                    End If
+                End If
+                
+                '// Add the datatype to the argument name
+                If (Not xmlArgs(i).Attributes.getNamedItem("type") Is Nothing) Then
+                    argumentName = StringFormat("{0} ({1})", argumentName, xmlArgs(i).Attributes.getNamedItem("type").Text)
+                Else
+                    argumentName = StringFormat("{0} ({1})", argumentName, "String")
+                End If
+                
+                Set nArg = trvCommands.nodes.Add(nCommand, etvwChild, commandName & "." & argumentName, argumentName)
+                
+                Set xmlArgRestricions = xmlArgs(i).selectNodes("restrictions/restriction")
+                
+                For j = 0 To (xmlArgRestricions.length - 1)
+                    restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
+                    Set nArgRestriction = trvCommands.nodes.Add(nArg, etvwChild, commandName & "." & argumentName & "." & restrictionName, restrictionName)
+                Next j
+            Next i
+        End If '// Len(commandName) > 0
+    Next
+    
     '// 08/30/2008 JSM - click the first command alphabetically
     ' fixed to work with SelectedNodeChanged() -Ribose/2009-08-10
-   ' If Not (defaultNode Is Nothing) Then
-   '     defaultNode.Selected = True
-   ' Else
-   '     trvCommands_SelectedNodeChanged
-   ' End If
+    If Not (defaultNode Is Nothing) Then
+        defaultNode.Selected = True
+    Else
+        trvCommands_SelectedNodeChanged
+    End If
     
 End Sub
+
 
 '// This function will prompt a user to save the changes (if necessary)
 '// 08/30/2008 JSM - Created
@@ -703,6 +688,8 @@ End Function
 ' if no node is selected (such as none existing), now disables all fields -Ribose/2009-08-10
 Private Sub trvCommands_SelectedNodeChanged()
 
+    On Error GoTo ErrorHandler
+
     Dim node As cTreeViewNode
     Dim nt As NodeType
     Dim commandName As String
@@ -737,6 +724,17 @@ Private Sub trvCommands_SelectedNodeChanged()
     Call m_Commands.OpenCommand(commandName, IIf(cboCommandGroup.ListIndex = 0, vbNullString, cboCommandGroup.Text))
     Call ResetForm
     Call PrepareForm(nt)
+    
+    Exit Sub
+    
+ErrorHandler:
+
+    frmChat.AddChat RTBColors.ErrorMessageText, Err.description
+    Call ResetForm
+    '// Disable our buttons
+    cmdSave.enabled = False
+    cmdDiscard.enabled = False
+    Exit Sub
     
 End Sub
 
@@ -820,6 +818,7 @@ Private Sub SaveForm()
                 For i = 0 To cboAlias.ListCount - 1
                     .aliases.Add cboAlias.List(i)
                 Next i
+                .IsEnabled = Not CBool(chkDisable.Value)
             End With
        
         Case NodeType.nArgument
@@ -930,7 +929,7 @@ Private Sub PrepareForm(nt As NodeType)
                 '// chkDisable
                 chkDisable.enabled = True
                 chkDisable.Visible = True
-                chkDisable.Value = m_Commands.IsEnabled
+                chkDisable.Value = IIf(m_Commands.IsEnabled, vbUnchecked, vbChecked)
                 '// custom captions
                 fraCommand.Caption = StringFormat("{0}", .commandName, .argumentName, .restrictionName)
                 chkDisable.Caption = StringFormat("Disable {0} command", .commandName, .argumentName, .restrictionName)

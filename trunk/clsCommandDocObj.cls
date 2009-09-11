@@ -31,9 +31,13 @@ Private m_special_notes  As String
 Private m_enabled        As Boolean
 Private m_owner          As String
 
+Private m_defaultXMLPath As String
+
 Private Sub Class_Initialize()
 
     Set m_database = New DOMDocument60
+    
+    m_defaultXMLPath = GetFilePath("Commands.xml")
     
     '// 06/23/2009 JSM - initializing these as Nothing
     Set m_params = Nothing
@@ -50,16 +54,27 @@ Private Sub Class_Terminate()
 End Sub
 
 Public Function OpenDatabase(Optional ByVal DatabasePath As String = vbNullString, Optional ByVal forceLoad As Boolean = False)
-
+    
     If (DatabasePath = vbNullString) Then
-        DatabasePath = GetFilePath("Commands.xml")
+        DatabasePath = m_defaultXMLPath
     End If
     
-    If forceLoad = True Or m_database.childNodes.length = 0 Then
+    If Not FileExists(DatabasePath) And m_database.childNodes.length = 0 Then
+         Set m_database.documentElement = m_database.createElement("commands")
+    ElseIf forceLoad = True Or m_database.childNodes.length = 0 Then
         m_database.Load DatabasePath
     End If
     
 End Function
+
+Private Function FileExists(FileName As String) As Boolean
+    On Error GoTo ErrorHandler
+    ' get the attributes and ensure that it isn't a directory
+    FileExists = (GetAttr(FileName) And vbDirectory) = 0
+ErrorHandler:
+    ' if an error occurs, this function returns False
+End Function
+
 
 Public Function GetCommandCount(Optional ByVal strScriptOwner As String = vbNullString) As Integer
 
@@ -480,6 +495,8 @@ Public Function Save() As Boolean
     
     Save = True
     
+    Exit Function
+    
 ERROR_HANDLER:
     
     Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.Save().")
@@ -504,7 +521,7 @@ Public Sub Delete()
 
 End Sub
 
-Private Function getParameters(ByRef CommandNode As IXMLDOMNode) As Collection
+Private Function getParameters(ByRef commandNode As IXMLDOMNode) As Collection
 
     Dim parameter  As IXMLDOMNode
     Dim Parameters As IXMLDOMNodeList
@@ -512,11 +529,11 @@ Private Function getParameters(ByRef CommandNode As IXMLDOMNode) As Collection
 
     Set getParameters = New Collection
     
-    If (CommandNode Is Nothing) Then
+    If (commandNode Is Nothing) Then
         Exit Function
     End If
     
-    Set Parameters = CommandNode.selectNodes("arguments/argument")
+    Set Parameters = commandNode.selectNodes("arguments/argument")
     
     For Each parameter In Parameters
         Set temp = New clsCommandParamsObj
@@ -924,7 +941,7 @@ Private Function getEnabled(ByRef AnyNode As IXMLDOMNode) As Boolean
         Exit Function
     End If
     
-    If (temp.Text = "false") Then
+    If (temp.Text = "0") Then
         getEnabled = False
     End If
 
@@ -945,9 +962,9 @@ Private Function setEnabled(ByRef AnyNode As IXMLDOMNode, ByVal enabled As Boole
     End If
 
     If (enabled = True) Then
-        temp.Text = "true"
+        temp.Text = "1"
     Else
-        temp.Text = "false"
+        temp.Text = "0"
     End If
     
     Call Save
@@ -974,7 +991,7 @@ End Function
 Private Function getSyntaxString(Optional IsLocal As Boolean = False) As String
 
     Dim retVal As String
-    Dim p As clsCommandParamsObj
+    Dim P As clsCommandParamsObj
     
     If (m_command_node Is Nothing) Then
         Exit Function
@@ -984,12 +1001,12 @@ Private Function getSyntaxString(Optional IsLocal As Boolean = False) As String
     retVal = StringFormat("{0} ", Me.Name)
     
     '// add the parameters
-    For Each p In Me.Parameters
+    For Each P In Me.Parameters
         retVal = StringFormat("{0}{2}{1}{3} ", _
                     retVal, _
-                    p.Name, _
-                    IIf(p.IsOptional, "[", "<"), _
-                    IIf(p.IsOptional, "]", ">"))
+                    P.Name, _
+                    IIf(P.IsOptional, "[", "<"), _
+                    IIf(P.IsOptional, "]", ">"))
     Next
     
     '// add the trigger
@@ -1357,16 +1374,16 @@ End Property
 
 Public Function GetParameterByName(ByVal sParamName As String) As clsCommandParamsObj
     
-    Dim p As clsCommandParamsObj
+    Dim P As clsCommandParamsObj
     Dim col As Collection
     Dim i As Integer
     
     Set col = Me.Parameters
         
     For i = 1 To col.Count
-        Set p = col(i)
-        If StrComp(sParamName, p.Name, vbTextCompare) = 0 Then
-            Set GetParameterByName = p
+        Set P = col(i)
+        If StrComp(sParamName, P.Name, vbTextCompare) = 0 Then
+            Set GetParameterByName = P
             Exit Function
         End If
     Next i
@@ -1382,4 +1399,9 @@ Public Property Get Parameters() As Collection
     
     Set Parameters = m_params
 
+End Property
+
+
+Public Property Get XMLDocument() As DOMDocument60
+    Set XMLDocument = m_database
 End Property

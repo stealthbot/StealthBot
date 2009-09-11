@@ -34,13 +34,13 @@ Public Function GetCommands(Optional ByVal scriptName As String = vbNullString) 
     scriptName = Replace$(scriptName, "'", "&apos;")
     
     If scriptName = vbNullString Then
-        xpath = StringFormat("./command[not(@owner)]", _
-            UCase$(AZ), LCase$(AZ))
+		frmChat.AddChat RTBColors.ErrorMessageText, "Cannot use GetCommands() for internal commands."
+		Exit Function
     ElseIf scriptName = Chr$(0) Then
-        xpath = StringFormat("./command[translate(@owner, '{0}', '{1}')='{2}' and (not(@enabled) or @enable = 1)]", _
+        xpath = StringFormat("./commands/command[translate(@owner, '{0}', '{1}')='{2}' and (not(@enabled) or @enable = 1)]", _
             UCase$(AZ), LCase$(AZ), LCase$(scriptName))
     Else
-        xpath = StringFormat("./command[translate(@owner, '{0}', '{1}')='{2}']", _
+        xpath = StringFormat("./commands/command[translate(@owner, '{0}', '{1}')='{2}']", _
             UCase$(AZ), LCase$(AZ), LCase$(scriptName))
     End If
         

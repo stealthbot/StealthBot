@@ -148,7 +148,7 @@ Sub Event_Command(Command)
                 If (Command.IsValid) Then
                     Command.Respond StringFormat("The soundex value for {0} is {1}. ", Command.Argument("Word"), Soundex(Command.Argument("Word")))
 				Else
-					Cmd.Respond StringFormat("The proper syntax for this command is: {0}SoundEx <Word>", BotVars.Trigger)
+					Command.Respond StringFormat("The proper syntax for this command is: {0}SoundEx <Word>", BotVars.Trigger)
                 End If
         End Select
     ElseIf (Command.Docs.Owner = vbNullString) Then 'Its a internal Command!

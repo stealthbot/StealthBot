@@ -4,7 +4,7 @@ Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
@@ -6603,6 +6603,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Dim bln                  As Boolean
     Dim doConvert            As Boolean
     Dim command_output()     As String
+    
+    Dim oCommandGenerator    As New clsCommandGeneratorObj
         
     s = ReadCfg(OT, "Timestamp")
     If StrictIsNumeric(s) And Val(s) < 4 Then BotVars.TSSetting = CInt(s) Else BotVars.TSSetting = 0
@@ -6643,6 +6645,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     End If
     
     Call LoadDatabase
+    Call oCommandGenerator.GenerateCommands
     
     If Mode <> 1 Then
         s = ReadCfg(OT, "ChatFont")
@@ -7198,6 +7201,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             If (Err.Number = 0) Then: sckMCP.bind , ReadCfg(MN, "LocalIP")
         End If
     End If
+    
+    Set oCommandGenerator = Nothing
     
     Exit Sub
 

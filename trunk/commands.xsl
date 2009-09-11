@@ -19,13 +19,14 @@ Option Explicit
         <xsl:for-each select="/commands/command[not(@owner)]">
 Private Sub cmd_<xsl:value-of select="@name"/>(ByRef oCommandDoc As clsCommandDocObj)
 
-    Dim oCommand As clsCommandObj, oParameter As clsCommandParamsObj, oRestriction As clsCommandRestrictionObj
+    Dim oParameter As clsCommandParamsObj, oRestriction As clsCommandRestrictionObj
 
     With oCommandDoc
         If Not .OpenCommand("<xsl:value-of select="@name"/>", vbNullString) Then
             
             Call .CreateCommand("<xsl:value-of select="@name"/>", vbNullString, False)
-            
+            Call .OpenCommand("<xsl:value-of select="@name"/>", vbNullString)
+			
             <xsl:if test="count(aliases/alias) > 0">
             With .aliases<xsl:for-each select="aliases/alias">
                 .Add "<xsl:value-of select="text()"/>"</xsl:for-each>
@@ -41,7 +42,7 @@ Private Sub cmd_<xsl:value-of select="@name"/>(ByRef oCommandDoc As clsCommandDo
             </xsl:if>
             
             <xsl:if test="count(access/rank) > 0">
-                .RequiredRank = "<xsl:value-of select="access/rank"/>"
+                .RequiredRank = <xsl:value-of select="access/rank"/>
             </xsl:if>
             
             <xsl:if test="count(access/flags/flag) > 0">
@@ -71,7 +72,7 @@ Private Sub cmd_<xsl:value-of select="@name"/>(ByRef oCommandDoc As clsCommandDo
                     Set oRestriction = oCommandDoc.NewRestriction("<xsl:value-of select="normalize-space(@name)"/>", <xsl:call-template name="getRank" />, <xsl:call-template name="getFlags" />)
                     With oRestriction
                     <xsl:if test="count(access/rank) > 0">
-                        .RequiredRank = "<xsl:value-of select="access/rank"/>"
+                        .RequiredRank = <xsl:value-of select="access/rank"/>
                     </xsl:if>
                     <xsl:if test="count(access/flags/flag) > 0">
                         .RequiredFlags = "<xsl:for-each select="access/flags/flag"><xsl:value-of select="normalize-space(text())"/></xsl:for-each>"
@@ -84,10 +85,13 @@ Private Sub cmd_<xsl:value-of select="@name"/>(ByRef oCommandDoc As clsCommandDo
                             .MatchError = <xsl:call-template name="vbstring"><xsl:with-param name="text" select="error/text()"/></xsl:call-template>
                         </xsl:if>
                     </xsl:if>
-                    End With
+                 End With
+				 .Restrictions.Add oRestriction
                 </xsl:for-each>
             End With
+			.Parameters.Add oParameter
             </xsl:for-each>
+			Call .Save()
         End If
     End With
 End Sub      
@@ -98,19 +102,17 @@ Public Sub GenerateCommands()
     Dim oCommandDoc As New clsCommandDocObj
     <xsl:for-each select="/commands/command[not(@owner)]">
     Call cmd_<xsl:value-of select="@name"/>(oCommandDoc)</xsl:for-each>
-	
-	Call oCommandDoc.Save()
-	
+
 End Sub
         
     </xsl:template>
 
     <xsl:template name="getOptional">
         <xsl:choose>
-            <xsl:when test="not(@optional)">True</xsl:when>
+            <xsl:when test="not(@optional)">False</xsl:when>
             <xsl:otherwise><xsl:choose>
-                <xsl:when test="@optional = 1">False</xsl:when>
-                <xsl:otherwise>True</xsl:otherwise></xsl:choose>
+                <xsl:when test="@optional = 1">True</xsl:when>
+                <xsl:otherwise>False</xsl:otherwise></xsl:choose>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>    
