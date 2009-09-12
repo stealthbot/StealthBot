@@ -107,7 +107,7 @@ Public Sub OnInvite(Command As clsCommandObj)
     
     If (IsW3) Then
         If (g_Clan.Self.Rank >= 3) Then
-            If (Command.IsValid) Then
+            If (Command.IsValid Or LenB(Command.Argument("Username")) = 0) Then
                 Call InviteToClan(Command.Argument("Username"))
                 Command.Respond Command.Argument("Username") & ": Clan invitation sent."
             Else

@@ -41,6 +41,7 @@ Public Sub DisbandClan()
 End Sub
 
 Public Sub InviteToClan(Username As String) '//Works
+    If (LenB(Username) = 0) Then Exit Sub
     With PBuffer
         .InsertDWord &H1
         .InsertNTString Username
@@ -112,7 +113,7 @@ Public Function DebugOutput(ByVal sIn As String) As String
     Dim iLen As Long, iPos As Long
     Dim sB As String, sT As String
     Dim sOut As String
-    Dim Offset As Long, sOffset As String
+    Dim offset As Long, sOffset As String
     'build random string to display
     '    y1 = 256
     '    sIn = String(y1, 0)
@@ -124,10 +125,10 @@ Public Function DebugOutput(ByVal sIn As String) As String
 
     If iLen = 0 Then Exit Function
     sOut = vbNullString
-    Offset = 0
+    offset = 0
 
     For x1 = 0 To ((iLen - 1) \ 16)
-        sOffset = Right$("0000" & Hex(Offset), 4)
+        sOffset = Right$("0000" & Hex(offset), 4)
         sB = String(48, " ")
         sT = "................"
         For y1 = 1 To 16
@@ -144,7 +145,7 @@ Public Function DebugOutput(ByVal sIn As String) As String
         If Len(sOut) > 0 Then sOut = sOut & vbCrLf
         sOut = sOut & sOffset & ":  "
         sOut = sOut & sB & "  " & sT
-        Offset = Offset + 16
+        offset = offset + 16
     Next x1
 
     'sDebugBuf = sDebugBuf & vbCrLf & vbCrLf & sOut
@@ -152,12 +153,12 @@ Public Function DebugOutput(ByVal sIn As String) As String
 End Function
 
 Public Function TimeSinceLastRemoval() As Long
-    Dim l As Long
+    Dim L As Long
     
     If LastRemoval > 0 Then
-        l = GetTickCount
+        L = GetTickCount
         
-        TimeSinceLastRemoval = ((l - LastRemoval) / 1000)
+        TimeSinceLastRemoval = ((L - LastRemoval) / 1000)
     Else
         TimeSinceLastRemoval = 30
     End If
