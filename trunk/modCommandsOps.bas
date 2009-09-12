@@ -77,6 +77,8 @@ Public Sub OnCAdd(Command As clsCommandObj)
     If (Command.IsValid) Then
         If (LenB(Command.Argument("Message")) > 0) Then
             sArgs = "--banmsg " & Command.Argument("Message")
+        Else
+            sArgs = "--banmsg Client Ban"
         End If
         
         Command.Args = StringFormat("{0} +B --type GAME {1}", Command.Argument("Game"), sArgs)

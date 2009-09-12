@@ -283,21 +283,21 @@ Public Function OnRemOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
         
         ' loop through paramter list
         For i = 1 To UBound(strArray)
-            Dim Parameter As String ' ...
+            Dim parameter As String ' ...
             Dim pmsg      As String ' ...
             
             Index = InStr(1, strArray(i), Space(1), vbBinaryCompare)
             If (Index > 0) Then
-                Parameter = Mid$(strArray(i), 1, Index - 1)
+                parameter = Mid$(strArray(i), 1, Index - 1)
                 pmsg = Mid$(strArray(i), Index + 1)
             Else
-                Parameter = strArray(i)
+                parameter = strArray(i)
             End If
             
-            Parameter = LCase$(Parameter)
+            parameter = LCase$(parameter)
             
             ' handle parameters
-            Select Case (Parameter)
+            Select Case (parameter)
                 Case "type"
                     If (Len(pmsg) > 0) Then
                         Select Case UCase$(pmsg)
@@ -425,7 +425,7 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
             
             ' loop through paramter list
             For i = 1 To UBound(strArray)
-                Dim Parameter As String ' ...
+                Dim parameter As String ' ...
                 Dim pmsg      As String ' ...
                 
                 ' check message for a space
@@ -434,20 +434,20 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                 ' did our search find a space?
                 If (Index > 0) Then
                     ' grab parameter
-                    Parameter = Mid$(strArray(i), 1, Index - 1)
+                    parameter = Mid$(strArray(i), 1, Index - 1)
                     
                     ' grab parameter message
                     pmsg = Mid$(strArray(i), Index + 1)
                 Else
                     ' grab parameter
-                    Parameter = strArray(i)
+                    parameter = strArray(i)
                 End If
                 
                 ' convert parameter to lowercase
-                Parameter = LCase$(Parameter)
+                parameter = LCase$(parameter)
                 
                 ' handle parameters
-                Select Case (Parameter)
+                Select Case (Trim$(parameter))
                     Case "type" ' ...
                         ' do we have a valid parameter Length?
                         If (Len(pmsg)) Then
