@@ -1542,12 +1542,14 @@ Private Sub Form_Load()
     CVERSION = StringFormat("StealthBot {0}v{1}.{2} - Build {3}", strBeta, App.Major, App.Minor, App.REVISION, 4)
     
     #If (COMPILE_CRC = 1) Then
-        If (Not ValidateExecutable) Then
+        Dim crc As New clsCRC32
+        If (Not crc.ValidateExecutable) Then
             MsgBox GetHexProtectionMessage, vbOKOnly + vbCritical
             'Call Form_Unload(0)
             Unload frmChat
             Exit Sub
         End If
+        Set crc = Nothing
     #End If
 
     #If (COMPILE_DEBUG = 0) Then
