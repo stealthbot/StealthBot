@@ -9,15 +9,15 @@ FILETYPE 0x1 //// 2 for dll, 1 for exe
 		BLOCK "000004b0"
 		{
 			VALUE "CompanyName", "Andy T (Stealth@USEast)"
-			VALUE "ProductName", "StealthBot v@VERSION_MAJOR@.@VERSION_MINOR@"
-			VALUE "FileDescription", "StealthBot v@VERSION_MAJOR@.@VERSION_MINOR@"
+			VALUE "ProductName", "StealthBot Launcher v@VERSION_MAJOR@.@VERSION_MINOR@"
+			VALUE "FileDescription", "StealthBot Launcher v@VERSION_MAJOR@.@VERSION_MINOR@"
 			VALUE "LegalCopyright", "(c) 2002-2009 Andy T. (Stealth@USEast)"
 			VALUE "LegalTrademarks", ""
 			VALUE "OriginalFilename", ""
 			VALUE "ProductVersion", "@VERSION_MAJOR@.@VERSION_MINOR@.0.@VERSION_REVISION@"
 			VALUE "FileVersion", "@VERSION_MAJOR@.@VERSION_MINOR@.0.@VERSION_REVISION@"
 			VALUE "Comments", ""
-			VALUE "InternalName", "StealthBot"
+			VALUE "InternalName", "StealthBot Launcher"
 		}
 	}
 	BLOCK "VarFileInfo"

@@ -128,6 +128,8 @@ Private Const OBJECT_NAME As String = "frmLauncher"
 
 Private Sub Form_Load()
 On Error GoTo ERROR_HANDLER
+
+    Me.Caption = StringFormat("SB Launcher v{0}.{1}.{2}", App.Major, App.Minor, App.Revision)
     If (LenB(Command()) > 0) Then
         If (SetCommandLine(Command())) Then
             Unload Me
