@@ -93,8 +93,6 @@ End Sub
 Public Sub OnPlay(Command As clsCommandObj)
     If (BotVars.DisableMP3Commands) Then Exit Sub
     
-    If (Not MediaPlayer.IsLoaded()) Then MediaPlayer.Start
-    
     If (MediaPlayer.IsLoaded()) Then
         If (LenB(Command.Argument("Song")) > 0) Then
             MediaPlayer.PlayTrack Command.Argument("Song")
@@ -104,7 +102,7 @@ Public Sub OnPlay(Command As clsCommandObj)
             Command.Respond "Playback started."
         End If
     Else
-        Command.Respond "Error: Could not launch media player."
+        Command.Respond MediaPlayer.Name & " is not loaded."
     End If
 End Sub
 
