@@ -22,9 +22,9 @@ Private Sub InitCRC32()
 
     Static CRC32Initialized As Boolean
     
-    Dim I      As Long
+    Dim i      As Long
     Dim j      As Long
-    Dim k      As Long
+    Dim K      As Long
     Dim XorVal As Long
     
     If (CRC32Initialized) Then
@@ -33,31 +33,31 @@ Private Sub InitCRC32()
     
     CRC32Initialized = True
     
-    For I = 0 To 255
-        k = I
+    For i = 0 To 255
+        K = i
         
         For j = 1 To 8
-            If k And 1 Then XorVal = CRC32_POLYNOMIAL Else XorVal = 0
-            If k < 0 Then k = ((k And &H7FFFFFFF) \ 2) Or &H40000000 Else k = k \ 2
-            k = k Xor XorVal
+            If K And 1 Then XorVal = CRC32_POLYNOMIAL Else XorVal = 0
+            If K < 0 Then K = ((K And &H7FFFFFFF) \ 2) Or &H40000000 Else K = K \ 2
+            K = K Xor XorVal
         Next
         
-        CRC32Table(I) = k
+        CRC32Table(i) = K
     Next
     
 End Sub
 
 Public Function CRC32(ByVal Data As String) As Long
 
-    Dim I As Long
+    Dim i As Long
     Dim j As Long
     
     Call InitCRC32
     
     CRC32 = &HFFFFFFFF
     
-    For I = 1 To Len(Data)
-        j = CByte(Asc(Mid(Data, I, 1))) Xor (CRC32 And &HFF&)
+    For i = 1 To Len(Data)
+        j = CByte(Asc(Mid(Data, i, 1))) Xor (CRC32 And &HFF&)
         
         If (CRC32 < 0) Then
             CRC32 = ((CRC32 And &H7FFFFFFF) \ &H100&) Or &H800000
@@ -121,7 +121,7 @@ Public Function ValidateExecutable() As Boolean
     
     'Compute the new CRC
     lngComputedCRC = CRC32(strBuffer)
-    strComputedCRC = hex$(lngComputedCRC)
+    strComputedCRC = ZeroOffset(lngComputedCRC, 8)
     
     'Read a CRC from ourselves
     intFreeFile = FreeFile
