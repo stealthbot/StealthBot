@@ -105,7 +105,7 @@ ERROR_HANDLER:
     
 End Function
 
-Public Sub PlayTrack(ByVal Track As Variant)
+Public Sub PlayTrack(Optional ByVal Track As Variant = vbNullString)
 
     ' ...
     If (IsLoaded() = False) Then
