@@ -228,18 +228,19 @@ Public Sub OnSetTrigger(Command As clsCommandObj)
 End Sub
 
 Public Sub OnWhisperCmds(Command As clsCommandObj)
-    If (StrComp(Command.Argument("SubCommand"), "status", vbTextCompare) = 0) Then
-        Command.Respond StringFormat("Command responses will be {0}.", _
-            IIf(BotVars.WhisperCmds, "whispered back", "displayed publicly"))
-    Else
-        If (BotVars.WhisperCmds) Then
-            BotVars.WhisperCmds = False
-            Call WriteINI("Main", "WhisperBack", "N")
-            Command.Respond "Command responses will now be displayed publicly."
-        Else
+    Select Case LCase$(Command.Argument("SubCommand"))
+        Case "on":
             BotVars.WhisperCmds = True
             Call WriteINI("Main", "WhisperBack", "Y")
             Command.Respond "Command responses will now be whispered back."
-        End If
-    End If
+        
+        Case "off":
+            BotVars.WhisperCmds = False
+            Call WriteINI("Main", "WhisperBack", "N")
+            Command.Respond "Command responses will now be displayed publicly."
+        
+        Case Else:
+            Command.Respond StringFormat("Command responses will be {0}.", _
+                IIf(BotVars.WhisperCmds, "whispered back", "displayed publicly"))
+    End Select
 End Sub

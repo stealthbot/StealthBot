@@ -7198,10 +7198,10 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Else
         Err.Clear
     
-        If (ReadCfg(MN, "LocalIP") <> vbNullString) Then
-            If (Err.Number = 0) Then: sckBNet.bind , ReadCfg(MN, "LocalIP")
-            If (Err.Number = 0) Then: sckBNLS.bind , ReadCfg(MN, "LocalIP")
-            If (Err.Number = 0) Then: sckMCP.bind , ReadCfg(MN, "LocalIP")
+        If (ReadCfg(OV, "LocalIP") <> vbNullString) Then
+            If (Err.Number = 0) Then: sckBNet.bind , ReadCfg(OV, "LocalIP")
+            If (Err.Number = 0) Then: sckBNLS.bind , ReadCfg(OV, "LocalIP")
+            If (Err.Number = 0) Then: sckMCP.bind , ReadCfg(OV, "LocalIP")
         End If
     End If
     

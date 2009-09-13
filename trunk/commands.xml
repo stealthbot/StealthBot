@@ -1667,8 +1667,10 @@
     </access>
   </command>
 
-  <command name="allseen">
-    <aliases />
+  <command name="lastseen">
+    <aliases>
+	  <alias>allseen</alias>
+	</aliases>
 
     <documentation>
       <description>
@@ -2707,7 +2709,7 @@
       <argument name="subcommand" type="word" optional="1">
         <documentation>
           <description>
-            The subcommand to use, if it is 'status' command will respond with the status. If not, it will toggle whisper responses.
+            The subcommand to use, Status, On, or Off
           </description>
         </documentation>
       </argument>

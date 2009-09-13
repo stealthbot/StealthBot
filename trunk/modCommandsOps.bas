@@ -625,7 +625,7 @@ Public Sub OnQuietTime(Command As clsCommandObj)
             Command.Respond "Quiet-time disabled."
         
         Case Else:
-            Command.Respond StringFormat("The bot is currently {0}.", _
+            Command.Respond StringFormat("Quiet-time is currently {0}.", _
                 IIf(BotVars.QuietTime, "enabled", "disabled"))
     End Select
 End Sub

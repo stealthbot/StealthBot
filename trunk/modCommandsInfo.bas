@@ -17,25 +17,6 @@ Public Sub OnAccountInfo(Command As clsCommandObj)
     RequestSystemKeys
 End Sub
 
-' handle allseen command
-Public Sub OnAllSeen(Command As clsCommandObj)
-    Dim retVal As String
-    Dim i      As Integer
-
-    If (colLastSeen.Count = 0) Then
-        retVal = "I have not seen anyone yet."
-    Else
-        retVal = "Last 15 users seen: "
-        For i = 1 To colLastSeen.Count
-            retVal = StringFormat("{0}{1}{2}", _
-                retVal, colLastSeen.Item(i), _
-                IIf(i = colLastSeen.Count, vbNullString, ", "))
-            If (i = 15) Then Exit For
-        Next i
-    End If
-    Command.Respond retVal
-End Sub
-
 Public Sub OnBanCount(Command As clsCommandObj)
     If (g_Channel.BanCount = 0) Then
         Command.Respond "No users have been banned since I joined this channel."
@@ -358,6 +339,24 @@ ERROR_HANDLER:
     frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnInitPerf()."
 End Sub
 
+Public Sub OnLastSeen(Command As clsCommandObj)
+    Dim retVal As String
+    Dim i      As Integer
+
+    If (colLastSeen.Count = 0) Then
+        retVal = "I have not seen anyone yet."
+    Else
+        retVal = "Last 15 users seen: "
+        For i = 1 To colLastSeen.Count
+            retVal = StringFormat("{0}{1}{2}", _
+                retVal, colLastSeen.Item(i), _
+                IIf(i = colLastSeen.Count, vbNullString, ", "))
+            If (i = 15) Then Exit For
+        Next i
+    End If
+    Command.Respond retVal
+End Sub
+
 Public Sub OnLastWhisper(Command As clsCommandObj)
     If (LenB(LastWhisper) > 0) Then
         Command.Respond StringFormat("The last whisper to this bot was from {0} at {1} on {2}.", _
@@ -522,20 +521,20 @@ On Error GoTo ERROR_HANDLER
     
     Dim retVal  As String
     Dim i       As Integer
-    Dim enabled As Boolean
+    Dim Enabled As Boolean
     Dim Name    As String
     Dim Count   As Integer
     
     If (frmChat.SControl.Modules.Count > 1) Then
         For i = 2 To frmChat.SControl.Modules.Count
             Name = modScripting.GetScriptName(CStr(i))
-            enabled = Not (StrComp(GetModuleByName(Name).CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 0)
+            Enabled = Not (StrComp(GetModuleByName(Name).CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 0)
                 
             retVal = StringFormat("{0}{1}{2}{3}{4}", _
                 retVal, _
-                IIf(enabled, vbNullString, "("), _
+                IIf(Enabled, vbNullString, "("), _
                 Name, _
-                IIf(enabled, vbNullString, ")"), _
+                IIf(Enabled, vbNullString, ")"), _
                 IIf(i = frmChat.SControl.Modules.Count, vbNullString, ", "))
                 
             Count = (Count + 1)
