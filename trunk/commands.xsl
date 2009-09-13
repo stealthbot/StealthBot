@@ -91,7 +91,7 @@ Private Sub cmd_<xsl:value-of select="@name"/>(ByRef oCommandDoc As clsCommandDo
             End With
 			.Parameters.Add oParameter
             </xsl:for-each>
-			Call .Save()
+			Call .Save(False)
         End If
     End With
 End Sub      
@@ -102,6 +102,8 @@ Public Sub GenerateCommands()
     Dim oCommandDoc As New clsCommandDocObj
     <xsl:for-each select="/commands/command[not(@owner)]">
     Call cmd_<xsl:value-of select="@name"/>(oCommandDoc)</xsl:for-each>
+	
+	Call oCommandDoc.Save()
 
 End Sub
         

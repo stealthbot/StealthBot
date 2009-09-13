@@ -1743,34 +1743,34 @@ Public Function GetW3Realm(Optional ByVal Username As String) As String
 End Function
 
 Public Function GetConfigFilePath() As String
-    Static filePath As String
+    Static filepath As String
     
-    If (LenB(filePath) = 0) Then
+    If (LenB(filepath) = 0) Then
         If ((LenB(ConfigOverride) > 0)) Then
-            filePath = ConfigOverride
+            filepath = ConfigOverride
         Else
-            filePath = StringFormat("{0}Config.ini", GetProfilePath())
+            filepath = StringFormat("{0}Config.ini", GetProfilePath())
         End If
     End If
     
-    If (InStr(1, filePath, "\", vbBinaryCompare) = 0) Then
-        filePath = StringFormat("{0}\{1}", CurDir$(), filePath)
+    If (InStr(1, filepath, "\", vbBinaryCompare) = 0) Then
+        filepath = StringFormat("{0}\{1}", CurDir$(), filepath)
     End If
     
-    GetConfigFilePath = filePath
+    GetConfigFilePath = filepath
 End Function
 
-Public Function GetFilePath(ByVal filename As String, Optional DefaultPath As String = vbNullString) As String
+Public Function GetFilePath(ByVal FileName As String, Optional DefaultPath As String = vbNullString) As String
     Dim s As String
     
-    If (InStr(filename, "\") = 0) Then
+    If (InStr(FileName, "\") = 0) Then
         If (LenB(DefaultPath) = 0) Then
-            GetFilePath = StringFormat("{0}{1}", GetProfilePath(), filename)
+            GetFilePath = StringFormat("{0}{1}", GetProfilePath(), FileName)
         Else
-            GetFilePath = StringFormat("{0}{1}", DefaultPath, filename)
+            GetFilePath = StringFormat("{0}{1}", DefaultPath, FileName)
         End If
         
-        s = ReadCfg("FilePaths", filename)
+        s = ReadCfg("FilePaths", FileName)
         
         If (LenB(s) > 0) Then
             If (LenB(Dir$(s))) Then
@@ -1778,7 +1778,7 @@ Public Function GetFilePath(ByVal filename As String, Optional DefaultPath As St
             End If
         End If
     Else
-        GetFilePath = filename
+        GetFilePath = FileName
     End If
 End Function
 
@@ -2842,29 +2842,31 @@ End Function
 
 Public Function convertAlias(ByVal cmdName As String) As String
     On Error GoTo ERROR_HANDLER
-    Dim sCommandsPath As String
-    sCommandsPath = GetFilePath("Commands.xml")
+
+    Dim commandDoc As New clsCommandDocObj
+
 
     If (Len(cmdName) > 0) Then
         Dim commands As DOMDocument60
         Dim Alias    As IXMLDOMNode
         
         ' ...
-        Set commands = New DOMDocument60
+        Set commands = commandDoc.XMLDocument
         
-        ' ...
-        If (Dir$(sCommandsPath) = vbNullString) Then
-            Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
-                "working directory.")
-                
-            Exit Function
-        End If
-        
-        ' ...
-        Call commands.Load(sCommandsPath)
+        '' ...
+        'If (Dir$(sCommandsPath) = vbNullString) Then
+        '    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
+        '        "working directory.")
+        '
+        '    Exit Function
+        'End If
+        '
+        '' ...
+        'Call commands.Load(sCommandsPath)
         
         ' ...
         If (InStr(1, cmdName, "'", vbBinaryCompare) > 0) Then
+            Set commandDoc = Nothing
             Exit Function
         End If
     
@@ -2892,6 +2894,7 @@ Public Function convertAlias(ByVal cmdName As String) As String
     
     ' ...
     convertAlias = cmdName
+    Set commandDoc = Nothing
 
     ' ...
     Exit Function
@@ -2899,7 +2902,7 @@ Public Function convertAlias(ByVal cmdName As String) As String
 ' ...
 ERROR_HANDLER:
 
-    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: XML Database Processor has encountered an error " & _
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Error: XML Database Processor has encountered an error " & _
         "during alias lookup.")
         
     ' ...

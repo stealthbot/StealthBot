@@ -39,6 +39,8 @@ Private Sub Class_Initialize()
     
     m_defaultXMLPath = GetFilePath("Commands.xml")
     
+    Call OpenDatabase(, True)
+    
     '// 06/23/2009 JSM - initializing these as Nothing
     Set m_params = Nothing
     Set m_aliases = Nothing
@@ -117,13 +119,13 @@ Private Function GetCommandXPath(ByVal strCommand As String, Optional ByVal strS
     strScriptOwner = Replace$(strScriptOwner, "'", "&apos;")
     
     If strScriptOwner = vbNullString Then
-        GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}' and not(@owner)]", _
+        GetCommandXPath = StringFormat("/commands/command[translate(@name, '{0}', '{1}')='{2}' and not(@owner)]", _
             UCase$(AZ), LCase$(AZ), LCase$(strCommand))
     ElseIf strScriptOwner = Chr$(0) Then
-        GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}']", _
+        GetCommandXPath = StringFormat("/commands/command[translate(@name, '{0}', '{1}')='{2}']", _
             UCase$(AZ), LCase$(AZ), LCase$(strCommand))
     Else
-        GetCommandXPath = StringFormat("./command[translate(@name, '{0}', '{1}')='{2}' and translate(@owner, '{0}', '{1}')='{3}']", _
+        GetCommandXPath = StringFormat("/commands/command[translate(@name, '{0}', '{1}')='{2}' and translate(@owner, '{0}', '{1}')='{3}']", _
             UCase$(AZ), LCase$(AZ), LCase$(strCommand), LCase$(strScriptOwner))
     End If
     
@@ -471,7 +473,7 @@ ERROR_HANDLER:
 
 End Function
 
-Public Function Save() As Boolean
+Public Function Save(Optional ByVal writeToFile As Boolean = True) As Boolean
 
     On Error GoTo ERROR_HANDLER
 
@@ -480,18 +482,22 @@ Public Function Save() As Boolean
     setAliases m_command_node, m_aliases
     setParameters m_command_node, m_params
     
-    If clsCommandDocObj.ValidateXMLFromStrings(m_database.xml, GetXSD()) Then
-        If Not CommandsSanityCheck(m_database, colErrorList) Then
+    If writeToFile = True Then
+    
+        If clsCommandDocObj.ValidateXMLFromStrings(m_database.xml, GetXSD()) Then
+            If Not CommandsSanityCheck(m_database, colErrorList) Then
+                Save = False
+                Exit Function
+            End If
+        Else
             Save = False
             Exit Function
         End If
-    Else
-        Save = False
-        Exit Function
+
+        '// 08/302009 52 - getting rid of the clsXML class since it didnt write valid XML
+        Call writeDocToFile(GetFilePath("Commands.xml"))
+        
     End If
-    
-    '// 08/302009 52 - getting rid of the clsXML class since it didnt write valid XML
-    Call m_database.Save(GetFilePath("Commands.xml"))
     
     Save = True
     
@@ -502,6 +508,51 @@ ERROR_HANDLER:
     Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.Save().")
 
 End Function
+
+
+
+Private Sub writeDocToFile(ByVal filepath As String)
+    
+    On Error GoTo ERROR_HANDLER
+    
+    Dim reader As New SAXXMLReader60 '// create the SAX reader
+    Dim writer As New MXXMLWriter60  '// create the XML writer
+    
+    Dim iFileNo As Integer
+    
+    '// set properties on the XML writer
+    writer.byteOrderMark = True
+    writer.omitXMLDeclaration = True
+    writer.indent = True
+    
+    '// set the XML writer to the SAX content handler
+    Set reader.contentHandler = writer
+    Set reader.dtdHandler = writer
+    Set reader.ErrorHandler = writer
+    reader.putProperty "http://xml.org/sax/properties/lexical-handler", writer
+    reader.putProperty "http://xml.org/sax/properties/declaration-handler", writer
+    
+    '// parse the DOMDocument object
+    reader.Parse m_database
+    
+    '// open the file for writing
+    iFileNo = FreeFile
+    Open filepath For Output As #iFileNo
+    Print #iFileNo, writer.output
+    
+    '// close the file
+    Close #iFileNo
+    
+    Set reader = Nothing
+    Set writer = Nothing
+    
+    Exit Sub
+
+ERROR_HANDLER:
+    
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.writeDocToFile().")
+
+End Sub
 
 
 Public Sub Delete()
@@ -649,10 +700,13 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
     
     '// get the arguments node
     Set argumentsNode = AnyNode.selectSingleNode("arguments")
+    If Not (argumentsNode Is Nothing) Then
+	    For Each node In argumentsNode.childNodes
+	        argumentsNode.removeChild node
+	    Next node
+    End If
     
-    For Each node In argumentsNode.childNodes
-        argumentsNode.removeChild node
-    Next node
+
     
     
     '// add the the new arguments node if necessary
@@ -789,10 +843,10 @@ Private Function setRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef Restriction
         '// create the error element if necessary
         If Len(restriction.MatchError) <> 0 Then
             '// add the error element
-            Set newNode = m_database.createNode("element", "error", vbNullString)
-            newNode.Text = restriction.MatchError
-            RestrictionNode.selectSingleNode("error").appendChild newNode
+            RestrictionNode.appendChild m_database.createNode("element", "error", vbNullString)
+            RestrictionNode.selectSingleNode("error").Text = restriction.MatchError
         End If
+        
         
         
         '// create the access node
