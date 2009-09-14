@@ -1092,43 +1092,18 @@ Begin VB.Form frmChat
          Caption         =   "View Caught P&hrases"
       End
       Begin VB.Menu mnuFiles 
-         Caption         =   "Edit &Files..."
+         Caption         =   "View &Files..."
          Begin VB.Menu mnuOpenBotFolder 
             Caption         =   "Open Bot &Folder"
          End
-         Begin VB.Menu mnuOpenPluginsFolder 
-            Caption         =   "Open &Plugins Folder"
-            Visible         =   0   'False
-         End
          Begin VB.Menu mnuSepA 
             Caption         =   "-"
-         End
-         Begin VB.Menu mnuEditConfig 
-            Caption         =   "Config File"
-         End
-         Begin VB.Menu mnuEditChangelog 
-            Caption         =   "Changelog"
-         End
-         Begin VB.Menu mnuEditQuotes 
-            Caption         =   "Quotes List"
-         End
-         Begin VB.Menu mnuEditFilters 
-            Caption         =   "Chat Filters"
          End
          Begin VB.Menu mnuClearedTxt 
             Caption         =   "Current Text Log"
          End
          Begin VB.Menu mnuWhisperCleared 
             Caption         =   "Whisper Window Text Log"
-         End
-         Begin VB.Menu mnuEditPhrasebans 
-            Caption         =   "Phrasebans"
-         End
-         Begin VB.Menu mnuEditQCini 
-            Caption         =   "QuickChannels"
-         End
-         Begin VB.Menu mnuEditScriptINI 
-            Caption         =   "Script Settings"
          End
       End
       Begin VB.Menu mnuSettingsRepair 
@@ -1369,6 +1344,9 @@ Begin VB.Form frmChat
       Begin VB.Menu mnuTerms 
          Caption         =   "&End-User License Agreement"
       End
+      Begin VB.Menu mnuChangeLog 
+         Caption         =   "&Change Log"
+      End
    End
    Begin VB.Menu mnuShortcuts 
       Caption         =   "invisibleMenu"
@@ -1586,7 +1564,7 @@ Private Sub Form_Load()
     
     With mnuTrayCaption
         .Caption = CVERSION
-        .enabled = False
+        .Enabled = False
     End With
     
     mail = True
@@ -1854,7 +1832,7 @@ Public Sub cacheTimer_Timer()
         Next c
     End If
     
-    cacheTimer.enabled = False
+    cacheTimer.Enabled = False
 End Sub
 
 Private Sub ChatQueueTimer_Timer()
@@ -3405,14 +3383,14 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, 
             If aInx > 0 Then
                 sProd = g_Channel.Users(aInx).game
 
-                mnuPopWebProfile.enabled = (sProd = "W3XP" Or sProd = "WAR3")
-                mnuPopInvite.enabled = (mnuPopWebProfile.enabled And g_Clan.Self.Rank >= 3)
-                mnuPopKick.enabled = (MyFlags = 2 Or MyFlags = 18)
-                mnuPopDes.enabled = (MyFlags = 2 Or MyFlags = 18)
-                mnuPopBan.enabled = (MyFlags = 2 Or MyFlags = 18)
+                mnuPopWebProfile.Enabled = (sProd = "W3XP" Or sProd = "WAR3")
+                mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And g_Clan.Self.Rank >= 3)
+                mnuPopKick.Enabled = (MyFlags = 2 Or MyFlags = 18)
+                mnuPopDes.Enabled = (MyFlags = 2 Or MyFlags = 18)
+                mnuPopBan.Enabled = (MyFlags = 2 Or MyFlags = 18)
             End If
         Else
-            mnuPopWebProfile.enabled = False
+            mnuPopWebProfile.Enabled = False
         End If
         
         mnuPopup.Tag = lvChannel.SelectedItem.Text 'Record which user is selected at time of right-clicking. - FrOzeN
@@ -3573,9 +3551,9 @@ Private Sub mnuBot_Click()
     Dim i As Integer
 
     If IsW3 And g_Connected Then
-        mnuIgnoreInvites.enabled = True
+        mnuIgnoreInvites.Enabled = True
     Else
-        mnuIgnoreInvites.enabled = False
+        mnuIgnoreInvites.Enabled = False
     End If
     
     ' ...
@@ -3595,9 +3573,14 @@ Private Sub mnuCatchPhrases_Click()
     frmCatch.Show
 End Sub
 
+Private Sub mnuChangeLog_Click()
+    ShellExecute frmChat.hWnd, "Open", "http://www.StealthBot.net/wiki/ChangeLog", &H0, &H0, vbNormalFocus
+    AddChat RTBColors.InformationText, "Opening EULA at http://www.StealthBot.net/wiki/ChangeLog"
+End Sub
+
 Private Sub mnuOpenScriptFolder_Click()
     Dim sPath As String
-    sPath = StringFormat("{0}\scripts", CurDir$())
+    sPath = GetFolderPath("Scripts")
     If (LenB(Dir$(sPath, vbDirectory)) > 0) Then
         Shell StringFormat("explorer.exe {0}", sPath), vbNormalFocus
     End If
@@ -3626,10 +3609,6 @@ Private Sub mnuCustomChannels_Click(Index As Integer)
     ' ...
     AddQ "/join " & mnuCustomChannels(Index).Caption, PRIORITY.CONSOLE_MESSAGE
 End Sub
-
-'Private Sub mnuCCEditor_Click()
-'    frmCCEditor.Show
-'End Sub
 
 Sub mnuClearWW_Click()
     rtbWhispers.Text = ""
@@ -3665,10 +3644,6 @@ Private Sub mnuDisconnect2_Click()
     Call DoDisconnect
 End Sub
 
-Private Sub mnuEditAccessFlags_Click()
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("Commands.xml"), &H0, &H0, vbNormalFocus
-End Sub
-
 Private Sub mnuEditCaught_Click()
     If Dir$(GetFilePath("CaughtPhrases.htm")) = vbNullString Then
         MsgBox "The bot has not caught any phrases yet."
@@ -3676,18 +3651,6 @@ Private Sub mnuEditCaught_Click()
     Else
         ShellExecute Me.hWnd, "Open", GetFilePath("CaughtPhrases.htm"), 0&, 0&, 0&
     End If
-End Sub
-
-Private Sub mnuEditChangelog_Click()
-    ShellExecute frmChat.hWnd, "Open", App.Path & "\Changelog.txt", &H0, &H0, vbNormalFocus
-End Sub
-
-Private Sub mnuEditPhrasebans_Click()
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("PhraseBans.txt"), &H0, &H0, vbNormalFocus
-End Sub
-
-Private Sub mnuEditQCini_Click()
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("QuickChannels.ini"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuFlash_Click()
@@ -3860,7 +3823,7 @@ Private Sub mnuPopAddLeft_Click()
     On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    If txtPre.enabled Then 'fix for topic 25290 -a
+    If txtPre.Enabled Then 'fix for topic 25290 -a
         If Dii Then txtPre.Text = "/w *" Else txtPre.Text = "/w "
         
         txtPre.Text = txtPre.Text & GetSelectedUser & " "
@@ -4019,14 +3982,13 @@ Private Sub mnuPopWebProfileW3XP_Click()
 End Sub
 
 Private Sub mnuClearedTxt_Click()
-    ShellExecute frmChat.hWnd, "Open", StringFormat("{0}{1}.txt", g_Logger.LogPath, Format(Date, "yyyy-MM-dd")), _
-        &H0, &H0, vbNormalFocus
-End Sub
-
-
-Private Sub mnuQC_Click(Index As Integer)
-    If Len(QC(Index)) > 0 Then
-        AddQ "/join " & QC(Index), PRIORITY.CONSOLE_MESSAGE
+    Dim sPath As String
+    sPath = StringFormat("{0}{1}.txt", g_Logger.LogPath, Format(Date, "yyyy-MM-dd"))
+    
+    If LenB(Dir$(sPath)) = 0 Then
+        AddChat RTBColors.ErrorMessageText, "The log file for today is empty."
+    Else
+        ShellExecute Me.hWnd, "Open", sPath, 0&, 0&, 0&
     End If
 End Sub
 
@@ -4145,20 +4107,14 @@ Private Sub mnuUpdateVerbytes_Click()
 End Sub
 
 Private Sub mnuWhisperCleared_Click()
-    ShellExecute frmChat.hWnd, "Open", StringFormat("{0}{1}-WHISPERS.txt", g_Logger.LogPath, Format(Date, "yyyy-MM-dd")), _
-        &H0, &H0, vbNormalFocus
-End Sub
-
-Private Sub mnuEditConfig_Click()
-    ShellExecute frmChat.hWnd, "Open", GetConfigFilePath(), &H0, &H0, vbNormalFocus
-End Sub
-
-Private Sub mnuEditFilters_Click()
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("Filters.ini"), &H0, &H0, vbNormalFocus
-End Sub
-
-Private Sub mnuEditQuotes_Click()
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("Quotes.txt"), &H0, &H0, vbNormalFocus
+    Dim sPath As String
+    sPath = StringFormat("{0}{1}-WHISPERS.txt", g_Logger.LogPath, Format(Date, "yyyy-MM-dd"))
+    
+    If LenB(Dir$(sPath)) = 0 Then
+        AddChat RTBColors.ErrorMessageText, "The whisper log file for today is empty."
+    Else
+        ShellExecute Me.hWnd, "Open", sPath, 0&, 0&, 0&
+    End If
 End Sub
 
 Private Sub mnuEditUsers_Click()
@@ -4168,15 +4124,6 @@ End Sub
 Private Sub mnuFListRefresh_Click()
     lvFriendList.ListItems.Clear
     Call FriendListHandler.RequestFriendsList(PBuffer)
-End Sub
-
-Private Sub mnuEditScriptINI_Click()
-    If (ReadCfg("Override", "ScriptViewer") = vbNullString) Then
-        ShellExecute frmChat.hWnd, "Open", GetFilePath("Scripts.ini", GetFolderPath("Scripts")), 0&, 0&, _
-            vbNormalFocus
-    Else
-        Shell StringFormat("{0}{1}{0} {0}{2}{0}", Chr$(34), ReadCfg("Override", "ScriptViewer"), GetFilePath("Scripts.ini", GetFolderPath("Scripts")))
-    End If
 End Sub
 
 Sub mnuReloadScripts_Click()
@@ -4250,8 +4197,9 @@ Private Sub mnuStatsW3_Click()
 End Sub
 
 Private Sub mnuTerms_Click()
-    'Shell "notepad " & App.Path & "\eula.txt", vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", App.Path & "\eula.txt", &H0, &H0, vbNormalFocus
+    'ShellExecute frmChat.hWnd, "Open", App.Path & "\eula.txt", &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", "http://www.StealthBot.net/wiki/EULA", &H0, &H0, vbNormalFocus
+    AddChat RTBColors.InformationText, "Opening EULA at http://www.stealthbot.net/wiki/EULA"
 End Sub
 
 Private Sub mnuFilters_Click()
@@ -4660,7 +4608,7 @@ End Sub
 
 Private Sub tmrAccountLock_Timer()
     
-    tmrAccountLock.enabled = False
+    tmrAccountLock.Enabled = False
     
     If (Not g_Online) Then
         Exit Sub
@@ -5811,7 +5759,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
         End If
     
         ' ...
-        tmrSilentChannel(0).enabled = False
+        tmrSilentChannel(0).Enabled = False
     ElseIf (Index = 1) Then
         ' ...
         If (mnuDisableVoidView.Checked = False) Then
@@ -7159,7 +7107,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     s = ReadCfg(OT, "DisablePrefix")
     If s = "Y" Then txtPre.Visible = False Else txtPre.Visible = True
-    mnuPopAddLeft.enabled = txtPre.Visible
+    mnuPopAddLeft.Enabled = txtPre.Visible
     
     s = ReadCfg(OT, "DisableSuffix")
     If s = "Y" Then txtPost.Visible = False Else txtPost.Visible = True
@@ -7954,55 +7902,55 @@ Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, X As Single,
             If Not (lvClanList.SelectedItem Is Nothing) Then
                 If lvClanList.SelectedItem.Index < 0 Then
                     
-                    mnuPopDem.enabled = False
-                    mnuPopPro.enabled = False
-                    mnuPopBNProfile.enabled = False
-                    mnuPopRem.enabled = False
+                    mnuPopDem.Enabled = False
+                    mnuPopPro.Enabled = False
+                    mnuPopBNProfile.Enabled = False
+                    mnuPopRem.Enabled = False
                     
                 Else
                 
-                    mnuPopRem.enabled = False
-                    mnuPopDem.enabled = False
-                    mnuPopPro.enabled = False
+                    mnuPopRem.Enabled = False
+                    mnuPopDem.Enabled = False
+                    mnuPopPro.Enabled = False
                     
                     If g_Clan.Self.Rank > 2 Then
                             
-                        mnuPopBNProfile.enabled = True
+                        mnuPopBNProfile.Enabled = True
                         
                         Select Case lvClanList.SelectedItem.SmallIcon
                         
                             Case 4
-                                mnuPopDem.enabled = False
-                                mnuPopRem.enabled = False
-                                mnuPopPro.enabled = False
+                                mnuPopDem.Enabled = False
+                                mnuPopRem.Enabled = False
+                                mnuPopPro.Enabled = False
                                 
                             Case 3
                                 
-                                mnuPopPro.enabled = False
+                                mnuPopPro.Enabled = False
                                 
                                 If g_Clan.Self.Rank = 4 Then
                                     
-                                    mnuPopDem.enabled = True
-                                    mnuPopRem.enabled = True
+                                    mnuPopDem.Enabled = True
+                                    mnuPopRem.Enabled = True
                                     
                                 Else
                                     
-                                    mnuPopDem.enabled = False
-                                    mnuPopRem.enabled = False
+                                    mnuPopDem.Enabled = False
+                                    mnuPopRem.Enabled = False
                                 
                                 End If
                             
                             Case 2
                                 
-                                mnuPopDem.enabled = True
-                                mnuPopPro.enabled = True
-                                mnuPopRem.enabled = True
+                                mnuPopDem.Enabled = True
+                                mnuPopPro.Enabled = True
+                                mnuPopRem.Enabled = True
                                 
                             Case 1
                                 
-                                mnuPopDem.enabled = False
-                                mnuPopPro.enabled = True
-                                mnuPopRem.enabled = True
+                                mnuPopDem.Enabled = False
+                                mnuPopPro.Enabled = True
+                                mnuPopRem.Enabled = True
                                 
                         End Select
                     
@@ -8136,7 +8084,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
     Dim i As Integer
     
     If (Not (UserCancelledConnect)) Then
-        tmrAccountLock.enabled = False
+        tmrAccountLock.Enabled = False
     
         SetTitle "Disconnected"
         

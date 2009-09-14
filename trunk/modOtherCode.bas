@@ -1370,7 +1370,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         
     With frmChat.lvChannel
         ' ...
-        .enabled = False
+        .Enabled = False
         
         ' ...
         .ListItems.Add isPriority, , Username, , i
@@ -1391,7 +1391,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         End If
         
         ' ...
-        .enabled = True
+        .Enabled = True
         
         ' ...
         .Refresh
@@ -1743,21 +1743,21 @@ Public Function GetW3Realm(Optional ByVal Username As String) As String
 End Function
 
 Public Function GetConfigFilePath() As String
-    Static filepath As String
+    Static filePath As String
     
-    If (LenB(filepath) = 0) Then
+    If (LenB(filePath) = 0) Then
         If ((LenB(ConfigOverride) > 0)) Then
-            filepath = ConfigOverride
+            filePath = ConfigOverride
         Else
-            filepath = StringFormat("{0}Config.ini", GetProfilePath())
+            filePath = StringFormat("{0}Config.ini", GetProfilePath())
         End If
     End If
     
-    If (InStr(1, filepath, "\", vbBinaryCompare) = 0) Then
-        filepath = StringFormat("{0}\{1}", CurDir$(), filepath)
+    If (InStr(1, filePath, "\", vbBinaryCompare) = 0) Then
+        filePath = StringFormat("{0}\{1}", CurDir$(), filePath)
     End If
     
-    GetConfigFilePath = filepath
+    GetConfigFilePath = filePath
 End Function
 
 Public Function GetFilePath(ByVal FileName As String, Optional DefaultPath As String = vbNullString) As String
@@ -1820,32 +1820,6 @@ End Function
 '        End If
 '    End If
 'End Function
-
-' PROFILE FILE FORMAT
-' profilename | profile path
-' assumes colProfiles is instantiated!
-'Public Sub LoadProfileList(ByRef cbo As ComboBox)
-'    Dim f As Integer
-'    Dim sInput As String
-'
-'    If LenB(ReadIfNI("Main", "ConfigVersion")) Then
-'        If LenB(Dir$(App.Path & "\profilelist.txt")) > 0 Then
-'            f = FreeFile
-'
-'            Open App.Path & "\profilelist.txt" For Input As #f
-'
-'                If LOF(f) > 0 Then
-'                    Do
-'                        Line Input #f, sInput
-'                        colProfiles.Add sInput
-'                    Loop While Not EOF(f)
-'                End If
-'
-'            Close #f
-'        End If
-'    End If
-'End Sub
-
 
 ' ProfileIndex param should only be used when changing profiles as a SET
 '   - colProfiles MUST be instantiated in order to call with a ProfileIndex > 0!
@@ -3107,7 +3081,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 ERROR_HANDLER:
     
     ' ...
-    If (Err.Number = 13) Then
+    If (Err.Number = 13 Or Err.Number = 91) Then
         Exit Sub
     End If
 
