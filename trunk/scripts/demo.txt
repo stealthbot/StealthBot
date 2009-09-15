@@ -1,5 +1,6 @@
 #include "\demo\frm.txt"
 #include "\demo\sck.txt"
+#include "\lib\Stealthbot\frmDataGrid.vbs"
 Option Explicit
 ' // store script data
 Script("Name") = "Demo"
@@ -56,6 +57,16 @@ Sub Event_Load()
                 .SpecialNotes = "Must be less then 10"
             End With
             .Parameters.Add Parameter
+            .Save
+        End With
+    End If
+
+    Set Command = OpenCommand("gridtest")
+    If Command Is Nothing Then
+        Set Command = CreateCommand("gridtest")
+        With Command
+            .Description = "Shows an example of the DataGrid form."
+            .RequiredRank = -1
             .Save
         End With
     End If
@@ -148,8 +159,10 @@ Sub Event_Command(Command)
                 If (Command.IsValid) Then
                     Command.Respond StringFormat("The soundex value for {0} is {1}. ", Command.Argument("Word"), Soundex(Command.Argument("Word")))
 				Else
-					Command.Respond StringFormat("The proper syntax for this command is: {0}SoundEx <Word>", BotVars.Trigger)
+					Cmd.Respond StringFormat("The proper syntax for this command is: {0}SoundEx <Word>", BotVars.Trigger)
                 End If
+			Case "gridtest"
+				Call GridTest()
         End Select
     ElseIf (Command.Docs.Owner = vbNullString) Then 'Its a internal Command!
         Command.Respond "Demo Event_Command Observer for internal command " & Command.Name
@@ -219,6 +232,33 @@ Sub DebugCommand(ByRef cmd)
     AddChat f, vbCyan, "------------------------------------------------------"
 End Sub
 
+
+Private Sub GridTest()
+	
+	Dim d
+	
+	Set d = CreateObject("Scripting.Dictionary")
+	
+	d.Add "John", "551-98-5415"
+	d.Add "Sam", "168-72-9721"
+	d.Add "Billy", "177-10-1687"
+	d.Add "Jill", "280-15-2165"
+	
+	Call SetClickCallback("frmDataGrid_Click_Callback")
+	Call LoadDictionary(d)
+	
+End Sub
+
+
+Public Sub frmDataGrid_Click_Callback(aValues)
+
+	Dim i, aHeaders
+	aHeaders = GetHeaders()
+	For i = 0 To UBound(aValues)
+		AddChat Color.LightBlue, aHeaders(i) & ": " & aValues(i)
+	Next
+
+End Sub
 
 ' // demo class module
 Class CDemoClass
