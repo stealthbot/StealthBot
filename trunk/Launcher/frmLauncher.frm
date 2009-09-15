@@ -6,7 +6,7 @@ Begin VB.Form frmLauncher
    Caption         =   "StealthBot Profile Launcher"
    ClientHeight    =   5010
    ClientLeft      =   150
-   ClientTop       =   450
+   ClientTop       =   750
    ClientWidth     =   3090
    BeginProperty Font 
       Name            =   "Tahoma"
@@ -96,6 +96,9 @@ Begin VB.Form frmLauncher
       Top             =   0
       Width           =   2955
    End
+   Begin VB.Menu mnuSettings 
+      Caption         =   "Settings"
+   End
    Begin VB.Menu mnuRightClick 
       Caption         =   "RightClick"
       Visible         =   0   'False
@@ -103,7 +106,7 @@ Begin VB.Form frmLauncher
          Caption         =   "Create New Profile"
       End
       Begin VB.Menu mnuLaunchProfile 
-         Caption         =   "Launch"
+         Caption         =   "Launch Profile"
       End
       Begin VB.Menu mnuCreateShortcut 
          Caption         =   "Create Shortcut"
@@ -137,6 +140,18 @@ On Error GoTo ERROR_HANDLER
         End If
     End If
     
+    #If COMPILE_CRC = 1 Then
+        Dim crc As New clsCRC32
+        If (Not crc.ValidateExecutable) Then
+            MsgBox "This application has been tampered with, Please download a new version at http://www.StealthBot.net/"
+            Unload Me
+            Exit Sub
+        End If
+        Set crc = Nothing
+    #End If
+    
+    Set cConfig = New clsConfig
+    
     ' UI: columns
     lstProfiles.ColumnHeaders.Add , , "center", 0, lvwColumnCenter
     SetupColumns lvwColumnLeft
@@ -161,6 +176,9 @@ End Sub
 Private Sub Form_Unload(Cancel As Integer)
 On Error GoTo ERROR_HANDLER
     Unload frmNameDialog
+    Unload frmConfig
+    
+    If (Not cConfig Is Nothing) Then cConfig.SaveConfig
     
     Exit Sub
 ERROR_HANDLER:
@@ -473,4 +491,13 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
 ERROR_HANDLER:
     ErrorHandler Err.Number, OBJECT_NAME, "AddInformationalItem"
+End Sub
+
+Private Sub mnuSettings_Click()
+On Error GoTo ERROR_HANDLER:
+    Load frmConfig
+    frmConfig.Show
+    Exit Sub
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "mnuSettings_Click"
 End Sub

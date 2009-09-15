@@ -49,6 +49,8 @@ Private CommandLine As String
 Public Declare Function GetFileAttributes Lib "kernel32" Alias "GetFileAttributesA" (ByVal lpFileName As String) As Long
 Public Const FILE_ATTRIBUTE_DIRECTORY As Long = &H10
 
+Public cConfig As clsConfig
+
 Public Sub ErrorHandler(lError As Long, sObjectName As String, sFunctionName As String)
 
     Dim sPath As String
@@ -187,10 +189,13 @@ On Error GoTo ERROR_HANDLER:
     
     sPath = StringFormat(ReplaceEnvironmentVars("%APPDATA%\StealthBot\{0}\"), sProfile)
     lRet = CreateProcess(StringFormat("{0}\StealthBot v2.7 Release Candidate 2.exe", App.Path), _
-      StringFormat("-debug -addpath {0}{1}{0}", Chr$(34), App.Path), _
+      StringFormat("-addpath {0}{1}{0}", Chr$(34), App.Path), _
       security, security, False, _
       NORMAL_PRIORITY_CLASS, _
       ByVal 0&, sPath, suInfo, pInfo)
+      
+    If (cConfig Is Nothing) Then Set cConfig = New clsConfig
+    If (cConfig.AutoClose) Then Unload frmLauncher
 
 
     Exit Function

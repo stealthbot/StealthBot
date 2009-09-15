@@ -111,6 +111,7 @@ Private Const INVALID_CHARS As String = "\/*?"":<>|"
 Private Sub Form_Load()
 On Error GoTo ERROR_HANDLER
     txtName.Text = vbNullString
+    Me.Icon = frmLauncher.Icon
     
     Exit Sub
 ERROR_HANDLER:
