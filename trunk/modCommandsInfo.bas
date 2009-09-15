@@ -223,7 +223,7 @@ On Error GoTo ERROR_HANDLER
     Dim tmpbuf      As String
     
     If (Command.IsValid) Then
-        tmpbuf = GetAllCommandsFor(, Command.Argument("Flags"))
+        tmpbuf = GetAllCommandsFor(Command.docs, Command.Argument("Flags"))
         If (LenB(tmpbuf) > 0) Then
             Command.Respond "Commands available to specified flag(s): " & tmpbuf
         Else
@@ -244,7 +244,7 @@ On Error GoTo ERROR_HANDLER
     
     If (Command.IsValid) Then
         If (CInt(Command.Argument("Rank")) > -1) Then
-            tmpbuf = GetAllCommandsFor(Command.Argument("Rank"))
+            tmpbuf = GetAllCommandsFor(Command.docs, Command.Argument("Rank"))
             If (LenB(tmpbuf) > 0) Then
                 Command.Respond "Commands available to specified rank: " & tmpbuf
             Else
@@ -689,12 +689,12 @@ Public Sub OnWhoIs(Command As clsCommandObj)
     End If
 End Sub
 
-Private Function GetAllCommandsFor(Optional Rank As Integer = -1, Optional Flags As String = vbNullString) As String
+Private Function GetAllCommandsFor(ByRef commandDoc As clsCommandDocObj, Optional Rank As Integer = -1, Optional Flags As String = vbNullString) As String
 On Error GoTo ERROR_HANDLER
     
     Dim tmpbuf      As String
     Dim i           As Integer
-    Dim xmldoc      As New DOMDocument60
+    Dim xmlDoc      As DOMDocument60
     Dim commands    As IXMLDOMNodeList
     Dim xpath       As String
     Dim lastCommand As String
@@ -704,10 +704,10 @@ On Error GoTo ERROR_HANDLER
     Dim Flag        As String
     AZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
-    If (LenB(Dir$(GetFilePath("Commands.xml"))) = 0) Then
-        Command.Respond "Error: The XML database could not be found in the working directory."
-        Exit Function
-    End If
+    'If (LenB(Dir$(GetFilePath("Commands.xml"))) = 0) Then
+    '    Command.Respond "Error: The XML database could not be found in the working directory."
+    '    Exit Function
+    'End If
 
     If (LenB(Flags) > 0) Then
         If (BotVars.CaseSensitiveFlags) Then
@@ -731,9 +731,9 @@ On Error GoTo ERROR_HANDLER
         xpath = StringFormat("./command/access/rank[number() <= {0}]", Rank)
     End If
     
-    xmldoc.Load GetFilePath("Commands.xml")
+    Set xmlDoc = commandDoc.XMLDocument
     
-    Set commands = xmldoc.documentElement.selectNodes(xpath)
+    Set commands = xmlDoc.documentElement.selectNodes(xpath)
 
     If (commands.length > 0) Then
         For i = 0 To commands.length - 1

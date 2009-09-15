@@ -41,9 +41,8 @@ Private Sub Class_Initialize()
     
     Call OpenDatabase(, True)
     
-    '// 06/23/2009 JSM - initializing these as Nothing
-    Set m_params = Nothing
-    Set m_aliases = Nothing
+    '// 06/23/2009 JSM - initializing properties
+    Call resetInstance
     
 End Sub
 
@@ -53,6 +52,21 @@ Private Sub Class_Terminate()
     Set m_params = Nothing
     Set m_aliases = Nothing
     
+End Sub
+
+Private Sub resetInstance()
+        
+    Set m_command_node = Nothing
+    Set m_aliases = Nothing
+    Set m_params = Nothing
+    Let m_name = vbNullString
+    Let m_required_rank = -1
+    Let m_required_flags = vbNullString
+    Let m_description = vbNullString
+    Let m_special_notes = vbNullString
+    Let m_enabled = False
+    Let m_owner = vbNullString
+
 End Sub
 
 Public Function OpenDatabase(Optional ByVal DatabasePath As String = vbNullString, Optional ByVal forceLoad As Boolean = False)
@@ -143,10 +157,7 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal strScript
     Dim xpath                 As String
     
     Call OpenDatabase
-    
-    Set m_command_node = Nothing
-    Set m_aliases = Nothing
-    Set m_params = Nothing
+    Call resetInstance
 
     If (m_database.documentElement Is Nothing) Then
         OpenCommand = False
@@ -511,7 +522,7 @@ End Function
 
 
 
-Private Sub writeDocToFile(ByVal filepath As String)
+Private Sub writeDocToFile(ByVal filePath As String)
     
     On Error GoTo ERROR_HANDLER
     
@@ -537,7 +548,7 @@ Private Sub writeDocToFile(ByVal filepath As String)
     
     '// open the file for writing
     iFileNo = FreeFile
-    Open filepath For Output As #iFileNo
+    Open filePath For Output As #iFileNo
     Print #iFileNo, writer.output
     
     '// close the file
@@ -701,9 +712,9 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
     '// get the arguments node
     Set argumentsNode = AnyNode.selectSingleNode("arguments")
     If Not (argumentsNode Is Nothing) Then
-	    For Each node In argumentsNode.childNodes
-	        argumentsNode.removeChild node
-	    Next node
+            For Each node In argumentsNode.childNodes
+                argumentsNode.removeChild node
+            Next node
     End If
     
 
@@ -1303,20 +1314,14 @@ Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String) A
 End Function
 
 Public Property Get Name() As String
-    If m_name = vbNullString Then
-        m_name = getName(m_command_node)
-    End If
     
-    Name = m_name
+    Name = getName(m_command_node)
+
 End Property
 
 Public Property Get Owner() As String
     
-    If m_owner = vbNullString Then
-        m_owner = getOwner(m_command_node)
-    End If
-    
-    Owner = m_owner
+    Owner = getOwner(m_command_node)
     
 End Property
 
