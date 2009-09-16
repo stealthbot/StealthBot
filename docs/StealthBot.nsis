@@ -1,0 +1,101 @@
+;NSIS script for StealthBot v2.6 Revision 3 created by Atomic GUI for NSIS
+
+; Title of this installation
+Name "StealthBot v2.6 Revision 3"
+
+; Do a CRC check when initializing setup
+CRCCheck On
+
+XPStyle On
+
+; Output filename
+Outfile "InstallSB.exe"
+
+; License page introduction text
+LicenseText "You must agree to the terms of the following End-User License Agreement to use StealthBot. If you do not agree to its terms, press Cancel now and delete this installer from your computer."
+
+; License text file
+LicenseData "C:\release\eula.txt"
+
+; The default installation folder
+InstallDir "$PROGRAMFILES\StealthBot"
+
+; Uninstall info registry location
+InstallDirRegKey HKLM "SOFTWARE\StealthBot v2.6 Revision 3" "Install_Dir"
+
+; Folder selection prompt
+DirText "Please select an installation folder. -- WARNING: The installer will overwrite your SCRIPT.TXT and ACCESS.INI files. Back them up before proceeding."
+
+; Section Default
+; Section Default
+Section "Default" Default
+SectionIn 1
+     SetOutPath "$INSTDIR"
+     File "C:\release\eula.txt"
+     File "C:\release\readme.chm"
+     File "C:\release\access.ini"
+     File "C:\release\script.txt"
+     File "C:\release\BotVars.txt"
+     File "C:\release\ScriptSupportClass.txt"
+     File "C:\release\StealthBot v2.6R3.exe"
+     File "C:\release\Changelog.txt"
+     File "C:\release\bncsutil.dll"
+     
+     SetOutPath "$SYSDIR"
+     SetOverwrite off
+     
+     ;Do not overwrite these files if they exist or are in use
+     ; (Dependencies)
+     File "C:\WINDOWS\system32\mscomctl.ocx"
+     RegDLL mscomctl.ocx
+     File "C:\WINDOWS\system32\richtx32.ocx"
+     RegDLL richtx32.ocx
+     File "C:\WINDOWS\system32\MSWINSCK.OCX"
+     RegDLL mswinsck.ocx
+     File "C:\WINDOWS\system32\COMDLG32.OCX"
+     RegDLL comdlg32.ocx
+     File "C:\WINDOWS\system32\TABCTL32.OCX"
+     RegDLL tabctl32.ocx
+     File "C:\WINDOWS\system32\MSSCRIPT.OCX"
+     RegDLL msscript.ocx
+     File "C:\WINDOWS\system32\vbalTreeView6.ocx"
+     RegDLL vbalTreeView6.ocx
+     File "C:\WINDOWS\system32\ssubtmr6.dll"
+     RegDLL ssubtmr6.dll
+     File "C:\WINDOWS\system32\msinet.ocx"
+     RegDLL msinet.ocx
+SectionEnd
+
+Section -post
+     SetOutPath "$INSTDIR"
+     CreateDirectory "$DESKTOP"
+     CreateShortCut "$DESKTOP\StealthBot v2.6 Revision 3.lnk" "$INSTDIR\StealthBot v2.6R3.exe" "" "$INSTDIR\StealthBot v2.6R3.exe" 0
+SectionEnd
+
+; This emptily named section will always run
+Section ""
+     WriteRegStr HKLM "SOFTWARE\StealthBot v2.6 Revision 3" "Install_Dir" "$INSTDIR"
+     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\StealthBot v2.6 Revision 3" "DisplayName" "StealthBot v2.6 Revision 3 (remove only)"
+     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\StealthBot v2.6 Revision 3" "UninstallString" '"$INSTDIR\uninst.exe"'
+
+     SetOutPath $INSTDIR
+     WriteUninstaller "uninst.exe"
+SectionEnd
+
+; Uninstall section here...
+UninstallText "This will uninstall StealthBot v2.6 Revision 3. Press NEXT to continue."
+Section "Uninstall"
+     DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\StealthBot v2.6 Revision 3"
+     Delete "$INSTDIR\StealthBot v2.6R3.exe"
+     Delete "$INSTDIR\eula.txt"
+     Delete "$INSTDIR\bncsutil.dll"
+     Delete "$INSTDIR\readme.htm"
+     Delete "$INSTDIR\ScriptSupportClass.txt"
+     Delete "$INSTDIR\Changelog.txt"
+     Delete "$DESKTOP\StealthBot v2.6 Revision 3.lnk"
+     Delete "$INSTDIR\uninst.exe"
+     RmDir "$DESKTOP"
+     RmDir "$INSTDIR"
+SectionEnd
+
+
