@@ -6808,8 +6808,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    s = ReadCfg(OT, "PeonBans")
-    If s = "1" Then BotVars.BanPeons = 1 Else BotVars.BanPeons = 0
+    BotVars.BanPeons = (ReadCfg(OT, "PeonBans") = "Y")
     
     s = ReadCfg(OT, "KickOnYell")
     If s = "Y" Then BotVars.KickOnYell = 1 Else BotVars.KickOnYell = 0

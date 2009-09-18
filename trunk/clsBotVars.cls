@@ -75,7 +75,7 @@ Private m_bBanEvasion                   As Boolean
 Private m_bLogDBActions                 As Boolean
 Private m_bLogCommands                  As Boolean
 Private m_sBotOwner                     As String
-Private m_byBanPeons                    As Byte
+Private m_bBanPeons                     As Boolean
 Private m_bWhisperCmds                  As Boolean
 Private m_bDoScroll                     As Boolean
 Private m_bLockChat                     As Boolean
@@ -782,15 +782,15 @@ Public Property Let BotOwner(ByVal sBotOwner As String)
 
 End Property
 
-Public Property Get BanPeons() As Byte
+Public Property Get BanPeons() As Boolean
 
-    BanPeons = m_byBanPeons
+    BanPeons = m_bBanPeons
 
 End Property
 
-Public Property Let BanPeons(ByVal byBanPeons As Byte)
+Public Property Let BanPeons(ByVal bBanPeons As Boolean)
 
-    m_byBanPeons = byBanPeons
+    m_bBanPeons = bBanPeons
 
 End Property
 

@@ -489,18 +489,18 @@ Public Sub OnPeonBan(Command As clsCommandObj)
     ' wins on record for any given race.
     Select Case LCase$(Command.Argument("SubCommand"))
         Case "on":
-            BotVars.BanPeons = 1
+            BotVars.BanPeons = True
             Call WriteINI("Other", "PeonBans", "Y")
             Command.Respond "Peon banning activated."
             
         Case "off":
-            BotVars.BanPeons = 0
+            BotVars.BanPeons = False
             Call WriteINI("Other", "PeonBans", "N")
             Command.Respond "Peon banning deactivated."
         
         Case Else:
             Command.Respond StringFormat("The bot is currently {0}banning peons.", _
-                IIf(BotVars.KickOnYell = 1, vbNullString, "not "))
+                IIf(BotVars.BanPeons, vbNullString, "not "))
     End Select
 End Sub
 
