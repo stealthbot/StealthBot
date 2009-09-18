@@ -836,7 +836,7 @@ Public Sub OnVoteBan(Command As clsCommandObj)
                     VoteInitiator = GetCumulativeAccess(Command.Username)
                 End If
             
-                Command.Respond StringFormat("30-second VoteBan vote started. Type YES to kick {0}, NO to acquit him/her.", Command.Argument("Username"))
+                Command.Respond StringFormat("30-second VoteBan vote started. Type YES to ban {0}, NO to acquit him/her.", Command.Argument("Username"))
             Else
                 Command.Respond ERROR_NOT_OPS
             End If
