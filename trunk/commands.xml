@@ -3000,6 +3000,33 @@
     </access>
   </command>
 
+  <command name="phrasebans">
+    <aliases />
+
+    <documentation>
+      <description>
+        The "phrasebans" command will enable, disable, or state the status of, phrase banning.
+      </description>
+    </documentation>
+
+    <arguments>
+      <argument name="subcommand" type="word" optional="1">
+        <documentation>
+          <description>
+            The sub-command to use. 'On', 'Off', or 'Status'
+          </description>
+        </documentation>
+      </argument>
+    </arguments>
+
+    <access>
+      <rank>80</rank>
+      <flags>
+        <flag>O</flag>
+      </flags>
+    </access>
+  </command>
+
   <command name="useitunes">
     <aliases />
 
