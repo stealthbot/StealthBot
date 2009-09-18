@@ -377,7 +377,7 @@ On Error GoTo ERROR_HANDLER
             Next i
         End If
     Else
-        If ((BotVars.WhisperCmds) Or (WasWhispered)) Then
+        If ((BotVars.WhisperCmds Or WasWhispered) And (PublicOutput = False)) Then
             For i = 1 To m_response.Count
                 frmChat.AddQ "/w " & Username & Space$(1) & m_response.Item(i), PRIORITY.COMMAND_RESPONSE_MESSAGE
             Next i

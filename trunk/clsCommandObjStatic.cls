@@ -56,6 +56,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
     If (WasWhispered And (StrComp(botUsername, strUsername, vbTextCompare) = 0)) Then Exit Function
     
     hasTrigger = False
+    PublicOutput = False
     Message = strText
     messageLen = Len(Message)
     
@@ -97,7 +98,6 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
             cropLen = 3
             hasTrigger = True
         Else
-            PublicOutput = False
             cropLen = 2
             hasTrigger = True
         End If
@@ -113,7 +113,6 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         '// EXAMPLE COMMAND STRING
         '// .add SammyHagar 200
         If (Left$(Message, Len(BotVars.TriggerLong)) = BotVars.TriggerLong) Then
-            PublicOutput = True
             cropLen = Len(BotVars.TriggerLong) + 1
             hasTrigger = True
         End If
@@ -123,7 +122,6 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         '// all: add SammyHagar 200
         If (hasTrigger = False) And (messageLen > 5) Then
             If (StrComp(Left$(Message, 3), "all", vbTextCompare) = 0) And (Mid$(Message, 4, 2) = ": " Or Mid$(Message, 4, 2) = ", ") Then
-                PublicOutput = True
                 cropLen = 6
                 hasTrigger = True
             End If
@@ -135,7 +133,6 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         If (hasTrigger = False) And (messageLen > 5) Then
             If (StrComp(Left$(Message, 3), "ops", vbTextCompare) = 0) And (Mid$(Message, 4, 2) = ": " Or Mid$(Message, 4, 2) = ", ") Then
                 If (g_Channel.Self.IsOperator) Then
-                    PublicOutput = True
                     cropLen = 6
                     hasTrigger = True
                 End If
@@ -149,7 +146,6 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
             If StrComp(Left$(Message, Len(botUsername)), botUsername, vbTextCompare) = 0 And _
                 (Mid$(Message, Len(botUsername) + 1, 2) = ": " Or Mid$(Message, Len(botUsername) + 1, 2) = ", ") Then
                 
-                PublicOutput = True
                 cropLen = Len(botUsername) + 3
                 hasTrigger = True
             
@@ -163,7 +159,6 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
             If StrComp(Left$(Message, Len(botRawUsername)), botRawUsername, vbTextCompare) = 0 And _
                 (Mid$(Message, Len(botRawUsername) + 1, 2) = ": " Or Mid$(Message, Len(botRawUsername) + 1, 2) = ", ") Then
                 
-                PublicOutput = True
                 cropLen = Len(botRawUsername) + 3
                 hasTrigger = True
             
@@ -177,7 +172,6 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
             If (UsernameRegex(botUsername, Left(Message, InStr(1, Message, ": ") - 1)) Or _
                 UsernameRegex(botRawUsername, Left$(Message, InStr(1, Message, ": ") - 1))) Then
                 
-                PublicOutput = True
                 cropLen = InStr(1, Message, ": ") + 2
                 hasTrigger = True
             End If
@@ -186,7 +180,6 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
             If (UsernameRegex(botUsername, Left$(Message, InStr(1, Message, ", ") - 1)) Or _
                 UsernameRegex(botRawUsername, Left$(Message, InStr(1, Message, ", ") - 1))) Then
                 
-                PublicOutput = True
                 cropLen = InStr(1, Message, ", ") + 2
                 hasTrigger = True
             End If
@@ -196,7 +189,6 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         If (StrComp(Message, "?trigger", vbTextCompare) = 0) Or _
             (StrComp(Message, "!inbox", vbTextCompare) = 0) Then
             
-            PublicOutput = True
             cropLen = 2
             hasTrigger = True
         End If

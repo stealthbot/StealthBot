@@ -95,11 +95,9 @@ Public Sub OnExpand(Command As clsCommandObj)
         If (Len(tmpSend) > 223) Then
             tmpSend = Left$(tmpSend, 223)
         End If
-        If (StrComp(ReadCfg("Override", "ForcePublicSay"), "Y", vbTextCompare) = 0) Then
-            Call frmChat.AddQ(tmpSend, PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
-        Else
-            Command.Respond tmpSend
-        End If
+        
+        Command.PublicOutput = True
+        Command.Respond tmpSend
     End If
 End Sub
 
@@ -319,11 +317,8 @@ Public Sub OnSay(Command As clsCommandObj)
             tmpSend = Command.Argument("Message")
         End If
     
-        If (StrComp(ReadCfg("Override", "ForcePublicSay"), "Y", vbTextCompare) = 0) Then
-            Call frmChat.AddQ(tmpSend, PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
-        Else
-            Command.Respond tmpSend
-        End If
+        Command.PublicOutput = True
+        Command.Respond tmpSend
     End If
 End Sub
 
@@ -341,11 +336,8 @@ Public Sub OnShout(Command As clsCommandObj)
             tmpSend = UCase$(Command.Argument("Message"))
         End If
     
-        If (StrComp(ReadCfg("Override", "ForcePublicSay"), "Y", vbTextCompare) = 0) Then
-            Call frmChat.AddQ(tmpSend, PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
-        Else
-            Command.Respond tmpSend
-        End If
+        Command.PublicOutput = True
+        Command.Respond tmpSend
     End If
 End Sub
 
