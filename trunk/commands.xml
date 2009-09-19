@@ -1095,7 +1095,7 @@
     </access>
   </command>
 
-  <command name="expand" token="speech">
+  <command name="expand">
     <aliases />
 
     <documentation>
@@ -1112,6 +1112,15 @@
 
             <access>
               <rank>100</rank>
+              <flags>
+                <flag>T</flag>
+              </flags>
+            </access>
+          </restriction>
+
+          <restriction name="RAW_USAGE" nonfatal="1">
+            <access>
+              <rank>70</rank>
               <flags>
                 <flag>T</flag>
               </flags>
@@ -1304,7 +1313,7 @@
           </restriction>
 
           <restriction name="OPS_USAGE">
-            <match message="^[oO][pP][sS][,:] " />
+            <match message="^ops[,:] " />
 
             <access>
               <rank>100</rank>
@@ -1315,10 +1324,19 @@
           </restriction>
 
           <restriction name="ALL_USAGE">
-            <match message="^[aA][lL][lL][,:] " />
+            <match message="^all[,:] " />
 
             <access>
               <rank>100</rank>
+              <flags>
+                <flag>T</flag>
+              </flags>
+            </access>
+          </restriction>
+
+          <restriction name="RAW_USAGE" nonfatal="1">
+            <access>
+              <rank>70</rank>
               <flags>
                 <flag>T</flag>
               </flags>
@@ -1360,7 +1378,7 @@
           </restriction>
 
           <restriction name="OPS_USAGE">
-            <match message="^[oO][pP][sS][,:] " />
+            <match message="^ops[,:] " />
 
             <access>
               <rank>100</rank>
@@ -1371,10 +1389,19 @@
           </restriction>
 
           <restriction name="ALL_USAGE">
-            <match message="^[aA][lL][lL][,:] " />
+            <match message="^all[,:] " />
 
             <access>
               <rank>100</rank>
+              <flags>
+                <flag>T</flag>
+              </flags>
+            </access>
+          </restriction>
+
+          <restriction name="RAW_USAGE" nonfatal="1">
+            <access>
+              <rank>70</rank>
               <flags>
                 <flag>T</flag>
               </flags>

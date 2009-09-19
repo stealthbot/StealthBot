@@ -321,12 +321,12 @@ Public Function CommandsSanityCheck(ByRef doc As DOMDocument60, Optional ByRef c
            
             Dim commandName As String
             Dim ownerName As String
-            Dim enabled As String
+            Dim Enabled As String
             
             '// default our values
             commandName = oCommand.Attributes.getNamedItem("name").Text
             ownerName = vbNullString
-            enabled = "1"
+            Enabled = "1"
             
             '// make sure name != ""
             If Len(commandName) = 0 Then
@@ -346,15 +346,15 @@ Public Function CommandsSanityCheck(ByRef doc As DOMDocument60, Optional ByRef c
             
             '// make sure enabled attribute is 0 or 1
             If Not (oCommand.Attributes.getNamedItem("enabled") Is Nothing) Then
-                enabled = oCommand.Attributes.getNamedItem("enabled").Text
-                If enabled <> "0" And enabled <> "1" Then
+                Enabled = oCommand.Attributes.getNamedItem("enabled").Text
+                If Enabled <> "0" And Enabled <> "1" Then
                     colErrorList.Add "If present, an enabled attribute must be equal to 0 or 1 on a command element."
                     Exit Do
                 End If
             End If
             
             '// make sure only 1 command is enabled if there are similar names
-            If enabled = "1" Then
+            If Enabled = "1" Then
                 If uniqueEnabledCommands.Exists(commandName) Then
                     colErrorList.Add "Only 1 command element can have no enabled attribute or an enabled attribute equal to 1."
                     Exit Do
@@ -662,6 +662,7 @@ Private Function getRestrictions(ByRef parameterNode As IXMLDOMNode) As Collecti
             .MatchCaseSensitive = getMatchCase(RestrictionNode)
             .RequiredFlags = getFlags(RestrictionNode)
             .RequiredRank = GetRank(RestrictionNode)
+            .Fatal = GetFatal(RestrictionNode)
         End With
         getRestrictions.Add temp
         Set temp = Nothing
@@ -824,6 +825,12 @@ Private Function setRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef Restriction
         Set newNode = m_database.createNode("attribute", "name", vbNullString)
         newNode.Text = restriction.Name
         RestrictionNode.Attributes.setNamedItem newNode
+        
+        If (restriction.Fatal) Then
+            Set newNode = m_database.createNode("attribute", "nonfatal", vbNullString)
+            newNode.Text = IIf(restriction.Fatal, "0", "1")
+            RestrictionNode.Attributes.setNamedItem newNode
+        End If
         
         '// create the match element if necessary
         If restriction.MatchMessage <> "" Then
@@ -1012,7 +1019,7 @@ Private Function getEnabled(ByRef AnyNode As IXMLDOMNode) As Boolean
 
 End Function
 
-Private Function setEnabled(ByRef AnyNode As IXMLDOMNode, ByVal enabled As Boolean)
+Private Function setEnabled(ByRef AnyNode As IXMLDOMNode, ByVal Enabled As Boolean)
 
     Dim temp As IXMLDOMNode
     Dim attr As IXMLDOMAttribute
@@ -1026,7 +1033,7 @@ Private Function setEnabled(ByRef AnyNode As IXMLDOMNode, ByVal enabled As Boole
         Set temp = AnyNode.Attributes.setNamedItem(m_database.createAttribute("enabled"))
     End If
 
-    If (enabled = True) Then
+    If (Enabled = True) Then
         temp.Text = "1"
     Else
         temp.Text = "0"
@@ -1230,6 +1237,22 @@ Private Function GetRank(ByRef AnyNode As IXMLDOMNode) As Integer
     
     GetRank = CInt(Val(temp.Text))
 
+End Function
+
+Private Function GetFatal(ByRef AnyNode As IXMLDOMNode) As Boolean
+
+    Dim temp As IXMLDOMNode
+    GetFatal = True
+    
+    If (AnyNode Is Nothing) Then
+        Exit Function
+    End If
+    
+    Set temp = AnyNode.Attributes.getNamedItem("nonfatal")
+    If (temp Is Nothing) Then
+        Exit Function
+    End If
+    GetFatal = (Not temp.Text = "1")
 End Function
 
 Private Function setRank(ByRef AnyNode As IXMLDOMNode, ByVal Rank As Integer) As Integer

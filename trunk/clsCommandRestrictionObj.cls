@@ -17,12 +17,13 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_name      As String
-Private m_req_rank  As Integer
-Private m_req_flags As String
+Private m_name           As String
+Private m_req_rank       As Integer
+Private m_req_flags      As String
 Private m_matchmessage   As String
 Private m_casesensitive  As Boolean
 Private m_error          As String
+Private m_fatal          As Boolean
 
 Public Property Get Name() As String
     Name = m_name
@@ -60,4 +61,9 @@ End Property
 Public Property Let MatchCaseSensitive(bln As Boolean)
     m_casesensitive = bln
 End Property
-
+Public Property Let Fatal(bFatal As Boolean)
+    m_fatal = bFatal
+End Property
+Public Property Get Fatal() As Boolean
+    Fatal = m_fatal
+End Property

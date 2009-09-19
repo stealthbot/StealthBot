@@ -34,6 +34,7 @@ Private m_hasaccess    As Boolean
 Private m_splithasrun  As Boolean
 Private m_waswhispered As Boolean
 Private m_response     As Collection
+Private m_restrictions As Dictionary
 
 Public Property Get Username() As String
     Username = m_Username
@@ -119,6 +120,7 @@ Public Sub Class_Initialize()
     m_splithasrun = False
     m_waswhispered = False
     Set m_response = New Collection
+    Set m_restrictions = New Dictionary
     
 End Sub
 
@@ -225,7 +227,7 @@ On Error GoTo ERROR_HANDLER
     Dim sArgs       As String
     Dim i           As Integer
     Dim Param       As clsCommandParamsObj
-    Dim restriction As clsCommandRestrictionObj
+    Dim Restriction As clsCommandRestrictionObj
     Dim sTemp       As String
     Dim sError      As String
     Dim dbAccess    As udtGetAccessResponse
@@ -279,26 +281,27 @@ On Error GoTo ERROR_HANDLER
             End If
         End If
         
-        For Each restriction In Param.Restrictions 'Loop Through the Restrictions
-            If (LenB(sTemp) > 0) Then
-                If (CheckMatch(restriction.MatchMessage, sTemp, restriction.MatchCaseSensitive)) Then 'If they match (regex)
+        If (LenB(sTemp) > 0) Then
+            For Each Restriction In Param.Restrictions 'Loop Through the Restrictions
+                m_restrictions(Restriction.Name) = True
+                If (CheckMatch(Restriction.MatchMessage, sTemp, Restriction.MatchCaseSensitive)) Then 'If they match (regex)
                     'If Rank = -1 It means it's missing, and it MUST have Flags. Or if Rank > User's Access
-                    If (restriction.RequiredRank = -1 Or restriction.RequiredRank > dbAccess.Rank) Then
-                        If (Not CheckForAnyFlags(restriction.RequiredFlags, dbAccess.Flags)) Then
-                            If (LenB(restriction.MatchError)) And (m_hasaccess) Then
-                                sError = Replace$(restriction.MatchError, "%Value", sTemp)
+                    If (Restriction.RequiredRank = -1 Or Restriction.RequiredRank > dbAccess.Rank) Then
+                        If (Not CheckForAnyFlags(Restriction.RequiredFlags, dbAccess.Flags)) Then
+                            If (LenB(Restriction.MatchError)) And (m_hasaccess) Then
+                                sError = Replace$(Restriction.MatchError, "%Value", sTemp)
                                 sError = Replace$(sError, "%Rank", dbAccess.Rank)
                                 sError = Replace$(sError, "%Flags", dbAccess.Flags)
                                 
                                 Respond sError
                             End If
-                            m_hasaccess = False
-                            Exit For
+                            If (Restriction.Fatal) Then m_hasaccess = False
+                            m_restrictions(Restriction.Name) = False
                         End If
                     End If
                 End If
-            End If
-        Next
+            Next
+        End If
         
         If (LenB(sTemp) = 0 And Not Param.IsOptional) Then
             IsValid = False
@@ -321,6 +324,15 @@ Public Function Argument(sName As String) As String
         Argument = m_xmlarguments.Item(sName)
     Else
         Argument = vbNullString
+    End If
+End Function
+
+Public Function Restriction(sName As String) As Boolean
+    If (Not m_splithasrun) Then SplitArguments
+    If (m_restrictions.Exists(sName)) Then
+        Restriction = m_restrictions.Item(sName)
+    Else
+        Restriction = False
     End If
 End Function
 

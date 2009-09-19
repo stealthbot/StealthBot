@@ -77,6 +77,7 @@ Private Sub cmd_<xsl:value-of select="@name"/>(ByRef oCommandDoc As clsCommandDo
                     <xsl:if test="count(access/flags/flag) > 0">
                         .RequiredFlags = "<xsl:for-each select="access/flags/flag"><xsl:value-of select="normalize-space(text())"/></xsl:for-each>"
                     </xsl:if>
+                    .Fatal = <xsl:call-template name="getFatal" />
 
                     <xsl:if test="count(match) > 0">
                         .MatchMessage = <xsl:call-template name="vbstring"><xsl:with-param name="text" select="match/@message"/></xsl:call-template>
@@ -85,7 +86,7 @@ Private Sub cmd_<xsl:value-of select="@name"/>(ByRef oCommandDoc As clsCommandDo
                             .MatchError = <xsl:call-template name="vbstring"><xsl:with-param name="text" select="error/text()"/></xsl:call-template>
                         </xsl:if>
                     </xsl:if>
-                 End With
+					End With
 				 .Restrictions.Add oRestriction
                 </xsl:for-each>
             End With
@@ -125,6 +126,16 @@ End Sub
             <xsl:otherwise><xsl:choose>
                 <xsl:when test="match[@case-sensitive] = 1">True</xsl:when>
                 <xsl:otherwise>False</xsl:otherwise></xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>  
+
+    <xsl:template name="getFatal">
+        <xsl:choose>
+            <xsl:when test="not(@nonfatal)">True</xsl:when>
+            <xsl:otherwise><xsl:choose>
+                <xsl:when test="@nonfatal = 1">False</xsl:when>
+                <xsl:otherwise>True</xsl:otherwise></xsl:choose>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>  

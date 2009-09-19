@@ -88,9 +88,13 @@ Public Sub OnExpand(Command As clsCommandObj)
     Dim i As Integer
     If (Command.IsValid) Then
         sMessage = Command.Argument("Message")
+        
+        If (Len(tmpSend) > 223) Then tmpSend = Left$(tmpSend, 223)
         For i = 1 To Len(sMessage)
             tmpSend = StringFormat("{0}{1}{2}", tmpSend, Mid$(sMessage, i, 1), IIf(i = Len(sMessage), vbNullString, Space$(1)))
         Next i
+        
+        If (Not Command.restriction("RAW_USAGE")) Then tmpSend = StringFormat("{0} Says: {1}", Command.Username, tmpSend)
         
         If (Len(tmpSend) > 223) Then
             tmpSend = Left$(tmpSend, 223)
@@ -311,12 +315,14 @@ Public Sub OnSay(Command As clsCommandObj)
     Dim tmpSend As String
     
     If (Command.IsValid) Then
-        If (Len(Command.Argument("Message")) > 223) Then
-            tmpSend = Left$(Command.Argument("Message"), 223)
+        If (Not Command.restriction("RAW_USAGE")) Then
+            tmpSend = StringFormat("{0} Says: {1}", Command.Username, Command.Argument("Message"))
         Else
             tmpSend = Command.Argument("Message")
         End If
-    
+        
+        If (Len(tmpSend) > 223) Then tmpSend = Left$(tmpSend, 223)
+        
         Command.PublicOutput = True
         Command.Respond tmpSend
     End If
@@ -330,11 +336,14 @@ Public Sub OnShout(Command As clsCommandObj)
     Dim tmpSend As String
     
     If (Command.IsValid) Then
-        If (Len(Command.Argument("Message")) > 223) Then
-            tmpSend = UCase$(Left$(Command.Argument("Message"), 223))
+    
+        If (Not Command.restriction("RAW_USAGE")) Then
+            tmpSend = StringFormat("{0} Shouts: {1}", Command.Username, UCase$(Command.Argument("Message")))
         Else
             tmpSend = UCase$(Command.Argument("Message"))
         End If
+        
+        If (Len(tmpSend) > 223) Then tmpSend = Left$(tmpSend, 223)
     
         Command.PublicOutput = True
         Command.Respond tmpSend
