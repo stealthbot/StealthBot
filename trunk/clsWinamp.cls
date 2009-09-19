@@ -109,7 +109,7 @@ Private Const WA_STOP        As Long = 40047 ' ...
 Private Const WA_FADEOUTSTOP As Long = 40147 ' ...
 
 Private Type extendedFileInfoStruct
-    filename As String
+    FileName As String
     metadata As String
     retlen   As Integer
     ret      As String
@@ -122,7 +122,7 @@ Private Type COPYDATASTRUCT
 End Type
 
 Private Type FILEINFO
-    file  As String
+    File  As String
     Index As Long
 End Type
 
@@ -334,7 +334,7 @@ Public Property Get Volume() As Long
     End If
 
     Volume = _
-        CLng(SendMessage(m_hWnd, WM_WA_IPC, -666, WA_SETVOLUME))
+        (CLng(SendMessage(m_hWnd, WM_WA_IPC, -666, WA_SETVOLUME) / 2.55))
     
 End Property
 
