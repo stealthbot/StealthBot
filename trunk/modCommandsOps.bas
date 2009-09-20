@@ -366,7 +366,7 @@ Public Sub OnIPBan(Command As clsCommandObj)
             Exit Sub
         End If
         
-        dbAccess = GetCumulativeAccess(BotVars.Username)
+        dbAccess = GetCumulativeAccess(Command.Username)
         If (Command.IsLocal) Then
             dbAccess.Rank = 201
             dbAccess.Flags = "A"
