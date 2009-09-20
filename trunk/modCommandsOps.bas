@@ -97,7 +97,7 @@ Public Sub OnChPw(Command As clsCommandObj)
     Dim delay As Integer
     If (Command.IsValid) Then
         Select Case (LCase$(Command.Argument("SubCommand")))
-            Case "on", "set":
+            Case "on":
                 If (LenB(Command.Argument("Value")) > 0) Then
                 
                     BotVars.ChannelPassword = Command.Argument("Value")
@@ -108,12 +108,12 @@ Public Sub OnChPw(Command As clsCommandObj)
                     Command.Respond "Error: You must supply a password."
                 End If
             
-            Case "off", "clear":
+            Case "off":
                 BotVars.ChannelPassword = vbNullString
                 BotVars.ChannelPasswordDelay = 0
                 Command.Respond "Channel password protection disabled."
             
-            Case "time", "delay", "wait":
+            Case "delay":
                 If (StrictIsNumeric(Command.Argument("Value"))) Then
                     delay = Val(Command.Argument("Value"))
                     If ((delay < 256) And (delay > 0)) Then
@@ -334,7 +334,7 @@ Public Sub OnIdleBans(Command As clsCommandObj)
                     End Select
                 End If
                 
-            Case "wait", "delay":
+            Case "delay":
                 If (StrictIsNumeric(Command.Argument("Value"))) Then
                     BotVars.IB_Wait = CInt(Command.Argument("Value"))
                     Call WriteINI("Other", "IdleBanDelay", BotVars.IB_Wait)
@@ -343,7 +343,7 @@ Public Sub OnIdleBans(Command As clsCommandObj)
                     Command.Respond "Error: IdleBan delays require a numeric value."
                 End If
                 
-            Case "status":
+            Case Else:
                 If (BotVars.IB_On = BTRUE) Then
                     Command.Respond StringFormat("Idle {0} is enabled with a delay of {1} seconds.", _
                         IIf(BotVars.IB_Kick, "kicking", "banning"), BotVars.IB_Wait)

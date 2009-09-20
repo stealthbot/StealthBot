@@ -3659,14 +3659,14 @@
       <argument name="subcommand" type="word">
         <documentation>
           <description>
-            The Sub Command to use, On, Off, Kick, Wait/Delay, Status
+            The Sub Command to use, On, Off, Kick, Delay, Status
           </description>
 
           <specialnotes>
             'On [Time]': Turn idlebans on, if time is specified, sets the delay in seconds.
             'Off': Disables idlebans
             'Kick [On/Off]': Changes the system to kick the user instead of ban them.
-            'Wait/Delay Time': Changes the delay before kicking/banning idles users to Time seconds.
+            'Delay Time': Changes the delay before kicking/banning idles users to Time seconds.
             'Status': Displays information, Delay time, Kick or Ban, Enabled or disabled
           </specialnotes>
         </documentation>
@@ -3900,14 +3900,14 @@
       <argument name="subcommand" type="word">
         <documentation>
           <description>
-            The subcommand to use, On, Off, Status.
+            The subcommand to use, On, Off, Delay, Status.
           </description>
 
           <specialnotes>
-            On/Set PASSWORD: Will enable channel password prtection, and set the password to PASSWORD.
-            Off/Kill/Clear: Will disable channel password protection.
-            Time/Delay/Wait TIME: Will set the delay to TIME, TIME must be greater than 0 and less than 256.
-            Info/Status: Will display information ont eh current status of channel password protection.
+            On PASSWORD: Will enable channel password prtection, and set the password to PASSWORD.
+            Off: Will disable channel password protection.
+            Delay TIME: Will set the delay to TIME, TIME must be greater than 0 and less than 256.
+            Status: Will display information ont eh current status of channel password protection.
           </specialnotes>
         </documentation>
       </argument>
