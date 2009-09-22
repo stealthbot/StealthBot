@@ -168,6 +168,8 @@ On Error GoTo ERROR_HANDLER:
     Debug.Print FullPath
     
     If oFso.FolderExists(FullPath) Then
+        Dir "C:\" 'VOILA, the Permission Denied fix
+        ' (source: http://www.codeguru.com/forum/showthread.php?t=310799) -andy
         oFso.DeleteFolder FullPath, True
         KillFolder = (Err.Number = 0 And oFso.FolderExists(FullPath) = False)
     Else
