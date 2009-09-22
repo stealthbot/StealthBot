@@ -4,10 +4,10 @@ Begin VB.Form frmLauncher
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "StealthBot Profile Launcher"
-   ClientHeight    =   5010
+   ClientHeight    =   3015
    ClientLeft      =   150
-   ClientTop       =   750
-   ClientWidth     =   3090
+   ClientTop       =   435
+   ClientWidth     =   5760
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -21,53 +21,72 @@ Begin VB.Form frmLauncher
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   334
+   ScaleHeight     =   201
    ScaleMode       =   3  'Pixel
-   ScaleWidth      =   206
+   ScaleWidth      =   384
    StartUpPosition =   3  'Windows Default
+   Begin VB.CheckBox chkAutoClose 
+      BackColor       =   &H00000000&
+      Caption         =   "Automatically close this launcher after loading a profile"
+      ForeColor       =   &H00FFFFFF&
+      Height          =   495
+      Left            =   2400
+      TabIndex        =   5
+      Top             =   2280
+      Width           =   3135
+   End
    Begin VB.CommandButton cmdRemoveProfile 
-      Caption         =   "Remove Profile"
+      Caption         =   "&Remove Profile"
       Enabled         =   0   'False
       Height          =   240
-      Left            =   120
-      TabIndex        =   4
-      Top             =   4680
+      Left            =   2400
+      TabIndex        =   3
+      Top             =   1680
       Width           =   1455
    End
    Begin VB.CommandButton cmdCreateProfile 
       Caption         =   "Create Profile"
       Height          =   240
-      Left            =   120
-      TabIndex        =   1
-      Top             =   4440
+      Left            =   4080
+      TabIndex        =   4
+      Top             =   1680
       Width           =   1455
    End
    Begin VB.CommandButton cmdLaunchThis 
-      Caption         =   "Launch Profile"
+      Caption         =   "&Launch Selected Profile"
       Enabled         =   0   'False
-      Height          =   240
-      Left            =   1560
-      TabIndex        =   2
-      Top             =   4440
-      Width           =   1455
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   12
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   480
+      Left            =   2400
+      TabIndex        =   1
+      Top             =   360
+      Width           =   3135
    End
    Begin VB.CommandButton cmdCreateShortcut 
-      Caption         =   "Create Shortcut"
+      Caption         =   "&Create a Shortcut"
       Enabled         =   0   'False
-      Height          =   240
-      Left            =   1560
-      TabIndex        =   5
-      Top             =   4680
+      Height          =   480
+      Left            =   2400
+      TabIndex        =   2
+      Top             =   1080
       Width           =   1455
    End
    Begin MSComctlLib.ListView lstProfiles 
-      Height          =   4095
-      Left            =   120
+      Height          =   2415
+      Left            =   240
       TabIndex        =   0
-      Top             =   240
-      Width           =   2895
-      _ExtentX        =   5106
-      _ExtentY        =   7223
+      Top             =   360
+      Width           =   2055
+      _ExtentX        =   3625
+      _ExtentY        =   4260
       View            =   3
       LabelEdit       =   1
       LabelWrap       =   -1  'True
@@ -84,6 +103,19 @@ Begin VB.Form frmLauncher
          Object.Width           =   2540
       EndProperty
    End
+   Begin VB.Label Label1 
+      AutoSize        =   -1  'True
+      BackColor       =   &H00000000&
+      BackStyle       =   0  'Transparent
+      Caption         =   "to this profile on your Desktop"
+      ForeColor       =   &H00FFFFFF&
+      Height          =   390
+      Left            =   3960
+      TabIndex        =   7
+      Top             =   1080
+      Width           =   1215
+      WordWrap        =   -1  'True
+   End
    Begin VB.Label lblProfiles 
       AutoSize        =   -1  'True
       BackColor       =   &H00000000&
@@ -91,13 +123,10 @@ Begin VB.Form frmLauncher
       Caption         =   "List of available profiles:"
       ForeColor       =   &H00FFFFFF&
       Height          =   195
-      Left            =   120
-      TabIndex        =   3
-      Top             =   0
-      Width           =   2955
-   End
-   Begin VB.Menu mnuSettings 
-      Caption         =   "Settings"
+      Left            =   240
+      TabIndex        =   6
+      Top             =   120
+      Width           =   1995
    End
    Begin VB.Menu mnuRightClick 
       Caption         =   "RightClick"
@@ -129,6 +158,7 @@ Option Explicit
 
 Private Const OBJECT_NAME As String = "frmLauncher"
 
+
 Private Sub Form_Load()
 On Error GoTo ERROR_HANDLER
 
@@ -143,7 +173,7 @@ On Error GoTo ERROR_HANDLER
     #If COMPILE_CRC = 1 Then
         Dim crc As New clsCRC32
         If (Not crc.ValidateExecutable) Then
-            MsgBox "This application has been tampered with, Please download a new version at http://www.StealthBot.net/"
+            MsgBox "This application has been tampered with, Please download a new version at http://www.StealthBot.net/", vbOKOnly + vbCritical
             Unload Me
             Exit Sub
         End If
@@ -165,8 +195,10 @@ On Error GoTo ERROR_HANDLER
         EnableButtons
     ' UI: if count = 0 then show informative item
     Else
-        SetupColumns lvwColumnCenter
+        SetupColumns lvwColumnLeft
     End If
+    
+    chkAutoClose.Value = IIf(cConfig.AutoClose, 1, 0)
     
     Exit Sub
 ERROR_HANDLER:
@@ -176,7 +208,6 @@ End Sub
 Private Sub Form_Unload(Cancel As Integer)
 On Error GoTo ERROR_HANDLER
     Unload frmNameDialog
-    Unload frmConfig
     
     If (Not cConfig Is Nothing) Then cConfig.SaveConfig
     
@@ -411,7 +442,13 @@ On Error GoTo ERROR_HANDLER
     If lstProfiles.ListItems.Count = 3 And lstProfiles.ListItems(1).Ghosted Then
         EnableButtons
         SetupColumns lvwColumnLeft
+    
+    ' here, we check to see if the last profile has been deleted and re-add the
+    '  welcome message if it has -at
+    ElseIf lstProfiles.ListItems.Count = 0 Then
+        SetupColumns lvwColumnCenter
     End If
+    
     lstProfiles.ListItems.Add , , Text
     
     Exit Sub
@@ -448,7 +485,7 @@ End Sub
 ' so neither has to be done anywhere else
 Private Sub SetupColumns(ByVal Alignment As ListColumnAlignmentConstants)
 On Error GoTo ERROR_HANDLER:
-    Const COLUMN_WIDTH_PX As Integer = 160
+    Const COLUMN_WIDTH_PX As Integer = 136
 
     lstProfiles.ListItems.Clear
     Select Case Alignment
@@ -493,11 +530,19 @@ ERROR_HANDLER:
     ErrorHandler Err.Number, OBJECT_NAME, "AddInformationalItem"
 End Sub
 
-Private Sub mnuSettings_Click()
+Private Sub cmdSettings_Click()
 On Error GoTo ERROR_HANDLER:
     Load frmConfig
     frmConfig.Show
     Exit Sub
 ERROR_HANDLER:
     ErrorHandler Err.Number, OBJECT_NAME, "mnuSettings_Click"
+End Sub
+
+Private Sub chkAutoClose_Click()
+    With cConfig
+        .AutoClose = (chkAutoClose.Value = 1)
+        
+        .SaveConfig
+    End With
 End Sub

@@ -162,17 +162,21 @@ On Error GoTo ERROR_HANDLER:
     Dim oFso As Object
     Set oFso = CreateObject("Scripting.FileSystemObject")
 
-    If Right(FullPath, 1) = "\" Then FullPath = Left(FullPath, Len(FullPath) - 1)
-
+    If Right$(FullPath, 1) = "\" Then FullPath = Left$(FullPath, Len(FullPath) - 1)
+    'escape all the slashes
+    'FullPath = Replace(FullPath, "\", "\\")
+    Debug.Print FullPath
+    
     If oFso.FolderExists(FullPath) Then
         oFso.DeleteFolder FullPath, True
-        KillFolder = Err.Number = 0 And oFso.FolderExists(FullPath) = False
+        KillFolder = (Err.Number = 0 And oFso.FolderExists(FullPath) = False)
     Else
         KillFolder = True
     End If
 
     Exit Function
 ERROR_HANDLER:
+    Debug.Print "error " & Err.Number & " in KillFolder, " & Err.Description
     ErrorHandler Err.Number, OBJECT_NAME, "KillFolder"
     KillFolder = False
 End Function
@@ -306,13 +310,13 @@ On Error GoTo ERROR_HANDLER
     
     sProfile = Item.Text
     
-    lRet = MsgBox(StringFormat("This will delete EVERYTHING in the {0}{1}{0} profile, Are you sure?", Chr$(34), sProfile), vbYesNoCancel)
+    lRet = MsgBox(StringFormat("This will delete EVERYTHING in the {0}{1}{0} profile. Are you sure?", Chr$(34), sProfile), vbYesNoCancel + vbQuestion)
     
     If (lRet = vbYes) Then
         If (KillFolder(StringFormat("{0}\StealthBot\{1}", ReplaceEnvironmentVars("%APPDATA%"), sProfile))) Then
             frmLauncher.UnlistProfile Item.Index
         Else
-            MsgBox "Failed to delete profile, May be in use by an apllication."
+            MsgBox "Failed to delete the profile. It may be in use by an application. Try rebooting your computer and deleting it again.", vbInformation + vbOKOnly
             Exit Function
         End If
     End If
