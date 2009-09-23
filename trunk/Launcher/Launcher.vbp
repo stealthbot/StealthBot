@@ -1,12 +1,13 @@
 Type=Exe
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\WINDOWS\system32\stdole2.tlb#OLE Automation
-Reference=*\G{F5078F18-C551-11D3-89B9-0000F81FE221}#6.0#0#..\..\..\..\..\WINDOWS\system32\msxml6.dll#Microsoft XML, v6.0
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\Windows\system32\stdole2.tlb#OLE Automation
+Reference=*\G{F5078F18-C551-11D3-89B9-0000F81FE221}#6.0#0#..\..\..\..\..\Windows\System32\msxml6.dll#Microsoft XML, v6.0
 Object={831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0; MSCOMCTL.OCX
 Form=frmLauncher.frm
 Form=frmNameDialog.frm
 Module=modLauncher; modLauncher.bas
 Class=clsCRC32; clsCRC32.cls
 Class=clsConfig; clsConfig.cls
+Form=frmConfig.frm
 IconForm="frmLauncher"
 Startup="frmLauncher"
 HelpFile=""
@@ -21,7 +22,6 @@ MinorVer=1
 RevisionVer=1
 AutoIncrementVer=0
 ServerSupportFiles=0
-VersionCompanyName="F1CS"
 CompilationType=0
 OptimizationType=0
 FavorPentiumPro(tm)=0
@@ -38,6 +38,3 @@ Retained=0
 ThreadPerObject=0
 MaxNumberOfThreads=1
 DebugStartupOption=0
-
-[MS Transaction Server]
-AutoRefresh=1

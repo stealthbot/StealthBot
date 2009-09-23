@@ -162,14 +162,10 @@ On Error GoTo ERROR_HANDLER:
     Dim oFso As Object
     Set oFso = CreateObject("Scripting.FileSystemObject")
 
-    If Right$(FullPath, 1) = "\" Then FullPath = Left$(FullPath, Len(FullPath) - 1)
-    'escape all the slashes
-    'FullPath = Replace(FullPath, "\", "\\")
-    Debug.Print FullPath
-    
+    If Right(FullPath, 1) = "\" Then FullPath = Left$(FullPath, Len(FullPath) - 1)
+
     If oFso.FolderExists(FullPath) Then
-        Dir "C:\" 'VOILA, the Permission Denied fix
-        ' (source: http://www.codeguru.com/forum/showthread.php?t=310799) -andy
+        Dir App.Path  'Use App.Path because that *should* always exist unless some voodo was performed. But 'C:/' is not garenteed.
         oFso.DeleteFolder FullPath, True
         KillFolder = (Err.Number = 0 And oFso.FolderExists(FullPath) = False)
     Else
@@ -178,7 +174,6 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Function
 ERROR_HANDLER:
-    Debug.Print "error " & Err.Number & " in KillFolder, " & Err.Description
     ErrorHandler Err.Number, OBJECT_NAME, "KillFolder"
     KillFolder = False
 End Function
@@ -315,7 +310,7 @@ On Error GoTo ERROR_HANDLER
     lRet = MsgBox(StringFormat("This will delete EVERYTHING in the {0}{1}{0} profile. Are you sure?", Chr$(34), sProfile), vbYesNoCancel + vbQuestion)
     
     If (lRet = vbYes) Then
-        If (KillFolder(StringFormat("{0}\StealthBot\{1}", ReplaceEnvironmentVars("%APPDATA%"), sProfile))) Then
+        If (KillFolder(StringFormat(ReplaceEnvironmentVars("%APPDATA%\StealthBot\{0}"), sProfile))) Then
             frmLauncher.UnlistProfile Item.Index
         Else
             MsgBox "Failed to delete the profile. It may be in use by an application. Try rebooting your computer and deleting it again.", vbInformation + vbOKOnly
