@@ -532,9 +532,9 @@ End Sub
 
 Private Sub cmdSettings_Click()
 On Error GoTo ERROR_HANDLER:
-    Load frmConfig
-    frmConfig.Show
-    Exit Sub
+    'Load frmConfig
+    'frmConfig.Show
+    'Exit Sub
 ERROR_HANDLER:
     ErrorHandler Err.Number, OBJECT_NAME, "mnuSettings_Click"
 End Sub
