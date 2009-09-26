@@ -22,19 +22,20 @@ Public Type scInc
     lineCount As Integer
 End Type
 
-Private m_srootmenu     As New clsMenuObj
-Private m_arrObjs()     As scObj
-Private m_objCount      As Integer
-Private m_arrIncs()     As scInc
-Private m_incCount      As Integer
-Private m_sc_control    As ScriptControl
-Private m_is_reloading  As Boolean
-Private m_ExecutingMdl  As Module
-Private m_TempMdlName   As String
-Private m_IsEventError  As Boolean
-Private VetoNextMessage As Boolean
-Private VetoNextPacket  As Boolean
-Private m_ScriptObservers  As Collection
+Private m_srootmenu         As New clsMenuObj
+Private m_arrObjs()         As scObj
+Private m_objCount          As Integer
+Private m_arrIncs()         As scInc
+Private m_incCount          As Integer
+Private m_sc_control        As ScriptControl
+Private m_is_reloading      As Boolean
+Private m_ExecutingMdl      As Module
+Private m_TempMdlName       As String
+Private m_IsEventError      As Boolean
+Private VetoNextMessage     As Boolean
+Private VetoNextPacket      As Boolean
+Private m_ScriptObservers   As Collection
+Private m_FunctionObservers As Collection
 
 Public Sub InitScriptControl(ByVal SC As ScriptControl)
 
@@ -46,7 +47,7 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
 
     ' ...
     frmChat.INet.Cancel
-    frmChat.scTimer.enabled = False
+    frmChat.scTimer.Enabled = False
     
     ' ...
     DestroyObjs
@@ -66,6 +67,7 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
     Set m_sc_control = SC
     
     Set m_ScriptObservers = New Collection
+    Set m_FunctionObservers = New Collection
     
     ' ...
     m_is_reloading = False
@@ -80,7 +82,7 @@ Public Sub LoadScripts()
     Dim CurrentModule As Module
     Dim Paths         As New Collection
     Dim strPath       As String  ' ...
-    Dim filename      As String  ' ...
+    Dim FileName      As String  ' ...
     Dim fileExt       As String  ' ...
     Dim i             As Integer ' ...
     Dim j             As Integer ' ...
@@ -98,17 +100,17 @@ Public Sub LoadScripts()
     ' ensure scripts folder exists
     If (LenB(Dir$(strPath)) > 0) Then
         ' grab initial script file name
-        filename = Dir$(strPath)
+        FileName = Dir$(strPath)
         
         ' grab script files
         ' note: if we don't enumerate this list prior to script loading,
         ' scripting errors can kill further script loading.
-        Do While (filename <> vbNullString)
+        Do While (FileName <> vbNullString)
             ' add script file to collection
-            Paths.Add filename
+            Paths.Add FileName
         
             ' grab next script file name
-            filename = Dir$()
+            FileName = Dir$()
         Loop
 
         ' Cycle through each of the files.
@@ -647,13 +649,17 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
     On Error Resume Next
 
     Dim i       As Integer
+    Dim x       As Integer
     Dim arr()   As Variant
     Dim str     As String
     Dim oldVeto As Boolean
     Dim oldEM   As Module
     Dim Proc    As Procedure
-    Dim obsers  As Collection
+    Dim sobsers As Collection
+    Dim fobsers As Collection
     Dim obser   As Module
+    Dim cobser  As Boolean
+    Dim mname   As String
         
     If (m_is_reloading) Then
         Exit Function
@@ -672,8 +678,10 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
     'This is so scriptors can observe internal events, like Internal Commands
     If (obj Is Nothing) Then
         str = "True"
+        mname = vbNullString
     Else
         str = obj.CodeObject.GetSettingsEntry("Enabled")
+        mname = GetScriptName(obj.Name)
     End If
     
     If (Not StrComp(str, "False", vbTextCompare) = 0) Then
@@ -681,21 +689,46 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
         RunInSingle = GetVeto 'Was this particular event vetoed?
         
         'Call any scripts that are observing this one
-        If (Not obj Is Nothing) Then
-            Set obsers = GetScriptObservers(GetScriptName(obj.Name), False)
-        Else
-            Set obsers = GetScriptObservers(vbNullString, False)
-        End If
-        For i = 1 To obsers.Count
-            Set obser = GetModuleByName(obsers.Item(i))
+        Set sobsers = GetScriptObservers(mname, False)
+        
+        For i = 1 To sobsers.Count
+            Set obser = GetModuleByName(sobsers.Item(i))
             If (Not obser Is Nothing) Then 'Is the script real/loaded?
                 str = obser.CodeObject.GetSettingsEntry("Enabled")
-                If (StrComp(str, "False", vbTextCompare) <> 0) Then 'Is it off?
+                If (Not StrComp(str, "False", vbTextCompare) = 0) Then 'Is it off?
                     Set m_ExecutingMdl = obser
                     CallByNameEx obser, "Run", VbMethod, arr
                 End If
             End If
             Set obser = Nothing
+        Next i
+        
+        Set fobsers = GetFunctionObservers(CStr(arr(0)))
+        
+        For i = 1 To fobsers.Count
+            cobser = True
+            If (StrComp(fobsers.Item(i), mname, vbTextCompare) = 0) Then 'Dont call itself
+                cobser = False
+            Else
+                For x = 1 To sobsers.Count 'See if we already called it with Script Observers
+                    If (StrComp(sobsers.Item(x), fobsers.Item(i), vbTextCompare) = 0) Then
+                        cobser = False
+                        Exit For
+                    End If
+                Next x
+            End If
+            
+            If (cobser) Then
+                Set obser = GetModuleByName(fobsers.Item(i))
+                If (Not obser Is Nothing) Then
+                    str = obser.CodeObject.GetSettingsEntry("Enabled")
+                    If (Not StrComp(str, "False", vbTextCompare) = 0) Then
+                        Set m_ExecutingMdl = obser
+                        CallByNameEx obser, "Run", VbMethod, arr
+                    End If
+                End If
+                Set obser = Nothing
+            End If
         Next i
     End If
     
@@ -1017,14 +1050,14 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
             If (m_arrObjs(Index).obj.Index > 0) Then
                 Unload frmChat.tmrScript(m_arrObjs(Index).obj.Index)
             Else
-                frmChat.tmrScript(0).enabled = False
+                frmChat.tmrScript(0).Enabled = False
             End If
             
         Case "LONGTIMER"
             If (m_arrObjs(Index).obj.Index > 0) Then
                 Unload frmChat.tmrScriptLong(m_arrObjs(Index).obj.Index)
             Else
-                frmChat.tmrScriptLong(0).enabled = False
+                frmChat.tmrScriptLong(0).Enabled = False
             End If
             
         Case "WINSOCK"
@@ -1308,11 +1341,11 @@ Public Function GetVeto() As Boolean
     
 End Function
 
-Private Function GetFileExtension(ByVal filename As String)
+Private Function GetFileExtension(ByVal FileName As String)
         
     Dim arr() As String
 
-    arr = Split(filename, ".")
+    arr = Split(FileName, ".")
     
     If UBound(arr) = 0 Then
         GetFileExtension = ""
@@ -1348,40 +1381,40 @@ Private Function IsValidFileExtension(ByVal ext As String) As Boolean
 
 End Function
 
-Private Function CleanFileName(ByVal filename As String) As String
+Private Function CleanFileName(ByVal FileName As String) As String
     
     On Error Resume Next
     
     ' ...
-    If (InStr(1, filename, ".") > 1) Then
+    If (InStr(1, FileName, ".") > 1) Then
         CleanFileName = _
-            Left$(filename, InStr(1, filename, ".") - 1)
+            Left$(FileName, InStr(1, FileName, ".") - 1)
     End If
 
 End Function
 
 '06/26/09 - Hdx Vary crappy function to check if Object names are valid, a-z0-9_ and 1st chr a-z (eventually should be a regexp)
 Public Function ValidObjectName(sName As String) As Boolean
-  Dim X As Integer
+  Dim x As Integer
   Dim sValid As String
   
   sValid = "abcdefghijklmnopqrstuvwxyz0123456789_"
   ValidObjectName = False
   
-  For X = 1 To Len(sName)
-    If (InStr(1, Left(sValid, IIf(X = 1, 26, 37)), Mid$(sName, X, 1), vbTextCompare) = 0) Then Exit Function
-  Next X
+  For x = 1 To Len(sName)
+    If (InStr(1, Left(sValid, IIf(x = 1, 26, 37)), Mid$(sName, x, 1), vbTextCompare) = 0) Then Exit Function
+  Next x
   
   ValidObjectName = True
 End Function
 
 Public Function ConvertStringArray(sArr() As String) As Variant()
   Dim vArr() As Variant
-  Dim X As Integer
+  Dim x As Integer
   ReDim vArr(LBound(sArr) To UBound(sArr))
-  For X = LBound(sArr) To UBound(sArr)
-    vArr(X) = CVar(sArr(X))
-  Next X
+  For x = LBound(sArr) To UBound(sArr)
+    vArr(x) = CVar(sArr(x))
+  Next x
   ConvertStringArray = vArr
 End Function
 
@@ -1645,4 +1678,51 @@ On Error GoTo ERROR_HANDLER
     Exit Function
 ERROR_HANDLER:
     frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modScripting.GetScriptObservers()"
+End Function
+
+'Adds a Function/Observer pair to the Function Observer collection
+'Observer\x00Function
+Public Sub AddFunctionObserver(ByVal ModuleName As String, ByVal sTargetFunction As String)
+On Error GoTo ERROR_HANDLER
+    Dim i     As Integer
+    Dim sItem As String
+        
+    sItem = StringFormat("{0}{1}{2}", ModuleName, Chr$(0), sTargetFunction)
+        
+    For i = 1 To m_FunctionObservers.Count
+        If (StrComp(m_FunctionObservers.Item(i), sItem, vbTextCompare) = 0) Then
+            Exit Sub
+        End If
+    Next i
+    
+    m_FunctionObservers.Add sItem
+    
+    Exit Sub
+ERROR_HANDLER:
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in modScripting.AddFunctionObservers()", Err.Number, Err.description)
+End Sub
+
+'Returns a collections of scripts who are observing this event in all scripts.
+Public Function GetFunctionObservers(sFunctionName As String) As Collection
+On Error GoTo ERROR_HANDLER:
+    Dim i As Integer
+    Dim sFunction As String
+    Dim sObserver As String
+    
+    Set GetFunctionObservers = New Collection
+    
+    For i = 1 To m_FunctionObservers.Count
+        If (InStr(m_FunctionObservers.Item(i), Chr$(0))) Then
+            sObserver = Split(m_FunctionObservers.Item(i), Chr$(0))(0)
+            sFunction = Split(m_FunctionObservers.Item(i), Chr$(0))(1)
+            
+            If (StrComp(sFunctionName, sFunction, vbTextCompare) = 0) Then
+                GetFunctionObservers.Add sObserver
+            End If
+        End If
+    Next i
+    
+    Exit Function
+ERROR_HANDLER:
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in modScripting.GetFunctionObservers()", Err.Number, Err.description)
 End Function

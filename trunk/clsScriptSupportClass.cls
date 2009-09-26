@@ -171,6 +171,13 @@ Public Enum BanTypes
     btUnban = 2
 End Enum
 
+'This is the name to use if you want to refer to the Internal 'Script' of the bot. 
+'Right now only 'Event_Command' is run in the bot.
+'So ObserveScript(SSC.InternalScript) would cause Event_Command to be fired for you for all Built-In commands.
+Public Property Get InternalScript() As String
+    InternalScript = vbNullString
+End Property
+
 '/* ******************************************************************************************
 ' *
 ' *
@@ -952,7 +959,7 @@ Public Sub GetWinCursorPos(ByRef lCursorX As Long, ByRef lCursorY As Long)
     
     GetCursorPos PAPI
     
-    lCursorX = PAPI.X
+    lCursorX = PAPI.x
     lCursorY = PAPI.y
 End Sub
 
@@ -1018,10 +1025,10 @@ End Sub
 '// STRINGFORMAT
 '// Replaces {#} parameters in source with the elements passed after it.
 '// EX: StringFormat("Hello {1}, your ping is {2}ms", Username, Ping)
-Public Function StringFormat(Source As String, ParamArray params() As Variant) As String
+Public Function StringFormat(source As String, ParamArray params() As Variant) As String
     Dim arr() As Variant
     arr() = params
-    StringFormat = modOtherCode.StringFormatA(Source, arr)
+    StringFormat = modOtherCode.StringFormatA(source, arr)
 End Function
 
 
@@ -1446,33 +1453,6 @@ Public Function DeleteCommand(ByVal commandName As String, Optional ByVal script
     
 End Function
 
-'// 08/23/2009 52 - Obsoleted in favor of the new Command Event
-'// ISCOMMAND
-'// Pass a message a user sent
-'// Returns a Command instance object specifying whether they have access to the command
-'// and whether it has the correct syntax among other things
-'// PARAMETERS
-'//     commandText - the sent message
-'//     strUsername - the user's username
-'//     ScriptName -  if provided, this function will check for commands created in the specified script
-'//                   vbNullString to get internal commands
-'//                   Chr(0) to get commands from any script
-'//                   if ommitted, this function will check for commands created in the currently executing script
-'Public Function IsCommand(ByVal commandText As String, ByVal strUsername As String, Optional ByVal scriptName As String) As Collection
-'
-'    Dim commands As Collection
-'
-'    If IsMissing(scriptName) Then scriptName = modScripting.GetScriptName
-'
-'    ' 08/17/2009 - 52 - using static class method
-'    Set commands = clsCommandObj.IsCommand(commandText, strUsername, scriptName)
-'
-'    Set IsCommand = commands
-'
-'    Set commands = Nothing
-'
-'End Function
-
 '// OBSERVESCRIPT
 '// Add the currently runnign script as an Observer of the Specified script
 '// The current script will have all events of the observed script duplicated and executed
@@ -1497,6 +1477,15 @@ Public Function GetObservers() As Collection
     Set GetObservers = modScripting.GetScriptObservers(modScripting.GetScriptName, False)
     
 End Function
+
+'// OBSERVEFUNCTION
+'// Add the currently running script as on Observer for this function, in all other scripts.
+'// The current script will have this function executed every time it is executed in another script.
+Public Sub ObserveFunction(ByVal sFunction As String)
+
+    modScripting.AddFunctionObserver modScripting.GetScriptName, sFunction
+
+End Sub
 
 '// GETSETTINGSENTRY
 '// Retrieves a value from settings.ini for your script
@@ -1639,26 +1628,26 @@ End Sub
 '// GETUSERDATABASE
 '// Gets a collection of users in the database
 Public Function GetUserDatabase() As Collection
-    Dim X As Integer
+    Dim x As Integer
     Dim temp As New clsDBEntryObj
     Set GetUserDatabase = New Collection
-    For X = LBound(DB) To UBound(DB)
-        If (Len(DB(X).Username) > 0) Then
+    For x = LBound(DB) To UBound(DB)
+        If (Len(DB(x).Username) > 0) Then
             With temp
-                .Name = DB(X).Username
-                .Rank = DB(X).Rank
-                .CreatedOn = DB(X).AddedOn
-                .CreatedBy = DB(X).AddedBy
-                .BanMessage = DB(X).BanMessage
-                .Flags = DB(X).Flags
-                .AddGroup DB(X).Groups
-                .ModifiedBy = DB(X).ModifiedBy
-                .ModifiedOn = DB(X).ModifiedOn
-                .EntryType = DB(X).Type
+                .Name = DB(x).Username
+                .Rank = DB(x).Rank
+                .CreatedOn = DB(x).AddedOn
+                .CreatedBy = DB(x).AddedBy
+                .BanMessage = DB(x).BanMessage
+                .Flags = DB(x).Flags
+                .AddGroup DB(x).Groups
+                .ModifiedBy = DB(x).ModifiedBy
+                .ModifiedOn = DB(x).ModifiedOn
+                .EntryType = DB(x).Type
             End With
-            GetUserDatabase.Add temp, DB(X).Username
+            GetUserDatabase.Add temp, DB(x).Username
         End If
-    Next X
+    Next x
     Set temp = Nothing
 End Function
 
