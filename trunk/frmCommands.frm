@@ -464,8 +464,8 @@ ErrorHandler:
     frmChat.AddChat RTBColors.ErrorMessageText, Err.description
     Call ResetForm
     '// Disable our buttons
-    cmdSave.enabled = False
-    cmdDiscard.enabled = False
+    cmdSave.Enabled = False
+    cmdDiscard.Enabled = False
     Exit Sub
     
 End Sub
@@ -732,8 +732,8 @@ ErrorHandler:
     frmChat.AddChat RTBColors.ErrorMessageText, Err.description
     Call ResetForm
     '// Disable our buttons
-    cmdSave.enabled = False
-    cmdDiscard.enabled = False
+    cmdSave.Enabled = False
+    cmdDiscard.Enabled = False
     Exit Sub
     
 End Sub
@@ -742,8 +742,8 @@ End Sub
 '// 08/30/2008 JSM - Created
 Private Sub FormIsDirty()
     m_SelectedElement.IsDirty = True
-    cmdSave.enabled = True
-    cmdDiscard.enabled = True
+    cmdSave.Enabled = True
+    cmdDiscard.Enabled = True
 End Sub
 
 
@@ -800,7 +800,7 @@ End Function
 Private Sub SaveForm()
     
     Dim parameter As clsCommandParamsObj
-    Dim restriction As clsCommandRestrictionObj
+    Dim Restriction As clsCommandRestrictionObj
     
     Dim i
 
@@ -836,8 +836,8 @@ Private Sub SaveForm()
             With m_Commands
                 Set parameter = m_Commands.GetParameterByName(m_SelectedElement.argumentName)
                 With parameter
-                    Set restriction = parameter.GetRestrictionByName(m_SelectedElement.restrictionName)
-                    With restriction
+                    Set Restriction = parameter.GetRestrictionByName(m_SelectedElement.restrictionName)
+                    With Restriction
                         .RequiredRank = txtRank.Text
                         .RequiredFlags = getFlags()
                     End With
@@ -847,6 +847,7 @@ Private Sub SaveForm()
     End Select
     
     Call m_Commands.Save
+    Call ResetForm
     Call PrepareForm(m_SelectedElement.TheNodeType)
     
 End Sub
@@ -878,7 +879,7 @@ End Function
 Private Sub PrepareForm(nt As NodeType)
     
     Dim parameter As clsCommandParamsObj
-    Dim restriction As clsCommandRestrictionObj
+    Dim Restriction As clsCommandRestrictionObj
     
     Dim requirements As String
     Dim sItem As String
@@ -896,22 +897,22 @@ Private Sub PrepareForm(nt As NodeType)
         Select Case nt
             Case NodeType.nCommand
                 '// txtRank
-                txtRank.enabled = True
-                lblRank.enabled = True
+                txtRank.Enabled = True
+                lblRank.Enabled = True
                 txtRank.Text = m_Commands.RequiredRank
                 '// cboAlias
-                cboAlias.enabled = True
-                lblAlias.enabled = True
-                cmdAliasAdd.enabled = True
-                cmdAliasRemove.enabled = True
+                cboAlias.Enabled = True
+                lblAlias.Enabled = True
+                cmdAliasAdd.Enabled = True
+                cmdAliasRemove.Enabled = True
                 For i = 1 To m_Commands.aliases.Count
                     cboAlias.AddItem m_Commands.aliases(i)
                 Next i
                 '// cboFlags
-                cboFlags.enabled = True
-                lblFlags.enabled = True
-                cmdFlagAdd.enabled = True
-                cmdFlagRemove.enabled = True
+                cboFlags.Enabled = True
+                lblFlags.Enabled = True
+                cmdFlagAdd.Enabled = True
+                cmdFlagRemove.Enabled = True
                 For i = 1 To Len(m_Commands.RequiredFlags)
                     cboFlags.AddItem Mid$(m_Commands.RequiredFlags, i, 1)
                 Next i
@@ -919,15 +920,15 @@ Private Sub PrepareForm(nt As NodeType)
                     cboFlags.Text = cboFlags.List(0)
                 End If
                 '// txtDescription
-                txtDescription.enabled = True
-                lblDescription.enabled = True
+                txtDescription.Enabled = True
+                lblDescription.Enabled = True
                 txtDescription.Text = PrepString(m_Commands.description)
                 '// txtSpecialNotes
-                txtSpecialNotes.enabled = True
-                lblSpecialNotes.enabled = True
+                txtSpecialNotes.Enabled = True
+                lblSpecialNotes.Enabled = True
                 txtSpecialNotes.Text = PrepString(m_Commands.SpecialNotes)
                 '// chkDisable
-                chkDisable.enabled = True
+                chkDisable.Enabled = True
                 chkDisable.Visible = True
                 chkDisable.Value = IIf(m_Commands.IsEnabled, vbUnchecked, vbChecked)
                 '// custom captions
@@ -935,19 +936,19 @@ Private Sub PrepareForm(nt As NodeType)
                 chkDisable.Caption = StringFormat("Disable {0} command", .commandName, .argumentName, .restrictionName)
                 '// only allow deleting script commands
                 If cboCommandGroup.ListIndex > 0 Then
-                    cmdDeleteCommand.enabled = True
+                    cmdDeleteCommand.Enabled = True
                 End If
                 
             Case NodeType.nArgument
                 Set parameter = m_Commands.GetParameterByName(.argumentName)
             
                 '// txtDescription
-                txtDescription.enabled = True
-                lblDescription.enabled = True
+                txtDescription.Enabled = True
+                lblDescription.Enabled = True
                 txtDescription.Text = PrepString(parameter.description)
                 '// txtSpecialNotes
-                txtSpecialNotes.enabled = True
-                lblSpecialNotes.enabled = True
+                txtSpecialNotes.Enabled = True
+                lblSpecialNotes.Enabled = True
                 txtSpecialNotes.Text = PrepString(parameter.SpecialNotes)
                 '// custom captions
                 fraCommand.Caption = StringFormat("{0} => {1}{3}", .commandName, .argumentName, .restrictionName, IIf(parameter.IsOptional, " - Optional", ""))
@@ -956,17 +957,17 @@ Private Sub PrepareForm(nt As NodeType)
             Case NodeType.nRestriction
             
                 Set parameter = m_Commands.GetParameterByName(.argumentName)
-                Set restriction = parameter.GetRestrictionByName(.restrictionName)
+                Set Restriction = parameter.GetRestrictionByName(.restrictionName)
             
                 '// txtRank
-                txtRank.enabled = True
-                lblRank.enabled = True
-                txtRank.Text = restriction.RequiredRank
+                txtRank.Enabled = True
+                lblRank.Enabled = True
+                txtRank.Text = Restriction.RequiredRank
                 '// cboFlags
-                cboFlags.enabled = True
-                lblFlags.enabled = True
-                For i = 1 To Len(restriction.RequiredFlags)
-                    cboFlags.AddItem Mid$(restriction.RequiredFlags, i, 1)
+                cboFlags.Enabled = True
+                lblFlags.Enabled = True
+                For i = 1 To Len(Restriction.RequiredFlags)
+                    cboFlags.AddItem Mid$(Restriction.RequiredFlags, i, 1)
                 Next i
                 If (cboFlags.ListCount) Then
                     cboFlags.Text = cboFlags.List(0)
@@ -982,8 +983,8 @@ Private Sub PrepareForm(nt As NodeType)
     m_SelectedElement.IsDirty = False
     
     '// Disable our buttons
-    cmdSave.enabled = False
-    cmdDiscard.enabled = False
+    cmdSave.Enabled = False
+    cmdDiscard.Enabled = False
 
 End Sub
 
@@ -999,31 +1000,31 @@ Private Sub ResetForm()
     fraCommand.Caption = ""
     chkDisable.Value = 0
     
-    txtRank.enabled = False
-    cboAlias.enabled = False
-    cboFlags.enabled = False
-    txtDescription.enabled = False
-    txtSpecialNotes.enabled = False
-    chkDisable.enabled = False
+    txtRank.Enabled = False
+    cboAlias.Enabled = False
+    cboFlags.Enabled = False
+    txtDescription.Enabled = False
+    txtSpecialNotes.Enabled = False
+    chkDisable.Enabled = False
     
-    lblRank.enabled = False
-    lblAlias.enabled = False
-    lblFlags.enabled = False
-    lblDescription.enabled = False
-    lblSpecialNotes.enabled = False
+    lblRank.Enabled = False
+    lblAlias.Enabled = False
+    lblFlags.Enabled = False
+    lblDescription.Enabled = False
+    lblSpecialNotes.Enabled = False
     
-    cmdAliasAdd.enabled = False
-    cmdAliasRemove.enabled = False
-    cmdFlagAdd.enabled = False
-    cmdFlagRemove.enabled = False
+    cmdAliasAdd.Enabled = False
+    cmdAliasRemove.Enabled = False
+    cmdFlagAdd.Enabled = False
+    cmdFlagRemove.Enabled = False
     
     chkDisable.Visible = False
     
     
     m_SelectedElement.IsDirty = False
-    cmdSave.enabled = False
-    cmdDiscard.enabled = False
-    cmdDeleteCommand.enabled = False
+    cmdSave.Enabled = False
+    cmdDiscard.Enabled = False
+    cmdDeleteCommand.Enabled = False
     
     lblSyntax.Caption = ""
     lblSyntax.ForeColor = RTBColors.ConsoleText

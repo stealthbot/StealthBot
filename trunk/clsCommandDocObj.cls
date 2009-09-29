@@ -76,7 +76,7 @@ Public Function OpenDatabase(Optional ByVal DatabasePath As String = vbNullStrin
     End If
     
     If Not FileExists(DatabasePath) And m_database.childNodes.length = 0 Then
-         Set m_database.documentElement = m_database.createElement("commands")
+        Set m_database.documentElement = m_database.createElement("commands")
     ElseIf forceLoad = True Or m_database.childNodes.length = 0 Then
         m_database.Load DatabasePath
     End If
@@ -136,7 +136,7 @@ Private Function GetCommandXPath(ByVal strCommand As String, Optional ByVal strS
         GetCommandXPath = StringFormat("/commands/command[translate(@name, '{0}', '{1}')='{2}' and not(@owner)]", _
             UCase$(AZ), LCase$(AZ), LCase$(strCommand))
     ElseIf strScriptOwner = Chr$(0) Then
-        GetCommandXPath = StringFormat("/commands/command[translate(@name, '{0}', '{1}')='{2}']", _
+        GetCommandXPath = StringFormat("/commands/command[translate(@name, '{0}', '{1}')='{2}' and (not(@enabled) or @enable = 1)]", _
             UCase$(AZ), LCase$(AZ), LCase$(strCommand))
     Else
         GetCommandXPath = StringFormat("/commands/command[translate(@name, '{0}', '{1}')='{2}' and translate(@owner, '{0}', '{1}')='{3}']", _
@@ -703,7 +703,7 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
     Dim newNode                       As IXMLDOMNode
     Dim node                          As IXMLDOMNode
     Dim parameter                     As clsCommandParamsObj
-    Dim restriction                   As clsCommandRestrictionObj
+    Dim Restriction                   As clsCommandRestrictionObj
     Dim i                             As Integer
     
     If (AnyNode Is Nothing) Then
@@ -804,7 +804,7 @@ Private Function setRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef Restriction
     
     Dim newNode                          As IXMLDOMNode
     Dim node                             As IXMLDOMNode
-    Dim restriction                      As clsCommandRestrictionObj
+    Dim Restriction                      As clsCommandRestrictionObj
     Dim i                                As Integer
     
     If (AnyNode Is Nothing) Then
@@ -815,7 +815,7 @@ Private Function setRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef Restriction
     AnyNode.appendChild m_database.createNode("element", "restrictions", vbNullString)
     
     '// loop through argument restrictions
-    For Each restriction In RestrictionCol
+    For Each Restriction In RestrictionCol
         
         '// create our restriction node
         Set RestrictionNode = m_database.createNode("element", "restriction", vbNullString)
@@ -823,34 +823,34 @@ Private Function setRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef Restriction
 
         '// name attribute
         Set newNode = m_database.createNode("attribute", "name", vbNullString)
-        newNode.Text = restriction.Name
+        newNode.Text = Restriction.Name
         RestrictionNode.Attributes.setNamedItem newNode
         
-        If (restriction.Fatal) Then
+        If (Restriction.Fatal) Then
             Set newNode = m_database.createNode("attribute", "nonfatal", vbNullString)
-            newNode.Text = IIf(restriction.Fatal, "0", "1")
+            newNode.Text = IIf(Restriction.Fatal, "0", "1")
             RestrictionNode.Attributes.setNamedItem newNode
         End If
         
         '// create the match element if necessary
-        If restriction.MatchMessage <> "" Then
+        If Restriction.MatchMessage <> "" Then
             '// add the match element
             RestrictionNode.appendChild m_database.createNode("element", "match", vbNullString)
             
             '// set the message attribute
             Set newNode = m_database.createNode("attribute", "message", vbNullString)
-            newNode.Text = restriction.MatchMessage
+            newNode.Text = Restriction.MatchMessage
             RestrictionNode.selectSingleNode("match").Attributes.setNamedItem newNode
             
             '// match[@message]
             Set newNode = m_database.createNode("attribute", "message", vbNullString)
-            newNode.Text = restriction.MatchMessage
+            newNode.Text = Restriction.MatchMessage
             RestrictionNode.selectSingleNode("match").Attributes.setNamedItem newNode
         
         
             '// match[@case-sensitive]
             Set newNode = m_database.createNode("attribute", "case-sensitive", vbNullString)
-            newNode.Text = IIf(restriction.MatchCaseSensitive, "1", "0")
+            newNode.Text = IIf(Restriction.MatchCaseSensitive, "1", "0")
             RestrictionNode.selectSingleNode("match").Attributes.setNamedItem newNode
             
             
@@ -859,10 +859,10 @@ Private Function setRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef Restriction
         
             
         '// create the error element if necessary
-        If Len(restriction.MatchError) <> 0 Then
+        If Len(Restriction.MatchError) <> 0 Then
             '// add the error element
             RestrictionNode.appendChild m_database.createNode("element", "error", vbNullString)
-            RestrictionNode.selectSingleNode("error").Text = restriction.MatchError
+            RestrictionNode.selectSingleNode("error").Text = Restriction.MatchError
         End If
         
         
@@ -872,19 +872,19 @@ Private Function setRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef Restriction
         
         '// create the rank noode
         RestrictionNode.selectSingleNode("access").appendChild m_database.createNode("element", "rank", vbNullString)
-        RestrictionNode.selectSingleNode("access/rank").Text = restriction.RequiredRank
+        RestrictionNode.selectSingleNode("access/rank").Text = Restriction.RequiredRank
         
         '// create the flags node
         RestrictionNode.selectSingleNode("access").appendChild m_database.createNode("element", "flags", vbNullString)
         
         '// add a flag element for each flag
-        For i = 1 To Len(restriction.RequiredFlags)
+        For i = 1 To Len(Restriction.RequiredFlags)
             Set newNode = m_database.createNode("element", "flag", vbNullString)
-            newNode.Text = Mid(restriction.RequiredFlags, i, 1)
+            newNode.Text = Mid(Restriction.RequiredFlags, i, 1)
             RestrictionNode.selectSingleNode("access/flags").appendChild newNode
         Next i
                         
-    Next restriction
+    Next Restriction
     
 
 End Function
@@ -1039,7 +1039,7 @@ Private Function setEnabled(ByRef AnyNode As IXMLDOMNode, ByVal Enabled As Boole
         temp.Text = "0"
     End If
     
-    Call Save
+    'Call Save
 
 End Function
 
@@ -1169,7 +1169,7 @@ Private Function setDescription(ByRef AnyNode As IXMLDOMNode, ByVal description 
     
     temp.Text = description
     
-    Call Save
+    'Call Save
 
 End Function
 
@@ -1209,7 +1209,7 @@ Private Function setNotes(ByRef AnyNode As IXMLDOMNode, ByVal Notes As String) A
     
     temp.Text = Notes
     
-    Call Save
+    'Call Save
     
 End Function
 
@@ -1277,7 +1277,7 @@ Private Function setRank(ByRef AnyNode As IXMLDOMNode, ByVal Rank As Integer) As
 
     temp.Text = Rank
     
-    Call Save
+    'Call Save
 
 End Function
 
@@ -1332,7 +1332,7 @@ Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String) A
         Flag.Text = Mid$(Flags, i, 1)
     Next i
     
-    Call Save
+    'Call Save
     
 End Function
 
