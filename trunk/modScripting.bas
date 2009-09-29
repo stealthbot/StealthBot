@@ -463,6 +463,13 @@ Private Function GetDefaultModuleProcs() As String
     str = str & "         SSC.DeleteCommand(commandName, Script(""Name""))" & vbNewLine
     str = str & "End Function" & vbNewLine
 
+    ' GetCommands() module-level function
+    str = str & "Function GetCommands()" & vbNewLine
+    str = str & "   Set GetCommands = _ " & vbNewLine
+    str = str & "         SSC.GetCommands(Script(""Name""))" & vbNewLine
+    str = str & "End Function" & vbNewLine
+
+
     ' store module-level coding
     GetDefaultModuleProcs = str
 
@@ -649,7 +656,7 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
     On Error Resume Next
 
     Dim i       As Integer
-    Dim x       As Integer
+    Dim X       As Integer
     Dim arr()   As Variant
     Dim str     As String
     Dim oldVeto As Boolean
@@ -710,12 +717,12 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
             If (StrComp(fobsers.Item(i), mname, vbTextCompare) = 0) Then 'Dont call itself
                 cobser = False
             Else
-                For x = 1 To sobsers.Count 'See if we already called it with Script Observers
-                    If (StrComp(sobsers.Item(x), fobsers.Item(i), vbTextCompare) = 0) Then
+                For X = 1 To sobsers.Count 'See if we already called it with Script Observers
+                    If (StrComp(sobsers.Item(X), fobsers.Item(i), vbTextCompare) = 0) Then
                         cobser = False
                         Exit For
                     End If
-                Next x
+                Next X
             End If
             
             If (cobser) Then
@@ -1395,26 +1402,26 @@ End Function
 
 '06/26/09 - Hdx Vary crappy function to check if Object names are valid, a-z0-9_ and 1st chr a-z (eventually should be a regexp)
 Public Function ValidObjectName(sName As String) As Boolean
-  Dim x As Integer
+  Dim X As Integer
   Dim sValid As String
   
   sValid = "abcdefghijklmnopqrstuvwxyz0123456789_"
   ValidObjectName = False
   
-  For x = 1 To Len(sName)
-    If (InStr(1, Left(sValid, IIf(x = 1, 26, 37)), Mid$(sName, x, 1), vbTextCompare) = 0) Then Exit Function
-  Next x
+  For X = 1 To Len(sName)
+    If (InStr(1, Left(sValid, IIf(X = 1, 26, 37)), Mid$(sName, X, 1), vbTextCompare) = 0) Then Exit Function
+  Next X
   
   ValidObjectName = True
 End Function
 
 Public Function ConvertStringArray(sArr() As String) As Variant()
   Dim vArr() As Variant
-  Dim x As Integer
+  Dim X As Integer
   ReDim vArr(LBound(sArr) To UBound(sArr))
-  For x = LBound(sArr) To UBound(sArr)
-    vArr(x) = CVar(sArr(x))
-  Next x
+  For X = LBound(sArr) To UBound(sArr)
+    vArr(X) = CVar(sArr(X))
+  Next X
   ConvertStringArray = vArr
 End Function
 

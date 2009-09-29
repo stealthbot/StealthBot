@@ -47,7 +47,7 @@ Public Function GetCommands(Optional ByVal scriptName As String = vbNullString) 
     Set commandNodes = doc.selectNodes(xpath)
     
     For Each commandNode In commandNodes
-      GetCommands.Add OpenCommand(commandNode.Attributes.getNamedItem("name").nodeValue, scriptName)
+      GetCommands.Add commandNode.Attributes.getNamedItem("name").nodeValue
     Next commandNode
     
     Set commandNode = Nothing

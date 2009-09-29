@@ -70,6 +70,16 @@ Sub Event_Load()
             .Save
         End With
     End If
+
+    Set Command = OpenCommand("deletescriptedcommands")
+    If Command Is Nothing Then
+        Set Command = CreateCommand("deletescriptedcommands")
+        With Command
+            .Description = "Deletes all commands created via script."
+            .RequiredRank = -1
+            .Save
+        End With
+    End If
     
     Set Parameter = Nothing
     Set Command = Nothing
@@ -163,13 +173,24 @@ Sub Event_Command(Command)
                 End If
 			Case "gridtest"
 				Call GridTest()
+			Case "deletescriptedcommands"
+				Call DeleteScriptedCommands()
         End Select
     ElseIf (Command.Docs.Owner = vbNullString) Then 'Its a internal Command!
         Command.Respond "Demo Event_Command Observer for internal command " & Command.Name
     End If
 End Sub
 
-
+Function DeleteScriptedCommands()
+	
+	Dim s, c
+	
+	For Each s In Scripts()
+		For Each c In s.GetCommands()
+			Call s.DeleteCommand(c)
+		Next
+	Next
+End Function
 
 Function Soundex(ByVal word)
     Dim result
