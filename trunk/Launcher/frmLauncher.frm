@@ -1,5 +1,6 @@
 VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
 Begin VB.Form frmLauncher 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -25,6 +26,13 @@ Begin VB.Form frmLauncher
    ScaleMode       =   3  'Pixel
    ScaleWidth      =   206
    StartUpPosition =   3  'Windows Default
+   Begin InetCtlsObjects.Inet iNet 
+      Left            =   1320
+      Top             =   2280
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      _Version        =   393216
+   End
    Begin VB.CommandButton cmdRemoveProfile 
       Caption         =   "Remove Profile"
       Enabled         =   0   'False
@@ -99,6 +107,9 @@ Begin VB.Form frmLauncher
    Begin VB.Menu mnuSettings 
       Caption         =   "Settings"
    End
+   Begin VB.Menu mnuInformation 
+      Caption         =   "Information"
+   End
    Begin VB.Menu mnuRightClick 
       Caption         =   "RightClick"
       Visible         =   0   'False
@@ -131,7 +142,6 @@ Private Const OBJECT_NAME As String = "frmLauncher"
 
 Private Sub Form_Load()
 On Error GoTo ERROR_HANDLER
-
     Me.Caption = StringFormat("SB Launcher v{0}.{1}.{2}", App.Major, App.Minor, App.Revision)
     If (LenB(Command()) > 0) Then
         If (SetCommandLine(Command())) Then
@@ -160,13 +170,22 @@ On Error GoTo ERROR_HANDLER
     modLauncher.LoadXMLDocument
     LoadProfiles
     
-    ' UI: if count > 0 then enable btns
-    If (lstProfiles.ListItems.Count > 0) Then
+    If (lstProfiles.ListItems.Count > 0) Then ' UI: if count > 0 then enable btns
         EnableButtons
-    ' UI: if count = 0 then show informative item
-    Else
+    Else ' UI: if count = 0 then show informative item
         SetupColumns lvwColumnCenter
     End If
+    
+    bIsClosing = False
+    
+    Load frmStatus
+    With frmStatus
+        .Top = Me.Top
+        .Left = Me.Left + Me.Width + 100
+        .Show
+    End With
+    
+    CheckForUpdates
     
     Exit Sub
 ERROR_HANDLER:
@@ -175,8 +194,13 @@ End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
 On Error GoTo ERROR_HANDLER
+
+    bIsClosing = True
+    UnHookAllProcs
+    
     Unload frmNameDialog
     Unload frmConfig
+    Unload frmStatus
     
     If (Not cConfig Is Nothing) Then cConfig.SaveConfig
     
@@ -199,7 +223,7 @@ ERROR_HANDLER:
     ErrorHandler Err.Number, OBJECT_NAME, "lstProfiles_DblClick"
 End Sub
 
-Private Sub lstProfiles_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstProfiles_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 On Error GoTo ERROR_HANDLER
 
     Dim bProfileMenus As Boolean
@@ -266,6 +290,16 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     ErrorHandler Err.Number, OBJECT_NAME, "cmdCreateShortcut_Click"
+End Sub
+
+Private Sub mnuInformation_Click()
+On Error GoTo ERROR_HANDLER:
+    
+    frmStatus.Show
+    
+    Exit Sub
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "mnuInformation_Click"
 End Sub
 
 Private Sub mnuLaunchProfile_Click()

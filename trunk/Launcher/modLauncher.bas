@@ -49,7 +49,8 @@ Private CommandLine As String
 Public Declare Function GetFileAttributes Lib "kernel32" Alias "GetFileAttributesA" (ByVal lpFileName As String) As Long
 Public Const FILE_ATTRIBUTE_DIRECTORY As Long = &H10
 
-Public cConfig As clsConfig
+Public cConfig    As clsConfig
+Public bIsClosing As Boolean
 
 Public Sub ErrorHandler(lError As Long, sObjectName As String, sFunctionName As String)
 
@@ -62,6 +63,8 @@ Public Sub ErrorHandler(lError As Long, sObjectName As String, sFunctionName As 
     Open sPath For Append As #1
         Print #1, StringFormat("Error #{0}: {1} in {2}.{3}()", lError, Error(lError), sObjectName, sFunctionName)
     Close #1
+    
+    AddChat vbRed, StringFormat("Error #{0}: {1} in {2}.{3}()", lError, Error(lError), sObjectName, sFunctionName)
     Err.Clear
 End Sub
 
@@ -388,7 +391,7 @@ On Error GoTo ERROR_HANDLER:
     Dim sSourcePath As String
     Dim sDestPath   As String
     Dim sFiles      As New Collection
-    Dim x           As Integer
+    Dim X           As Integer
     
     CopyFolder = False
     
@@ -404,8 +407,8 @@ On Error GoTo ERROR_HANDLER:
          If (Not sFile = "..") Then sFiles.Add sFile
     Loop
     
-    For x = 1 To sFiles.Count
-        sFile = sFiles.Item(x)
+    For X = 1 To sFiles.Count
+        sFile = sFiles.Item(X)
         sSourcePath = StringFormat("{0}\{1}", sSource, sFile)
         sDestPath = StringFormat("{0}\{1}", sDest, sFile)
         If ((GetFileAttributes(sSourcePath) And FILE_ATTRIBUTE_DIRECTORY) = FILE_ATTRIBUTE_DIRECTORY) Then
@@ -420,7 +423,7 @@ On Error GoTo ERROR_HANDLER:
                 Exit Function
             End If
         End If
-    Next x
+    Next X
     
     CopyFolder = True
         
@@ -429,3 +432,65 @@ ERROR_HANDLER:
     ErrorHandler Err.Number, OBJECT_NAME, "CopyFolder"
     CopyFolder = False
 End Function
+
+Public Sub AddChat(ParamArray saElements() As Variant)
+On Error GoTo ERROR_HANDLER:
+    Dim i As Integer
+    With frmStatus.rtbStatus
+        If (Len(.Text) > &H4000) Then
+            .SelStart = 0
+            .SelLength = &H100
+            .SelText = vbNullString
+        End If
+        
+        .SelStart = Len(.Text)
+        .SelLength = 0
+        .SelColor = vbWhite
+        .SelText = StringFormat("[{0}] ", Time)
+        .SelStart = Len(.Text)
+        
+        For i = LBound(saElements) To UBound(saElements) Step 2
+            .SelStart = Len(.Text)
+            .SelLength = 0
+            .SelColor = saElements(i)
+            .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
+            .SelStart = Len(.Text)
+        Next i
+    End With
+    Exit Sub
+ERROR_HANDLER:
+    If (Err.Number = 13 Or Err.Number = 91) Then Exit Sub
+    ErrorHandler Err.Number, OBJECT_NAME, "AddChat"
+End Sub
+
+Public Function GetWebPath()
+    GetWebPath = "http://www.StealthBot.net/sb/Launcher/"
+End Function
+
+Public Sub CheckForUpdates()
+On Error GoTo ERROR_HANDLER:
+
+    Dim sTemp As String
+    Dim i     As Integer
+    Dim sCRC  As String
+    
+    With frmLauncher.iNet
+    
+        sTemp = .OpenURL(StringFormat("{0}?p=lupdate", GetWebPath))
+        
+        i = InStr(sTemp, Chr$(&HFF))
+        If (i = 0) Then
+            AddChat vbRed, "Failed to get launcer update information."
+            Exit Sub
+        End If
+        
+        If (Not StrComp(Left$(sTemp, i - 1), StringFormat("{0}.{1}", App.Major, App.Minor), vbTextCompare) = 0) Then
+            sTemp = .OpenURL(StringFormat("{0}?p=latest_url", GetWebPath))
+            AddChat vbGreen, "New updates avalible: ", vbWhite, sTemp
+            Exit Sub
+        End If
+    End With
+    Exit Sub
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "CheckForUpdates"
+End Sub
