@@ -2,11 +2,11 @@ VERSION 5.00
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Begin VB.Form frmStatus 
    BackColor       =   &H00000000&
-   BorderStyle     =   1  'Fixed Single
+   BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Launcher Status"
    ClientHeight    =   2475
    ClientLeft      =   45
-   ClientTop       =   345
+   ClientTop       =   315
    ClientWidth     =   6525
    BeginProperty Font 
       Name            =   "Tahoma"
@@ -22,6 +22,7 @@ Begin VB.Form frmStatus
    MinButton       =   0   'False
    ScaleHeight     =   2475
    ScaleWidth      =   6525
+   ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
    Begin RichTextLib.RichTextBox rtbStatus 
       Height          =   1695
@@ -42,7 +43,7 @@ Begin VB.Form frmStatus
       TextRTF         =   $"frmStatus.frx":0000
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   9
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False

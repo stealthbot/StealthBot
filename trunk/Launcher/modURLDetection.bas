@@ -47,6 +47,7 @@ Private Const ENM_LINK         As Long = &H4000000
 Private Const EN_LINK          As Long = &H70B
 Private Const GWL_WNDPROC      As Long = (-4)
 Private Const SW_SHOW          As Long = 5
+Private Const WM_MOVE          As Long = &H3
 
 Private m_OldProcs As New Dictionary
 
@@ -126,6 +127,10 @@ On Error GoTo ERROR_HANDLER:
                 End If
             End With
         End If
+    ElseIf msg = WM_MOVE And hWnd = frmLauncher.hWnd Then
+        'If (frmStatus.Visible) Then
+            frmStatus.Move frmLauncher.Left + frmLauncher.Width + 100, frmLauncher.Top
+        'End If
     End If
     
     NewWindowProc = CallWindowProc(m_OldProcs.Item(CStr(hWnd)), hWnd, msg, wParam, lParam)

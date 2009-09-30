@@ -173,8 +173,11 @@ On Error GoTo ERROR_HANDLER
     If (lstProfiles.ListItems.Count > 0) Then ' UI: if count > 0 then enable btns
         EnableButtons
     Else ' UI: if count = 0 then show informative item
-        SetupColumns lvwColumnCenter
+        'SetupColumns lvwColumnCenter
+        AddChat vbGreen, "To get started using StealthBot, Use the ""Create Profile"" Button."
     End If
+    
+    CheckForUpdates
     
     bIsClosing = False
     
@@ -185,7 +188,7 @@ On Error GoTo ERROR_HANDLER
         .Show
     End With
     
-    CheckForUpdates
+    HookWindowProc Me.hWnd
     
     Exit Sub
 ERROR_HANDLER:
@@ -295,7 +298,11 @@ End Sub
 Private Sub mnuInformation_Click()
 On Error GoTo ERROR_HANDLER:
     
-    frmStatus.Show
+    If (frmStatus.Visible) Then
+        frmStatus.Hide
+    Else
+        frmStatus.Show
+    End If
     
     Exit Sub
 ERROR_HANDLER:
@@ -442,9 +449,11 @@ End Sub
 ' deals with informational item if exists
 Public Sub ListProfile(ByVal Text As String)
 On Error GoTo ERROR_HANDLER
-    If lstProfiles.ListItems.Count = 3 And lstProfiles.ListItems(1).Ghosted Then
-        EnableButtons
-        SetupColumns lvwColumnLeft
+    If lstProfiles.ListItems.Count = 3 Then
+        If lstProfiles.ListItems(1).Ghosted Then
+            EnableButtons
+            SetupColumns lvwColumnLeft
+        End If
     End If
     lstProfiles.ListItems.Add , , Text
     

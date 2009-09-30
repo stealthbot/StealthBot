@@ -478,6 +478,9 @@ On Error GoTo ERROR_HANDLER:
     
     With frmLauncher.iNet
     
+        sTemp = .OpenURL(StringFormat("{0}?p=lnews", GetWebPath))
+        AddChat vbGreen, StringFormat("Launcher news:{0}{1}", vbNewLine, sTemp)
+        
         sTemp = .OpenURL(StringFormat("{0}?p=lupdate", GetWebPath))
         
         i = InStr(sTemp, Chr$(&HFF))
