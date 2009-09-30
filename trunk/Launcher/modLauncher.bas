@@ -469,6 +469,12 @@ Public Function GetWebPath()
     GetWebPath = "http://www.StealthBot.net/sb/Launcher/"
 End Function
 
+Public Function ReplaceVars(sString As String) As String
+    sString = Replace$(sString, "{PROFILEPATH}", "%APPDATA\StealthBot")
+    sString = ReplaceEnvironmentVars(sString)
+    ReplaceVars = sString
+End Function
+
 Public Sub CheckForUpdates()
 On Error GoTo ERROR_HANDLER:
 
@@ -479,7 +485,7 @@ On Error GoTo ERROR_HANDLER:
     With frmLauncher.iNet
     
         sTemp = .OpenURL(StringFormat("{0}?p=lnews", GetWebPath))
-        AddChat vbGreen, StringFormat("Launcher news:{0}{1}", vbNewLine, sTemp)
+        AddChat vbGreen, StringFormat("Launcher news:{0}{1}", vbNewLine, ReplaceVars(sTemp))
         
         sTemp = .OpenURL(StringFormat("{0}?p=lupdate", GetWebPath))
         

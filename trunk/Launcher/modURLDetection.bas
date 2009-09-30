@@ -129,7 +129,9 @@ On Error GoTo ERROR_HANDLER:
         End If
     ElseIf msg = WM_MOVE And hWnd = frmLauncher.hWnd Then
         'If (frmStatus.Visible) Then
-            frmStatus.Move frmLauncher.Left + frmLauncher.Width + 100, frmLauncher.Top
+            With frmLauncher
+                frmStatus.Move .Left + .Width + 100, .Top
+            End With
         'End If
     End If
     

@@ -22,7 +22,7 @@
 		echo "Welcome to the new StealthBot Launcher\r\n";
 		echo "This allows you to run multiple instances of SB from the same executable.\r\n";
 		echo "This also makes all files used by the bot UAC compliant.\r\n";
-		echo "Your Bot's information will now be located in %APPDATA%\\StealthBot\\{ProfileName}\\\r\n";
+		echo "Your Bot's information will now be located in {PROFILEPATH}\r\n";
 		break;
  }
 
