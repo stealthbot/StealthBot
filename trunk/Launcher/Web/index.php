@@ -6,7 +6,7 @@
  
  switch($_GET["p"]){
 	case "lupdate": 
-		echo "1.1\xFF00000000";
+		echo "1.2\xFF00000000";
 		break;
 		
 	case "linfo":

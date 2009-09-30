@@ -7144,12 +7144,13 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         Call g_Channel.CheckUsers
     Else
         Err.Clear
-    
-        If (ReadCfg(OV, "LocalIP") <> vbNullString) Then
-            If (Err.Number = 0) Then: sckBNet.bind , ReadCfg(OV, "LocalIP")
-            If (Err.Number = 0) Then: sckBNLS.bind , ReadCfg(OV, "LocalIP")
-            If (Err.Number = 0) Then: sckMCP.bind , ReadCfg(OV, "LocalIP")
-        End If
+     
+        '//Removed 10/29/09 - Hdx - I'll add in this feature later properly, does not work as is.
+        'If (ReadCfg(OV, "LocalIP") <> vbNullString) Then
+        '    If (Err.Number = 0) Then: sckBNet.bind , ReadCfg(OV, "LocalIP")
+        '    If (Err.Number = 0) Then: sckBNLS.bind , ReadCfg(OV, "LocalIP")
+        '    If (Err.Number = 0) Then: sckMCP.bind , ReadCfg(OV, "LocalIP")
+        'End If
     End If
     
     Set oCommandGenerator = Nothing

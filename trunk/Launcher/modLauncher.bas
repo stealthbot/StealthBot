@@ -53,9 +53,12 @@ Public cConfig    As clsConfig
 Public bIsClosing As Boolean
 
 Public Sub ErrorHandler(lError As Long, sObjectName As String, sFunctionName As String)
-
     Dim sPath As String
-    sPath = StringFormat("{0}\LauncherErrors.txt", GetDesktopPath())
+    
+    
+    AddChat vbRed, StringFormat("Error #{0}: {1} in {2}.{3}()", lError, Error(lError), sObjectName, sFunctionName)
+    
+    sPath = ReplaceEnvironmentVars("%APPDATA%\StealthBot\LauncherErrors.txt")
     If (LenB(Dir$(sPath)) = 0) Then
         Open sPath For Output As #1: Close #1
     End If
@@ -64,7 +67,6 @@ Public Sub ErrorHandler(lError As Long, sObjectName As String, sFunctionName As 
         Print #1, StringFormat("Error #{0}: {1} in {2}.{3}()", lError, Error(lError), sObjectName, sFunctionName)
     Close #1
     
-    AddChat vbRed, StringFormat("Error #{0}: {1} in {2}.{3}()", lError, Error(lError), sObjectName, sFunctionName)
     Err.Clear
 End Sub
 
