@@ -194,7 +194,7 @@ On Error GoTo ERROR_HANDLER:
     If (Not ProfileExists(sProfile)) Then Exit Function
     
     sPath = StringFormat(ReplaceEnvironmentVars("%APPDATA%\StealthBot\{0}\"), sProfile)
-    lRet = CreateProcess(StringFormat("{0}\StealthBot v2.7 Release Candidate 2.exe", App.Path), _
+    lRet = CreateProcess(StringFormat("{0}\StealthBot v2.7.exe", App.Path), _
       StringFormat("-addpath {0}{1}{0}", Chr$(34), App.Path), _
       security, security, False, _
       NORMAL_PRIORITY_CLASS, _
