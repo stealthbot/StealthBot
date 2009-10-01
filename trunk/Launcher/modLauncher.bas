@@ -37,12 +37,10 @@ Private Type SECURITY_ATTRIBUTES
 End Type
 
 Private Const NORMAL_PRIORITY_CLASS As Long = &H20
+Private Const SW_SHOW               As Long = 5
 
-Private Declare Function CreateProcess Lib "kernel32" Alias "CreateProcessA" _
-    (ByVal lpApplicationName As String, ByVal lpCommandLine As String, _
-    lpProcessAttributes As SECURITY_ATTRIBUTES, lpThreadAttributes As SECURITY_ATTRIBUTES, _
-    ByVal bInheritHandles As Long, ByVal dwCreationFlags As Long, lpEnvironment As Any, _
-    ByVal lpCurrentDriectory As String, lpStartupInfo As STARTUPINFO, lpProcessInformation As PROCESS_INFORMATION) As Long
+Private Declare Function CreateProcess Lib "kernel32" Alias "CreateProcessA" (ByVal lpApplicationName As String, ByVal lpCommandLine As String, lpProcessAttributes As SECURITY_ATTRIBUTES, lpThreadAttributes As SECURITY_ATTRIBUTES, ByVal bInheritHandles As Long, ByVal dwCreationFlags As Long, lpEnvironment As Any, ByVal lpCurrentDriectory As String, lpStartupInfo As STARTUPINFO, lpProcessInformation As PROCESS_INFORMATION) As Long
+Private Declare Function ShellExecute Lib "shell32" Alias "ShellExecuteA" (ByVal hWnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
 
 Private xml_doc As DOMDocument60
 Private CommandLine As String
@@ -465,9 +463,9 @@ End Function
 '    ErrorHandler Err.Number, OBJECT_NAME, "AddChat"
 'End Sub
 
-'Public Function GetWebPath()
-'    GetWebPath = "http://www.StealthBot.net/sb/Launcher/"
-'End Function
+Public Function GetWebPath()
+    GetWebPath = "http://www.StealthBot.net/sb/Launcher/"
+End Function
 
 Public Function ReplaceVars(sString As String) As String
     sString = Replace$(sString, "{PROFILEPATH}", "%APPDATA\StealthBot")
@@ -475,33 +473,42 @@ Public Function ReplaceVars(sString As String) As String
     ReplaceVars = sString
 End Function
 
-'Public Sub CheckForUpdates()
-'On Error GoTo ERROR_HANDLER:
-'
-'    Dim sTemp As String
-'    Dim i     As Integer
-'    Dim sCRC  As String
-'
-'    With frmLauncher.Inet
-'
-'        sTemp = .OpenURL(StringFormat("{0}?p=lnews", GetWebPath))
-'        AddChat vbGreen, StringFormat("Launcher news:{0}{1}", vbNewLine, ReplaceVars(sTemp))
-'
-'        sTemp = .OpenURL(StringFormat("{0}?p=lupdate", GetWebPath))
-'
-'        i = InStr(sTemp, Chr$(&HFF))
-'        If (i = 0) Then
-'            AddChat vbRed, "Failed to get launcer update information."
-'            Exit Sub
-'        End If
-'
-'        If (Not StrComp(Left$(sTemp, i - 1), StringFormat("{0}.{1}", App.Major, App.Minor), vbTextCompare) = 0) Then
-'            sTemp = .OpenURL(StringFormat("{0}?p=latest_url", GetWebPath))
-'            AddChat vbGreen, "New updates avalible: ", vbWhite, sTemp
-'            Exit Sub
-'        End If
-'    End With
-'    Exit Sub
-'ERROR_HANDLER:
-'    ErrorHandler Err.Number, OBJECT_NAME, "CheckForUpdates"
-'End Sub
+Public Function CheckForUpdates() As Boolean
+On Error GoTo ERROR_HANDLER:
+
+    Dim sTemp As String
+    Dim i     As Integer
+    Dim sCRC  As String
+    Dim lRet  As Long
+
+    With frmLauncher.Inet
+
+        'sTemp = .OpenURL(StringFormat("{0}?p=lnews", GetWebPath))
+        'AddChat vbGreen, StringFormat("Launcher news:{0}{1}", vbNewLine, ReplaceVars(sTemp))
+
+        sTemp = .OpenURL(StringFormat("{0}?p=lupdate", GetWebPath))
+
+        i = InStr(sTemp, Chr$(&HFF))
+        If (i = 0) Then
+            'AddChat vbRed, "Failed to get launcer update information."
+            Exit Function
+        End If
+
+        If (Not StrComp(Left$(sTemp, i - 1), StringFormat("{0}.{1}", App.Major, App.Minor), vbTextCompare) = 0) Then
+            sTemp = .OpenURL(StringFormat("{0}?p=latest_url", GetWebPath))
+            lRet = MsgBox(StringFormat("Version {0} of the launcher is avalible at {1}.{2}Would you like to download it now?", _
+                Left$(sTemp, i - 1), sTemp, vbNewLine), vbYesNo)
+                
+                
+            If (lRet = vbYes) Then
+                ShellExecute frmLauncher.hWnd, vbNullString, sTemp, vbNullString, vbNullString, SW_SHOW
+                CheckForUpdates = True
+            End If
+            'AddChat vbGreen, "New updates avalible: ", vbWhite, sTemp
+            Exit Function
+        End If
+    End With
+    Exit Function
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "CheckForUpdates"
+End Function

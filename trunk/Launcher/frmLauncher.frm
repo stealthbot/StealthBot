@@ -1,13 +1,14 @@
 VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
 Begin VB.Form frmLauncher 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "StealthBot Profile Launcher"
-   ClientHeight    =   5310
+   Caption         =   "StealthBot Launcher v0.0.000"
+   ClientHeight    =   5145
    ClientLeft      =   150
    ClientTop       =   435
-   ClientWidth     =   3135
+   ClientWidth     =   3450
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -21,29 +22,36 @@ Begin VB.Form frmLauncher
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   354
+   ScaleHeight     =   343
    ScaleMode       =   3  'Pixel
-   ScaleWidth      =   209
+   ScaleWidth      =   230
    StartUpPosition =   3  'Windows Default
+   Begin InetCtlsObjects.Inet iNet 
+      Left            =   1440
+      Top             =   2280
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      _Version        =   393216
+   End
    Begin VB.CheckBox chkAutoClose 
       BackColor       =   &H00000000&
       Caption         =   "Automatically close this launcher after loading the profile"
       ForeColor       =   &H00FFFFFF&
-      Height          =   615
+      Height          =   495
       Left            =   240
       TabIndex        =   4
       ToolTipText     =   "Leaving the launcher open will allow you to create and launch additional profiles."
       Top             =   4080
-      Width           =   2655
+      Width           =   3015
    End
    Begin VB.CommandButton cmdRemoveProfile 
       Caption         =   "Remove Profile"
       Enabled         =   0   'False
       Height          =   240
-      Left            =   1560
+      Left            =   1800
       TabIndex        =   2
       Top             =   3240
-      Width           =   1335
+      Width           =   1455
    End
    Begin VB.CommandButton cmdCreateProfile 
       Caption         =   "Create Profile"
@@ -51,7 +59,7 @@ Begin VB.Form frmLauncher
       Left            =   240
       TabIndex        =   1
       Top             =   3240
-      Width           =   1335
+      Width           =   1575
    End
    Begin VB.CommandButton cmdLaunchThis 
       Caption         =   "Launch Selected Profile"
@@ -65,28 +73,28 @@ Begin VB.Form frmLauncher
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   480
+      Height          =   360
       Left            =   240
       TabIndex        =   5
       Top             =   4680
-      Width           =   2655
+      Width           =   2895
    End
    Begin VB.CommandButton cmdCreateShortcut 
       Caption         =   "Create a Shortcut"
       Enabled         =   0   'False
-      Height          =   480
+      Height          =   360
       Left            =   240
       TabIndex        =   3
       Top             =   3600
-      Width           =   1335
+      Width           =   1455
    End
    Begin MSComctlLib.ListView lstProfiles 
       Height          =   2895
       Left            =   240
       TabIndex        =   0
       Top             =   360
-      Width           =   2655
-      _ExtentX        =   4683
+      Width           =   3015
+      _ExtentX        =   5318
       _ExtentY        =   5106
       View            =   3
       LabelEdit       =   1
@@ -111,10 +119,10 @@ Begin VB.Form frmLauncher
       Caption         =   "to this profile on your Desktop"
       ForeColor       =   &H00FFFFFF&
       Height          =   465
-      Left            =   1680
+      Left            =   1800
       TabIndex        =   7
       Top             =   3600
-      Width           =   1215
+      Width           =   1455
       WordWrap        =   -1  'True
    End
    Begin VB.Label lblProfiles 
@@ -162,6 +170,9 @@ Private Const OBJECT_NAME As String = "frmLauncher"
 Private Sub Form_Load()
 On Error GoTo ERROR_HANDLER
     Me.Caption = StringFormat("StealthBot Launcher v{0}.{1}.{2}", App.Major, App.Minor, App.Revision)
+    
+    CheckForUpdates
+    
     If (LenB(Command()) > 0) Then
         If (SetCommandLine(Command())) Then
             Unload Me
@@ -186,7 +197,7 @@ On Error GoTo ERROR_HANDLER
     SetupColumns lvwColumnLeft
 
     ' profiles: load
-    modLauncher.LoadXMLDocument
+    'modLauncher.LoadXMLDocument
     LoadProfiles
     
     If (lstProfiles.ListItems.Count > 0) Then ' UI: if count > 0 then enable btns
@@ -224,6 +235,8 @@ On Error GoTo ERROR_HANDLER
     'UnHookAllProcs
     
     Unload frmNameDialog
+    'Unload frmConfig
+    'Unload frmstatus
     
     If (Not cConfig Is Nothing) Then cConfig.SaveConfig
     

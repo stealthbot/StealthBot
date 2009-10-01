@@ -14,7 +14,7 @@
 		break;
 		
 	case "latest_url":
-		echo "http://fiftytoo.no-ip.com:45000/zipped/Stealthbot-2.7_Build-421.zip";
+		echo "http://fiftytoo.no-ip.com:45000/zipped/Stealthbot-2.7_Build-423.zip";
 		break;
 		
 	case "lnews":
