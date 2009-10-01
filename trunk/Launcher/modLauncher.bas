@@ -56,7 +56,7 @@ Public Sub ErrorHandler(lError As Long, sObjectName As String, sFunctionName As 
     Dim sPath As String
     
     
-    AddChat vbRed, StringFormat("Error #{0}: {1} in {2}.{3}()", lError, Error(lError), sObjectName, sFunctionName)
+    'AddChat vbRed, StringFormat("Error #{0}: {1} in {2}.{3}()", lError, Error(lError), sObjectName, sFunctionName)
     
     sPath = ReplaceEnvironmentVars("%APPDATA%\StealthBot\LauncherErrors.txt")
     If (LenB(Dir$(sPath)) = 0) Then
@@ -435,39 +435,39 @@ ERROR_HANDLER:
     CopyFolder = False
 End Function
 
-Public Sub AddChat(ParamArray saElements() As Variant)
-On Error GoTo ERROR_HANDLER:
-    Dim i As Integer
-    With frmStatus.rtbStatus
-        If (Len(.Text) > &H4000) Then
-            .SelStart = 0
-            .SelLength = &H100
-            .SelText = vbNullString
-        End If
-        
-        .SelStart = Len(.Text)
-        .SelLength = 0
-        .SelColor = vbWhite
-        .SelText = StringFormat("[{0}] ", Time)
-        .SelStart = Len(.Text)
-        
-        For i = LBound(saElements) To UBound(saElements) Step 2
-            .SelStart = Len(.Text)
-            .SelLength = 0
-            .SelColor = saElements(i)
-            .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
-            .SelStart = Len(.Text)
-        Next i
-    End With
-    Exit Sub
-ERROR_HANDLER:
-    If (Err.Number = 13 Or Err.Number = 91) Then Exit Sub
-    ErrorHandler Err.Number, OBJECT_NAME, "AddChat"
-End Sub
+'Public Sub AddChat(ParamArray saElements() As Variant)
+'On Error GoTo ERROR_HANDLER:
+'    Dim i As Integer
+'    With frmStatus.rtbStatus
+'        If (Len(.Text) > &H4000) Then
+'            .SelStart = 0
+'            .SelLength = &H100
+'            .SelText = vbNullString
+'        End If
+'
+'        .SelStart = Len(.Text)
+'        .SelLength = 0
+'        .SelColor = vbWhite
+'        .SelText = StringFormat("[{0}] ", Time)
+'        .SelStart = Len(.Text)
+'
+'        For i = LBound(saElements) To UBound(saElements) Step 2
+'            .SelStart = Len(.Text)
+'            .SelLength = 0
+'            .SelColor = saElements(i)
+'            .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
+'            .SelStart = Len(.Text)
+'        Next i
+'    End With
+'    Exit Sub
+'ERROR_HANDLER:
+'    If (Err.Number = 13 Or Err.Number = 91) Then Exit Sub
+'    ErrorHandler Err.Number, OBJECT_NAME, "AddChat"
+'End Sub
 
-Public Function GetWebPath()
-    GetWebPath = "http://www.StealthBot.net/sb/Launcher/"
-End Function
+'Public Function GetWebPath()
+'    GetWebPath = "http://www.StealthBot.net/sb/Launcher/"
+'End Function
 
 Public Function ReplaceVars(sString As String) As String
     sString = Replace$(sString, "{PROFILEPATH}", "%APPDATA\StealthBot")
@@ -475,33 +475,33 @@ Public Function ReplaceVars(sString As String) As String
     ReplaceVars = sString
 End Function
 
-Public Sub CheckForUpdates()
-On Error GoTo ERROR_HANDLER:
-
-    Dim sTemp As String
-    Dim i     As Integer
-    Dim sCRC  As String
-    
-    With frmLauncher.iNet
-    
-        sTemp = .OpenURL(StringFormat("{0}?p=lnews", GetWebPath))
-        AddChat vbGreen, StringFormat("Launcher news:{0}{1}", vbNewLine, ReplaceVars(sTemp))
-        
-        sTemp = .OpenURL(StringFormat("{0}?p=lupdate", GetWebPath))
-        
-        i = InStr(sTemp, Chr$(&HFF))
-        If (i = 0) Then
-            AddChat vbRed, "Failed to get launcer update information."
-            Exit Sub
-        End If
-        
-        If (Not StrComp(Left$(sTemp, i - 1), StringFormat("{0}.{1}", App.Major, App.Minor), vbTextCompare) = 0) Then
-            sTemp = .OpenURL(StringFormat("{0}?p=latest_url", GetWebPath))
-            AddChat vbGreen, "New updates avalible: ", vbWhite, sTemp
-            Exit Sub
-        End If
-    End With
-    Exit Sub
-ERROR_HANDLER:
-    ErrorHandler Err.Number, OBJECT_NAME, "CheckForUpdates"
-End Sub
+'Public Sub CheckForUpdates()
+'On Error GoTo ERROR_HANDLER:
+'
+'    Dim sTemp As String
+'    Dim i     As Integer
+'    Dim sCRC  As String
+'
+'    With frmLauncher.Inet
+'
+'        sTemp = .OpenURL(StringFormat("{0}?p=lnews", GetWebPath))
+'        AddChat vbGreen, StringFormat("Launcher news:{0}{1}", vbNewLine, ReplaceVars(sTemp))
+'
+'        sTemp = .OpenURL(StringFormat("{0}?p=lupdate", GetWebPath))
+'
+'        i = InStr(sTemp, Chr$(&HFF))
+'        If (i = 0) Then
+'            AddChat vbRed, "Failed to get launcer update information."
+'            Exit Sub
+'        End If
+'
+'        If (Not StrComp(Left$(sTemp, i - 1), StringFormat("{0}.{1}", App.Major, App.Minor), vbTextCompare) = 0) Then
+'            sTemp = .OpenURL(StringFormat("{0}?p=latest_url", GetWebPath))
+'            AddChat vbGreen, "New updates avalible: ", vbWhite, sTemp
+'            Exit Sub
+'        End If
+'    End With
+'    Exit Sub
+'ERROR_HANDLER:
+'    ErrorHandler Err.Number, OBJECT_NAME, "CheckForUpdates"
+'End Sub

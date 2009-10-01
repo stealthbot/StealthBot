@@ -299,6 +299,7 @@ Private Sub Form_Load()
     AddCrLf
     AddLine "StealthBot is updated and maintained by a team of developers who mostly volunteer their time."
     AddLine "-> The current list of developers can be found at http://devteam.stealthbot.net."
+    AddLine "-> Donations to the project are split between developers after expenses."
     AddCrLf
     AddLine "All Blizzard copyrights are (c) 1996 to present Blizzard Entertainment."
     AddLine "For a detailed listing of Blizzard copyrights, please visit"
@@ -313,11 +314,10 @@ Private Sub Form_Load()
     AddLine "- Thanks to Retain, Jack, Hdx, and Berzerker, for their long lists of suggestions and bug reports"
     AddLine "- Thanks to PhiX for his excellent continued support help on StealthBot.net"
     AddCrLf
-    AddLine "- My website administrators, Distant, MetaLMilitiA, Hdx and Eric for their continued help in managing the stealthbot.net forums"
-    AddLine "- LW-Killbound for the splash screen image"
+    AddLine "- My website administrators & moderators, for their continued help in managing the stealthbot.net forums"
     AddCrLf
     AddLine "- And, an extra-special thanks to:"
-    AddLine "-> The tech support people on StealthBot.net and in Clan SBS, for giving their time"
+    AddLine "-> The tech support people on StealthBot.net and in Clan SBS, for giving their time to help others"
     AddLine "-> The people who have donated to the StealthBot project - you can find a current list at http://contributors.stealthbot.net - THANK YOU!"
     
     lblBottom.Caption = "(c)2002-2009 Andy Trevino - all rights reserved." & vbCrLf & "Use of this program is subject to the License Agreement found at http://eula.stealthbot.net."
@@ -331,11 +331,11 @@ Private Sub AddCrLf()
     txtDescr.Text = txtDescr.Text & vbCrLf
 End Sub
 
-Private Sub Form_MouseMove(Button As Integer, Shift As Integer, x As Single, Y As Single)
-    Dim I As Byte
-    For I = 0 To 6
-        lblURL(I).ForeColor = vbWhite
-    Next I
+Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, y As Single)
+    Dim i As Byte
+    For i = 0 To 6
+        lblURL(i).ForeColor = vbWhite
+    Next i
 End Sub
 
 Private Sub lblOK_Click()
@@ -375,10 +375,10 @@ Private Sub lblURL_Click(Index As Integer)
     End If
 End Sub
 
-Private Sub lblURL_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
-    Dim I As Byte
-    For I = 0 To 6
-        lblURL(I).ForeColor = vbWhite
-    Next I
+Private Sub lblURL_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, y As Single)
+    Dim i As Byte
+    For i = 0 To 6
+        lblURL(i).ForeColor = vbWhite
+    Next i
     lblURL(Index).ForeColor = vbBlue
 End Sub
