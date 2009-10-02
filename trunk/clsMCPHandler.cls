@@ -52,7 +52,6 @@ Public Enum eCharacterFlags
     ClassicHardcoreLadder& = &H48
 End Enum
 
-Private msCurrentChunk As String
 Private msBNetUniqueUsername As String
 
 Public Event CharListEntry(ByVal CharName As String, ByVal Statstring As String, ByVal ExpirationDate As Date)
@@ -66,8 +65,8 @@ Public Event CharListResponse(ByVal NumCharacters As Integer)
 
 Public Sub SendStartup()
     With PBuffer
-        .InsertNonNTString msCurrentChunk
-        .InsertNTString msBNetUniqueUsername
+        .InsertNonNTString ds.MCPData
+        .InsertNTString ds.UniqueName
         .SendPacketMCP MCP_STARTUP
     End With
 End Sub
@@ -115,28 +114,6 @@ Public Sub UpgradeCharacter(ByVal CharName As String)
     With PBuffer
         .InsertNTString CharName
         .SendPacketMCP MCP_CHARUPGRADE
-    End With
-End Sub
-
-'// note: this sub does not use the MCP socket and requires calchashbuf()
-Public Sub LogonToRealm(ByVal cookie As Long, ByVal ServerToken As Long, ByVal RealmName As String) ', Optional ByVal RealmPass As String = "password")
-    '(DWORD)      Cookie
-    '(DWORD[5])   Hashed realm password
-    '(STRING)     Realm title
-    Dim Buffer As String * 20
-    RealmError = False
-    
-    Buffer = String$(20, vbNullChar)
-    Call calcHashBuf("password", 8, Buffer)
-    Call calcHashBuf(MKL(cookie) & MKL(ServerToken) & Buffer, 28, Buffer)
-    
-    'frmChat.AddChat vbRed, RealmName
-    
-    With PBuffer
-        .InsertDWord cookie
-        .InsertNonNTString Buffer
-        .InsertNTString RealmName
-        .SendPacket &H3E
     End With
 End Sub
 
@@ -306,18 +283,6 @@ ERROR_HANDLER:
     
     Exit Sub
 End Sub
-
-Public Property Get CurrentChunk() As String
-
-    CurrentChunk = msCurrentChunk
-
-End Property
-
-Public Property Let CurrentChunk(ByVal sCurrentChunk As String)
-
-    msCurrentChunk = sCurrentChunk
-
-End Property
 
 Public Property Get BNetUniqueUsername() As String
 

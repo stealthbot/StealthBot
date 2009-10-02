@@ -143,23 +143,17 @@ Private Sub CloseEmailReg()
         If Dii And BotVars.UseRealm Then
             frmRealm.Show
         Else
-            Call Send0x0A
+            Call SendEnterChatSequance
         End If
     End If
     
     ClosedProperly = True
-    AwaitingEmailReg = 0
+    ds.WaitingForEmail = False
 End Sub
 
 Private Sub cmdGo_Click()
-    PBuffer.InsertNTString txtAddress.text
-    PBuffer.SendPacket &H59
-    
-    If LenB(txtAddress.text) > 0 Then
-        frmChat.AddChat RTBColors.SuccessText, ">> E-mail address registered."
-    Else
-        frmChat.AddChat RTBColors.SuccessText, ">> E-mail address declined."
-    End If
+
+    modBNCS.SEND_SID_SETEMAIL txtAddress.Text
     
     CloseEmailReg
     
@@ -167,10 +161,8 @@ Private Sub cmdGo_Click()
 End Sub
 
 Private Sub cmdIgnore_Click()
-    PBuffer.InsertNTString vbNullString
-    PBuffer.SendPacket &H59
     
-    frmChat.AddChat RTBColors.SuccessText, ">> E-mail registration declined."
+    modBNCS.SEND_SID_SETEMAIL vbNullString
     
     CloseEmailReg
     

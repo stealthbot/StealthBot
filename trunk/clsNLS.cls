@@ -24,28 +24,32 @@ Private m_OldNlsHandle As Long
 
 Private m_Salt As String * 32
 Private m_B As String * 32
+Private m_v As String * 32
 
 Private m_Username As String
 Private m_Password As String
 Private m_NewPassword As String
+Private m_Initialized As Boolean
 
 ' make sure all possible handles have been freed
 Private Sub Class_Terminate()
 
-    If m_NlsHandle <> 0 Then
+    If Not m_NlsHandle = 0 Then
         nls_free m_NlsHandle
         m_NlsHandle = 0
     End If
 
-    If m_NewNlsHandle <> 0 Then
+    If Not m_NewNlsHandle = 0 Then
         nls_free m_NewNlsHandle
         m_NewNlsHandle = 0
     End If
 
-    If m_OldNlsHandle <> 0 Then
+    If Not m_OldNlsHandle = 0 Then
         nls_free m_OldNlsHandle
         m_OldNlsHandle = 0
     End If
+    
+    m_Initialized = False
 
 End Sub
 
@@ -63,12 +67,19 @@ Public Function Initialize(ByVal Username As String, ByVal Password As String) A
     
     m_NlsHandle = nls_init(Username, Password)
     
+    SrpGetSaltAndVerifier m_Salt, m_v
+    
     ' return true if nls_init succeeded
-    If m_NlsHandle <> 0 Then
+    If Not m_NlsHandle = 0 Then
         Initialize = True
+        m_Initialized = True
     End If
 
 End Function
+
+Public Property Get Username() As String
+    Username = m_Username
+End Property
 
 
 ' SRP-level functions (use these if you know what you're doing)
@@ -77,7 +88,7 @@ End Function
 ' get this value when building SID_AUTH_ACCOUNTLOGON->S
 ' length will be 32 bytes
 Public Property Get SrpA() As String
-
+    If (Not m_Initialized) Then Initialize BotVars.Username, BotVars.Password
     Dim a As String * 32
 
     nls_get_A m_NlsHandle, a
@@ -98,7 +109,7 @@ End Property
 ' gets the stored Salt value
 ' this just gets the value you stored (or created in AccountCreate())
 Public Property Get SrpSalt() As String
-    
+    If (Not m_Initialized) Then Initialize BotVars.Username, BotVars.Password
     SrpSalt = m_Salt
     
 End Property
@@ -115,8 +126,24 @@ End Property
 ' gets the stored B value
 ' this just gets the value you stored
 Public Property Get SrpB() As String
-
+    If (Not m_Initialized) Then Initialize BotVars.Username, BotVars.Password
     SrpB = m_B
+
+End Property
+
+' store the verifier value
+' length should be 32 bytes
+Public Property Let Srpv(ByVal v As String)
+
+    m_v = v
+
+End Property
+
+' gets the stored verifier value
+' this just gets the value you stored
+Public Property Get Srpv() As String
+    If (Not m_Initialized) Then Initialize BotVars.Username, BotVars.Password
+    Srpv = m_v
 
 End Property
 
@@ -124,6 +151,7 @@ End Property
 ' get this value when building SID_AUTH_ACCOUNTLOGONPROOF->S
 ' length will be 20 bytes
 Public Property Get SrpM1() As String
+    If (Not m_Initialized) Then Initialize BotVars.Username, BotVars.Password
 
     Dim M1 As String * 20
 
@@ -136,7 +164,7 @@ End Property
 ' get the S value (the secret value)
 ' length will be 32 bytes
 Public Property Get SrpS() As String
-
+    If (Not m_Initialized) Then Initialize BotVars.Username, BotVars.Password
     Dim s As String * 32
     
     nls_get_S m_NlsHandle, s, m_B, m_Salt
@@ -148,7 +176,7 @@ End Property
 ' get the K value (a value based on the secret)
 ' length will be 40 bytes
 Public Property Get SrpK() As String
-
+    If (Not m_Initialized) Then Initialize BotVars.Username, BotVars.Password
     Dim K As String * 40
     
     nls_get_K m_NlsHandle, K, m_Salt
@@ -161,7 +189,7 @@ End Property
 ' optionally check this value when parsing SID_AUTH_ACCOUNTLOGONPROOF->C
 ' M[2] length should be 20 bytes
 Public Function SrpVerifyM2(ByVal M2 As String) As Boolean
-
+    If (Not m_Initialized) Then Initialize BotVars.Username, BotVars.Password
     SrpVerifyM2 = nls_check_M2(m_NlsHandle, M2, m_B, m_Salt)
 
 End Function
@@ -171,7 +199,7 @@ End Function
 ' M[2] length should be 20 bytes
 ' must have set PersistOld in .AccountChangeProof() before calling this, or the handle was lost!
 Public Function SrpVerifyOldM2(ByVal M2 As String) As Boolean
-
+    If (Not m_Initialized) Then Initialize BotVars.Username, BotVars.Password
     SrpVerifyOldM2 = nls_check_M2(m_OldNlsHandle, M2, m_B, m_Salt)
     
     ' they shouldn't need to use this handle anymore-- free it
@@ -186,7 +214,7 @@ End Function
 ' Salt length will be 32 bytes
 ' Verifier length will be 32 bytes
 Public Sub SrpGetSaltAndVerifier(ByRef Salt As String, ByRef Verifier As String)
-
+    If (Not m_Initialized) Then Initialize BotVars.Username, BotVars.Password
     Dim s As String * 32
     Dim v As String * 32
     Dim i As Integer

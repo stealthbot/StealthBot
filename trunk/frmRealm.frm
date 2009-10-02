@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmRealm 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -593,7 +593,7 @@ Private Sub Form_Unload(Cancel As Integer)
             frmChat.sckMCP.Close
         End If
         
-        Call Send0x0A
+        SendEnterChatSequance
     End If
     
     RealmError = False
@@ -658,7 +658,7 @@ Private Sub cmdCreate_Click()
     If lvwChars.ListItems.Count > 7 Then
         frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Your account is full! Delete a character before trying to create another."
     Else
-        If Len(txtCharName.text) > 2 Then
+        If Len(txtCharName.Text) > 2 Then
             If chkLadder.Value = 1 Then Flags = Flags Or &H40
             
             If chkExpansion.Value = 1 Then
@@ -670,7 +670,7 @@ Private Sub cmdCreate_Click()
             
             For i = 1 To 7
                 If optNewCharType(i).Value = True Then
-                    MCPHandler.CreateMCPCharacter i - 1, Flags, txtCharName.text
+                    MCPHandler.CreateMCPCharacter i - 1, Flags, txtCharName.Text
                     Exit For
                 End If
             Next i
@@ -678,7 +678,7 @@ Private Sub cmdCreate_Click()
     End If
 End Sub
 
-Private Sub lvwChars_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lvwChars_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     If Button = vbRightButton Then
         If Not (lvwChars.SelectedItem Is Nothing) Then
             PopupMenu mnuPop
@@ -730,7 +730,7 @@ Private Sub MCPHandler_CharCreateResponse(ByVal Status As Byte, ByVal Message As
         Call optViewExisting_Click
     Else
         frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
-        txtCharName.text = vbNullString
+        txtCharName.Text = vbNullString
     End If
     
     ClearExpirationLabel
@@ -787,7 +787,7 @@ Private Sub MCPHandler_CharLogonResponse(ByVal Status As Byte, ByVal Message As 
     If Status = 0 Then
         frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
         
-        Send0x0A
+        SendEnterChatSequance
     Else
         frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
         RealmError = True
@@ -812,7 +812,7 @@ Private Sub mnuPopDelete_Click()
     Dim s As String
     
     If Not (lvwChars.SelectedItem Is Nothing) Then
-        s = Split(lvwChars.SelectedItem.text, vbCr)(0)
+        s = Split(lvwChars.SelectedItem.Text, vbCr)(0)
         IndexToDelete = lvwChars.SelectedItem.Index
         
         MCPHandler.DeleteCharacter s
@@ -895,7 +895,7 @@ Private Sub tmrLoginTimeout_Timer()
         
         If mTicks >= 30 Then
             frmChat.sckMCP.Close
-            Send0x0A
+            SendEnterChatSequance
             Unload Me
         End If
     End If

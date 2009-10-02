@@ -43,7 +43,7 @@ Public Declare Function checkRevision_Raw Lib "BNCSutil.dll" Alias "checkRevisio
     (ByVal ValueString As String, ByVal File1 As String, ByVal File2 As String, _
      ByVal File3 As String, ByVal mpqNumber As Long, ByRef Checksum As Long) As Long
 Public Declare Function getExeInfo_Raw Lib "BNCSutil.dll" Alias "getExeInfo" _
-    (ByVal filename As String, ByVal exeInfoString As String, _
+    (ByVal FileName As String, ByVal exeInfoString As String, _
     ByVal infoBufferSize As Long, Version As Long, ByVal Platform As Long) As Long
 
 ' Old Logon System
@@ -122,20 +122,20 @@ Public Declare Function nls_account_logon Lib "BNCSutil.dll" _
 Public Declare Sub nls_get_A Lib "BNCSutil.dll" _
     (ByVal NLS As Long, ByVal Out As String)
 Public Declare Sub nls_get_M1 Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Out As String, ByVal b As String, ByVal Salt As String)
+    (ByVal NLS As Long, ByVal Out As String, ByVal B As String, ByVal Salt As String)
 Public Declare Sub nls_get_v Lib "BNCSutil.dll" _
     (ByVal NLS As Long, ByVal Out As String, ByVal Salt As String)
 Public Declare Function nls_check_M2 Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal M2 As String, ByVal b As String, ByVal Salt As String) As Long
+    (ByVal NLS As Long, ByVal M2 As String, ByVal B As String, ByVal Salt As String) As Long
 Public Declare Function nls_check_signature Lib "BNCSutil.dll" _
-    (ByVal address As Long, ByVal Signature As String) As Long
+    (ByVal Address As Long, ByVal Signature As String) As Long
 Public Declare Function nls_account_change_proof Lib "BNCSutil.dll" _
     (ByVal NLS As Long, ByVal Buffer As String, ByVal NewPassword As String, _
-    ByVal b As String, ByVal Salt As String) As Long 'returns a new NLS pointer for the new password
+    ByVal B As String, ByVal Salt As String) As Long 'returns a new NLS pointer for the new password
 Public Declare Sub nls_get_S Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Out As String, ByVal b As String, ByVal Salt As String)
+    (ByVal NLS As Long, ByVal Out As String, ByVal B As String, ByVal Salt As String)
 Public Declare Sub nls_get_K Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Out As String, ByVal s As String)
+    (ByVal NLS As Long, ByVal Out As String, ByVal S As String)
     
 '  Constants
 '---------------------------
@@ -148,6 +148,17 @@ Public Const BNCSutil_PLATFORM_MAC& = &H2
 
 Public Const BNCSutil_PLATFORM_OSX& = &H3
 
+'  Winsock
+'---------------------------
+Private Type sockaddr_in
+    Family As Integer
+    Port As Integer
+    Address As Long
+    Filler As String * 8
+End Type
+
+Private Declare Function getsockname Lib "ws2_32.dll" (ByVal S As Long, Name As sockaddr_in, NameLen As Long) As Long
+
 
 
 '  VB-Specifc Functions
@@ -157,16 +168,16 @@ Public Const BNCSutil_PLATFORM_OSX& = &H3
 ' Returns True if the current BNCSutil version is sufficent, False if not.
 ' Function will now return the right value - l)ragon
 Public Function bncsutil_checkVersion(ByVal RequiredVersion As String) As Boolean
-    Dim I&, j&
+    Dim i&, j&
     Dim Frag() As String
     Dim Req As Long, Check As Long
     bncsutil_checkVersion = False
     Frag = Split(RequiredVersion, ".")
     j = 0
-    For I = UBound(Frag) To 0 Step -1
-        Check = Check + (CLng(Val(Frag(I))) * (100 ^ j))
+    For i = UBound(Frag) To 0 Step -1
+        Check = Check + (CLng(Val(Frag(i))) * (100 ^ j))
         j = j + 1
-    Next I
+    Next i
     'v Somone desided to use Check here instead of Req - l)ragon
     Req = BNCSutil_getVersion()
     If (Check >= Req) Then
@@ -196,7 +207,7 @@ End Function
 'Returns the file version or 0 on failure.
 Public Function getExeInfo(EXEFile As String, InfoString As String, Optional ByVal Platform As Long = BNCSutil_PLATFORM_WINDOWS) As Long
     Dim Version As Long, InfoSize As Long, Result As Long
-    Dim I&
+    Dim i&
     InfoSize = 256
     InfoString = String$(256, vbNullChar)
     Result = getExeInfo_Raw(EXEFile, InfoString, InfoSize, Version, Platform)
@@ -214,9 +225,9 @@ Public Function getExeInfo(EXEFile As String, InfoString As String, Optional ByV
         Result = getExeInfo_Raw(EXEFile, InfoString, InfoSize, Version, Platform)
     Wend
     getExeInfo = Version
-    I = InStr(InfoString, vbNullChar)
-    If I = 0 Then Exit Function
-    InfoString = Left$(InfoString, I - 1)
+    i = InStr(InfoString, vbNullChar)
+    If i = 0 Then Exit Function
+    InfoString = Left$(InfoString, i - 1)
 End Function
 
 'OLS Password Hashing
@@ -230,4 +241,13 @@ Public Function hashPassword(Password As String) As String
     Dim Hash As String * 20
     hashPassword_Raw Password, Hash
     hashPassword = Hash
+End Function
+
+Public Function nls_check_socket_signature(ByVal SocketHandle As Long, Signature As String) As Boolean
+    Dim NameLen As Long, Name As sockaddr_in
+    
+    NameLen = 16
+    getsockname SocketHandle, Name, NameLen
+    
+    nls_check_socket_signature = (nls_check_signature(Name.Address, Signature) <> 0)
 End Function

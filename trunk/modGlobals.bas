@@ -211,7 +211,6 @@ Public VoteDuration As Integer
 Public PBuffer As New clsDataBuffer
 Public ListToolTip As clsCTooltip
 Public AwaitingEmailReg As Byte
-Public Passed0x0F As Byte
 Public g_ThisIconCode As Integer
 
 'Mode1 Values

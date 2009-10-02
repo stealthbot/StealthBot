@@ -176,6 +176,9 @@ Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Inte
             Case "D2XP": GetVerByte = &HC
             Case "W3XP": GetVerByte = &H18
             Case "WAR3": GetVerByte = &H18
+            Case "DRTL": GetVerByte = &H2A
+            Case "DSHR": GetVerByte = &H2A
+            Case "JSTR": GetVerByte = &HA5
         End Select
     Else
         GetVerByte = _
@@ -204,6 +207,10 @@ Public Function GetGamePath(ByVal Client As String) As String
             Case "D2XP", "PX2D": GetGamePath = StringFormat("{0}\D2XP\", App.Path)
             Case "W3XP", "PX3W": GetGamePath = StringFormat("{0}\WAR3\", App.Path)
             Case "WAR3", "3RAW": GetGamePath = StringFormat("{0}\WAR3\", App.Path)
+            Case "DRTL", "LTRD": GetGamePath = StringFormat("{0}\DRTL\", App.Path)
+            Case "DSHR", "RHSD": GetGamePath = StringFormat("{0}\DSHR\", App.Path)
+            Case "JSTR", "RTSJ": GetGamePath = StringFormat("{0}\JSTR\", App.Path)
+            Case "SSHR", "RHSS": GetGamePath = StringFormat("{0}\SSHR\", App.Path)
             
             Case Else
                 frmChat.AddChat RTBColors.ErrorMessageText, _
@@ -486,14 +493,14 @@ ERROR_HANDLER:
     
 End Sub
 
-Public Sub APISend(ByRef s As String) '// faster API-based sending for EFP
+Public Sub APISend(ByRef S As String) '// faster API-based sending for EFP
 
     Dim i As Long
     
-    i = Len(s) + 5
+    i = Len(S) + 5
     
     Call Send(frmChat.sckBNet.SocketHandle, "ÿ" & "" & Chr(i) & _
-        Chr(0) & s & Chr(0), i, 0)
+        Chr(0) & S & Chr(0), i, 0)
 End Sub
 
 Public Function Voting(ByVal Mode1 As Byte, Optional Mode2 As Byte, Optional Username As String) As String
@@ -1209,10 +1216,10 @@ End Sub
 '// parses a system time and returns in the format:
 '//     mm/dd/yy, hh:mm:ss
 '//
-Public Function SystemTimeToString(ByRef sT As SYSTEMTIME) As String
+Public Function SystemTimeToString(ByRef st As SYSTEMTIME) As String
     Dim buf As String
 
-    With sT
+    With st
         buf = buf & .wMonth & "/"
         buf = buf & .wDay & "/"
         buf = buf & .wYear & ", "
@@ -1225,10 +1232,10 @@ Public Function SystemTimeToString(ByRef sT As SYSTEMTIME) As String
 End Function
 
 Public Function GetCurrentMS() As String
-    Dim sT As SYSTEMTIME
-    GetLocalTime sT
+    Dim st As SYSTEMTIME
+    GetLocalTime st
     
-    GetCurrentMS = Right$("000" & sT.wMilliseconds, 3)
+    GetCurrentMS = Right$("000" & st.wMilliseconds, 3)
 End Function
 
 Public Function ZeroOffset(ByVal lInpt As Long, ByVal lDigits As Long) As String
@@ -1406,14 +1413,14 @@ End Sub
 
 
 Public Function CheckBlock(ByVal Username As String) As Boolean
-    Dim s As String
+    Dim S As String
     Dim i As Integer
     
     If (LenB(Dir$(GetFilePath("Filters.ini"))) > 0) Then
-        s = ReadINI("BlockList", "Total", GetFilePath("Filters.ini"))
+        S = ReadINI("BlockList", "Total", GetFilePath("Filters.ini"))
         
-        If (StrictIsNumeric(s)) Then
-            i = s
+        If (StrictIsNumeric(S)) Then
+            i = S
         Else
             Exit Function
         End If
@@ -1421,9 +1428,9 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
         Username = PrepareCheck(Username)
         
         For i = 0 To i
-            s = ReadINI("BlockList", "Filter" & i, GetFilePath("Filters.ini"))
+            S = ReadINI("BlockList", "Filter" & i, GetFilePath("Filters.ini"))
             
-            If (Username Like PrepareCheck(s)) Then
+            If (Username Like PrepareCheck(S)) Then
                 CheckBlock = True
                 
                 Exit Function
@@ -1460,17 +1467,17 @@ Public Function CheckMsg(ByVal msg As String, Optional ByVal Username As String,
 End Function
 
 Public Sub UpdateProfile()
-    Dim s As String
+    Dim S As String
     
-    s = MediaPlayer.TrackName
+    S = MediaPlayer.TrackName
     
-    If (s = vbNullString) Then
+    If (S = vbNullString) Then
         SetProfile "", ":[ ProfileAmp ]:" & vbCrLf & MediaPlayer.Name & " is not currently playing " & _
                 vbCrLf & "Last updated " & Time & ", " & Format(Date, "d-MM-yyyy") & vbCrLf & _
                     CVERSION & " - http://www.stealthbot.net"
     Else
         SetProfile "", ":[ ProfileAmp ]:" & vbCrLf & MediaPlayer.Name & " is currently playing: " & _
-                vbCrLf & s & vbCrLf & "Last updated " & Time & ", " & Format(Date, "d-MM-yyyy") & _
+                vbCrLf & S & vbCrLf & "Last updated " & Time & ", " & Format(Date, "d-MM-yyyy") & _
                     vbCrLf & CVERSION & " - http://www.stealthbot.net"
     End If
 End Sub
@@ -1500,9 +1507,9 @@ Public Function GetNewsURL() As String
     GetNewsURL = "http://www.stealthbot.net/getver3.php?vc=" & VERCODE
 End Function
 
-Public Function HTMLToRGBColor(ByVal s As String) As Long
-    HTMLToRGBColor = RGB(Val("&H" & Mid$(s, 1, 2)), Val("&H" & Mid$(s, 3, 2)), _
-        Val("&H" & Mid$(s, 5, 2)))
+Public Function HTMLToRGBColor(ByVal S As String) As Long
+    HTMLToRGBColor = RGB(Val("&H" & Mid$(S, 1, 2)), Val("&H" & Mid$(S, 3, 2)), _
+        Val("&H" & Mid$(S, 5, 2)))
 End Function
 
 Public Function StrictIsNumeric(ByVal sCheck As String, Optional AllowNegatives As Boolean = False) As Boolean
@@ -1761,7 +1768,7 @@ Public Function GetConfigFilePath() As String
 End Function
 
 Public Function GetFilePath(ByVal FileName As String, Optional DefaultPath As String = vbNullString) As String
-    Dim s As String
+    Dim S As String
     
     If (InStr(FileName, "\") = 0) Then
         If (LenB(DefaultPath) = 0) Then
@@ -1770,11 +1777,11 @@ Public Function GetFilePath(ByVal FileName As String, Optional DefaultPath As St
             GetFilePath = StringFormat("{0}{1}", DefaultPath, FileName)
         End If
         
-        s = ReadCfg("FilePaths", FileName)
+        S = ReadCfg("FilePaths", FileName)
         
-        If (LenB(s) > 0) Then
-            If (LenB(Dir$(s))) Then
-                GetFilePath = s
+        If (LenB(S) > 0) Then
+            If (LenB(Dir$(S))) Then
+                GetFilePath = S
             End If
         End If
     Else
@@ -1826,7 +1833,7 @@ End Function
 Public Function GetProfilePath(Optional ByVal ProfileIndex As Integer) As String
     Static LastPath As String
     
-    Dim s As String
+    Dim S As String
 
 '    If ProfileIndex > 0 Then
 '        If ProfileIndex <= colProfiles.Count Then
@@ -2071,17 +2078,17 @@ Public Function isbanned(ByVal sUser As String) As Boolean
 End Function
 
 Public Function IsValidIPAddress(ByVal sIn As String) As Boolean
-    Dim s() As String
+    Dim S() As String
     Dim i   As Integer
     
     IsValidIPAddress = True
     
     If (InStr(1, sIn, ".", vbBinaryCompare)) Then
-        s() = Split(sIn, ".")
+        S() = Split(sIn, ".")
         
-        If (UBound(s) = 3) Then
+        If (UBound(S) = 3) Then
             For i = 0 To 3
-                If (Not (StrictIsNumeric(s(i)))) Then
+                If (Not (StrictIsNumeric(S(i)))) Then
                     IsValidIPAddress = False
                 End If
             Next i
@@ -2369,7 +2376,7 @@ End Sub
 
 Public Sub CaughtPhrase(ByVal Username As String, ByVal msg As String, ByVal Phrase As String, ByVal mType As Byte)
     Dim i As Integer
-    Dim s As String
+    Dim S As String
     
     i = FreeFile
     
@@ -2378,9 +2385,9 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal msg As String, ByVal Phr
     End If
     
     Select Case (mType)
-        Case CPTALK:    s = "TALK"
-        Case CPEMOTE:   s = "EMOTE"
-        Case CPWHISPER: s = "WHISPER"
+        Case CPTALK:    S = "TALK"
+        Case CPEMOTE:   S = "EMOTE"
+        Case CPWHISPER: S = "WHISPER"
     End Select
     
     If (Dir$(GetFilePath("CaughtPhrases.htm")) = vbNullString) Then
@@ -2402,37 +2409,37 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal msg As String, ByVal Phr
         msg = Replace(msg, ">", "&gt;", 1)
         
         Print #i, "<B>" & Format(Date, "MM-dd-yyyy") & " - " & Time & _
-            " - " & s & Space(1) & Username & ": </B>" & _
+            " - " & S & Space(1) & Username & ": </B>" & _
                 Replace(msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
                     "<br>"
     Close #i
 End Sub
 
 
-Public Function DoReplacements(ByVal s As String, Optional Username As String, _
+Public Function DoReplacements(ByVal S As String, Optional Username As String, _
     Optional Ping As Long) As String
 
     Dim gAcc As udtGetAccessResponse
     
     gAcc = GetCumulativeAccess(Username)
 
-    s = Replace(s, "%0", Username, 1)
-    s = Replace(s, "%1", GetCurrentUsername, 1)
-    s = Replace(s, "%c", g_Channel.Name, 1)
-    s = Replace(s, "%bc", BanCount, 1)
+    S = Replace(S, "%0", Username, 1)
+    S = Replace(S, "%1", GetCurrentUsername, 1)
+    S = Replace(S, "%c", g_Channel.Name, 1)
+    S = Replace(S, "%bc", BanCount, 1)
     
     If (Ping > -2) Then
-        s = Replace(s, "%p", Ping, 1)
+        S = Replace(S, "%p", Ping, 1)
     End If
     
-    s = Replace(s, "%v", CVERSION, 1)
-    s = Replace(s, "%a", IIf(gAcc.Rank >= 0, gAcc.Rank, "0"), 1)
-    s = Replace(s, "%f", IIf(gAcc.Flags <> vbNullString, gAcc.Flags, "<none>"), 1)
-    s = Replace(s, "%t", Time$, 1)
-    s = Replace(s, "%d", Date, 1)
-    s = Replace(s, "%m", GetMailCount(Username), 1)
+    S = Replace(S, "%v", CVERSION, 1)
+    S = Replace(S, "%a", IIf(gAcc.Rank >= 0, gAcc.Rank, "0"), 1)
+    S = Replace(S, "%f", IIf(gAcc.Flags <> vbNullString, gAcc.Flags, "<none>"), 1)
+    S = Replace(S, "%t", Time$, 1)
+    S = Replace(S, "%d", Date, 1)
+    S = Replace(S, "%m", GetMailCount(Username), 1)
     
-    DoReplacements = s
+    DoReplacements = S
 End Function
 
 ' Updated 4/10/06 to support millisecond pauses
@@ -2661,6 +2668,11 @@ Function GetProductKey(Optional ByVal Product As String) As String
         Case "D2XP", "VD2D": GetProductKey = "D2"
         Case "WAR3", "3RAW": GetProductKey = "W3"
         Case "W3XP", "PX3W": GetProductKey = "W3"
+        Case "DRTL", "LTRD": GetProductKey = "D1"
+        Case "DSHR", "RHSD": GetProductKey = "D1"
+        Case "JSTR", "RTSJ": GetProductKey = "JS"
+        Case "SSHR", "RHSS": GetProductKey = "SS"
+        Case Else:           GetProductKey = Product
     End Select
 End Function
 
@@ -2686,15 +2698,15 @@ Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Lon
     Dim strTmp    As String  ' stores working copy of StringSplit
     Dim length    As Long    ' stores Length after LinePostfix
     Dim bln       As Boolean ' stores result of delimiter split
-    Dim s         As String  ' stores temp string for settings
+    Dim S         As String  ' stores temp string for settings
     
     ' check for custom line postfix
-    s = ReadCfg("Override", "AddQLinePostfix")
-    If LenB(s) > 0 Then
-        If Left$(s, 1) = "{" And Right$(s, 1) = "}" Then
-            LinePostfix = Mid$(s, 2, Len(s) - 2)
+    S = ReadCfg("Override", "AddQLinePostfix")
+    If LenB(S) > 0 Then
+        If Left$(S, 1) = "{" And Right$(S, 1) = "}" Then
+            LinePostfix = Mid$(S, 2, Len(S) - 2)
         Else
-            LinePostfix = s
+            LinePostfix = S
         End If
     Else
         LinePostfix = "[more]"
@@ -2898,7 +2910,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     On Error GoTo ERROR_HANDLER
    
     Dim arr()          As Variant
-    Dim s              As String
+    Dim S              As String
     Dim L              As Long
     Dim lngVerticalPos As Long
     Dim Diff           As Long
@@ -3009,7 +3021,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         End If
         
-        s = GetTimeStamp()
+        S = GetTimeStamp()
         
         With rtb
             .selStart = Len(.Text)
@@ -3019,7 +3031,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             .SelItalic = False
             .SelUnderline = False
             .SelColor = RTBColors.TimeStamps
-            .SelText = s
+            .SelText = S
             .selLength = Len(.SelText)
         End With
 
@@ -3167,4 +3179,20 @@ Public Function ResolveHost(ByVal strHostName As String) As String
     End If
 End Function
 
-
+Public Sub CloseAllConnections(Optional ShowMessage As Boolean = True)
+    If (frmChat.sckBNLS.State <> 0) Then: frmChat.sckBNLS.Close
+    If (frmChat.sckBNet.State <> 0) Then: frmChat.sckBNet.Close
+    If (frmChat.sckMCP.State <> 0) Then: frmChat.sckMCP.Close
+    
+    If (ShowMessage) Then
+        frmChat.AddChat RTBColors.ErrorMessageText, "All connections closed."
+    End If
+    
+    BNLSAuthorized = False
+    
+    SetTitle "Disconnected"
+    
+    g_Online = False
+    
+    RunInAll "Event_ServerError", "All connections closed."
+End Sub

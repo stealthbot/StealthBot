@@ -3,6 +3,7 @@ Attribute VB_Name = "modEvents"
 ' Andy T (andy@stealthbot.net) March 2005
 
 Option Explicit
+Private Const OBJECT_NAME As String = "modEvents"
 
 Private Const MSG_FILTER_MAX_EVENTS As Long = 100 ' maximum number of storable events
 Private Const MSG_FILTER_DELAY_INT  As Long = 500 ' interval for event count measuring
@@ -60,7 +61,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                 
                 ' ...
                 With UserEvent
-                    .EventID = ID_USERFLAGS
+                    .eventID = ID_USERFLAGS
                     .Flags = Flags
                     .Ping = Ping
                     .GameID = Product
@@ -302,14 +303,14 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         ' update message using Battle.net's unignore command.
         If (frmChat.mnuDisableVoidView.Checked = False) Then
             ' ...
-            frmChat.tmrSilentChannel(1).enabled = True
+            frmChat.tmrSilentChannel(1).Enabled = True
         
             ' ...
             frmChat.AddQ "/unignore " & GetCurrentUsername
         End If
     Else
         ' ...
-        frmChat.tmrSilentChannel(1).enabled = False
+        frmChat.tmrSilentChannel(1).Enabled = False
     End If
 
     ' lets update our configuration file with the
@@ -361,7 +362,7 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
     On Error Resume Next
     
     Dim ft  As FILETIME
-    Dim sT  As SYSTEMTIME
+    Dim st  As SYSTEMTIME
     Dim s() As String
     Dim U   As String
     Dim i   As Integer
@@ -424,17 +425,17 @@ Repeat2:
             
         ElseIf KeyName = "Profile\Description" Then
         
-            Dim X() As String
+            Dim x() As String
             
-            X() = Split(KeyValue, Chr(13))
+            x() = Split(KeyValue, Chr(13))
             ReDim s(0)
             
-            For i = LBound(X) To UBound(X)
-                s(0) = X(i)
+            For i = LBound(x) To UBound(x)
+                s(0) = x(i)
                 
                 If Len(s(0)) > 200 Then s(0) = Left$(s(0), 200)
                 
-                If i = LBound(X) Then
+                If i = LBound(x) Then
                     frmChat.AddQ U & "[Descr] " & s(0)
                 Else
                     frmChat.AddQ U & "[Descr] " & Right(s(0), Len(s(0)) - 1)
@@ -473,11 +474,11 @@ Repeat4:
                 
                 ft.dwLowDateTime = KeyValue 'CLng(KeyValue & "0")
                 
-                FileTimeToSystemTime ft, sT
+                FileTimeToSystemTime ft, st
 
-                With sT
+                With st
                     frmChat.AddQ U & Right$(KeyName, Len(KeyName) - 7) & ": " & _
-                        SystemTimeToString(sT) & " (Battle.net time)"
+                        SystemTimeToString(st) & " (Battle.net time)"
                 End With
                 
             Else    '// it's a SECONDS type
@@ -507,11 +508,11 @@ Repeat4:
             
             ft.dwLowDateTime = KeyValue 'CLng(KeyValue & "0")
             
-            FileTimeToSystemTime ft, sT
+            FileTimeToSystemTime ft, st
             
-            With sT
+            With st
                 frmChat.AddChat RTBColors.ServerInfoText, Right$(KeyName, Len(KeyName) - 7) & ": " & _
-                        SystemTimeToString(sT) & " (Battle.net time)"
+                        SystemTimeToString(st) & " (Battle.net time)"
             End With
             
         Else    '// it's a SECONDS type
@@ -530,7 +531,7 @@ Repeat4:
     End If
 End Sub
 
-Public Sub Event_LoggedOnAs(Username As String, Product As String)
+Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountName As String)
     LastWhisper = vbNullString
 
     'If InStr(1, Username, "*", vbBinaryCompare) <> 0 Then
@@ -540,9 +541,7 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     Call g_Queue.Clear
     
     g_Online = True
-    
-    DestroyNLSObject
-    
+        
     AttemptedFirstReconnect = False
     
     CurrentUsername = KillNull(Username)
@@ -565,13 +564,13 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
         .AddChat RTBColors.InformationText, "[BNET] Logged on as ", RTBColors.SuccessText, Username, _
             RTBColors.InformationText, "."
             
-        .tmrAccountLock.enabled = False
+        .tmrAccountLock.Enabled = False
         
         .UpTimer.Interval = 1000
         
         .Timer.Interval = 30000
     
-        .tmrClanUpdate.enabled = True
+        .tmrClanUpdate.Enabled = True
     
         'If (Not (DisableMonitor)) Then
         '    .AddChat RTBColors.SuccessText, "User monitor initialized."
@@ -609,7 +608,7 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
 
     On Error Resume Next
     
-    RunInAll "Event_LoggedOn", Username, Product
+    RunInAll "Event_LoggedOn", Username, BotVars.Product
 End Sub
 
 ' updated 8-10-05 for new logging system
@@ -634,7 +633,7 @@ Public Sub Event_LogonEvent(ByVal Message As Byte, Optional ByVal ExtraInfo As S
             
             sMessage = "Login successful."
             
-            frmChat.tmrAccountLock.enabled = False
+            frmChat.tmrAccountLock.Enabled = False
             
         Case 3:
             lColor = RTBColors.InformationText
@@ -652,7 +651,7 @@ Public Sub Event_LogonEvent(ByVal Message As Byte, Optional ByVal ExtraInfo As S
             lColor = RTBColors.ErrorMessageText
     End Select
     
-    frmChat.AddChat lColor, "[BNET] " & sMessage
+    frmChat.AddChat lColor, "[BNCS] " & sMessage
 End Sub
 
 Public Sub Event_RealmConnected()
@@ -1007,7 +1006,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
                 
                 ' ...
                 With UserEvent
-                    .EventID = ID_EMOTE
+                    .eventID = ID_EMOTE
                     .Flags = Flags
                     .Message = Message
                 End With
@@ -1157,7 +1156,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 
                 ' ...
                 With UserEvent
-                    .EventID = ID_USER
+                    .eventID = ID_USER
                     .Flags = Flags
                     .Ping = Ping
                     .GameID = Product
@@ -1375,7 +1374,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                 
                 ' ...
                 With UserEvent
-                    .EventID = ID_JOIN
+                    .eventID = ID_JOIN
                     .Flags = Flags
                     .Ping = Ping
                     .GameID = Product
@@ -1436,7 +1435,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                     ' default to not combine with userjoins
                     ToDisplay = False
                     
-                    Select Case UserEvent.EventID
+                    Select Case UserEvent.eventID
                     
                         ' user flags update
                         Case ID_USERFLAGS
@@ -1725,7 +1724,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
                 
                 ' ...
                 With UserEvent
-                    .EventID = ID_TALK
+                    .eventID = ID_TALK
                     .Flags = Flags
                     .Ping = Ping
                     .Message = Message
@@ -2211,64 +2210,23 @@ Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, By
     End If
 End Sub
 
-Public Function Event_AccountCreateResponse(ByVal Result As Long) As Boolean
-    Dim Success As Boolean
-    Dim sOut    As String
-    
-    Success = (Result = 0)
-    
-    Select Case (Result)
-        Case 1, 6: sOut = "Your desired account name does not contain enough alphanumeric characters."
-        Case 2:    sOut = "Your desired account name contains invalid characters."
-        Case 3:    sOut = "Your desired account name contains a banned word."
-        Case 4:    sOut = "Your desired account name already exists."
-        Case Else: sOut = "Unknown response to 0x3D. Result code: " & Result
-    End Select
-    
-    If (Success) Then
-        frmChat.AddChat RTBColors.SuccessText, _
-            "[BNET] Account created successfully!"
-    Else
-        frmChat.AddChat RTBColors.ErrorMessageText, _
-            "There was an error in trying to create a new account."
-        frmChat.AddChat RTBColors.ErrorMessageText, sOut
-    End If
-    
-    Event_AccountCreateResponse = Success
-End Function
-
-Public Function Event_RealmStatusError(ByVal Status As Long)
-    Select Case (Status)
-        Case &H80000001:
-            frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] The Diablo II Realm is currently " & _
-                "unavailable. Please try again later."
-        Case &H80000002:
-            frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Diablo II Realm logon has failed. " & _
-                "Please try again later."
-        Case Else:
-            frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Login to the Diablo II Realm " & _
-                "has failed for an unknown reason (0x" & ZeroOffset(Status, 8) & "). Please try again later."
-    End Select
-    
-    RealmError = True
-End Function
 
 '11/22/07 - Hdx - Pass the channel listing (0x0B) directly off to scriptors for there needs. (What other use is there?)
 Public Sub Event_ChannelList(sChannels() As String)
-    Dim X As Integer
+    Dim x As Integer
         
     If (MDebug("all")) Then
         frmChat.AddChat RTBColors.InformationText, "Received Channel List: "
     End If
     
-    For X = 0 To UBound(sChannels)
+    For x = 0 To UBound(sChannels)
         ' ...
         If (frmChat.mnuPublicChannels(0).Caption <> vbNullString) Then
             Call Load(frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.Count))
         End If
         
-        frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.Count - 1).Caption = sChannels(X)
-    Next X
+        frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.Count - 1).Caption = sChannels(x)
+    Next x
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' call event script function
@@ -2278,6 +2236,19 @@ Public Sub Event_ChannelList(sChannels() As String)
     
     RunInAll "Event_ChannelList", ConvertStringArray(sChannels)
 End Sub
+'10/01/09 - Hdx - This is for SID_MESSAGEBOX, for now it'll raise it's own event, and Event_ServerError
+Public Function Event_MessageBox(lStyle As Long, sText As String, sCaption As String)
+On Error GoTo ERROR_HANDLER:
+
+    Call Event_ServerError(sText)
+    
+    RunInAll "Event_MessageBox", lStyle, sText, sCaption
+
+    Exit Function
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_MessageBox()", Err.Number, Err.description, OBJECT_NAME))
+End Function
 
 Public Function CleanUsername(ByVal Username As String) As String
     

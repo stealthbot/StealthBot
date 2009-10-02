@@ -15,20 +15,15 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Dim PacketID    As Byte              ' Battle.net packet ID
     Dim s           As String            ' Temporary string
     Dim L           As Long              ' Temporary long
-    Dim EventID     As Long              ' 0x0F packet Event ID
-    Dim UserFlags   As Long              ' 0x0F user's flags
-    Dim UserPing    As Long              ' 0x0F user's ping
-    Dim Username    As String            ' Misc username storage
     Dim s2          As String            ' Temporary string
     Dim s3          As String            ' Temporary string
     Dim ClanTag     As String            ' User clan tag
     Dim Product     As String            ' User product
     Dim w3icon      As String            ' Warcraft III icon code
-    Dim b           As Boolean           ' Temporary bool
+    Dim B           As Boolean           ' Temporary bool
     Dim sArr()      As String            ' Temp String array
     Dim veto        As Boolean
     
-    Static ServerToken As Long           ' Server token used in various packets
     
     '--------------
     '| Initialize |
@@ -54,7 +49,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
         ' Added 2007-06-08 for a packet logging menu feature to aid tech support
         WritePacketData stBNCS, StoC, PacketID, PacketLen, PacketData
                 
-        ' ...
+        ' ...-
         If (RunInAll("Event_PacketReceived", "BNCS", PacketID, Len(PacketData), PacketData)) Then
             Exit Sub
         End If
@@ -69,495 +64,10 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
         '--------------
         
         Select Case PacketID
-            '###########################################################################
-            Case &HB 'SID_GETCHANNELLIST
-                L = InStr(5, PacketData, String(2, Chr$(0)))
-                If L < 6 Then L = LenB(PacketData) - 5
-                sArr = Split(Mid$(PacketData, 5, L - 5), Chr$(0))
-                Call Event_ChannelList(sArr)
                 
-            '##########################################################################
-            Case &H2D 'SID_ICONDATA
-                If MDebug("debug") Then
-                    pD.GetRaw 8
-                    frmChat.AddChat RTBColors.InformationText, "Received Icons file name: ", RTBColors.InformationText, pD.GetString
-                End If
-                
-            '##########################################################################
-            Case &H4C 'SID_EXTRAWORK
-                If MDebug("debug") Then
-                    frmChat.AddChat RTBColors.InformationText, "Received Extra Work file name: ", RTBColors.InformationText, pD.GetString
-                End If
-            
-            '###########################################################################
-            Case &HA 'SID_ENTERCHAT
-                s = pD.GetString
-                Call Event_LoggedOnAs(s, BotVars.Product)
-            
-            '###########################################################################
-            Case &HF 'SID_CHATEVENT
-                ' User information
-                EventID = pD.GetDWORD
-                UserFlags = pD.GetDWORD
-                UserPing = pD.GetDWORD
-                
-                ' (3 defunct DWORDS)
-                pD.Position = pD.Position + (3 * 4)
-                
-                ' Further user information
-                Username = pD.GetString
-                s = pD.GetString   ' Statstring
-                s2 = ""
-                
-                If LenB(s) > 0 Then
-                    Dim UserStats As clsUserStats
-                    
-                    ' ...
-                    Set UserStats = New clsUserStats
-                    
-                    ' ...
-                    UserStats.Statstring = s
-                    
-                    ' ...
-                    Product = UserStats.game
-                    s2 = UserStats.ToString
-                    ClanTag = UserStats.Clan
-                    
-                    ' ...
-                    Set UserStats = Nothing
-                End If
-                
-                If Product = "WAR3" Or Product = "W3XP" Then
-                    If Len(s2) > 4 Then w3icon = StrReverse(Mid$(s2, 6, 4))
-                End If
-                
-                ' 0x0F is a beast!
-                Select Case EventID
-                    Dim j As Integer ' ...
-                    
-                    Case ID_JOIN
-                        Call Event_UserJoins(Username, UserFlags, s2, UserPing, Product, ClanTag, s, w3icon)
-                        
-                    Case ID_LEAVE
-                        Call Event_UserLeaves(Username, UserFlags)
-                        
-                    Case ID_USER
-                        Call Event_UserInChannel(Username, UserFlags, s2, UserPing, Product, ClanTag, s, w3icon)
-                        
-                    Case ID_WHISPER
-                        If (Not (bFlood)) Then
-                            Call Event_WhisperFromUser(Username, UserFlags, s, UserPing)
-                        End If
-                        
-                    Case ID_TALK
-                        Call Event_UserTalk(Username, UserFlags, s, UserPing)
-
-                    Case ID_BROADCAST
-                        Call Event_ServerInfo(Username, "BROADCAST from " & Username & ": " & s)
-                    
-                    Case ID_CHANNEL
-                        Call Event_JoinedChannel(s, UserFlags)
-                        
-                    Case ID_USERFLAGS
-                        Call Event_FlagsUpdate(Username, s, UserFlags, UserPing, Product)
-
-                    Case ID_WHISPERSENT
-                        Call Event_WhisperToUser(Username, UserFlags, s, UserPing)
-                    
-                    Case ID_CHANNELFULL, ID_CHANNELDOESNOTEXIST, ID_CHANNELRESTRICTED
-                        'Call Event_ServerError(S)
-                        
-                    Case ID_INFO
-                        'MsgBox Username & ":" & UserFlags & ":" & UserPing
-                    
-                        Call Event_ServerInfo(Username, s)
-                        
-                    Case ID_ERROR
-                        Call Event_ServerError(s)
-                        
-                    Case ID_EMOTE
-                        Call Event_UserEmote(Username, UserFlags, s)
-                        
-                    Case Else
-                        If MDebug("debug") Then
-                            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unhandled 0x0F Event: " & ZeroOffset(EventID, 2))
-                            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Packet data: " & vbCrLf & DebugOutput(PacketData))
-                        End If
-                End Select
-                    
-            '###########################################################################
-            Case &H19 'SID_MESSAGEBOX
-                pD.Position = pD.Position + 4  'unused DWORD
-                s = pD.GetString
-                
-                Call Event_ServerError(s)
-            
-            '###########################################################################
-            Case &H25 'SID_PING
-                If BotVars.Spoof = 0 Or g_Online Then
-                    PBuffer.InsertDWord pD.GetDWORD
-                    PBuffer.SendPacket &H25
-                End If
-            
             '###########################################################################
             Case &H26 'SID_READUSERDATA
                 ProfileParse PacketData
-            
-            '###########################################################################
-            Case &H3D 'SID_CREATEACCT2
-                L = pD.GetDWORD
-                
-                b = Event_AccountCreateResponse(L)
-                
-                If b Then
-                    Send0x3A ds.GetServerToken
-                Else
-                    Call frmChat.DoDisconnect
-                End If
-            
-            '###########################################################################
-            Case &H31 'SID_CHANGEPASSWORD
-                ' Hypothetical code for when I decide to implement this
-                ' b = CBool(pd.GetDWord)
-                ' call event_ChangePasswordResponse(b)
-            
-            '###########################################################################
-            Case &H3A 'SID_LOGONRESPONSE2
-                L = pD.GetDWORD
-            
-                Select Case L
-                    Case &H0  'Successful login.
-                        Event_LogonEvent 2
-                        
-                        If AwaitingEmailReg = 0 Then
-                            If Dii And BotVars.UseRealm Then
-                                Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Asking Battle.net for a list of Realm servers...")
-                                frmRealm.Show
-                                PBuffer.SendPacket &H40
-                            Else
-                                Send0x0A
-                            End If
-                        Else
-                            frmEMailReg.Show
-                        End If
-                        
-                    Case &H1  'Nonexistent account.
-                        Event_LogonEvent 0
-                        Event_LogonEvent 3
-                        AttemptAccountCreation
-                        
-                    Case &H2  'Invalid password.
-                        Event_LogonEvent 1
-                        Call frmChat.DoDisconnect
-                        
-                    Case &H6  'Account has been closed (includes a reason)
-                        s = pD.GetString
-                        Event_LogonEvent 5, s
-                        Call frmChat.DoDisconnect
-                        
-                    Case Else
-                        ' WTF?
-                        frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Invalid response to 0x3A!"
-                        frmChat.AddChat RTBColors.ErrorMessageText, "Status code: " & L
-                        frmChat.AddChat RTBColors.ErrorMessageText, "Packet dump: " & vbCrLf & _
-                            DebugOutput(PacketData)
-                        Call frmChat.DoDisconnect
-                        
-                End Select
-                
-            '###########################################################################
-            Case &H3E 'SID_LOGONREALMEX
-                'Debug.Print DebugOutput(PacketData)
-                's: MCP chunk 1
-                's2: IP address
-                'l: Port
-                
-                If Len(PacketData) > 8 Then
-                    s = pD.GetRaw(16) 'MCP chunk 1
-                    
-                    s2 = ""
-                    
-                    For L = 1 To 4 ' IP
-                        s2 = s2 & Asc(pD.GetRaw(1)) & IIf(L < 4, ".", "")
-                    Next L
-                    
-                    
-                    L = pD.GetDWORD 'Port
-                    L = ntohs(L)        'Fix byte order
-                    'Debug.Print l
-                    'Debug.Print ntohl(l)
-                    
-                    s = s & pD.GetRaw(48) 'MCP chunk 2
-                    
-                    With frmChat.sckMCP
-                        If .State <> 0 Then .Close
-                        
-                        .RemoteHost = s2
-                        .RemotePort = L
-                    End With
-                    
-                    frmRealm.MCPHandler.CurrentChunk = s
-                    
-                    s = pD.GetString
-                    frmRealm.MCPHandler.BNetUniqueUsername = s
-                    
-                    frmChat.sckMCP.Connect
-                    
-                Else
-                    pD.Position = pD.Position + 4
-                    L = pD.GetDWORD
-                    
-                    Call Event_RealmStatusError(L)
-                    Unload frmRealm
-                End If
-                
-            Case &H40 'SID_QUERYREALMS2
-                pD.Position = pD.Position + 12
-                
-                s = pD.GetString
-                
-                Call frmChat.AddChat(RTBColors.SuccessText, "[BNET] Battle.net has responded!")
-                Call frmChat.AddChat(RTBColors.InformationText, "[REALM] Opening a connection to the Diablo II Realm...")
-                
-                frmRealm.MCPHandler.LogonToRealm &H1, ServerToken, s
-                
-                
-            'Case &H44 'SID_WARCRAFTGENERAL
-                'l = pD.GetByte ' Subcommand ID
-            
-            'Case &H46 'SID_NEWS_INFO
-            
-            '###########################################################################
-            Case &H50 'SID_AUTH_INFO
-                L = pD.GetDWORD ' Logon type
-                ds.LogonType = L
-                
-                ServerToken = pD.GetDWORD
-                ds.SetServerToken ServerToken
-                
-                pD.Position = pD.Position + 4
-                
-                s3 = pD.GetRaw(8)    ' mpq filetime
-                s = pD.GetString   ' mpq filename
-                s2 = pD.GetString  ' ValueString [Hash Command]
-                
-                ds.SetHashCmd s2
-                
-                ' "IX86ver1.mpq"
-                ' Updated 9/12/06 to combat Blizzard's change to the system
-                ' Designed to be future-fixable via an update to BNCSutil.dll
-                ds.SetMPQRev extractMPQNumber(s)
-                ' Debug.Print "Extracted " & ds.GetMPQRev & " from " & s
-                
-                ' Updated 11/7/06 due to another change to Blizzard's checkrevision
-                ' Now passing the entire filename to BNLS
-                
-                Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Checking version...")
-                
-                If MDebug("all") Then
-                    frmChat.AddChat COLOR_BLUE, "-- MPQ name: " & s
-                    If (InStr(1, s, "lockdown", vbTextCompare)) Then
-                        frmChat.AddChat COLOR_BLUE, "-- Checksum Seed: " & StrToHex(s2, True)
-                    Else
-                        frmChat.AddChat COLOR_BLUE, "-- Checksum Formula: " & s2
-                    End If
-                End If
-                
-                If BotVars.BNLS Then
-                    NLogin.Send_0x0D ds.LogonType
-                
-                    If LenB(ReadINI("Override", "BNLSLegacyHashing", "config.ini")) > 0 Then
-                        NLogin.Send_0x09 ds.GetMPQRev, ds.GetHashCmd
-                    Else
-                        NLogin.Send_0x1A GetBNLSProductID(BotVars.Product), &H0, &H1, s3, s, s2
-                    End If
-                Else
-                    Call Send0x51(ServerToken)
-                End If
-                
-            '###########################################################################
-            Case &H51 'SID_AUTH_CHECK
-                ' b is being used as a NoProceed boolean
-                L = pD.GetDWORD
-                s = pD.GetString
-                b = True    'Default action: Do not proceed
-                
-                Select Case L
-                    Case &H0    'SUCCESS
-                        b = False
-                        Call Event_VersionCheck(0, vbNullString)
-                        
-                    Case &H100  'OLD Version
-                        Call Event_VersionCheck(1, vbNullString)
-                        
-                    Case &H101  'INVALID VERSION
-                        Call Event_VersionCheck(1, vbNullString)
-                        
-                    Case &H200  'INVALID KEY
-                        Call Event_VersionCheck(2, vbNullString)
-                        
-                    Case &H201  'CDKEY IN USE, parse addtl info for username
-                        Call Event_VersionCheck(6, s)
-                        
-                    Case &H202 'BANNED
-                        Call Event_VersionCheck(5, vbNullString)
-                        
-                    Case &H203 'Wrong product
-                        Call Event_VersionCheck(4, vbNullString)
-                    
-                    Case &H210  'INVALID KEY
-                        Call Event_VersionCheck(7, vbNullString)
-                        
-                    Case &H211  'CDKEY IN USE, parse addtl info for username
-                        Call Event_VersionCheck(8, s)
-                        
-                    Case &H212 'BANNED
-                        Call Event_VersionCheck(9, vbNullString)
-                        
-                    Case &H213 'Wrong product
-                        Call Event_VersionCheck(10, vbNullString)
-                    
-                    Case Else
-                        If (ReadCfg("Override", "Ignore0x51Reply") = "Y") Then
-                            b = False
-                        End If
-                        
-                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(L, 4))
-                End Select
-                
-                If frmChat.sckBNet.State = 7 And AwaitingEmailReg = 0 And Not b Then
-                    Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Sending login information...")
-            
-                    frmChat.tmrAccountLock.Enabled = True
-            
-                    If ds.LogonType = 2 Then ' NLS! Proceed to 0x52+
-                        'If BotVars.BNLS Then
-                            ' no more bnls hashing
-                            'NLogin.Send_0x02 g_username, BotVars.Password
-                        'Else
-                            Call CreateNLSObject
-                            Call Send0x53
-                        'End If
-                        
-                    Else ' Not NLS! Proceed to 0x3A+
-                        Send0x3A ServerToken
-                    End If
-                End If
-            
-            '###########################################################################
-            Case &H52 'SID_AUTH_ACCOUNTCREATE
-                L = pD.GetDWORD
-                
-                Select Case L
-                    Case &H0
-                        Call Event_LogonEvent(4)
-                        
-                        If frmChat.sckBNet.State = 7 Then
-                            Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Sending login information...")
-                            
-                            ' no more BNLS hashing
-                            'If BotVars.BNLS Then
-                            '    NLogin.Send_0x02 g_username, BotVars.Password
-                            'Else
-                                Call Send0x53
-                            'End If
-                        End If
-                        
-                    Case Else
-                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "Account creation failed.")
-                        Call frmChat.DoDisconnect
-                        
-                End Select
-                
-                
-            '###########################################################################
-            Case &H53 'SID_AUTH_ACCOUNTLOGON
-                L = pD.GetDWORD
-                s = pD.GetRaw(32) 'Salt [s]
-                s2 = pD.GetRaw(32) ' Server key [B]
-                
-                Select Case L
-                    Case &H0    'Accepted, requires proof
-                        ' no more bnls hashing
-                        'If BotVars.BNLS Then
-                            'NLogin.Send_0x03 s & s2 ' BNLS wants it all at once
-                        'Else
-                            Send0x54 s, s2
-                        'End If
-                        
-                    Case &H1    'Nonexistent
-                        Call Event_LogonEvent(0)
-                        Call Event_LogonEvent(3)
-                        
-                        ' no more bnls hashing
-                        'If BotVars.BNLS Then
-                            'NLogin.Send_0x04 g_username, BotVars.Password
-                        'Else
-                            Send0x52
-                        'End If
-                        
-                    Case &H5    'Requires upgrade
-                        If BotVars.BNLS Then
-                            NLogin.Send_0x07 g_username, BotVars.Password
-                        Else
-                            Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Battle.net reports that your account requires an NLS upgrade.")
-                            Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Please connect using BNLS at least once so that this upgrade can occur.")
-                            frmChat.DoDisconnect
-                        End If
-                        
-                    Case Else
-                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Unknown response to 0x53: 0x" & ZeroOffset(L, 4))
-                        frmChat.DoDisconnect
-                        
-                End Select
-                
-                
-            '###########################################################################
-            Case &H54 'SID_AUTH_ACCOUNTLOGONPROOF
-                L = pD.GetDWORD
-                
-                Select Case L
-                    Case &H0   'Success
-                        Call Event_LogonEvent(2)
-                        Send0x0A
-                        
-                    Case &HE    'Email registration requried
-                        frmEMailReg.Show
-                        ' ( the rest is handled by frmEMailReg )
-                        
-                    Case &HF    'Custom message
-                        pD.Position = pD.Position + 32
-                        s = pD.GetString
-                        Call Event_LogonEvent(5, s)
-                        Call frmChat.DoDisconnect
-                    
-                    Case &H2    'Invalid password
-                        Call Event_LogonEvent(1)
-                        Call frmChat.DoDisconnect
-                        
-                    Case Else
-                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Unknown response to 0x54: 0x" & Right$("00" & Hex(Conv(Mid$(PacketData, 5, 4))), 2))
-                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Hex dump of the packet: ")
-                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET]" & vbCrLf & DebugOutput(PacketData))
-                        Call frmChat.DoDisconnect
-                        
-                End Select
-                
-            '###########################################################################
-            Case &H59 'SID_SETEMAIL
-                AwaitingEmailReg = 1
-                frmEMailReg.Show
-                
-            '###########################################################################
-            'Case &H5E 'SID_WARDEN
-                'Call Send Warden, strip header from PacketData
-                'Call Send0x5E(Mid$(PacketData, 5))
-                
-            '    If (Not modWarden.CanHandleWarden()) Then
-            '        Call frmChat.AddChat(vbRed, "[Warden] You have received a Warden packet that cannot be handled. As a result, you will be disconnected in two minutes.")
-            '    End If
-                
-            '    Call modWarden.WardenOnData(PacketData)
             
             '###########################################################################
             Case Is >= &H65 'Friends List or Clan-related packet
@@ -584,10 +94,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case Else
-                If MDebug("debug") Then
-                    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unhandled packet 0x" & ZeroOffset(PacketID, 2))
-                    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Packet data: " & vbCrLf & DebugOutput(PacketData))
-                End If
+                Call modBNCS.BNCSRecvPacket(PacketData)
             
         End Select
     End If
@@ -597,7 +104,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in BNCSParsePacket()."
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in BNCSParsePacket()."
     
     Exit Sub
 End Sub
@@ -615,12 +122,6 @@ Public Function StrToHex(ByVal String1 As String, Optional ByVal NoSpaces As Boo
     StrToHex = strReturn
 End Function
 
-Public Function LShift(ByVal pnValue As Long, ByVal pnShift As Long) As Double
-    'on error resume next
-    LShift = CDbl(pnValue * (2 ^ pnShift))
-End Function
-
-
 Public Function RShift(ByVal pnValue As Long, ByVal pnShift As Long) As Double
     'on error resume next
     RShift = CDbl(pnValue \ (2 ^ pnShift))
@@ -635,33 +136,6 @@ Public Function KillNull(ByVal Text As String) As String
     End If
     KillNull = Left$(Text, i - 1)
 End Function
-
-Public Function ParsePing(strData As String) As Long
-    'on error resume next
-    Dim strPing As String
-    strPing$ = Mid$(strData, 13, 4)
-    CopyMemory ParsePing, ByVal strPing$, 4
-End Function
-
-Public Function CVL(x As String) As Long
-    'on error resume next
-    If Len(x) < 4 Then
-        Exit Function
-    End If
-    CopyMemory CVL, ByVal x, 4
-End Function
-
-
-'' Converts a string to an Integer
-'Private Function CVI(x As String) As Integer
-''on error resume next
-'    If Len(x) < 2 Then
-'        MsgBox "CVI(): String too short"
-'        Stop
-'    End If
-'
-'    CopyMemory CVI, ByVal x, 2
-'End Function
 
 Public Function GetHexValue(ByVal v As Long) As String
 
@@ -759,17 +233,17 @@ Public Sub RequestSpecificKey(ByVal sUsername As String, ByVal sKey As String)
     End With
 End Sub
 
-Public Sub SetProfile(ByVal Location As String, ByVal Description As String, Optional ByVal Sex As String = vbNullString)
+Public Sub SetProfile(ByVal Location As String, ByVal description As String, Optional ByVal Sex As String = vbNullString)
     'Dim i As Byte
     Const MAX_DESCR As Long = 510
     Const MAX_SEX As Long = 200
     Const MAX_LOC As Long = 200
     
     '// Sanity checks
-    If LenB(Description) = 0 Then
-        Description = Space(1)
-    ElseIf Len(Description) > MAX_DESCR Then
-        Description = Left$(Description, MAX_DESCR)
+    If LenB(description) = 0 Then
+        description = Space(1)
+    ElseIf Len(description) > MAX_DESCR Then
+        description = Left$(description, MAX_DESCR)
     End If
     
     If LenB(Sex) = 0 Then
@@ -796,7 +270,7 @@ Public Sub SetProfile(ByVal Location As String, ByVal Description As String, Opt
         .InsertNTString "Profile\Sex"
                                             '// Values()
         .InsertNTString Location
-        .InsertNTString Description
+        .InsertNTString description
         .InsertNTString Sex
         
         .SendPacket &H27
@@ -809,7 +283,7 @@ End Sub
 '//     field from profiles
 '// 2009-07-14: corrected a problem in this method, thanks Jack (t=42494) -andy
 '//     method was erasing profile data
-Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
+Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
     'Dim i As Byte
     Const MAX_DESCR As Long = 510
     Const MAX_SEX As Long = 200
@@ -830,14 +304,14 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
     End If
     
     '// Sanity checks
-    If (LenB(Description) > 0) Then
-        If (Len(Description) > MAX_DESCR) Then
-            Description = Left$(Description, MAX_DESCR)
+    If (LenB(description) > 0) Then
+        If (Len(description) > MAX_DESCR) Then
+            description = Left$(description, MAX_DESCR)
         End If
         
         nKeys = nKeys + 1
         pKeys(nKeys) = "Profile\Description"
-        pData(nKeys) = Description
+        pData(nKeys) = description
     End If
         
     If nKeys > 0 Then
@@ -860,26 +334,14 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
     End If
 End Sub
 
-Public Function StringToDWord(Data As String) As Long
-    Dim tmp As String
-    tmp = StrToHex(Data)
-    Dim a As String, b As String, c As String, d As String
-    a = Mid(tmp, 1, 2)
-    b = Mid(tmp, 3, 2)
-    c = Mid(tmp, 5, 2)
-    d = Mid(tmp, 7, 2)
-    tmp = d & c & b & a
-    StringToDWord = Val("&H" & tmp)
-End Function
-
 Public Sub sPrintF(ByRef source As String, ByVal nText As String, _
     Optional ByVal a As Variant, _
-    Optional ByVal b As Variant, _
+    Optional ByVal B As Variant, _
     Optional ByVal c As Variant, _
     Optional ByVal d As Variant, _
     Optional ByVal e As Variant, _
     Optional ByVal f As Variant, _
-    Optional ByVal G As Variant, _
+    Optional ByVal g As Variant, _
     Optional ByVal H As Variant)
     
     nText = Replace(nText, "%S", "%s")
@@ -893,8 +355,8 @@ Public Sub sPrintF(ByRef source As String, ByVal nText As String, _
                 If IsEmpty(a) Then GoTo theEnd
                 nText = Replace(nText, "%s", a, 1, 1)
             Case 1
-                If IsEmpty(b) Then GoTo theEnd
-                nText = Replace(nText, "%s", b, 1, 1)
+                If IsEmpty(B) Then GoTo theEnd
+                nText = Replace(nText, "%s", B, 1, 1)
             Case 2
                 If IsEmpty(c) Then GoTo theEnd
                 nText = Replace(nText, "%s", c, 1, 1)
@@ -908,8 +370,8 @@ Public Sub sPrintF(ByRef source As String, ByVal nText As String, _
                 If IsEmpty(f) Then GoTo theEnd
                 nText = Replace(nText, "%s", f, 1, 1)
             Case 6
-                If IsEmpty(G) Then GoTo theEnd
-                nText = Replace(nText, "%s", G, 1, 1)
+                If IsEmpty(g) Then GoTo theEnd
+                nText = Replace(nText, "%s", g, 1, 1)
             Case 7
                 If IsEmpty(H) Then GoTo theEnd
                 nText = Replace(nText, "%s", H, 1, 1)
@@ -1082,7 +544,7 @@ ParseStatString_Exit:
 
 ParseStatString_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ParseStatString of Module modParsing"
+    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure ParseStatString of Module modParsing"
     outbuf = "- Error parsing statstring. [" & Replace(Statstring, Chr(0), "") & "]"
     
     Resume ParseStatString_Exit
@@ -1246,14 +708,6 @@ End Function
 Public Function GetCharacterName(ByVal Statstring As String, ByVal Start As Byte, ByRef cName As String) As Byte
     cName = Mid$(Statstring, Start, InStr(Start, Statstring, ",") - Start)
     GetCharacterName = InStr(Start, Statstring, ",") + 1
-End Function
-
-Function MakeLong(x As String) As Long
- 'on error resume next
-    If Len(x) < 4 Then
-        Exit Function
-    End If
-    CopyMemory MakeLong, ByVal x, 4
 End Function
 
 Public Sub StrCpy(ByRef source As String, ByVal nText As String)

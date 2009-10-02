@@ -1,16 +1,16 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "Msinet.ocx"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   165
-   ClientTop       =   735
+   ClientLeft      =   225
+   ClientTop       =   825
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -892,6 +892,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -917,7 +918,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1466,7 +1466,7 @@ Option Explicit
 
 Private Declare Function RegQueryValueEx Lib "advapi32.dll" Alias "RegQueryValueExA" (ByVal hKey As Long, ByVal lpValueName As String, ByVal lpReserved As Long, lpType As Long, lpData As Any, lpcbData As Long) As Long
 
-Private Declare Function bind Lib "ws2_32.dll" (ByVal s As Long, ByRef Name As sockaddr_in, ByVal namelen As Long) As Long
+Private Declare Function bind Lib "ws2_32.dll" (ByVal s As Long, ByRef Name As sockaddr_in, ByVal NameLen As Long) As Long
 Private Declare Function inet_addr Lib "wsock32.dll" (ByVal cp As String) As Long
 Private Declare Function htons Lib "wsock32.dll" (ByVal hostshort As Long) As Integer
 Private Declare Function WSAGetLastError Lib "wsock32.dll" () As Integer
@@ -1585,9 +1585,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2003,7 +2003,7 @@ Sub Event_BNetDisconnected()
     If sckBNet.State <> 0 Then sckBNet.Close
     If sckBNLS.State <> 0 Then sckBNLS.Close
     
-    Passed0x0F = 0
+    BNLSAuthorized = False
     
     Call UpdateTrayTooltip
     
@@ -2992,7 +2992,6 @@ Sub Form_Unload(Cancel As Integer)
     Set colSafelist = Nothing
     Set SharedScriptSupport = Nothing
     Set ds = Nothing
-    Set NLogin = Nothing
     
     'Set dictTimerInterval = Nothing
     'Set dictTimerCount = Nothing
@@ -4081,12 +4080,12 @@ Private Sub mnuUpdateVerbytes_Click()
     Dim s As String, ary() As String
     Dim i As Integer
     
-    Dim Keys(3) As String
+    Dim keys(3) As String
     
-    Keys(0) = "W2"
-    Keys(1) = "SC"
-    Keys(2) = "D2"
-    Keys(3) = "W3"
+    keys(0) = "W2"
+    keys(1) = "SC"
+    keys(2) = "D2"
+    keys(3) = "W3"
     
     If Not INet.StillExecuting Then
         s = INet.OpenURL("http://www.stealthbot.net/sb/verbytes/versionbytes.txt")
@@ -4096,7 +4095,7 @@ Private Sub mnuUpdateVerbytes_Click()
             ary() = Split(s, " ")
             
             For i = 0 To 3
-                WriteINI "Override", Keys(i) & "VerByte", ary(i)
+                WriteINI "Override", keys(i) & "VerByte", ary(i)
             Next i
             
             AddChat RTBColors.SuccessText, "Your config.ini file has been loaded with current version bytes."
@@ -5455,7 +5454,7 @@ Private Sub sckBNet_Close()
     Else
         Call Event_BNetDisconnected
     End If
-    
+    ds.ClientToken = 0
     g_Connected = False
 End Sub
 
@@ -5470,6 +5469,7 @@ Private Sub sckBNet_Connect()
     
     Call modWarden.WardenCleanup(WardenInstance)
     WardenInstance = modWarden.WardenInitilize(sckBNet.SocketHandle)
+    ds.Reset
         
     If (Not (BotVars.UseProxy)) Then
         InitBNetConnection
@@ -5486,9 +5486,9 @@ Sub InitBNetConnection()
     Call Send(sckBNet.SocketHandle, ChrW(1), 1, 0)
     
     If BotVars.BNLS Then
-        NLogin.Send_0x10 BotVars.Product
+        modBNLS.SEND_BNLS_REQUESTVERSIONBYTE
     Else
-        Call Send0x50
+        Call modBNCS.SEND_SID_AUTH_INFO 'TO-DO: Non-NLS connection
     End If
 End Sub
 
@@ -7455,10 +7455,10 @@ Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
 End Sub
 
 Private Sub sckBNLS_Close()
-    If Passed0x0F < 1 Then
-        AddChat RTBColors.ErrorMessageText, StrReverse(StrReverse("This version of StealthBot has been disabled."))
-        AddChat RTBColors.ErrorMessageText, StrReverse(StrReverse("Please visit http://www.stealthbot.net for more information and to download an updated version."))
-        AddChat RTBColors.ErrorMessageText, StrReverse(StrReverse("If you are receiving this message in error, please check your firewall settings, especially programs such as Norton Internet Security. NIS is notorious for blocking the connection to the BNLS server."))
+    If (Not BNLSAuthorized) Then
+        AddChat RTBColors.ErrorMessageText, "This version of StealthBot has been disabled."
+        AddChat RTBColors.ErrorMessageText, "Please visit http://www.stealthbot.net for more information and to download an updated version."
+        AddChat RTBColors.ErrorMessageText, "If you are receiving this message in error, please check your firewall settings, especially programs such as Norton Internet Security. NIS is notorious for blocking the connection to the BNLS server."
     End If
 End Sub
 
@@ -7469,10 +7469,11 @@ Private Sub sckBNLS_Connect()
     
     Call Event_BNLSConnected
     
-    With PBuffer
-        .InsertNTString "stealth"
-        .vLSendPacket &HE
-    End With
+    'With PBuffer
+    '    .InsertNTString "stealth"
+    '    .vLSendPacket &HE
+    'End With
+    modBNLS.SEND_BNLS_AUTHORIZE
     
     SetNagelStatus sckBNLS.SocketHandle, False
     
@@ -7538,7 +7539,7 @@ Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
         BNLSBuffer.AddData strTemp
             
         While BNLSBuffer.FullPacket
-            NLogin.ParsePacket BNLSBuffer.GetPacket
+            modBNLS.BNLSRecvPacket BNLSBuffer.GetPacket
         Wend
     End If
     
@@ -8088,7 +8089,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
     
         SetTitle "Disconnected"
         
-        Call NLogin.CloseConnection(DoNotShow)
+        Call CloseAllConnections(DoNotShow = 0)
         
         Set g_Channel = Nothing
         Set g_Clan = Nothing
@@ -8143,6 +8144,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         
         g_Connected = False
         g_Online = False
+        ds.ClientToken = 0
         
         Call ClearChannel
         lvClanList.ListItems.Clear
@@ -8153,7 +8155,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         
         Call g_Queue.Clear
     
-        Passed0x0F = 0
+        BNLSAuthorized = False
         uTicks = 0
         
         With mnuPublicChannels(0)
@@ -8174,9 +8176,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
             Call cboSend.SetFocus
             On Error GoTo ERROR_HANDLER
         End If
-        
-        DestroyNLSObject
-        
+                
         Unload frmRealm
         
         PassedClanMotdCheck = False

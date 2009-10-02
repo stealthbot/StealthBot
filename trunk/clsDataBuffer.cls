@@ -272,25 +272,25 @@ End Function ' end function InsertNTString
 ' ...
 Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI, Optional Peek As Boolean = False) As String
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     ' ...
-    For I = m_bufpos To m_bufsize
-        If (m_buf(I) = &H0) Then
+    For i = m_bufpos To m_bufsize
+        If (m_buf(i) = &H0) Then
             Exit For
         End If
-    Next I
+    Next i
 
     ' ...
-    If (I < m_bufsize) Then
+    If (i < m_bufsize) Then
         ' ...
-        GetString = String$(I - m_bufpos, Chr$(0))
+        GetString = String$(i - m_bufpos, Chr$(0))
             
         ' copy data to buffer
-        CopyMemory ByVal GetString, m_buf(m_bufpos), I - m_bufpos
+        CopyMemory ByVal GetString, m_buf(m_bufpos), i - m_bufpos
         
         ' ...
-        If (Not Peek) Then m_bufpos = I + 1
+        If (Not Peek) Then m_bufpos = i + 1
     End If
 
 End Function ' end function GetString
@@ -300,7 +300,7 @@ Public Function GetRaw(Optional ByVal length As Integer = -1, Optional Peek As B
 
     ' ...
     If (length = -1) Then
-        length = m_bufsize
+        length = m_bufsize - m_bufpos
     End If
     
     ' ...
@@ -422,7 +422,7 @@ Public Function SendPacket(Optional PacketID As Byte)
 
     Dim L      As Long    ' ...
     Dim buf()  As Byte    ' ...
-    Dim I      As Integer ' ...
+    Dim i      As Integer ' ...
     Dim strbuf As String  ' ...
     Dim veto   As Boolean
     
