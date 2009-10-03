@@ -67,12 +67,11 @@ Public Function Initialize(ByVal Username As String, ByVal Password As String) A
     
     m_NlsHandle = nls_init(Username, Password)
     
-    SrpGetSaltAndVerifier m_Salt, m_v
-    
     ' return true if nls_init succeeded
     If Not m_NlsHandle = 0 Then
         Initialize = True
         m_Initialized = True
+        SrpGetSaltAndVerifier m_Salt, m_v
     End If
 
 End Function
@@ -110,6 +109,7 @@ End Property
 ' this just gets the value you stored (or created in AccountCreate())
 Public Property Get SrpSalt() As String
     If (Not m_Initialized) Then Initialize BotVars.Username, BotVars.Password
+    If (StrComp(m_Salt, String$(32, Chr$(0))) = 0) Then Initialize BotVars.Username, BotVars.Password
     SrpSalt = m_Salt
     
 End Property
@@ -361,11 +361,14 @@ End Function
 ' Hdx's amazing function to implement aton() - "#.#.#.#" to network byte order...
 Public Function aton(sIPAddress As String) As Long
     Dim sIP() As String
+    Dim sValue As String
     sIP = Split(sIPAddress, ".")
     If (Not UBound(sIP) = 3) Then Exit Function
-    aton = Val(sIP(0)) + _
-          (Val(sIP(1)) * &H100) + _
-          (Val(sIP(2)) * &H10000) + _
-          (Val(sIP(3)) * &H1000000)
+    sValue = StringFormat("{0}{1}{2}{3}", Chr$(sIP(0)), Chr$(sIP(1)), Chr$(sIP(2)), Chr$(sIP(3)))
+    CopyMemory aton, ByVal sValue, 4
+    'aton = Val(sIP(0)) + _
+    '      (Val(sIP(1)) * &H100) + _
+    '      (Val(sIP(2)) * &H10000) + _
+    '      (Val(sIP(3)) * &H1000000)
 End Function
 

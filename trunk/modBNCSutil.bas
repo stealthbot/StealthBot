@@ -135,7 +135,7 @@ Public Declare Function nls_account_change_proof Lib "BNCSutil.dll" _
 Public Declare Sub nls_get_S Lib "BNCSutil.dll" _
     (ByVal NLS As Long, ByVal Out As String, ByVal B As String, ByVal Salt As String)
 Public Declare Sub nls_get_K Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Out As String, ByVal S As String)
+    (ByVal NLS As Long, ByVal Out As String, ByVal s As String)
     
 '  Constants
 '---------------------------
@@ -147,19 +147,6 @@ Public Const BNCSutil_PLATFORM_PPC& = &H2
 Public Const BNCSutil_PLATFORM_MAC& = &H2
 
 Public Const BNCSutil_PLATFORM_OSX& = &H3
-
-'  Winsock
-'---------------------------
-Private Type sockaddr_in
-    Family As Integer
-    Port As Integer
-    Address As Long
-    Filler As String * 8
-End Type
-
-Private Declare Function getsockname Lib "ws2_32.dll" (ByVal S As Long, Name As sockaddr_in, NameLen As Long) As Long
-
-
 
 '  VB-Specifc Functions
 '---------------------------
@@ -241,13 +228,4 @@ Public Function hashPassword(Password As String) As String
     Dim Hash As String * 20
     hashPassword_Raw Password, Hash
     hashPassword = Hash
-End Function
-
-Public Function nls_check_socket_signature(ByVal SocketHandle As Long, Signature As String) As Boolean
-    Dim NameLen As Long, Name As sockaddr_in
-    
-    NameLen = 16
-    getsockname SocketHandle, Name, NameLen
-    
-    nls_check_socket_signature = (nls_check_signature(Name.Address, Signature) <> 0)
 End Function

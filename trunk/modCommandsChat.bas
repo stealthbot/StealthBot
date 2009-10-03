@@ -94,7 +94,7 @@ Public Sub OnExpand(Command As clsCommandObj)
             tmpSend = StringFormat("{0}{1}{2}", tmpSend, Mid$(sMessage, i, 1), IIf(i = Len(sMessage), vbNullString, Space$(1)))
         Next i
         
-        If (Not Command.restriction("RAW_USAGE")) Then tmpSend = StringFormat("{0} Says: {1}", Command.Username, tmpSend)
+        If (Not Command.Restriction("RAW_USAGE")) Then tmpSend = StringFormat("{0} Says: {1}", Command.Username, tmpSend)
         
         If (Len(tmpSend) > 223) Then
             tmpSend = Left$(tmpSend, 223)
@@ -288,7 +288,7 @@ Public Sub OnReconnect(Command As clsCommandObj)
         
         Call frmChat.DoDisconnect
         
-        frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Reconnecting by command, please wait..."
+        frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Reconnecting by command, please wait..."
         
         Pause 1
         
@@ -315,7 +315,7 @@ Public Sub OnSay(Command As clsCommandObj)
     Dim tmpSend As String
     
     If (Command.IsValid) Then
-        If (Not Command.restriction("RAW_USAGE")) Then
+        If (Not Command.Restriction("RAW_USAGE")) Then
             tmpSend = StringFormat("{0} Says: {1}", Command.Username, Command.Argument("Message"))
         Else
             tmpSend = Command.Argument("Message")
@@ -337,7 +337,7 @@ Public Sub OnShout(Command As clsCommandObj)
     
     If (Command.IsValid) Then
     
-        If (Not Command.restriction("RAW_USAGE")) Then
+        If (Not Command.Restriction("RAW_USAGE")) Then
             tmpSend = StringFormat("{0} Shouts: {1}", Command.Username, UCase$(Command.Argument("Message")))
         Else
             tmpSend = UCase$(Command.Argument("Message"))

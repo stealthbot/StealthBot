@@ -892,7 +892,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -918,6 +917,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1968,7 +1968,7 @@ Sub Event_BNetConnected()
     If (BotVars.UseProxy) Then
         AddChat RTBColors.SuccessText, "[PROXY] Connected!"
     Else
-        AddChat RTBColors.SuccessText, "[BNET] Connected!"
+        AddChat RTBColors.SuccessText, "[BNCS] Connected!"
     End If
     
     Call SetNagelStatus(sckBNet.SocketHandle, False)
@@ -1978,7 +1978,7 @@ Sub Event_BNetConnecting()
     If BotVars.UseProxy Then
         AddChat RTBColors.InformationText, "[PROXY] Connecting to the Battle.net server at " & BotVars.Server & "..."
     Else
-        AddChat RTBColors.InformationText, "[BNET] Connecting to the Battle.net server at " & BotVars.Server & "..."
+        AddChat RTBColors.InformationText, "[BNCS] Connecting to the Battle.net server at " & BotVars.Server & "..."
     End If
 End Sub
 
@@ -1987,7 +1987,7 @@ Sub Event_BNetDisconnected()
     UpTimer.Interval = 0
     BotVars.JoinWatch = 0
     
-    AddChat RTBColors.ErrorMessageText, IIf(BotVars.UseProxy And BotVars.ProxyStatus <> psOnline, "[PROXY] ", "[BNET] ") & "Disconnected."
+    AddChat RTBColors.ErrorMessageText, IIf(BotVars.UseProxy And BotVars.ProxyStatus <> psOnline, "[PROXY] ", "[BNCS] ") & "Disconnected."
     
     DoDisconnect (1)
     
@@ -1997,7 +1997,7 @@ Sub Event_BNetDisconnected()
     Call ClearChannel
     
     UpdateProxyStatus psNotConnected
-    'AddChat RTBColors.ErrorMessageText, "[BNET] Attempting to reconnect, please wait..."
+    'AddChat RTBColors.ErrorMessageText, "[BNCS] Attempting to reconnect, please wait..."
     'AddChat RTBColors.SuccessText, "Connection initialized."
     
     If sckBNet.State <> 0 Then sckBNet.Close
@@ -2019,7 +2019,7 @@ Sub Event_BNetError(ErrorNumber As Integer, description As String)
     If BotVars.UseProxy And BotVars.ProxyStatus <> psOnline Then
         s = "[PROXY] "
     Else
-        s = "[BNET] "
+        s = "[BNCS] "
     End If
     
     AddChat RTBColors.ErrorMessageText, s & ErrorNumber & " -- " & description
@@ -2056,7 +2056,7 @@ Sub Event_BNetError(ErrorNumber As Integer, description As String)
     
     If DisplayError(ErrorNumber, IIf(BotVars.UseProxy And BotVars.ProxyStatus <> psOnline, 2, 1), BNET) = True Then
         AddChat RTBColors.ErrorMessageText, _
-            IIf(BotVars.UseProxy And BotVars.ProxyStatus <> psOnline, "[PROXY] ", "[BNET] ") & _
+            IIf(BotVars.UseProxy And BotVars.ProxyStatus <> psOnline, "[PROXY] ", "[BNCS] ") & _
                 "Attempting to reconnect in " & (BotVars.ReconnectDelay / 1000) & _
                     IIf(((BotVars.ReconnectDelay / 1000) > 1), " seconds", " second") & _
                         "..."
@@ -2538,7 +2538,7 @@ End Sub
 Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     AddChat vbYellow, "[CLAN] " & Member & " has left the clan."
     
-    Dim X   As ListItem
+    Dim x   As ListItem
     Dim pos As Integer
     
     pos = g_Clan.GetUserIndexEx(Member)
@@ -2550,14 +2550,14 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     
     Member = convertUsername(Member)
 
-    Set X = lvClanList.FindItem(Member)
+    Set x = lvClanList.FindItem(Member)
     
-    If (Not (X Is Nothing)) Then
-        lvClanList.ListItems.Remove X.Index
+    If (Not (x Is Nothing)) Then
+        lvClanList.ListItems.Remove x.Index
         
         lvClanList.Refresh
         
-        Set X = Nothing
+        Set x = Nothing
     End If
     
     On Error Resume Next
@@ -2719,7 +2719,7 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
 End Sub
 
 Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
-    Dim X   As ListItem
+    Dim x   As ListItem
     Dim pos As Integer
     
     pos = g_Clan.GetUserIndexEx(Username)
@@ -2751,7 +2751,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     
     Username = convertUsername(Username)
     
-    Set X = lvClanList.FindItem(Username)
+    Set x = lvClanList.FindItem(Username)
 
     If StrComp(Username, CurrentUsername, vbTextCompare) = 0 Then
         g_Clan.Self.Rank = IIf(Rank = 0, Rank + 1, Rank)
@@ -2763,9 +2763,9 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
         AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(Rank) & "."
     End If
     
-    If Not (X Is Nothing) Then
-        lvClanList.ListItems.Remove X.Index
-        Set X = Nothing
+    If Not (x Is Nothing) Then
+        lvClanList.ListItems.Remove x.Index
+        Set x = Nothing
     End If
     
     AddClanMember Username, CInt(Rank), CInt(IsOnline)
@@ -3126,27 +3126,27 @@ End Sub
 Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLIndex As Byte)
     On Error GoTo ERROR_HANDLER
 
-    Dim X As ListItem
+    Dim x As ListItem
     Dim i As Integer
     Const ICONLINE = 23
     Const ICOFFLINE = 24
     
-    Set X = lvFriendList.FindItem(Username)
+    Set x = lvFriendList.FindItem(Username)
     
-    If Not (X Is Nothing) Then
+    If Not (x Is Nothing) Then
         With g_Friends.Item(FLIndex)
             Select Case .LocationID
                 Case FRL_OFFLINE
-                    X.SmallIcon = ICUNKNOWN
+                    x.SmallIcon = ICUNKNOWN
                     
-                    X.ListSubItems.Item(1).ReportIcon = ICOFFLINE
+                    x.ListSubItems.Item(1).ReportIcon = ICOFFLINE
                     
                 Case Else
-                    If X.ListSubItems.Item(1).ReportIcon = ICOFFLINE Then
+                    If x.ListSubItems.Item(1).ReportIcon = ICOFFLINE Then
                         'Friend is now online - notify user?
                     End If
                     
-                    X.ListSubItems.Item(1).ReportIcon = ICONLINE
+                    x.ListSubItems.Item(1).ReportIcon = ICONLINE
                     
                     Select Case .game
                         Case Is = "STAR": i = ICSTAR
@@ -3164,13 +3164,13 @@ Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLInd
                         Case Else: i = ICUNKNOWN
                     End Select
                     
-                    X.SmallIcon = i
+                    x.SmallIcon = i
             End Select
         End With
         
     End If
     
-    Set X = Nothing
+    Set x = Nothing
     
     Exit Sub
     
@@ -3186,7 +3186,7 @@ Private Sub INet_StateChanged(ByVal State As Integer)
     End If
 End Sub
 
-Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim i As Integer ' ...
  
     ' ...
@@ -3366,7 +3366,7 @@ Private Sub lvClanList_dblClick()
     End If
 End Sub
 
-Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim aInx As Integer
     Dim sProd As String * 4
     
@@ -3398,17 +3398,17 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, 
     End If
 End Sub
 
-Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     If Button = vbRightButton Then
         PopupMenu mnuFLpop
     End If
 End Sub
 
-Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim lvhti As LVHITTESTINFO
     Dim lItemIndex As Long
    
-    lvhti.pt.X = X / Screen.TwipsPerPixelX
+    lvhti.pt.x = x / Screen.TwipsPerPixelX
     lvhti.pt.y = y / Screen.TwipsPerPixelY
     lItemIndex = SendMessageAny(lvFriendList.hWnd, LVM_HITTEST, 0, lvhti) + 1
    
@@ -3473,13 +3473,13 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
                     ListToolTip.TipText = sTemp
                 End With
                 
-                Call ListToolTip.Create(lvFriendList.hWnd, CLng(X), CLng(y))
+                Call ListToolTip.Create(lvFriendList.hWnd, CLng(x), CLng(y))
             End If
         End If
     End If
 End Sub
 
-Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim lvhti As LVHITTESTINFO
     Dim lItemIndex As Long
     Dim sOutBuf As String
@@ -3487,7 +3487,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
     Dim UserAccess As udtGetAccessResponse
     Dim Clan As String
    
-    lvhti.pt.X = X / Screen.TwipsPerPixelX
+    lvhti.pt.x = x / Screen.TwipsPerPixelX
     lvhti.pt.y = y / Screen.TwipsPerPixelY
     lItemIndex = SendMessageAny(lvChannel.hWnd, LVM_HITTEST, -1, lvhti) + 1
  
@@ -3540,7 +3540,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                     
                 End With
                 
-                Call ListToolTip.Create(lvChannel.hWnd, CLng(X), CLng(y))
+                Call ListToolTip.Create(lvChannel.hWnd, CLng(x), CLng(y))
             End If
         End If
     End If
@@ -4320,7 +4320,7 @@ Private Sub rtbWhispers_KeyPress(KeyAscii As Integer)
     cboSend.SelText = Chr$(KeyAscii)
 End Sub
 
-Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     On Error Resume Next
     
     If Button = 1 And Len(rtbChat.SelText) > 0 Then
@@ -4331,7 +4331,7 @@ Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, X As Single, y 
     End If
 End Sub
 
-Private Sub rtbWhispers_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub rtbWhispers_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     On Error Resume Next
     
     If Button = 1 And Len(rtbWhispers.SelText) > 0 Then
@@ -4613,7 +4613,7 @@ Private Sub tmrAccountLock_Timer()
         Exit Sub
     End If
     
-    AddChat vbRed, "[BNET] Your account appears to be locked, likely due to an excessive number of " & _
+    AddChat vbRed, "[BNCS] Your account appears to be locked, likely due to an excessive number of " & _
         "invalid logins.  Please try connecting again in 15-20 minutes."
         
     DoDisconnect
@@ -4802,7 +4802,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     Dim L As Long
     Dim n As Integer
     Dim c As Integer ',oldSelStart As Integer
-    Dim X() As String
+    Dim x() As String
     Dim m As String
     Dim s As String ',sClosest As String
     Dim Vetoed As Boolean
@@ -4919,22 +4919,22 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     On Error Resume Next
                     
                     If (InStr(1, Clipboard.GetText, Chr(13), vbTextCompare) <> 0) Then
-                        X() = Split(Clipboard.GetText, Chr(10))
+                        x() = Split(Clipboard.GetText, Chr(10))
                         
-                        If UBound(X) > 0 Then
-                            For n = LBound(X) To UBound(X)
-                                X(n) = Replace(X(n), Chr(13), vbNullString)
+                        If UBound(x) > 0 Then
+                            For n = LBound(x) To UBound(x)
+                                x(n) = Replace(x(n), Chr(13), vbNullString)
                                 
-                                If (X(n) <> vbNullString) Then
-                                    If (n <> LBound(X)) Then
-                                        AddQ txtPre.Text & X(n) & txtPost.Text, PRIORITY.CONSOLE_MESSAGE
+                                If (x(n) <> vbNullString) Then
+                                    If (n <> LBound(x)) Then
+                                        AddQ txtPre.Text & x(n) & txtPost.Text, PRIORITY.CONSOLE_MESSAGE
                                         
-                                        cboSend.AddItem txtPre.Text & X(n) & txtPost.Text, 0
+                                        cboSend.AddItem txtPre.Text & x(n) & txtPost.Text, 0
                                     Else
-                                        AddQ txtPre.Text & cboSend.Text & X(n) & txtPost.Text, _
+                                        AddQ txtPre.Text & cboSend.Text & x(n) & txtPost.Text, _
                                             PRIORITY.CONSOLE_MESSAGE
                                         
-                                        cboSend.AddItem txtPre.Text & cboSend.Text & X(n) & txtPost.Text, 0
+                                        cboSend.AddItem txtPre.Text & cboSend.Text & x(n) & txtPost.Text, 0
                                     End If
                                 End If
                             Next n
@@ -7176,7 +7176,7 @@ Function DisplayError(ByVal ErrorNumber As Integer, bytType As Byte, _
     If (LenB(s) > 0) Then
         Select Case (bytType)
             Case 0: s = "[BNLS] " & s
-            Case 1: s = "[BNET] " & s
+            Case 1: s = "[BNCS] " & s
             Case 2: s = "[PROXY] " & s
         End Select
         
@@ -7883,7 +7883,7 @@ Private Function GetClanSelectedUser() As String
     End With
 End Function
 
-Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     If Button = vbRightButton Then
         'lvClanList.SetFocus
         

@@ -147,8 +147,8 @@ End Sub
 Private Sub SEND_SID_GETCHANNELLIST()
 On Error GoTo ERROR_HANDLER:
     Dim pBuff As New clsDataBuffer
-    pBuff.InsertDWord 0
-    PBuffer.SendPacket SID_GETCHANNELLIST
+    pBuff.InsertDWord GetDWORD(BotVars.Product)
+    pBuff.SendPacket SID_GETCHANNELLIST
     Set pBuff = Nothing
     
     Exit Sub
@@ -663,7 +663,7 @@ On Error GoTo ERROR_HANDLER:
     ds.CRevSeed = pBuff.GetString
     ds.ServerSig = pBuff.GetRaw(128)
     
-    Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Checking version...")
+    Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Checking version...")
     
     If (MDebug("all") Or MDebug("crev")) Then
         frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Name: {0}", ds.CRevFileName)
@@ -675,8 +675,8 @@ On Error GoTo ERROR_HANDLER:
         End If
     End If
     
-    If (LenB(ds.ServerSig) = 128) Then
-        If (nls_check_socket_signature(frmChat.sckBNet.SocketHandle, ds.ServerSig)) Then
+    If (Len(ds.ServerSig) = 128) Then
+        If (ds.NLS.VerifyServerSignature(frmChat.sckBNet.RemoteHostIP, ds.ServerSig)) Then
             frmChat.AddChat RTBColors.SuccessText, "[BNCS] Server signature validated!"
         Else
             If (Not BotVars.UseProxy) Then
@@ -960,6 +960,7 @@ Private Sub SEND_SID_AUTH_ACCOUNTCREATE()
 On Error GoTo ERROR_HANDLER:
     
     Dim pBuff As New clsDataBuffer
+    ds.NLS.Initialize BotVars.Username, BotVars.Password
     With pBuff
         .InsertNonNTString ds.NLS.SrpSalt
         .InsertNonNTString ds.NLS.Srpv
@@ -994,7 +995,7 @@ On Error GoTo ERROR_HANDLER:
     
     Select Case lResult
         Case &H0: 'Accepted, requires proof.
-            'Send0x54 s, s2
+            SEND_SID_AUTH_ACCOUNTLOGONPROOF
                         
         Case &H1: 'Account doesn't exist.
             Call Event_LogonEvent(0)
@@ -1397,9 +1398,9 @@ On Error GoTo ERROR_HANDLER:
     SEND_SID_GETCHANNELLIST
     
     'Why were we joining a random channel?
-    'Randomize
-    'Num = (1 + Rnd() * 1000)
-    'FullJoin BotVars.HomeChannel & ":" & Num, 0
+    Randomize
+    Num = (1 + Rnd() * 1000)
+    FullJoin BotVars.HomeChannel & ":" & Num, 0
     
     RequestSystemKeys
     SEND_SID_CHATCOMMAND "/whoami"

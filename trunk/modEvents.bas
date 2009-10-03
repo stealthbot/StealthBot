@@ -561,7 +561,7 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
     With frmChat
         .InitListviewTabs
     
-        .AddChat RTBColors.InformationText, "[BNET] Logged on as ", RTBColors.SuccessText, Username, _
+        .AddChat RTBColors.InformationText, "[BNCS] Logged on as ", RTBColors.SuccessText, Username, _
             RTBColors.InformationText, "."
             
         .tmrAccountLock.Enabled = False
@@ -1929,7 +1929,7 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
 
     Select Case (Message)
         Case 0:
-            frmChat.AddChat RTBColors.SuccessText, "[BNET] Client version accepted!"
+            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Client version accepted!"
             
             ' if using server finder
             If ((BotVars.BNLS) And (BotVars.UseAltBnls)) Then
@@ -1938,68 +1938,68 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
             End If
         
         Case 1:
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Version check failed! " & _
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Version check failed! " & _
                 "The version byte for this attempt was 0x" & Hex(GetVerByte(BotVars.Product)) & "."
 
             If (BotVars.BNLS) Then
-                If (frmChat.CheckFindAltBNLS("[BNET] BNLS has not been updated yet, " & _
+                If (frmChat.CheckFindAltBNLS("[BNCS] BNLS has not been updated yet, " & _
                         "or you experienced an error. Try connecting again.")) Then
                     ' if we are using the finder, then don't close all connections
                     Message = 0
                 End If
             Else
-                frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Please ensure you " & _
+                frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Please ensure you " & _
                     "have updated your hash files using more current ones from the directory " & _
                         "of the game you're connecting with."
                 
-                frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] In addition, you can try " & _
+                frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] In addition, you can try " & _
                     "choosing ""Update version bytes from StealthBot.net"" from the Bot menu."
             End If
         
         Case 2:
-            frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
+            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your CD-key is invalid!"
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your CD-key is invalid!"
         
         Case 3:
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Version check failed! " & _
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Version check failed! " & _
                 "BNLS has not been updated yet.. Try reconnecting in an hour or two."
         
         Case 4:
-            frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
+            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your CD-key is for another game."
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your CD-key is for another game."
         
         Case 5:
-            frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
+            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your CD-key is banned. " & _
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your CD-key is banned. " & _
                 "For more information, visit http://us.blizzard.com/support/article.xml?locale=en_US&articleId=20637 ."
         
         Case 6:
-            frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
+            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your CD-key is currently in " & _
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your CD-key is currently in " & _
                 "use under the owner name: " & ExtraInfo & "."
         
         Case 7:
-            frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
+            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your expansion CD-key is invalid."
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your expansion CD-key is invalid."
         
         Case 8:
-            frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
+            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your expansion CD-key is currently " & _
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your expansion CD-key is currently " & _
                 "in use under the owner name: " & ExtraInfo & "."
         
         Case 9:
-            frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
+            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
         
         Case 10:
-            frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
+            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your expansion CD-key is for the wrong game."
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your expansion CD-key is for the wrong game."
         
         Case Else
             frmChat.AddChat RTBColors.ErrorMessageText, "Unhandled 0x51 response! Value: " & Message
