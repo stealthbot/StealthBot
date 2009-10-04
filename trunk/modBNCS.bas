@@ -79,7 +79,7 @@ Public Function BNCSRecvPacket(ByVal sData As String) As Boolean
     
     Exit Function
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNCSRecvPacket()", Err.Number, Err.description, OBJECT_NAME))
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNCSRecvPacket()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 '*******************************
@@ -97,7 +97,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_ENTERCHAT()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_ENTERCHAT()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -117,7 +117,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_ENTERCHAT()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_ENTERCHAT()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -136,7 +136,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_GETCHANNELLIST()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_GETCHANNELLIST()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -154,7 +154,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_GETCHANNELLIST()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_GETCHANNELLIST()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -175,7 +175,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CHATCOMMAND()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CHATCOMMAND()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 
@@ -253,7 +253,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CHATEVENT()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CHATEVENT()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -278,7 +278,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_UDPPINGRESPONSE()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_UDPPINGRESPONSE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -296,7 +296,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_MESSAGEBOX()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_MESSAGEBOX()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -314,7 +314,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_PING()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_PING()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -339,7 +339,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_PING()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_PING()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -392,7 +392,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONRESPONSE2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONRESPONSE2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -426,7 +426,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_LOGONRESPONSE2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_LOGONRESPONSE2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -464,7 +464,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CREATEACCOUNT2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CREATEACCOUNT2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**************************************
@@ -494,7 +494,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CREATEACCOUNT2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CREATEACCOUNT2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -546,7 +546,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONREALMEX()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONREALMEX()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -573,7 +573,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_LOGONREALMEX()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_LOGONREALMEX()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -619,7 +619,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Recv_SID_QUERYREALMS2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Recv_SID_QUERYREALMS2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -637,7 +637,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_QUERYREALMS2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_QUERYREALMS2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -697,7 +697,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_INFO()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_INFO()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -766,7 +766,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_INFO()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_INFO()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -819,7 +819,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_CHECK()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_CHECK()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -906,7 +906,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_CHECK()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_CHECK()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**********************************
@@ -946,7 +946,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTCREATE()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTCREATE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**********************************
@@ -972,7 +972,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTCREATE()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTCREATE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**********************************
@@ -1013,7 +1013,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTLOGON()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTLOGON()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**********************************
@@ -1034,7 +1034,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTLOGON()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTLOGON()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**************************************
@@ -1082,7 +1082,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTLOGONPROOF()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTLOGONPROOF()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**************************************
@@ -1103,7 +1103,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTLOGONPROOF()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTLOGONPROOF()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -1120,7 +1120,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_SETEMAIL()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_SETEMAIL()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**************************************
@@ -1147,47 +1147,35 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_SETEMAIL()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_SETEMAIL()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '=======================================================================================================
-
 'This function will attempt to complete the CRev request that Bnet has sent to us.
 'Returns True if successful.
 Private Function CompileCheckrevision() As Boolean
 On Error GoTo ERROR_HANDLER:
-    Dim sFiles()  As String
-    Dim sResult   As String
-    Dim lChecksum As Long
     Dim lVersion  As Long
-    sFiles = GetHashFiles
+    Dim lChecksum As Long
+    Dim sResult   As String
+    Dim sHeader   As String
+    Dim sFile     As String
     
-    If (PrepareCheck(ds.CRevFileName) Like PrepareCheck("ver-IX86-*.mpq")) Then
-        If (CheckPath(sFiles(0)) Or CheckPath(sFiles(1)) Or CheckPath(sFiles(2))) Then
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Connection terminated due to missing hash files."
-            Exit Function
-        End If
-        
-        If (Not checkRevisionA(ds.CRevSeed, sFiles, extractMPQNumber(ds.CRevFileName), lChecksum)) Then
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] CheckRevision Failed in BNCSUtil.dll"
-            Exit Function
-        End If
-        
-        lVersion = getExeInfo(sFiles(0), sResult)
-        
+    sHeader = StringFormat("CRev_{0}", GetProductKey)
+    If (Warden_CheckRevision(ds.CRevFileName, ds.CRevFileTimeRaw, ds.CRevSeed, sHeader, lVersion, lChecksum, sResult)) Then
         ds.CRevChecksum = lChecksum
         ds.CRevResult = sResult
         ds.CRevVersion = lVersion
-        
         CompileCheckrevision = True
     Else
-        frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Unsupported Local Hashing Archive: {0}", ds.CRevFileName)
+        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Local Hashing Failed")
+        CompileCheckrevision = False
     End If
     Exit Function
 ERROR_HANDLER:
     CompileCheckrevision = False
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.CompileCheckrevision()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.CompileCheckrevision()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 Public Function GetCDKeyCount(Optional sProduct As String = vbNullString) As Long
@@ -1221,7 +1209,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Function
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetCDKeyCount()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.GetCDKeyCount()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 Private Function GetHashFiles() As String()
@@ -1283,7 +1271,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Function
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetHashFiles()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.GetHashFiles()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 Public Function GetLogonSystem(Optional sProduct As String = vbNullString) As Long
@@ -1323,7 +1311,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Function
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetLogonSystem()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.GetLogonSystem()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 'This will return a Long, that is OverRideable by the config, based on product ID, with a default.
@@ -1345,7 +1333,7 @@ On Error GoTo ERROR_HANDLER:
 ERROR_HANDLER:
     GetLongOverRide = lRet
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetLongOverRide()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.GetLongOverRide()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 'Same as above, except converts the override data to a dword (EXA: "68XI" to 0x49583836)
@@ -1366,7 +1354,7 @@ On Error GoTo ERROR_HANDLER:
 ERROR_HANDLER:
     GetDWORDOverRide = lRet
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetDWORDOverRide()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.GetDWORDOverRide()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 Private Function GetDWORD(sData As String) As Long
@@ -1378,7 +1366,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Function
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetDWORD()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.GetDWORD()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 Public Sub SendEnterChatSequance()
@@ -1411,5 +1399,5 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SendEnterChatSequance()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SendEnterChatSequance()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub

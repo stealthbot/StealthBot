@@ -51,7 +51,7 @@ Private Declare Function md5_input Lib "Warden.dll" (ByRef Context As MD5Context
 Private Declare Function md5_digest Lib "Warden.dll" (ByRef Context As MD5Context, ByVal digest As String) As Long
 Private Declare Function md5_verify_data Lib "Warden.dll" (ByVal Data As String, ByVal length As Long, ByVal CorrectMD5 As String) As Boolean
 
-Private Declare Sub mediv_random_init Lib "Warden.dll" (ByRef Context As MedivRandomContext, ByVal seed As String, ByVal length As Long)
+Private Declare Sub mediv_random_init Lib "Warden.dll" (ByRef Context As MedivRandomContext, ByVal Seed As String, ByVal length As Long)
 Private Declare Sub mediv_random_get_bytes Lib "Warden.dll" (ByRef Context As MedivRandomContext, ByVal Buffer As String, ByVal length As Long)
 
 Private Declare Function warden_init Lib "Warden.dll" (ByVal SocketHandle As Long) As Long
@@ -93,6 +93,99 @@ Private Const WARDEN_MEM_UNKNOWN_SEGMENT     As Long = &HF  '//Could not read se
 Private Const WARDEN_INVALID_INSTANCE        As Long = &H10 '//Instance passed to this function was invalid
 
 Public WardenInstance As Long
+'====================================================================================================
+'^^^^Warden Stuff
+'vvvvCrev Stuff
+'====================================================================================================
+Private Declare Function check_revision Lib "Warden.dll" (ByVal ArchiveTime As String, ByVal ArchiveName As String, ByVal Seed As String, ByVal INIFile As String, ByVal INIHeader As String, ByRef Version As Long, ByRef Checksum As Long, ByVal Result As String) As Long
+Private Declare Function crev_max_result Lib "Warden.dll" () As Long
+Private Declare Function crev_error_description Lib "Warden.dll" (ByVal ErrorCode As Long, ByVal Description As String, ByVal Size As Long) As Long
+
+Private Const CREV_SUCCESS          As Long = 0 '//If everything went ok
+Private Const CREV_UNKNOWN_VERSION  As Long = 1 '//Unknown version, Not lockdown, Or Ver
+Private Const CREV_UNKNOWN_REVISION As Long = 2 '//Unknown Revision (0-7 for old, 0-19 for lockdown)
+Private Const CREV_MALFORMED_SEED   As Long = 3 '//If the Seed passed in wasn't able to be translated properly
+Private Const CREV_MISSING_FILENAME As Long = 4 '//We were not able to get the file path information from the INI file, Result holds more info.
+Private Const CREV_MISSING_FILE     As Long = 5 '//Was not able to open a file, Result has the File Path
+Private Const CREV_FILE_INFO_ERROR  As Long = 6 '//And error while trying to get the file info string, Result holds the path of the file
+    
+'====================================================================================================
+Public Function Warden_CheckRevision(sArchiveName As String, sArchiveFileTime As String, sSeed As String, sHeader As String, ByRef lVersion As Long, ByRef lChecksum As Long, ByRef sResult As String) As Boolean
+On Error GoTo trap:
+    Dim lRet       As Long
+    Dim ltVersion  As Long
+    Dim ltChecksum As Long
+    Dim stResult   As String
+    Dim sError     As String
+    Dim i          As Long
+    Dim ft         As FILETIME
+    Dim st         As SYSTEMTIME
+    Dim sFileTime  As String
+    
+    Warden_CheckRevision = False
+    stResult = String$(crev_max_result, Chr$(0))
+    
+    lRet = check_revision(sArchiveFileTime, sArchiveName, sSeed, _
+        GetFilePath("CheckRevision.ini", StringFormat("{0}\", App.Path)), sHeader, _
+        ltVersion, ltChecksum, stResult)
+    
+    i = InStr(1, stResult, Chr$(0))
+    If (i > 0) Then stResult = Left$(stResult, i - 1)
+    
+    
+    If (Not Len(sArchiveFileTime) = 8) Then sArchiveFileTime = Left$(StringFormat("{0}{1}", sArchiveFileTime, String$(8, Chr$(0))), 8)
+    CopyMemory ft, ByVal sArchiveFileTime, 8
+    
+    FileTimeToSystemTime ft, st
+    sFileTime = StringFormat("{0}/{1}/{2} {3}:{4}:{5}", st.wMonth, st.wDay, st.wYear, st.wHour, st.wMinute, st.wSecond)
+    
+    Select Case lRet
+        Case CREV_SUCCESS:
+            Warden_CheckRevision = True
+            sResult = stResult
+            lChecksum = ltChecksum
+            lVersion = ltVersion
+            Exit Function
+            
+        Case CREV_UNKNOWN_VERSION, CREV_UNKNOWN_REVISION:
+            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Warden.dll does not support checkrevision for {0} {1}", sArchiveName, sFileTime)
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Make sure you've got the latest Warden.dll from http://www.stealthbot.net/sb/redir/warden/"
+        
+        Case CREV_MALFORMED_SEED:
+            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] The seed value string was malformed: {0}", IIf(InStr(1, sSeed, "A=", vbTextCompare) > 0, sSeed, StrToHex(sSeed, True)))
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Make sure you've got the latest Warden.dll from http://www.stealthbot.net/sb/redir/warden/"
+            
+        Case CREV_MISSING_FILENAME:
+            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Could not read key {0}{1}{0} under [{2}] from CheckRevision.ini, Update your configuration", Chr$(34), stResult, sHeader)
+            
+        Case CREV_MISSING_FILE:
+            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Could not open file {0}{1}{0}", Chr$(34), stResult)
+            
+        Case CREV_FILE_INFO_ERROR:
+            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Error retrieving information from {0}{1}{0}", Chr$(34), stResult)
+        
+        Case Else:
+            sResult = String$(crev_max_result, Chr$(0))
+            i = crev_error_description(lRet, sResult, Len(sResult))
+            If (i > 0) Then
+                sResult = String$(i, Chr$(0))
+                i = crev_error_description(lRet, sResult, Len(sResult))
+            End If
+            
+            i = InStr(1, sResult, Chr$(0))
+            If (i > 0) Then stResult = Left$(stResult, i - 1)
+            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Unknown CheckRevision error: {0}", stResult)
+        
+    End Select
+  
+trap:
+  If (Err.Number = 53) Then
+    frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Warden.dll not found, Local Hashing will not work."
+    frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Make sure you've got the latest Warden.dll from http://www.stealthbot.net/sb/redir/warden/"
+    Err.Clear
+  End If
+  Warden_CheckRevision = False
+End Function
 
 Public Sub WardenCleanup(Instance As Long)
   On Error GoTo trap
