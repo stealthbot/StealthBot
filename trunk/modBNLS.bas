@@ -11,6 +11,7 @@ Private Const BNLS_VERSIONCHECKEX2    As Byte = &H1A
 Public BNLSAuthorized As Boolean
 
 Public Function BNLSRecvPacket(ByVal sData As String) As Boolean
+On Error GoTo ERROR_HANDLER:
     Static pBuff As New clsDataBuffer
     
     Dim PacketID As Byte
@@ -38,7 +39,6 @@ Public Function BNLSRecvPacket(ByVal sData As String) As Boolean
     
     Select Case PacketID
         
-        Case BNLS_CHOOSENLSREVISION:  Call RECV_BNLS_CHOOSENLSREVISION(pBuff)
         Case BNLS_AUTHORIZE:          Call RECV_BNLS_AUTHORIZE(pBuff)
         Case BNLS_AUTHORIZEPROOF:     Call RECV_BNLS_AUTHORIZEPROOF(pBuff)
         Case BNLS_REQUESTVERSIONBYTE: Call RECV_BNLS_REQUESTVERSIONBYTE(pBuff)
@@ -57,45 +57,6 @@ Public Function BNLSRecvPacket(ByVal sData As String) As Boolean
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNLSRecvPacket()", Err.Number, Err.description, OBJECT_NAME))
 End Function
-
-'**********************************
-'BNLS_CHOOSENLSREVISION (0x0D) S->C
-'**********************************
-' (DWORD) Success (1 = success)
-'**********************************
-Public Sub RECV_BNLS_CHOOSENLSREVISION(pBuff As clsDataBuffer)
-On Error GoTo ERROR_HANDLER:
-
-    If (pBuff.GetDWORD = 1) Then
-        If (MDebug("debug")) Then
-            frmChat.AddChat RTBColors.InformationText, "[BNLS] NLS Revision Accepted"
-        End If
-    Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "[BNLS] NLS Revision Rejected"
-    End If
-
-    Exit Sub
-ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_CHOOSENLSREVISION()", Err.Number, Err.description, OBJECT_NAME))
-End Sub
-
-'**********************************
-'BNLS_CHOOSENLSREVISION (0x0D) C->S
-'**********************************
-' (DWORD) NLS revision number.
-'**********************************
-Public Sub SEND_BNLS_CHOOSENLSREVISION(ByVal lNLSRev As Long)
-On Error GoTo ERROR_HANDLER:
-
-    Dim pBuff As New clsDataBuffer
-    pBuff.InsertDWord lNLSRev
-    pBuff.vLSendPacket BNLS_CHOOSENLSREVISION
-    Set pBuff = Nothing
-
-    Exit Sub
-ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_CHOOSENLSREVISION()", Err.Number, Err.description, OBJECT_NAME))
-End Sub
 
 '*******************************
 'BNLS_AUTHORIZE (0x0E) S->C
