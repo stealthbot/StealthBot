@@ -101,14 +101,17 @@ Private Declare Function check_revision Lib "Warden.dll" (ByVal ArchiveTime As S
 Private Declare Function crev_max_result Lib "Warden.dll" () As Long
 Private Declare Function crev_error_description Lib "Warden.dll" (ByVal ErrorCode As Long, ByVal Description As String, ByVal Size As Long) As Long
 
-Private Const CREV_SUCCESS          As Long = 0 '//If everything went ok
-Private Const CREV_UNKNOWN_VERSION  As Long = 1 '//Unknown version, Not lockdown, Or Ver
-Private Const CREV_UNKNOWN_REVISION As Long = 2 '//Unknown Revision (0-7 for old, 0-19 for lockdown)
-Private Const CREV_MALFORMED_SEED   As Long = 3 '//If the Seed passed in wasn't able to be translated properly
-Private Const CREV_MISSING_FILENAME As Long = 4 '//We were not able to get the file path information from the INI file, Result holds more info.
-Private Const CREV_MISSING_FILE     As Long = 5 '//Was not able to open a file, Result has the File Path
-Private Const CREV_FILE_INFO_ERROR  As Long = 6 '//And error while trying to get the file info string, Result holds the path of the file
-    
+Private Const CREV_SUCCESS             As Long = 0  '//If everything went ok
+Private Const CREV_UNKNOWN_VERSION     As Long = 1  '//Unknown version, Not lockdown, Or Ver
+Private Const CREV_UNKNOWN_REVISION    As Long = 2  '//Unknown Revision (0-7 for old, 0-19 for lockdown)
+Private Const CREV_MALFORMED_SEED      As Long = 3  '//If the Seed passed in wasn't able to be translated properly
+Private Const CREV_MISSING_FILENAME    As Long = 4  '//We were not able to get the file path information from the INI file, Result holds more info.
+Private Const CREV_MISSING_FILE        As Long = 5  '//Was not able to open a file, Result has the File Path
+Private Const CREV_FILE_INFO_ERROR     As Long = 6  '//And error while trying to get the file info string, Result holds the path of the file
+Private Const CREV_TOFEW_RVAS          As Long = 7  '//Less then 14 RVAs in hash file, probably corrupt
+Private Const CREV_UNKNOWN_RELOC_TYPE  As Long = 8  '//Unknown Reloc Type, only 16, 32, and 64 bit are known
+Private Const CREV_OUT_OF_MEMORY       As Long = 9  '//Out of memory
+Private Const CREV_CORRUPT_IMPORT_DATA As Long = 10 '//Corrupt IAT data, File may be Corrupt
 '====================================================================================================
 Public Function Warden_CheckRevision(sArchiveName As String, sArchiveFileTime As String, sSeed As String, sHeader As String, ByRef lVersion As Long, ByRef lChecksum As Long, ByRef sResult As String) As Boolean
 On Error GoTo trap:
