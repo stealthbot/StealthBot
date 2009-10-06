@@ -102,6 +102,7 @@ Public AttemptedFirstReconnect As Boolean
 
 Public ConfigOverride As String
 Public CommandLine As String
+Public lLauncherVersion As Long
 
 Public rtbChatLength As Long
 

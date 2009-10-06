@@ -2212,7 +2212,8 @@ Public Sub SetCommandLine(sCommandLine As String)
     CommandLine = vbNullString
     sTemp = sCommandLine
     
-    Do While Left$(sTemp, 1) = "-"
+    Do While Left$(Trim$(sTemp), 1) = "-"
+        sTemp = Trim$(sTemp)
         sSetting = Split(Mid$(sTemp, 2) & Space$(1), Space$(1))(0)
         sTemp = Mid$(sTemp, Len(sSetting) + 3)
         Select Case LCase$(sSetting)
@@ -2257,6 +2258,14 @@ Public Sub SetCommandLine(sCommandLine As String)
                 AddEnvPath sValue
                 
                 CommandLine = StringFormat("{0}-addpath {1}{2}{1} ", CommandLine, Chr$(34), sValue)
+                
+            Case "launcherver":
+                If (Len(sTemp) >= 8) Then
+                    sValue = Left$(sTemp, 8)
+                    lLauncherVersion = CLng(StringFormat("&H{0}", sValue))
+                    
+                    CommandLine = StringFormat("{0}-launcherver {1} ", CommandLine, sValue)
+                End If
                 
             Case Else:
                 CommandLine = StringFormat("{0}-{1} ", CommandLine, sSetting)

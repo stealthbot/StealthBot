@@ -1,6 +1,5 @@
 VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
 Begin VB.Form frmLauncher 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -26,13 +25,6 @@ Begin VB.Form frmLauncher
    ScaleMode       =   3  'Pixel
    ScaleWidth      =   230
    StartUpPosition =   3  'Windows Default
-   Begin InetCtlsObjects.Inet iNet 
-      Left            =   1440
-      Top             =   2280
-      _ExtentX        =   1005
-      _ExtentY        =   1005
-      _Version        =   393216
-   End
    Begin VB.CheckBox chkAutoClose 
       BackColor       =   &H00000000&
       Caption         =   "Automatically close this launcher after loading the profile"
@@ -171,7 +163,7 @@ Private Sub Form_Load()
 On Error GoTo ERROR_HANDLER
     Me.Caption = StringFormat("StealthBot Launcher v{0}.{1}.{2}", App.Major, App.Minor, App.Revision)
     
-    CheckForUpdates
+    'CheckForUpdates
     
     If (LenB(Command()) > 0) Then
         If (SetCommandLine(Command())) Then

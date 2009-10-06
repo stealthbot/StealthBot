@@ -193,7 +193,8 @@ On Error GoTo ERROR_HANDLER:
     
     sPath = StringFormat(ReplaceEnvironmentVars("%APPDATA%\StealthBot\{0}\"), sProfile)
     lRet = CreateProcess(StringFormat("{0}\StealthBot v2.7.exe", App.Path), _
-      StringFormat("-addpath {0}{1}{0}", Chr$(34), App.Path), _
+      StringFormat(" -addpath {0}{1}{0} -launcherver {2}{3}{4}", Chr$(34), App.Path, _
+        ZeroOffset(App.Major, 2), ZeroOffset(App.Minor, 2), ZeroOffset(App.Revision, 4)), _
       security, security, False, _
       NORMAL_PRIORITY_CLASS, _
       ByVal 0&, sPath, suInfo, pInfo)
@@ -473,42 +474,51 @@ Public Function ReplaceVars(sString As String) As String
     ReplaceVars = sString
 End Function
 
-Public Function CheckForUpdates() As Boolean
+'Public Function CheckForUpdates() As Boolean
+'On Error GoTo ERROR_HANDLER:
+'
+'    Dim sTemp As String
+'    Dim i     As Integer
+'    Dim sCRC  As String
+'    Dim lRet  As Long
+'
+'    With frmLauncher.iNet
+'
+'        'sTemp = .OpenURL(StringFormat("{0}?p=lnews", GetWebPath))
+'        'AddChat vbGreen, StringFormat("Launcher news:{0}{1}", vbNewLine, ReplaceVars(sTemp))
+'
+'        sTemp = .OpenURL(StringFormat("{0}?p=lupdate", GetWebPath))
+'
+'        i = InStr(sTemp, Chr$(&HFF))
+'        If (i = 0) Then
+'            'AddChat vbRed, "Failed to get launcer update information."
+'            Exit Function
+'        End If
+'
+'        If (Not StrComp(Left$(sTemp, i - 1), StringFormat("{0}.{1}", App.Major, App.Minor), vbTextCompare) = 0) Then
+'            sTemp = .OpenURL(StringFormat("{0}?p=latest_url", GetWebPath))
+'            lRet = MsgBox(StringFormat("Version {0} of the launcher is avalible at {1}.{2}Would you like to download it now?", _
+'                Left$(sTemp, i - 1), sTemp, vbNewLine), vbYesNo)
+'
+'
+'            If (lRet = vbYes) Then
+'                ShellExecute frmLauncher.hWnd, vbNullString, sTemp, vbNullString, vbNullString, SW_SHOW
+'                CheckForUpdates = True
+'            End If
+'            'AddChat vbGreen, "New updates avalible: ", vbWhite, sTemp
+'            Exit Function
+'        End If
+'    End With
+'    Exit Function
+'ERROR_HANDLER:
+'    ErrorHandler Err.Number, OBJECT_NAME, "CheckForUpdates"
+'End Function
+
+Public Function ZeroOffset(ByVal lInput As Long, ByVal lDigits As Long) As String
 On Error GoTo ERROR_HANDLER:
-
-    Dim sTemp As String
-    Dim i     As Integer
-    Dim sCRC  As String
-    Dim lRet  As Long
-
-    With frmLauncher.Inet
-
-        'sTemp = .OpenURL(StringFormat("{0}?p=lnews", GetWebPath))
-        'AddChat vbGreen, StringFormat("Launcher news:{0}{1}", vbNewLine, ReplaceVars(sTemp))
-
-        sTemp = .OpenURL(StringFormat("{0}?p=lupdate", GetWebPath))
-
-        i = InStr(sTemp, Chr$(&HFF))
-        If (i = 0) Then
-            'AddChat vbRed, "Failed to get launcer update information."
-            Exit Function
-        End If
-
-        If (Not StrComp(Left$(sTemp, i - 1), StringFormat("{0}.{1}", App.Major, App.Minor), vbTextCompare) = 0) Then
-            sTemp = .OpenURL(StringFormat("{0}?p=latest_url", GetWebPath))
-            lRet = MsgBox(StringFormat("Version {0} of the launcher is avalible at {1}.{2}Would you like to download it now?", _
-                Left$(sTemp, i - 1), sTemp, vbNewLine), vbYesNo)
-                
-                
-            If (lRet = vbYes) Then
-                ShellExecute frmLauncher.hWnd, vbNullString, sTemp, vbNullString, vbNullString, SW_SHOW
-                CheckForUpdates = True
-            End If
-            'AddChat vbGreen, "New updates avalible: ", vbWhite, sTemp
-            Exit Function
-        End If
-    End With
+    ZeroOffset = Right$(String(lDigits, "0") & Hex$(lInput), lDigits)
     Exit Function
 ERROR_HANDLER:
     ErrorHandler Err.Number, OBJECT_NAME, "CheckForUpdates"
+    ZeroOffset = String$(lDigits, "0")
 End Function
