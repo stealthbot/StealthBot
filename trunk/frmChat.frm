@@ -1,16 +1,16 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "Msinet.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   225
-   ClientTop       =   825
+   ClientLeft      =   165
+   ClientTop       =   735
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -1604,7 +1604,7 @@ Private Sub Form_Load()
     End If
     
     CfgVersion = Val(ReadCfg("Main", "ConfigVersion"))
-'
+
 '    If CfgVersion < 3 Then
 '
 '        s = ReadCFG("Position", "Left")
@@ -1700,7 +1700,7 @@ Private Sub Form_Load()
     Me.AutoRedraw = True
     
     AddChat RTBColors.ConsoleText, "-> Welcome to " & CVERSION & ", by Stealth."
-    AddChat RTBColors.ConsoleText, "-> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net"
+    AddChat RTBColors.ConsoleText, "-> If you enjoy StealthBot, consider supporting its development at http://donate.stealthbot.net"
 
     On Error Resume Next
     
@@ -1854,16 +1854,12 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-Private Sub DisplayNews()
 
-    Dim ret As String ' ...
-    
-    ' ...
+Private Sub DisplayNews()
+    Dim ret As String
     ret = INet.OpenURL(GetNewsURL())
     
-    ' ...
     HandleNews ret
-
 End Sub
 
 
@@ -2218,7 +2214,7 @@ Public Sub FindAltBNLS()
             ' ...
             If ((strReturn = vbNullString) Or (Right(strReturn, 2) <> vbCrLf)) Then
                 
-                strReturn = INet.OpenURL("http://stealthbot.net/p/bnls.php")
+                strReturn = INet.OpenURL("http://stealthbot.net/sb/bnls.php")
                 If ((strReturn = vbNullString) Or (Left(strReturn, 1) <> vbLf)) Then
                     ' ...
                     AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured while trying to locate an alternative BNLS server."
@@ -3573,8 +3569,8 @@ Private Sub mnuCatchPhrases_Click()
 End Sub
 
 Private Sub mnuChangeLog_Click()
-    ShellExecute frmChat.hWnd, "Open", "http://www.StealthBot.net/wiki/ChangeLog", &H0, &H0, vbNormalFocus
-    AddChat RTBColors.InformationText, "Opening EULA at http://www.StealthBot.net/wiki/ChangeLog"
+    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/sb/changelog", &H0, &H0, vbNormalFocus
+    AddChat RTBColors.InformationText, "Opening the bot's changelog at http://www.stealthbot.net/sb/changelog"
 End Sub
 
 Private Sub mnuOpenScriptFolder_Click()
@@ -4197,8 +4193,8 @@ End Sub
 
 Private Sub mnuTerms_Click()
     'ShellExecute frmChat.hWnd, "Open", App.Path & "\eula.txt", &H0, &H0, vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", "http://www.StealthBot.net/wiki/EULA", &H0, &H0, vbNormalFocus
-    AddChat RTBColors.InformationText, "Opening EULA at http://www.stealthbot.net/wiki/EULA"
+    ShellExecute frmChat.hWnd, "Open", "http://eula.stealthbot.net", &H0, &H0, vbNormalFocus
+    AddChat RTBColors.InformationText, "Opening the StealthBot EULA at http://eula.stealthbot.net."
 End Sub
 
 Private Sub mnuFilters_Click()

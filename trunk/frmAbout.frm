@@ -301,7 +301,7 @@ Private Sub Form_Load()
     AddLine "-> The current list of developers can be found at http://devteam.stealthbot.net."
     AddLine "-> Donations to the project are split between developers after expenses."
     AddCrLf
-    AddLine "All Blizzard copyrights are (c) 1996 to present Blizzard Entertainment."
+    AddLine "All Blizzard copyrights are (c) 1996-present Blizzard Entertainment."
     AddLine "For a detailed listing of Blizzard copyrights, please visit"
     AddLine "  http://www.blizzard.com/copyright.shtml"
     AddLine "For any further legal information regarding StealthBot and the StealthBot website, visit"
@@ -320,7 +320,7 @@ Private Sub Form_Load()
     AddLine "-> The tech support people on StealthBot.net and in Clan SBS, for giving their time to help others"
     AddLine "-> The people who have donated to the StealthBot project - you can find a current list at http://contributors.stealthbot.net - THANK YOU!"
     
-    lblBottom.Caption = "(c)2002-2009 Andy Trevino - all rights reserved." & vbCrLf & "Use of this program is subject to the License Agreement found at http://eula.stealthbot.net."
+    lblBottom.Caption = "(c)2002-2009 Andy T - all rights reserved." & vbCrLf & "Use of this program is subject to the License Agreement found at http://eula.stealthbot.net."
 End Sub
 
 Private Sub AddLine(ByVal sIn As String)
@@ -331,7 +331,7 @@ Private Sub AddCrLf()
     txtDescr.Text = txtDescr.Text & vbCrLf
 End Sub
 
-Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub Form_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim i As Byte
     For i = 0 To 6
         lblURL(i).ForeColor = vbWhite
@@ -369,13 +369,13 @@ Private Sub lblURL_Click(Index As Integer)
     ElseIf Index = 0 Then
         ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net", 0&, 0&, 0&
     ElseIf Index = 6 Then
-        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/sb/redir/wiki/", 0&, 0&, 0&
+        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/wiki/", 0&, 0&, 0&
     ElseIf Index = 5 Then
-        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/sb/redir/contributors/", 0&, 0&, 0&
+        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/sb/contributors/", 0&, 0&, 0&
     End If
 End Sub
 
-Private Sub lblURL_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lblURL_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim i As Byte
     For i = 0 To 6
         lblURL(i).ForeColor = vbWhite

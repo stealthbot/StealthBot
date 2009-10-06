@@ -4,10 +4,10 @@ Begin VB.Form frmLauncher
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "StealthBot Launcher v0.0.000"
-   ClientHeight    =   5145
+   ClientHeight    =   5160
    ClientLeft      =   150
    ClientTop       =   435
-   ClientWidth     =   3450
+   ClientWidth     =   3360
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -21,9 +21,9 @@ Begin VB.Form frmLauncher
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   343
+   ScaleHeight     =   344
    ScaleMode       =   3  'Pixel
-   ScaleWidth      =   230
+   ScaleWidth      =   224
    StartUpPosition =   3  'Windows Default
    Begin VB.CheckBox chkAutoClose 
       BackColor       =   &H00000000&
@@ -34,7 +34,7 @@ Begin VB.Form frmLauncher
       TabIndex        =   4
       ToolTipText     =   "Leaving the launcher open will allow you to create and launch additional profiles."
       Top             =   4080
-      Width           =   3015
+      Width           =   2895
    End
    Begin VB.CommandButton cmdRemoveProfile 
       Caption         =   "Remove Profile"
@@ -43,7 +43,7 @@ Begin VB.Form frmLauncher
       Left            =   1800
       TabIndex        =   2
       Top             =   3240
-      Width           =   1455
+      Width           =   1335
    End
    Begin VB.CommandButton cmdCreateProfile 
       Caption         =   "Create Profile"
@@ -85,8 +85,8 @@ Begin VB.Form frmLauncher
       Left            =   240
       TabIndex        =   0
       Top             =   360
-      Width           =   3015
-      _ExtentX        =   5318
+      Width           =   2895
+      _ExtentX        =   5106
       _ExtentY        =   5106
       View            =   3
       LabelEdit       =   1
@@ -114,7 +114,7 @@ Begin VB.Form frmLauncher
       Left            =   1800
       TabIndex        =   7
       Top             =   3600
-      Width           =   1455
+      Width           =   1335
       WordWrap        =   -1  'True
    End
    Begin VB.Label lblProfiles 

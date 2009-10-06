@@ -313,7 +313,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in Ban()."
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in Ban()."
 
     Exit Function
 End Function
@@ -388,7 +388,7 @@ Public Function StringFormatA(source As String, params() As Variant) As String
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in StringFormatA().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in StringFormatA().")
 
     StringFormatA = vbNullString
     
@@ -413,7 +413,7 @@ Public Function StringFormat(source As String, ParamArray params() As Variant)
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in StringFormat().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in StringFormat().")
 
 
     StringFormat = vbNullString
@@ -487,7 +487,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
     Exit Sub
 
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in bnetSend().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in bnetSend().")
 
     Exit Sub
     
@@ -1044,7 +1044,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
 ERROR_HANDLER:
     'Ignores error 28: "Out of stack memory"
     If Err.Number <> 28 Then
-        Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in " & _
+        Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in " & _
             "GetCumulativeAccess().")
     End If
 
@@ -1502,11 +1502,6 @@ Public Sub ReadyINet()
     frmChat.INet.Cancel
 End Sub
 
-Public Function GetNewsURL() As String
-    ' Changed link back to original one until everything gets moved. (8/20/09) -Pyro
-    GetNewsURL = "http://www.stealthbot.net/getver3.php?vc=" & VERCODE
-End Function
-
 Public Function HTMLToRGBColor(ByVal s As String) As Long
     HTMLToRGBColor = RGB(Val("&H" & Mid$(s, 1, 2)), Val("&H" & Mid$(s, 3, 2)), _
         Val("&H" & Mid$(s, 5, 2)))
@@ -1798,7 +1793,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.{3}()", Err.Number, Err.Description, "modOtherCode", "GetFolderPath")
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.{3}()", Err.Number, Err.description, "modOtherCode", "GetFolderPath")
 End Function
 
 'Public Function OKToDoAutocompletion(ByRef sText As String, ByVal KeyAscii As Integer) As Boolean
@@ -1863,7 +1858,7 @@ Public Function GetProfilePath(Optional ByVal ProfileIndex As Integer) As String
 End Function
 
 Public Sub OpenReadme()
-    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/sb/redir/readme/", 0, 0, 0
+    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/sb/readme/", 0, 0, 0
     frmChat.AddChat RTBColors.SuccessText, "You are being taken to the StealthBot Online Readme."
 End Sub
 
@@ -2212,8 +2207,7 @@ Public Sub SetCommandLine(sCommandLine As String)
     CommandLine = vbNullString
     sTemp = sCommandLine
     
-    Do While Left$(Trim$(sTemp), 1) = "-"
-        sTemp = Trim$(sTemp)
+    Do While Left$(sTemp, 1) = "-"
         sSetting = Split(Mid$(sTemp, 2) & Space$(1), Space$(1))(0)
         sTemp = Mid$(sTemp, Len(sSetting) + 3)
         Select Case LCase$(sSetting)
@@ -2259,14 +2253,6 @@ Public Sub SetCommandLine(sCommandLine As String)
                 
                 CommandLine = StringFormat("{0}-addpath {1}{2}{1} ", CommandLine, Chr$(34), sValue)
                 
-            Case "launcherver":
-                If (Len(sTemp) >= 8) Then
-                    sValue = Left$(sTemp, 8)
-                    lLauncherVersion = CLng(StringFormat("&H{0}", sValue))
-                    
-                    CommandLine = StringFormat("{0}-launcherver {1} ", CommandLine, sValue)
-                End If
-                
             Case Else:
                 CommandLine = StringFormat("{0}-{1} ", CommandLine, sSetting)
         End Select
@@ -2306,7 +2292,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.{3}()", Err.Number, Err.Description, "modOtherCode", "AddEnvPath")
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.{3}()", Err.Number, Err.description, "modOtherCode", "AddEnvPath")
     Err.Clear
 End Function
 
@@ -2599,7 +2585,7 @@ Public Sub LogCommand(ByVal Caller As String, ByVal CString As String)
     Exit Sub
 
 LogCommand_Error:
-    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in " & _
+    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in " & _
         "Procedure; LogCommand; of; Module; modOtherCode; "
     
     Exit Sub
@@ -2819,7 +2805,7 @@ Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Lon
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: " & Err.Description & " in SplitByLen()."
+    frmChat.AddChat vbRed, "Error: " & Err.description & " in SplitByLen()."
     
     Exit Function
 End Function
@@ -3110,7 +3096,7 @@ ERROR_HANDLER:
         Exit Sub
     End If
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in DisplayRichText()."
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in DisplayRichText()."
     
     Exit Sub
     
