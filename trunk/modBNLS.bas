@@ -157,6 +157,7 @@ On Error GoTo ERROR_HANDLER:
             modBNCS.SEND_SID_AUTH_INFO lVerByte
         Else 'TO-DO: Non-NLS connection
             frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", lLogonSystem)
+            frmChat.AddChat RTBColors.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
             frmChat.DoDisconnect
         End If
     Else

@@ -1585,9 +1585,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -3716,8 +3716,7 @@ End Sub
 Private Sub mnuGetNews_Click()
     On Error Resume Next
     
-    INet.Cancel
-    INet.Execute GetNewsURL(), "GET"
+    DisplayNews
 End Sub
 
 Sub mnuHelpReadme_Click()
@@ -3996,49 +3995,10 @@ Private Sub mnuRepairCleanMail_Click()
     frmChat.AddChat RTBColors.SuccessText, "Delivered and invalid pieces of mail have been removed from your mail.dat file."
 End Sub
 
-'Private Sub mnuRepairConfig_Click()
-'    Dim i As Integer
-'
-'    If MsgBox("Are you sure?" & vbCrLf & _
-'            "This action will remove any overrides or ""hacks"" that you have placed in your config.ini file, including custom version bytes." & vbCrLf & _
-'            "It cannot be reversed.", vbYesNo, "Remove config.ini overrides") = vbYes Then
-'        Const m = "Main"
-'        Const o = "Other"
-'
-'        Dim Fields(16) As String
-'
-'        Fields(0) = "ForceDefaultLocaleID"
-'        Fields(1) = "UppercasePassword"
-'        Fields(2) = "DisableSBNews"
-'        Fields(3) = "OwnerName"
-'        Fields(4) = "PeonBanMsg"
-'        Fields(8) = "D2VerByte"
-'        Fields(9) = "SCVerByte"
-'        Fields(10) = "W2VerByte"
-'        Fields(11) = ""
-'        Fields(12) = "SetBNLSServer"
-'        Fields(13) = "0x51UnknownOverride"
-'        Fields(14) = "DisableSBNews"
-'        Fields(15) = "W3VerByte"
-'        Fields(16) = "WinampPath"
-'
-'        For i = 0 To UBound(Fields)
-'            If LenB(ReadCFG(m, Fields(i))) > 0 Then
-'                If i < 16 Then
-'                    WriteINI m, Fields(i), " "
-'                Else
-'                    WriteINI o, Fields(i), " "
-'                End If
-'            End If
-'        Next i
-'    End If
-'End Sub
-
 Private Sub mnuRepairDataFiles_Click()
-    If MsgBox("Are you sure? This action will delete your mail.dat (Bot mail database) and commands.dat (custom command database) files.", vbYesNo, "Repair data files") = vbYes Then
+    If MsgBox("Are you sure? This action will delete your mail.dat (Bot mail database) file.", vbYesNo, "Repair data files") = vbYes Then
         On Error Resume Next
         Kill GetFilePath("Mail.dat")
-        Kill GetFilePath("Commands.dat")
         AddChat RTBColors.SuccessText, "The bot's DAT data files have been removed."
     End If
 End Sub

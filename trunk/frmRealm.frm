@@ -593,7 +593,7 @@ Private Sub Form_Unload(Cancel As Integer)
             frmChat.sckMCP.Close
         End If
         
-        SendEnterChatSequance
+        SendEnterChatSequence
     End If
     
     RealmError = False
@@ -787,7 +787,7 @@ Private Sub MCPHandler_CharLogonResponse(ByVal Status As Byte, ByVal Message As 
     If Status = 0 Then
         frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
         
-        SendEnterChatSequance
+        SendEnterChatSequence
     Else
         frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
         RealmError = True
@@ -895,7 +895,7 @@ Private Sub tmrLoginTimeout_Timer()
         
         If mTicks >= 30 Then
             frmChat.sckMCP.Close
-            SendEnterChatSequance
+            SendEnterChatSequence
             Unload Me
         End If
     End If

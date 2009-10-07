@@ -143,7 +143,7 @@ Private Sub CloseEmailReg()
         If Dii And BotVars.UseRealm Then
             frmRealm.Show
         Else
-            Call SendEnterChatSequance
+            Call SendEnterChatSequence
         End If
     End If
     

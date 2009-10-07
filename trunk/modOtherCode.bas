@@ -2679,8 +2679,8 @@ Function GetProductKey(Optional ByVal Product As String) As String
         Case Else:           GetProductKey = Product
     End Select
     
-    If (LenB(ReadCfg$("OverRide", StringFormat("{0}ProdKey", Product))) > 0) Then
-        GetProductKey = ReadCfg$("OverRide", StringFormat("{0}ProdKey", Product))
+    If (LenB(ReadCfg$("Override", StringFormat("{0}ProdKey", Product))) > 0) Then
+        GetProductKey = ReadCfg$("Override", StringFormat("{0}ProdKey", Product))
     End If
 End Function
 

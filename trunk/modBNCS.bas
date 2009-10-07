@@ -367,7 +367,7 @@ On Error GoTo ERROR_HANDLER:
                     frmRealm.Show
                     SEND_SID_QUERYREALMS2
                 Else
-                    SendEnterChatSequance
+                    SendEnterChatSequence
                 End If
             Else
                 frmEMailReg.Show
@@ -741,11 +741,11 @@ On Error GoTo ERROR_HANDLER:
     
     With pBuff
     
-        .InsertDWord GetLongOverRide("ProtID", 0)                             'ProtocolID
-        .InsertDWord GetDWORDOverRide("PlatID", PLATFORM_INTEL)               'Platform ID
+        .InsertDWord GetLongOverride("ProtID", 0)                             'ProtocolID
+        .InsertDWord GetDWORDOverride("PlatID", PLATFORM_INTEL)               'Platform ID
         .InsertDWord GetDWORD(BotVars.Product)                                'Product ID
         .InsertDWord IIf(lVerByte = 0, GetVerByte(BotVars.Product), lVerByte) 'VersionByte
-        .InsertDWord GetLongOverRide("ProdLang", 0)                           'Product Language
+        .InsertDWord GetLongOverride("ProdLang", 0)                           'Product Language
         .InsertDWord LocalIP                                                  'Local IP
         .InsertDWord GetTimeZoneBias                                          'Time Zone Bias
         If (ReadCfg("Override", "ForceDefaultLocaleID") = "Y") Then
@@ -870,7 +870,7 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord ds.CRevVersion  'CRev Version
         .InsertDWord ds.CRevChecksum 'CRev Checksum
         .InsertDWord keys            'CDKey Count
-        .InsertDWord IIf(ReadCfg$("OverRide", "SpawnKey") = "Y", 1, 0)
+        .InsertDWord IIf(ReadCfg$("Override", "SpawnKey") = "Y", 1, 0)
         
         For i = 1 To keys
             If (i = 1) Then
@@ -931,16 +931,17 @@ On Error GoTo ERROR_HANDLER:
                 Exit Sub
             End If
             
-        Case &H4: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed, Name already exists."
-        Case &H7: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed, Name is too short/blank."
-        Case &H8: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed, Name contains an illegal character."
-        Case &H9: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed, Name contains an illegal word."
-        Case &HA: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed, Name contains too few alphanumeric characters."
-        Case &HB: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed, Name contains adjacent punctuation characters."
-        Case &HC: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed, Name contains too many punctuation characters."
+        Case &H4: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed because your name already exists."
+        Case &H7: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed because your name is too short/blank."
+        Case &H8: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed because your name contains an illegal character."
+        Case &H9: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed because your name contains an illegal word."
+        Case &HA: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed because your name contains too few alphanumeric characters."
+        Case &HB: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed because your name contains adjacent punctuation characters."
+        Case &HC: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed because your name contains too many punctuation characters."
         Case Else
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Account creation failed, Unknown reason: 0x{0}", ZeroOffset(lResult, 8)))
+            Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Account creation failed for an unknown reason: 0x{0}", ZeroOffset(lResult, 8)))
     End Select
+    
     Call frmChat.DoDisconnect
     
     Exit Sub
@@ -1061,7 +1062,7 @@ On Error GoTo ERROR_HANDLER:
             If (Not ds.NLS.SrpVerifyM2(M2)) Then
                 frmChat.AddChat RTBColors.InformationText, "[BNCS] Warning, The server sent an invalid password proof, it may be a fake server."
             End If
-            SendEnterChatSequance
+            SendEnterChatSequence
                    
         Case &H2: 'Invalid password
             Call Event_LogonEvent(1)
@@ -1181,7 +1182,7 @@ End Function
 Public Function GetCDKeyCount(Optional sProduct As String = vbNullString) As Long
 On Error GoTo ERROR_HANDLER:
 
-    Dim sOverRide As String
+    Dim sOverride As String
     Dim lRet      As Long
 
     If (LenB(sProduct) = 0) Then sProduct = BotVars.Product
@@ -1201,9 +1202,9 @@ On Error GoTo ERROR_HANDLER:
         Case Else:           lRet = &H0
     End Select
     
-    sOverRide = ReadCfg$("OverRide", StringFormat("{0}KeyCount", GetProductKey))
+    sOverride = ReadCfg$("Override", StringFormat("{0}KeyCount", GetProductKey))
     
-    If (LenB(sOverRide) > 0 And StrictIsNumeric(sOverRide)) Then lRet = CLng(sOverRide)
+    If (LenB(sOverride) > 0 And StrictIsNumeric(sOverride)) Then lRet = CLng(sOverride)
     
     GetCDKeyCount = lRet
     Exit Function
@@ -1277,30 +1278,37 @@ End Function
 Public Function GetLogonSystem(Optional sProduct As String = vbNullString) As Long
 On Error GoTo ERROR_HANDLER:
 
-    Dim sOverRide As String
+    Dim sOverride As String
     Dim lRet      As Long
-
+    
+    ' Temporary short-circuit:
+    '  Return BNCS_NLS because no other login sequences are supported
+    '  -andy
+    GetLogonSystem = BNCS_NLS
+    Exit Function
+    
     If (LenB(sProduct) = 0) Then sProduct = BotVars.Product
     
+    ' Many of these login sequences are not supported
     Select Case UCase$(sProduct)
         Case "RATS", "STAR": lRet = BNCS_NLS
         Case "PXES", "SEXP": lRet = BNCS_NLS
-        Case "NB2W", "W2BN": lRet = BNCS_OLS
+        Case "NB2W", "W2BN": lRet = BNCS_NLS
         Case "VD2D", "D2DV": lRet = BNCS_NLS
         Case "PX2D", "D2XP": lRet = BNCS_NLS
-        Case "RTSJ", "JSTR": lRet = BNCS_LLS
+        'Case "RTSJ", "JSTR": lRet = BNCS_LLS
         Case "3RAW", "WAR3": lRet = BNCS_NLS
         Case "PX3W", "W3XP": lRet = BNCS_NLS
-        Case "LTRD", "DRTL": lRet = BNCS_OLS
-        Case "RSHD", "DSHR": lRet = BNCS_OLS
-        Case "RHSS", "SSHR": lRet = BNCS_LLS
+        'Case "LTRD", "DRTL": lRet = BNCS_OLS
+        'Case "RSHD", "DSHR": lRet = BNCS_OLS
+        'Case "RHSS", "SSHR": lRet = BNCS_LLS
         Case Else:           lRet = &H0
     End Select
     
-    sOverRide = ReadCfg$("OverRide", StringFormat("{0}LogonSystem", GetProductKey))
+    sOverride = ReadCfg$("Override", StringFormat("{0}LogonSystem", GetProductKey))
     
-    If (LenB(sOverRide) > 0 And StrictIsNumeric(sOverRide)) Then
-        Select Case CLng(sOverRide)
+    If (LenB(sOverride) > 0 And StrictIsNumeric(sOverride)) Then
+        Select Case CLng(sOverride)
             Case BNCS_NLS: lRet = BNCS_NLS
             Case BNCS_LLS: lRet = BNCS_LLS
             Case BNCS_OLS: lRet = BNCS_OLS
@@ -1314,47 +1322,47 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.GetLogonSystem()", Err.Number, Err.description, OBJECT_NAME))
 End Function
 
-'This will return a Long, that is OverRideable by the config, based on product ID, with a default.
-'GetProdLongOverRide("ProtId", 0, "DRTL") would return 0, unless the user had D1ProtID= something in there config
-Private Function GetLongOverRide(sKey As String, lDefault As Long) As Long
+'This will return a Long, that is Overrideable by the config, based on product ID, with a default.
+'GetProdLongOverride("ProtId", 0, "DRTL") would return 0, unless the user had D1ProtID= something in there config
+Private Function GetLongOverride(sKey As String, lDefault As Long) As Long
 On Error GoTo ERROR_HANDLER:
 
-    Dim sOverRide As String
+    Dim sOverride As String
     Dim lRet      As Long
     
     lRet = lDefault
     
-    sOverRide = ReadCfg$("OverRide", StringFormat("{0}{1}", GetProductKey, sKey))
+    sOverride = ReadCfg$("Override", StringFormat("{0}{1}", GetProductKey, sKey))
     
-    If (LenB(sOverRide) > 0 And StrictIsNumeric(sOverRide)) Then lRet = CLng(sOverRide)
+    If (LenB(sOverride) > 0 And StrictIsNumeric(sOverride)) Then lRet = CLng(sOverride)
     
-    GetLongOverRide = lRet
+    GetLongOverride = lRet
     Exit Function
 ERROR_HANDLER:
-    GetLongOverRide = lRet
+    GetLongOverride = lRet
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetLongOverRide()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.GetLongOverride()", Err.Number, Err.description, OBJECT_NAME))
 End Function
 
 'Same as above, except converts the override data to a dword (EXA: "68XI" to 0x49583836)
-Private Function GetDWORDOverRide(sKey As String, lDefault As Long) As Long
+Private Function GetDWORDOverride(sKey As String, lDefault As Long) As Long
 On Error GoTo ERROR_HANDLER:
 
-    Dim sOverRide As String
+    Dim sOverride As String
     Dim lRet      As Long
     
     lRet = lDefault
     
-    sOverRide = ReadCfg$("OverRide", StringFormat("{0}{1}", GetProductKey, sKey))
+    sOverride = ReadCfg$("Override", StringFormat("{0}{1}", GetProductKey, sKey))
     
-    If (LenB(sOverRide) > 0) Then lRet = GetDWORD(sOverRide)
+    If (LenB(sOverride) > 0) Then lRet = GetDWORD(sOverride)
     
-    GetDWORDOverRide = lRet
+    GetDWORDOverride = lRet
     Exit Function
 ERROR_HANDLER:
-    GetDWORDOverRide = lRet
+    GetDWORDOverride = lRet
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetDWORDOverRide()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.GetDWORDOverride()", Err.Number, Err.description, OBJECT_NAME))
 End Function
 
 Private Function GetDWORD(sData As String) As Long
@@ -1369,7 +1377,7 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.GetDWORD()", Err.Number, Err.description, OBJECT_NAME))
 End Function
 
-Public Sub SendEnterChatSequance()
+Public Sub SendEnterChatSequence()
 On Error GoTo ERROR_HANDLER:
     Dim Num As Integer
     
@@ -1399,5 +1407,5 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SendEnterChatSequance()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SendEnterChatSequence()", Err.Number, Err.description, OBJECT_NAME))
 End Sub

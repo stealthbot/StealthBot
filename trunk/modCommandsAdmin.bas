@@ -127,7 +127,7 @@ Public Sub OnSetExpKey(Command As clsCommandObj)
         strKey = Replace$(Command.Argument("Key"), "-", vbNullString)
         strKey = Replace$(strKey, Space$(1), vbNullString)
         
-        If (Not StrComp(ReadCfg("OverRide", "SetKeyIgnoreLength"), "Y", vbTextCompare) = 0) Then
+        If (Not StrComp(ReadCfg("Override", "SetKeyIgnoreLength"), "Y", vbTextCompare) = 0) Then
             If ((Not Len(strKey) = 13) And (Not Len(strKey) = 16) And (Not Len(strKey) = 26)) Then
                 strKey = vbNullString
             End If
@@ -160,7 +160,7 @@ Public Sub OnSetKey(Command As clsCommandObj)
         strKey = Replace$(Command.Argument("Key"), "-", vbNullString)
         strKey = Replace$(strKey, Space$(1), vbNullString)
         
-        If (Not StrComp(ReadCfg("OverRide", "SetKeyIgnoreLength"), "Y", vbTextCompare) = 0) Then
+        If (Not StrComp(ReadCfg("Override", "SetKeyIgnoreLength"), "Y", vbTextCompare) = 0) Then
             If ((Not Len(strKey) = 13) And (Not Len(strKey) = 16) And (Not Len(strKey) = 26)) Then
                 strKey = vbNullString
             End If
