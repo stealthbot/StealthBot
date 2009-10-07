@@ -721,19 +721,10 @@ On Error GoTo ERROR_HANDLER:
     Dim LocalIP     As Long
     Dim CountryAbr  As String
     Dim CountryName As String
-    Dim LocalIPAr() As String
     
     Dim pBuff As New clsDataBuffer
     
-    LocalIPAr = Split(frmChat.sckBNet.LocalIP, ".")
-    If (UBound(LocalIPAr) = 3) Then
-        LocalIP = CLng(LocalIPAr(0)) Or _
-            (CLng(LocalIPAr(1)) * &H100) Or _
-            (CLng(LocalIPAr(2)) * &H10000) Or _
-            (CLng(LocalIPAr(3)) * &H1000000)
-    Else
-        LocalIP = 0
-    End If
+    LocalIP = aton(frmChat.sckBNet.LocalIP)
 
     Call GetCountryData(CountryAbr, CountryName)
     If (Not Len(CountryAbr) = 3) Then CountryAbr = "USA"
@@ -759,7 +750,6 @@ On Error GoTo ERROR_HANDLER:
         .InsertNTString CountryName                                           'Country Name
         .SendPacket SID_AUTH_INFO
     End With
-
     
     Set pBuff = Nothing
     

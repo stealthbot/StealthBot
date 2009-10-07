@@ -357,18 +357,4 @@ Public Function VerifyServerSignature(ByVal IPAddress As String, ByVal Signature
     VerifyServerSignature = nls_check_signature(aton(IPAddress), Signature)
 
 End Function
- 
-' Hdx's amazing function to implement aton() - "#.#.#.#" to network byte order...
-Public Function aton(sIPAddress As String) As Long
-    Dim sIP() As String
-    Dim sValue As String
-    sIP = Split(sIPAddress, ".")
-    If (Not UBound(sIP) = 3) Then Exit Function
-    sValue = StringFormat("{0}{1}{2}{3}", Chr$(sIP(0)), Chr$(sIP(1)), Chr$(sIP(2)), Chr$(sIP(3)))
-    CopyMemory aton, ByVal sValue, 4
-    'aton = Val(sIP(0)) + _
-    '      (Val(sIP(1)) * &H100) + _
-    '      (Val(sIP(2)) * &H10000) + _
-    '      (Val(sIP(3)) * &H1000000)
-End Function
 
