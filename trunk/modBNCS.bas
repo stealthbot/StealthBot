@@ -753,6 +753,10 @@ On Error GoTo ERROR_HANDLER:
     
     Set pBuff = Nothing
     
+    If (BotVars.Spoof = 1) Then
+        Call SEND_SID_PING(pBuff.GetDWORD)
+    End If
+    
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
