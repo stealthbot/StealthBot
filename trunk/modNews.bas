@@ -53,7 +53,9 @@ Public Sub HandleNews(ByVal s As String)
             End If
             
             If Len(Splt(3)) > 1 Then
+                frmChat.AddChat RTBColors.ServerInfoText, ">> "
                 frmChat.AddChat RTBColors.ServerInfoText, ">> ÿcbStealthBot News"
+                
                 If InStr(1, Splt(2), "\n") > 0 Then
                     SubSplt() = Split(Splt(3), "\n")
                     
@@ -63,6 +65,8 @@ Public Sub HandleNews(ByVal s As String)
                 Else
                     frmChat.AddChat RTBColors.ServerInfoText, ">> " & Splt(3)
                 End If
+                
+                frmChat.AddChat RTBColors.ServerInfoText, ">> "
             End If
         End If
     
