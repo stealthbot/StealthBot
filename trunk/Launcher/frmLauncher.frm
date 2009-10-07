@@ -7,7 +7,7 @@ Begin VB.Form frmLauncher
    ClientHeight    =   5205
    ClientLeft      =   150
    ClientTop       =   435
-   ClientWidth     =   3360
+   ClientWidth     =   3600
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -23,38 +23,38 @@ Begin VB.Form frmLauncher
    MinButton       =   0   'False
    ScaleHeight     =   347
    ScaleMode       =   3  'Pixel
-   ScaleWidth      =   224
+   ScaleWidth      =   240
    StartUpPosition =   3  'Windows Default
    Begin VB.CheckBox chkAutoClose 
       BackColor       =   &H00000000&
-      Caption         =   "Automatically close this launcher after loading the profile"
+      Caption         =   "&Automatically close this launcher after loading the profile"
       ForeColor       =   &H00FFFFFF&
       Height          =   495
       Left            =   240
       TabIndex        =   4
       ToolTipText     =   "Leaving the launcher open will allow you to create and launch additional profiles."
       Top             =   4080
-      Width           =   2895
+      Width           =   3135
    End
    Begin VB.CommandButton cmdRemoveProfile 
-      Caption         =   "Remove Profile"
+      Caption         =   "&Remove Profile"
       Enabled         =   0   'False
       Height          =   240
-      Left            =   1800
+      Left            =   1920
       TabIndex        =   2
       Top             =   3240
-      Width           =   1335
+      Width           =   1455
    End
    Begin VB.CommandButton cmdCreateProfile 
-      Caption         =   "Create Profile"
+      Caption         =   "&Create Profile"
       Height          =   240
       Left            =   240
       TabIndex        =   1
       Top             =   3240
-      Width           =   1575
+      Width           =   1695
    End
    Begin VB.CommandButton cmdLaunchThis 
-      Caption         =   "Launch Selected Profile"
+      Caption         =   "&Launch Selected Profile"
       Enabled         =   0   'False
       BeginProperty Font 
          Name            =   "Tahoma"
@@ -69,24 +69,24 @@ Begin VB.Form frmLauncher
       Left            =   240
       TabIndex        =   5
       Top             =   4680
-      Width           =   2895
+      Width           =   3135
    End
    Begin VB.CommandButton cmdCreateShortcut 
-      Caption         =   "Create a Shortcut"
+      Caption         =   "Create a &Shortcut"
       Enabled         =   0   'False
       Height          =   360
       Left            =   240
       TabIndex        =   3
       Top             =   3600
-      Width           =   1455
+      Width           =   1695
    End
    Begin MSComctlLib.ListView lstProfiles 
       Height          =   2895
       Left            =   240
       TabIndex        =   0
       Top             =   360
-      Width           =   2895
-      _ExtentX        =   5106
+      Width           =   3135
+      _ExtentX        =   5530
       _ExtentY        =   5106
       View            =   3
       LabelEdit       =   1
@@ -111,7 +111,7 @@ Begin VB.Form frmLauncher
       Caption         =   "to this profile on your Desktop"
       ForeColor       =   &H00FFFFFF&
       Height          =   465
-      Left            =   1800
+      Left            =   2040
       TabIndex        =   7
       Top             =   3600
       Width           =   1335
@@ -516,7 +516,7 @@ End Sub
 ' so neither has to be done anywhere else
 Private Sub SetupColumns(ByVal Alignment As ListColumnAlignmentConstants)
 On Error GoTo ERROR_HANDLER:
-    Const COLUMN_WIDTH_PX As Integer = 190
+    Const COLUMN_WIDTH_PX As Integer = 206
 
     lstProfiles.ListItems.Clear
     Select Case Alignment
