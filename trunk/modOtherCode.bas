@@ -1502,11 +1502,6 @@ Public Sub ReadyINet()
     frmChat.INet.Cancel
 End Sub
 
-Public Function GetNewsURL() As String
-    ' Changed link back to original one until everything gets moved. (8/20/09) -Pyro
-    GetNewsURL = "http://www.stealthbot.net/getver3.php?vc=" & VERCODE
-End Function
-
 Public Function HTMLToRGBColor(ByVal s As String) As Long
     HTMLToRGBColor = RGB(Val("&H" & Mid$(s, 1, 2)), Val("&H" & Mid$(s, 3, 2)), _
         Val("&H" & Mid$(s, 5, 2)))
