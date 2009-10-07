@@ -1502,6 +1502,11 @@ Public Sub ReadyINet()
     frmChat.INet.Cancel
 End Sub
 
+Public Function GetNewsURL() As String
+    ' Changed link back to original one until everything gets moved. (8/20/09) -Pyro
+    GetNewsURL = "http://www.stealthbot.net/getver3.php?vc=" & VERCODE
+End Function
+
 Public Function HTMLToRGBColor(ByVal s As String) As Long
     HTMLToRGBColor = RGB(Val("&H" & Mid$(s, 1, 2)), Val("&H" & Mid$(s, 3, 2)), _
         Val("&H" & Mid$(s, 5, 2)))
@@ -1858,7 +1863,7 @@ Public Function GetProfilePath(Optional ByVal ProfileIndex As Integer) As String
 End Function
 
 Public Sub OpenReadme()
-    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/sb/readme/", 0, 0, 0
+    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/sb/redir/readme/", 0, 0, 0
     frmChat.AddChat RTBColors.SuccessText, "You are being taken to the StealthBot Online Readme."
 End Sub
 
@@ -2207,7 +2212,8 @@ Public Sub SetCommandLine(sCommandLine As String)
     CommandLine = vbNullString
     sTemp = sCommandLine
     
-    Do While Left$(sTemp, 1) = "-"
+    Do While Left$(Trim$(sTemp), 1) = "-"
+        sTemp = Trim$(sTemp)
         sSetting = Split(Mid$(sTemp, 2) & Space$(1), Space$(1))(0)
         sTemp = Mid$(sTemp, Len(sSetting) + 3)
         Select Case LCase$(sSetting)
@@ -2252,6 +2258,14 @@ Public Sub SetCommandLine(sCommandLine As String)
                 AddEnvPath sValue
                 
                 CommandLine = StringFormat("{0}-addpath {1}{2}{1} ", CommandLine, Chr$(34), sValue)
+                
+            Case "launcherver":
+                If (Len(sTemp) >= 8) Then
+                    sValue = Left$(sTemp, 8)
+                    lLauncherVersion = CLng(StringFormat("&H{0}", sValue))
+                    
+                    CommandLine = StringFormat("{0}-launcherver {1} ", CommandLine, sValue)
+                End If
                 
             Case Else:
                 CommandLine = StringFormat("{0}-{1} ", CommandLine, sSetting)

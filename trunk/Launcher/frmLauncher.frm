@@ -4,7 +4,7 @@ Begin VB.Form frmLauncher
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "StealthBot Launcher v0.0.000"
-   ClientHeight    =   5160
+   ClientHeight    =   5205
    ClientLeft      =   150
    ClientTop       =   435
    ClientWidth     =   3360
@@ -21,7 +21,7 @@ Begin VB.Form frmLauncher
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   344
+   ScaleHeight     =   347
    ScaleMode       =   3  'Pixel
    ScaleWidth      =   224
    StartUpPosition =   3  'Windows Default
@@ -516,7 +516,7 @@ End Sub
 ' so neither has to be done anywhere else
 Private Sub SetupColumns(ByVal Alignment As ListColumnAlignmentConstants)
 On Error GoTo ERROR_HANDLER:
-    Const COLUMN_WIDTH_PX As Integer = 170
+    Const COLUMN_WIDTH_PX As Integer = 190
 
     lstProfiles.ListItems.Clear
     Select Case Alignment
@@ -560,12 +560,8 @@ On Error GoTo ERROR_HANDLER
 ERROR_HANDLER:
     ErrorHandler Err.Number, OBJECT_NAME, "AddInformationalItem"
 End Sub
-'
-'Private Sub mnuSettings_Click()
-'On Error GoTo ERROR_HANDLER:
-'    Load frmConfig
-'    frmConfig.Show
-'    Exit Sub
-'ERROR_HANDLER:
-'    ErrorHandler Err.Number, OBJECT_NAME, "mnuSettings_Click"
-'End Sub
+
+Private Sub chkAutoClose_Click()
+    cConfig.AutoClose = (chkAutoClose.Value)
+    cConfig.SaveConfig
+End Sub
