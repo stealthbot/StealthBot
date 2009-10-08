@@ -76,8 +76,8 @@ Public Function Add(ByVal QuoteStr As String) As Long
     
 ERROR_HANDLER:
     
-    MsgBox "Error (#" & Err.Number & "): " & Err.description & " in Quotes.Add()."
-    
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.Add()", _
+    Err.Number, Err.description, OBJECT_NAME)
 End Function
 
 ' call this to reqmove quotes from the collection
@@ -183,6 +183,7 @@ Public Function GetRandomQuote() As String
     On Error GoTo ERROR_HANDLER
 
     Dim iRand      As Integer
+    Dim sQuote     As String
     
     If m_Quotes.Count = 0 Then
         GetRandomQuote = vbNullString
@@ -191,18 +192,23 @@ Public Function GetRandomQuote() As String
     
     ' randomly select quote
     Randomize
-    iRand = (Rnd * &H1000 * m_Quotes.Count) Mod m_Quotes.Count 'Do % Count so it will ALWAYS be < Count
+    iRand = (Rnd * m_Quotes.Count)
     
     ' get quote in collection
-    
-    GetRandomQuote = m_Quotes.Item(iRand)
+    If (iRand + 1 <= m_Quotes.Count) Then
+        sQuote = m_Quotes.Item(iRand + 1)
+    Else
+        sQuote = m_Quotes.Item(m_Quotes.Count)
+    End If
     
     ' security check
-    If Left$(GetRandomQuote, 1) = "/" Then GetRandomQuote = " " & GetRandomQuote
+    If Left$(sQuote, 1) = "/" Then sQuote = StringFormat(" {0}", sQuote)
+    GetRandomQuote = sQuote
     
     Exit Function
 
 ERROR_HANDLER:
+frmChat.AddChat vbYellow, "" & iRand
     frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.GetRandomQuote()", _
     Err.Number, Err.description, OBJECT_NAME)
     

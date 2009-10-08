@@ -257,7 +257,7 @@ Public Sub OnMMail(Command As clsCommandObj)
     Dim Rank     As Long
     Dim Flags    As String
     Dim i        As Integer
-    Dim X        As Integer
+    Dim x        As Integer
     Dim dbAccess As udtGetAccessResponse
     
     If (Command.IsValid) Then
@@ -286,13 +286,13 @@ Public Sub OnMMail(Command As clsCommandObj)
             For i = 0 To UBound(DB)
                 If (StrComp(DB(i).Type, "USER", vbTextCompare) = 0) Then
                     dbAccess = GetCumulativeAccess(DB(i).Username)
-                    For X = 1 To Len(Flags)
-                        If (InStr(1, dbAccess.Flags, Mid$(Flags, X, 1), IIf(BotVars.CaseSensitiveFlags, vbBinaryCompare, vbTextCompare)) > 0) Then
+                    For x = 1 To Len(Flags)
+                        If (InStr(1, dbAccess.Flags, Mid$(Flags, x, 1), IIf(BotVars.CaseSensitiveFlags, vbBinaryCompare, vbTextCompare)) > 0) Then
                             temp.To = DB(i).Username
                             Call AddMail(temp)
                             Exit For
                         End If
-                    Next X
+                    Next x
                 End If
             Next i
             Command.Respond StringFormat("Mass mailing to users with any of the flags {0} complete.", Flags)
@@ -400,6 +400,7 @@ Public Sub OnVote(Command As clsCommandObj)
                 Else
                     VoteInitiator = GetCumulativeAccess(Command.Username)
                 End If
+                Command.Respond Voting(BVT_VOTE_START, BVT_VOTE_STD, vbNullString)
             Else
                 Command.Respond "Vote durations must be between 1 and 32000"
             End If

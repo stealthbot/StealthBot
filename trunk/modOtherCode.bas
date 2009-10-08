@@ -1,5 +1,6 @@
 Attribute VB_Name = "modOtherCode"
 Option Explicit
+Private Const OBJECT_NAME As String = "modOtherCode"
 Private Declare Function GetEnvironmentVariable Lib "kernel32" Alias "GetEnvironmentVariableA" (ByVal lpName As String, ByVal lpBuffer As String, ByVal nSize As Long) As Long
 Private Declare Function SetEnvironmentVariable Lib "kernel32" Alias "SetEnvironmentVariableA" (ByVal lpName As String, ByVal lpValue As String) As Long
 
@@ -518,13 +519,14 @@ Public Sub APISend(ByRef s As String) '// faster API-based sending for EFP
 End Sub
 
 Public Function Voting(ByVal Mode1 As Byte, Optional Mode2 As Byte, Optional Username As String) As String
+On Error GoTo ERROR_HANDLER:
     Static Voted()  As String
     Static VotesYes As Integer
     Static VotesNo  As Integer
     Static VoteMode As Byte
     Static Target   As String
         
-    Dim i           As Integer
+    Dim i             As Integer
     
     Select Case (Mode1)
         Case BVT_VOTE_ADD
@@ -615,6 +617,10 @@ Public Function Voting(ByVal Mode1 As Byte, Optional Mode2 As Byte, Optional Use
                 Voting = Voting & " The vote is a draw."
             End If
     End Select
+    Exit Function
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Voting()", Err.Number, Err.description, OBJECT_NAME))
 End Function
 
 Public Function GetAccess(ByVal Username As String, Optional dbType As String = _

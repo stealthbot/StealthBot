@@ -211,9 +211,8 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: " & Err.description & " in Event_FlagsUpdate()"
-
-    Exit Sub
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_FlagsUpdate()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
@@ -349,13 +348,9 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     RunInAll "Event_ChannelJoin", ChannelName, Flags
     
     Exit Sub
-
 ERROR_HANDLER:
-
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in Event_JoinedChannel()."
-
-    Exit Sub
-    
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_JoinedChannel()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
@@ -532,6 +527,7 @@ Repeat4:
 End Sub
 
 Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountName As String)
+On Error GoTo ERROR_HANDLER:
     LastWhisper = vbNullString
 
     'If InStr(1, Username, "*", vbBinaryCompare) <> 0 Then
@@ -602,17 +598,17 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
     
     'Call FullJoin(BotVars.HomeChannel)
     
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' call event script function
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-    On Error Resume Next
-    
     RunInAll "Event_LoggedOn", Username, BotVars.Product
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_LoggedOnAs()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 ' updated 8-10-05 for new logging system
 Public Sub Event_LogonEvent(ByVal Message As Byte, Optional ByVal ExtraInfo As String)
+On Error GoTo ERROR_HANDLER:
     Dim lColor       As Long
     Dim sMessage     As String
     'Dim UseExtraInfo As Boolean
@@ -652,36 +648,55 @@ Public Sub Event_LogonEvent(ByVal Message As Byte, Optional ByVal ExtraInfo As S
     End Select
     
     frmChat.AddChat lColor, "[BNCS] " & sMessage
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_LogonEvent()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_RealmConnected()
+On Error GoTo ERROR_HANDLER:
     frmChat.AddChat RTBColors.SuccessText, "Realm: Connected! Please wait, " & _
         "logging in to the Diablo II realm may take a moment."
+        
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_RealmConnected()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_RealmConnecting()
+On Error GoTo ERROR_HANDLER:
     frmChat.AddChat RTBColors.InformationText, "Realm: Connecting..."
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_RealmConnecting()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_RealmError(ErrorNumber As Integer, description As String)
+On Error GoTo ERROR_HANDLER:
     frmChat.AddChat RTBColors.ErrorMessageText, "Realm: Error " & _
         ErrorNumber & ": " & description
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_RealmError()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_ServerError(ByVal Message As String)
+On Error GoTo ERROR_HANDLER:
     frmChat.AddChat RTBColors.ErrorMessageText, Message
     
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' call event script function
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    
-    On Error Resume Next
-    
     RunInAll "Event_ServerError", Message
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_ServerError()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
-
+On Error GoTo ERROR_HANDLER:
     ' ...
     On Error GoTo ERROR_HANDLER
 
@@ -947,29 +962,12 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             frmChat.AddChat RTBColors.ServerInfoText, Message
         End If
     End If
-    
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' call event script function
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    
-    On Error Resume Next
-    
+
     RunInAll "Event_ServerInfo", Message
-    
     Exit Sub
-    
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: " & Err.description & " in Event_ServerInfo()."
-
-    Exit Sub
-End Sub
-
-Public Sub Event_SomethingUnknown(ByVal UnknownString As String)
-    frmChat.AddChat RTBColors.ErrorMessageText, "Something unknown has happened... " & _
-        "Did Battle.Net change something? The Unknown Event is as follows:"
-    frmChat.AddChat RTBColors.ErrorMessageText, "[" & UnknownString & "]"
-    frmChat.AddChat RTBColors.ErrorMessageText, "Please report this event to Stealth as soon " & _
-        "as possible, copy/paste this entire message."
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_ServerInfo()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
@@ -1088,13 +1086,11 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
         ' ...
         RunInAll "Event_UserEmote", Username, Flags, Message
     End If
-    
+
     Exit Sub
-    
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error (" & Err.Number & "): " & Err.description & " in Event_UserEmote()."
-    
-    Exit Sub
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_UserEmote()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 'Ping, Product, Clan, InitStatstring, W3Icon
@@ -1289,14 +1285,11 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         frmChat.AddChat vbMagenta, "Username: " & Username & ", Statstring: " & _
             originalstatstring
     End If
-    
+
     Exit Sub
-    
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in Event_UserInChannel().")
-    Call frmChat.AddChat(vbRed, "Error Source: " & Err.source)
-    
-    Exit Sub
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_UserInChannel()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
@@ -1313,7 +1306,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim i           As Long
     Dim temp        As Byte
     Dim Level       As Byte
-    Dim l           As Long
+    Dim L           As Long
     Dim Banned      As Boolean
     Dim f           As Integer
     Dim UserIndex   As Integer ' ...
@@ -1542,11 +1535,11 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
             
             If (mail) Then
-                l = GetMailCount(Username)
+                L = GetMailCount(Username)
                 
-                If (l > 0) Then
-                    frmChat.AddQ "/w " & Username & " You have " & l & _
-                        " new message" & IIf(l = 1, "", "s") & ". Type !inbox to retrieve."
+                If (L > 0) Then
+                    frmChat.AddQ "/w " & Username & " You have " & L & _
+                        " new message" & IIf(L = 1, "", "s") & ". Type !inbox to retrieve."
                 End If
             End If
         End If
@@ -1569,11 +1562,9 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     End If
     
     Exit Sub
-    
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in Event_UserJoins().")
-    
-    Exit Sub
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_UserJoins()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
@@ -1671,13 +1662,11 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         
         RunInAll "Event_UserLeaves", Username, Flags
     End If
-    
+
     Exit Sub
-    
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in Event_UserLeaves().")
-    
-    Exit Sub
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_UserLeaves()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
@@ -1860,17 +1849,15 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         RunInAll "Event_UserTalk", Username, Flags, Message, Ping
     End If
     
-    ' ...
+
     Exit Sub
-    
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error (" & Err.Number & "): " & Err.description & " in Event_UserTalk()."
-    
-    Exit Sub
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_UserTalk()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 Private Function CheckMessage(Username As String, Message As String) As Boolean
-    
+On Error GoTo ERROR_HANDLER:
     Dim BanningUser As Boolean ' ...
     Dim i           As Integer ' ...
     
@@ -1922,11 +1909,14 @@ Private Function CheckMessage(Username As String, Message As String) As Boolean
     ' ...
     CheckMessage = BanningUser
     
+    Exit Function
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.CheckMessage()", Err.Number, Err.description, OBJECT_NAME))
 End Function
 
 Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
-    'Dim L As Long
-
+On Error GoTo ERROR_HANDLER:
     Select Case (Message)
         Case 0:
             frmChat.AddChat RTBColors.SuccessText, "[BNCS] Client version accepted!"
@@ -2009,9 +1999,15 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
     If (Message > 0) Then
         Call frmChat.DoDisconnect
     End If
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_VersionCheck()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long)
+On Error GoTo ERROR_HANDLER:
     'Dim s       As String
     Dim lCarats As Long
     Dim WWIndex As Integer
@@ -2069,7 +2065,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         If (VoteDuration > 0) Then
             If (InStr(1, Message, "yes", vbTextCompare) > 0) Then
                 Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDYES, Username)
-            ElseIf (InStr(Message, "no", vbTextCompare) > 0) Then
+            ElseIf (InStr(1, Message, "no", vbTextCompare) > 0) Then
                 Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDNO, Username)
             End If
         End If
@@ -2142,18 +2138,22 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         
         On Error Resume Next
         
-        ' ...
         g_lastQueueUser = Username
         
-        ' ...
         RunInAll "Event_WhisperFromUser", Username, Flags, Message, Ping
     End If
     
     LastWhisperTime = GetTickCount
+
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_WhisperFromUser()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 ' Flags and ping are deliberately not used at this time
 Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long)
+On Error GoTo ERROR_HANDLER:
     Dim WWIndex As Integer
     Dim ToANSI  As String
     
@@ -2209,11 +2209,16 @@ Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, By
             frmChat.rtbWhispers.Visible = False
         End If
     End If
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_WhisperToUser()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 
 '11/22/07 - Hdx - Pass the channel listing (0x0B) directly off to scriptors for there needs. (What other use is there?)
 Public Sub Event_ChannelList(sChannels() As String)
+On Error GoTo ERROR_HANDLER:
     Dim x As Integer
         
     If (MDebug("all")) Then
@@ -2229,13 +2234,11 @@ Public Sub Event_ChannelList(sChannels() As String)
         frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.Count - 1).Caption = sChannels(x)
     Next x
     
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' call event script function
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    
-    On Error Resume Next
-    
     RunInAll "Event_ChannelList", ConvertStringArray(sChannels)
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_ChannelList()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 '10/01/09 - Hdx - This is for SID_MESSAGEBOX, for now it'll raise it's own event, and Event_ServerError
 Public Function Event_MessageBox(lStyle As Long, sText As String, sCaption As String)
@@ -2252,7 +2255,7 @@ ERROR_HANDLER:
 End Function
 
 Public Function CleanUsername(ByVal Username As String) As String
-    
+On Error GoTo ERROR_HANDLER:
     Dim tmp As String  ' ...
     Dim pos As Integer ' ...
     
@@ -2277,6 +2280,10 @@ Public Function CleanUsername(ByVal Username As String) As String
     ' ...
     CleanUsername = tmp
     
+    Exit Function
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.CleanUsername()", Err.Number, Err.description, OBJECT_NAME))
 End Function
 
 'Private Function GetDiablo2CharacterName(ByVal Username As String) As String
