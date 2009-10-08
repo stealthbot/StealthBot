@@ -2,15 +2,27 @@ Attribute VB_Name = "modBNCS"
 Option Explicit
 Private Const OBJECT_NAME As String = "modBNCS"
 
+Private Declare Sub GetSystemTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
+Private Declare Sub GetLocalTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
+Private Declare Function SystemTimeToFileTime Lib "kernel32" (lpSystemTime As SYSTEMTIME, lpFileTime As FILETIME) As Long
+
+
 Public Const SID_NULL                   As Byte = &H0
+Public Const SID_CLIENTID               As Byte = &H5
+Public Const SID_STARTVERSIONING        As Byte = &H6
+Public Const SID_REPORTVERSION          As Byte = &H7
 Public Const SID_ENTERCHAT              As Byte = &HA
 Public Const SID_GETCHANNELLIST         As Byte = &HB
 Public Const SID_CHATCOMMAND            As Byte = &HE
 Public Const SID_CHATEVENT              As Byte = &HF
+Public Const SID_LOCALEINFO             As Byte = &H12
 Public Const SID_UDPPINGRESPONSE        As Byte = &H14
 Public Const SID_MESSAGEBOX             As Byte = &H19
+Public Const SID_LOGONCHALLENGEEX       As Byte = &H1D
+Public Const SID_CLIENTID2              As Byte = &H1E
 Public Const SID_PING                   As Byte = &H25
 Public Const SID_ICONDATA               As Byte = &H2D
+Public Const SID_CDKEY2                 As Byte = &H36
 Public Const SID_LOGONRESPONSE2         As Byte = &H3A
 Public Const SID_CREATEACCOUNT2         As Byte = &H3D
 Public Const SID_LOGONREALMEX           As Byte = &H3E
@@ -50,24 +62,29 @@ On Error GoTo ERROR_HANDLER:
     End With
     
     Select Case PacketID
-        Case SID_NULL:                   'Don't Throw Unknown Error
-        Case SID_ENTERCHAT:              Call RECV_SID_ENTERCHAT(pBuff)
-        Case SID_GETCHANNELLIST:         Call RECV_SID_GETCHANNELLIST(pBuff)
-        Case SID_CHATEVENT:              Call RECV_SID_CHATEVENT(pBuff)
-        Case SID_MESSAGEBOX:             Call RECV_SID_MESSAGEBOX(pBuff)
-        Case SID_PING:                   Call RECV_SID_PING(pBuff)
-        Case SID_ICONDATA:               'Don't Throw Unknown Error
-        Case SID_LOGONRESPONSE2:         Call RECV_SID_LOGONRESPONSE2(pBuff)
-        Case SID_CREATEACCOUNT2:         Call RECV_SID_CREATEACCOUNT2(pBuff)
-        Case SID_LOGONREALMEX:           Call RECV_SID_LOGONREALMEX(pBuff)
-        Case SID_QUERYREALMS2:           Call RECV_SID_QUERYREALMS2(pBuff)
-        Case SID_EXTRAWORK:              'Don't Throw Unknown Error
-        Case SID_AUTH_INFO:              Call RECV_SID_AUTH_INFO(pBuff)
-        Case SID_AUTH_CHECK:             Call RECV_SID_AUTH_CHECK(pBuff)
-        Case SID_AUTH_ACCOUNTCREATE:     Call RECV_SID_AUTH_ACCOUNTCREATE(pBuff)
-        Case SID_AUTH_ACCOUNTLOGON:      Call RECV_SID_AUTH_ACCOUNTLOGON(pBuff)
-        Case SID_AUTH_ACCOUNTLOGONPROOF: Call RECV_SID_AUTH_ACCOUNTLOGONPROOF(pBuff)
-        Case SID_SETEMAIL:               Call RECV_SID_SETEMAIL(pBuff)
+        Case SID_NULL:                   'Don't Throw Unknown Error                  '0x00
+        Case SID_CLIENTID:               'Don't Throw Unknown Error                  '0x05
+        Case SID_STARTVERSIONING:        Call RECV_SID_STARTVERSIONING(pBuff)        '0x06
+        Case SID_REPORTVERSION:          Call RECV_SID_REPORTVERSION(pBuff)          '0x07
+        Case SID_ENTERCHAT:              Call RECV_SID_ENTERCHAT(pBuff)              '0x0A
+        Case SID_GETCHANNELLIST:         Call RECV_SID_GETCHANNELLIST(pBuff)         '0x0B
+        Case SID_CHATEVENT:              Call RECV_SID_CHATEVENT(pBuff)              '0x0F
+        Case SID_MESSAGEBOX:             Call RECV_SID_MESSAGEBOX(pBuff)             '0x19
+        Case SID_LOGONCHALLENGEEX:       Call RECV_SID_LOGONCHALLENGEEX(pBuff)       '0x1D
+        Case SID_PING:                   Call RECV_SID_PING(pBuff)                   '0x25
+        Case SID_ICONDATA:               'Don't Throw Unknown Error                  '0x2D
+        Case SID_CDKEY2:                 Call RECV_SID_CDKEY2(pBuff)                 '0x36
+        Case SID_LOGONRESPONSE2:         Call RECV_SID_LOGONRESPONSE2(pBuff)         '0x3A
+        Case SID_CREATEACCOUNT2:         Call RECV_SID_CREATEACCOUNT2(pBuff)         '0x3D
+        Case SID_LOGONREALMEX:           Call RECV_SID_LOGONREALMEX(pBuff)           '0x3C
+        Case SID_QUERYREALMS2:           Call RECV_SID_QUERYREALMS2(pBuff)           '0x40
+        Case SID_EXTRAWORK:              'Don't Throw Unknown Error                  '0x4C
+        Case SID_AUTH_INFO:              Call RECV_SID_AUTH_INFO(pBuff)              '0x50
+        Case SID_AUTH_CHECK:             Call RECV_SID_AUTH_CHECK(pBuff)             '0x51
+        Case SID_AUTH_ACCOUNTCREATE:     Call RECV_SID_AUTH_ACCOUNTCREATE(pBuff)     '0x52
+        Case SID_AUTH_ACCOUNTLOGON:      Call RECV_SID_AUTH_ACCOUNTLOGON(pBuff)      '0x53
+        Case SID_AUTH_ACCOUNTLOGONPROOF: Call RECV_SID_AUTH_ACCOUNTLOGONPROOF(pBuff) '0x54
+        Case SID_SETEMAIL:               Call RECV_SID_SETEMAIL(pBuff)               '0x59
     
         Case Else:
             BNCSRecvPacket = False
@@ -82,6 +99,142 @@ On Error GoTo ERROR_HANDLER:
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNCSRecvPacket()", Err.Number, Err.description, OBJECT_NAME))
 End Function
+
+'*******************************
+'SID_STARTVERSIONING (0x06) S->C
+'*******************************
+' (FILETIME) MPQ Filetime
+' (STRING) MPQ Filename
+' (STRING) ValueString
+'*******************************
+Public Sub RECV_SID_STARTVERSIONING(pBuff As clsDataBuffer)
+On Error GoTo ERROR_HANDLER:
+    
+    With pBuff
+        ds.CRevFileTime = .GetRaw(8)
+        ds.CRevFileName = .GetString
+        ds.CRevSeed = .GetString
+    End With
+    
+    If (BotVars.BNLS) Then
+        Call modBNLS.SEND_BNLS_VERSIONCHECKEX2(ds.CRevFileTimeRaw, ds.CRevFileName, ds.CRevSeed)
+    Else
+        Call SEND_SID_REPORTVERSION
+    End If
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_STARTVERSIONING()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
+'*******************************
+'SID_STARTVERSIONING (0x06) C->S
+'*******************************
+' (DWORD) Platform ID
+' (DWORD) Product ID
+' (DWORD) Version Byte
+' (DWORD) Unknown (0)
+'*******************************
+Public Sub SEND_SID_STARTVERSIONING(Optional lVerByte As Long = 0)
+On Error GoTo ERROR_HANDLER:
+
+    Dim pBuff As New clsDataBuffer
+    
+    With pBuff
+        .InsertDWord GetDWORDOverride("PlatID", PLATFORM_INTEL)               'Platform ID
+        .InsertDWord GetDWORD(BotVars.Product)                                'Product ID
+        .InsertDWord IIf(lVerByte = 0, GetVerByte(BotVars.Product), lVerByte) 'VersionByte
+        .InsertDWord 0  'Unknown
+        .SendPacket SID_STARTVERSIONING
+    End With
+    
+    Set pBuff = Nothing
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_STARTVERSIONING()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+'*******************************
+'SID_REPORTVERSION (0x07) S->C
+'*******************************
+' (DWORD) Result
+' (STRING) Patch path
+'*******************************
+Private Sub RECV_SID_REPORTVERSION(pBuff As clsDataBuffer)
+On Error GoTo ERROR_HANDLER:
+    Dim lResult As Long
+    Dim sPatch  As String
+    
+    lResult = pBuff.GetDWORD
+    sPatch = pBuff.GetDWORD
+    
+    Select Case lResult
+        Case 0: Call Event_VersionCheck(1, sPatch) 'Failed Version Check
+        Case 1: Call Event_VersionCheck(1, sPatch) 'Old Game Version
+        Case 2: 'Success
+            Call Event_VersionCheck(0, sPatch)
+            If (GetCDKeyCount > 0) Then
+                SEND_SID_CDKEY2
+            Else
+                SEND_SID_LOGONRESPONSE2
+            End If
+        Case 3: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Version Check Failed, Invalid game version" 'Reinstall required
+        Case Else:
+            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown SID_REPORTVERSION Response: 0x" & ZeroOffset(lResult, 8))
+    End Select
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_REPORTVERSION()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
+'*******************************
+'SID_REPORTVERSION (0x07) C->S
+'*******************************
+' (DWORD) Platform ID
+' (DWORD) Product ID
+' (DWORD) Version Byte
+' (DWORD) EXE Version
+' (DWORD) EXE Hash
+' (STRING) EXE Information
+'*******************************
+Public Sub SEND_SID_REPORTVERSION(Optional lVerByte As Long = 0)
+On Error GoTo ERROR_HANDLER:
+
+    If (Not BotVars.BNLS) Then
+        If (Not CompileCheckrevision()) Then
+            frmChat.DoDisconnect
+            Exit Sub
+        End If
+    End If
+        
+    If (ds.CRevChecksum = 0 Or ds.CRevVersion = 0 Or LenB(ds.CRevResult) = 0) Then
+        frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Check Revision Failed, sanity failed"
+        frmChat.DoDisconnect
+        Exit Sub
+    End If
+    
+    Dim pBuff As New clsDataBuffer
+    With pBuff
+        .InsertDWord GetDWORDOverride("PlatID", PLATFORM_INTEL)               'Platform ID
+        .InsertDWord GetDWORD(BotVars.Product)                                'Product ID
+        .InsertDWord IIf(lVerByte = 0, GetVerByte(BotVars.Product), lVerByte) 'VersionByte
+        .InsertDWord ds.CRevVersion                                           'Exe Version
+        .InsertDWord ds.CRevChecksum                                          'Checksum
+        .InsertNTString ds.CRevResult                                         'Result
+        .SendPacket SID_REPORTVERSION
+    End With
+    
+    Set pBuff = Nothing
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_STARTVERSIONING()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
 
 '*******************************
 'SID_ENTERCHAT (0x0A) S->C
@@ -257,6 +410,82 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CHATEVENT()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
+'*********************************
+' SID_LOCALEINFO (0x12) C->S
+'*********************************
+' (FILETIME) System time
+' (FILETIME) Local time
+' (DWORD) Timezone bias
+' (DWORD) SystemDefaultLCID
+' (DWORD) UserDefaultLCID
+' (DWORD) UserDefaultLangID
+' (STRING) Abbreviated language name
+' (STRING) Country Code
+' (STRING) Abbreviated country name
+' (STRING) Country Name
+'*********************************
+Public Sub SEND_SID_LOCALEINFO()
+On Error GoTo ERROR_HANDLER:
+    Const LOCALE_SABBREVLANGNAME As Long = &H3
+    Const LOCALE_USER_DEFAULT    As Long = &H400
+    Dim LanguageAbr As String
+    Dim CountryCode As String
+    Dim CountryAbr  As String
+    Dim CountryName As String
+    Dim lRet        As String
+    
+    Dim st As SYSTEMTIME
+    Dim ft As FILETIME
+    
+    Dim pBuff As New clsDataBuffer
+    
+    LanguageAbr = String$(256, 0)
+    Call GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SABBREVLANGNAME, LanguageAbr, Len(LanguageAbr))
+    LanguageAbr = KillNull(LanguageAbr)
+    
+    Call GetCountryData(CountryAbr, CountryName, CountryCode)
+    If (Len(LanguageAbr) = 0) Then LanguageAbr = "ENU"
+    If (Len(CountryCode) = 0) Then CountryCode = "1"
+    If (Not Len(CountryAbr) = 3) Then CountryAbr = "USA"
+    If (LenB(CountryName) = 0) Then CountryName = "United States"
+    
+    With pBuff
+        Call GetSystemTime(st)
+        Call SystemTimeToFileTime(st, ft)
+        .InsertDWord ft.dwLowDateTime                                 'SystemTime
+        .InsertDWord ft.dwHighDateTime                                'SystemTime
+        
+        Call GetLocalTime(st)
+        Call SystemTimeToFileTime(st, ft)
+        .InsertDWord ft.dwLowDateTime                                 'LocalTime
+        .InsertDWord ft.dwHighDateTime                                'LocalTime
+        
+        .InsertDWord GetTimeZoneBias                                  'Time Zone Bias
+        If (ReadCfg("Override", "ForceDefaultLocaleID") = "Y") Then
+            .InsertDWord 1033                                         'SystemDefaultLCID
+            .InsertDWord 1033                                         'UserDefaultLCID
+            .InsertDWord 1033                                         'UserDefaultLangID
+        Else
+            .InsertDWord CLng(GetSystemDefaultLCID)                   'SystemDefaultLCID
+            .InsertDWord CLng(GetUserDefaultLCID)                     'UserDefaultLCID
+            .InsertDWord CLng(GetUserDefaultLangID)                   'UserDefaultLangID
+        End If
+        
+        .InsertNTString LanguageAbr                                   'Language Abbrev
+        .InsertNTString CountryCode                                   'Country Code
+        .InsertNTString CountryAbr                                    'Country Abbrev
+        .InsertNTString CountryName                                   'Country Name
+        
+        .SendPacket SID_LOCALEINFO
+    End With
+    Set pBuff = Nothing
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_LOCALEINFO()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
 '*******************************
 'SID_UDPPINGRESPONSE (0x14) C->S
 '*******************************
@@ -298,6 +527,66 @@ On Error GoTo ERROR_HANDLER:
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_MESSAGEBOX()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
+'********************************
+'SID_LOGONCHALLENGEEX (0x1D) S->C
+'********************************
+' (DWORD) UDP Token
+' (DWORD) Server Token
+'********************************
+Private Sub RECV_SID_LOGONCHALLENGEEX(pBuff As clsDataBuffer)
+On Error GoTo ERROR_HANDLER:
+    
+    ds.UDPValue = pBuff.GetDWORD
+    ds.ServerToken = pBuff.GetDWORD
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONCHALLENGEEX()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
+'*********************************
+' SID_CLIENTID2 (0x1E) C->S
+'*********************************
+' (DWORD) Server Version
+' For server version 1:
+'  (DWORD) Registration Version
+'  (DWORD) Registration Authority
+' For server version 0:
+'  (DWORD) Registration Authority
+'  (DWORD) Registration Version
+' (DWORD) Account Number
+' (DWORD) Registration Token
+' (STRING) LAN computer name
+' (STRING) LAN username
+'*********************************
+'This is eww, I don't like hard coding,
+'but to get this crap I would need to
+'use Storm.dll, which we don't want to
+'distribute with the bot.
+'*********************************
+Public Sub SEND_SID_CLIENTID2()
+On Error GoTo ERROR_HANDLER:
+
+    Dim pBuff As New clsDataBuffer
+    With pBuff
+        .InsertDWord 1
+        .InsertDWord 0
+        .InsertDWord 0
+        .InsertDWord 0
+        .InsertDWord 0
+        .InsertNTString vbNullString
+        .InsertNTString vbNullString
+        .SendPacket SID_CLIENTID2
+    End With
+    Set pBuff = Nothing
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CLIENTID2()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -342,6 +631,116 @@ ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_PING()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
+
+'*******************************
+'SID_CDKEY2 (0x36) S->C
+'*******************************
+' (DWORD) Result
+' (STRING) Key owner
+'*******************************
+Private Sub RECV_SID_CDKEY2(pBuff As clsDataBuffer)
+On Error GoTo ERROR_HANDLER:
+    Dim lResult As Long
+    Dim sInfo   As String
+    
+    lResult = pBuff.GetDWORD
+    sInfo = pBuff.GetString
+    
+    Select Case lResult
+        Case 1:
+            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Your CDKey was accepted!"
+            SEND_SID_LOGONRESPONSE2
+            Exit Sub
+        Case 2: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your CDKey is invalid"
+        Case 3: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your CDKey is invalid, Bad Product"
+        Case 4: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your CDKey is banned from Battle.net"
+        Case 5: frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Your CDKey is in use by {0}", sInfo)
+        Case Else: frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Unknown SID_CDKEY2 Response 0x{0}: {1}", ZeroOffset(lResult, 8), sInfo)
+    End Select
+    CloseAllConnections
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CDKEY2()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
+'*******************************
+'SID_CDKEY2 (0x36) C->S
+'*******************************
+' (DWORD) Spawn (0/1)
+' (DWORD) Key Length
+' (DWORD) CDKey Product
+' (DWORD) CDKey Value1
+' (DWORD) Server Token
+' (DWORD) Client Token
+' (DWORD) [5] Hashed Data
+' (STRING) Key owner
+'*******************************
+Public Sub SEND_SID_CDKEY2()
+On Error GoTo ERROR_HANDLER:
+    Dim sHash    As String
+    Dim lResult  As Long
+    Dim lProduct As Long
+    Dim lPrivate As Long
+    Dim lPublic  As Long
+    
+    Dim pBuff As New clsDataBuffer
+    
+    lResult = kd_init()
+    
+    If (lResult = 0) Then
+        frmChat.AddChat RTBColors.ErrorMessageText, "BNCSUtil: kd_init() failed! Please use BNLS to connect."
+        frmChat.DoDisconnect
+    Else
+        lResult = kd_create(BotVars.CDKey, Len(BotVars.CDKey))
+        If (kd_isValid(lResult) = 0) Then
+            frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
+            frmChat.DoDisconnect
+        Else
+            lProduct = kd_product(lResult)
+            lPublic = kd_val1(lResult)
+            lPrivate = kd_val2(lResult)
+            Call kd_free(lResult)
+            
+            With pBuff
+                .InsertDWord ds.ClientToken
+                .InsertDWord ds.ServerToken
+                .InsertDWord lProduct
+                .InsertDWord lPublic
+                .InsertDWord lPrivate
+                sHash = String$(20, 0)
+                Call modBNCSutil.calcHashBuf(.Data, 20, sHash)
+                .Clear
+            End With
+        End If
+    End If
+    
+    With pBuff
+        .InsertDWord IIf(ReadCfg$("Override", "SpawnKey") = "Y", 1, 0)
+        .InsertDWord Len(BotVars.CDKey)
+        
+        .InsertDWord lProduct
+        .InsertDWord lPublic
+        .InsertDWord ds.ServerToken
+        .InsertDWord ds.ClientToken
+        .InsertNonNTString sHash
+        
+        If (LenB(ReadCfg("Override", "OwnerName")) > 0) Then
+            .InsertNTString ReadCfg("Override", "OwnerName")
+        Else
+            .InsertNTString BotVars.Username
+        End If
+        .SendPacket SID_CDKEY2
+    End With
+    Set pBuff = Nothing
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CDKEY2()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
 
 '*******************************
 'SID_LOGONRESPONSE2 (0x3A) S->C
@@ -726,7 +1125,7 @@ On Error GoTo ERROR_HANDLER:
     
     LocalIP = aton(frmChat.sckBNet.LocalIP)
 
-    Call GetCountryData(CountryAbr, CountryName)
+    Call GetCountryData(CountryAbr, CountryName, vbNull)
     If (Not Len(CountryAbr) = 3) Then CountryAbr = "USA"
     If (LenB(CountryName) = 0) Then CountryName = "United States"
     
@@ -1278,8 +1677,8 @@ On Error GoTo ERROR_HANDLER:
     ' Temporary short-circuit:
     '  Return BNCS_NLS because no other login sequences are supported
     '  -andy
-    GetLogonSystem = BNCS_NLS
-    Exit Function
+    'GetLogonSystem = BNCS_NLS
+    'Exit Function
     
     If (LenB(sProduct) = 0) Then sProduct = BotVars.Product
     
@@ -1287,14 +1686,14 @@ On Error GoTo ERROR_HANDLER:
     Select Case UCase$(sProduct)
         Case "RATS", "STAR": lRet = BNCS_NLS
         Case "PXES", "SEXP": lRet = BNCS_NLS
-        Case "NB2W", "W2BN": lRet = BNCS_NLS
+        Case "NB2W", "W2BN": lRet = BNCS_OLS
         Case "VD2D", "D2DV": lRet = BNCS_NLS
         Case "PX2D", "D2XP": lRet = BNCS_NLS
         'Case "RTSJ", "JSTR": lRet = BNCS_LLS
         Case "3RAW", "WAR3": lRet = BNCS_NLS
         Case "PX3W", "W3XP": lRet = BNCS_NLS
-        'Case "LTRD", "DRTL": lRet = BNCS_OLS
-        'Case "RSHD", "DSHR": lRet = BNCS_OLS
+        Case "LTRD", "DRTL": lRet = BNCS_OLS
+        Case "RSHD", "DSHR": lRet = BNCS_OLS
         'Case "RHSS", "SSHR": lRet = BNCS_LLS
         Case Else:           lRet = &H0
     End Select

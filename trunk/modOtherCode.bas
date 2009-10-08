@@ -1580,10 +1580,11 @@ Public Sub WriteCDKeys(ByRef cboCDKey As ComboBox)
     Next i
 End Sub
 
-Public Sub GetCountryData(ByRef CountryAbbrev As String, ByRef CountryName As String)
-    Const LOCALE_USER_DEFAULT = &H400
-    Const LOCALE_SABBREVCTRYNAME As Long = &H7 'abbreviated country name
-    Const LOCALE_SENGCOUNTRY As Long = &H1002  'English name of country
+Public Sub GetCountryData(ByRef CountryAbbrev As String, ByRef CountryName As String, ByRef sCountryCode As String)
+    Const LOCALE_USER_DEFAULT    As Long = &H400
+    Const LOCALE_ICOUNTRY        As Long = &H5     'Country Code
+    Const LOCALE_SABBREVCTRYNAME As Long = &H7     'abbreviated country name
+    Const LOCALE_SENGCOUNTRY     As Long = &H1002  'English name of country
     
     Dim sBuf As String
     
@@ -1594,6 +1595,10 @@ Public Sub GetCountryData(ByRef CountryAbbrev As String, ByRef CountryName As St
     sBuf = String$(256, 0)
     Call GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SENGCOUNTRY, sBuf, Len(sBuf))
     CountryName = KillNull(sBuf)
+    
+    sBuf = String$(256, 0)
+    Call GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_ICOUNTRY, sBuf, Len(sBuf))
+    sCountryCode = KillNull(sBuf)
 End Sub
 
 Public Sub SetNagelStatus(ByVal lSocketHandle As Long, ByVal bEnabled As Boolean)
@@ -2305,7 +2310,7 @@ On Error GoTo ERROR_HANDLER:
     Loop
     
     If MDebug("debug") Then
-        sRet = StringFormat("{0} * Program executed in debug mode; unhandled packet information will be displayed.|")
+        sRet = StringFormat("{0} * Program executed in debug mode; unhandled packet information will be displayed.|", sRet)
     End If
     
     SetCommandLine = Split(sRet, "|")

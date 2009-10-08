@@ -147,19 +147,22 @@ Private Sub RECV_BNLS_REQUESTVERSIONBYTE(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
     
     Dim lVerByte     As Long
-    Dim lLogonSystem As Long
     
     If (Not pBuff.GetDWORD = 0) Then
         lVerByte = pBuff.GetDWORD
+        Call WriteINI("Override", GetProductKey() & "VerByte", Hex(lVerByte)) 'Save BNLS's Version Byte
         
-        lLogonSystem = modBNCS.GetLogonSystem()
-        If (lLogonSystem = modBNCS.BNCS_NLS) Then
-            modBNCS.SEND_SID_AUTH_INFO lVerByte
-        Else 'TO-DO: Non-NLS connection
-            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", lLogonSystem)
-            frmChat.AddChat RTBColors.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
-            frmChat.DoDisconnect
-        End If
+        Select Case modBNCS.GetLogonSystem()
+            Case modBNCS.BNCS_NLS: Call modBNCS.SEND_SID_AUTH_INFO(lVerByte)
+            Case modBNCS.BNCS_OLS:
+                modBNCS.SEND_SID_CLIENTID2
+                modBNCS.SEND_SID_LOCALEINFO
+                modBNCS.SEND_SID_STARTVERSIONING lVerByte
+            Case Else:
+                frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", modBNCS.GetLogonSystem())
+                frmChat.AddChat RTBColors.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
+                frmChat.DoDisconnect
+        End Select
     Else
         frmChat.AddChat RTBColors.ErrorMessageText, "[BNLS] Version byte request failed!"
         frmChat.DoDisconnect
@@ -202,12 +205,23 @@ End Sub
 '************************************
 Private Sub RECV_BNLS_VERSIONCHECKEX2(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
+    Dim lVersionByte As Long
 
     If (pBuff.GetDWORD = 1) Then
         ds.CRevVersion = pBuff.GetDWORD
         ds.CRevChecksum = pBuff.GetDWORD
         ds.CRevResult = pBuff.GetString
-        modBNCS.SEND_SID_AUTH_CHECK
+        pBuff.GetDWORD
+        lVersionByte = pBuff.GetDWORD
+        
+        Select Case modBNCS.GetLogonSystem()
+            Case modBNCS.BNCS_NLS: Call modBNCS.SEND_SID_AUTH_CHECK
+            Case modBNCS.BNCS_OLS: Call modBNCS.SEND_SID_REPORTVERSION(lVersionByte)
+            Case Else:
+                frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", modBNCS.GetLogonSystem())
+                frmChat.AddChat RTBColors.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
+                frmChat.DoDisconnect
+        End Select
     Else
         frmChat.Event_BNLSDataError 2
         frmChat.DoDisconnect

@@ -59,15 +59,3 @@ Public Sub DecodeCDKey(ByVal sCDKey As String, ByVal ServerToken As Long, ByVal 
         Call kd_free(KDh)
     End If
 End Sub
-
-
-
-Public Sub Send0x09(ByVal ServerToken As Long, ByVal UDPValue As Long)
-    If BotVars.UseUDP Then
-        With PBuffer
-            .InsertDWord ServerToken
-            .InsertDWord UDPValue
-            .SendPacket &H9
-        End With
-    End If
-End Sub

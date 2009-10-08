@@ -1313,7 +1313,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim i           As Long
     Dim temp        As Byte
     Dim Level       As Byte
-    Dim L           As Long
+    Dim l           As Long
     Dim Banned      As Boolean
     Dim f           As Integer
     Dim UserIndex   As Integer ' ...
@@ -1542,11 +1542,11 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
             
             If (mail) Then
-                L = GetMailCount(Username)
+                l = GetMailCount(Username)
                 
-                If (L > 0) Then
-                    frmChat.AddQ "/w " & Username & " You have " & L & _
-                        " new message" & IIf(L = 1, "", "s") & ". Type !inbox to retrieve."
+                If (l > 0) Then
+                    frmChat.AddQ "/w " & Username & " You have " & l & _
+                        " new message" & IIf(l = 1, "", "s") & ". Type !inbox to retrieve."
                 End If
             End If
         End If
@@ -1939,7 +1939,8 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
         
         Case 1:
             frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Version check failed! " & _
-                "The version byte for this attempt was 0x" & Hex(GetVerByte(BotVars.Product)) & "."
+                "The version byte for this attempt was 0x" & Hex(GetVerByte(BotVars.Product)) & "." & _
+                IIf(LenB(ExtraInfo) = 0, vbNullString, " Extra Information: " & ExtraInfo)
 
             If (BotVars.BNLS) Then
                 If (frmChat.CheckFindAltBNLS("[BNCS] BNLS has not been updated yet, " & _

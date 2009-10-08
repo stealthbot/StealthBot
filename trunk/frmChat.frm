@@ -3,14 +3,14 @@ Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
    ClientLeft      =   165
-   ClientTop       =   735
+   ClientTop       =   870
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -892,6 +892,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -917,7 +918,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1513,12 +1513,11 @@ Private Sub Form_Load()
     
     ' COMPILER FLAGS
     #If (BETA = 1) Then
-        strBeta = "Beta "
-        #Else
-        strBeta = vbNullString
+        CVERSION = StringFormat("StealthBot Beta v{0}.{1} - Build {2}", App.Major, App.Minor, App.REVISION)
+    #Else
+        CVERSION = StringFormat("StealthBot v{0}.{1}.{2}", App.Major, App.Minor, App.REVISION)
     #End If
     
-    CVERSION = StringFormat("StealthBot {0}v{1}.{2} - Build {3}", strBeta, App.Major, App.Minor, App.REVISION, 4)
     
     #If (COMPILE_CRC = 1) Then
         Dim crc As New clsCRC32
@@ -5453,7 +5452,17 @@ Sub InitBNetConnection()
     If BotVars.BNLS Then
         modBNLS.SEND_BNLS_REQUESTVERSIONBYTE
     Else
-        Call modBNCS.SEND_SID_AUTH_INFO 'TO-DO: Non-NLS connection
+        Select Case modBNCS.GetLogonSystem()
+            Case modBNCS.BNCS_NLS: Call modBNCS.SEND_SID_AUTH_INFO
+            Case modBNCS.BNCS_OLS:
+                modBNCS.SEND_SID_CLIENTID2
+                modBNCS.SEND_SID_LOCALEINFO
+                modBNCS.SEND_SID_STARTVERSIONING
+            Case Else:
+                AddChat RTBColors.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", modBNCS.GetLogonSystem())
+                AddChat RTBColors.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
+                DoDisconnect
+        End Select
     End If
 End Sub
 
@@ -5798,34 +5807,21 @@ Sub Connect()
         Else
             Dii = False
         End If
-        'StealthLock Check
-        'NOT 'Disabled due to public version!
 
-        #If (BETA = 1) Then
-            Call AddChat(RTBColors.InformationText, "Authorizing your private-release, " & _
-                "please wait...")
+        'Changed 10-07-2009 - Hdx - Are we going to have private betas anymore?
+        #If (BETA = 2) Then
+            Call AddChat(RTBColors.InformationText, "Authorizing your private-release, please wait...")
             
-            ' ...
             If (GetAuth(BotVars.Username)) Then
-                Call AddChat(RTBColors.SuccessText, _
-                    "Private usage authorized, connecting your bot...")
+                Call AddChat(RTBColors.SuccessText, "Private usage authorized, connecting your bot...")
                 
                 ' was auth function bypassed?
-                If (AUTH_CHECKED = False) Then
-                    BotVars.Password = Chr$(0)
-                End If
+                If (AUTH_CHECKED = False) Then BotVars.Password = Chr$(0)
             Else
-                ' ...
-                Call AddChat(RTBColors.ErrorMessageText, _
-                    "- - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -")
+                Call AddChat(RTBColors.ErrorMessageText, "- - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -")
                 
-                ' ...
                 Call DoDisconnect
-                
-                ' ...
                 UserCancelledConnect = False
-                
-                ' ...
                 Exit Sub
             End If
         #Else
