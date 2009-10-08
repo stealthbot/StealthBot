@@ -47,9 +47,13 @@ Public Sub HandleNews(ByVal s As String)
             '##############
             
             If Val(Splt(1)) <> App.REVISION Or (lLauncherVersion > 0 And Val(Splt(2)) <> lLauncherVersion) Then '// old version
-                frmChat.AddChat RTBColors.ErrorMessageText, "ÿcbYou are running an outdated version of StealthBot."
-                frmChat.AddChat RTBColors.ErrorMessageText, "To download an updated version or for more information, visit http://www.stealthbot.net."
-                frmChat.AddChat RTBColors.ErrorMessageText, "To disable version checking, add the line " & Chr(34) & "DisableSBNews=Y" & Chr(34) & " under the [Main] section of your config.ini file."
+                If (Val(Splt(0)) = App.REVISION) Then
+                    frmChat.AddChat RTBColors.InformationText, "ÿcbYou are running a development release of StealthBot, visit http://www.stealthbot.net/wiki/BuildLog for more information"
+                Else
+                    frmChat.AddChat RTBColors.ErrorMessageText, "ÿcbYou are running an outdated version of StealthBot."
+                    frmChat.AddChat RTBColors.ErrorMessageText, "To download an updated version or for more information, visit http://www.stealthbot.net."
+                    frmChat.AddChat RTBColors.ErrorMessageText, "To disable version checking, add the line " & Chr(34) & "DisableSBNews=Y" & Chr(34) & " under the [Main] section of your config.ini file."
+                End If
             End If
             
             If Len(Splt(3)) > 1 Then

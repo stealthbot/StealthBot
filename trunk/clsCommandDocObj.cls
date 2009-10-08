@@ -125,7 +125,7 @@ ERROR_HANDLER:
     
 End Function
 
-Private Function GetCommandXPath(ByVal strCommand As String, Optional ByVal strScriptOwner As String = vbNullString) As String
+Private Function GetCommandXPath(ByVal strCommand As String, Optional ByVal strScriptOwner As String = vbNullString, Optional Enabled2 As Boolean = False) As String
     Dim AZ As String
     AZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
@@ -136,8 +136,10 @@ Private Function GetCommandXPath(ByVal strCommand As String, Optional ByVal strS
         GetCommandXPath = StringFormat("/commands/command[translate(@name, '{0}', '{1}')='{2}' and not(@owner)]", _
             UCase$(AZ), LCase$(AZ), LCase$(strCommand))
     ElseIf strScriptOwner = Chr$(0) Then
-        GetCommandXPath = StringFormat("/commands/command[translate(@name, '{0}', '{1}')='{2}' and (not(@enabled) or @enable = 1)]", _
-            UCase$(AZ), LCase$(AZ), LCase$(strCommand))
+        
+        GetCommandXPath = StringFormat("/commands/command[translate(@name, '{0}', '{1}')='{2}' and ({3})]", _
+            UCase$(AZ), LCase$(AZ), LCase$(strCommand), _
+            IIf(Enabled2, "@enabled = '1'", "not(@enabled)"))
     Else
         GetCommandXPath = StringFormat("/commands/command[translate(@name, '{0}', '{1}')='{2}' and translate(@owner, '{0}', '{1}')='{3}']", _
             UCase$(AZ), LCase$(AZ), LCase$(strCommand), LCase$(strScriptOwner))
@@ -167,15 +169,26 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal strScript
     xpath = GetCommandXPath(strCommand, strScriptOwner)
     
     Set m_command_node = m_database.selectSingleNode(xpath)
+    If ((m_command_node Is Nothing) And (strScriptOwner = Chr$(0))) Then
+        xpath = GetCommandXPath(strCommand, strScriptOwner, True)
+        Set m_command_node = m_database.selectSingleNode(xpath)
+    End If
     
     If (m_command_node Is Nothing) Then
         'Lets try an alias
-        xpath = GetCommandXPath(convertAlias(strCommand), strScriptOwner)
-        Set m_command_node = m_database.documentElement.selectSingleNode(xpath)
+        If (strScriptOwner = Chr$(0)) Then
+            xpath = GetCommandXPath(convertAlias(strCommand), strScriptOwner)
+            Set m_command_node = m_database.documentElement.selectSingleNode(xpath)
+            
+            If ((m_command_node Is Nothing) And (strScriptOwner = Chr$(0))) Then
+                xpath = GetCommandXPath(convertAlias(strCommand), strScriptOwner, True)
+                Set m_command_node = m_database.selectSingleNode(xpath)
+            End If
         
-        If (m_command_node Is Nothing) Then
-            OpenCommand = False
-            Exit Function
+            If (m_command_node Is Nothing) Then
+                OpenCommand = False
+                Exit Function
+            End If
         End If
     End If
     
