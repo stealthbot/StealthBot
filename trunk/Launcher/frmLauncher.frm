@@ -164,7 +164,7 @@ On Error GoTo ERROR_HANDLER
     Me.Caption = StringFormat("StealthBot Launcher v{0}.{1}.{2}", App.Major, App.Minor, App.Revision)
     
     'CheckForUpdates
-    
+    HadError = False
     If (LenB(Command()) > 0) Then
         If (SetCommandLine(Command())) Then
             Unload Me
@@ -562,6 +562,11 @@ ERROR_HANDLER:
 End Sub
 
 Private Sub chkAutoClose_Click()
+On Error GoTo ERROR_HANDLER
     cConfig.AutoClose = (chkAutoClose.Value)
     cConfig.SaveConfig
+    
+    Exit Sub
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "chkAutoClose_Click"
 End Sub

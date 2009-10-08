@@ -19,7 +19,7 @@ Private Const CRC32_POLYNOMIAL As Long = &HEDB88320
 Private CRC32Table(0 To 255) As Long
 
 Private Sub InitCRC32()
-
+On Error GoTo ERROR_HANDLER:
     Static CRC32Initialized As Boolean
     
     Dim i      As Long
@@ -44,10 +44,13 @@ Private Sub InitCRC32()
         
         CRC32Table(i) = K
     Next
-    
+    Exit Sub
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "InitCRC32"
 End Sub
 
 Public Function CRC32(ByVal Data As String) As Long
+On Error GoTo ERROR_HANDLER:
 
     Dim i As Long
     Dim j As Long
@@ -70,15 +73,24 @@ Public Function CRC32(ByVal Data As String) As Long
     
     CRC32 = (Not (CRC32))
     
+    Exit Function
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "CRC32"
 End Function
 
 Public Function GetFileCRC32(ByVal filePath As String) As Long
+On Error GoTo ERROR_HANDLER:
 
     Dim str As String  ' ...
     Dim tmp As String  ' ...
     Dim f   As Integer ' ...
     
     f = FreeFile
+    
+    If (LenB(Dir$(filePath)) = 0) Then
+        MsgBox StringFormat("Could not get CRC for {0}{1}{0}", Chr$(34), filePath)
+        Exit Function
+    End If
     
     Open filePath For Input As #f
         Do While (EOF(f) = False)
@@ -90,6 +102,15 @@ Public Function GetFileCRC32(ByVal filePath As String) As Long
     
     GetFileCRC32 = CRC32(str)
 
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    
+    If (LenB(Dir$(filePath)) = 0) Then
+        MsgBox StringFormat("Error #{0}: {1}{2}Could not get CRC for {0}{1}{0}", Err.Number, Err.Description, vbNewLine, Chr$(34), filePath)
+    End If
+    ErrorHandler Err.Number, OBJECT_NAME, "GetFileCRC32"
 End Function
 
 Public Function ValidateExecutable() As Boolean

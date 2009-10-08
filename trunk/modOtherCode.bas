@@ -2214,10 +2214,12 @@ Public Function MDebug(ByVal sArg As String) As Boolean
     MDebug = InStr(1, CommandLine, StringFormat("-{0} ", sArg), vbTextCompare) > 0
 End Function
 
-Public Sub SetCommandLine(sCommandLine As String)
+Public Function SetCommandLine(sCommandLine As String)
+On Error GoTo ERROR_HANDLER:
     Dim sTemp    As String
     Dim sSetting As String
     Dim sValue   As String
+    Dim sRet     As String
     CommandLine = vbNullString
     sTemp = sCommandLine
     
@@ -2272,9 +2274,30 @@ Public Sub SetCommandLine(sCommandLine As String)
                 If (Len(sTemp) >= 8) Then
                     sValue = Left$(sTemp, 8)
                     lLauncherVersion = CLng(StringFormat("&H{0}", sValue))
+                    sTemp = Mid$(sTemp, 9)
                     
                     CommandLine = StringFormat("{0}-launcherver {1} ", CommandLine, sValue)
                 End If
+                
+            Case "launchererror":
+                If (Left$(sTemp, 1) = Chr$(34)) Then
+                    If (InStr(2, sTemp, Chr$(34), vbTextCompare) > 0) Then
+                        sValue = Mid$(sTemp, 2, InStr(2, sTemp, Chr$(34), vbTextCompare) - 2)
+                        sTemp = Mid$(sTemp, Len(sValue) + 4)
+                    Else
+                        sValue = Mid$(Split(sTemp & " -", " -")(0), 2)
+                        sTemp = Mid$(sTemp, Len(sValue) + 3)
+                    End If
+                Else
+                    sValue = Split(sTemp & " -", " -")(0)
+                    sTemp = Mid$(sTemp, Len(sValue) + 2)
+                End If
+                sRet = StringFormat("{0}ÁYThe StealthBot Profile Launcher had and error!|", sRet)
+                If (LenB(sValue) > 0) Then
+                    sRet = StringFormat("{0}ÁYOpen {1} for more information|", sRet, sValue)
+                End If
+                
+                CommandLine = StringFormat("{0}-launchererror {1}{2}{1} ", CommandLine, Chr$(34), sValue)
                 
             Case Else:
                 CommandLine = StringFormat("{0}-{1} ", CommandLine, sSetting)
@@ -2282,9 +2305,17 @@ Public Sub SetCommandLine(sCommandLine As String)
     Loop
     
     If MDebug("debug") Then
-        frmChat.AddChat RTBColors.ServerInfoText, " * Program executed in debug mode; unhandled packet information will be displayed."
+        sRet = StringFormat("{0} * Program executed in debug mode; unhandled packet information will be displayed.|")
     End If
-End Sub
+    
+    SetCommandLine = Split(sRet, "|")
+    
+    Exit Function
+ERROR_HANDLER:
+    sRet = StringFormat("Error #{0}: {1} in modOtherCode.SetCommandLine()|CommandLine: {2}", Err.Number, Err.description, sCommandLine)
+    SetCommandLine = Split(sRet, "|")
+    Err.Clear
+End Function
 
 Private Function AddEnvPath(sPath As String) As Boolean
 On Error GoTo ERROR_HANDLER:

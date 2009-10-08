@@ -83,10 +83,20 @@ End Sub
 
 
 Public Property Let AutoClose(ByVal bData As Boolean)
+On Error GoTo ERROR_HANDLER:
     m_autoclose = bData
+    
+    Exit Property
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "AutoClose Let"
 End Property
 
 Public Property Get AutoClose() As Boolean
+On Error GoTo ERROR_HANDLER:
     If (Not m_loaded) Then LoadConfig
     AutoClose = m_autoclose
+    
+    Exit Property
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "AutoClose Get"
 End Property

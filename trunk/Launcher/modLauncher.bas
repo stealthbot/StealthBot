@@ -49,11 +49,14 @@ Public Const FILE_ATTRIBUTE_DIRECTORY As Long = &H10
 
 Public cConfig    As clsConfig
 Public bIsClosing As Boolean
+Public HadError   As Boolean
+Public sErrorFile As String
 
 Public Sub ErrorHandler(lError As Long, sObjectName As String, sFunctionName As String)
+On Error GoTo ERROR_HANDLER:
     Dim sPath As String
     
-    
+    HadError = True
     'AddChat vbRed, StringFormat("Error #{0}: {1} in {2}.{3}()", lError, Error(lError), sObjectName, sFunctionName)
     
     sPath = ReplaceEnvironmentVars("%APPDATA%\StealthBot\LauncherErrors.txt")
@@ -65,6 +68,13 @@ Public Sub ErrorHandler(lError As Long, sObjectName As String, sFunctionName As 
         Print #1, StringFormat("Error #{0}: {1} in {2}.{3}()", lError, Error(lError), sObjectName, sFunctionName)
     Close #1
     
+    Err.Clear
+    sErrorFile = ReplaceEnvironmentVars("%APPDATA%\StealthBot\LauncherErrors.txt")
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    MsgBox StringFormat("Error #{0}: {1} in {2}.{3}()", lError, Error(lError), sObjectName, sFunctionName)
     Err.Clear
 End Sub
 
@@ -188,13 +198,20 @@ On Error GoTo ERROR_HANDLER:
     Dim security As SECURITY_ATTRIBUTES
     Dim suInfo   As STARTUPINFO
     Dim pInfo    As PROCESS_INFORMATION
+    Dim sCL      As String
+    
+    sCL = StringFormat(" -addpath {0}{1}{0}", Chr$(34), App.Path)
+    sCL = StringFormat("{0} -launcherver {1}{2}{3}", sCL, ZeroOffset(App.Major, 2), ZeroOffset(App.Minor, 2), ZeroOffset(App.Revision, 4))
+    If (HadError) Then
+        sCL = StringFormat("{0} -launchererror", sCL)
+        If (LenB(sErrorFile)) Then sCL = StringFormat("{0} {1}{2}{1}", sCL, Chr$(34), sErrorFile)
+    End If
     
     If (Not ProfileExists(sProfile)) Then Exit Function
     
     sPath = StringFormat(ReplaceEnvironmentVars("%APPDATA%\StealthBot\{0}\"), sProfile)
     lRet = CreateProcess(StringFormat("{0}\StealthBot v2.7.exe", App.Path), _
-      StringFormat(" -addpath {0}{1}{0} -launcherver {2}{3}{4}", Chr$(34), App.Path, _
-        ZeroOffset(App.Major, 2), ZeroOffset(App.Minor, 2), ZeroOffset(App.Revision, 4)), _
+        sCL, _
       security, security, False, _
       NORMAL_PRIORITY_CLASS, _
       ByVal 0&, sPath, suInfo, pInfo)
@@ -465,13 +482,23 @@ End Function
 'End Sub
 
 Public Function GetWebPath()
+On Error GoTo ERROR_HANDLER
     GetWebPath = "http://www.StealthBot.net/sb/Launcher/"
+    
+    Exit Function
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "GetWebPath"
 End Function
 
 Public Function ReplaceVars(sString As String) As String
+On Error GoTo ERROR_HANDLER
     sString = Replace$(sString, "{PROFILEPATH}", "%APPDATA\StealthBot")
     sString = ReplaceEnvironmentVars(sString)
     ReplaceVars = sString
+    
+    Exit Function
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "ReplaceVars"
 End Function
 
 'Public Function CheckForUpdates() As Boolean

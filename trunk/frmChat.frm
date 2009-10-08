@@ -1,10 +1,10 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "Msinet.ocx"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
@@ -1509,6 +1509,7 @@ Private Sub Form_Load()
     Dim L As Long
     Dim FrmSplashInUse As Boolean
     Dim strBeta As String
+    Dim sStr() As String
     
     ' COMPILER FLAGS
     #If (BETA = 1) Then
@@ -1543,7 +1544,7 @@ Private Sub Form_Load()
     Set colQueue = New Collection
     Set colSafelist = New Collection
     
-    SetCommandLine Command()
+    sStr = SetCommandLine(Command())
     
     ' SPLASH SCREEN
     If ReadCfg("Main", "ShowSplash") <> "N" Then
@@ -1585,9 +1586,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -1702,6 +1703,13 @@ Private Sub Form_Load()
     AddChat RTBColors.ConsoleText, "-> Welcome to " & CVERSION & ", by Stealth."
     AddChat RTBColors.ConsoleText, "-> If you enjoy StealthBot, consider supporting its development at http://donate.stealthbot.net"
 
+    Dim x As Integer
+    For x = LBound(sStr) To UBound(sStr)
+        If (LenB(sStr(x)) > 0) Then
+            AddChat RTBColors.InformationText, sStr(x)
+        End If
+    Next x
+    
     On Error Resume Next
     
     VoteDuration = -1
@@ -1716,6 +1724,7 @@ Private Sub Form_Load()
         AddChat RTBColors.ServerInfoText, "Please note that any usage of this program is subject to " & _
             "the terms of the End-User License Agreement available at http://eula.stealthbot.net."
     End If
+    
     
     Randomize
  
