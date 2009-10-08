@@ -67,22 +67,16 @@ Public Property Let MOTD(str As String)
 
 End Property
 
-' ...
 Public Property Get Self() As clsClanMemberObj
 
-    Dim i As Integer ' ...
+    Dim i As Integer
 
-    ' ...
     Set Self = New clsClanMemberObj
     
-    ' ...
     For i = 1 To Members.Count
-        ' ...
-        If (StrComp(Members(i).Name, CurrentUsername, vbTextCompare) = 0) Then
-            ' ...
+        'Changed 10/08/09 - Hdx - Now uses BotVars.Username instead of CurrentUsername so that if you login as a multiple (#2 #2) it will still work.
+        If (StrComp(Members(i).Name, BotVars.Username, vbTextCompare) = 0) Then
             Set Self = Members(i)
-        
-            ' ...
             Exit For
         End If
     Next i
