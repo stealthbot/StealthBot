@@ -17,6 +17,8 @@ Attribute VB_Exposed = False
 ' -Ribose/2009-08-10
 Option Explicit
 
+Private Const OBJECT_NAME As String = "clsQuotesObj"
+
 ' actual quotes collection
 Private m_Quotes As Collection
 
@@ -105,22 +107,18 @@ Public Function Remove(ByVal QuoteStr As Variant) As String
     ' store
     Remove = m_Quotes.Item(Index)
 
-    ' remove
     m_Quotes.Remove Index
     
     ' is not loading from file?
     If m_blnIsLoaded Then
-    
-        ' save
         SaveQuotes
-        
     End If
     
     Exit Function
     
 ERROR_HANDLER:
-    
-    MsgBox "Error (#" & Err.Number & "): " & Err.description & " in Quotes.Remove()."
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.Remove()", _
+    Err.Number, Err.description, OBJECT_NAME)
 
 End Function
 
@@ -184,19 +182,20 @@ Public Function GetRandomQuote() As String
 
     On Error GoTo ERROR_HANDLER
 
-    Dim Rand      As Integer
+    Dim iRand      As Integer
     
-        If m_Quotes.Count = 0 Then
+    If m_Quotes.Count = 0 Then
         GetRandomQuote = vbNullString
         Exit Function
     End If
     
     ' randomly select quote
     Randomize
-    Rand = (Rnd * m_Quotes.Count) + 1
+    iRand = (Rnd * &H1000 * m_Quotes.Count) Mod m_Quotes.Count 'Do % Count so it will ALWAYS be < Count
     
     ' get quote in collection
-    GetRandomQuote = m_Quotes.Item(Rand)
+    
+    GetRandomQuote = m_Quotes.Item(iRand)
     
     ' security check
     If Left$(GetRandomQuote, 1) = "/" Then GetRandomQuote = " " & GetRandomQuote
@@ -204,8 +203,8 @@ Public Function GetRandomQuote() As String
     Exit Function
 
 ERROR_HANDLER:
-
-    MsgBox "Error (#" & Err.Number & "): " & Err.description & " in Quotes.GetRandomQuote()."
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.GetRandomQuote()", _
+    Err.Number, Err.description, OBJECT_NAME)
     
 End Function
 
@@ -243,9 +242,8 @@ Private Sub LoadQuotes()
     Exit Sub
     
 ERROR_HANDLER:
-
-    MsgBox "Error (#" & Err.Number & "): " & Err.description & " in Quotes.LoadQuotes()."
-
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.LoadQuotes()", _
+    Err.Number, Err.description, OBJECT_NAME)
 End Sub
 
 ' this function will save quotes into quotes.txt when changes are made
@@ -273,9 +271,8 @@ Private Sub SaveQuotes()
     Exit Sub
     
 ERROR_HANDLER:
-
-    MsgBox "Error (#" & Err.Number & "): " & Err.description & " in Quotes.SaveQuotes()."
-
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.SaveQuotes()", _
+    Err.Number, Err.description, OBJECT_NAME)
 End Sub
 
 ' this function will save a single quote into quotes.txt on add (instead of saving the whole thing)
@@ -293,12 +290,10 @@ Private Sub AppendQuote(ByVal QuoteStr As String)
     
     If (LenB(Dir$(strPath)) > 0) Then
         Open (strPath) For Append As #f
-            ' print new quote
             Print #f, QuoteStr
         Close #f
     Else
         Open (strPath) For Output As #f
-            ' print new quote
             Print #f, QuoteStr
         Close #f
     End If
@@ -306,8 +301,7 @@ Private Sub AppendQuote(ByVal QuoteStr As String)
     Exit Sub
     
 ERROR_HANDLER:
-
-    MsgBox "Error (#" & Err.Number & "): " & Err.description & " in Quotes.AppendQuote()."
-
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.AppendQuotes()", _
+    Err.Number, Err.description, OBJECT_NAME)
 End Sub
 
