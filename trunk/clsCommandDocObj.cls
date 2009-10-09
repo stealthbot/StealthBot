@@ -176,19 +176,17 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal strScript
     
     If (m_command_node Is Nothing) Then
         'Lets try an alias
-        If (strScriptOwner = Chr$(0)) Then
-            xpath = GetCommandXPath(convertAlias(strCommand), strScriptOwner)
-            Set m_command_node = m_database.documentElement.selectSingleNode(xpath)
+        xpath = GetCommandXPath(convertAlias(strCommand), strScriptOwner)
+        Set m_command_node = m_database.documentElement.selectSingleNode(xpath)
             
-            If ((m_command_node Is Nothing) And (strScriptOwner = Chr$(0))) Then
-                xpath = GetCommandXPath(convertAlias(strCommand), strScriptOwner, True)
-                Set m_command_node = m_database.selectSingleNode(xpath)
-            End If
+        If ((m_command_node Is Nothing) And (strScriptOwner = Chr$(0))) Then
+            xpath = GetCommandXPath(convertAlias(strCommand), strScriptOwner, True)
+            Set m_command_node = m_database.selectSingleNode(xpath)
+        End If
         
-            If (m_command_node Is Nothing) Then
-                OpenCommand = False
-                Exit Function
-            End If
+        If (m_command_node Is Nothing) Then
+            OpenCommand = False
+            Exit Function
         End If
     End If
     

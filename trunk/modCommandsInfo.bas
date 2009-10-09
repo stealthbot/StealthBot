@@ -647,14 +647,15 @@ Public Sub OnWhoAmI(Command As clsCommandObj)
         Else
             If (dbAccess.Rank > 0) Then
                 If (LenB(dbAccess.Flags) > 0) Then
-                    Command.Respond dbAccess.Username & " holds rank " & dbAccess.Rank & _
-                        " and flags " & dbAccess.Flags & "."
+                    Command.Respond StringFormat("{0} holds rank {1} and flags {2}.", dbAccess.Username, dbAccess.Rank, dbAccess.Flags)
                 Else
-                    Command.Respond dbAccess.Username & " holds rank " & dbAccess.Rank & "."
+                    Command.Respond StringFormat("{0} holds rank {1}.", dbAccess.Username, dbAccess.Rank)
                 End If
             Else
                 If (LenB(dbAccess.Flags) > 0) Then
-                    Command.Respond dbAccess.Username & " has flags " & dbAccess.Flags & "."
+                    Command.Respond StringFormat("{0} has flags {1}.", dbAccess.Username, dbAccess.Flags)
+                Else
+                    Command.Respond StringFormat("{0} has no rank or flags.", dbAccess.Username)
                 End If
             End If
         End If
