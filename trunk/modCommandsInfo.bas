@@ -643,19 +643,19 @@ Public Sub OnWhoAmI(Command As clsCommandObj)
     Else
         dbAccess = GetCumulativeAccess(Command.Username)
         If (dbAccess.Rank = 1000) Then
-            Command.Respond "You are the bot owner, " & Command.Username & "."
+            Command.Respond StringFormat("You are the bot owner, {0}.", Command.Username)
         Else
             If (dbAccess.Rank > 0) Then
                 If (LenB(dbAccess.Flags) > 0) Then
-                    Command.Respond StringFormat("{0} holds rank {1} and flags {2}.", dbAccess.Username, dbAccess.Rank, dbAccess.Flags)
+                    Command.Respond StringFormat("{0} holds rank {1} and flags {2}.", Command.Username, dbAccess.Rank, dbAccess.Flags)
                 Else
-                    Command.Respond StringFormat("{0} holds rank {1}.", dbAccess.Username, dbAccess.Rank)
+                    Command.Respond StringFormat("{0} holds rank {1}.", Command.Username, dbAccess.Rank)
                 End If
             Else
                 If (LenB(dbAccess.Flags) > 0) Then
-                    Command.Respond StringFormat("{0} has flags {1}.", dbAccess.Username, dbAccess.Flags)
+                    Command.Respond StringFormat("{0} has flags {1}.", Command.Username, dbAccess.Flags)
                 Else
-                    Command.Respond StringFormat("{0} has no rank or flags.", dbAccess.Username)
+                    Command.Respond StringFormat("{0} has no rank or flags.", Command.Username)
                 End If
             End If
         End If
