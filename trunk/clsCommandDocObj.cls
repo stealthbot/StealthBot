@@ -102,6 +102,9 @@ Public Function GetCommandCount(Optional ByVal strScriptOwner As String = vbNull
     
     OpenDatabase
     
+    strScriptOwner = Replace$(strScriptOwner, "'", "&apos;")
+    
+    
     '// create xpath expression based on strScriptOwner
     If strScriptOwner = vbNullString Then
         xpath = "/commands/command[not(@owner)]"
@@ -119,7 +122,7 @@ Public Function GetCommandCount(Optional ByVal strScriptOwner As String = vbNull
 
 ERROR_HANDLER:
     Set nodes = Nothing
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.GetCommands().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.GetCommandCount().")
 
     Exit Function
     

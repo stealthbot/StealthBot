@@ -34,8 +34,8 @@ Public Function GetCommands(Optional ByVal scriptName As String = vbNullString) 
     scriptName = Replace$(scriptName, "'", "&apos;")
     
     If scriptName = vbNullString Then
-		frmChat.AddChat RTBColors.ErrorMessageText, "Cannot use GetCommands() for internal commands."
-		Exit Function
+         xpath = StringFormat("./commands/command[not(@owner) and (not(@enabled) or @enable = 1)]", _
+            UCase$(AZ), LCase$(AZ), LCase$(scriptName))
     ElseIf scriptName = Chr$(0) Then
         xpath = StringFormat("./commands/command[translate(@owner, '{0}', '{1}')='{2}' and (not(@enabled) or @enable = 1)]", _
             UCase$(AZ), LCase$(AZ), LCase$(scriptName))
@@ -129,9 +129,9 @@ Public Function ValidateXMLFromStrings(ByVal strXML As String, ByVal strXSD As S
     Set objErr = objXML.Validate()
    
     ' any good?
-    ValidateXMLFromStrings = (objErr.errorCode = 0)
-    If objErr.errorCode <> 0 Then
-        Err.Raise 1, "ValidateXML", "Error (#" & objErr.errorCode & ") on Line " & objErr.line & ": " & objErr.Reason
+    ValidateXMLFromStrings = (objErr.ErrorCode = 0)
+    If objErr.ErrorCode <> 0 Then
+        Err.Raise 1, "ValidateXML", "Error (#" & objErr.ErrorCode & ") on Line " & objErr.line & ": " & objErr.Reason
     End If
     
     Exit Function
