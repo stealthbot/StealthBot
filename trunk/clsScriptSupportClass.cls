@@ -1627,12 +1627,14 @@ End Sub
 
 '// GETUSERDATABASE
 '// Gets a collection of users in the database
+'// 10/10/2009 B#003 52 - Changed code to destroy the temp object after each use
 Public Function GetUserDatabase() As Collection
     Dim x As Integer
-    Dim temp As New clsDBEntryObj
+    Dim temp As clsDBEntryObj
     Set GetUserDatabase = New Collection
     For x = LBound(DB) To UBound(DB)
         If (Len(DB(x).Username) > 0) Then
+            Set temp = New clsDBEntryObj
             With temp
                 .Name = DB(x).Username
                 .Rank = DB(x).Rank
@@ -1646,9 +1648,9 @@ Public Function GetUserDatabase() As Collection
                 .EntryType = DB(x).Type
             End With
             GetUserDatabase.Add temp, DB(x).Username
+            Set temp = Nothing
         End If
     Next x
-    Set temp = Nothing
 End Function
 
 '// GETCURRENTUSERNAME
