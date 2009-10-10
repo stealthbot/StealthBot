@@ -223,7 +223,7 @@ On Error GoTo ERROR_HANDLER
     Dim tmpbuf      As String
     
     If (Command.IsValid) Then
-        tmpbuf = GetAllCommandsFor(Command.docs, Command.Argument("Flags"))
+        tmpbuf = GetAllCommandsFor(Command.docs, , Command.Argument("Flags"))
         If (LenB(tmpbuf) > 0) Then
             Command.Respond "Commands available to specified flag(s): " & tmpbuf
         Else
