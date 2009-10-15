@@ -121,6 +121,7 @@ Public Sub OnGreet(Command As clsCommandObj)
                 If (LenB(Command.Argument("Value")) > 0) Then
                     BotVars.GreetMsg = Command.Argument("Value")
                     Call WriteINI("Other", "GreetMsg", BotVars.GreetMsg)
+                    Command.Respond "Greet message set." '1732 - 10/15/2009 - Hdx - Greet Set command will respond now.
                 Else
                     Command.Respond "You must supply a greet message."
                 End If
