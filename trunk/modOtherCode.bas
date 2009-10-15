@@ -1701,11 +1701,12 @@ Public Function VBHexToHTMLHex(ByVal sIn As String) As String
         Mid$(sIn, 1, 2)
 End Function
 
+'//10-15-2009 - Hdx - Updated url to new address
 Public Sub GetW3LadderProfile(ByVal sPlayer As String, ByVal eType As enuWebProfileTypes)
     If (LenB(sPlayer) > 0) Then
-        ShellExecute frmChat.hWnd, "Open", "http://www.battle.net/war3/ladder/" & _
-            IIf(eType = W3XP, "w3xp", "war3") & "-player-profile.aspx?Gateway=" & _
-                GetW3Realm(sPlayer) & "&PlayerName=" & NameWithoutRealm(sPlayer), 0&, 0&, 0&
+        ShellExecute frmChat.hWnd, "Open", _
+        StringFormat("http://classic.battle.net/war3/ladder/{0}-player-profile.aspx?Gateway={1}&PlayerName={2}", _
+            IIf(eType = W3XP, "w3xp", "war3"), GetW3Realm(sPlayer), NameWithoutRealm(sPlayer, 1)), 0&, 0&, 0&
     End If
 End Sub
 
