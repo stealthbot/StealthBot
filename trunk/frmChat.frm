@@ -3,7 +3,7 @@ Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
@@ -2676,20 +2676,13 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
     Dim ClanMember As clsClanMemberObj
     Dim i          As Long
     
-    ' ...
     If AwaitingClanList = 1 Then
-        ' ...
         g_Clan.Clear
-    
-        ' ...
         lvClanList.ListItems.Clear
     
-        ' ...
         For i = 0 To UBound(Members) Step 4
-            ' ...
             Set ClanMember = New clsClanMemberObj
             
-            ' ...
             With ClanMember
                 .Name = Members(i)
                 .Rank = Val(Members(i + 1))
@@ -2697,28 +2690,19 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
                 .Location = Members(i + 3)
             End With
 
-            ' ...
             g_Clan.Members.Add ClanMember
-        
-            ' ...
             If ((Len(Members(i)) > 0) And (UBound(Members) >= i + 1)) Then
-                ' ...
                 AddClanMember ClanMember.DisplayName, Val(Members(i + 1)), Val(Members(i + 2))
                 
-                ' ...
                 On Error Resume Next
                 
-                ' ...
-                RunInAll "Event_ClanMemberList", ClanMember.DisplayName, Val(Members(i + 1)), _
-                    Val(Members(i + 2))
+                RunInAll "Event_ClanMemberList", ClanMember.DisplayName, Val(Members(i + 1)), Val(Members(i + 2))
             End If
         Next i
     End If
     
-    ' ...
     lblCurrentChannel.Caption = GetChannelString()
     
-    ' ...
     frmChat.ListviewTabs_Click 0
 End Sub
 
@@ -7801,17 +7785,19 @@ Sub DisableListviewTabs()
 End Sub
 
 Sub AddClanMember(ByVal Name As String, Rank As Integer, Online As Integer)
-    
+On Error GoTo ERROR_HANDLER:
     Dim visible_rank As Integer
     
     visible_rank = Rank
     
-    If visible_rank = 0 Then visible_rank = 1
-    If visible_rank > 4 Then visible_rank = 5 '// handle bad ranks
+    If (visible_rank = 0) Then visible_rank = 1
+    If (visible_rank > 4) Then visible_rank = 5 '// handle bad ranks
     
     '// add user
     
     Name = KillNull(Name)
+    
+    If (Not Online = 0) Then Online = 1
     
     With lvClanList
         .ListItems.Add .ListItems.Count + 1, , Name, , visible_rank
@@ -7822,14 +7808,14 @@ Sub AddClanMember(ByVal Name As String, Rank As Integer, Online As Integer)
         .Sorted = True
     End With
     
-    ' ...
     lblCurrentChannel.Caption = GetChannelString()
     
-    ' ...
     frmChat.ListviewTabs_Click 0
     
-    On Error Resume Next
     RunInAll "Event_ClanInfo", Name, Rank, Online
+    Exit Sub
+ERROR_HANDLER:
+    AddChat vbRed, StringFormat("Error: #{0}: {1} in frmChat.AddClanMember", Err.Number, Err.description)
 End Sub
 
 Private Function GetClanSelectedUser() As String
