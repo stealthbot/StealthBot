@@ -656,7 +656,7 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
     On Error Resume Next
 
     Dim i       As Integer
-    Dim X       As Integer
+    Dim x       As Integer
     Dim arr()   As Variant
     Dim str     As String
     Dim oldVeto As Boolean
@@ -717,12 +717,12 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
             If (StrComp(fobsers.Item(i), mname, vbTextCompare) = 0) Then 'Dont call itself
                 cobser = False
             Else
-                For X = 1 To sobsers.Count 'See if we already called it with Script Observers
-                    If (StrComp(sobsers.Item(X), fobsers.Item(i), vbTextCompare) = 0) Then
+                For x = 1 To sobsers.Count 'See if we already called it with Script Observers
+                    If (StrComp(sobsers.Item(x), fobsers.Item(i), vbTextCompare) = 0) Then
                         cobser = False
                         Exit For
                     End If
-                Next X
+                Next x
             End If
             
             If (cobser) Then
@@ -926,33 +926,14 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
             HookWindowProc obj.obj.hWnd
             
         Case "MENU"
+            ' check if there are no menus and we're adding one
             If (ObjCount("Menu", SCModule) = 0) Then
-                Dim tmp As New clsMenuObj ' ...
-                
-                tmp.Name = _
-                    "mnu" & scriptName & "Dash1"
-                tmp.Parent = _
-                    DynamicMenus("mnu" & scriptName)
+                Dim tmp As clsMenuObj
+                ' get the dynamic menu dash
+                Set tmp = DynamicMenus("dashmnu" & scriptName)
+                ' show it
+                tmp.Visible = True
                 tmp.Caption = "-"
-                
-                ' ...
-                m_arrObjs(m_objCount).ObjName = tmp.Name
-                m_arrObjs(m_objCount).ObjType = "Menu"
-                
-                ' ...
-                Set m_arrObjs(m_objCount).SCModule = SCModule
-                
-                ' ...
-                Set m_arrObjs(m_objCount).obj = tmp
-                
-                ' ...
-                m_objCount = (m_objCount + 1)
-                
-                ' ...
-                ReDim Preserve m_arrObjs(0 To m_objCount)
-                
-                ' ...
-                DynamicMenus.Add tmp
             End If
         
             ' ...
@@ -1089,6 +1070,15 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
             Unload m_arrObjs(Index).obj
             
         Case "MENU"
+            ' check if there is one menu left and we're destroying it
+            If (ObjCount("Menu", SCModule) = 1) Then
+                Dim tmp As clsMenuObj
+                ' get the dynamic menu dash
+                Set tmp = DynamicMenus("dashmnu" & m_arrObjs(Index).obj.Parent.Caption)
+                ' show it
+                tmp.Visible = False
+            End If
+            
             m_arrObjs(Index).obj.Class_Terminate
     End Select
 
@@ -1202,33 +1192,33 @@ Public Function InitMenus()
     Dim Name As String     ' ...
     Dim i    As Integer    ' ...
 
-    ' ...
+    ' destroy all the menus and start over
     DestroyMenus
     
-    ' ...
+    ' for each script add menus
     For i = 2 To frmChat.SControl.Modules.Count
         If (i = 2) Then
             frmChat.mnuScriptingDash(0).Visible = True
         End If
     
-        ' ...
+        ' name is the script name at this module index
         Name = GetScriptName(CStr(i))
     
-        ' ...
+        ' new menu
         Set tmp = New clsMenuObj
     
-        ' ...
+        ' root menu, give name, hwnd, and caption
         tmp.Name = Chr$(0) & Name & Chr$(0) & "ROOT"
         tmp.hWnd = GetSubMenu(GetMenu(frmChat.hWnd), 5)
         tmp.Caption = Name
             
-        ' ...
+        ' add with script name as key for adding more menus
         DynamicMenus.Add tmp, "mnu" & Name
             
-        ' ...
+        ' new menu
         Set tmp = New clsMenuObj
     
-        ' ...
+        ' enable/disable menu, give name, parent, and caption
         tmp.Name = Chr$(0) & Name & Chr$(0) & "ENABLE|DISABLE"
         tmp.Parent = DynamicMenus("mnu" & Name)
         tmp.Caption = "Enabled"
@@ -1239,19 +1229,31 @@ Public Function InitMenus()
             tmp.Checked = True
         End If
         
-        ' ...
+        ' add it
         DynamicMenus.Add tmp
         
-        ' ...
+        ' new menu
         Set tmp = New clsMenuObj
     
-        ' ...
+        ' view script menu item, give name, parent, and caption
         tmp.Name = Chr$(0) & Name & Chr$(0) & "VIEW_SCRIPT"
         tmp.Parent = DynamicMenus("mnu" & Name)
         tmp.Caption = "View Script"
         
-        ' ...
+        ' add it
         DynamicMenus.Add tmp
+        
+        ' new menu
+        Set tmp = New clsMenuObj
+        
+        ' dash, give name, parent, caption, and hide it
+        tmp.Name = Chr$(0) & Name & Chr$(0) & "DASH"
+        tmp.Parent = DynamicMenus("mnu" & Name)
+        tmp.Caption = "-"
+        tmp.Visible = False
+        
+        ' give it a key so it can't be confused with another script's main menu or menu dash
+        DynamicMenus.Add tmp, "dashmnu" & Name
     Next i
     
     Exit Function
@@ -1402,26 +1404,26 @@ End Function
 
 '06/26/09 - Hdx Vary crappy function to check if Object names are valid, a-z0-9_ and 1st chr a-z (eventually should be a regexp)
 Public Function ValidObjectName(sName As String) As Boolean
-  Dim X As Integer
+  Dim x As Integer
   Dim sValid As String
   
   sValid = "abcdefghijklmnopqrstuvwxyz0123456789_"
   ValidObjectName = False
   
-  For X = 1 To Len(sName)
-    If (InStr(1, Left(sValid, IIf(X = 1, 26, 37)), Mid$(sName, X, 1), vbTextCompare) = 0) Then Exit Function
-  Next X
+  For x = 1 To Len(sName)
+    If (InStr(1, Left(sValid, IIf(x = 1, 26, 37)), Mid$(sName, x, 1), vbTextCompare) = 0) Then Exit Function
+  Next x
   
   ValidObjectName = True
 End Function
 
 Public Function ConvertStringArray(sArr() As String) As Variant()
   Dim vArr() As Variant
-  Dim X As Integer
+  Dim x As Integer
   ReDim vArr(LBound(sArr) To UBound(sArr))
-  For X = LBound(sArr) To UBound(sArr)
-    vArr(X) = CVar(sArr(X))
-  Next X
+  For x = LBound(sArr) To UBound(sArr)
+    vArr(x) = CVar(sArr(x))
+  Next x
   ConvertStringArray = vArr
 End Function
 
