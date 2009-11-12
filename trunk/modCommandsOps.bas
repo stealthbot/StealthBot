@@ -621,7 +621,7 @@ Public Sub OnQuietTime(Command As clsCommandObj)
             
         Case "off":
             BotVars.QuietTime = False
-            Call WriteINI("Other", "QuietTime", "N")
+            Call WriteINI("Main", "QuietTime", "N")
             Command.Respond "Quiet-time disabled."
         
         Case Else:
