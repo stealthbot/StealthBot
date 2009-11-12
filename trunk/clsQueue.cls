@@ -49,7 +49,7 @@ Public Function Push(ByRef obj As clsQueueOBj)
     On Error GoTo ERROR_HANDLER
     
     Dim Index As Long ' ...
-    Dim I     As Long ' ...
+    Dim i     As Long ' ...
     
     ' ...
     Index = m_objCount
@@ -57,16 +57,16 @@ Public Function Push(ByRef obj As clsQueueOBj)
     ' ...
     If (m_objCount >= 1) Then
         ' ...
-        For I = 0 To m_objCount - 1
+        For i = 0 To m_objCount - 1
             ' ...
-            If (obj.PRIORITY < m_QueueObjs(I).PRIORITY) Then
+            If (obj.PRIORITY < m_QueueObjs(i).PRIORITY) Then
                 ' ...
-                Index = I
+                Index = i
                 
                 ' ...
                 Exit For
             End If
-        Next I
+        Next i
     
         ' ...
         ReDim Preserve m_QueueObjs(0 To m_objCount)
@@ -74,9 +74,9 @@ Public Function Push(ByRef obj As clsQueueOBj)
 
     ' ...
     If (Index < m_objCount) Then
-        For I = m_objCount To Index + 1 Step -1
-            Set m_QueueObjs(I) = m_QueueObjs(I - 1)
-        Next I
+        For i = m_objCount To Index + 1 Step -1
+            Set m_QueueObjs(i) = m_QueueObjs(i - 1)
+        Next i
     End If
     
     ' ...
@@ -121,6 +121,8 @@ Public Function Pop() As clsQueueOBj
     
     ' ...
     RemoveItem 0
+    
+    RecalculateDelay
 
 End Function ' end function Pop
 
@@ -153,14 +155,14 @@ Public Function Item(ByVal Index As Long) As Object
 End Function ' end function Item
 
 ' ...
-Public Function ItemByID(ByVal I As Double) As Object
+Public Function ItemByID(ByVal i As Double) As Object
 
     ' ...
     Dim j As Long ' ...
 
     ' ...
     For j = 0 To m_objCount - 1
-        If (m_QueueObjs(j).ID = I) Then
+        If (m_QueueObjs(j).ID = i) Then
             Set ItemByID = m_QueueObjs(j)
         
             Exit Function
@@ -179,28 +181,53 @@ Public Property Get Count() As Long
     
 End Property
 
+' return the number of credits currently stored
+Public Property Get Credits() As Long
+
+    Credits = g_BNCSQueue.CurrentCredits
+
+End Property
+
+' returns the number of milliseconds until the message provided "would" be sent
+' does not affect the queue
+Public Function GetDelayFor(ByVal sText As String) As Long
+    
+    Dim Delay As Long, ls As Long, cr As Long
+    ' call CalculateDelay with the provided text,
+    ' and store the lastsent time and credits in the
+    ' local variables (and ignore them...)
+    Delay = g_BNCSQueue.CalculateDelay(sText, ls, cr)
+    
+    GetDelayFor = Delay
+    
+End Function
+
 Public Function RemoveLines(ByVal match As String) As Integer
 
     Dim curQueueObj As clsQueueOBj ' ...
-    Dim I           As Long     ' ...
+    Dim i           As Long     ' ...
     Dim found       As Long     ' ...
     
     ' ...
     Do
         ' ...
-        Set curQueueObj = m_QueueObjs(I)
+        Set curQueueObj = m_QueueObjs(i)
 
         ' ...
         If (PrepareCheck(curQueueObj.Message) Like PrepareCheck(match)) Then
-            RemoveItem I
+            RemoveItem i
             
             found = (found + 1)
             
-            I = 0
+            i = 0
         Else
-            I = (I + 1)
+            i = (i + 1)
         End If
-    Loop While (I < Count())
+    Loop While (i < Count())
+    
+    If found Then
+        RecalculateDelay
+    End If
     
     RemoveLines = found
 
@@ -209,7 +236,7 @@ End Function
 ' ...
 Public Sub RemoveItem(ByVal Index As Long)
 
-    Dim I As Long ' ...
+    Dim i As Long ' ...
 
     ' ...
     If ((Index < 0) Or (Index > m_objCount - 1)) Then
@@ -219,15 +246,17 @@ Public Sub RemoveItem(ByVal Index As Long)
     ' ...
     If (m_objCount > 1) Then
         ' ...
-        For I = Index To ((m_objCount - 1) - 1)
-            Set m_QueueObjs(I) = m_QueueObjs(I + 1)
-        Next I
+        For i = Index To ((m_objCount - 1) - 1)
+            Set m_QueueObjs(i) = m_QueueObjs(i + 1)
+        Next i
         
         ' ...
         ReDim Preserve m_QueueObjs(0 To m_objCount - 1)
         
         ' ...
         m_objCount = (m_objCount - 1)
+        
+        RecalculateDelay
     Else
         Clear
     End If
@@ -235,14 +264,16 @@ Public Sub RemoveItem(ByVal Index As Long)
 End Sub ' end function RemoveItem
 
 ' ...
-Public Sub RemoveItemByID(ByVal I As Double)
+Public Sub RemoveItemByID(ByVal i As Double)
 
     Dim j As Long ' ...
     
     ' ...
     For j = 0 To m_objCount - 1
-        If (m_QueueObjs(j).ID = I) Then
+        If (m_QueueObjs(j).ID = i) Then
             RemoveItem j
+            
+            RecalculateDelay
             
             Exit Sub
         End If
@@ -253,12 +284,12 @@ End Sub
 ' ...
 Public Sub Clear()
 
-    Dim I As Long ' ...
+    Dim i As Long ' ...
 
     ' ...
-    For I = 0 To m_objCount - 1
-        Set m_QueueObjs(I) = Nothing
-    Next I
+    For i = 0 To m_objCount - 1
+        Set m_QueueObjs(i) = Nothing
+    Next i
 
     ' ...
     ReDim m_QueueObjs(0)
@@ -269,10 +300,33 @@ Public Sub Clear()
     ' ...
     m_objCount = 0
     
+    RecalculateDelay
+    
+End Sub ' end sub Clear
+
+' after removing an item or clearing, redetermine time to next item
+' if items remain
+Private Sub RecalculateDelay()
+
+    Dim NewDelay As Long, ExtraDelay As Long
+
     KillTimer 0&, QueueTimerID
     
     QueueTimerID = 0
     
     g_BNCSQueue.ClearQueue
     
-End Sub ' end sub Clear
+    If (Count) Then
+        With Peek()
+            NewDelay = g_BNCSQueue.GetDelay(.Message)
+            
+            If .PRIORITY = PRIORITY.CHANNEL_MODERATION_MESSAGE Then
+                ExtraDelay = g_BNCSQueue.BanDelay()
+            End If
+        End With
+        
+        QueueTimerID = SetTimer(0&, 0&, NewDelay + ExtraDelay, _
+            AddressOf QueueTimerProc)
+    End If
+    
+End Sub

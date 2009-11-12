@@ -48,21 +48,34 @@ Private Credits As Long
 '
 ' Returns the amount of time you should wait before sending the next message in the queue
 Public Function GetDelay(ByVal sText As String) As Long
+    Dim Delay As Long
+    ' call CalculateDelay with the provided text, and store the lastsent time and credits in the globals
+    Delay = CalculateDelay(sText, LastSent, Credits)
+    
+    GetDelay = Delay
+End Function
+
+' calculates the delay for a message, returning a new lastsent time (now), and a new credit amount
+Public Function CalculateDelay(ByVal sText As String, ByRef lLastSent As Long, ByRef lCredits As Long) As Long
+    Dim NewCredits As Long, NewLastSent As Long
     Dim ThisByteDelay As Long, ThisPacketCost As Long
     Dim byteCost As Long, RequiredDelay As Long
     
+    NewCredits = Credits
+    NewLastSent = GetTickCount()
+    
     byteCost = BotVars.QueueCostPerByte
     
-    If Credits < BotVars.QueueMaxCredits Then
+    If NewCredits < BotVars.QueueMaxCredits Then
         ' Adjust credits up
-        Credits = Credits + ((GetTickCount() - LastSent) / BotVars.QueueCreditRate)
+        NewCredits = NewCredits + ((NewLastSent - LastSent) / BotVars.QueueCreditRate)
         
-        If Credits > BotVars.QueueMaxCredits Then
-            Credits = BotVars.QueueMaxCredits
+        If NewCredits > BotVars.QueueMaxCredits Then
+            NewCredits = BotVars.QueueMaxCredits
         End If
     End If
     
-    LastSent = GetTickCount()
+    lLastSent = GetTickCount()
     '        int thisByteDelay = byteCost;
     ThisByteDelay = byteCost
     
@@ -74,18 +87,20 @@ Public Function GetDelay(ByVal sText As String) As Long
     Debug.Print "Cost for this packet: " & ThisPacketCost
     
     '// Check how long this packet will have to wait
-    If (Credits < 0) Then
-        RequiredDelay = (-1 * Credits) * BotVars.QueueCreditRate
+    If (NewCredits < 0) Then
+        RequiredDelay = (-1 * NewCredits) * BotVars.QueueCreditRate
     End If
     
-    If (ThisPacketCost > Credits) Then
-        RequiredDelay = (-1 * (Credits - ThisPacketCost)) * ThisByteDelay
+    If (ThisPacketCost > NewCredits) Then
+        RequiredDelay = (-1 * (NewCredits - ThisPacketCost)) * ThisByteDelay
     End If
     
-    Credits = Credits - ThisPacketCost
+    NewCredits = NewCredits - ThisPacketCost
     
-    Debug.Print "Remaining credits: " & Credits & "; delay: " & RequiredDelay
-    GetDelay = RequiredDelay
+    lCredits = NewCredits
+    
+    Debug.Print "Remaining credits: " & NewCredits & "; delay: " & RequiredDelay
+    CalculateDelay = RequiredDelay
 End Function
 
 Public Sub ClearQueue()
@@ -111,6 +126,11 @@ End Sub
 '    BotVars.QueueMaxCredits = DefaultMaxCredits                                 '750
 '    BotVars.QueueCreditRate = DefaultCreditRate                                 '8
 'End Sub
+
+Public Property Get CurrentCredits() As Long
+    CurrentCredits = Credits
+End Property
+
 
 Public Property Get DefaultStartingCredits()
     DefaultStartingCredits = 200
