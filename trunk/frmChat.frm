@@ -2,15 +2,15 @@ VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
    ClientLeft      =   165
-   ClientTop       =   870
+   ClientTop       =   855
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -892,7 +892,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -918,6 +917,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -6903,7 +6903,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
          'quLower.Interval = 2500
     'End If
     
-    ProtectMsg = ReadCfg("Other", "ProtectMsg")
+    ProtectMsg = ReadCfg(OT, "ProtectMsg")
     If ProtectMsg = vbNullString Then ProtectMsg = "Channel Protection"
     
     Call LoadOutFilters
@@ -7097,6 +7097,11 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         '    If (Err.Number = 0) Then: sckMCP.bind , ReadCfg(OV, "LocalIP")
         'End If
     End If
+    
+    ' check for script disable override and act accordingly ~Ribose
+    s = ReadCfg(OV, "DisableScripts")
+    ' tell the script system what the override is set to
+    modScripting.SetScriptSystemDisabled (s = "Y")
     
     Set oCommandGenerator = Nothing
     

@@ -290,6 +290,11 @@ On Error GoTo ERROR_HANDLER
     Dim strRet  As String
     Dim Script  As Module
     
+    If modScripting.GetScriptSystemDisabled() Then
+        Command.Respond "Error: Scripts are globally disabled via the override."
+        Exit Sub
+    End If
+    
     If (LenB(Command.Argument("Script")) > 0) Then
         Set Script = modScripting.GetModuleByName(Command.Argument("Script"))
         If (Script Is Nothing) Then
@@ -480,6 +485,11 @@ On Error GoTo ERROR_HANDLER
     
     Dim Script As Module
     
+    If modScripting.GetScriptSystemDisabled() Then
+        Command.Respond "Error: Scripts are globally disabled via the override."
+        Exit Sub
+    End If
+    
     If (Command.IsValid) Then
         Set Script = modScripting.GetModuleByName(Command.Argument("Script"))
         If (Script Is Nothing) Then
@@ -524,6 +534,11 @@ On Error GoTo ERROR_HANDLER
     Dim Enabled As Boolean
     Dim Name    As String
     Dim Count   As Integer
+    
+    If modScripting.GetScriptSystemDisabled() Then
+        Command.Respond "Error: Scripts are globally disabled via the override."
+        Exit Sub
+    End If
     
     If (frmChat.SControl.Modules.Count > 1) Then
         For i = 2 To frmChat.SControl.Modules.Count

@@ -31,6 +31,11 @@ Public Sub OnDisable(Command As clsCommandObj)
     Dim Module As Module
     Dim Name   As String
     
+    If modScripting.GetScriptSystemDisabled() Then
+        Command.Respond "Error: Scripts are globally disabled via the override."
+        Exit Sub
+    End If
+    
     If (Command.IsValid) Then
         Set Module = modScripting.GetModuleByName(Command.Argument("Script"))
         If (Module Is Nothing) Then
@@ -58,6 +63,11 @@ End Sub
 Public Sub OnEnable(Command As clsCommandObj)
     Dim Module As Module
     Dim Name   As String
+    
+    If modScripting.GetScriptSystemDisabled() Then
+        Command.Respond "Error: Scripts are globally disabled via the override."
+        Exit Sub
+    End If
     
     If (Command.IsValid) Then
         Set Module = modScripting.GetModuleByName(Command.Argument("Script"))

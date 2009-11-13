@@ -36,9 +36,14 @@ Private VetoNextMessage     As Boolean
 Private VetoNextPacket      As Boolean
 Private m_ScriptObservers   As Collection
 Private m_FunctionObservers As Collection
+Private m_SystemDisabled    As Boolean
+Private m_SCInitialized     As Boolean
 
 Public Sub InitScriptControl(ByVal SC As ScriptControl)
 
+    ' check whether the override is disabling the script system
+    If m_SystemDisabled Then Exit Sub
+    
     ' ...
     m_is_reloading = True
 
@@ -71,6 +76,9 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
     
     ' ...
     m_is_reloading = False
+    
+    ' this will always be true after first successful load
+    m_SCInitialized = True
 
 End Sub
 
@@ -89,6 +97,9 @@ Public Sub LoadScripts()
     Dim str           As String  ' ...
     Dim tmp           As String  ' ...
     Dim res           As Boolean ' ...
+
+    ' check whether the override is disabling the script system
+    If m_SystemDisabled Then Exit Sub
 
     ' ********************************
     '      LOAD SCRIPTS
@@ -533,6 +544,9 @@ Public Sub InitScripts()
     
     Dim i   As Integer ' ...
     Dim tmp As String  ' ...
+
+    ' check whether the override is disabling the script system
+    If m_SystemDisabled Then Exit Sub
     
     If (reloading = False) Then
         RunInAll "Event_FirstRun"
@@ -601,6 +615,9 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
     Dim obj     As Module
     Dim Proc    As Procedure
 
+    ' check whether the override is disabling the script system
+    If m_SystemDisabled Then Exit Function
+
     Set SC = m_sc_control
     
     If (m_is_reloading) Then
@@ -667,6 +684,9 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
     Dim obser   As Module
     Dim cobser  As Boolean
     Dim mname   As String
+
+    ' check whether the override is disabling the script system
+    If m_SystemDisabled Then Exit Function
         
     If (m_is_reloading) Then
         Exit Function
@@ -1441,6 +1461,10 @@ Public Sub SC_Error()
     Dim i           As Integer
     Dim tmp         As String
     
+    ' check whether the override is disabling the script system
+    ' (this function is being called in that case due to /exec)
+    If m_SystemDisabled Then Exit Sub
+    
     With m_sc_control
         Number = .Error.Number
         description = .Error.description
@@ -1734,4 +1758,54 @@ On Error GoTo ERROR_HANDLER:
     Exit Function
 ERROR_HANDLER:
     frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in modScripting.GetFunctionObservers()", Err.Number, Err.description)
+End Function
+
+' call this during config reload to enable/disable the system
+' (all calls to the script system will exit if true!!)
+' if this call is enabling the system, load scripts (init sc, init scripts, load scripts)
+' if this call is disabling the system, clean up scripts (close)
+Public Sub SetScriptSystemDisabled(ByVal SystemDisabled As Boolean)
+    
+    On Error GoTo ERROR_HANDLER
+    
+    If m_SystemDisabled = Not SystemDisabled Then
+        If SystemDisabled Then
+            ' system is being disabled, close (if open)
+            If m_SCInitialized Then
+                RunInAll "Event_LoggedOff"
+                RunInAll "Event_Close"
+            End If
+        Else
+            ' system is being enabled, open
+            InitScriptControl frmChat.SControl
+            LoadScripts
+            InitScripts
+        End If
+    End If
+    
+    ' hide the scripting menu if system is disabled, show it if enabled
+    frmChat.mnuScripting.Visible = Not SystemDisabled
+    
+    ' store the state so calls to modScripting functions are aborted if disabled
+    m_SystemDisabled = SystemDisabled
+    
+    Exit Sub
+
+ERROR_HANDLER:
+
+    ' Cannot call this method while the script is executing
+    If (Err.Number = -2147467259) Then
+        frmChat.AddChat vbRed, "Error: Script is still executing."
+        
+        Exit Sub
+    End If
+
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+        " in SetScriptSystemDisabled()."
+End Sub
+
+Public Function GetScriptSystemDisabled() As Boolean
+
+    GetScriptSystemDisabled = m_SystemDisabled
+    
 End Function
