@@ -2272,7 +2272,16 @@ On Error GoTo ERROR_HANDLER:
             
             ' ...
             If (Right$(tmp, 1) = ")") Then
-                tmp = Left$(tmp, Len(tmp) - 1)
+                ' fixed so that usernames actually ending in
+                ' ")" don't get trimmed (ultimately messing up
+                ' such bots with ops). ~Ribose/2009-11-15
+                If pos > 3 Then
+                    ' blah (*blah)
+                    '     ^^^
+                    If Mid$(tmp, pos - 2, 3) = " (*" Then
+                        tmp = Left$(tmp, Len(tmp) - 1)
+                    End If
+                End If
             End If
         End If
     End If
