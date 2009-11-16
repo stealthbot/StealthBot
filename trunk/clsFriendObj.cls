@@ -20,7 +20,7 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_username    As String
+Private m_Username    As String
 Private m_status      As Byte
 Private m_location_id As Byte
 Private m_location    As String
@@ -100,7 +100,7 @@ End Property
 
 Public Property Get IsInChannel() As Boolean
 
-    IsInChannel = (LocationID And 2)
+    IsInChannel = (LocationID = 2)
 
 End Property
 
@@ -112,19 +112,19 @@ End Property
 
 Public Property Get Name() As String
 
-    Name = m_username
+    Name = m_Username
 
 End Property
 
 Public Property Let Name(ByVal sUsername As String)
 
-    m_username = KillNull(sUsername)
+    m_Username = KillNull(sUsername)
 
 End Property
 
 Public Property Get DisplayName() As String
 
-    DisplayName = convertUsername(m_username)
+    DisplayName = convertUsername(m_Username)
 
 End Property
 
