@@ -36,6 +36,12 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Dim pos             As Integer  ' ...
     Dim doUpdate        As Boolean  ' ...
     Dim Displayed       As Boolean  ' stores whether this event has been displayed by another event in the RTB
+
+    ' if this is the public channel before the home channel,
+    ' skip userinchannel events for quick loading! -Ribose/2009-11-17
+    If m_skipUICEvents Then
+        Exit Sub
+    End If
     
     ' if our username is for some reason null, we don't
     ' want to continue, possibly causing further errors
