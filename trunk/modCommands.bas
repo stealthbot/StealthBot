@@ -1129,9 +1129,15 @@ Public Function GetShitlist(ByVal Username As String) As String
     
     If (Ban) Then
         If ((Len(gAcc.BanMessage) > 0) And (gAcc.BanMessage <> "%")) Then
-            GetShitlist = Username & Space(1) & gAcc.BanMessage
+            GetShitlist = Username & Space$(1) & gAcc.BanMessage
+        ElseIf InStr(1, gAcc.Username, " (clan)", vbBinaryCompare) > 0 Then
+            GetShitlist = Username & Space$(1) & "Clanban: " & Mid$(gAcc.Username, 2, InStr(1, gAcc.Username, " (clan)", vbBinaryCompare) - 2)
+        ElseIf InStr(1, gAcc.Username, " (game)", vbBinaryCompare) > 0 Then
+            GetShitlist = Username & Space$(1) & "Clientban: " & Mid$(gAcc.Username, 2, InStr(1, gAcc.Username, " (game)", vbBinaryCompare) - 2)
+        ElseIf InStr(1, gAcc.Username, "*", vbBinaryCompare) > 0 Then
+            GetShitlist = Username & Space$(1) & "Tagban: " & Mid$(gAcc.Username, 2, Len(gAcc.Username) - 2)
         Else
-            GetShitlist = Username & Space(1) & "Shitlisted"
+            GetShitlist = Username & Space$(1) & "Shitlisted"
         End If
     End If
 End Function
@@ -1178,7 +1184,7 @@ End Function
 Public Sub LoadDatabase()
     On Error Resume Next
     Dim s      As String
-    Dim X()    As String
+    Dim x()    As String
     Dim Path   As String
     Dim i      As Integer
     Dim f      As Integer
@@ -1198,13 +1204,13 @@ Public Sub LoadDatabase()
                 Line Input #f, s
                 
                 If InStr(1, s, " ", vbTextCompare) > 0 Then
-                    X() = Split(s, " ", 10)
+                    x() = Split(s, " ", 10)
                     
-                    If UBound(X) > 0 Then
+                    If UBound(x) > 0 Then
                         ReDim Preserve DB(i)
                         
                         With DB(i)
-                            .Username = X(0)
+                            .Username = x(0)
                             
                             .Rank = 0
                             .AddedOn = Now
@@ -1216,11 +1222,11 @@ Public Sub LoadDatabase()
                             .ModifiedOn = Now
                             .Type = "USER"
                             
-                            If StrictIsNumeric(X(1)) Then
-                                .Rank = Val(X(1))
+                            If StrictIsNumeric(x(1)) Then
+                                .Rank = Val(x(1))
                             Else
-                                If X(1) <> "%" Then
-                                    .Flags = X(1)
+                                If x(1) <> "%" Then
+                                    .Flags = x(1)
                                     
                                     'If InStr(X(1), "S") > 0 Then
                                     '    AddToSafelist .Name
@@ -1229,37 +1235,37 @@ Public Sub LoadDatabase()
                                 End If
                             End If
                             
-                            If UBound(X) > 1 Then
-                                If StrictIsNumeric(X(2)) Then
-                                    .Rank = Int(X(2))
+                            If UBound(x) > 1 Then
+                                If StrictIsNumeric(x(2)) Then
+                                    .Rank = Int(x(2))
                                 Else
-                                    If X(2) <> "%" Then
-                                        .Flags = X(2)
+                                    If x(2) <> "%" Then
+                                        .Flags = x(2)
                                     End If
                                 End If
                                 
                                 '  0        1       2       3      4        5          6       7     8
                                 ' username access flags addedby addedon modifiedby modifiedon type banmsg
-                                If UBound(X) > 2 Then
-                                    .AddedBy = X(3)
+                                If UBound(x) > 2 Then
+                                    .AddedBy = x(3)
                                     
-                                    If UBound(X) > 3 Then
-                                        .AddedOn = CDate(Replace(X(4), "_", " "))
+                                    If UBound(x) > 3 Then
+                                        .AddedOn = CDate(Replace(x(4), "_", " "))
                                         
-                                        If UBound(X) > 4 Then
-                                            .ModifiedBy = X(5)
+                                        If UBound(x) > 4 Then
+                                            .ModifiedBy = x(5)
                                             
-                                            If UBound(X) > 5 Then
-                                                .ModifiedOn = CDate(Replace(X(6), "_", " "))
+                                            If UBound(x) > 5 Then
+                                                .ModifiedOn = CDate(Replace(x(6), "_", " "))
 
-                                                If UBound(X) > 6 Then
-                                                    .Type = X(7)
+                                                If UBound(x) > 6 Then
+                                                    .Type = x(7)
                                                     
-                                                    If UBound(X) > 7 Then
-                                                        .Groups = X(8)
+                                                    If UBound(x) > 7 Then
+                                                        .Groups = x(8)
                                                         
-                                                        If UBound(X) > 8 Then
-                                                            .BanMessage = X(9)
+                                                        If UBound(x) > 8 Then
+                                                            .BanMessage = x(9)
                                                         End If
                                                     End If
                                                 End If
