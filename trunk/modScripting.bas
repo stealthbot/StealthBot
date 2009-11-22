@@ -1092,11 +1092,29 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
         Case "MENU"
             ' check if there is one menu left and we're destroying it
             If (ObjCount("Menu", SCModule) = 1) Then
+                Dim IsForm As Boolean
                 Dim tmp As clsMenuObj
-                ' get the dynamic menu dash
-                Set tmp = DynamicMenus("dashmnu" & m_arrObjs(Index).obj.Parent.Caption)
-                ' show it
-                tmp.Visible = False
+                ' default to false
+                IsForm = False
+                ' get the menu
+                Set tmp = m_arrObjs(Index).obj
+                ' get root menu
+                Do While StrComp(Right$(tmp.Name, 4), "ROOT", vbBinaryCompare) <> 0
+                    ' check if this has a window as a parent instead
+                    If StrComp(TypeName$(tmp.Parent), "frmScript", vbBinaryCompare) = 0 Then
+                        ' yes, get outta here!
+                        IsForm = True
+                        Exit Do
+                    End If
+                    Set tmp = tmp.Parent
+                Loop
+                ' check again so that the dash doesn't get hidden
+                If Not IsForm Then
+                    ' get dynamic dash from caption of root
+                    Set tmp = DynamicMenus("dashmnu" & tmp.Caption)
+                    ' show it
+                    tmp.Visible = False
+                End If
             End If
             
             m_arrObjs(Index).obj.Class_Terminate
@@ -1775,19 +1793,21 @@ Public Sub SetScriptSystemDisabled(ByVal SystemDisabled As Boolean)
                 RunInAll "Event_LoggedOff"
                 RunInAll "Event_Close"
             End If
+            ' hide scripting menu
+            frmChat.mnuScripting.Visible = False
+            ' store the state
+            m_SystemDisabled = True
         Else
+            ' store the state
+            m_SystemDisabled = False
+            ' show scripting menu
+            frmChat.mnuScripting.Visible = True
             ' system is being enabled, open
             InitScriptControl frmChat.SControl
             LoadScripts
             InitScripts
         End If
     End If
-    
-    ' hide the scripting menu if system is disabled, show it if enabled
-    frmChat.mnuScripting.Visible = Not SystemDisabled
-    
-    ' store the state so calls to modScripting functions are aborted if disabled
-    m_SystemDisabled = SystemDisabled
     
     Exit Sub
 
