@@ -91,7 +91,7 @@ Public Sub OnGreet(Command As clsCommandObj)
             Case "off":
                 BotVars.UseGreet = False
                 Call WriteINI("Other", "UseGreets", "N")
-                Command.Respond "Gree messages diabled."
+                Command.Respond "Greet messages disabled."
             
             Case "whisper":
                 Select Case (LCase$(Command.Argument("Value")))
