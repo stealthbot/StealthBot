@@ -6230,14 +6230,14 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                 currChar = Asc(Mid$(strTmp, i, 1))
             
                 ' find the first non-space after the /
-                If (currChar <> Asc(Space(1))) Then
+                If (Not currChar = Asc(Space(1))) Then
                     Exit For
                 End If
             Next i
             
             ' if we found a non-space, strip everything
             If (i >= 2) Then
-                strTmp = "/" & Mid$(strTmp, i)
+                strTmp = StringFormat("/{0}", Mid$(strTmp, i))
             End If
 
             ' Find the next instance of a space (the end of the command word)
@@ -6266,28 +6266,19 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                     (Command = "kick") Or _
                     (Command = "designate")) Then
         
-                    ' ...
                     Splt() = Split(strTmp, Space$(1), 3)
                     
-                    ' ...
                     If (UBound(Splt) > 0) Then
-                        ' ...
-                        Command = Splt(0) & Space$(1) & reverseUsername(Splt(1)) & _
-                            Space$(1)
+                        Command = StringFormat("{0} {1}", Splt(0), reverseUsername(Splt(1)))
 
-                        ' ...
                         If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
-                            ' ...
                             If ((LCase$(Splt(0)) = "/unignore") Or (LCase$(Splt(0)) = "/unsquelch")) Then
-                                ' ...
                                 If (StrComp(Splt(1), GetCurrentUsername, vbTextCompare) = 0) Then
-                                    ' ...
                                     lvChannel.ListItems.Clear
                                 End If
                             End If
                         End If
                         
-                        ' ...
                         If (UBound(Splt) > 1) Then
                             ReDim Preserve Splt(0 To UBound(Splt) - 1)
                         End If
@@ -6296,86 +6287,63 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                 ElseIf ((Command = "f") Or _
                         (Command = "friends")) Then
                     
-                    ' ...
                     Splt() = Split(strTmp, Space$(1), 3)
                     
-                    ' ...
-                    Command = Splt(0) & Space$(1)
+                    Command = Splt(0)
                     
-                    ' ...
                     If (UBound(Splt) >= 1) Then
-                        ' ...
-                        Command = Command & Splt(1) & Space$(1)
-                    
-                        ' ...
+                        Command = StringFormat("{0} {1}", Command, Splt(1))
+                        
                         If (UBound(Splt) >= 2) Then
-                            ' ...
                             Select Case (LCase$(Splt(1)))
                                 Case "m", "msg"
-                                    ' ...
                                     ReDim Preserve Splt(0 To UBound(Splt) - 1)
 
                                 Case Else
-                                    ' ...
                                     Splt() = Split(strTmp, Space$(1), 4)
                                 
-                                    ' ...
                                     If ((StrReverse$(BotVars.Product) = "WAR3") Or _
                                         (StrReverse$(BotVars.Product) = "W3XP")) Then
                                         
-                                        ' ...
-                                        Command = Command & reverseUsername(Splt(2)) & _
-                                            Space$(1)
+                                        Command = StringFormat("{0} {1}", Command, reverseUsername(Splt(2)))
                                     Else
-                                        ' ...
-                                        Command = Command & Splt(2) & Space$(1)
+                                        Command = StringFormat("{0} {1}", Command, Splt(2))
                                     End If
                                     
-                                    ' ...
                                     If (UBound(Splt) >= 3) Then
-                                        Command = Command & Splt(3)
+                                        Command = StringFormat("{0} {1}", Command, Splt(3))
                                     End If
                             End Select
                         End If
                     End If
                 Else
-                    ' ...
-                    Command = "/" & Command & Space$(1)
-                    
-                    ' ...
+                    Command = StringFormat("/{0}", Command)
                     strTmp = Mid$(strTmp, Len(Command) + 1)
                 End If
                 
-                ' ...
                 If (Len(Command) >= BNET_MSG_LENGTH) Then
                     Exit Function
                 End If
 
-                ' ...
                 If (UBound(Splt) > 0) Then
-                    ' ...
                     strTmp = Mid$(strTmp, _
                         (Len(Join(Splt(), Space$(1))) + (Len(Space$(1))) + 1))
                 End If
             End If
         End If
         
-        ' ...
         If (msg_priority < 0) Then
-            Dim cmdName    As String ' ...
-            Dim spaceIndex As Long   ' ...
+            Dim cmdName    As String
+            Dim spaceIndex As Long
 
-            ' ...
             spaceIndex = InStr(1, Message, Space$(1), vbBinaryCompare)
             
-            ' ...
             If (spaceIndex >= 2) Then
                 cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 2))
             Else
                 cmdName = LCase$(Mid$(Message, 2))
             End If
             
-            ' ...
             Select Case (cmdName)
                 Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
                 Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
@@ -6396,10 +6364,8 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             MaxLength = BNET_MSG_LENGTH
         End If
         
-        ' ...
         Call SplitByLen(strTmp, (MaxLength - Len(Command)), Splt(), vbNullString, , OversizeDelimiter)
 
-        ' ...
         ReDim Preserve Splt(0 To UBound(Splt))
 
         ' add to the queue!
@@ -6408,12 +6374,14 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             GTC = GetTickCount()
             
             ' store working copy
-            Send = Command & Splt(i)
+            Send = Splt(i)
+            If (LenB(Command) > 0) Then
+                Send = StringFormat("{0} {1}", Command, Send)
+            End If
             
             ' create the queue object
             Set Q = New clsQueueOBj
             
-            ' ...
             With Q
                 .Message = Send
                 .PRIORITY = msg_priority
@@ -6451,7 +6419,6 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             End If
         Next i
         
-        ' ...
         AddQ = UBound(Splt) + 1
         
         ' store our tick for future reference
