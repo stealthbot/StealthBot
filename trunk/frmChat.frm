@@ -892,6 +892,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -917,7 +918,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3597,11 +3597,6 @@ Private Sub mnuCustomChannels_Click(Index As Integer)
     AddQ "/join " & mnuCustomChannels(Index).Caption, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
-Sub mnuClearWW_Click()
-    rtbWhispers.Text = ""
-    AddWhisper RTBColors.ConsoleText, ">> Whisper window cleared."
-End Sub
-
 Private Sub mnuCommandManager_Click()
     'frmCommands.Show vbModal, Me
     frmCommands.Show vbModeless
@@ -3916,11 +3911,41 @@ Private Sub mnuPopWhisper_Click()
     End If
 End Sub
 
-Sub mnuClear_Click()
-    rtbChat.Text = vbNullString
-    rtbChatLength = 0
-    rtbWhispers.Text = vbNullString
-    AddChat RTBColors.InformationText, "Chat and whisper windows cleared."
+Private Sub mnuClear_Click()
+    Call ClearChatScreen(3)
+End Sub
+
+Private Sub mnuClearWW_Click()
+    Call ClearChatScreen(2)
+End Sub
+
+' clear the chat screen:
+' 1 - clear chat window only
+' 2 - clear whisper window only
+' 3 (default) - clear chat and whisper
+Sub ClearChatScreen(Optional ByVal ClearOption As Integer = 3)
+    ' if they passed 0 (False), change to 3
+    If ClearOption = 0 Then ClearOption = 3
+    ' if they passed -1 (True), change to 1 (old behavior: DoNotClearWhispers)
+    If ClearOption = -1 Then ClearOption = 1
+    ' check for 2 (or 3) and clear whispers
+    If ClearOption And 2 Then
+        rtbWhispers.Text = vbNullString
+        ' add cleared message
+        AddWhisper RTBColors.ConsoleText, ">> Whisper window cleared."
+    End If
+    ' check for 1 (or 3) and clear chats
+    If ClearOption And 1 Then
+        rtbChat.Text = vbNullString
+        rtbChatLength = 0
+        ' add a sensical cleared message
+        If ClearOption And 2 Then
+            AddChat RTBColors.InformationText, "Chat window cleared."
+        Else
+            AddChat RTBColors.InformationText, "Chat and whisper windows cleared."
+        End If
+    End If
+    ' set focus to send box
     cboSend.SetFocus
 End Sub
 
