@@ -171,7 +171,7 @@ Public Enum BanTypes
     btUnban = 2
 End Enum
 
-'This is the name to use if you want to refer to the Internal 'Script' of the bot. 
+'This is the name to use if you want to refer to the Internal 'Script' of the bot.
 'Right now only 'Event_Command' is run in the bot.
 'So ObserveScript(SSC.InternalScript) would cause Event_Command to be fired for you for all Built-In commands.
 Public Property Get InternalScript() As String
@@ -635,10 +635,6 @@ End Function
 '// Connects the bot. Will disconnect an already-existent connection.
 Public Sub Connect()
     
-    If (frmChat.sckBNet.State <> sckClosed) Then
-        Exit Sub
-    End If
-    
     Call frmChat.DoConnect
     
 End Sub
@@ -870,14 +866,14 @@ End Function
 
 '// CLEARSCREEN
 '// Empties the bot's current chat window
-'//  By default, also empties the whisper window; pass an argument of TRUE to the
-'//   "DoNotClearWhispers" parameter and it will skip that behavior
-Public Function ClearScreen(Optional ByVal DoNotClearWhispers As Boolean) As String
-    Call frmChat.mnuClear_Click
+'//  CLEAROPTION:
+'//   1 = clear chat window
+'//   2 = clear whisper window
+'//   3 (default) = clear both chat and whisper window
+Public Function ClearScreen(Optional ByVal ClearOption As Integer) As String
     
-    If Not DoNotClearWhispers Then
-        Call frmChat.mnuClearWW_Click
-    End If
+    Call frmChat.ClearChatScreen(ClearOption)
+    
 End Function
 
 
@@ -989,6 +985,18 @@ End Function
 '//     Mirror function for the Windows API function
 Public Function WinSendMessage(ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     WinSendMessage = SendMessage(hWnd, wMsg, wParam, lParam)
+End Function
+
+'// WINGETWINDOWLONG
+'//     Mirror function for the Windows API function
+Public Function WinGetWindowLong(ByVal hWnd As Long, ByVal nIndex As Integer) As Long
+    WinGetWindowLong = GetWindowLong(hWnd, nIndex)
+End Function
+
+'// WINSETWINDOWLONG
+'//     Mirror function for the Windows API function
+Public Function WinSetWindowLong(ByVal hWnd As Long, ByVal nIndex As Integer, ByVal dwNewLong As Long) As Long
+    WinSetWindowLong = SetWindowLong(hWnd, nIndex, dwNewLong)
 End Function
 
 '// DSP
@@ -1161,7 +1169,7 @@ End Function
 
 '// CRC32
 '// Returns the result of a standard CRC32 hash
-Public Function CRC32(ByRef str As String) As String
+Public Function CRC32(ByRef str As String) As Long
 
     Dim clsCRC32 As New clsCRC32
     
@@ -1195,7 +1203,7 @@ End Function
 '// Changed 10/18/2009 - Hdx
 '//    Added Optional Argument "Spacer", This will go between every hex digit, people usually use Space$(1) for nice debugging print
 '//    inHex will now properly pad characters that are < 0x10 with a leading 0, Chr$(6) becomes "06" instead of "6"
-Public Function XSHA1(ByRef str As String, Optional ByVal inHex As Boolean = False, Optional Spacer As String = vbNullString) As String
+Public Function XSHA1(ByRef str As String, Optional ByVal inHex As Boolean = False, Optional SPACER As String = vbNullString) As String
     Dim i As Integer
     Dim s As String
     
@@ -1203,7 +1211,7 @@ Public Function XSHA1(ByRef str As String, Optional ByVal inHex As Boolean = Fal
     
     If inHex Then
         For i = 1 To Len(XSHA1)
-            s = StringFormat("{0}{1}{2}", s, IIf(i > 1, Spacer, vbNullString), ZeroOffset(Asc(Mid(XSHA1, i, 1)), 2))
+            s = StringFormat("{0}{1}{2}", s, IIf(i > 1, SPACER, vbNullString), ZeroOffset(Asc(Mid(XSHA1, i, 1)), 2))
         Next
         XSHA1 = s
     End If

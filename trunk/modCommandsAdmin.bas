@@ -24,7 +24,7 @@ Public Sub OnAdd(Command As clsCommandObj)
 End Sub
 
 Public Sub OnClear(Command As clsCommandObj)
-    frmChat.mnuClear_Click
+    frmChat.ClearChatScreen
 End Sub
 
 Public Sub OnDisable(Command As clsCommandObj)
@@ -116,6 +116,16 @@ Public Sub OnRem(Command As clsCommandObj)
     For i = LBound(response) To UBound(response)
         Command.Respond response(i)
     Next i
+End Sub
+
+Public Sub OnSetBnlsServer(Command As clsCommandObj)
+    If (Command.IsValid) Then
+        Call WriteINI("Main", "BNLSServer", Command.Argument("Server"))
+        BotVars.BNLSServer = Command.Argument("Server")
+        Command.Respond "New BNLS server set to " & BotVars.BNLSServer
+    Else
+        Command.Respond "You must specify a server."
+    End If
 End Sub
 
 Public Sub OnSetCommandLine(Command As clsCommandObj)
