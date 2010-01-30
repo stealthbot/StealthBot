@@ -2943,6 +2943,8 @@ Sub Form_Unload(Cancel As Integer)
     RunInAll "Event_Close"
     RunInAll "Event_Shutdown"
     
+    DestroyObjs
+    
     On Error GoTo 0
     
     If ExReconnectTimerID > 0 Then
@@ -3017,6 +3019,8 @@ Sub Form_Unload(Cancel As Integer)
     ' if it was compiled with the debugger, we don't allow minimizing to tray anyway
     #If Not COMPILE_DEBUG = 1 Then
         Call ExitProcess(0)
+    #Else
+        End
     #End If
 End Sub
 

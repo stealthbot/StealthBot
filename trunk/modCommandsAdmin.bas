@@ -30,6 +30,8 @@ End Sub
 Public Sub OnDisable(Command As clsCommandObj)
     Dim Module As Module
     Dim Name   As String
+    Dim i      As Integer
+    Dim mnu    As clsMenuObj
     
     If modScripting.GetScriptSystemDisabled() Then
         Command.Respond "Error: Scripts are globally disabled via the override."
@@ -49,6 +51,14 @@ Public Sub OnDisable(Command As clsCommandObj)
                 SharedScriptSupport.WriteSettingsEntry "Enabled", "False", , Name
                 modScripting.DestroyObjs Module
                 Command.Respond Name & " has been disabled."
+                For i = 1 To DynamicMenus.Count
+                    Set mnu = DynamicMenus(i)
+                    If (StrComp(mnu.Name, Chr$(0) & Name & Chr$(0) & "ENABLE|DISABLE", vbTextCompare) = 0) Then
+                        mnu.Checked = False
+                        Exit For
+                    End If
+                Next i
+                Set mnu = Nothing
             End If
         End If
     Else
@@ -63,6 +73,8 @@ End Sub
 Public Sub OnEnable(Command As clsCommandObj)
     Dim Module As Module
     Dim Name   As String
+    Dim i      As Integer
+    Dim mnu    As clsMenuObj
     
     If modScripting.GetScriptSystemDisabled() Then
         Command.Respond "Error: Scripts are globally disabled via the override."
@@ -81,6 +93,14 @@ Public Sub OnEnable(Command As clsCommandObj)
                 SharedScriptSupport.WriteSettingsEntry "Enabled", "True", , Name
                 modScripting.InitScript Module
                 Command.Respond Name & " has been enabled."
+                For i = 1 To DynamicMenus.Count
+                    Set mnu = DynamicMenus(i)
+                    If (StrComp(mnu.Name, Chr$(0) & Name & Chr$(0) & "ENABLE|DISABLE", vbTextCompare) = 0) Then
+                        mnu.Checked = True
+                        Exit For
+                    End If
+                Next i
+                Set mnu = Nothing
             End If
         End If
     Else

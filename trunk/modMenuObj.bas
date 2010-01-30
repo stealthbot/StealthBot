@@ -82,16 +82,16 @@ Public Function GetMenuByID(ByVal lng As Long) As Object
 
     On Error GoTo ERROR_HANDLER
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
     
     ' ...
-    For I = 1 To DynamicMenus.Count
-        If (DynamicMenus(I).ID = lng) Then
-            Set GetMenuByID = DynamicMenus(I)
+    For i = 1 To DynamicMenus.Count
+        If (DynamicMenus(i).ID = lng) Then
+            Set GetMenuByID = DynamicMenus(i)
             
             Exit Function
         End If
-    Next I
+    Next i
 
     Exit Function
     
@@ -119,29 +119,25 @@ Public Sub MenuClick(hWnd As Long, lngMenuCommand As Long)
 
         RunInSingle obj.SCModule, obj.ObjName & "_Click"
     Else
-        Dim I As Integer ' ...
+        Dim i As Integer ' ...
         
-        For I = 1 To DynamicMenus.Count
-            If (DynamicMenus(I).ID = lngMenuCommand) Then
+        For i = 1 To DynamicMenus.Count
+            If (DynamicMenus(i).ID = lngMenuCommand) Then
                 ' is this a default scripting menu?
-                If (Left$(DynamicMenus(I).Name, 1) = Chr$(0)) Then
+                If (Left$(DynamicMenus(i).Name, 1) = Chr$(0)) Then
                     Dim s_name   As String ' ...
                     Dim sub_name As String ' ...
 
                     s_name = _
-                        Split(Mid$(DynamicMenus(I).Name, 2), Chr$(0))(0)
+                        Split(Mid$(DynamicMenus(i).Name, 2), Chr$(0))(0)
                     sub_name = _
-                        Split(Mid$(DynamicMenus(I).Name, 2), Chr$(0))(1)
+                        Split(Mid$(DynamicMenus(i).Name, 2), Chr$(0))(1)
                         
                     If (sub_name = "ENABLE|DISABLE") Then
-                        If (DynamicMenus(I).Checked) Then
+                        If (DynamicMenus(i).Checked) Then
                             ProcessCommand GetCurrentUsername, "/disable " & s_name, True
-                            
-                            DynamicMenus(I).Checked = False
                         Else
                             ProcessCommand GetCurrentUsername, "/enable " & s_name, True
-                            
-                            DynamicMenus(I).Checked = True
                         End If
                     ElseIf (sub_name = "VIEW_SCRIPT") Then
                         If (ReadCfg("Override", "ScriptViewer") = vbNullString) Then
@@ -155,7 +151,7 @@ Public Sub MenuClick(hWnd As Long, lngMenuCommand As Long)
                 
                 Exit For
             End If
-        Next I
+        Next i
     End If
     
     Exit Sub
