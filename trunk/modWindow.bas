@@ -18,7 +18,7 @@ End Type
 
 Private Type ENLINK
     hdr    As NMHDR
-    Msg    As Long
+    msg    As Long
     wParam As Long
     lParam As Long
     chrg   As CHARRANGE
@@ -80,7 +80,7 @@ Public Sub DisableURLDetect(ByVal hWndTextbox As Long)
 
 End Sub
 
-Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 
     Dim Rezult As Long
     Dim uHead  As NMHDR
@@ -89,7 +89,7 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wPara
     Dim sText  As String
     Dim lLen   As Long
     
-    If Msg = TASKBARCREATED_MSGID Then
+    If msg = TASKBARCREATED_MSGID Then
         Shell_NotifyIcon NIM_ADD, nid
     End If
     
@@ -105,14 +105,14 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wPara
         End Select
     End If
     
-    If Msg = WM_NOTIFY Then
+    If msg = WM_NOTIFY Then
         CopyMemory uHead, ByVal lParam, LenB(uHead)
        
         If (uHead.code = EN_LINK) Then
             CopyMemory eLink, ByVal lParam, LenB(eLink)
        
             With eLink
-                If .Msg = WM_LBUTTONDBLCLK Then
+                If .msg = WM_LBUTTONDBLCLK Then
                     eText.chrg.cpMin = .chrg.cpMin
                     eText.chrg.cpMax = .chrg.cpMax
                     eText.lpstrText = Space$(1024)
@@ -120,16 +120,16 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wPara
                     lLen = SendMessageAny(uHead.hWndFrom, EM_GETTEXTRANGE, 0, eText)
                     sText = Left$(eText.lpstrText, lLen)
        
-                   ShellExecute hWnd, vbNullString, sText, vbNullString, vbNullString, SW_SHOW
+                   ShellExecute hWnd, 0&, sText, 0&, 0&, vbNormalFocus
                 End If
             End With
         End If
-    ElseIf Msg = WM_COMMAND Then
+    ElseIf msg = WM_COMMAND Then
         If lParam = 0 Then
             MenuClick hWnd, wParam
         End If
     End If
     
-    NewWindowProc = CallWindowProc(hWndSet(hWnd), hWnd, Msg, wParam, lParam)
+    NewWindowProc = CallWindowProc(hWndSet(hWnd), hWnd, msg, wParam, lParam)
     
 End Function

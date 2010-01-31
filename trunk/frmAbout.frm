@@ -365,13 +365,13 @@ End Sub
 
 Private Sub lblURL_Click(Index As Integer)
     If Index = 3 Then
-        ShellExecute Me.hWnd, "Open", "mailto:stealth@stealthbot.net", 0&, 0&, 0&
+        ShellExecute Me.hWnd, "Open", "mailto:stealth@stealthbot.net", 0&, 0&, vbNormalFocus
     ElseIf Index = 0 Then
-        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net", 0&, 0&, 0&
+        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net", 0&, 0&, vbNormalFocus
     ElseIf Index = 6 Then
-        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/wiki/", 0&, 0&, 0&
+        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/wiki/", 0&, 0&, vbNormalFocus
     ElseIf Index = 5 Then
-        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/sb/contributors/", 0&, 0&, 0&
+        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/sb/contributors/", 0&, 0&, vbNormalFocus
     End If
 End Sub
 

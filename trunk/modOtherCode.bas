@@ -1706,7 +1706,7 @@ Public Sub GetW3LadderProfile(ByVal sPlayer As String, ByVal eType As enuWebProf
     If (LenB(sPlayer) > 0) Then
         ShellExecute frmChat.hWnd, "Open", _
         StringFormat("http://classic.battle.net/war3/ladder/{0}-player-profile.aspx?Gateway={1}&PlayerName={2}", _
-            IIf(eType = W3XP, "w3xp", "war3"), GetW3Realm(sPlayer), NameWithoutRealm(sPlayer, 1)), 0&, 0&, 0&
+            IIf(eType = W3XP, "w3xp", "war3"), GetW3Realm(sPlayer), NameWithoutRealm(sPlayer, 1)), 0&, 0&, vbNormalFocus
     End If
 End Sub
 
@@ -1884,7 +1884,7 @@ Public Function GetProfilePath(Optional ByVal ProfileIndex As Integer) As String
 End Function
 
 Public Sub OpenReadme()
-    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/sb/redir/readme/", 0, 0, 0
+    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/sb/redir/readme/", 0&, 0&, vbNormalFocus
     frmChat.AddChat RTBColors.SuccessText, "You are being taken to the StealthBot Online Readme."
 End Sub
 
