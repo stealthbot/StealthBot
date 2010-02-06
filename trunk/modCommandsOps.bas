@@ -658,7 +658,6 @@ End Sub
 Public Sub OnSafeDel(Command As clsCommandObj)
     If (Command.IsValid) Then
         Command.Args = Command.Argument("Username") & " -S --type USER"
-        Command.IsLocal = True
         Call OnAdd(Command)
     Else
         Command.Respond "Error: You must supply a username."
