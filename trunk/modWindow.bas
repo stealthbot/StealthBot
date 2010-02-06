@@ -120,7 +120,7 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wPara
                     lLen = SendMessageAny(uHead.hWndFrom, EM_GETTEXTRANGE, 0, eText)
                     sText = Left$(eText.lpstrText, lLen)
        
-                   ShellExecute hWnd, 0&, sText, 0&, 0&, vbNormalFocus
+                    ShellExecute hWnd, vbNullString, sText, vbNullString, vbNullString, vbNormalFocus
                 End If
             End With
         End If

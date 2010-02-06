@@ -892,7 +892,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -918,6 +917,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3565,7 +3565,7 @@ Private Sub mnuCatchPhrases_Click()
 End Sub
 
 Private Sub mnuChangeLog_Click()
-    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/sb/changelog", 0&, 0&, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/sb/changelog", vbNullString, vbNullString, vbNormalFocus
     AddChat RTBColors.InformationText, "Opening the bot's changelog at http://www.stealthbot.net/sb/changelog"
 End Sub
 
@@ -3635,7 +3635,7 @@ Private Sub mnuEditCaught_Click()
         MsgBox "The bot has not caught any phrases yet."
         Exit Sub
     Else
-        ShellExecute Me.hWnd, "Open", GetFilePath("CaughtPhrases.htm"), 0&, 0&, vbNormalFocus
+        ShellExecute Me.hWnd, "Open", GetFilePath("CaughtPhrases.htm"), vbNullString, vbNullString, vbNormalFocus
     End If
 End Sub
 
@@ -3715,7 +3715,7 @@ Sub mnuHelpReadme_Click()
 End Sub
 
 Sub mnuHelpWebsite_Click()
-    ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net", 0&, 0&, vbNormalFocus
+    ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net", vbNullString, vbNullString, vbNormalFocus
 End Sub
 
 Private Sub mnuHideBans_Click()
@@ -4003,7 +4003,7 @@ Private Sub mnuClearedTxt_Click()
     If LenB(Dir$(sPath)) = 0 Then
         AddChat RTBColors.ErrorMessageText, "The log file for today is empty."
     Else
-        ShellExecute Me.hWnd, "Open", sPath, 0&, 0&, vbNormalFocus
+        ShellExecute Me.hWnd, "Open", sPath, vbNullString, vbNullString, vbNormalFocus
     End If
 End Sub
 
@@ -4089,12 +4089,12 @@ Private Sub mnuWhisperCleared_Click()
     If LenB(Dir$(sPath)) = 0 Then
         AddChat RTBColors.ErrorMessageText, "The whisper log file for today is empty."
     Else
-        ShellExecute Me.hWnd, "Open", sPath, 0&, 0&, vbNormalFocus
+        ShellExecute Me.hWnd, "Open", sPath, vbNullString, vbNullString, vbNormalFocus
     End If
 End Sub
 
 Private Sub mnuEditUsers_Click()
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("Users.txt"), 0&, 0&, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("Users.txt"), vbNullString, vbNullString, vbNormalFocus
 End Sub
 
 Private Sub mnuFListRefresh_Click()
@@ -4173,8 +4173,8 @@ Private Sub mnuStatsW3_Click()
 End Sub
 
 Private Sub mnuTerms_Click()
-    'ShellExecute frmChat.hWnd, "Open", App.Path & "\eula.txt", &H0, &H0, vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", "http://eula.stealthbot.net", 0&, 0&, vbNormalFocus
+    'ShellExecute frmChat.hWnd, "Open", App.Path & "\eula.txt", vbNullString, vbNullString, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", "http://eula.stealthbot.net", vbNullString, vbNullString, vbNormalFocus
     AddChat RTBColors.InformationText, "Opening the StealthBot EULA at http://eula.stealthbot.net."
 End Sub
 
