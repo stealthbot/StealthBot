@@ -280,7 +280,7 @@ Public Sub OnWhisperCmds(Command As clsCommandObj)
             Command.Respond "Command responses will now be displayed publicly."
         
         Case Else:
-            Command.Respond StringFormat("Command responses will be {0}.", _
+            Command.Respond StringFormat("Command responses are currently {0}.", _
                 IIf(BotVars.WhisperCmds, "whispered back", "displayed publicly"))
     End Select
 End Sub

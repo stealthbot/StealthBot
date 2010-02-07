@@ -129,9 +129,9 @@ Public Sub OnChPw(Command As clsCommandObj)
             Case Else:
             
                 If ((LenB(BotVars.ChannelPassword) = 0) Or (BotVars.ChannelPasswordDelay = 0)) Then
-                    Command.Respond "Channel password protection is disabled."
+                    Command.Respond "Channel password protection is currently disabled."
                 Else
-                    Command.Respond StringFormat("Channel password protection is enabled. Password [{0}], Delay [{1}].", _
+                    Command.Respond StringFormat("Channel password protection is currently enabled. Password [{0}], Delay [{1}].", _
                         BotVars.ChannelPassword, BotVars.ChannelPasswordDelay)
                 End If
         End Select
@@ -345,10 +345,10 @@ Public Sub OnIdleBans(Command As clsCommandObj)
                 
             Case Else:
                 If (BotVars.IB_On = BTRUE) Then
-                    Command.Respond StringFormat("Idle {0} is enabled with a delay of {1} seconds.", _
+                    Command.Respond StringFormat("Idle {0} is currently enabled with a delay of {1} seconds.", _
                         IIf(BotVars.IB_Kick, "kicking", "banning"), BotVars.IB_Wait)
                 Else
-                    Command.Respond "Idlebans are disabled."
+                    Command.Respond "Idlebanning is currently disabled."
                 End If
         End Select
     End If
@@ -451,7 +451,7 @@ Public Sub OnKickOnYell(Command As clsCommandObj)
             Command.Respond "Kick-on-yell disabled."
         
         Case Else:
-            Command.Respond StringFormat("Kick-on-yell is {0}.", _
+            Command.Respond StringFormat("Kick-on-yell is currently {0}.", _
                 IIf(BotVars.KickOnYell = 1, "enabled", "disabled"))
     End Select
 End Sub
@@ -530,7 +530,7 @@ Public Sub OnPlugBan(Command As clsCommandObj)
     ' a connectivity issue became fairly common, and the UDP plug began to
     ' represent that a user was using a bot.  This feature allows for the
     ' banning of both, potential bots, and users unlikely to be capable of
-    ' creating and/or joining games based on the UDP protocl.
+    ' creating and/or joining games based on the UDP protocol.
         Select Case LCase$(Command.Argument("SubCommand"))
         Case "on":
             If (BotVars.PlugBan) Then
