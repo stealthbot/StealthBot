@@ -269,6 +269,7 @@ On Error GoTo ERROR_HANDLER
                     
                     Respond sError
                     
+                    m_splithasrun = True
                     IsValid = False
                     Exit Sub
                 Else
