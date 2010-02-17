@@ -2659,7 +2659,7 @@
         </documentation>
       </argument>
 
-      <argument name="Value" type="word" optional="1">
+      <argument name="Value" type="string" optional="1">
         <documentation>
           <description>
             The whisper subcommand to use, must be: 'on', or 'off'
