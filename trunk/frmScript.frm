@@ -163,6 +163,16 @@ Begin VB.Form frmScript
       OLEDragMode     =   1
       NumItems        =   0
    End
+   Begin VB.Frame fra 
+      BackColor       =   &H00000000&
+      ForeColor       =   &H00FFFFFF&
+      Height          =   375
+      Index           =   0
+      Left            =   2040
+      TabIndex        =   12
+      Top             =   360
+      Width           =   375
+   End
    Begin VB.Label lbl 
       BackColor       =   &H00000000&
       Caption         =   "lbl"
@@ -364,6 +374,13 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
             
             Set obj.obj = cmb(ObjCount(ObjType))
         
+        Case "FRAME"
+            If (ObjCount(ObjType) > 0) Then
+                Load fra(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = fra(ObjCount(ObjType))
+        
         Case "IMAGELIST"
             If (ObjCount(ObjType) > 0) Then
                 Load iml(ObjCount(ObjType))
@@ -543,6 +560,13 @@ Public Sub DestroyObj(ByVal ObjName As String)
                 cmb(0).Visible = False
             End If
         
+        Case "FRAME"
+            If (m_arrObjs(Index).obj.Index > 0) Then
+                Unload fra(m_arrObjs(Index).obj.Index)
+            Else
+                fra(0).Visible = False
+            End If
+        
         Case "IMAGELIST"
             If (m_arrObjs(Index).obj.Index > 0) Then
                 Unload iml(m_arrObjs(Index).obj.Index)
@@ -713,6 +737,8 @@ Public Sub ClearObjs()
             Case "COMBOXBOX"
                 cmb(m_arrObjs(i).obj.Index).Text = ""
             
+            Case "FRAME"
+            
             Case "IMAGELIST"
                 iml(m_arrObjs(i).obj.Index).ListImages.Clear
             
@@ -845,7 +871,10 @@ Private Sub Form_KeyPress(KeyAscii As Integer)
     On Error Resume Next
 
     ' ...
-    RunInSingle m_sc_module, m_name & "_KeyPress", KeyAscii
+    If (RunInSingle(m_sc_module, m_name & "_KeyPress", KeyAscii)) Then
+        ' vetoed
+        KeyAscii = 0
+    End If
 
 End Sub
 
@@ -919,7 +948,10 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     On Error Resume Next
 
     ' ...
-    RunInSingle m_sc_module, m_name & "_QueryUnload", UnloadMode
+    If (RunInSingle(m_sc_module, m_name & "_QueryUnload", UnloadMode)) Then
+        ' vetoed
+        Cancel = 1
+    End If
 
 End Sub
 
@@ -948,10 +980,13 @@ Public Sub Form_Unload(Cancel As Integer)
     ' ...
     If (m_hidden = False) Then
         ' ...
-        Me.Hide
+        If (RunInSingle(m_sc_module, m_name & "_Unload")) Then
+            ' vetoed
+            Exit Sub
+        End If
         
         ' ...
-        RunInSingle m_sc_module, m_name & "_Unload", Cancel
+        Me.Hide
         
         ' ...
         m_hidden = True
@@ -1000,7 +1035,10 @@ Private Sub cmd_KeyPress(Index As Integer, KeyAscii As Integer)
     obj = GetScriptObjByIndex("Button", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
+    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+        ' vetoed
+        KeyAscii = 0
+    End If
 
 End Sub
 
@@ -1266,7 +1304,10 @@ Private Sub lst_KeyPress(Index As Integer, KeyAscii As Integer)
     obj = GetScriptObjByIndex("ListBox", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
+    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+        ' vetoed
+        KeyAscii = 0
+    End If
 
 End Sub
 
@@ -1392,7 +1433,10 @@ Private Sub lsv_AfterLabelEdit(Index As Integer, Cancel As Integer, NewString As
     obj = GetScriptObjByIndex("ListView", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_AfterLabelEdit", Cancel, NewString
+    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_AfterLabelEdit", NewString)) Then
+        ' vetoed
+        Cancel = 1
+    End If
 
 End Sub
 
@@ -1406,7 +1450,10 @@ Private Sub lsv_BeforeLabelEdit(Index As Integer, Cancel As Integer)
     obj = GetScriptObjByIndex("ListView", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_BeforeLabelEdit", Cancel
+    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_BeforeLabelEdit")) Then
+        ' vetoed
+        Cancel = 1
+    End If
 
 End Sub
 
@@ -1476,7 +1523,10 @@ Private Sub lsv_KeyPress(Index As Integer, KeyAscii As Integer)
     obj = GetScriptObjByIndex("ListView", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
+    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+        ' vetoed
+        KeyAscii = 0
+    End If
 
 End Sub
 
@@ -1616,7 +1666,10 @@ Private Sub opt_KeyPress(Index As Integer, KeyAscii As Integer)
     obj = GetScriptObjByIndex("OptionButton", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
+    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+        ' vetoed
+        KeyAscii = 0
+    End If
 
 End Sub
 
@@ -1770,7 +1823,10 @@ Private Sub pic_KeyPress(Index As Integer, KeyAscii As Integer)
     obj = GetScriptObjByIndex("PictureBox", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
+    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+        ' vetoed
+        KeyAscii = 0
+    End If
 
 End Sub
 
@@ -1840,7 +1896,10 @@ Private Sub pic_LinkOpen(Index As Integer, Cancel As Integer)
     obj = GetScriptObjByIndex("PictureBox", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_LinkOpen", Cancel
+    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_LinkOpen")) Then
+        ' vetoed
+        Cancel = 1
+    End If
 
 End Sub
 
@@ -2008,7 +2067,11 @@ Private Sub rtb_KeyPress(Index As Integer, KeyAscii As Integer)
     obj = GetScriptObjByIndex("RichTextBox", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
+    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+        ' vetoed
+        KeyAscii = 0
+    End If
+    
 End Sub
 
 Private Sub rtb_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
@@ -2217,7 +2280,10 @@ Private Sub txt_KeyPress(Index As Integer, KeyAscii As Integer)
     obj = GetScriptObjByIndex("TextBox", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
+    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+        ' vetoed
+        KeyAscii = 0
+    End If
 
 End Sub
 
@@ -2301,7 +2367,10 @@ Private Sub chk_KeyPress(Index As Integer, KeyAscii As Integer)
     obj = GetScriptObjByIndex("CheckBox", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
+    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+        ' vetoed
+        KeyAscii = 0
+    End If
 
 End Sub
 
@@ -2454,7 +2523,10 @@ Private Sub cmb_KeyPress(Index As Integer, KeyAscii As Integer)
     obj = GetScriptObjByIndex("ComboBox", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
+    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+        ' vetoed
+        KeyAscii = 0
+    End If
 
 End Sub
 
@@ -2510,8 +2582,219 @@ Private Sub trv_AfterLabelEdit(Index As Integer, Cancel As Integer, NewString As
     obj = GetScriptObjByIndex("TreeView", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_AfterLabelEdit", Cancel, NewString
+    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_AfterLabelEdit", NewString)) Then
+        ' vetoed
+        Cancel = 1
+    End If
 
+End Sub
+
+Private Sub trv_BeforeLabelEdit(Index As Integer, Cancel As Integer)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetScriptObjByIndex("TreeView", Index)
+    
+    ' ...
+    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_BeforeLabelEdit")) Then
+        ' vetoed
+        Cancel = 1
+    End If
+
+End Sub
+
+Private Sub trv_Click(Index As Integer)
+    
+    On Error Resume Next
+    
+    Dim obj As scObj
+    
+    obj = GetScriptObjByIndex("TreeView", Index)
+    
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+
+End Sub
+
+Private Sub trv_Collapse(Index As Integer, Node As Node)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetScriptObjByIndex("TreeView", Index)
+    
+    ' ...
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Collapse", Node
+    
+End Sub
+
+Private Sub trv_DblClick(Index As Integer)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetScriptObjByIndex("TreeView", Index)
+    
+    ' ...
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_DblClick"
+
+End Sub
+
+Private Sub trv_Expand(Index As Integer, Node As Node)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetScriptObjByIndex("TreeView", Index)
+    
+    ' ...
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Expand", Node
+    
+End Sub
+
+Private Sub trv_GotFocus(Index As Integer)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetScriptObjByIndex("TreeView", Index)
+    
+    ' ...
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_GotFocus"
+
+End Sub
+
+Private Sub trv_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetScriptObjByIndex("TreeView", Index)
+    
+    ' ...
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
+
+End Sub
+
+Private Sub trv_KeyPress(Index As Integer, KeyAscii As Integer)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetScriptObjByIndex("TreeView", Index)
+    
+    ' ...
+    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+        ' vetoed
+        KeyAscii = 0
+    End If
+
+End Sub
+
+Private Sub trv_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetScriptObjByIndex("TreeView", Index)
+    
+    ' ...
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
+
+End Sub
+
+Private Sub trv_LostFocus(Index As Integer)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetScriptObjByIndex("TreeView", Index)
+    
+    ' ...
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_LostFocus"
+
+End Sub
+
+Private Sub trv_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
+
+    On Error Resume Next
+    
+    Dim obj As scObj
+    
+    obj = GetScriptObjByIndex("TreeView", Index)
+    
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
+
+End Sub
+
+Private Sub trv_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
+
+    On Error Resume Next
+    
+    Dim obj As scObj
+    
+    obj = GetScriptObjByIndex("TreeView", Index)
+    
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
+
+End Sub
+
+Private Sub trv_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
+
+    On Error Resume Next
+    
+    Dim obj As scObj
+    
+    obj = GetScriptObjByIndex("TreeView", Index)
+    
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
+
+End Sub
+
+Private Sub trv_NodeCheck(Index As Integer, Node As Node)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetScriptObjByIndex("TreeView", Index)
+    
+    ' ...
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_NodeCheck", Node
+    
+End Sub
+
+Private Sub trv_NodeClick(Index As Integer, Node As Node)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetScriptObjByIndex("TreeView", Index)
+    
+    ' ...
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_NodeClick", Node
+    
 End Sub
 
 Private Sub prg_Click(Index As Integer)
@@ -2557,6 +2840,68 @@ Private Sub prg_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("ProgressBar", Index)
+    
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
+
+End Sub
+
+Private Sub fra_Click(Index As Integer)
+    
+    On Error Resume Next
+    
+    Dim obj As scObj
+    
+    obj = GetScriptObjByIndex("Frame", Index)
+    
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+
+End Sub
+
+Private Sub fra_DblClick(Index As Integer)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetScriptObjByIndex("Frame", Index)
+    
+    ' ...
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_DblClick"
+
+End Sub
+
+Private Sub fra_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
+
+    On Error Resume Next
+    
+    Dim obj As scObj
+    
+    obj = GetScriptObjByIndex("Frame", Index)
+    
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
+
+End Sub
+
+Private Sub fra_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
+
+    On Error Resume Next
+    
+    Dim obj As scObj
+    
+    obj = GetScriptObjByIndex("Frame", Index)
+    
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
+
+End Sub
+
+Private Sub fra_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
+
+    On Error Resume Next
+    
+    Dim obj As scObj
+    
+    obj = GetScriptObjByIndex("Frame", Index)
     
     RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
 

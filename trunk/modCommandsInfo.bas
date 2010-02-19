@@ -302,8 +302,8 @@ On Error GoTo ERROR_HANDLER
         Else
             If (Not StrComp(Script.CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 1) Then
                 Command.Respond StringFormat("The Script {0} loaded in {1}ms.", _
-                    Script.CodeObject.Script("Name"), _
-                    Script.CodeObject.Script("InitPerf"))
+                    GetScriptName(Script.Name), _
+                    GetScriptDictionary(Script)("InitPerf"))
             Else
                 Command.Respond "That script is currently disabled."
             End If
@@ -321,13 +321,13 @@ On Error GoTo ERROR_HANDLER
                 If (Not StrComp(Script.CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 0) Then
                     If (Command.IsLocal And Not Command.PublicOutput) Then
                         Command.Respond StringFormat(" '{0}' loaded in {1}ms.", _
-                            Script.CodeObject.Script("Name"), _
-                            Script.CodeObject.Script("InitPerf"))
+                            GetScriptName(Script.Name), _
+                            GetScriptDictionary(Script)("InitPerf"))
                     Else
                         strRet = StringFormat("{0} '{1}' {2}ms{3}", _
                             strRet, _
-                            Script.CodeObject.Script("Name"), _
-                            Script.CodeObject.Script("InitPerf"), _
+                            GetScriptName(Script.Name), _
+                            GetScriptDictionary(Script)("InitPerf"), _
                             IIf(i = frmChat.SControl.Modules.Count, vbNullString, ","))
                     End If
                 End If
@@ -500,22 +500,22 @@ On Error GoTo ERROR_HANDLER
             Dim Author   As String
             
             Version = StringFormat("{0}.{1} Revision {2}", _
-                Script.CodeObject.Script("Major"), _
-                Script.CodeObject.Script("Minor"), _
-                Script.CodeObject.Script("Revision"))
+                GetScriptDictionary(Script)("Major"), _
+                GetScriptDictionary(Script)("Minor"), _
+                GetScriptDictionary(Script)("Revision"))
                 
-            VerTotal = Val(Script.CodeObject.Script("Major")) _
-                     + Val(Script.CodeObject.Script("Minor")) _
-                     + Val(Script.CodeObject.Script("Revision"))
+            VerTotal = Val(GetScriptDictionary(Script)("Major")) _
+                     + Val(GetScriptDictionary(Script)("Minor")) _
+                     + Val(GetScriptDictionary(Script)("Revision"))
                      
-            Author = Script.CodeObject.Script("Author")
+            Author = GetScriptDictionary(Script)("Author")
             
             If ((LenB(Author) = 0) And (VerTotal = 0)) Then
                 Command.Respond StringFormat("There is no additional information for the '{0}' script.", _
-                    Script.CodeObject.Script("Name"))
+                    GetScriptName(Script.Name))
             Else
                 Command.Respond StringFormat("{0}{1}{2}", _
-                    Script.CodeObject.Script("Name"), _
+                    GetScriptName(Script.Name), _
                     IIf(VerTotal > 0, " v" & Version, vbNullString), _
                     IIf(LenB(Author) > 0, " by " & Author, vbNullString))
             End If

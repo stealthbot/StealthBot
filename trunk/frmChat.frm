@@ -4275,8 +4275,8 @@ Private Sub rtbWhispers_KeyDown(KeyCode As Integer, Shift As Integer)
         Select Case KeyCode
             Case vbKeyL
                 Call mnuLock_Click
-            'Case vbKeyR
-            '    Call mnuReloadScript_Click
+            Case vbKeyR
+                Call mnuReloadScript_Click
         End Select
         
         'Disable Ctrl+L, Ctrl+E, and Ctrl+R
@@ -4496,6 +4496,20 @@ Private Sub sckScript_Connect(Index As Integer)
     RunInSingle obj.SCModule, obj.ObjName & "_Connect"
     
     
+End Sub
+
+Private Sub sckScript_ConnectionRequest(Index As Integer, requestID As Long)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetScriptObjByIndex("Winsock", Index)
+
+    ' ...
+    RunInSingle obj.SCModule, obj.ObjName & "_ConnectionRequest", requestID
+
 End Sub
 
 Private Sub sckScript_DataArrival(Index As Integer, ByVal bytesTotal As Long)

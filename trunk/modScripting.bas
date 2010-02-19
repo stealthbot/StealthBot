@@ -147,7 +147,7 @@ Public Sub LoadScripts()
                 ' Does the script have a valid name?
                 If (IsScriptNameValid(CurrentModule) = False) Then
                     ' No. Try to fix it.
-                    CurrentModule.CodeObject.Script("Name") = CleanFileName(m_TempMdlName)
+                    GetScriptDictionary(CurrentModule)("Name") = CleanFileName(m_TempMdlName)
                 
                     ' Is it valid now?
                     If (IsScriptNameValid(CurrentModule) = False) Then
@@ -323,17 +323,17 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
         ' store module-level functions
         ScriptModule.ExecuteStatement GetDefaultModuleProcs()
         
-        ' create Script object
-        ScriptModule.ExecuteStatement "Set Script = CreateObject(""Scripting.Dictionary"")"
+        ' initialize the variables globally
+        ScriptModule.ExecuteStatement "Public Script, DataBuffer"
         
-        ' make Script object keys case-insensitive
-        ScriptModule.CodeObject.Script.CompareMode = Scripting.CompareMethod.TextCompare
+        ' store Script dictionary into script
+        SetScriptDictionary ScriptModule
         
         ' create default DataBuffer object
-        ScriptModule.ExecuteStatement "Set DataBuffer = DataBufferEx()"
+        Set ScriptModule.CodeObject.DataBuffer = SharedScriptSupport.DataBufferEx()
         
-        ' set the path Script() value
-        ScriptModule.CodeObject.Script("Path") = filePath
+        ' set the Script("Path") value
+        GetScriptDictionary(ScriptModule)("Path") = filePath
         
         ' add this as the "first" include for this script, with no name so that later it is changed to "scriptname"
         AddInclude ScriptModule, vbNullString, lineCount
@@ -350,7 +350,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
         ' the error handler will use this information to continually subtract linecounts until
         ' the line number is in the bounds of the include information where the file actually is
         ' so that we know what include is causing an error
-        ScriptModule.CodeObject.Script("IncludeLBound") = m_incCount - includes.Count - 1
+        GetScriptDictionary(ScriptModule)("IncludeLBound") = m_incCount - includes.Count - 1
         
         ' add content
         ScriptModule.AddCode strContent
@@ -584,7 +584,7 @@ Public Sub InitScript(ByVal SCModule As Module)
     finishTime = GetTickCount()
  
     '// 03/27/2009 52 - added default Script property for the load time
-    SCModule.CodeObject.Script("InitPerf") = (finishTime - startTime)
+    GetScriptDictionary(SCModule)("InitPerf") = (finishTime - startTime)
 
     If (g_Online) Then
         RunInSingle SCModule, "Event_LoggedOn", GetCurrentUsername, BotVars.Product
@@ -1496,7 +1496,7 @@ Public Sub SC_Error()
         Exit Sub ' exec error handler will handle this
     Else
         ' start at the stored include index
-        IncIndex = m_ExecutingMdl.CodeObject.Script("IncludeLBound")
+        IncIndex = GetScriptDictionary(m_ExecutingMdl)("IncludeLBound")
         ' loop until we have reached a line number within this include's bounds
         For i = IncIndex To UBound(m_arrIncs)
             If Not m_ExecutingMdl Is m_arrIncs(i).SCModule Then
@@ -1525,7 +1525,7 @@ Public Sub SC_Error()
     End If
     
     ' check if the script is planning to handle errors itself, if Script("HandleErrors") = True, then call event_error
-    If ((StrComp(m_ExecutingMdl.CodeObject.Script("HandleErrors"), _
+    If ((StrComp(GetScriptDictionary(m_ExecutingMdl)("HandleErrors"), _
                  "True", vbTextCompare) = 0) And _
                  (m_IsEventError = False)) Then
         ' call Event_Error(Number, Description, Line, Column, Text, Source)
@@ -1656,7 +1656,7 @@ Public Function GetScriptName(Optional ByVal ModuleID As String = vbNullString) 
     If Module Is Nothing Then Exit Function
     
     ' get Script() value "Name"
-    GetScriptName = Module.CodeObject.Script("Name")
+    GetScriptName = GetScriptDictionary(Module)("Name")
     
     Exit Function
 
@@ -1829,3 +1829,30 @@ Public Function GetScriptSystemDisabled() As Boolean
     GetScriptSystemDisabled = m_SystemDisabled
     
 End Function
+
+' call this function to get a script module's CodeObject.Script dictionary.
+' this will make sure that the CodeObject.Script is of type Dictionary and
+' can be accessed as such
+' if not, the CodeObject.Script object will be restored (but all data was lost)
+' prevents RTE due to CodeObject.Script(key) accesses failing when Script not
+' of type Dictionary ~Ribose
+Public Function GetScriptDictionary(ByRef mdl As Module) As Dictionary
+    If (StrComp(TypeName$(mdl.CodeObject.Script), "Dictionary") <> 0) Then
+        SetScriptDictionary mdl
+        frmChat.AddChat vbRed, "Scripting error: A Script object has been reset. " & _
+                               "Script module ID: " & mdl.Name
+    End If
+    Set GetScriptDictionary = mdl.CodeObject.Script
+End Function
+
+' call this function to set or reset the contents of the CodeObject.Script
+' dictionary for the specified module
+Private Function SetScriptDictionary(ByRef mdl As Module)
+    ' let's store a dictionary into the specified CodeObject.Script
+    Dim Dict As New Scripting.Dictionary
+    ' make Script object keys case-insensitive
+    Dict.CompareMode = TextCompare
+    ' store it
+    Set mdl.CodeObject.Script = Dict
+End Function
+
