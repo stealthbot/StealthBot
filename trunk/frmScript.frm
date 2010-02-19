@@ -125,7 +125,6 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
-      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -171,6 +170,7 @@ Begin VB.Form frmScript
       Left            =   2040
       TabIndex        =   12
       Top             =   360
+      Visible         =   0   'False
       Width           =   375
    End
    Begin VB.Label lbl 
@@ -2618,7 +2618,7 @@ Private Sub trv_Click(Index As Integer)
 
 End Sub
 
-Private Sub trv_Collapse(Index As Integer, Node As Node)
+Private Sub trv_Collapse(Index As Integer, node As node)
 
     On Error Resume Next
 
@@ -2628,7 +2628,7 @@ Private Sub trv_Collapse(Index As Integer, Node As Node)
     obj = GetScriptObjByIndex("TreeView", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Collapse", Node
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Collapse", node
     
 End Sub
 
@@ -2646,7 +2646,7 @@ Private Sub trv_DblClick(Index As Integer)
 
 End Sub
 
-Private Sub trv_Expand(Index As Integer, Node As Node)
+Private Sub trv_Expand(Index As Integer, node As node)
 
     On Error Resume Next
 
@@ -2656,7 +2656,7 @@ Private Sub trv_Expand(Index As Integer, Node As Node)
     obj = GetScriptObjByIndex("TreeView", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Expand", Node
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Expand", node
     
 End Sub
 
@@ -2769,7 +2769,7 @@ Private Sub trv_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
 
 End Sub
 
-Private Sub trv_NodeCheck(Index As Integer, Node As Node)
+Private Sub trv_NodeCheck(Index As Integer, node As node)
 
     On Error Resume Next
 
@@ -2779,11 +2779,11 @@ Private Sub trv_NodeCheck(Index As Integer, Node As Node)
     obj = GetScriptObjByIndex("TreeView", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_NodeCheck", Node
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_NodeCheck", node
     
 End Sub
 
-Private Sub trv_NodeClick(Index As Integer, Node As Node)
+Private Sub trv_NodeClick(Index As Integer, node As node)
 
     On Error Resume Next
 
@@ -2793,7 +2793,7 @@ Private Sub trv_NodeClick(Index As Integer, Node As Node)
     obj = GetScriptObjByIndex("TreeView", Index)
     
     ' ...
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_NodeClick", Node
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_NodeClick", node
     
 End Sub
 
