@@ -19,7 +19,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Declare Function GetVersionEx Lib "Kernel32.dll" Alias "GetVersionExA" (lpVersionInformation As Any) As Long
-
+  
 Private Const VER_PLATFORM_WIN32_NT    As Long = 2
 Private Const VER_NT_WORKSTATION       As Long = 1
 Private Const VER_NT_DOMAIN_CONTROLLER As Long = 2
@@ -93,7 +93,6 @@ End Sub
 
 Public Property Get Name() As String
     
-    Dim NullPos As Integer
     ' ...
     If (IsWindowsNT = False) Then
         If (IsWindows95) Then
@@ -125,12 +124,6 @@ Public Property Get Name() As String
     
     If (Name = vbNullString) Then
         Name = "Unknown"
-    End If
-    
-    ' service pack
-    NullPos = InStr(m_osVer.szCSDVersion, Chr$(0))
-    If (NullPos > 1) Then
-        Name = Name & " " & Left$(m_osVer.szCSDVersion, NullPos - 1)
     End If
     
 End Property

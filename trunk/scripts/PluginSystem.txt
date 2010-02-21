@@ -150,7 +150,7 @@ Set dictTimerCount = CreateObject("Scripting.Dictionary")
 Set pluginMenus = CreateObject("Scripting.Dictionary")
 
 '// script information ~Ribose
-Script("Name") = "Plugin System"
+Script("Name") = "PluginSystem"
 Script("Author") = "Xellos, Swent"
 Script("Major") = 0
 Script("Minor") = 98
