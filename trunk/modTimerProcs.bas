@@ -87,11 +87,8 @@ Public Sub QueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal idEvent 
 
     Dim Message  As String
     Dim Tag      As String
-    Dim Sent     As Boolean
-    Dim I        As Integer
-    Dim override As Integer
     Dim pri      As Integer
-    Dim ID       As Integer
+    Dim ID       As Double
     
     Call KillTimer(0&, QueueTimerID)
     QueueTimerID = 0
@@ -102,7 +99,7 @@ Public Sub QueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal idEvent 
         With g_Queue.Peek
             Message = .Message
             Tag = .Tag
-            pri = .PRIORITY
+            pri = .Priority
             ID = .ID
         End With
         
@@ -130,7 +127,7 @@ Public Sub QueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal idEvent 
                 With g_Queue.Peek()
                     NewDelay = g_BNCSQueue.GetDelay(.Message)
                     
-                    If .PRIORITY = PRIORITY.CHANNEL_MODERATION_MESSAGE Then
+                    If .Priority = Priority.CHANNEL_MODERATION_MESSAGE Then
                         ExtraDelay = g_BNCSQueue.BanDelay()
                     End If
                 End With
