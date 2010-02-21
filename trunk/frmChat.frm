@@ -892,6 +892,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -917,7 +918,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3586,7 +3586,7 @@ Private Sub mnuPublicChannels_Click(Index As Integer)
     'FullJoin mnuChannels(Index).Caption
     
     ' ...
-    AddQ "/join " & mnuPublicChannels(Index).Caption, Priority.CONSOLE_MESSAGE
+    AddQ "/join " & mnuPublicChannels(Index).Caption, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuCustomChannels_Click(Index As Integer)
@@ -3598,7 +3598,7 @@ Private Sub mnuCustomChannels_Click(Index As Integer)
     'FullJoin mnuChannels(Index).Caption
     
     ' ...
-    AddQ "/join " & mnuCustomChannels(Index).Caption, Priority.CONSOLE_MESSAGE
+    AddQ "/join " & mnuCustomChannels(Index).Caption, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuCommandManager_Click()
@@ -3654,7 +3654,7 @@ Private Sub mnuFLpopDemote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
             If (.Index < lvFriendList.ListItems.Count) Then
-              AddQ "/f d " & .Text, Priority.CONSOLE_MESSAGE
+              AddQ "/f d " & .Text, PRIORITY.CONSOLE_MESSAGE
               'MoveFriend .index, .index + 1
             End If
         End With
@@ -3666,7 +3666,7 @@ Private Sub mnuFLpopPromote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
             If (.Index > 1) Then
-              AddQ "/f p " & .Text, Priority.CONSOLE_MESSAGE
+              AddQ "/f p " & .Text, PRIORITY.CONSOLE_MESSAGE
               'MoveFriend .index, .index - 1
             End If
         End With
@@ -3691,14 +3691,14 @@ End Sub
 Private Sub mnuFLPopRemove_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         AddQ "/f r " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(lvFriendList.SelectedItem.Text), _
-            Priority.CONSOLE_MESSAGE
+            PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
 Private Sub mnuFLPopWhisper_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         AddQ "/w " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(lvFriendList.SelectedItem.Text) & _
-            Space(1) & cboSend.Text, Priority.CONSOLE_MESSAGE
+            Space(1) & cboSend.Text, PRIORITY.CONSOLE_MESSAGE
             
         cboSend.Text = ""
     End If
@@ -3823,13 +3823,13 @@ Private Sub mnuPopAddToFList_Click()
     
     If Not (lvChannel.SelectedItem Is Nothing) Then
         AddQ "/f a " & _
-            IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), Priority.CONSOLE_MESSAGE
+            IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
 Private Sub mnuPopClanWhois_Click()
     If Not (lvClanList.SelectedItem Is Nothing) Then
-        AddQ "/whois " & lvClanList.SelectedItem.Text, Priority.CONSOLE_MESSAGE
+        AddQ "/whois " & lvClanList.SelectedItem.Text, PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -3838,7 +3838,7 @@ Private Sub mnuPopDes_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
 
     AddQ "/designate " & _
-        IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), Priority.CONSOLE_MESSAGE
+        IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopFLProfile_Click()
@@ -3851,7 +3851,7 @@ End Sub
 
 Private Sub mnuPopFLWhois_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
-        AddQ "/whois " & lvFriendList.SelectedItem.Text, Priority.CONSOLE_MESSAGE
+        AddQ "/whois " & lvFriendList.SelectedItem.Text, PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -3889,7 +3889,7 @@ Private Sub mnuPopSquelch_Click()
     On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/squelch " & GetSelectedUser, Priority.CONSOLE_MESSAGE, Priority.CONSOLE_MESSAGE
+    AddQ "/squelch " & GetSelectedUser, PRIORITY.CONSOLE_MESSAGE, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 
@@ -3897,7 +3897,7 @@ Private Sub mnuPopUnsquelch_Click()
     'On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/unsquelch " & GetSelectedUser, Priority.CONSOLE_MESSAGE
+    AddQ "/unsquelch " & GetSelectedUser, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopWhisper_Click()
@@ -3907,7 +3907,7 @@ Private Sub mnuPopWhisper_Click()
     If cboSend.Text <> vbNullString Then
         AddQ "/w " & _
             IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser) & Space(1) & _
-                cboSend.Text, Priority.CONSOLE_MESSAGE
+                cboSend.Text, PRIORITY.CONSOLE_MESSAGE
         
         cboSend.AddItem cboSend.Text, 0
         cboSend.Text = vbNullString
@@ -3958,7 +3958,7 @@ Private Sub mnuPopWhois_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     AddQ "/whois " & _
-        IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), Priority.CONSOLE_MESSAGE
+        IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopInvite_Click()
@@ -4145,31 +4145,31 @@ End Sub
 Private Sub mnuStatsBW_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/stats " & CleanUsername(GetSelectedUser) & " SEXP", Priority.CONSOLE_MESSAGE
+    AddQ "/stats " & CleanUsername(GetSelectedUser) & " SEXP", PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuStatsFT_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/stats " & CleanUsername(GetSelectedUser) & " W3XP", Priority.CONSOLE_MESSAGE
+    AddQ "/stats " & CleanUsername(GetSelectedUser) & " W3XP", PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuStatsSC_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/stats " & CleanUsername(GetSelectedUser) & " STAR", Priority.CONSOLE_MESSAGE
+    AddQ "/stats " & CleanUsername(GetSelectedUser) & " STAR", PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuStatsW2_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/stats " & CleanUsername(GetSelectedUser) & " W2BN", Priority.CONSOLE_MESSAGE
+    AddQ "/stats " & CleanUsername(GetSelectedUser) & " W2BN", PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuStatsW3_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/stats " & CleanUsername(GetSelectedUser) & " WAR3", Priority.CONSOLE_MESSAGE
+    AddQ "/stats " & CleanUsername(GetSelectedUser) & " WAR3", PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuTerms_Click()
@@ -4276,7 +4276,7 @@ Private Sub rtbWhispers_KeyDown(KeyCode As Integer, Shift As Integer)
             Case vbKeyL
                 Call mnuLock_Click
             Case vbKeyR
-                Call mnuReloadScript_Click
+                Call mnuReloadScripts_Click
         End Select
         
         'Disable Ctrl+L, Ctrl+E, and Ctrl+R
@@ -4372,7 +4372,7 @@ Private Sub mnuPopKick_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     If MyFlags = 2 Or MyFlags = 18 Then
-        AddQ "/kick " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), Priority.CONSOLE_MESSAGE
+        AddQ "/kick " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -4380,7 +4380,7 @@ Private Sub mnuPopBan_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     If MyFlags = 2 Or MyFlags = 18 Then
-        AddQ "/ban " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), Priority.CONSOLE_MESSAGE
+        AddQ "/ban " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -4498,7 +4498,7 @@ Private Sub sckScript_Connect(Index As Integer)
     
 End Sub
 
-Private Sub sckScript_ConnectionRequest(Index As Integer, requestID As Long)
+Private Sub sckScript_ConnectionRequest(Index As Integer, ByVal requestID As Long)
 
     On Error Resume Next
 
@@ -4918,12 +4918,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 
                                 If (x(n) <> vbNullString) Then
                                     If (n <> LBound(x)) Then
-                                        AddQ txtPre.Text & x(n) & txtPost.Text, Priority.CONSOLE_MESSAGE
+                                        AddQ txtPre.Text & x(n) & txtPost.Text, PRIORITY.CONSOLE_MESSAGE
                                         
                                         cboSend.AddItem txtPre.Text & x(n) & txtPost.Text, 0
                                     Else
                                         AddQ txtPre.Text & cboSend.Text & x(n) & txtPost.Text, _
-                                            Priority.CONSOLE_MESSAGE
+                                            PRIORITY.CONSOLE_MESSAGE
                                         
                                         cboSend.AddItem txtPre.Text & cboSend.Text & x(n) & txtPost.Text, 0
                                     End If
@@ -5086,7 +5086,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Case S_CTRL 'CTRL+ENTER - rewhisper
                         If LenB(cboSend.Text) > 0 Then
                             AddQ "/w " & LastWhisperTo & Space(1) & cboSend.Text, _
-                                Priority.CONSOLE_MESSAGE
+                                PRIORITY.CONSOLE_MESSAGE
                                 
                             cboSend.Text = vbNullString
                         End If
@@ -5094,7 +5094,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Case S_CTRLSHIFT 'CTRL+SHIFT+ENTER - reply
                         If LenB(cboSend.Text) > 0 Then
                             AddQ "/w " & LastWhisper & Space(1) & cboSend.Text, _
-                                Priority.CONSOLE_MESSAGE
+                                PRIORITY.CONSOLE_MESSAGE
                             cboSend.Text = vbNullString
                         End If
                 
@@ -5122,7 +5122,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 If (Left$(s, 6) = "/tell ") Then
                                     s = "/w " & Mid$(s, 7)
                                     
-                                    Call AddQ(OutFilterMsg(s), Priority.CONSOLE_MESSAGE)
+                                    Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
                                     
                                     GoTo theEnd
                                     
@@ -5229,7 +5229,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     commandResult = ProcessCommand(GetCurrentUsername, m, _
                                         True, False)
                                 Else
-                                    Call AddQ(OutFilterMsg(s), Priority.CONSOLE_MESSAGE)
+                                    Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
                                 End If
                                 
                                 'Ignore rest of code as the bot is closing
@@ -5774,7 +5774,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
             End If
         
             ' ...
-            Call AddQ("/unsquelch " & GetCurrentUsername, Priority.SPECIAL_MESSAGE)
+            Call AddQ("/unsquelch " & GetCurrentUsername, PRIORITY.SPECIAL_MESSAGE)
         End If
     End If
     
@@ -6385,14 +6385,14 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             End If
             
             Select Case (cmdName)
-                Case "designate": msg_priority = Priority.SPECIAL_MESSAGE
-                Case "resign":    msg_priority = Priority.SPECIAL_MESSAGE
-                Case "who":       msg_priority = Priority.SPECIAL_MESSAGE
-                Case "unban":     msg_priority = Priority.SPECIAL_MESSAGE
-                Case "clan", "c": msg_priority = Priority.SPECIAL_MESSAGE
-                Case "ban":       msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                Case "kick":      msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                Case Else:        msg_priority = Priority.MESSAGE_DEFAULT
+                Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
+                Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
+                Case "who":       msg_priority = PRIORITY.SPECIAL_MESSAGE
+                Case "unban":     msg_priority = PRIORITY.SPECIAL_MESSAGE
+                Case "clan", "c": msg_priority = PRIORITY.SPECIAL_MESSAGE
+                Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
             End Select
         End If
         
@@ -6424,7 +6424,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             
             With Q
                 .Message = Send
-                .Priority = msg_priority
+                .PRIORITY = msg_priority
                 .Tag = Tag
             End With
 
@@ -6442,7 +6442,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                     delay = 10
                     
                     ' are we issuing a ban or kick command?
-                    If (msg_priority = Priority.CHANNEL_MODERATION_MESSAGE) Then
+                    If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
                         delay = g_BNCSQueue.BanDelay()
                     End If
                 End If

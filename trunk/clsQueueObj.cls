@@ -19,7 +19,7 @@ Private m_priority As Integer
 Private m_response As String
 Private m_tag      As String
 
-Public Property Let id(ByVal i As Double)
+Public Property Let ID(ByVal i As Double)
 
     If (m_obj_id > 0) Then
         Exit Property
@@ -29,15 +29,15 @@ Public Property Let id(ByVal i As Double)
     
 End Property
 
-Public Property Get id() As Double
+Public Property Get ID() As Double
 
-    id = m_obj_id
+    ID = m_obj_id
     
 End Property
 
-Public Property Let Message(ByVal Msg As String)
+Public Property Let Message(ByVal msg As String)
 
-    m_message = Msg
+    m_message = msg
     
 End Property
 
@@ -47,15 +47,15 @@ Public Property Get Message() As String
     
 End Property
 
-Public Property Let PRIORITY(ByVal pri As Integer)
+Public Property Let Priority(ByVal pri As Integer)
 
     m_priority = pri
     
 End Property
 
-Public Property Get PRIORITY() As Integer
+Public Property Get Priority() As Integer
 
-    PRIORITY = m_priority
+    Priority = m_priority
     
 End Property
 

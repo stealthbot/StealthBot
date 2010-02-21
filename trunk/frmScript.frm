@@ -125,6 +125,7 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
+      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -2618,7 +2619,7 @@ Private Sub trv_Click(Index As Integer)
 
 End Sub
 
-Private Sub trv_Collapse(Index As Integer, node As node)
+Private Sub trv_Collapse(Index As Integer, ByVal node As node)
 
     On Error Resume Next
 
@@ -2646,7 +2647,7 @@ Private Sub trv_DblClick(Index As Integer)
 
 End Sub
 
-Private Sub trv_Expand(Index As Integer, node As node)
+Private Sub trv_Expand(Index As Integer, ByVal node As node)
 
     On Error Resume Next
 
@@ -2769,7 +2770,7 @@ Private Sub trv_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
 
 End Sub
 
-Private Sub trv_NodeCheck(Index As Integer, node As node)
+Private Sub trv_NodeCheck(Index As Integer, ByVal node As node)
 
     On Error Resume Next
 
@@ -2783,7 +2784,7 @@ Private Sub trv_NodeCheck(Index As Integer, node As node)
     
 End Sub
 
-Private Sub trv_NodeClick(Index As Integer, node As node)
+Private Sub trv_NodeClick(Index As Integer, ByVal node As node)
 
     On Error Resume Next
 
