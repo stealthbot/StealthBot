@@ -3814,7 +3814,7 @@ Private Sub mnuPopAddLeft_Click()
         Index = g_Channel.GetUserIndex(GetSelectedUser)
         s = vbNullString
         If Dii Then s = "*"
-        s = StringFormatA("/w {0}{1} ", s, g_Channel.Users(Index).Name)
+        s = StringFormat("/w {0}{1} ", s, g_Channel.Users(Index).Name)
         txtPre.Text = s
         
         cboSend.SetFocus
