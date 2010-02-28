@@ -124,7 +124,7 @@ End Property
 
 Public Property Get DisplayName() As String
 
-    DisplayName = convertUsername(m_Username)
+    DisplayName = ConvertUsername(m_Username)
 
 End Property
 

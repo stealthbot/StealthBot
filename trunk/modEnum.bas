@@ -82,7 +82,7 @@ End Type
 
 Public Type POINTAPI
     x As Long
-    Y As Long
+    y As Long
 End Type
 
 Public Type LVHITTESTINFO
@@ -132,12 +132,11 @@ Public Enum enuSettingsPanels
     spConnectionAdvanced = 1
     spInterfaceGeneral = 2
     spInterfaceFontsColors = 3
-    '#4 IS SKIPPED
-    spGenModeration = 5
-    spGenGreets = 6
-    spGenIdles = 7
-    spGenMisc = 8
-    spSplash = 9
+    spGenModeration = 4
+    spGenGreets = 5
+    spGenIdles = 6
+    spGenMisc = 7
+    spSplash = 8
 End Enum
 
 Public Enum enuDBActions

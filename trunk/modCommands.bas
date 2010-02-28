@@ -1540,84 +1540,217 @@ Private Function CheckUser(ByVal user As String, Optional ByVal allow_illegal As
     End If
 End Function
 
-Public Function usingGameConventions() As Boolean
-    Select Case (StrReverse$(BotVars.Product))
-        Case "D2DV", "D2XP"
-            If ((BotVars.UseGameConventions = True) And ((BotVars.UseD2GameConventions = True))) Then
-                usingGameConventions = True
-            End If
-            
-        Case "WAR3", "W3XP"
-            If ((BotVars.UseGameConventions = True)) And ((BotVars.UseW3GameConventions = True)) Then
-                usingGameConventions = True
-            End If
-    End Select
+' this fully converts a username based on naming conventions
+Public Function ConvertUsername(ByVal Username As String) As String
+    If (LenB(Username) = 0) Then
+        ConvertUsername = Username
+    Else
+        ' handle namespace conversions (@gateways)
+        ConvertUsername = ConvertUsernameGateway(Username)
+        
+        ' handle D2 naming conventions
+        ConvertUsername = ConvertUsernameD2(ConvertUsername, Username)
+    End If
 End Function
 
-Public Function convertUsername(ByVal Username As String) As String
-    Dim Index As Long ' ...
+' this converts a username only on gateway conventions
+Public Function ConvertUsernameGateway(ByVal Username As String) As String
+    Dim Index          As Long    ' index of substring in string
+    Dim Gateways(5, 2) As String  ' list of known namespaces
+    Dim blnIsW3        As Boolean ' whether this bot is on WC3
+    Dim MyGateway      As String  ' the bot's gateway
+    Dim intConvert     As Integer ' convert type, 0=none, 1=wc3->legacy, 2=legacy->wc3, 3=show all
+    Dim blnConvert     As Boolean ' whether we are converting
+    Dim i              As Integer ' loop iterator
+    Dim blnOnOther     As Boolean ' whether the user is on the other namespace
+    Dim MyGatewayIndex As Integer ' the bot's namespace index, 0=legacy 1=wc3
+
+    ' populate list
+    Gateways(0, 0) = "USWest"
+    Gateways(0, 1) = "Lordaeron"
+    Gateways(1, 0) = "USEast"
+    Gateways(1, 1) = "Azeroth"
+    Gateways(2, 0) = "Asia"
+    Gateways(2, 1) = "Kalimdor"
+    Gateways(3, 0) = "Europe"
+    Gateways(3, 1) = "Northrend"
+    Gateways(4, 0) = "Beta"
+    Gateways(4, 1) = "Westfall"
     
-    If (Len(Username) < 1) Then
-        convertUsername = Username
-    Else
-        If ((StrReverse$(BotVars.Product) = "D2DV") Or (StrReverse$(BotVars.Product) = "D2XP")) Then
-            If ((BotVars.UseGameConventions = False) Or ((BotVars.UseD2GameConventions = False))) Then
-               
-                Index = InStr(1, Username, "*", vbBinaryCompare)
-            
-                If (Index > 0) Then
-                    convertUsername = Mid$(Username, Index + 1)
-                Else
-                    convertUsername = Username
-                End If
-            Else
-                Index = InStr(1, Username, "*", vbBinaryCompare)
-            
-                If (Index > 1) Then
-                    convertUsername = StringFormat("{0} (*{1})", Left$(Username, Index - 1), Mid$(Username, Index + 1))
-                Else
-                    If (Index = 0) Then
-                        convertUsername = "*" & Username
-                    End If
-                End If
-            End If
-            
-        ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or (StrReverse$(BotVars.Product) = "W3XP")) Then
-            If ((BotVars.UseGameConventions = False)) Or ((BotVars.UseW3GameConventions = False)) Then
+    ' store whether we are on WC3
+    blnIsW3 = _
+        ((StrReverse$(BotVars.Product) = "WAR3") Or _
+         (StrReverse$(BotVars.Product) = "W3XP"))
     
-                If (LenB(BotVars.Gateway) > 0) Then
-                    Select Case (BotVars.Gateway)
-                        Case "Lordaeron": Index = InStr(1, Username, "@USWest", vbTextCompare)
-                        Case "Azeroth":   Index = InStr(1, Username, "@USEast", vbTextCompare)
-                        Case "Kalimdor":  Index = InStr(1, Username, "@Asia", vbTextCompare)
-                        Case "Northrend": Index = InStr(1, Username, "@Europe", vbTextCompare)
-                    End Select
-                    
-                    If (Index > 1) Then
-                        convertUsername = Left$(Username, Index - 1)
-                    Else
-                        convertUsername = Username & "@" & BotVars.Gateway
-                    End If
-                End If
-            End If
+    ' store how we will be converting namespaces
+    intConvert = BotVars.GatewayConventions
+    
+    ' get my gateway
+    MyGateway = BotVars.Gateway
+    
+    ' handle not having gateway yet
+    If (LenB(MyGateway) = 0) Then
+        ConvertUsernameGateway = Username
+        Exit Function
+    End If
+    
+    ' get my namespace index
+    For i = 0 To 4
+        If (StrComp(Gateways(i, 0), MyGateway, vbTextCompare) = 0) Then
+            MyGatewayIndex = 0
+            Exit For
+        ElseIf (StrComp(Gateways(i, 1), MyGateway, vbTextCompare) = 0) Then
+            MyGatewayIndex = 1
+            Exit For
         End If
+    Next i
+    
+    ' is user on other namespace?
+    Index = InStr(1, Username, "@" & Gateways(i, IIf(MyGatewayIndex = 0, 1, 0)), vbTextCompare)
+    
+    ' store whether user is on other namespace
+    ' (whether the other @gateway was found)
+    blnOnOther = (Index > 0)
+    
+    ' choose action
+    Select Case intConvert
+        Case 0: ' default, no conversions
+            blnConvert = False
+        Case 1: ' legacy, convert if we are on wc3
+            blnConvert = (blnIsW3)
+        Case 2: ' wc3, convert if we are not on wc3 (we are on legacy)
+            blnConvert = (Not blnIsW3)
+        Case 3: ' show all, convert if they are on this namespace
+            blnConvert = (Not blnOnOther)
+        Case Else: ' default
+            blnConvert = False
+    End Select
+    
+    If (blnConvert) Then
+        ' we are converting
+        If (blnOnOther) Then
+            ' return username without other namespace
+            ConvertUsernameGateway = Left$(Username, Index - 1)
+        Else
+            ' return username with our namespace
+            ConvertUsernameGateway = Username & "@" & BotVars.Gateway
+        End If
+    Else
+        ' we are not converting, leave it alone
+        ConvertUsernameGateway = Username
+    End If
+    
+End Function
+
+' this converts a username only on D2 naming conventions
+Public Function ConvertUsernameD2(ByVal Username As String, Optional ByVal RealUsername As String) As String
+    Dim Index          As Long       ' index of substring in string
+    Dim strFormat      As String     ' D2 naming format
+    Dim Title          As String     ' D2 character title
+    Dim UserObj        As clsUserObj ' user object to get more D2 information
+    Dim Char           As String     ' D2 character name
+    Dim Name           As String     ' D2 account name
+    
+    If IsMissing(RealUsername) Then
+        RealUsername = Username
+    End If
+    
+    If (BotVars.UseD2Naming = False) Then
+        ' D2 naming disabled
+        Index = InStr(1, Username, "*", vbBinaryCompare)
         
-        If (convertUsername = vbNullString) Then
-            convertUsername = Username
+        If (Index > 0) Then
+            ' user has star in name
+            ConvertUsernameD2 = Mid$(Username, Index + 1)
+        Else
+            ' user has no star in name
+            ConvertUsernameD2 = Username
+        End If
+    Else
+        ' d2 naming enabled
+        Index = InStr(1, Username, "*", vbBinaryCompare)
+        
+        If (Index > 1) Then
+            ' user has star in name after position 1
+            ' (we are on D2 and the character is provided)
+            
+            ' get d2 naming format
+            strFormat = BotVars.D2NamingFormat
+            strFormat = Replace$(strFormat, "title ", "{0}", 1, 1, vbTextCompare)
+            strFormat = Replace$(strFormat, "char", "{1}", 1, 1, vbTextCompare)
+            strFormat = Replace$(strFormat, "name", "{2}", 1, 1, vbTextCompare)
+            
+            ' get char and name from username
+            Char = Left$(Username, Index - 1)
+            Name = Mid$(Username, Index + 1)
+            
+            ' get D2 character title, if available
+            Set UserObj = g_Channel.GetUserEx(RealUsername)
+            Title = UserObj.Stats.CharacterTitle
+            If (LenB(Title) > 0) Then Title = Title & " "
+            Set UserObj = Nothing
+            
+            ' return formatted name
+            ConvertUsernameD2 = StringFormat(strFormat, Title, Char, Name)
+        ElseIf (Index = 0) Then
+            ' user has no star in name
+            If ((StrReverse$(BotVars.Product) = "D2DV") Or (StrReverse$(BotVars.Product) = "D2XP")) Then
+                ' if on D2, add star and return
+                ConvertUsernameD2 = "*" & Username
+            Else
+                ' if not on D2, get any D2 info we can anyway
+                
+                ' get d2 naming format
+                strFormat = BotVars.D2NamingFormat
+                strFormat = Replace$(strFormat, "title ", "{0}", 1, 1, vbTextCompare)
+                strFormat = Replace$(strFormat, "char", "{1}", 1, 1, vbTextCompare)
+                strFormat = Replace$(strFormat, "name", "{2}", 1, 1, vbTextCompare)
+                
+                ' get name from username
+                Name = Username
+                
+                ' get D2 character name and title, if available
+                Set UserObj = g_Channel.GetUserEx(RealUsername)
+                Title = UserObj.Stats.CharacterTitle
+                If (LenB(Title) > 0) Then Title = Title & " "
+                Char = UserObj.Stats.CharacterName
+                Set UserObj = Nothing
+                
+                ' if character name found
+                If (LenB(Char) = 0) Then
+                    ' if no character name, return *name
+                    ConvertUsernameD2 = "*" & Username
+                Else
+                    ' if character name, return formatted name
+                    ConvertUsernameD2 = StringFormat(strFormat, Title, Char, Name)
+                End If
+            End If
+        Else
+            ' if user has star in name at position 1, keep *name format
+            ConvertUsernameD2 = Username
         End If
     End If
 End Function
 
-Public Function reverseUsername(ByVal Username As String) As String
-    Dim Index As Long ' ...
+' reverses converting username gateways
+Public Function ReverseConvertUsernameGateway(ByVal Username As String) As String
+    Dim Index          As Long    ' index of substring in string
+    Dim Gateways(5, 2) As String  ' list of known namespaces
+    Dim blnIsW3        As Boolean ' whether this bot is on WC3
+    Dim MyGateway      As String  ' the bot's gateway
+    Dim intConvert     As Integer ' convert type, 0=none, 1=wc3->legacy, 2=legacy->wc3, 3=show all
+    Dim blnConvert     As Boolean ' whether we are converting
+    Dim i              As Integer ' loop iterator
+    Dim blnOnThis      As Boolean ' whether the user is on this namespace
+    Dim MyGatewayIndex As Integer ' the bot's namespace index, 0=legacy 1=wc3
     
-    If (Len(Username) < 1) Then
+    If (LenB(Username) = 0) Then
         Exit Function
     End If
 
+    ' add * to D2 if not using D2 naming
     If ((StrReverse$(BotVars.Product) = "D2DV") Or (StrReverse$(BotVars.Product) = "D2XP")) Then
-        If ((BotVars.UseGameConventions = False)) Or ((BotVars.UseD2GameConventions = False)) Then
-            
+        If (BotVars.UseD2Naming = False) Then
             ' With reverseUsername() now being called from AddQ(), usernames
             ' in procedures called prior to AddQ() will no longer require
             ' prefixes; however, we want to ensure that a '*' was not already
@@ -1625,31 +1758,83 @@ Public Function reverseUsername(ByVal Username As String) As String
             ' to continue functioning correctly.  This check may be removed in
             ' future releases.
             If (Not Left$(Username, 1) = "*") Then
-                reverseUsername = ("*" & Username)
-            End If
-        End If
-    ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or (StrReverse$(BotVars.Product) = "W3XP")) Then
-        If ((BotVars.UseGameConventions = False)) Or ((BotVars.UseW3GameConventions = False)) Then
-            
-            If (BotVars.Gateway <> vbNullString) Then
-                Index = InStr(1, Username, ("@" & BotVars.Gateway), vbTextCompare)
-    
-                If (Index > 0) Then
-                    reverseUsername = Left$(Username, Index - 1)
-                Else
-                    Select Case (BotVars.Gateway)
-                        Case "Lordaeron": reverseUsername = Username & "@USWest"
-                        Case "Azeroth":   reverseUsername = Username & "@USEast"
-                        Case "Kalimdor":  reverseUsername = Username & "@Asia"
-                        Case "Northrend": reverseUsername = Username & "@Europe"
-                        Case Else:        reverseUsername = Username
-                    End Select
-                End If
+                Username = ("*" & Username)
             End If
         End If
     End If
+
+    ' populate list
+    Gateways(0, 0) = "USWest"
+    Gateways(0, 1) = "Lordaeron"
+    Gateways(1, 0) = "USEast"
+    Gateways(1, 1) = "Azeroth"
+    Gateways(2, 0) = "Asia"
+    Gateways(2, 1) = "Kalimdor"
+    Gateways(3, 0) = "Europe"
+    Gateways(3, 1) = "Northrend"
+    Gateways(4, 0) = "Beta"
+    Gateways(4, 1) = "Westfall"
     
-    If (reverseUsername = vbNullString) Then
-        reverseUsername = Username
+    ' store whether we are on WC3
+    blnIsW3 = _
+        ((StrReverse$(BotVars.Product) = "WAR3") Or _
+         (StrReverse$(BotVars.Product) = "W3XP"))
+    
+    ' store how we will be converting namespaces
+    intConvert = BotVars.GatewayConventions
+    
+    ' get my gateway
+    MyGateway = BotVars.Gateway
+    
+    ' handle not having gateway yet
+    If (LenB(MyGateway) = 0) Then
+        ReverseConvertUsernameGateway = Username
+        Exit Function
+    End If
+    
+    ' get my namespace index
+    For i = 0 To 4
+        If (StrComp(Gateways(i, 0), MyGateway, vbTextCompare) = 0) Then
+            MyGatewayIndex = 0
+            Exit For
+        ElseIf (StrComp(Gateways(i, 1), MyGateway, vbTextCompare) = 0) Then
+            MyGatewayIndex = 1
+            Exit For
+        End If
+    Next i
+    
+    ' is user on this namespace?
+    Index = InStr(1, Username, "@" & MyGateway, vbTextCompare)
+    
+    ' store whether user is on this namespace
+    ' (whether this @gateway was found)
+    blnOnThis = (Index > 0)
+    
+    ' choose action
+    Select Case intConvert
+        Case 0: ' default, no conversions
+            blnConvert = False
+        Case 1: ' legacy, un-convert if we are on wc3
+            blnConvert = (blnIsW3)
+        Case 2: ' wc3, un-convert if we are not on wc3 (we are on legacy)
+            blnConvert = (Not blnIsW3)
+        Case 3: ' show all, un-convert if they are on this namespace
+            blnConvert = (blnOnThis)
+        Case Else: ' default
+            blnConvert = False
+    End Select
+    
+    If (blnConvert) Then
+        ' we are converting
+        If (blnOnThis) Then
+            ' return username without this namespace
+            ReverseConvertUsernameGateway = Left$(Username, Index - 1)
+        Else
+            ' return username with their namespace
+            ReverseConvertUsernameGateway = Username & "@" & Gateways(i, IIf(MyGatewayIndex = 0, 1, 0))
+        End If
+    Else
+        ' we are not converting, leave it alone
+        ReverseConvertUsernameGateway = Username
     End If
 End Function

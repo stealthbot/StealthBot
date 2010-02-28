@@ -1326,7 +1326,7 @@ Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long, Icon
     GetSmallIcon = i
 End Function
 
-Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flags As Long, ByVal Ping As Long, IconCode As Integer, Optional Clan As String, Optional ForcePosition As Integer)
+Public Sub AddName(ByVal Username As String, ByVal AccountName As String, ByVal Product As String, ByVal Flags As Long, ByVal Ping As Long, IconCode As Integer, Optional Clan As String, Optional ForcePosition As Integer)
     Dim i          As Integer
     Dim LagIcon    As Integer
     Dim isPriority As Integer
@@ -1401,6 +1401,9 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         
         ' ...
         .ListItems.Add isPriority, , Username, , i
+        
+        ' store account name here so popup menus work
+        .ListItems.Item(isPriority).Tag = AccountName
         
         ' ...
         If (.ColumnHeaders(2).Width > 0) Then
@@ -1753,7 +1756,7 @@ End Function
 
 Public Function GetCurrentUsername() As String
 
-    GetCurrentUsername = convertUsername(CurrentUsername)
+    GetCurrentUsername = ConvertUsername(CurrentUsername)
 
 End Function
 
@@ -2409,7 +2412,18 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
     Set lvItem = frmChat.lvChannel.FindItem(NameToFind)
 
     If (lvItem Is Nothing) Then
-        checkChannel = 0
+        If BotVars.UseD2Naming Then
+            checkChannel = 0
+            Dim i As Integer
+            For i = 1 To frmChat.lvChannel.ListItems.Count
+                If frmChat.lvChannel.ListItems(i).Tag = CleanUsername(ReverseConvertUsernameGateway(NameToFind)) Then
+                    checkChannel = i
+                    Exit For
+                End If
+            Next i
+        Else
+            checkChannel = 0
+        End If
     Else
         checkChannel = lvItem.Index
     End If

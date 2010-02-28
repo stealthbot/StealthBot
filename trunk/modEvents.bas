@@ -143,7 +143,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     ' we aren't in a silent channel, are we?
     If (g_Channel.IsSilent) Then
         ' ...
-        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, _
+        AddName Username, UserObj.Name, Product, Flags, Ping, UserObj.Stats.IconCode, _
             Clan
     Else
         ' ...
@@ -174,7 +174,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                             ((PreviousFlags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
                             
                         ' ...
-                        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, _
+                        AddName Username, UserObj.Name, Product, Flags, Ping, UserObj.Stats.IconCode, _
                             Clan, 1
                         
                         ' default to display this event
@@ -193,7 +193,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                         End If
                     Else
                         ' ...
-                        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, _
+                        AddName Username, UserObj.Name, Product, Flags, Ping, UserObj.Stats.IconCode, _
                             Clan, pos
                     End If
                 End If
@@ -546,7 +546,18 @@ On Error GoTo ERROR_HANDLER:
         
     AttemptedFirstReconnect = False
     
+    Dim Stats As New clsUserStats
+    Stats.Statstring = Statstring
+    
     CurrentUsername = KillNull(Username)
+    
+    If (StrComp(Stats.game, "D2DV", vbBinaryCompare)) = 0 Or (StrComp(Stats.game, "D2XP", vbBinaryCompare)) = 0 Then
+        If (LenB(Stats.CharacterName) > 0) Then
+            CurrentUsername = Stats.CharacterName & "*" & CurrentUsername
+        End If
+    End If
+    
+    Set Stats = Nothing
     
     'RequestSystemKeys
     
@@ -724,7 +735,7 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     ' ...
-    Username = convertUsername(Username)
+    Username = ConvertUsername(Username)
 
     ' ...
     If (frmChat.mnuUTF8.Checked) Then
@@ -1206,7 +1217,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         'frmChat.AddChat vbRed, UserObj.Stats.IconCode
     
         ' ...
-        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, sClan
+        AddName Username, UserObj.Name, Product, Flags, Ping, UserObj.Stats.IconCode, sClan
             
         ' ...
         frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
@@ -1491,7 +1502,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         End If
         
         ' add to user list
-        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, sClan
+        AddName Username, UserObj.Name, Product, Flags, Ping, UserObj.Stats.IconCode, sClan
         
         ' update caption
         frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString
@@ -1632,7 +1643,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     End If
     
     ' ...
-    Username = convertUsername(Username)
+    Username = ConvertUsername(Username)
     
     ' ...
     RemoveBanFromQueue Username
@@ -1666,7 +1677,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         
         On Error Resume Next
         
-        RunInAll "Event_UserLeaves", Username, Flags
+        RunInAll "Event_UserLeaves", CleanUsername(Username), Flags
     End If
 
     Exit Sub
@@ -2019,7 +2030,7 @@ On Error GoTo ERROR_HANDLER:
     Dim WWIndex As Integer
     Dim ToANSI  As String
     
-    Username = convertUsername(Username)
+    Username = ConvertUsername(Username)
     
     ' ...
     ToANSI = UTF8Decode(Message)
@@ -2175,7 +2186,7 @@ On Error GoTo ERROR_HANDLER:
     
     ' ...
     If (StrComp(Username, "your friends", vbTextCompare) <> 0) Then
-        Username = convertUsername(Username)
+        Username = ConvertUsername(Username)
         
         LastWhisperTo = Username
     Else
@@ -2260,7 +2271,7 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.Event_MessageBox()", Err.Number, Err.description, OBJECT_NAME))
 End Function
 
-Public Function CleanUsername(ByVal Username As String) As String
+Public Function CleanUsername(ByVal Username As String, Optional ByVal PrependNamingStar As Boolean = False) As String
 On Error GoTo ERROR_HANDLER:
     Dim tmp As String  ' ...
     Dim pos As Integer ' ...
@@ -2290,6 +2301,10 @@ On Error GoTo ERROR_HANDLER:
                 End If
             End If
         End If
+    End If
+    
+    If (Dii And PrependNamingStar And BotVars.UseD2Naming = False) Then
+        tmp = "*" & tmp
     End If
 
     ' ...

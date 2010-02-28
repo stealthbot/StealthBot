@@ -43,7 +43,7 @@ End Property
 Public Property Get DisplayName() As String
 
     ' ...
-    DisplayName = convertUsername(Name)
+    DisplayName = ConvertUsername(Name)
 
 End Property
 

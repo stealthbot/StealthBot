@@ -11,12 +11,12 @@ Begin VB.Form frmChat
    ClientHeight    =   7950
    ClientLeft      =   165
    ClientTop       =   855
-   ClientWidth     =   12585
+   ClientWidth     =   11400
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
    LinkTopic       =   "Form1"
    ScaleHeight     =   7950
-   ScaleWidth      =   12585
+   ScaleWidth      =   11400
    StartUpPosition =   3  'Windows Default
    Begin MSComctlLib.ListView lvChannel 
       Height          =   6375
@@ -263,347 +263,347 @@ Begin VB.Form frmChat
             Key             =   ""
          EndProperty
          BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":32541
+            Picture         =   "frmChat.frx":327F2
             Key             =   ""
          EndProperty
          BeginProperty ListImage25 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":345FA
+            Picture         =   "frmChat.frx":32C00
             Key             =   ""
          EndProperty
          BeginProperty ListImage26 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":376B4
+            Picture         =   "frmChat.frx":35CBA
             Key             =   ""
          EndProperty
          BeginProperty ListImage27 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3791E
+            Picture         =   "frmChat.frx":35F24
             Key             =   ""
          EndProperty
          BeginProperty ListImage28 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":37B2F
+            Picture         =   "frmChat.frx":36135
             Key             =   ""
          EndProperty
          BeginProperty ListImage29 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":37D69
+            Picture         =   "frmChat.frx":3636F
             Key             =   ""
          EndProperty
          BeginProperty ListImage30 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":37FCD
+            Picture         =   "frmChat.frx":365D3
             Key             =   ""
          EndProperty
          BeginProperty ListImage31 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38228
+            Picture         =   "frmChat.frx":3682E
             Key             =   ""
          EndProperty
          BeginProperty ListImage32 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38473
+            Picture         =   "frmChat.frx":36A79
             Key             =   ""
          EndProperty
          BeginProperty ListImage33 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":386DD
+            Picture         =   "frmChat.frx":36CE3
             Key             =   ""
          EndProperty
          BeginProperty ListImage34 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38900
+            Picture         =   "frmChat.frx":36F06
             Key             =   ""
          EndProperty
          BeginProperty ListImage35 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38B2D
+            Picture         =   "frmChat.frx":37133
             Key             =   ""
          EndProperty
          BeginProperty ListImage36 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38D49
+            Picture         =   "frmChat.frx":3734F
             Key             =   ""
          EndProperty
          BeginProperty ListImage37 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38F80
+            Picture         =   "frmChat.frx":37586
             Key             =   ""
          EndProperty
          BeginProperty ListImage38 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":391CB
+            Picture         =   "frmChat.frx":377D1
             Key             =   ""
          EndProperty
          BeginProperty ListImage39 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39435
+            Picture         =   "frmChat.frx":37A3B
             Key             =   ""
          EndProperty
          BeginProperty ListImage40 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39638
+            Picture         =   "frmChat.frx":37C3E
             Key             =   ""
          EndProperty
          BeginProperty ListImage41 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39871
+            Picture         =   "frmChat.frx":37E77
             Key             =   ""
          EndProperty
          BeginProperty ListImage42 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39AA0
+            Picture         =   "frmChat.frx":380A6
             Key             =   ""
          EndProperty
          BeginProperty ListImage43 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39CFC
+            Picture         =   "frmChat.frx":38302
             Key             =   ""
          EndProperty
          BeginProperty ListImage44 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39F46
+            Picture         =   "frmChat.frx":3854C
             Key             =   ""
          EndProperty
          BeginProperty ListImage45 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A1B0
+            Picture         =   "frmChat.frx":387B6
             Key             =   ""
          EndProperty
          BeginProperty ListImage46 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A3F3
+            Picture         =   "frmChat.frx":389F9
             Key             =   ""
          EndProperty
          BeginProperty ListImage47 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A647
+            Picture         =   "frmChat.frx":38C4D
             Key             =   ""
          EndProperty
          BeginProperty ListImage48 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A889
+            Picture         =   "frmChat.frx":38E8F
             Key             =   ""
          EndProperty
          BeginProperty ListImage49 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3AAF1
+            Picture         =   "frmChat.frx":390F7
             Key             =   ""
          EndProperty
          BeginProperty ListImage50 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3AD50
+            Picture         =   "frmChat.frx":39356
             Key             =   ""
          EndProperty
          BeginProperty ListImage51 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3AFBA
+            Picture         =   "frmChat.frx":395C0
             Key             =   ""
          EndProperty
          BeginProperty ListImage52 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B208
+            Picture         =   "frmChat.frx":3980E
             Key             =   ""
          EndProperty
          BeginProperty ListImage53 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B487
+            Picture         =   "frmChat.frx":39A8D
             Key             =   ""
          EndProperty
          BeginProperty ListImage54 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B6BC
+            Picture         =   "frmChat.frx":39CC2
             Key             =   ""
          EndProperty
          BeginProperty ListImage55 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B929
+            Picture         =   "frmChat.frx":39F2F
             Key             =   ""
          EndProperty
          BeginProperty ListImage56 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3BB40
+            Picture         =   "frmChat.frx":3A146
             Key             =   ""
          EndProperty
          BeginProperty ListImage57 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3BDAA
+            Picture         =   "frmChat.frx":3A3B0
             Key             =   ""
          EndProperty
          BeginProperty ListImage58 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3BFE4
+            Picture         =   "frmChat.frx":3A5EA
             Key             =   ""
          EndProperty
          BeginProperty ListImage59 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C20D
+            Picture         =   "frmChat.frx":3A813
             Key             =   ""
          EndProperty
          BeginProperty ListImage60 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C460
+            Picture         =   "frmChat.frx":3AA66
             Key             =   ""
          EndProperty
          BeginProperty ListImage61 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C699
+            Picture         =   "frmChat.frx":3AC9F
             Key             =   ""
          EndProperty
          BeginProperty ListImage62 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C8EF
+            Picture         =   "frmChat.frx":3AEF5
             Key             =   ""
          EndProperty
          BeginProperty ListImage63 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3CB60
+            Picture         =   "frmChat.frx":3B166
             Key             =   ""
          EndProperty
          BeginProperty ListImage64 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3CDCA
+            Picture         =   "frmChat.frx":3B3D0
             Key             =   ""
          EndProperty
          BeginProperty ListImage65 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D022
+            Picture         =   "frmChat.frx":3B628
             Key             =   ""
          EndProperty
          BeginProperty ListImage66 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D247
+            Picture         =   "frmChat.frx":3B84D
             Key             =   ""
          EndProperty
          BeginProperty ListImage67 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D49A
+            Picture         =   "frmChat.frx":3BAA0
             Key             =   ""
          EndProperty
          BeginProperty ListImage68 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D6BD
+            Picture         =   "frmChat.frx":3BCC3
             Key             =   ""
          EndProperty
          BeginProperty ListImage69 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D927
+            Picture         =   "frmChat.frx":3BF2D
             Key             =   ""
          EndProperty
          BeginProperty ListImage70 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3DB67
+            Picture         =   "frmChat.frx":3C16D
             Key             =   ""
          EndProperty
          BeginProperty ListImage71 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3DDAC
+            Picture         =   "frmChat.frx":3C3B2
             Key             =   ""
          EndProperty
          BeginProperty ListImage72 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3DFFA
+            Picture         =   "frmChat.frx":3C600
             Key             =   ""
          EndProperty
          BeginProperty ListImage73 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E241
+            Picture         =   "frmChat.frx":3C847
             Key             =   ""
          EndProperty
          BeginProperty ListImage74 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E4AB
+            Picture         =   "frmChat.frx":3CAB1
             Key             =   ""
          EndProperty
          BeginProperty ListImage75 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E6DE
+            Picture         =   "frmChat.frx":3CCE4
             Key             =   ""
          EndProperty
          BeginProperty ListImage76 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E923
+            Picture         =   "frmChat.frx":3CF29
             Key             =   ""
          EndProperty
          BeginProperty ListImage77 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3EB5F
+            Picture         =   "frmChat.frx":3D165
             Key             =   ""
          EndProperty
          BeginProperty ListImage78 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3EDCB
+            Picture         =   "frmChat.frx":3D3D1
             Key             =   ""
          EndProperty
          BeginProperty ListImage79 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F035
+            Picture         =   "frmChat.frx":3D63B
             Key             =   ""
          EndProperty
          BeginProperty ListImage80 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F27C
+            Picture         =   "frmChat.frx":3D882
             Key             =   ""
          EndProperty
          BeginProperty ListImage81 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F4C4
+            Picture         =   "frmChat.frx":3DACA
             Key             =   ""
          EndProperty
          BeginProperty ListImage82 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F6F0
+            Picture         =   "frmChat.frx":3DCF6
             Key             =   ""
          EndProperty
          BeginProperty ListImage83 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F917
+            Picture         =   "frmChat.frx":3DF1D
             Key             =   ""
          EndProperty
          BeginProperty ListImage84 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3FB81
+            Picture         =   "frmChat.frx":3E187
             Key             =   ""
          EndProperty
          BeginProperty ListImage85 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3FD86
+            Picture         =   "frmChat.frx":3E38C
             Key             =   ""
          EndProperty
          BeginProperty ListImage86 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3FF81
+            Picture         =   "frmChat.frx":3E587
             Key             =   ""
          EndProperty
          BeginProperty ListImage87 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":401C2
+            Picture         =   "frmChat.frx":3E7C8
             Key             =   ""
          EndProperty
          BeginProperty ListImage88 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":403D2
+            Picture         =   "frmChat.frx":3E9D8
             Key             =   ""
          EndProperty
          BeginProperty ListImage89 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":40643
+            Picture         =   "frmChat.frx":3EC49
             Key             =   ""
          EndProperty
          BeginProperty ListImage90 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":40954
+            Picture         =   "frmChat.frx":3EF5A
             Key             =   ""
          EndProperty
          BeginProperty ListImage91 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":40C9A
+            Picture         =   "frmChat.frx":3F2A0
             Key             =   ""
          EndProperty
          BeginProperty ListImage92 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4126B
+            Picture         =   "frmChat.frx":3F871
             Key             =   ""
          EndProperty
          BeginProperty ListImage93 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4183B
+            Picture         =   "frmChat.frx":3FE41
             Key             =   ""
          EndProperty
          BeginProperty ListImage94 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":41DE6
+            Picture         =   "frmChat.frx":403EC
             Key             =   ""
          EndProperty
          BeginProperty ListImage95 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4247B
+            Picture         =   "frmChat.frx":40A81
             Key             =   ""
          EndProperty
          BeginProperty ListImage96 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":42B0C
+            Picture         =   "frmChat.frx":41112
             Key             =   ""
          EndProperty
          BeginProperty ListImage97 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4319F
+            Picture         =   "frmChat.frx":417A5
             Key             =   ""
          EndProperty
          BeginProperty ListImage98 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":43706
+            Picture         =   "frmChat.frx":41D0C
             Key             =   ""
          EndProperty
          BeginProperty ListImage99 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":43C73
+            Picture         =   "frmChat.frx":42279
             Key             =   ""
          EndProperty
          BeginProperty ListImage100 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":441E5
+            Picture         =   "frmChat.frx":427EB
             Key             =   ""
          EndProperty
          BeginProperty ListImage101 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4478C
+            Picture         =   "frmChat.frx":42D92
             Key             =   ""
          EndProperty
          BeginProperty ListImage102 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":44D31
+            Picture         =   "frmChat.frx":43337
             Key             =   ""
          EndProperty
          BeginProperty ListImage103 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":452DE
+            Picture         =   "frmChat.frx":438E4
             Key             =   ""
          EndProperty
          BeginProperty ListImage104 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":482C1
+            Picture         =   "frmChat.frx":468C7
             Key             =   ""
          EndProperty
          BeginProperty ListImage105 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4DFFE
+            Picture         =   "frmChat.frx":4C604
             Key             =   ""
          EndProperty
          BeginProperty ListImage106 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":53CC3
+            Picture         =   "frmChat.frx":522C9
             Key             =   ""
          EndProperty
          BeginProperty ListImage107 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":598DB
+            Picture         =   "frmChat.frx":57EE1
             Key             =   ""
          EndProperty
          BeginProperty ListImage108 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":5F36E
+            Picture         =   "frmChat.frx":5D974
             Key             =   ""
          EndProperty
          BeginProperty ListImage109 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":64F9F
+            Picture         =   "frmChat.frx":635A5
             Key             =   ""
          EndProperty
       EndProperty
@@ -699,7 +699,7 @@ Begin VB.Form frmChat
       _Version        =   393216
       TabOrientation  =   1
       Style           =   1
-      Tab             =   1
+      Tab             =   2
       TabHeight       =   520
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -711,16 +711,16 @@ Begin VB.Form frmChat
          Strikethrough   =   0   'False
       EndProperty
       TabCaption(0)   =   "Channel  "
-      TabPicture(0)   =   "frmChat.frx":6ABBD
+      TabPicture(0)   =   "frmChat.frx":691C3
       Tab(0).ControlEnabled=   0   'False
       Tab(0).ControlCount=   0
       TabCaption(1)   =   "Friends  "
-      TabPicture(1)   =   "frmChat.frx":6ABD9
-      Tab(1).ControlEnabled=   -1  'True
+      TabPicture(1)   =   "frmChat.frx":691DF
+      Tab(1).ControlEnabled=   0   'False
       Tab(1).ControlCount=   0
       TabCaption(2)   =   "Clan  "
-      TabPicture(2)   =   "frmChat.frx":6ABF5
-      Tab(2).ControlEnabled=   0   'False
+      TabPicture(2)   =   "frmChat.frx":691FB
+      Tab(2).ControlEnabled=   -1  'True
       Tab(2).ControlCount=   0
    End
    Begin VB.Timer tmrFriendlistUpdate 
@@ -892,11 +892,10 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
-      TextRTF         =   $"frmChat.frx":6AC11
+      TextRTF         =   $"frmChat.frx":69217
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -918,11 +917,12 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
       OLEDropMode     =   0
-      TextRTF         =   $"frmChat.frx":6AC8C
+      TextRTF         =   $"frmChat.frx":69292
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   9
@@ -1822,7 +1822,7 @@ Public Sub cacheTimer_Timer()
                 End If
             End If
             
-            strArray(c) = convertUsername(CleanUsername(strArray(c)))
+            strArray(c) = ConvertUsername(CleanUsername(strArray(c)))
             
             'AddChat vbRed, strArray(C)
             
@@ -2552,7 +2552,7 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
         g_Clan.Members.Remove pos
     End If
     
-    Member = convertUsername(Member)
+    Member = ConvertUsername(Member)
 
     Set x = lvClanList.FindItem(Member)
     
@@ -2663,7 +2663,7 @@ Private Sub ClanHandler_ClanInvitation(ByVal Token As String, ByVal ClanTag As S
         If NewClan Then Clan.isNew = 1
         
         With RTBColors
-            AddChat .SuccessText, "[CLAN] ", .InformationText, convertUsername(InvitedBy), .SuccessText, " has invited you to join a clan: ", .InformationText, ClanName, .SuccessText, " [", .InformationText, ClanTag, .SuccessText, "]"
+            AddChat .SuccessText, "[CLAN] ", .InformationText, ConvertUsername(InvitedBy), .SuccessText, " has invited you to join a clan: ", .InformationText, ClanName, .SuccessText, " [", .InformationText, ClanTag, .SuccessText, "]"
         End With
         
         frmClanInvite.Show
@@ -2737,7 +2737,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
         g_Clan.Members.Add ClanMember
     End If
     
-    Username = convertUsername(Username)
+    Username = ConvertUsername(Username)
     
     Set x = lvClanList.FindItem(Username)
 
@@ -3690,14 +3690,14 @@ End Sub
 
 Private Sub mnuFLPopRemove_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
-        AddQ "/f r " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(lvFriendList.SelectedItem.Text), _
+        AddQ "/f r " & CleanUsername(lvFriendList.SelectedItem.Text, True), _
             PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
 Private Sub mnuFLPopWhisper_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
-        AddQ "/w " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(lvFriendList.SelectedItem.Text) & _
+        AddQ "/w " & CleanUsername(lvFriendList.SelectedItem.Text, True) & _
             Space(1) & cboSend.Text, PRIORITY.CONSOLE_MESSAGE
             
         cboSend.Text = ""
@@ -3807,11 +3807,15 @@ End Sub
 Private Sub mnuPopAddLeft_Click()
     On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    Dim Index As Integer
+    Dim s As String
     
     If txtPre.Enabled Then 'fix for topic 25290 -a
-        If Dii Then txtPre.Text = "/w *" Else txtPre.Text = "/w "
-        
-        txtPre.Text = txtPre.Text & GetSelectedUser & " "
+        Index = g_Channel.GetUserIndex(GetSelectedUser)
+        s = vbNullString
+        If Dii Then s = "*"
+        s = StringFormatA("/w {0}{1} ", s, g_Channel.Users(Index).Name)
+        txtPre.Text = s
         
         cboSend.SetFocus
         cboSend.selStart = Len(cboSend.Text)
@@ -3822,8 +3826,7 @@ Private Sub mnuPopAddToFList_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     If Not (lvChannel.SelectedItem Is Nothing) Then
-        AddQ "/f a " & _
-            IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
+        AddQ "/f a " & CleanUsername(GetSelectedUser, True), PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -3837,8 +3840,7 @@ Private Sub mnuPopDes_Click()
     On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
 
-    AddQ "/designate " & _
-        IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
+    AddQ "/designate " & CleanUsername(GetSelectedUser, True), PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopFLProfile_Click()
@@ -3905,8 +3907,7 @@ Private Sub mnuPopWhisper_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     If cboSend.Text <> vbNullString Then
-        AddQ "/w " & _
-            IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser) & Space(1) & _
+        AddQ "/w " & CleanUsername(GetSelectedUser, True) & Space(1) & _
                 cboSend.Text, PRIORITY.CONSOLE_MESSAGE
         
         cboSend.AddItem cboSend.Text, 0
@@ -3957,8 +3958,7 @@ Private Sub mnuPopWhois_Click()
     On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/whois " & _
-        IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
+    AddQ "/whois " & CleanUsername(GetSelectedUser, True), PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopInvite_Click()
@@ -3971,7 +3971,7 @@ Private Sub mnuPopInvite_Click()
     
     If LenB(sPlayer) > 0 Then
         If g_Clan.Self.Rank >= 3 Then
-            InviteToClan (reverseUsername(sPlayer))
+            InviteToClan (ReverseConvertUsernameGateway(sPlayer))
             AddChat RTBColors.InformationText, "[CLAN] Invitation sent to " & GetSelectedUser & ", awaiting reply."
         End If
     End If
@@ -4185,6 +4185,8 @@ End Sub
 Private Sub mnuPopPLookup_Click()
     On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    Dim sUser As String
+    sUser = GetSelectedUser
     
     RequestProfile CleanUsername(GetSelectedUser)
     
@@ -4372,7 +4374,7 @@ Private Sub mnuPopKick_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     If MyFlags = 2 Or MyFlags = 18 Then
-        AddQ "/kick " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
+        AddQ "/kick " & CleanUsername(GetSelectedUser, True), PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -4380,7 +4382,7 @@ Private Sub mnuPopBan_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     If MyFlags = 2 Or MyFlags = 18 Then
-        AddQ "/ban " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
+        AddQ "/ban " & CleanUsername(GetSelectedUser, True), PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -4743,7 +4745,7 @@ Private Sub cboSend_KeyUp(KeyCode As Integer, Shift As Integer)
                             .selStart = 0
                             .selLength = Len(.Text)
                             .SelText = _
-                                "/w " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(LastWhisper) & " "
+                                "/w " & CleanUsername(LastWhisper, True) & " "
                             .selStart = Len(.Text)
                         End If
                     End If
@@ -4753,7 +4755,7 @@ Private Sub cboSend_KeyUp(KeyCode As Integer, Shift As Integer)
                             .selStart = 0
                             .selLength = Len(.Text)
                             .SelText = _
-                                "/w " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(LastWhisper) & " "
+                                "/w " & CleanUsername(LastWhisper, True) & " "
                             .selStart = Len(.Text)
                         End If
                     End If
@@ -4769,7 +4771,7 @@ Private Sub cboSend_KeyUp(KeyCode As Integer, Shift As Integer)
                                 .SelText = "/f m "
                             Else
                                 .SelText = _
-                                    "/w " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(LastWhisperTo) & " "
+                                    "/w " & CleanUsername(LastWhisperTo, True) & " "
                             End If
                             
                             .selStart = Len(.Text)
@@ -6309,7 +6311,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                     Splt() = Split(strTmp, Space$(1), 3)
                     
                     If (UBound(Splt) > 0) Then
-                        Command = StringFormat("{0} {1}", Splt(0), reverseUsername(Splt(1)))
+                        Command = StringFormat("{0} {1}", Splt(0), ReverseConvertUsernameGateway(Splt(1)))
 
                         If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
                             If ((LCase$(Splt(0)) = "/unignore") Or (LCase$(Splt(0)) = "/unsquelch")) Then
@@ -6345,7 +6347,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                                     If ((StrReverse$(BotVars.Product) = "WAR3") Or _
                                         (StrReverse$(BotVars.Product) = "W3XP")) Then
                                         
-                                        Command = StringFormat("{0} {1}", Command, reverseUsername(Splt(2)))
+                                        Command = StringFormat("{0} {1}", Command, ReverseConvertUsernameGateway(Splt(2)))
                                     Else
                                         Command = StringFormat("{0} {1}", Command, Splt(2))
                                     End If
@@ -6500,9 +6502,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Dim i                    As Integer
     Dim f                    As Integer
     Dim Index                As Integer
-    Dim D2GameConventions    As String
-    Dim W3GameConventions    As String
-    Dim gameConventions      As String
     Dim bln                  As Boolean
     Dim doConvert            As Boolean
     Dim command_output()     As String
@@ -6647,24 +6646,30 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         BotVars.StoreAllBans = False
     End If
     
-    gameConventions = ReadCfg(OT, "UseGameConventions")
-    D2GameConventions = ReadCfg(OT, "UseD2GameConventions")
-    W3GameConventions = ReadCfg(OT, "Usew3GameConventions")
+    i = 0
+    s = ReadCfg(OT, "NamespaceConvention")
+    If (StrictIsNumeric(s)) Then
+        If (CDbl(s) < 4) Then
+            i = CDbl(s)
+        End If
+    End If
+    BotVars.GatewayConventions = i
     
-    If (gameConventions = vbNullString) Then
-        gameConventions = "Y"
+    s = ReadCfg(OT, "UseD2Naming")
+    BotVars.UseD2Naming = (s = "Y")
+    
+    BotVars.D2NamingFormat = ReadCfg(OV, "D2NamingFormat")
+    If (LenB(BotVars.D2NamingFormat) = 0) Then
+        BotVars.D2NamingFormat = "char (*name)"
     End If
     
-    If (W3GameConventions = vbNullString) Then
-        W3GameConventions = "Y"
+    s = ReadCfg(OT, "ShowStatsIcons")
+    If s = "N" Then
+        BotVars.ShowStatsIcons = False
+    Else
+        BotVars.ShowStatsIcons = True
     End If
     
-    With BotVars
-        .UseGameConventions = (gameConventions = "Y")
-        .UseD2GameConventions = (D2GameConventions = "Y")
-        .UseW3GameConventions = (W3GameConventions = "Y")
-    End With
-
     ' ...
     If (g_Online) Then
         Dim found       As ListItem ' ...
@@ -6683,7 +6688,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             Set CurrentUser = g_Channel.Users(i)
         
             ' ...
-            AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Flags, CurrentUser.Ping, _
+            AddName CurrentUser.DisplayName, CurrentUser.Name, CurrentUser.game, CurrentUser.Flags, CurrentUser.Ping, _
                 CurrentUser.Stats.IconCode, CurrentUser.Clan
         Next i
         
@@ -6703,14 +6708,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = ReadCfg(OT, "JoinLeaves")
     JoinMessagesOff = (Not (s = "Y"))
     mnuToggle.Checked = JoinMessagesOff
-    
-    s = ReadCfg(OT, "ShowStatsIcons")
-    
-    If s = "N" Then
-        BotVars.ShowStatsIcons = False
-    Else
-        BotVars.ShowStatsIcons = True
-    End If
     
     s = ReadCfg(OT, "Mail")
     If s = "N" Then mail = False Else mail = True
@@ -7544,7 +7541,7 @@ Function GetSelectedUser() As String
         Exit Function
     End If
     
-    GetSelectedUser = lvChannel.SelectedItem.Text
+    GetSelectedUser = lvChannel.SelectedItem.Tag
 End Function
 
 Function GetRandomPerson() As String
@@ -7836,7 +7833,7 @@ Private Function GetClanSelectedUser() As String
             If .SelectedItem.Index < 1 Then
                 GetClanSelectedUser = vbNullString: Exit Function
             Else
-                GetClanSelectedUser = reverseUsername(.SelectedItem.Text)
+                GetClanSelectedUser = ReverseConvertUsernameGateway(.SelectedItem.Text)
             End If
         End If
     End With

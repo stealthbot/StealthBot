@@ -280,7 +280,7 @@ Public Sub OnGiveUp(Command As clsCommandObj)
                     End If
                 End If
                 
-                Call bnetSend("/designate " & reverseUsername(sUsername))
+                Call bnetSend("/designate " & ReverseConvertUsernameGateway(sUsername))
                 Call Pause(2)
                 Call bnetSend("/resign")
                 

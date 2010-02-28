@@ -101,6 +101,9 @@ Private m_retain_old_bans               As Boolean
 Private m_store_all_bans                As Boolean
 Private m_use_alt_bnls                  As Boolean
 Private m_case_sensitive_flags          As Boolean
+Private m_byGatewayConventions          As Byte
+Private m_bUseD2Naming                  As Boolean
+Private m_sD2NamingFormat               As String
 ' Queue stuff
 Private m_lMaxCredits                   As Long
 Private m_lCostPerPacket                As Long
@@ -866,39 +869,39 @@ Public Property Let NoRTBAutomaticCopy(ByVal bNoRTBAutomaticCopy As Boolean)
 
 End Property
 
-Public Property Get UseGameConventions() As Boolean
+Public Property Get GatewayConventions() As Byte
+    
+    GatewayConventions = m_byGatewayConventions
+    
+End Property
 
-    UseGameConventions = m_bUseGameConventions
+Public Property Let GatewayConventions(ByVal byGatewayConventions As Byte)
+
+    m_byGatewayConventions = byGatewayConventions
 
 End Property
 
-Public Property Let UseGameConventions(ByVal bUseGameConventions As Boolean)
+Public Property Get UseD2Naming() As Boolean
 
-    m_bUseGameConventions = bUseGameConventions
-
-End Property
-
-Public Property Get UseD2GameConventions() As Boolean
-
-    UseD2GameConventions = m_bUseD2GameConventions
+    UseD2Naming = m_bUseD2Naming
 
 End Property
 
-Public Property Let UseD2GameConventions(ByVal bUseD2GameConventions As Boolean)
+Public Property Let UseD2Naming(ByVal bUseD2Naming As Boolean)
 
-    m_bUseD2GameConventions = bUseD2GameConventions
-
-End Property
-
-Public Property Get UseW3GameConventions() As Boolean
-
-    UseW3GameConventions = m_bUseW3GameConventions
+    m_bUseD2Naming = bUseD2Naming
 
 End Property
 
-Public Property Let UseW3GameConventions(ByVal bUseW3GameConventions As Boolean)
+Public Property Get D2NamingFormat() As String
 
-    m_bUseW3GameConventions = bUseW3GameConventions
+    D2NamingFormat = m_sD2NamingFormat
+
+End Property
+
+Public Property Let D2NamingFormat(ByVal sD2NamingFormat As String)
+
+    m_sD2NamingFormat = sD2NamingFormat
 
 End Property
 
@@ -929,7 +932,6 @@ Public Property Let Gateway(ByVal sGateway As String)
     End If
 
 End Property
-
 
 Public Property Get Realm() As String
 

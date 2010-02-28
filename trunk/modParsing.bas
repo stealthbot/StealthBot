@@ -213,7 +213,7 @@ Public Sub RequestProfile(strUser As String)
         .InsertDWord 1
         .InsertDWord 4
         .InsertDWord GetTickCount()
-        .InsertNTString CleanUsername(reverseUsername(strUser))
+        .InsertNTString CleanUsername(ReverseConvertUsernameGateway(strUser))
         .InsertNTString "Profile\Age"
         .InsertNTString "Profile\Sex"
         .InsertNTString "Profile\Location"
@@ -227,7 +227,7 @@ Public Sub RequestSpecificKey(ByVal sUsername As String, ByVal sKey As String)
         .InsertDWord 1
         .InsertDWord 1
         .InsertDWord GetTickCount()
-        .InsertNTString reverseUsername(sUsername)
+        .InsertNTString ReverseConvertUsernameGateway(sUsername)
         .InsertNTString sKey
         .SendPacket &H26
     End With
