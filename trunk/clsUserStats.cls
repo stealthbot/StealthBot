@@ -88,17 +88,17 @@ Private m_hardcore            As Boolean
 Private m_realm               As String
 Private m_are_stats_valid     As Boolean
 
-Public Property Let game(ByVal str As String)
+Public Property Let Game(ByVal str As String)
 
     ' ...
     m_game = str
 
 End Property
 
-Public Property Get game() As String
+Public Property Get Game() As String
 
     ' ...
-    game = m_game
+    Game = m_game
 
 End Property
 
@@ -147,7 +147,7 @@ End Property
 Public Property Get IconTier() As String
 
     ' ...
-    If ((game = "WAR3") Or (game = "W3XP")) Then
+    If ((Game = "WAR3") Or (Game = "W3XP")) Then
         ' ...
         Select Case (Mid$(Icon, 2, 1))
             Case "H": IconTier = "Human"
@@ -165,7 +165,7 @@ End Property
 Public Property Get IconName() As String
 
     ' ...
-    If ((game = "WAR3") Or (game = "W3XP")) Then
+    If ((Game = "WAR3") Or (Game = "W3XP")) Then
         ' ...
         Select Case (StrReverse$(Icon))
             Case "WCRF": IconName = "WCG Referee"
@@ -185,7 +185,7 @@ Public Property Get IconName() As String
         Select Case (Mid$(Icon, 2, 1))
             Case "H" ' Human
                 ' ...
-                If (game = "WAR3") Then
+                If (Game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -208,7 +208,7 @@ Public Property Get IconName() As String
             
             Case "N" ' Night Elf
                 ' ...
-                If (game = "WAR3") Then
+                If (Game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -231,7 +231,7 @@ Public Property Get IconName() As String
                 
             Case "U" ' Undead
                 ' ...
-                If (game = "WAR3") Then
+                If (Game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -254,7 +254,7 @@ Public Property Get IconName() As String
             
             Case "O" ' Orc
                 ' ...
-                If (game = "WAR3") Then
+                If (Game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -277,7 +277,7 @@ Public Property Get IconName() As String
 
             Case "R" ' Random
                 ' ...
-                If (game = "WAR3") Then
+                If (Game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -300,7 +300,7 @@ Public Property Get IconName() As String
 
             Case "D" ' Tournament
                 ' ...
-                If (game = "W3XP") Then
+                If (Game = "W3XP") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -329,7 +329,7 @@ Public Property Let Statstring(ByVal str As String)
     End If
 
     ' ...
-    game = StrReverse$(Left$(str, 4))
+    Game = StrReverse$(Left$(str, 4))
 
     ' ...
     If (Len(str) >= 5) Then
@@ -488,20 +488,20 @@ Public Property Get CharacterClass() As String
     On Error GoTo ERROR_HANDLER
     
     ' ...
-    If ((game = "DSHR") Or (game = "DRTL")) Then
+    If ((Game = "DSHR") Or (Game = "DRTL")) Then
         
         Dim DIClasses(0 To 3) As String ' ...
         
-        DIClasses(0) = "warrior"
-        DIClasses(1) = "rogue"
-        DIClasses(2) = "sorceror"
+        DIClasses(0) = "Warrior"
+        DIClasses(1) = "Rogue"
+        DIClasses(2) = "Sorceror"
         
         ' ...
         If (CharacterClassID < UBound(DIClasses)) Then
             CharacterClass = DIClasses(CharacterClassID)
         End If
         
-    ElseIf ((game = "D2DV") Or (game = "D2XP")) Then
+    ElseIf ((Game = "D2DV") Or (Game = "D2XP")) Then
     
         Dim DIIClasses(0 To 7) As String ' ...
         
@@ -565,7 +565,7 @@ End Property
 Public Property Get IsExpansionCharacter() As Boolean
 
     ' ...
-    If (StrReverse$(game) = "D2XP") Then
+    If (StrReverse$(Game) = "D2XP") Then
         IsExpansionCharacter = True
     Else
         IsExpansionCharacter = ((CharacterFlags And &H20) = &H20)
@@ -602,7 +602,7 @@ Public Property Get ActsCompleted() As Integer
 
 End Property
 
-Public Property Let ActsCompleted(ByVal I As Integer)
+Public Property Let ActsCompleted(ByVal i As Integer)
 
     ' ...
     m_acts_completed = i
@@ -612,7 +612,7 @@ End Property
 Public Property Get CurrentAct() As Integer
 
     ' ...
-    If ((game() = "D2DV") Or (game() = "D2XP")) Then
+    If ((Game() = "D2DV") Or (Game() = "D2XP")) Then
         ' ...
         If (IsExpansionCharacter() = False) Then
             CurrentAct = ((ActsCompleted() Mod 4) + 1)
@@ -626,7 +626,7 @@ End Property
 Public Property Get CurrentDifficulty() As String
 
     ' ...
-    If ((game = "D2DV") Or (game = "D2XP")) Then
+    If ((Game = "D2DV") Or (Game = "D2XP")) Then
         ' ...
         Select Case (CurrentDifficultyID)
             Case 0: CurrentDifficulty = "Normal"
@@ -642,7 +642,7 @@ Public Property Get CurrentDifficultyID() As Integer
     Dim difficulty As Integer ' ...
     
     ' ...
-    If ((game = "D2DV") Or (game = "D2XP")) Then
+    If ((Game = "D2DV") Or (Game = "D2XP")) Then
         ' ...
         If (IsExpansionCharacter = False) Then
             difficulty = Fix(ActsCompleted / 4)
@@ -692,7 +692,7 @@ Public Property Get CharacterTitle() As String
     Expansion(1, 2, 0) = "Guardian"
     
     ' ...
-    If ((game = "D2DV") Or (game = "D2XP")) Then
+    If ((Game = "D2DV") Or (Game = "D2XP")) Then
         ' ...
         If (CurrentDifficultyID >= 1) Then
             ' ...
@@ -834,10 +834,10 @@ Public Property Get ToString() As String
     Dim buf As String ' ...
     
     ' ...
-    buf = MakeLongGameName(game)
+    buf = MakeLongGameName(Game)
     
     ' ...
-    Select Case (game)
+    Select Case (Game)
         ' ...
         Case "SSHR", "STAR", "JSTR", "SEXP"
             buf = buf & StarCraft_ToString()
@@ -872,7 +872,9 @@ Public Property Get ToString() As String
 End Property
 
 Public Property Get IconCode() As Integer
-
+    
+    Dim intWins As Integer
+    
     ' ...
     If (BotVars.ShowStatsIcons) Then
         ' ...
@@ -884,66 +886,64 @@ Public Property Get IconCode() As Integer
             Case "WCBR": IconCode = IC_WCBR
             Case "WCPG": IconCode = IC_WCPG
         End Select
-    
+        
         ' ...
         If (IconCode) Then
             Exit Property
         End If
+        
+        Select Case Game
+            Case "DRTL"
+                IconCode = (ICON_START_DRTL + CharacterClassID)
+            
+            Case "D2DV", "D2XP"
+                If (LenB(Statstring) > 0) Then
+                    IconCode = (ICON_START_D2 + CharacterClassID - 1)
+                End If
+            
+            Case "STAR", "SEXP"
+                intWins = Wins
+                If (intWins > 10) Then intWins = 10
+                IconCode = (ICON_START_SC + intWins)
+            
+            Case "W2BN"
+                intWins = Wins
+                If (intWins > 10) Then intWins = 10
+                IconCode = (ICON_START_W2 + intWins)
+            
+            Case "WAR3", "W3XP"
+                ' ...
+                IconCode = _
+                    GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(Game), _
+                        IIf(IsWCG, Icon, ""))
+
+                ' ...
+                If (Game = "W3XP") Then
+                    IconCode = (ICON_START_W3XP + IconCode)
+                Else
+                    IconCode = (ICON_START_WAR3 + IconCode)
+                End If
+            
+        End Select
     End If
-
-    ' ...
-    Select Case (game)
-        Case "CHAT": IconCode = ICCHAT
-        Case "SSHR": IconCode = ICSCSW
-        Case "STAR": IconCode = ICSTAR
-        Case "JSTR": IconCode = ICJSTR
-        Case "SEXP": IconCode = ICSEXP
-        Case "DSHR": IconCode = ICDIABLOSW
-        Case "DRTL": IconCode = ICDIABLO
-        Case "D2DV": IconCode = ICD2DV
-        Case "D2XP": IconCode = ICD2XP
-        Case "W2BN": IconCode = ICW2BN
-        
-        Case "WAR3"
-            
-            ' ...
-            If ((BotVars.ShowStatsIcons) And (LenB(Statstring) > 0)) Then
-                ' ...
-                IconCode = _
-                    GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), _
-                        IIf(IsWCG, Icon, ""))
-
-                ' ...
-                IconCode = (ICON_START_WAR3 + IconCode)
-            End If
-            
-            ' ...
-            If ((IconCode = 0) Or (IconCode = ICUNKNOWN)) Then
-                IconCode = ICWAR3
-            End If
-            
-        Case "W3XP"
-            
-            ' ...
-            If ((BotVars.ShowStatsIcons) And (LenB(Statstring) > 0)) Then
-                ' ...
-                IconCode = _
-                    GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), _
-                        IIf(IsWCG, Icon, ""))
-                        
-                ' ...
-                IconCode = (ICON_START_W3XP + IconCode)
-            End If
-            
-            ' ...
-            If ((IconCode = 0) Or (IconCode = ICUNKNOWN)) Then
-                IconCode = ICWAR3X
-            End If
-        
-        Case Else
-            IconCode = ICUNKNOWN
-    End Select
-
+    
+    If ((IconCode = 0) Or (IconCode = ICUNKNOWN)) Then
+        Select Case (Game)
+            Case "CHAT": IconCode = ICCHAT
+            Case "SSHR": IconCode = ICSCSW
+            Case "STAR": IconCode = ICSTAR
+            Case "JSTR": IconCode = ICJSTR
+            Case "SEXP": IconCode = ICSEXP
+            Case "DSHR": IconCode = ICDIABLOSW
+            Case "DRTL": IconCode = ICDIABLO
+            Case "W2BN": IconCode = ICW2BN
+            Case "D2DV": IconCode = ICD2DV
+            Case "D2XP": IconCode = ICD2XP
+            Case "WAR3": IconCode = ICWAR3
+            Case "W3XP": IconCode = ICWAR3X
+            Case Else:   IconCode = ICUNKNOWN
+        End Select
+    End If
 End Property
 
 Private Sub Parse()
@@ -959,7 +959,7 @@ Private Sub Parse()
     End If
 
     ' ...
-    Select Case (game)
+    Select Case (Game)
         ' ...
         Case "SSHR", "STAR", "JSTR", "SEXP"
             Call ParseStarCraft
@@ -1261,10 +1261,10 @@ Private Sub MakeArr(ByVal str As String, ByRef arr() As Integer)
     
 End Sub
 
-Private Function MakeLongGameName(ByVal game As String) As String
+Private Function MakeLongGameName(ByVal Game As String) As String
 
     ' ...
-    Select Case (game)
+    Select Case (Game)
         ' chat/telnet
         Case "CHAT": MakeLongGameName = "Chat"
     
