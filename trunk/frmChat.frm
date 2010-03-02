@@ -1634,7 +1634,7 @@ End Type
 Private Sub Form_Load()
     Dim s As String
     Dim f As Integer
-    Dim L As Long
+    Dim l As Long
     Dim FrmSplashInUse As Boolean
     Dim strBeta As String
     Dim sStr() As String
@@ -1753,13 +1753,13 @@ Private Sub Form_Load()
 
     s = ReadCfg("Position", "Height")
     If LenB(s) > 0 And StrictIsNumeric(s) Then
-        L = (IIf(CLng(s) < 200, 200, CLng(s)) * Screen.TwipsPerPixelY)
+        l = (IIf(CLng(s) < 200, 200, CLng(s)) * Screen.TwipsPerPixelY)
         
         If (rtbWhispersVisible) Then
-            L = L - (rtbWhispers.Height / Screen.TwipsPerPixelY)
+            l = l - (rtbWhispers.Height / Screen.TwipsPerPixelY)
         End If
         
-        Me.Height = L
+        Me.Height = l
     End If
     
     s = ReadCfg("Position", "Width")
@@ -2035,7 +2035,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
     
     
     Dim s As String
-    Dim L As Long
+    Dim l As Long
     Dim i As Integer
     
     If Not BotVars.LockChat Then
@@ -2081,7 +2081,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             If Len(saElements(i + 1)) > 0 Then
                 With rtbWhispers
                     .selStart = Len(.Text)
-                    L = .selStart
+                    l = .selStart
                     .selLength = 0
                     .SelColor = saElements(i)
                     .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
@@ -2090,7 +2090,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             End If
         Next i
         
-        Call ColorModify(rtbWhispers, L)
+        Call ColorModify(rtbWhispers, l)
     End If
 End Sub
 
@@ -3033,7 +3033,7 @@ Public Function GetLogFilePath() As String
 End Function
 
 Sub Form_Unload(Cancel As Integer)
-    Dim Key As String, L As Long
+    Dim Key As String, l As Long
     
     'Me.WindowState = vbNormal
     'Me.Show
@@ -3745,7 +3745,7 @@ Private Sub mnuDisableVoidView_Click()
 End Sub
 
 Private Sub mnuDisconnect2_Click()
-    Dim Key As String, L As Long
+    Dim Key As String, l As Long
     Key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
@@ -4550,7 +4550,7 @@ Sub mnuLock_Click()
 End Sub
 
 Sub mnuDisconnect_Click()
-    Dim Key As String, L As Long
+    Dim Key As String, l As Long
     Key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
@@ -4920,7 +4920,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     Dim temp As udtGetAccessResponse
     
     Dim i As Long
-    Dim L As Long
+    Dim l As Long
     Dim n As Integer
     Dim c As Integer ',oldSelStart As Integer
     Dim x() As String
@@ -4943,7 +4943,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     'AddChat vbRed, "Shift: " & Shift
 
 
-    L = cboSend.selStart
+    l = cboSend.selStart
 
     With lvChannel
 
@@ -4963,7 +4963,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     End If
 
                     cboSend.SetFocus
-                    cboSend.selStart = L
+                    cboSend.selStart = l
                     Exit Sub
                 End If
 
@@ -4976,7 +4976,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     End If
 
                     cboSend.SetFocus
-                    cboSend.selStart = L
+                    cboSend.selStart = l
                     Exit Sub
                 End If
 
@@ -5004,13 +5004,13 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         .ListItems.Item(1).Ghosted = True
     
                         cboSend.SetFocus
-                        cboSend.selStart = L
+                        cboSend.selStart = l
                     Else
                         If .ListItems.Count > 0 Then
                             .ListItems(1).Selected = True
                             .ListItems(1).Ghosted = True
                             cboSend.SetFocus
-                            cboSend.selStart = L
+                            cboSend.selStart = l
                         End If
                     End If
                 End If
@@ -5023,7 +5023,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         .ListItems.Item(.ListItems.Count).Ghosted = True
     
                         cboSend.SetFocus
-                        cboSend.selLength = L
+                        cboSend.selLength = l
                     End If
                 End If
                 
@@ -8117,11 +8117,11 @@ Private Sub mnuPopPro_Click()
 End Sub
 
 Private Sub mnuPopRem_Click()
-    Dim L As Long
-    L = TimeSinceLastRemoval
+    Dim l As Long
+    l = TimeSinceLastRemoval
 
-    If L < 30 Then
-        AddChat RTBColors.ErrorMessageText, "You must wait " & 30 - L & " more seconds before you " & _
+    If l < 30 Then
+        AddChat RTBColors.ErrorMessageText, "You must wait " & 30 - l & " more seconds before you " & _
                 "can remove another user from your clan."
     Else
         If MsgBox("Are you sure you want to remove this user from the clan?", vbExclamation + vbYesNo, _

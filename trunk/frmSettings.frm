@@ -5450,7 +5450,11 @@ Sub LoadColors()
         CAdd "Current Channel Label | Background", .ChannelLabelBack
         CAdd "Current Channel Label | Text", .ChannelLabelText
         CAdd "Channel List | Background", .ChannelListBack
-        CAdd "Channel List | Text", .ChannelListText
+        CAdd "Channel List | Normal Users", .ChannelListText
+        CAdd "Channel List | Self", .ChannelListSelf
+        CAdd "Channel List | Idle Users", .ChannelListIdle
+        CAdd "Channel List | Squelched Users", .ChannelListSquelched
+        CAdd "Channel List | Operators", .ChannelListOps
         CAdd "Chat Window | Background", .RTBBack
         CAdd "Send Boxes | Background", .SendBoxesBack
         CAdd "Send Boxes | Text", .SendBoxesText

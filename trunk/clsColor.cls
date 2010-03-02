@@ -34,16 +34,16 @@ End Function
 '// shows a list of all the colors in the chat window
 Public Sub List()
     
-    Dim Keys() As Variant
+    Dim keys() As Variant
     Dim i      As Integer
     Dim Co     As Long
     
     If Named Is Nothing Then PopulateList
     
-    Keys() = Named.Keys()
+    keys() = Named.keys()
     For i = 0 To Named.Count - 1
-        Co = CSS(Keys(i))
-        frmChat.AddChat Co, StringFormat("{0}{2}{2}({1})", Keys(i), Co, vbTab)
+        Co = CSS(keys(i))
+        frmChat.AddChat Co, StringFormat("{0}{2}{2}({1})", keys(i), Co, vbTab)
         DoEvents
     Next i
 
@@ -650,8 +650,20 @@ End Property
 Public Property Get ChannelListBack() As Long
     ChannelListBack = FormColors.ChannelListBack
 End Property
-Public Property Get ChannelListText() As Long
+Public Property Get ChannelListNormal() As Long
     ChannelListText = FormColors.ChannelListText
+End Property
+Public Property Get ChannelListSelf() As Long
+    ChannelListText = FormColors.ChannelListSelf
+End Property
+Public Property Get ChannelListIdle() As Long
+    ChannelListText = FormColors.ChannelListIdle
+End Property
+Public Property Get ChannelListSquelched() As Long
+    ChannelListText = FormColors.ChannelListSquelched
+End Property
+Public Property Get ChannelListOps() As Long
+    ChannelListText = FormColors.ChannelListOps
 End Property
 Public Property Get RTBBack() As Long
     RTBBack = FormColors.RTBBack

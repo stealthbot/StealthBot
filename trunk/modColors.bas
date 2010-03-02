@@ -4,6 +4,10 @@ Option Explicit
 Public Type udtColorList
     ChannelListBack As Long
     ChannelListText As Long
+    ChannelListSelf As Long
+    ChannelListIdle As Long
+    ChannelListSquelched As Long
+    ChannelListOps As Long
     SendBoxesBack As Long
     SendBoxesText As Long
     ChannelLabelBack As Long
@@ -41,6 +45,10 @@ Public Sub SetFormColors()
     With FormColors
         frmChat.lvChannel.BackColor = .ChannelListBack
         frmChat.lvChannel.ForeColor = .ChannelListText
+        frmChat.lvFriendList.BackColor = .ChannelListBack
+        frmChat.lvFriendList.ForeColor = .ChannelListText
+        frmChat.lvClanList.BackColor = .ChannelListBack
+        frmChat.lvClanList.ForeColor = .ChannelListText
         frmChat.lblCurrentChannel.ForeColor = .ChannelLabelText
         frmChat.lblCurrentChannel.BackColor = .ChannelLabelBack
         frmChat.txtPost.ForeColor = .SendBoxesText
@@ -65,6 +73,10 @@ Public Sub GetColorLists(Optional sPath As String)
         .ChannelLabelText = -1
         .ChannelListBack = -1
         .ChannelListText = -1
+        .ChannelListSelf = -1
+        .ChannelListIdle = -1
+        .ChannelListSquelched = -1
+        .ChannelListOps = -1
         .RTBBack = -1
         .SendBoxesBack = -1
         .SendBoxesText = -1
@@ -95,41 +107,61 @@ Public Sub GetColorLists(Optional sPath As String)
     
     
     'Attempt to read
-    If LenB(Dir(sPath)) > 0 Then
+    If LenB(Dir$(sPath)) > 0 Then
         Open sPath For Random As #f Len = 4
+        
+        Dim SCLFVer As Integer
+        Dim i As Integer
+        
+        ' old size = 112
+        ' new size = 128
+        ' added four listview color settings ~Ribose/2010-03-01
+        If LOF(f) = 112 Then
+            SCLFVer = 1
+        Else
+            SCLFVer = 2
+        End If
+        
+        i = 1
         
         If LOF(f) > 1 Then
             With FormColors
-                Get #f, 1, .ChannelLabelBack
-                Get #f, 2, .ChannelLabelText
-                Get #f, 3, .ChannelListBack
-                Get #f, 4, .ChannelListText
-                Get #f, 5, .RTBBack
-                Get #f, 6, .SendBoxesBack
-                Get #f, 7, .SendBoxesText
+                .ChannelLabelBack = DoGet(f, i)
+                .ChannelLabelText = DoGet(f, i)
+                .ChannelListBack = DoGet(f, i)
+                .ChannelListText = DoGet(f, i)
+                If SCLFVer = 2 Then
+                    .ChannelListSelf = DoGet(f, i)
+                    .ChannelListIdle = DoGet(f, i)
+                    .ChannelListSquelched = DoGet(f, i)
+                    .ChannelListOps = DoGet(f, i)
+                End If
+                .RTBBack = DoGet(f, i)
+                .SendBoxesBack = DoGet(f, i)
+                .SendBoxesText = DoGet(f, i)
             End With
             
             With RTBColors
-                Get #f, 8, .TalkBotUsername
-                Get #f, 9, .TalkUsernameNormal
-                Get #f, 10, .TalkUsernameOp
-                Get #f, 11, .TalkNormalText
-                Get #f, 12, .Carats
-                Get #f, 13, .EmoteText
-                Get #f, 14, .EmoteUsernames
-                Get #f, 15, .InformationText
-                Get #f, 16, .SuccessText
-                Get #f, 17, .ErrorMessageText
-                Get #f, 18, .TimeStamps
-                Get #f, 19, .ServerInfoText
-                Get #f, 20, .ConsoleText
-                Get #f, 21, .JoinText
-                Get #f, 22, .JoinUsername
-                Get #f, 23, .JoinedChannelName
-                Get #f, 24, .JoinedChannelText
-                Get #f, 25, .WhisperCarats
-                Get #f, 26, .WhisperText
-                Get #f, 27, .WhisperUsernames
+                .TalkBotUsername = DoGet(f, i)
+                .TalkUsernameNormal = DoGet(f, i)
+                .TalkUsernameOp = DoGet(f, i)
+                .TalkNormalText = DoGet(f, i)
+                .Carats = DoGet(f, i)
+                .EmoteText = DoGet(f, i)
+                .EmoteUsernames = DoGet(f, i)
+                .InformationText = DoGet(f, i)
+                .SuccessText = DoGet(f, i)
+                .ErrorMessageText = DoGet(f, i)
+                .TimeStamps = DoGet(f, i)
+                .ServerInfoText = DoGet(f, i)
+                .ConsoleText = DoGet(f, i)
+                .JoinText = DoGet(f, i)
+                .JoinUsername = DoGet(f, i)
+                .JoinedChannelName = DoGet(f, i)
+                .JoinedChannelText = DoGet(f, i)
+                .WhisperCarats = DoGet(f, i)
+                .WhisperText = DoGet(f, i)
+                .WhisperUsernames = DoGet(f, i)
             End With
         End If
         Close #f
@@ -140,6 +172,10 @@ Public Sub GetColorLists(Optional sPath As String)
         If .ChannelLabelText = -1 Then .ChannelLabelText = vbWhite
         If .ChannelListBack = -1 Then .ChannelListBack = vbBlack
         If .ChannelListText = -1 Then .ChannelListText = COLOR_TEAL
+        If .ChannelListSelf = -1 Then .ChannelListSelf = vbWhite
+        If .ChannelListIdle = -1 Then .ChannelListIdle = &HBBBBBB
+        If .ChannelListSquelched = -1 Then .ChannelListSquelched = &H99
+        If .ChannelListOps = -1 Then .ChannelListOps = &HDDDDDD
         If .RTBBack = -1 Then .RTBBack = vbBlack
         If .SendBoxesBack = -1 Then .SendBoxesBack = vbBlack
         If .SendBoxesText = -1 Then .SendBoxesText = vbWhite
@@ -170,3 +206,14 @@ Public Sub GetColorLists(Optional sPath As String)
     
     Call SetFormColors
 End Sub
+
+' calls Get from the file at the specified position, and increases the position
+Private Function DoGet(ByVal f As Integer, ByRef i As Integer) As Long
+    Dim l As Long
+    
+    Get #f, i, l
+    
+    DoGet = l
+    
+    i = i + 1
+End Function

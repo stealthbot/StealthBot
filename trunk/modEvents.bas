@@ -109,7 +109,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                 .Statstring = Message
                 .Stats.Statstring = Message
                 .Clan = .Stats.Clan
-                .game = Product
+                .Game = Product
             End With
         End If
     End If
@@ -299,14 +299,14 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     ' have we just joined the void?
     If (g_Channel.IsSilent) Then
-        ' lets inform user of potential lag issues while in this channel
-        frmChat.AddChat RTBColors.InformationText, "If you experience a lot of lag while within " & _
-                "this channel, try selecting 'Disable Silent Channel View' from the Window menu."
-        
         ' if we've joined the void, lets try to grab the list of
         ' users within the channel by attempting to force a user
         ' update message using Battle.net's unignore command.
         If (frmChat.mnuDisableVoidView.Checked = False) Then
+            ' lets inform user of potential lag issues while in this channel
+            frmChat.AddChat RTBColors.InformationText, "If you experience a lot of lag while within " & _
+                    "this channel, try selecting 'Disable Silent Channel View' from the Window menu."
+            
             ' ...
             frmChat.tmrSilentChannel(1).Enabled = True
         
@@ -551,14 +551,6 @@ On Error GoTo ERROR_HANDLER:
     
     CurrentUsername = KillNull(Username)
     
-    If (StrComp(Stats.game, "D2DV", vbBinaryCompare)) = 0 Or (StrComp(Stats.game, "D2XP", vbBinaryCompare)) = 0 Then
-        If (LenB(Stats.CharacterName) > 0) Then
-            CurrentUsername = Stats.CharacterName & "*" & CurrentUsername
-        End If
-    End If
-    
-    Set Stats = Nothing
-    
     'RequestSystemKeys
     
     Call SetNagelStatus(frmChat.sckBNet.SocketHandle, True)
@@ -568,8 +560,17 @@ On Error GoTo ERROR_HANDLER:
     If (StrComp(Left$(CurrentUsername, 2), "w#", vbTextCompare) = 0) Then
         CurrentUsername = Mid(CurrentUsername, 3)
     End If
+    
+    ' if D2 and on a char, we need to tell the whole world this so that Self is known later on
+    If (StrComp(Stats.Game, "D2DV", vbBinaryCompare)) = 0 Or (StrComp(Stats.Game, "D2XP", vbBinaryCompare)) = 0 Then
+        If (LenB(Stats.CharacterName) > 0) Then
+            CurrentUsername = Stats.CharacterName & "*" & CurrentUsername
+        End If
+    End If
+    
+    Set Stats = Nothing
 
-    SharedScriptSupport.myUsername = CurrentUsername
+    SharedScriptSupport.myUsername = GetCurrentUsername
     
     With frmChat
         .InitListviewTabs
@@ -1193,7 +1194,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     With UserObj
         .Name = Username
         .Flags = Flags
-        .game = Product
+        .Game = Product
         .Ping = Ping
         .JoinTime = g_Channel.JoinTime
         .Clan = sClan
@@ -1259,17 +1260,39 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 ' ...
                 Set found = frmChat.lvChannel.ListItems(pos)
                 
-                ' ...
+                ' if the update occured to a D2 user ...
+                If ((StrComp(UserObj.Game, "D2DV") = 0) Or (StrComp(UserObj.Game, "D2XP") = 0)) Then
+                    ' the username could have changed!
+                    If (StrComp(UserObj.DisplayName, found.Text, vbBinaryCompare) <> 0) Then
+                        ' it did, so update user name text in channel list
+                        found.Text = UserObj.DisplayName
+                        
+                        ' now check if this is Self
+                        If (StrComp(UserObj.Name, CleanUsername(CurrentUsername), vbBinaryCompare) = 0) Then
+                            ' it is! we have to do some magic to tell SB we have a new name
+                            CurrentUsername = UserObj.Stats.CharacterName & "*" & CleanUsername(CurrentUsername)
+                            
+                            ' tell scripting
+                            SharedScriptSupport.myUsername = GetCurrentUsername
+                            
+                            ' set form title
+                            SetTitle GetCurrentUsername & ", online in channel " & _
+                                    g_Channel.Name
+                            
+                            ' tell tray icon
+                            Call frmChat.UpdateTrayTooltip
+                        End If
+                    End If
+                End If
+                
+                ' if we are showing stats icons ...
                 If (BotVars.ShowStatsIcons) Then
-                    ' ...
+                    ' ... and the icon code is valid
                     If (UserObj.Stats.IconCode <> -1) Then
-                        ' ...
-                        If ((UserObj.game = "WAR3") Or (UserObj.game = "W3XP")) Then
-                            ' if the icon in the list is not the icon found by stats, update
-                            NewIcon = GetSmallIcon(UserObj.game, UserObj.Flags, UserObj.Stats.IconCode)
-                            If (found.SmallIcon <> NewIcon) Then
-                                found.SmallIcon = NewIcon
-                            End If
+                        ' if the icon in the list is not the icon found by stats, update
+                        NewIcon = GetSmallIcon(UserObj.Game, UserObj.Flags, UserObj.Stats.IconCode)
+                        If (found.SmallIcon <> NewIcon) Then
+                            found.SmallIcon = NewIcon
                         End If
                     End If
                 End If
@@ -1370,7 +1393,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                 .Name = Username
                 .Flags = Flags
                 .Ping = Ping
-                .game = Product
+                .Game = Product
                 .JoinTime = UtcNow
                 .Clan = sClan
                 .Statstring = originalstatstring
@@ -2285,8 +2308,6 @@ On Error GoTo ERROR_HANDLER:
     
         ' ...
         If (pos > 0) Then
-            tmp = Mid$(tmp, pos + 1)
-            
             ' ...
             If (Right$(tmp, 1) = ")") Then
                 ' fixed so that usernames actually ending in
@@ -2300,6 +2321,9 @@ On Error GoTo ERROR_HANDLER:
                     End If
                 End If
             End If
+            
+            ' ...
+            tmp = Mid$(tmp, pos + 1)
         End If
     End If
     

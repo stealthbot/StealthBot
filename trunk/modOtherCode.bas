@@ -908,7 +908,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             ' ...
                             For j = 1 To g_Channel.Users.Count
                                 If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
-                                    If (StrComp(dynGroups(i).Username, g_Channel.Users(j).game, vbTextCompare) = 0) Then
+                                    If (StrComp(dynGroups(i).Username, g_Channel.Users(j).Game, vbTextCompare) = 0) Then
                                         ' ...
                                         doCheck = True
                                     End If
@@ -2128,7 +2128,7 @@ Public Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal 
     '/* Self */
     If (IsSelf) Then
         'Debug.Print "Assigned color IsSelf"
-        GetNameColor = vbWhite
+        GetNameColor = FormColors.ChannelListSelf
         
         Exit Function
     End If
@@ -2136,7 +2136,7 @@ Public Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal 
     '/* Squelched */
     If ((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
         'Debug.Print "Assigned color SQUELCH"
-        GetNameColor = &H99
+        GetNameColor = FormColors.ChannelListSquelched
         
         Exit Function
     End If
@@ -2153,20 +2153,20 @@ Public Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal 
     '/* Operator */
     If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
         'Debug.Print "Assigned color OP"
-        GetNameColor = &HDDDDDD
+        GetNameColor = FormColors.ChannelListOps
         Exit Function
     End If
     
     '/* Idle */
     If (IdleTime > BotVars.SecondsToIdle) Then
         'Debug.Print "Assigned color IDLE"
-        GetNameColor = &HBBBBBB
+        GetNameColor = FormColors.ChannelListIdle
         Exit Function
     End If
     
     '/* Default */
     'Debug.Print "Assigned color NORMAL"
-    GetNameColor = COLOR_TEAL
+    GetNameColor = FormColors.ChannelListText
 End Function
 
 Public Function FlagDescription(ByVal Flags As Long) As String
@@ -2990,7 +2990,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
    
     Dim arr()          As Variant
     Dim s              As String
-    Dim L              As Long
+    Dim l              As Long
     Dim lngVerticalPos As Long
     Dim Diff           As Long
     Dim i              As Long
@@ -3120,18 +3120,18 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         
             If ((StrictIsNumeric(saElements(i + 1))) And (Len(saElements(i + 2)) > 0)) Then
-                L = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
+                l = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
                 
-                While (L > 0)
-                    Mid$(saElements(i + 2), L + 1, 1) = "/"
+                While (l > 0)
+                    Mid$(saElements(i + 2), l + 1, 1) = "/"
                     
-                    L = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
+                    l = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
                 Wend
             
-                L = Len(rtb.Text)
+                l = Len(rtb.Text)
             
                 With rtb
-                    .selStart = L
+                    .selStart = l
                     .selLength = 0
                     .SelFontName = saElements(i)
                     .SelColor = saElements(i + 1)
@@ -3154,7 +3154,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         End If
 
-        ColorModify rtb, L
+        ColorModify rtb, l
 
         If (blUnlock) Then
             SendMessage rtb.hWnd, WM_VSCROLL, _
