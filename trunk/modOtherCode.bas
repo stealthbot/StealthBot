@@ -1272,7 +1272,9 @@ End Function
 Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long, IconCode As Integer) As Long
     Dim i As Long
     
-    If ((Flags And USER_BLIZZREP) = USER_BLIZZREP) Then 'Flags = 1: blizzard rep
+    If (BotVars.ShowFlagsIcons = False) Then
+        i = IconCode ' disable any of the below flags-based icons
+    ElseIf ((Flags And USER_BLIZZREP) = USER_BLIZZREP) Then 'Flags = 1: blizzard rep
         i = ICBLIZZ
     ElseIf ((Flags And USER_SYSOP) = USER_SYSOP) Then 'Flags = 8: battle.net sysop
         i = ICSYSOP
@@ -2990,7 +2992,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
    
     Dim arr()          As Variant
     Dim s              As String
-    Dim l              As Long
+    Dim L              As Long
     Dim lngVerticalPos As Long
     Dim Diff           As Long
     Dim i              As Long
@@ -3120,18 +3122,18 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         
             If ((StrictIsNumeric(saElements(i + 1))) And (Len(saElements(i + 2)) > 0)) Then
-                l = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
+                L = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
                 
-                While (l > 0)
-                    Mid$(saElements(i + 2), l + 1, 1) = "/"
+                While (L > 0)
+                    Mid$(saElements(i + 2), L + 1, 1) = "/"
                     
-                    l = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
+                    L = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
                 Wend
             
-                l = Len(rtb.Text)
+                L = Len(rtb.Text)
             
                 With rtb
-                    .selStart = l
+                    .selStart = L
                     .selLength = 0
                     .SelFontName = saElements(i)
                     .SelColor = saElements(i + 1)
@@ -3154,7 +3156,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         End If
 
-        ColorModify rtb, l
+        ColorModify rtb, L
 
         If (blUnlock) Then
             SendMessage rtb.hWnd, WM_VSCROLL, _

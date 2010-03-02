@@ -97,6 +97,7 @@ Private m_safelist_group                As String
 Private m_tagbans_group                 As String
 Private m_autocomplete_postfix          As String
 Private m_show_stats_icons              As Boolean
+Private m_show_flags_icons              As Boolean
 Private m_retain_old_bans               As Boolean
 Private m_store_all_bans                As Boolean
 Private m_use_alt_bnls                  As Boolean
@@ -1063,6 +1064,21 @@ Public Property Get ShowStatsIcons() As Boolean
 
     ' ...
     ShowStatsIcons = m_show_stats_icons
+
+End Property
+
+
+Public Property Let ShowFlagsIcons(bln As Boolean)
+
+    ' ...
+    m_show_flags_icons = bln
+
+End Property
+
+Public Property Get ShowFlagsIcons() As Boolean
+
+    ' ...
+    ShowFlagsIcons = m_show_flags_icons
 
 End Property
 

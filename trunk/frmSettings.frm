@@ -20,9 +20,555 @@ Begin VB.Form frmSettings
       BackColor       =   &H00000000&
       ForeColor       =   &H00FFFFFF&
       Height          =   4815
+      Index           =   7
+      Left            =   3000
+      TabIndex        =   119
+      Top             =   0
+      Width           =   6615
+      Begin VB.CheckBox chkShowUserFlagsIcons 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Show user flag-based icons"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   48
+         Top             =   4440
+         Value           =   1  'Checked
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkD2Naming 
+         BackColor       =   &H00000000&
+         Caption         =   "Use Diablo II naming conventions"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   3480
+         TabIndex        =   59
+         ToolTipText     =   "Show usernames with Diablo II naming conventions."
+         Top             =   4080
+         Width           =   2895
+      End
+      Begin VB.OptionButton optNaming 
+         BackColor       =   &H00000000&
+         Caption         =   "Show all"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   3
+         Left            =   4800
+         Style           =   1  'Graphical
+         TabIndex        =   58
+         ToolTipText     =   "Show usernames with all gateways."
+         Top             =   3720
+         Width           =   1215
+      End
+      Begin VB.OptionButton optNaming 
+         BackColor       =   &H00000000&
+         Caption         =   "WarCraft III"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   2
+         Left            =   3480
+         Style           =   1  'Graphical
+         TabIndex        =   57
+         ToolTipText     =   "Show usernames as they would appear to a WarCraft III user."
+         Top             =   3720
+         Width           =   1215
+      End
+      Begin VB.OptionButton optNaming 
+         BackColor       =   &H00000000&
+         Caption         =   "Legacy"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   1
+         Left            =   4800
+         Style           =   1  'Graphical
+         TabIndex        =   56
+         ToolTipText     =   "Show usernames as they would appear to a StarCraft or WarCraft II user."
+         Top             =   3360
+         Width           =   1215
+      End
+      Begin VB.OptionButton optNaming 
+         BackColor       =   &H00000000&
+         Caption         =   "Default"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   0
+         Left            =   3480
+         Style           =   1  'Graphical
+         TabIndex        =   55
+         ToolTipText     =   "Show usernames as they would appear to the selected client."
+         Top             =   3360
+         Value           =   -1  'True
+         Width           =   1215
+      End
+      Begin VB.CheckBox chkShowUserGameStatsIcons 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Show user game stats icons"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   375
+         Left            =   360
+         TabIndex        =   47
+         Top             =   4035
+         Value           =   1  'Checked
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkDisableSuffix 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Disable suffix box"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   43
+         ToolTipText     =   "Disables the smaller suffix box to the right of the box you type in to send text to Battle.net"
+         Top             =   2640
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkDisablePrefix 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Disable prefix box"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   42
+         ToolTipText     =   "Disables the smaller prefix box to the left of the box you type in to send text to Battle.net"
+         Top             =   2280
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkLogAllCommands 
+         BackColor       =   &H00000000&
+         Caption         =   "Log all commands"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   3480
+         TabIndex        =   52
+         ToolTipText     =   "Any commands issued to the bot will be logged in a file in the bot's Logs folder called 'commandlog.txt'."
+         Top             =   1890
+         Width           =   2295
+      End
+      Begin VB.CheckBox chkLogDBActions 
+         BackColor       =   &H00000000&
+         Caption         =   "Log database changes"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   3480
+         TabIndex        =   51
+         ToolTipText     =   "Any actions that change the database will be logged in the log folder in a file called 'database.txt'."
+         Top             =   1560
+         Width           =   2295
+      End
+      Begin VB.CheckBox chkShowOffline 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Show offline friends"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   45
+         ToolTipText     =   "Determines whether or not offline friends are hidden from /f list"
+         Top             =   3360
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkURLDetect 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Enable URL detection"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   44
+         ToolTipText     =   "Enables automatic URL detection and highlighting in the main chat window."
+         Top             =   3000
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkDoNotUsePacketFList 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Do not use 0x65 internal friends' list"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   375
+         Left            =   360
+         TabIndex        =   46
+         ToolTipText     =   "Disable the internal friends' list (alternative channel list)"
+         Top             =   3675
+         Width           =   2535
+      End
+      Begin VB.TextBox txtBackupChan 
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   3480
+         MaxLength       =   25
+         TabIndex        =   54
+         Top             =   2775
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkMinimizeOnStartup 
+         BackColor       =   &H00000000&
+         Caption         =   "Minimize on startup"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   3480
+         TabIndex        =   50
+         ToolTipText     =   "Automatically minimize on startup."
+         Top             =   1200
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkConnectOnStartup 
+         BackColor       =   &H00000000&
+         Caption         =   "Connect on startup"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   3480
+         TabIndex        =   49
+         ToolTipText     =   "Automatically connect when the bot starts up."
+         Top             =   840
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkAllowMP3 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Allow MP3 commands"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   38
+         ToolTipText     =   "Allow commands such as .next and .back that change your current Winamp song."
+         Top             =   840
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkWhisperCmds 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Whisper command responses"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   40
+         ToolTipText     =   "Whisper the return messages of all bot commands."
+         Top             =   1560
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkPAmp 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Use ProfileAmp"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   39
+         ToolTipText     =   "Enable/disable ProfileAmp - writes Winamp's currently played song to your profile every 30 seconds"
+         Top             =   1200
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkMail 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Check users' mail"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   41
+         ToolTipText     =   "Enable/disable checking of the mail.ini file when people join."
+         Top             =   1920
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkBackup 
+         BackColor       =   &H00000000&
+         Caption         =   "Join a backup channel when kicked"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   375
+         Left            =   3480
+         TabIndex        =   53
+         ToolTipText     =   "The bot will join a specified channel when kicked, instead of rejoining."
+         Top             =   2160
+         Width           =   2895
+      End
+      Begin VB.Label Label8 
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "Gateway naming convention:"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   195
+         Index           =   6
+         Left            =   3480
+         TabIndex        =   196
+         Top             =   3120
+         Width           =   2100
+      End
+      Begin VB.Label Label8 
+         BackColor       =   &H00000000&
+         Caption         =   "Backup channel:"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   10
+         Left            =   3480
+         TabIndex        =   185
+         Top             =   2550
+         Width           =   2415
+      End
+      Begin VB.Line Line1 
+         BorderColor     =   &H00FFFFFF&
+         Index           =   9
+         X1              =   3120
+         X2              =   3120
+         Y1              =   840
+         Y2              =   4560
+      End
+      Begin VB.Line Line1 
+         BorderColor     =   &H00FFFFFF&
+         Index           =   8
+         X1              =   360
+         X2              =   6240
+         Y1              =   600
+         Y2              =   600
+      End
+      Begin VB.Label Label1 
+         BackColor       =   &H00000000&
+         Caption         =   "Miscellaneous general settings"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   375
+         Index           =   18
+         Left            =   360
+         TabIndex        =   181
+         Top             =   240
+         Width           =   4815
+      End
+   End
+   Begin VB.Frame fraPanel 
+      BackColor       =   &H00000000&
+      ForeColor       =   &H00FFFFFF&
+      Height          =   4815
       Index           =   0
       Left            =   3000
-      TabIndex        =   111
+      TabIndex        =   112
       Top             =   0
       Width           =   6615
       Begin VB.TextBox txtOwner 
@@ -377,7 +923,7 @@ Begin VB.Form frmSettings
          Height          =   495
          Index           =   19
          Left            =   240
-         TabIndex        =   191
+         TabIndex        =   192
          Top             =   3840
          Width           =   615
       End
@@ -396,7 +942,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   840
-         TabIndex        =   186
+         TabIndex        =   187
          Top             =   2040
          Width           =   1095
       End
@@ -416,7 +962,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   1920
-         TabIndex        =   185
+         TabIndex        =   186
          Top             =   2040
          Width           =   855
       End
@@ -436,7 +982,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   10
          Left            =   4800
-         TabIndex        =   136
+         TabIndex        =   137
          Top             =   2160
          Width           =   735
       End
@@ -487,7 +1033,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   9
          Left            =   3240
-         TabIndex        =   135
+         TabIndex        =   136
          Top             =   2040
          Width           =   615
       End
@@ -515,7 +1061,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   8
          Left            =   3240
-         TabIndex        =   133
+         TabIndex        =   134
          Top             =   1560
          Width           =   735
       End
@@ -535,7 +1081,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   6
          Left            =   3240
-         TabIndex        =   132
+         TabIndex        =   133
          Top             =   840
          Width           =   495
       End
@@ -555,7 +1101,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   4
          Left            =   240
-         TabIndex        =   131
+         TabIndex        =   132
          Top             =   840
          Width           =   735
       End
@@ -575,7 +1121,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   1
          Left            =   240
-         TabIndex        =   130
+         TabIndex        =   131
          Top             =   1440
          Width           =   735
       End
@@ -595,7 +1141,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   2
          Left            =   240
-         TabIndex        =   129
+         TabIndex        =   130
          Top             =   2040
          Width           =   495
       End
@@ -615,7 +1161,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   3
          Left            =   240
-         TabIndex        =   128
+         TabIndex        =   129
          Top             =   3240
          Width           =   1095
       End
@@ -635,7 +1181,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   5
          Left            =   240
-         TabIndex        =   127
+         TabIndex        =   128
          Top             =   2640
          Width           =   1335
       End
@@ -655,209 +1201,22 @@ Begin VB.Form frmSettings
          Height          =   375
          Index           =   7
          Left            =   360
-         TabIndex        =   134
+         TabIndex        =   135
          Top             =   240
          Width           =   4815
       End
    End
-   Begin VB.ComboBox cboProfile 
-      Appearance      =   0  'Flat
-      BackColor       =   &H00993300&
-      Enabled         =   0   'False
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   315
-      Left            =   120
-      TabIndex        =   190
-      Text            =   "Profile Selector"
-      Top             =   120
-      Width           =   2775
-   End
-   Begin VB.CommandButton cmdWebsite 
-      Caption         =   "&Website"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   255
-      Left            =   3840
-      TabIndex        =   123
-      Top             =   4920
-      Width           =   855
-   End
-   Begin VB.CommandButton cmdReadme 
-      Caption         =   "&Readme"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   255
-      Left            =   3000
-      TabIndex        =   122
-      Top             =   4920
-      Width           =   855
-   End
-   Begin VB.CommandButton cmdStepByStep 
-      Caption         =   "&Step-By-Step Configuration"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   255
-      Left            =   4800
-      TabIndex        =   124
-      Top             =   4920
-      Width           =   2535
-   End
-   Begin VB.CommandButton cmdSave 
-      Caption         =   "Apply and Cl&ose"
-      Default         =   -1  'True
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   255
-      Left            =   8280
-      TabIndex        =   125
-      Top             =   4920
-      Width           =   1335
-   End
-   Begin VB.CommandButton cmdCancel 
-      Cancel          =   -1  'True
-      Caption         =   "&Cancel"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   255
-      Left            =   7440
-      TabIndex        =   126
-      Top             =   4920
-      Width           =   855
-   End
-   Begin vbalTreeViewLib6.vbalTreeView tvw 
-      Height          =   4620
-      Left            =   120
-      TabIndex        =   0
-      Top             =   555
-      Width           =   2775
-      _ExtentX        =   4895
-      _ExtentY        =   8149
-      BackColor       =   10040064
-      ForeColor       =   16777215
-      Style           =   2
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Tahoma"
-         Size            =   9.75
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-   End
    Begin VB.Frame fraPanel 
       BackColor       =   &H00000000&
       ForeColor       =   &H00FFFFFF&
       Height          =   4815
-      Index           =   8
+      Index           =   1
       Left            =   3000
-      TabIndex        =   119
+      TabIndex        =   113
       Top             =   0
       Width           =   6615
-      Begin VB.Label lblSplash 
-         BackColor       =   &H00000000&
-         Caption         =   "Splash message container label."
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   11.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   3135
-         Left            =   360
-         TabIndex        =   121
-         Top             =   960
-         Width           =   6015
-      End
-      Begin VB.Line Line1 
-         BorderColor     =   &H00FFFFFF&
-         Index           =   0
-         X1              =   360
-         X2              =   6240
-         Y1              =   720
-         Y2              =   720
-      End
-      Begin VB.Label Label1 
-         BackColor       =   &H00000000&
-         Caption         =   "Welcome to &StealthBot"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   14.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   375
-         Index           =   0
-         Left            =   360
-         TabIndex        =   120
-         Top             =   240
-         Width           =   3255
-      End
-   End
-   Begin VB.Frame fraPanel 
-      BackColor       =   &H00000000&
-      ForeColor       =   &H00FFFFFF&
-      Height          =   4815
-      Index           =   7
-      Left            =   3000
-      TabIndex        =   118
-      Top             =   0
-      Width           =   6615
-      Begin VB.CheckBox chkD2Naming 
-         BackColor       =   &H00000000&
-         Caption         =   "Use Diablo II naming conventions"
+      Begin VB.ComboBox cboBNLSServer 
+         BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -868,16 +1227,18 @@ Begin VB.Form frmSettings
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   3480
-         TabIndex        =   58
-         ToolTipText     =   "Show usernames with Diablo II naming conventions."
-         Top             =   4080
-         Width           =   2895
+         Height          =   315
+         ItemData        =   "frmSettings.frx":0000
+         Left            =   2760
+         List            =   "frmSettings.frx":0002
+         TabIndex        =   61
+         Text            =   "cboBNLSServer"
+         Top             =   1200
+         Width           =   3495
       End
-      Begin VB.OptionButton optNaming 
-         BackColor       =   &H00000000&
-         Caption         =   "Show all"
+      Begin VB.TextBox txtReconDelay 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -888,62 +1249,17 @@ Begin VB.Form frmSettings
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   3
-         Left            =   4800
-         Style           =   1  'Graphical
-         TabIndex        =   57
-         ToolTipText     =   "Show usernames with all gateways."
-         Top             =   3720
-         Width           =   1215
-      End
-      Begin VB.OptionButton optNaming 
-         BackColor       =   &H00000000&
-         Caption         =   "WarCraft III"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   2
-         Left            =   3480
-         Style           =   1  'Graphical
-         TabIndex        =   56
-         ToolTipText     =   "Show usernames as they would appear to a WarCraft III user."
-         Top             =   3720
-         Width           =   1215
-      End
-      Begin VB.OptionButton optNaming 
-         BackColor       =   &H00000000&
-         Caption         =   "Legacy"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   1
-         Left            =   4800
-         Style           =   1  'Graphical
-         TabIndex        =   55
-         ToolTipText     =   "Show usernames as they would appear to a StarCraft or WarCraft II user."
+         Height          =   285
+         Left            =   1680
+         MaxLength       =   15
+         TabIndex        =   64
+         Text            =   "1000"
          Top             =   3360
-         Width           =   1215
+         Width           =   855
       End
-      Begin VB.OptionButton optNaming 
+      Begin VB.OptionButton optSocks5 
          BackColor       =   &H00000000&
-         Caption         =   "Default"
+         Caption         =   "SOCKS5"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -955,876 +1271,15 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   0
-         Left            =   3480
+         Left            =   5400
          Style           =   1  'Graphical
-         TabIndex        =   54
-         ToolTipText     =   "Show usernames as they would appear to the selected client."
+         TabIndex        =   69
          Top             =   3360
-         Value           =   -1  'True
-         Width           =   1215
+         Width           =   855
       End
-      Begin VB.CheckBox chkShowUserGameStatsIcons 
-         Alignment       =   1  'Right Justify
+      Begin VB.OptionButton optSocks4 
          BackColor       =   &H00000000&
-         Caption         =   "Show user game stats icons"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   375
-         Left            =   360
-         TabIndex        =   47
-         Top             =   4035
-         Value           =   1  'Checked
-         Width           =   2535
-      End
-      Begin VB.CheckBox chkDisableSuffix 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00000000&
-         Caption         =   "Disable suffix box"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   43
-         ToolTipText     =   "Disables the smaller suffix box to the right of the box you type in to send text to Battle.net"
-         Top             =   2640
-         Width           =   2535
-      End
-      Begin VB.CheckBox chkDisablePrefix 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00000000&
-         Caption         =   "Disable prefix box"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   42
-         ToolTipText     =   "Disables the smaller prefix box to the left of the box you type in to send text to Battle.net"
-         Top             =   2280
-         Width           =   2535
-      End
-      Begin VB.CheckBox chkLogAllCommands 
-         BackColor       =   &H00000000&
-         Caption         =   "Log all commands"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   3480
-         TabIndex        =   51
-         ToolTipText     =   "Any commands issued to the bot will be logged in a file in the bot's Logs folder called 'commandlog.txt'."
-         Top             =   1890
-         Width           =   2295
-      End
-      Begin VB.CheckBox chkLogDBActions 
-         BackColor       =   &H00000000&
-         Caption         =   "Log database changes"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   3480
-         TabIndex        =   50
-         ToolTipText     =   "Any actions that change the database will be logged in the log folder in a file called 'database.txt'."
-         Top             =   1560
-         Width           =   2295
-      End
-      Begin VB.CheckBox chkShowOffline 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00000000&
-         Caption         =   "Show offline friends"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   45
-         ToolTipText     =   "Determines whether or not offline friends are hidden from /f list"
-         Top             =   3360
-         Width           =   2535
-      End
-      Begin VB.CheckBox chkURLDetect 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00000000&
-         Caption         =   "Enable URL detection"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   44
-         ToolTipText     =   "Enables automatic URL detection and highlighting in the main chat window."
-         Top             =   3000
-         Width           =   2535
-      End
-      Begin VB.CheckBox chkDoNotUsePacketFList 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00000000&
-         Caption         =   "Do not use 0x65 internal friends' list"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   375
-         Left            =   360
-         TabIndex        =   46
-         ToolTipText     =   "Disable the internal friends' list (alternative channel list)"
-         Top             =   3675
-         Width           =   2535
-      End
-      Begin VB.TextBox txtBackupChan 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   3480
-         MaxLength       =   25
-         TabIndex        =   53
-         Top             =   2775
-         Width           =   2535
-      End
-      Begin VB.CheckBox chkMinimizeOnStartup 
-         BackColor       =   &H00000000&
-         Caption         =   "Minimize on startup"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   3480
-         TabIndex        =   49
-         ToolTipText     =   "Automatically minimize on startup."
-         Top             =   1200
-         Width           =   2535
-      End
-      Begin VB.CheckBox chkConnectOnStartup 
-         BackColor       =   &H00000000&
-         Caption         =   "Connect on startup"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   3480
-         TabIndex        =   48
-         ToolTipText     =   "Automatically connect when the bot starts up."
-         Top             =   840
-         Width           =   2535
-      End
-      Begin VB.CheckBox chkAllowMP3 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00000000&
-         Caption         =   "Allow MP3 commands"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   38
-         ToolTipText     =   "Allow commands such as .next and .back that change your current Winamp song."
-         Top             =   840
-         Width           =   2535
-      End
-      Begin VB.CheckBox chkWhisperCmds 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00000000&
-         Caption         =   "Whisper command responses"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   40
-         ToolTipText     =   "Whisper the return messages of all bot commands."
-         Top             =   1560
-         Width           =   2535
-      End
-      Begin VB.CheckBox chkPAmp 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00000000&
-         Caption         =   "Use ProfileAmp"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   39
-         ToolTipText     =   "Enable/disable ProfileAmp - writes Winamp's currently played song to your profile every 30 seconds"
-         Top             =   1200
-         Width           =   2535
-      End
-      Begin VB.CheckBox chkMail 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00000000&
-         Caption         =   "Check users' mail"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   41
-         ToolTipText     =   "Enable/disable checking of the mail.ini file when people join."
-         Top             =   1920
-         Width           =   2535
-      End
-      Begin VB.CheckBox chkBackup 
-         BackColor       =   &H00000000&
-         Caption         =   "Join a backup channel when kicked"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   375
-         Left            =   3480
-         TabIndex        =   52
-         ToolTipText     =   "The bot will join a specified channel when kicked, instead of rejoining."
-         Top             =   2160
-         Width           =   2895
-      End
-      Begin VB.Label Label8 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Gateway naming convention:"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   195
-         Index           =   6
-         Left            =   3480
-         TabIndex        =   195
-         Top             =   3120
-         Width           =   2100
-      End
-      Begin VB.Label Label8 
-         BackColor       =   &H00000000&
-         Caption         =   "Backup channel:"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   10
-         Left            =   3480
-         TabIndex        =   184
-         Top             =   2550
-         Width           =   2415
-      End
-      Begin VB.Line Line1 
-         BorderColor     =   &H00FFFFFF&
-         Index           =   9
-         X1              =   3120
-         X2              =   3120
-         Y1              =   840
-         Y2              =   4560
-      End
-      Begin VB.Line Line1 
-         BorderColor     =   &H00FFFFFF&
-         Index           =   8
-         X1              =   360
-         X2              =   6240
-         Y1              =   600
-         Y2              =   600
-      End
-      Begin VB.Label Label1 
-         BackColor       =   &H00000000&
-         Caption         =   "Miscellaneous general settings"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   375
-         Index           =   18
-         Left            =   360
-         TabIndex        =   180
-         Top             =   240
-         Width           =   4815
-      End
-   End
-   Begin VB.Frame fraPanel 
-      BackColor       =   &H00000000&
-      ForeColor       =   &H00FFFFFF&
-      Height          =   4815
-      Index           =   6
-      Left            =   3000
-      TabIndex        =   117
-      Top             =   0
-      Width           =   6615
-      Begin VB.OptionButton optMsg 
-         BackColor       =   &H00000000&
-         Caption         =   "Message"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   5280
-         Style           =   1  'Graphical
-         TabIndex        =   72
-         Top             =   840
-         Value           =   -1  'True
-         Width           =   975
-      End
-      Begin VB.OptionButton optQuote 
-         BackColor       =   &H00000000&
-         Caption         =   "Quote"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   5280
-         Style           =   1  'Graphical
-         TabIndex        =   75
-         Top             =   1920
-         Width           =   975
-      End
-      Begin VB.OptionButton optUptime 
-         BackColor       =   &H00000000&
-         Caption         =   "Uptime"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   5280
-         Style           =   1  'Graphical
-         TabIndex        =   73
-         Top             =   1200
-         Width           =   975
-      End
-      Begin VB.OptionButton optMP3 
-         BackColor       =   &H00000000&
-         Caption         =   "MP3"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   5280
-         Style           =   1  'Graphical
-         TabIndex        =   74
-         Top             =   1560
-         Width           =   975
-      End
-      Begin VB.CheckBox chkIdles 
-         BackColor       =   &H00000000&
-         Caption         =   "Show anti-idle messages"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   70
-         Top             =   840
-         Width           =   2175
-      End
-      Begin VB.TextBox txtIdleMsg 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   360
-         TabIndex        =   76
-         Text            =   "/me is a %ver"
-         Top             =   1800
-         Width           =   4335
-      End
-      Begin VB.TextBox txtIdleWait 
-         Alignment       =   2  'Center
-         BackColor       =   &H00993300&
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   3000
-         TabIndex        =   71
-         Text            =   "6"
-         Top             =   1200
-         Width           =   495
-      End
-      Begin VB.Line Line5 
-         BorderColor     =   &H00FFFFFF&
-         Index           =   4
-         X1              =   3840
-         X2              =   5160
-         Y1              =   1080
-         Y2              =   1080
-      End
-      Begin VB.Line Line5 
-         BorderColor     =   &H00FFFFFF&
-         Index           =   3
-         X1              =   5040
-         X2              =   5280
-         Y1              =   2040
-         Y2              =   2040
-      End
-      Begin VB.Line Line5 
-         BorderColor     =   &H00FFFFFF&
-         Index           =   2
-         X1              =   5040
-         X2              =   5280
-         Y1              =   1680
-         Y2              =   1680
-      End
-      Begin VB.Line Line5 
-         BorderColor     =   &H00FFFFFF&
-         Index           =   1
-         X1              =   5040
-         X2              =   5280
-         Y1              =   1320
-         Y2              =   1320
-      End
-      Begin VB.Line Line5 
-         BorderColor     =   &H00FFFFFF&
-         Index           =   0
-         X1              =   5040
-         X2              =   5040
-         Y1              =   1080
-         Y2              =   2040
-      End
-      Begin VB.Label lblIdle 
-         BackColor       =   &H00000000&
-         Caption         =   "Idle message type"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   3
-         Left            =   3840
-         TabIndex        =   179
-         Top             =   840
-         Width           =   1455
-      End
-      Begin VB.Label lblIdle 
-         BackColor       =   &H00000000&
-         Caption         =   "Delay between messages (minutes)"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   0
-         Left            =   360
-         TabIndex        =   178
-         Top             =   1200
-         Width           =   3015
-      End
-      Begin VB.Label lblIdle 
-         BackColor       =   &H00000000&
-         Caption         =   "Idle message"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   1
-         Left            =   360
-         TabIndex        =   177
-         Top             =   1560
-         Width           =   1095
-      End
-      Begin VB.Line Line1 
-         BorderColor     =   &H00FFFFFF&
-         Index           =   7
-         X1              =   360
-         X2              =   6240
-         Y1              =   600
-         Y2              =   600
-      End
-      Begin VB.Label lblIdleVars 
-         BackColor       =   &H00000000&
-         Caption         =   "idle variable container label"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   1935
-         Left            =   360
-         TabIndex        =   175
-         Top             =   2280
-         Width           =   5895
-      End
-      Begin VB.Label Label1 
-         BackColor       =   &H00000000&
-         Caption         =   "Idle message settings"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   375
-         Index           =   17
-         Left            =   360
-         TabIndex        =   176
-         Top             =   240
-         Width           =   4815
-      End
-   End
-   Begin VB.Frame fraPanel 
-      BackColor       =   &H00000000&
-      ForeColor       =   &H00FFFFFF&
-      Height          =   4815
-      Index           =   5
-      Left            =   3000
-      TabIndex        =   116
-      Top             =   0
-      Width           =   6615
-      Begin VB.CheckBox chkWhisperGreet 
-         BackColor       =   &H00000000&
-         Caption         =   "Whisper the greet message"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   78
-         Top             =   1200
-         Width           =   2655
-      End
-      Begin VB.TextBox txtGreetMsg 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   360
-         MaxLength       =   200
-         TabIndex        =   79
-         Text            =   "Welcome to %c, %0! I am a %v."
-         Top             =   1800
-         Width           =   5895
-      End
-      Begin VB.CheckBox chkGreetMsg 
-         BackColor       =   &H00000000&
-         Caption         =   "Greet users who join the channel"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   77
-         Top             =   840
-         Width           =   3015
-      End
-      Begin VB.Label lblGreetVars 
-         BackColor       =   &H00000000&
-         Caption         =   "greet variable container label"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   1935
-         Left            =   360
-         TabIndex        =   174
-         Top             =   2280
-         Width           =   5895
-      End
-      Begin VB.Label lblIdle 
-         BackColor       =   &H00000000&
-         Caption         =   "Greet Message"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   2
-         Left            =   360
-         TabIndex        =   173
-         Top             =   1560
-         Width           =   1935
-      End
-      Begin VB.Line Line1 
-         BorderColor     =   &H00FFFFFF&
-         Index           =   6
-         X1              =   360
-         X2              =   6240
-         Y1              =   600
-         Y2              =   600
-      End
-      Begin VB.Label Label1 
-         BackColor       =   &H00000000&
-         Caption         =   "Greet message settings"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   375
-         Index           =   16
-         Left            =   360
-         TabIndex        =   172
-         Top             =   240
-         Width           =   4815
-      End
-   End
-   Begin VB.Frame fraPanel 
-      BackColor       =   &H00000000&
-      ForeColor       =   &H00FFFFFF&
-      Height          =   4815
-      Index           =   4
-      Left            =   3000
-      TabIndex        =   115
-      Top             =   0
-      Width           =   6615
-      Begin VB.CheckBox chkBanEvasion 
-         BackColor       =   &H00000000&
-         Caption         =   "Use Ban Evasion"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   86
-         ToolTipText     =   "Ban Evasion attempts to keep people who are banned out of your channel."
-         Top             =   2880
-         Width           =   2295
-      End
-      Begin VB.CheckBox chkIdleKick 
-         BackColor       =   &H00000000&
-         Caption         =   "Kick instead of ban"
+         Caption         =   "SOCKS4"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -1837,472 +1292,13 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   4440
-         TabIndex        =   89
-         ToolTipText     =   "Instead of banning idle users, the bot will simply kick them."
-         Top             =   720
-         Width           =   1815
-      End
-      Begin VB.CheckBox chkPeonbans 
-         BackColor       =   &H00000000&
-         Caption         =   "Ban Warcraft III Peons"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   3000
-         TabIndex        =   91
-         ToolTipText     =   "Ban Warcraft III users who have the Peon icon."
-         Top             =   1440
-         Width           =   2295
-      End
-      Begin VB.TextBox txtLevelBanMsg 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   3000
-         MaxLength       =   180
-         TabIndex        =   101
-         Text            =   "You are below the required level for entry."
-         Top             =   4180
-         Width           =   3375
-      End
-      Begin VB.CheckBox chkCBan 
-         BackColor       =   &H00000000&
-         Caption         =   "The Frozen Throne"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   5
-         Left            =   4560
-         TabIndex        =   98
-         Top             =   2520
-         Width           =   1695
-      End
-      Begin VB.CheckBox chkCBan 
-         BackColor       =   &H00000000&
-         Caption         =   "Lord of Destruction"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   3
-         Left            =   4560
-         TabIndex        =   97
-         Top             =   2280
-         Width           =   1695
-      End
-      Begin VB.CheckBox chkPhrasebans 
-         BackColor       =   &H00000000&
-         Caption         =   "Enable Phrasebanning"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   80
-         ToolTipText     =   "Ban unsafelisted users who state banned phrases."
-         Top             =   720
-         Width           =   1935
-      End
-      Begin VB.CheckBox chkIPBans 
-         BackColor       =   &H00000000&
-         Caption         =   "Enable IPBanning"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   81
-         ToolTipText     =   "Ban squelched users."
-         Top             =   1080
-         Width           =   1935
-      End
-      Begin VB.CheckBox chkCBan 
-         BackColor       =   &H00000000&
-         Caption         =   "Starcraft"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   0
-         Left            =   3000
-         TabIndex        =   92
-         Top             =   2040
-         Width           =   975
-      End
-      Begin VB.CheckBox chkCBan 
-         BackColor       =   &H00000000&
-         Caption         =   "Brood War"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   1
-         Left            =   4560
-         TabIndex        =   96
-         Top             =   2040
-         Width           =   1215
-      End
-      Begin VB.CheckBox chkCBan 
-         BackColor       =   &H00000000&
-         Caption         =   "Diablo II"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   2
-         Left            =   3000
-         TabIndex        =   93
-         Top             =   2280
-         Width           =   975
-      End
-      Begin VB.CheckBox chkCBan 
-         BackColor       =   &H00000000&
-         Caption         =   "Warcraft II BNE"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   6
-         Left            =   3000
-         TabIndex        =   95
-         Top             =   2760
-         Width           =   1455
-      End
-      Begin VB.CheckBox chkCBan 
-         BackColor       =   &H00000000&
-         Caption         =   "Warcraft III"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   4
-         Left            =   3000
-         TabIndex        =   94
-         Top             =   2520
-         Width           =   1335
-      End
-      Begin VB.CheckBox chkQuiet 
-         BackColor       =   &H00000000&
-         Caption         =   "Enable Quiet-Time"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   82
-         ToolTipText     =   "Ban unsafelisted users that talk."
-         Top             =   1440
-         Width           =   1935
-      End
-      Begin VB.TextBox txtProtectMsg 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   360
-         MaxLength       =   180
-         TabIndex        =   87
-         Text            =   "Lockdown Enabled"
-         Top             =   4180
-         Width           =   2535
-      End
-      Begin VB.CheckBox chkProtect 
-         BackColor       =   &H00000000&
-         Caption         =   "Enable Channel Protection"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   85
-         ToolTipText     =   "Ban unsafelisted users who join the channel."
-         Top             =   2520
-         Width           =   2295
-      End
-      Begin VB.CheckBox chkKOY 
-         BackColor       =   &H00000000&
-         Caption         =   "Enable Kick-On-Yell"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   83
-         ToolTipText     =   "Kick users who yell (uppercase message longer than 5 letters)"
-         Top             =   1800
-         Width           =   1935
-      End
-      Begin VB.TextBox txtBanW3 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   5400
-         MaxLength       =   25
-         TabIndex        =   100
-         Top             =   3480
-         Width           =   495
-      End
-      Begin VB.CheckBox chkPlugban 
-         BackColor       =   &H00000000&
-         Caption         =   "Enable PlugBans"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   84
-         ToolTipText     =   "Ban users with a UDP plug."
-         Top             =   2160
-         Width           =   1935
-      End
-      Begin VB.TextBox txtBanD2 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   3840
-         MaxLength       =   25
-         TabIndex        =   99
-         Top             =   3480
-         Width           =   495
-      End
-      Begin VB.CheckBox chkIdlebans 
-         BackColor       =   &H00000000&
-         Caption         =   "Ban idle users"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   3000
-         TabIndex        =   88
-         ToolTipText     =   "Ban users who have been idle for X seconds."
-         Top             =   720
-         Width           =   1455
-      End
-      Begin VB.TextBox txtIdleBanDelay 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   4560
-         MaxLength       =   25
-         TabIndex        =   90
-         Top             =   1080
-         Width           =   615
-      End
-      Begin VB.Label lblMod 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00000000&
-         Caption         =   "Levelban message"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   0
-         Left            =   3000
-         TabIndex        =   181
-         Top             =   3940
-         Width           =   1335
-      End
-      Begin VB.Label lblMod 
-         BackColor       =   &H00000000&
-         Caption         =   "Seconds before ban:"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   2
-         Left            =   3000
-         TabIndex        =   171
-         Top             =   1080
-         Width           =   1575
-      End
-      Begin VB.Label lblMod 
-         BackColor       =   &H00000000&
-         Caption         =   "Clientbans"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   615
-         Index           =   3
-         Left            =   3000
-         TabIndex        =   170
-         Top             =   1800
+         Style           =   1  'Graphical
+         TabIndex        =   68
+         Top             =   3360
          Width           =   855
       End
-      Begin VB.Label lblMod 
-         BackColor       =   &H00000000&
-         Caption         =   "Protection ban message"
+      Begin VB.TextBox txtProxyPort 
+         BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -2313,17 +1309,35 @@ Begin VB.Form frmSettings
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   5
-         Left            =   360
-         TabIndex        =   169
-         ToolTipText     =   "Shorter is better"
-         Top             =   3940
-         Width           =   1935
+         Height          =   285
+         Left            =   4440
+         MaxLength       =   5
+         TabIndex        =   67
+         Top             =   3000
+         Width           =   1815
       End
-      Begin VB.Label lblMod 
+      Begin VB.TextBox txtProxyIP 
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   4440
+         MaxLength       =   15
+         TabIndex        =   66
+         Top             =   2640
+         Width           =   1815
+      End
+      Begin VB.CheckBox chkUseProxies 
          BackColor       =   &H00000000&
-         Caption         =   "LevelBans: Set to 0 to disable."
+         Caption         =   "Use a proxy to connect"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -2335,110 +1349,33 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   1
          Left            =   3000
-         TabIndex        =   168
-         Top             =   3240
-         Width           =   2295
-      End
-      Begin VB.Label lblMod 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00000000&
-         Caption         =   "Diablo II"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   4
-         Left            =   3000
-         TabIndex        =   167
-         Top             =   3480
-         Width           =   735
-      End
-      Begin VB.Label lblMod 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00000000&
-         Caption         =   "Warcraft III"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   6
-         Left            =   4320
-         TabIndex        =   166
-         Top             =   3480
-         Width           =   975
-      End
-      Begin VB.Line Line1 
-         BorderColor     =   &H00FFFFFF&
-         Index           =   5
-         X1              =   360
-         X2              =   6240
-         Y1              =   600
-         Y2              =   600
-      End
-      Begin VB.Label Label1 
-         BackColor       =   &H00000000&
-         Caption         =   "General moderation settings"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   375
-         Index           =   15
-         Left            =   360
-         TabIndex        =   165
-         Top             =   240
-         Width           =   4815
-      End
-   End
-   Begin VB.Frame fraPanel 
-      BackColor       =   &H00000000&
-      ForeColor       =   &H00FFFFFF&
-      Height          =   4815
-      Index           =   3
-      Left            =   3000
-      TabIndex        =   114
-      Top             =   0
-      Width           =   6615
-      Begin VB.CommandButton cmdSaveColor 
-         Caption         =   "Sa&ve changes to this color"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   255
-         Left            =   4200
-         TabIndex        =   110
-         Top             =   2160
+         TabIndex        =   65
+         ToolTipText     =   "Routes your Battle.net and/or BNLS connection through a SOCKS4 or 5 proxy."
+         Top             =   2280
          Width           =   2055
       End
-      Begin VB.ComboBox cboColorList 
+      Begin VB.CheckBox chkUDP 
+         BackColor       =   &H00000000&
+         Caption         =   "Use Lag Plug"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   63
+         ToolTipText     =   "Sets whether or not you have a lag plug when you sign on. If you don't know what this is, leave it off."
+         Top             =   2880
+         Width           =   1455
+      End
+      Begin VB.ComboBox cboSpoof 
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
@@ -2453,224 +1390,11 @@ Begin VB.Form frmSettings
          Height          =   315
          Left            =   360
          Style           =   2  'Dropdown List
-         TabIndex        =   35
-         Top             =   1800
-         Width           =   5895
-      End
-      Begin VB.TextBox txtValue 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   360
-         TabIndex        =   36
+         TabIndex        =   62
          Top             =   2520
-         Width           =   1575
-      End
-      Begin VB.CommandButton cmdColorPicker 
-         Caption         =   "Color Picker"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   255
-         Left            =   360
-         TabIndex        =   37
-         Top             =   3000
-         Width           =   1575
-      End
-      Begin VB.TextBox txtR 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   600
-         TabIndex        =   102
-         Top             =   3360
-         Width           =   615
-      End
-      Begin VB.TextBox txtG 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   1560
-         TabIndex        =   103
-         Top             =   3360
-         Width           =   615
-      End
-      Begin VB.TextBox txtB 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   2520
-         TabIndex        =   104
-         Top             =   3360
-         Width           =   615
-      End
-      Begin VB.CommandButton cmdGetRGB 
-         Caption         =   "Generate New Value from RGB"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   255
-         Left            =   360
-         TabIndex        =   107
-         Top             =   3720
-         Width           =   2775
-      End
-      Begin VB.CommandButton cmdImport 
-         Caption         =   "&Import ColorList"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   255
-         Left            =   3240
-         TabIndex        =   108
-         Top             =   3720
-         Width           =   1455
-      End
-      Begin VB.CommandButton cmdDefaults 
-         Caption         =   "Restore &Default Colors"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   255
-         Left            =   4200
-         TabIndex        =   34
-         Top             =   1560
-         Width           =   2055
-      End
-      Begin VB.CommandButton cmdExport 
-         Caption         =   "&Export ColorList"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   255
-         Left            =   4800
-         TabIndex        =   109
-         Top             =   3720
-         Width           =   1455
-      End
-      Begin VB.TextBox txtHTML 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   3600
-         MaxLength       =   6
-         TabIndex        =   105
-         Top             =   3240
-         Width           =   1455
-      End
-      Begin VB.CommandButton cmdHTMLGen 
-         Caption         =   "Generate"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   255
-         Left            =   5160
-         TabIndex        =   106
-         Top             =   3240
-         Width           =   1095
-      End
-      Begin VB.TextBox txtChanFont 
-         Alignment       =   2  'Center
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   1920
-         TabIndex        =   32
-         Top             =   1200
          Width           =   2175
       End
-      Begin VB.TextBox txtChatFont 
-         Alignment       =   2  'Center
+      Begin VB.ComboBox cboConnMethod 
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
@@ -2682,127 +1406,16 @@ Begin VB.Form frmSettings
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00FFFFFF&
-         Height          =   285
+         Height          =   315
          Left            =   1920
-         TabIndex        =   30
+         Style           =   2  'Dropdown List
+         TabIndex        =   60
          Top             =   840
-         Width           =   2175
-      End
-      Begin VB.TextBox txtChanSize 
-         Alignment       =   2  'Center
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   4560
-         MaxLength       =   2
-         TabIndex        =   33
-         Top             =   1200
-         Width           =   615
-      End
-      Begin VB.TextBox txtChatSize 
-         Alignment       =   2  'Center
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   4560
-         MaxLength       =   2
-         TabIndex        =   31
-         Top             =   840
-         Width           =   615
-      End
-      Begin MSComDlg.CommonDialog cDLG 
-         Left            =   5400
-         Top             =   960
-         _ExtentX        =   847
-         _ExtentY        =   847
-         _Version        =   393216
-      End
-      Begin VB.Label lblCurrentValue 
-         BackColor       =   &H00000000&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   2040
-         TabIndex        =   164
-         Top             =   2640
-         Width           =   1215
-      End
-      Begin VB.Label lblEg 
-         BorderStyle     =   1  'Fixed Single
-         Height          =   375
-         Left            =   3360
-         TabIndex        =   163
-         Top             =   2520
-         Width           =   2895
-      End
-      Begin VB.Label Label1 
-         BackColor       =   &H00000000&
-         Caption         =   "Color to modify:"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   14
-         Left            =   360
-         TabIndex        =   162
-         Top             =   1560
-         Width           =   1215
-      End
-      Begin VB.Label Label3 
-         BackColor       =   &H00000000&
-         Caption         =   "New Value:                   Current Value:       Example:"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   161
-         Top             =   2280
          Width           =   4335
       End
-      Begin VB.Label Label4 
+      Begin VB.CheckBox chkBNLSAlt 
          BackColor       =   &H00000000&
-         Caption         =   "R:"
+         Caption         =   "Enable Automatic BNLS Server Finder"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -2815,13 +1428,13 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   160
-         Top             =   3360
-         Width           =   135
+         TabIndex        =   70
+         Top             =   4440
+         Width           =   4695
       End
-      Begin VB.Label Label5 
+      Begin VB.Label lbl5 
          BackColor       =   &H00000000&
-         Caption         =   "G:"
+         Caption         =   "BNLS server, if applicable:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -2833,53 +1446,15 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   1320
-         TabIndex        =   159
-         Top             =   3360
-         Width           =   135
-      End
-      Begin VB.Label Label6 
-         BackColor       =   &H00000000&
-         Caption         =   "B:"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   2280
-         TabIndex        =   158
-         Top             =   3360
-         Width           =   255
-      End
-      Begin VB.Label Label7 
-         BackColor       =   &H00000000&
-         Caption         =   "Use HTML hexadecimal colors:"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   3360
-         TabIndex        =   157
-         Top             =   3000
+         Index           =   12
+         Left            =   360
+         TabIndex        =   193
+         Top             =   1200
          Width           =   2415
       End
-      Begin VB.Label Label8 
-         Alignment       =   2  'Center
+      Begin VB.Label lbl5 
          BackColor       =   &H00000000&
-         Caption         =   "#"
+         Caption         =   "(in milliseconds)"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -2891,15 +1466,104 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   5
-         Left            =   3360
-         TabIndex        =   156
-         Top             =   3240
-         Width           =   255
+         Index           =   11
+         Left            =   480
+         TabIndex        =   189
+         Top             =   3480
+         Width           =   1215
       End
-      Begin VB.Label Label8 
+      Begin VB.Label lbl5 
          BackColor       =   &H00000000&
-         Caption         =   "Size"
+         Caption         =   "Reconnect delay"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   10
+         Left            =   360
+         TabIndex        =   188
+         Top             =   3240
+         Width           =   1215
+      End
+      Begin VB.Label lbl5 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Proxy port"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   9
+         Left            =   3000
+         TabIndex        =   184
+         Top             =   3000
+         Width           =   1335
+      End
+      Begin VB.Label lbl5 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Proxy IP address"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   8
+         Left            =   3000
+         TabIndex        =   183
+         Top             =   2640
+         Width           =   1335
+      End
+      Begin VB.Line Line4 
+         BorderColor     =   &H00FFFFFF&
+         X1              =   2760
+         X2              =   2760
+         Y1              =   2280
+         Y2              =   3720
+      End
+      Begin VB.Label lbl5 
+         BackColor       =   &H00000000&
+         Caption         =   $"frmSettings.frx":0004
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   495
+         Index           =   1
+         Left            =   360
+         TabIndex        =   144
+         Top             =   3840
+         Width           =   5895
+      End
+      Begin VB.Label lbl5 
+         BackColor       =   &H00000000&
+         Caption         =   "Ping spoofing"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -2912,14 +1576,33 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   0
-         Left            =   4200
-         TabIndex        =   154
-         Top             =   840
-         Width           =   375
+         Left            =   360
+         TabIndex        =   143
+         Top             =   2280
+         Width           =   1575
       End
-      Begin VB.Label Label8 
+      Begin VB.Label lblHashPath 
+         Alignment       =   2  'Center
+         BackColor       =   &H80000012&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   142
+         Top             =   1920
+         Width           =   6015
+      End
+      Begin VB.Label lbl5 
          BackColor       =   &H00000000&
-         Caption         =   "Channel List"
+         Caption         =   "Connection method:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -2933,55 +1616,13 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   2
          Left            =   360
-         TabIndex        =   153
-         ToolTipText     =   "Changes the font settings for the channel list."
-         Top             =   1200
-         Width           =   975
-      End
-      Begin VB.Label Label8 
-         BackColor       =   &H00000000&
-         Caption         =   "Chat Window"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   7
-         Left            =   360
-         TabIndex        =   152
-         ToolTipText     =   "Changes the font setting for the main chat window."
+         TabIndex        =   141
          Top             =   840
-         Width           =   975
+         Width           =   1575
       End
-      Begin VB.Label Label8 
+      Begin VB.Label lbl5 
          BackColor       =   &H00000000&
-         Caption         =   "Font"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   1
-         Left            =   1440
-         TabIndex        =   151
-         Top             =   840
-         Width           =   495
-      End
-      Begin VB.Label Label8 
-         BackColor       =   &H00000000&
-         Caption         =   "Size"
+         Caption         =   "Local hashing supports all game clients. Your current hash file path is:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -2994,34 +1635,14 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   3
-         Left            =   4200
-         TabIndex        =   150
-         Top             =   1200
-         Width           =   375
-      End
-      Begin VB.Label Label8 
-         BackColor       =   &H00000000&
-         Caption         =   "Font"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   4
-         Left            =   1440
-         TabIndex        =   149
-         Top             =   1200
-         Width           =   495
+         Left            =   360
+         TabIndex        =   140
+         Top             =   1680
+         Width           =   5895
       End
       Begin VB.Line Line1 
          BorderColor     =   &H00FFFFFF&
-         Index           =   4
+         Index           =   2
          X1              =   360
          X2              =   6240
          Y1              =   600
@@ -3029,7 +1650,7 @@ Begin VB.Form frmSettings
       End
       Begin VB.Label Label1 
          BackColor       =   &H00000000&
-         Caption         =   "Interface font and color settings"
+         Caption         =   "Advanced connection settings"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   12
@@ -3041,30 +1662,11 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Index           =   13
+         Index           =   11
          Left            =   360
-         TabIndex        =   148
+         TabIndex        =   138
          Top             =   240
          Width           =   4815
-      End
-      Begin VB.Label lblColorStatus 
-         Alignment       =   2  'Center
-         BackColor       =   &H00000000&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   189
-         Top             =   4200
-         Width           =   5895
       End
    End
    Begin VB.Frame fraPanel 
@@ -3073,7 +1675,7 @@ Begin VB.Form frmSettings
       Height          =   4815
       Index           =   2
       Left            =   3000
-      TabIndex        =   113
+      TabIndex        =   114
       Top             =   0
       Width           =   6615
       Begin VB.TextBox txtMaxBackLogSize 
@@ -3338,7 +1940,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   194
+         TabIndex        =   195
          Top             =   4110
          Width           =   1575
       End
@@ -3357,7 +1959,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   2790
-         TabIndex        =   193
+         TabIndex        =   194
          Top             =   4110
          Width           =   3015
       End
@@ -3377,7 +1979,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   8
          Left            =   3120
-         TabIndex        =   155
+         TabIndex        =   156
          Top             =   720
          Width           =   1575
       End
@@ -3397,7 +1999,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   7
          Left            =   2790
-         TabIndex        =   147
+         TabIndex        =   148
          Top             =   4440
          Width           =   3015
       End
@@ -3417,7 +2019,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   6
          Left            =   360
-         TabIndex        =   146
+         TabIndex        =   147
          Top             =   4440
          Width           =   1575
       End
@@ -3437,13 +2039,13 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   4
          Left            =   360
-         TabIndex        =   145
+         TabIndex        =   146
          Top             =   2760
          Width           =   2535
       End
       Begin VB.Label lbl5 
          BackColor       =   &H00000000&
-         Caption         =   $"frmSettings.frx":0000
+         Caption         =   $"frmSettings.frx":0099
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -3457,7 +2059,7 @@ Begin VB.Form frmSettings
          Height          =   615
          Index           =   5
          Left            =   360
-         TabIndex        =   144
+         TabIndex        =   145
          Top             =   3360
          Width           =   5895
       End
@@ -3485,7 +2087,7 @@ Begin VB.Form frmSettings
          Height          =   375
          Index           =   12
          Left            =   360
-         TabIndex        =   138
+         TabIndex        =   139
          Top             =   240
          Width           =   4815
       End
@@ -3494,13 +2096,13 @@ Begin VB.Form frmSettings
       BackColor       =   &H00000000&
       ForeColor       =   &H00FFFFFF&
       Height          =   4815
-      Index           =   1
+      Index           =   3
       Left            =   3000
-      TabIndex        =   112
+      TabIndex        =   115
       Top             =   0
       Width           =   6615
-      Begin VB.ComboBox cboBNLSServer 
-         BackColor       =   &H00993300&
+      Begin VB.CommandButton cmdSaveColor 
+         Caption         =   "Sa&ve changes to this color"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -3510,156 +2112,13 @@ Begin VB.Form frmSettings
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   315
-         ItemData        =   "frmSettings.frx":00D6
-         Left            =   2760
-         List            =   "frmSettings.frx":00D8
-         TabIndex        =   60
-         Text            =   "cboBNLSServer"
-         Top             =   1200
-         Width           =   3495
-      End
-      Begin VB.TextBox txtReconDelay 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   1680
-         MaxLength       =   15
-         TabIndex        =   63
-         Text            =   "1000"
-         Top             =   3360
-         Width           =   855
-      End
-      Begin VB.OptionButton optSocks5 
-         BackColor       =   &H00000000&
-         Caption         =   "SOCKS5"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   5400
-         Style           =   1  'Graphical
-         TabIndex        =   68
-         Top             =   3360
-         Width           =   855
-      End
-      Begin VB.OptionButton optSocks4 
-         BackColor       =   &H00000000&
-         Caption         =   "SOCKS4"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   4440
-         Style           =   1  'Graphical
-         TabIndex        =   67
-         Top             =   3360
-         Width           =   855
-      End
-      Begin VB.TextBox txtProxyPort 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   4440
-         MaxLength       =   5
-         TabIndex        =   66
-         Top             =   3000
-         Width           =   1815
-      End
-      Begin VB.TextBox txtProxyIP 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   285
-         Left            =   4440
-         MaxLength       =   15
-         TabIndex        =   65
-         Top             =   2640
-         Width           =   1815
-      End
-      Begin VB.CheckBox chkUseProxies 
-         BackColor       =   &H00000000&
-         Caption         =   "Use a proxy to connect"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   3000
-         TabIndex        =   64
-         ToolTipText     =   "Routes your Battle.net and/or BNLS connection through a SOCKS4 or 5 proxy."
-         Top             =   2280
+         Left            =   4200
+         TabIndex        =   111
+         Top             =   2160
          Width           =   2055
       End
-      Begin VB.CheckBox chkUDP 
-         BackColor       =   &H00000000&
-         Caption         =   "Use Lag Plug"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   62
-         ToolTipText     =   "Sets whether or not you have a lag plug when you sign on. If you don't know what this is, leave it off."
-         Top             =   2880
-         Width           =   1455
-      End
-      Begin VB.ComboBox cboSpoof 
+      Begin VB.ComboBox cboColorList 
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
@@ -3674,180 +2133,1576 @@ Begin VB.Form frmSettings
          Height          =   315
          Left            =   360
          Style           =   2  'Dropdown List
-         TabIndex        =   61
-         Top             =   2520
-         Width           =   2175
-      End
-      Begin VB.ComboBox cboConnMethod 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   315
-         Left            =   1920
-         Style           =   2  'Dropdown List
-         TabIndex        =   59
-         Top             =   840
-         Width           =   4335
-      End
-      Begin VB.CheckBox chkBNLSAlt 
-         BackColor       =   &H00000000&
-         Caption         =   "Enable Automatic BNLS Server Finder"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   69
-         Top             =   4440
-         Width           =   4695
-      End
-      Begin VB.Label lbl5 
-         BackColor       =   &H00000000&
-         Caption         =   "BNLS server, if applicable:"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   12
-         Left            =   360
-         TabIndex        =   192
-         Top             =   1200
-         Width           =   2415
-      End
-      Begin VB.Label lbl5 
-         BackColor       =   &H00000000&
-         Caption         =   "(in milliseconds)"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   11
-         Left            =   480
-         TabIndex        =   188
-         Top             =   3480
-         Width           =   1215
-      End
-      Begin VB.Label lbl5 
-         BackColor       =   &H00000000&
-         Caption         =   "Reconnect delay"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   10
-         Left            =   360
-         TabIndex        =   187
-         Top             =   3240
-         Width           =   1215
-      End
-      Begin VB.Label lbl5 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00000000&
-         Caption         =   "Proxy port"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   9
-         Left            =   3000
-         TabIndex        =   183
-         Top             =   3000
-         Width           =   1335
-      End
-      Begin VB.Label lbl5 
-         Alignment       =   1  'Right Justify
-         BackColor       =   &H00000000&
-         Caption         =   "Proxy IP address"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   8
-         Left            =   3000
-         TabIndex        =   182
-         Top             =   2640
-         Width           =   1335
-      End
-      Begin VB.Line Line4 
-         BorderColor     =   &H00FFFFFF&
-         X1              =   2760
-         X2              =   2760
-         Y1              =   2280
-         Y2              =   3720
-      End
-      Begin VB.Label lbl5 
-         BackColor       =   &H00000000&
-         Caption         =   $"frmSettings.frx":00DA
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   495
-         Index           =   1
-         Left            =   360
-         TabIndex        =   143
-         Top             =   3840
+         TabIndex        =   35
+         Top             =   1800
          Width           =   5895
       End
-      Begin VB.Label lbl5 
+      Begin VB.TextBox txtValue 
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   360
+         TabIndex        =   36
+         Top             =   2520
+         Width           =   1575
+      End
+      Begin VB.CommandButton cmdColorPicker 
+         Caption         =   "Color Picker"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   360
+         TabIndex        =   37
+         Top             =   3000
+         Width           =   1575
+      End
+      Begin VB.TextBox txtR 
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   600
+         TabIndex        =   103
+         Top             =   3360
+         Width           =   615
+      End
+      Begin VB.TextBox txtG 
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   1560
+         TabIndex        =   104
+         Top             =   3360
+         Width           =   615
+      End
+      Begin VB.TextBox txtB 
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   2520
+         TabIndex        =   105
+         Top             =   3360
+         Width           =   615
+      End
+      Begin VB.CommandButton cmdGetRGB 
+         Caption         =   "Generate New Value from RGB"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   360
+         TabIndex        =   108
+         Top             =   3720
+         Width           =   2775
+      End
+      Begin VB.CommandButton cmdImport 
+         Caption         =   "&Import ColorList"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   3240
+         TabIndex        =   109
+         Top             =   3720
+         Width           =   1455
+      End
+      Begin VB.CommandButton cmdDefaults 
+         Caption         =   "Restore &Default Colors"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   4200
+         TabIndex        =   34
+         Top             =   1560
+         Width           =   2055
+      End
+      Begin VB.CommandButton cmdExport 
+         Caption         =   "&Export ColorList"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   4800
+         TabIndex        =   110
+         Top             =   3720
+         Width           =   1455
+      End
+      Begin VB.TextBox txtHTML 
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   3600
+         MaxLength       =   6
+         TabIndex        =   106
+         Top             =   3240
+         Width           =   1455
+      End
+      Begin VB.CommandButton cmdHTMLGen 
+         Caption         =   "Generate"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   5160
+         TabIndex        =   107
+         Top             =   3240
+         Width           =   1095
+      End
+      Begin VB.TextBox txtChanFont 
+         Alignment       =   2  'Center
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   1920
+         TabIndex        =   32
+         Top             =   1200
+         Width           =   2175
+      End
+      Begin VB.TextBox txtChatFont 
+         Alignment       =   2  'Center
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   1920
+         TabIndex        =   30
+         Top             =   840
+         Width           =   2175
+      End
+      Begin VB.TextBox txtChanSize 
+         Alignment       =   2  'Center
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   4560
+         MaxLength       =   2
+         TabIndex        =   33
+         Top             =   1200
+         Width           =   615
+      End
+      Begin VB.TextBox txtChatSize 
+         Alignment       =   2  'Center
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   4560
+         MaxLength       =   2
+         TabIndex        =   31
+         Top             =   840
+         Width           =   615
+      End
+      Begin MSComDlg.CommonDialog cDLG 
+         Left            =   5400
+         Top             =   960
+         _ExtentX        =   847
+         _ExtentY        =   847
+         _Version        =   393216
+      End
+      Begin VB.Label lblCurrentValue 
          BackColor       =   &H00000000&
-         Caption         =   "Ping spoofing"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   2040
+         TabIndex        =   165
+         Top             =   2640
+         Width           =   1215
+      End
+      Begin VB.Label lblEg 
+         BorderStyle     =   1  'Fixed Single
+         Height          =   375
+         Left            =   3360
+         TabIndex        =   164
+         Top             =   2520
+         Width           =   2895
+      End
+      Begin VB.Label Label1 
+         BackColor       =   &H00000000&
+         Caption         =   "Color to modify:"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   14
+         Left            =   360
+         TabIndex        =   163
+         Top             =   1560
+         Width           =   1215
+      End
+      Begin VB.Label Label3 
+         BackColor       =   &H00000000&
+         Caption         =   "New Value:                   Current Value:       Example:"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   162
+         Top             =   2280
+         Width           =   4335
+      End
+      Begin VB.Label Label4 
+         BackColor       =   &H00000000&
+         Caption         =   "R:"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   161
+         Top             =   3360
+         Width           =   135
+      End
+      Begin VB.Label Label5 
+         BackColor       =   &H00000000&
+         Caption         =   "G:"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   1320
+         TabIndex        =   160
+         Top             =   3360
+         Width           =   135
+      End
+      Begin VB.Label Label6 
+         BackColor       =   &H00000000&
+         Caption         =   "B:"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   2280
+         TabIndex        =   159
+         Top             =   3360
+         Width           =   255
+      End
+      Begin VB.Label Label7 
+         BackColor       =   &H00000000&
+         Caption         =   "Use HTML hexadecimal colors:"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   3360
+         TabIndex        =   158
+         Top             =   3000
+         Width           =   2415
+      End
+      Begin VB.Label Label8 
+         Alignment       =   2  'Center
+         BackColor       =   &H00000000&
+         Caption         =   "#"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   5
+         Left            =   3360
+         TabIndex        =   157
+         Top             =   3240
+         Width           =   255
+      End
+      Begin VB.Label Label8 
+         BackColor       =   &H00000000&
+         Caption         =   "Size"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   0
+         Left            =   4200
+         TabIndex        =   155
+         Top             =   840
+         Width           =   375
+      End
+      Begin VB.Label Label8 
+         BackColor       =   &H00000000&
+         Caption         =   "Channel List"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   2
+         Left            =   360
+         TabIndex        =   154
+         ToolTipText     =   "Changes the font settings for the channel list."
+         Top             =   1200
+         Width           =   975
+      End
+      Begin VB.Label Label8 
+         BackColor       =   &H00000000&
+         Caption         =   "Chat Window"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   7
+         Left            =   360
+         TabIndex        =   153
+         ToolTipText     =   "Changes the font setting for the main chat window."
+         Top             =   840
+         Width           =   975
+      End
+      Begin VB.Label Label8 
+         BackColor       =   &H00000000&
+         Caption         =   "Font"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   1
+         Left            =   1440
+         TabIndex        =   152
+         Top             =   840
+         Width           =   495
+      End
+      Begin VB.Label Label8 
+         BackColor       =   &H00000000&
+         Caption         =   "Size"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   3
+         Left            =   4200
+         TabIndex        =   151
+         Top             =   1200
+         Width           =   375
+      End
+      Begin VB.Label Label8 
+         BackColor       =   &H00000000&
+         Caption         =   "Font"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   4
+         Left            =   1440
+         TabIndex        =   150
+         Top             =   1200
+         Width           =   495
+      End
+      Begin VB.Line Line1 
+         BorderColor     =   &H00FFFFFF&
+         Index           =   4
+         X1              =   360
+         X2              =   6240
+         Y1              =   600
+         Y2              =   600
+      End
+      Begin VB.Label Label1 
+         BackColor       =   &H00000000&
+         Caption         =   "Interface font and color settings"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   375
+         Index           =   13
+         Left            =   360
+         TabIndex        =   149
+         Top             =   240
+         Width           =   4815
+      End
+      Begin VB.Label lblColorStatus 
+         Alignment       =   2  'Center
+         BackColor       =   &H00000000&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   190
+         Top             =   4200
+         Width           =   5895
+      End
+   End
+   Begin VB.Frame fraPanel 
+      BackColor       =   &H00000000&
+      ForeColor       =   &H00FFFFFF&
+      Height          =   4815
+      Index           =   4
+      Left            =   3000
+      TabIndex        =   116
+      Top             =   0
+      Width           =   6615
+      Begin VB.CheckBox chkBanEvasion 
+         BackColor       =   &H00000000&
+         Caption         =   "Use Ban Evasion"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   87
+         ToolTipText     =   "Ban Evasion attempts to keep people who are banned out of your channel."
+         Top             =   2880
+         Width           =   2295
+      End
+      Begin VB.CheckBox chkIdleKick 
+         BackColor       =   &H00000000&
+         Caption         =   "Kick instead of ban"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   4440
+         TabIndex        =   90
+         ToolTipText     =   "Instead of banning idle users, the bot will simply kick them."
+         Top             =   720
+         Width           =   1815
+      End
+      Begin VB.CheckBox chkPeonbans 
+         BackColor       =   &H00000000&
+         Caption         =   "Ban Warcraft III Peons"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   3000
+         TabIndex        =   92
+         ToolTipText     =   "Ban Warcraft III users who have the Peon icon."
+         Top             =   1440
+         Width           =   2295
+      End
+      Begin VB.TextBox txtLevelBanMsg 
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   3000
+         MaxLength       =   180
+         TabIndex        =   102
+         Text            =   "You are below the required level for entry."
+         Top             =   4180
+         Width           =   3375
+      End
+      Begin VB.CheckBox chkCBan 
+         BackColor       =   &H00000000&
+         Caption         =   "The Frozen Throne"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   5
+         Left            =   4560
+         TabIndex        =   99
+         Top             =   2520
+         Width           =   1695
+      End
+      Begin VB.CheckBox chkCBan 
+         BackColor       =   &H00000000&
+         Caption         =   "Lord of Destruction"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   3
+         Left            =   4560
+         TabIndex        =   98
+         Top             =   2280
+         Width           =   1695
+      End
+      Begin VB.CheckBox chkPhrasebans 
+         BackColor       =   &H00000000&
+         Caption         =   "Enable Phrasebanning"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   81
+         ToolTipText     =   "Ban unsafelisted users who state banned phrases."
+         Top             =   720
+         Width           =   1935
+      End
+      Begin VB.CheckBox chkIPBans 
+         BackColor       =   &H00000000&
+         Caption         =   "Enable IPBanning"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   82
+         ToolTipText     =   "Ban squelched users."
+         Top             =   1080
+         Width           =   1935
+      End
+      Begin VB.CheckBox chkCBan 
+         BackColor       =   &H00000000&
+         Caption         =   "Starcraft"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   0
+         Left            =   3000
+         TabIndex        =   93
+         Top             =   2040
+         Width           =   975
+      End
+      Begin VB.CheckBox chkCBan 
+         BackColor       =   &H00000000&
+         Caption         =   "Brood War"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   1
+         Left            =   4560
+         TabIndex        =   97
+         Top             =   2040
+         Width           =   1215
+      End
+      Begin VB.CheckBox chkCBan 
+         BackColor       =   &H00000000&
+         Caption         =   "Diablo II"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   2
+         Left            =   3000
+         TabIndex        =   94
+         Top             =   2280
+         Width           =   975
+      End
+      Begin VB.CheckBox chkCBan 
+         BackColor       =   &H00000000&
+         Caption         =   "Warcraft II BNE"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   6
+         Left            =   3000
+         TabIndex        =   96
+         Top             =   2760
+         Width           =   1455
+      End
+      Begin VB.CheckBox chkCBan 
+         BackColor       =   &H00000000&
+         Caption         =   "Warcraft III"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   4
+         Left            =   3000
+         TabIndex        =   95
+         Top             =   2520
+         Width           =   1335
+      End
+      Begin VB.CheckBox chkQuiet 
+         BackColor       =   &H00000000&
+         Caption         =   "Enable Quiet-Time"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   83
+         ToolTipText     =   "Ban unsafelisted users that talk."
+         Top             =   1440
+         Width           =   1935
+      End
+      Begin VB.TextBox txtProtectMsg 
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   360
+         MaxLength       =   180
+         TabIndex        =   88
+         Text            =   "Lockdown Enabled"
+         Top             =   4180
+         Width           =   2535
+      End
+      Begin VB.CheckBox chkProtect 
+         BackColor       =   &H00000000&
+         Caption         =   "Enable Channel Protection"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   86
+         ToolTipText     =   "Ban unsafelisted users who join the channel."
+         Top             =   2520
+         Width           =   2295
+      End
+      Begin VB.CheckBox chkKOY 
+         BackColor       =   &H00000000&
+         Caption         =   "Enable Kick-On-Yell"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   84
+         ToolTipText     =   "Kick users who yell (uppercase message longer than 5 letters)"
+         Top             =   1800
+         Width           =   1935
+      End
+      Begin VB.TextBox txtBanW3 
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   5400
+         MaxLength       =   25
+         TabIndex        =   101
+         Top             =   3480
+         Width           =   495
+      End
+      Begin VB.CheckBox chkPlugban 
+         BackColor       =   &H00000000&
+         Caption         =   "Enable PlugBans"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   85
+         ToolTipText     =   "Ban users with a UDP plug."
+         Top             =   2160
+         Width           =   1935
+      End
+      Begin VB.TextBox txtBanD2 
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   3840
+         MaxLength       =   25
+         TabIndex        =   100
+         Top             =   3480
+         Width           =   495
+      End
+      Begin VB.CheckBox chkIdlebans 
+         BackColor       =   &H00000000&
+         Caption         =   "Ban idle users"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   3000
+         TabIndex        =   89
+         ToolTipText     =   "Ban users who have been idle for X seconds."
+         Top             =   720
+         Width           =   1455
+      End
+      Begin VB.TextBox txtIdleBanDelay 
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   4560
+         MaxLength       =   25
+         TabIndex        =   91
+         Top             =   1080
+         Width           =   615
+      End
+      Begin VB.Label lblMod 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Levelban message"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   0
+         Left            =   3000
+         TabIndex        =   182
+         Top             =   3940
+         Width           =   1335
+      End
+      Begin VB.Label lblMod 
+         BackColor       =   &H00000000&
+         Caption         =   "Seconds before ban:"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   2
+         Left            =   3000
+         TabIndex        =   172
+         Top             =   1080
+         Width           =   1575
+      End
+      Begin VB.Label lblMod 
+         BackColor       =   &H00000000&
+         Caption         =   "Clientbans"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   615
+         Index           =   3
+         Left            =   3000
+         TabIndex        =   171
+         Top             =   1800
+         Width           =   855
+      End
+      Begin VB.Label lblMod 
+         BackColor       =   &H00000000&
+         Caption         =   "Protection ban message"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   5
+         Left            =   360
+         TabIndex        =   170
+         ToolTipText     =   "Shorter is better"
+         Top             =   3940
+         Width           =   1935
+      End
+      Begin VB.Label lblMod 
+         BackColor       =   &H00000000&
+         Caption         =   "LevelBans: Set to 0 to disable."
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   1
+         Left            =   3000
+         TabIndex        =   169
+         Top             =   3240
+         Width           =   2295
+      End
+      Begin VB.Label lblMod 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Diablo II"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   4
+         Left            =   3000
+         TabIndex        =   168
+         Top             =   3480
+         Width           =   735
+      End
+      Begin VB.Label lblMod 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Warcraft III"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   6
+         Left            =   4320
+         TabIndex        =   167
+         Top             =   3480
+         Width           =   975
+      End
+      Begin VB.Line Line1 
+         BorderColor     =   &H00FFFFFF&
+         Index           =   5
+         X1              =   360
+         X2              =   6240
+         Y1              =   600
+         Y2              =   600
+      End
+      Begin VB.Label Label1 
+         BackColor       =   &H00000000&
+         Caption         =   "General moderation settings"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   375
+         Index           =   15
+         Left            =   360
+         TabIndex        =   166
+         Top             =   240
+         Width           =   4815
+      End
+   End
+   Begin VB.Frame fraPanel 
+      BackColor       =   &H00000000&
+      ForeColor       =   &H00FFFFFF&
+      Height          =   4815
+      Index           =   5
+      Left            =   3000
+      TabIndex        =   117
+      Top             =   0
+      Width           =   6615
+      Begin VB.CheckBox chkWhisperGreet 
+         BackColor       =   &H00000000&
+         Caption         =   "Whisper the greet message"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   79
+         Top             =   1200
+         Width           =   2655
+      End
+      Begin VB.TextBox txtGreetMsg 
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   360
+         MaxLength       =   200
+         TabIndex        =   80
+         Text            =   "Welcome to %c, %0! I am a %v."
+         Top             =   1800
+         Width           =   5895
+      End
+      Begin VB.CheckBox chkGreetMsg 
+         BackColor       =   &H00000000&
+         Caption         =   "Greet users who join the channel"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   78
+         Top             =   840
+         Width           =   3015
+      End
+      Begin VB.Label lblGreetVars 
+         BackColor       =   &H00000000&
+         Caption         =   "greet variable container label"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   1935
+         Left            =   360
+         TabIndex        =   175
+         Top             =   2280
+         Width           =   5895
+      End
+      Begin VB.Label lblIdle 
+         BackColor       =   &H00000000&
+         Caption         =   "Greet Message"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   2
+         Left            =   360
+         TabIndex        =   174
+         Top             =   1560
+         Width           =   1935
+      End
+      Begin VB.Line Line1 
+         BorderColor     =   &H00FFFFFF&
+         Index           =   6
+         X1              =   360
+         X2              =   6240
+         Y1              =   600
+         Y2              =   600
+      End
+      Begin VB.Label Label1 
+         BackColor       =   &H00000000&
+         Caption         =   "Greet message settings"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   12
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   375
+         Index           =   16
+         Left            =   360
+         TabIndex        =   173
+         Top             =   240
+         Width           =   4815
+      End
+   End
+   Begin VB.Frame fraPanel 
+      BackColor       =   &H00000000&
+      ForeColor       =   &H00FFFFFF&
+      Height          =   4815
+      Index           =   6
+      Left            =   3000
+      TabIndex        =   118
+      Top             =   0
+      Width           =   6615
+      Begin VB.OptionButton optMsg 
+         BackColor       =   &H00000000&
+         Caption         =   "Message"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   5280
+         Style           =   1  'Graphical
+         TabIndex        =   73
+         Top             =   840
+         Value           =   -1  'True
+         Width           =   975
+      End
+      Begin VB.OptionButton optQuote 
+         BackColor       =   &H00000000&
+         Caption         =   "Quote"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   5280
+         Style           =   1  'Graphical
+         TabIndex        =   76
+         Top             =   1920
+         Width           =   975
+      End
+      Begin VB.OptionButton optUptime 
+         BackColor       =   &H00000000&
+         Caption         =   "Uptime"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   5280
+         Style           =   1  'Graphical
+         TabIndex        =   74
+         Top             =   1200
+         Width           =   975
+      End
+      Begin VB.OptionButton optMP3 
+         BackColor       =   &H00000000&
+         Caption         =   "MP3"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   5280
+         Style           =   1  'Graphical
+         TabIndex        =   75
+         Top             =   1560
+         Width           =   975
+      End
+      Begin VB.CheckBox chkIdles 
+         BackColor       =   &H00000000&
+         Caption         =   "Show anti-idle messages"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   71
+         Top             =   840
+         Width           =   2175
+      End
+      Begin VB.TextBox txtIdleMsg 
+         BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   360
+         TabIndex        =   77
+         Text            =   "/me is a %ver"
+         Top             =   1800
+         Width           =   4335
+      End
+      Begin VB.TextBox txtIdleWait 
+         Alignment       =   2  'Center
+         BackColor       =   &H00993300&
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   3000
+         TabIndex        =   72
+         Text            =   "6"
+         Top             =   1200
+         Width           =   495
+      End
+      Begin VB.Line Line5 
+         BorderColor     =   &H00FFFFFF&
+         Index           =   4
+         X1              =   3840
+         X2              =   5160
+         Y1              =   1080
+         Y2              =   1080
+      End
+      Begin VB.Line Line5 
+         BorderColor     =   &H00FFFFFF&
+         Index           =   3
+         X1              =   5040
+         X2              =   5280
+         Y1              =   2040
+         Y2              =   2040
+      End
+      Begin VB.Line Line5 
+         BorderColor     =   &H00FFFFFF&
+         Index           =   2
+         X1              =   5040
+         X2              =   5280
+         Y1              =   1680
+         Y2              =   1680
+      End
+      Begin VB.Line Line5 
+         BorderColor     =   &H00FFFFFF&
+         Index           =   1
+         X1              =   5040
+         X2              =   5280
+         Y1              =   1320
+         Y2              =   1320
+      End
+      Begin VB.Line Line5 
+         BorderColor     =   &H00FFFFFF&
+         Index           =   0
+         X1              =   5040
+         X2              =   5040
+         Y1              =   1080
+         Y2              =   2040
+      End
+      Begin VB.Label lblIdle 
+         BackColor       =   &H00000000&
+         Caption         =   "Idle message type"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   3
+         Left            =   3840
+         TabIndex        =   180
+         Top             =   840
+         Width           =   1455
+      End
+      Begin VB.Label lblIdle 
+         BackColor       =   &H00000000&
+         Caption         =   "Delay between messages (minutes)"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -3861,32 +3716,13 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   0
          Left            =   360
-         TabIndex        =   142
-         Top             =   2280
-         Width           =   1575
+         TabIndex        =   179
+         Top             =   1200
+         Width           =   3015
       End
-      Begin VB.Label lblHashPath 
-         Alignment       =   2  'Center
-         BackColor       =   &H80000012&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   141
-         Top             =   1920
-         Width           =   6015
-      End
-      Begin VB.Label lbl5 
+      Begin VB.Label lblIdle 
          BackColor       =   &H00000000&
-         Caption         =   "Connection method:"
+         Caption         =   "Idle message"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -3898,43 +3734,42 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   2
+         Index           =   1
          Left            =   360
-         TabIndex        =   140
-         Top             =   840
-         Width           =   1575
-      End
-      Begin VB.Label lbl5 
-         BackColor       =   &H00000000&
-         Caption         =   "Local hashing supports all game clients. Your current hash file path is:"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   3
-         Left            =   360
-         TabIndex        =   139
-         Top             =   1680
-         Width           =   5895
+         TabIndex        =   178
+         Top             =   1560
+         Width           =   1095
       End
       Begin VB.Line Line1 
          BorderColor     =   &H00FFFFFF&
-         Index           =   2
+         Index           =   7
          X1              =   360
          X2              =   6240
          Y1              =   600
          Y2              =   600
       End
+      Begin VB.Label lblIdleVars 
+         BackColor       =   &H00000000&
+         Caption         =   "idle variable container label"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   1935
+         Left            =   360
+         TabIndex        =   176
+         Top             =   2280
+         Width           =   5895
+      End
       Begin VB.Label Label1 
          BackColor       =   &H00000000&
-         Caption         =   "Advanced connection settings"
+         Caption         =   "Idle message settings"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   12
@@ -3946,11 +3781,197 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Index           =   11
+         Index           =   17
          Left            =   360
-         TabIndex        =   137
+         TabIndex        =   177
          Top             =   240
          Width           =   4815
+      End
+   End
+   Begin VB.ComboBox cboProfile 
+      Appearance      =   0  'Flat
+      BackColor       =   &H00993300&
+      Enabled         =   0   'False
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   315
+      Left            =   120
+      TabIndex        =   191
+      Text            =   "Profile Selector"
+      Top             =   120
+      Width           =   2775
+   End
+   Begin VB.CommandButton cmdWebsite 
+      Caption         =   "&Website"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   3840
+      TabIndex        =   124
+      Top             =   4920
+      Width           =   855
+   End
+   Begin VB.CommandButton cmdReadme 
+      Caption         =   "&Readme"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   3000
+      TabIndex        =   123
+      Top             =   4920
+      Width           =   855
+   End
+   Begin VB.CommandButton cmdStepByStep 
+      Caption         =   "&Step-By-Step Configuration"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   4800
+      TabIndex        =   125
+      Top             =   4920
+      Width           =   2535
+   End
+   Begin VB.CommandButton cmdSave 
+      Caption         =   "Apply and Cl&ose"
+      Default         =   -1  'True
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   8280
+      TabIndex        =   126
+      Top             =   4920
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdCancel 
+      Cancel          =   -1  'True
+      Caption         =   "&Cancel"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   7440
+      TabIndex        =   127
+      Top             =   4920
+      Width           =   855
+   End
+   Begin vbalTreeViewLib6.vbalTreeView tvw 
+      Height          =   4620
+      Left            =   120
+      TabIndex        =   0
+      Top             =   555
+      Width           =   2775
+      _ExtentX        =   4895
+      _ExtentY        =   8149
+      BackColor       =   10040064
+      ForeColor       =   16777215
+      Style           =   2
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+   Begin VB.Frame fraPanel 
+      BackColor       =   &H00000000&
+      ForeColor       =   &H00FFFFFF&
+      Height          =   4815
+      Index           =   8
+      Left            =   3000
+      TabIndex        =   120
+      Top             =   0
+      Width           =   6615
+      Begin VB.Label lblSplash 
+         BackColor       =   &H00000000&
+         Caption         =   "Splash message container label."
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   11.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   3135
+         Left            =   360
+         TabIndex        =   122
+         Top             =   960
+         Width           =   6015
+      End
+      Begin VB.Line Line1 
+         BorderColor     =   &H00FFFFFF&
+         Index           =   0
+         X1              =   360
+         X2              =   6240
+         Y1              =   720
+         Y2              =   720
+      End
+      Begin VB.Label Label1 
+         BackColor       =   &H00000000&
+         Caption         =   "Welcome to &StealthBot"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   14.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   375
+         Index           =   0
+         Left            =   360
+         TabIndex        =   121
+         Top             =   240
+         Width           =   3255
       End
    End
 End
@@ -4512,6 +4533,7 @@ Private Function SaveSettings() As Boolean
     WINI "NamespaceConvention", i, secOther
     WINI "UseD2Naming", Cv(chkD2Naming.Value), secOther
     WINI "ShowStatsIcons", Cv(chkShowUserGameStatsIcons.Value), secOther
+    WINI "ShowFlagsIcons", Cv(chkShowUserFlagsIcons.Value), secOther
     WINI "LogDBActions", Cv(chkLogDBActions.Value), secMain
     WINI "LogCommands", Cv(chkLogAllCommands.Value), secMain
     
@@ -5016,6 +5038,7 @@ Private Sub InitGenMisc()
     chkD2Naming.Value = YesToTrue(ReadCfg(OT, "UseD2Naming"), 0)
     
     chkShowUserGameStatsIcons.Value = YesToTrue(ReadCfg(OT, "ShowStatsIcons"), 1)
+    chkShowUserFlagsIcons.Value = YesToTrue(ReadCfg(OT, "ShowFlagsIcons"), 1)
     
     chkURLDetect.Value = YesToTrue(ReadCfg(MN, "URLDetect"), 1)
     chkDoNotUsePacketFList.Value = YesToTrue(ReadCfg(MN, "DoNotUseDirectFList"), 0)

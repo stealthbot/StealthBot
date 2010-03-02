@@ -651,19 +651,19 @@ Public Property Get ChannelListBack() As Long
     ChannelListBack = FormColors.ChannelListBack
 End Property
 Public Property Get ChannelListNormal() As Long
-    ChannelListText = FormColors.ChannelListText
+    ChannelListNormal = FormColors.ChannelListText
 End Property
 Public Property Get ChannelListSelf() As Long
-    ChannelListText = FormColors.ChannelListSelf
+    ChannelListSelf = FormColors.ChannelListSelf
 End Property
 Public Property Get ChannelListIdle() As Long
-    ChannelListText = FormColors.ChannelListIdle
+    ChannelListIdle = FormColors.ChannelListIdle
 End Property
 Public Property Get ChannelListSquelched() As Long
-    ChannelListText = FormColors.ChannelListSquelched
+    ChannelListSquelched = FormColors.ChannelListSquelched
 End Property
 Public Property Get ChannelListOps() As Long
-    ChannelListText = FormColors.ChannelListOps
+    ChannelListOps = FormColors.ChannelListOps
 End Property
 Public Property Get RTBBack() As Long
     RTBBack = FormColors.RTBBack
