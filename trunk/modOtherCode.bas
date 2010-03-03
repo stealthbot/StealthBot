@@ -328,7 +328,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in Ban()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in Ban()."
 
     Exit Function
 End Function
@@ -2887,7 +2887,7 @@ Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Lon
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: " & Err.description & " in SplitByLen()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: " & Err.description & " in SplitByLen()."
     
     Exit Function
 End Function
@@ -3178,7 +3178,7 @@ ERROR_HANDLER:
         Exit Sub
     End If
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in DisplayRichText()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in DisplayRichText()."
     
     Exit Sub
     

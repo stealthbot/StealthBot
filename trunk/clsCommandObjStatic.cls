@@ -516,3 +516,24 @@ Private Function StripQuotes(ByVal strText As String) As String
     End If
 
 End Function
+
+Public Function CleanXPathVar(ByVal str As String) As String
+    str = Replace$(str, "\", "\\")
+    str = Replace$(str, "'", "&apos;")
+    CleanXPathVar = str
+End Function
+
+'Function to check if command names are valid
+Public Function IsValidCommandName(sName As String) As Boolean
+    Dim x As Integer
+    Dim sValid As String
+    
+    sValid = "abcdefghijklmnopqrstuvwxyz0123456789_"
+    IsValidCommandName = False
+    
+    For x = 1 To Len(sName)
+        If (InStr(1, sValid, Mid$(sName, x, 1), vbTextCompare) = 0) Then Exit Function
+    Next x
+  
+    IsValidCommandName = True
+End Function

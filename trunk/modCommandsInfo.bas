@@ -234,7 +234,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnHelpAttr()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnHelpAttr()."
 End Sub
 
 Public Sub OnHelpRank(Command As clsCommandObj)
@@ -258,7 +258,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnHelpRank()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnHelpRank()."
 End Sub
 
 Public Sub OnInfo(Command As clsCommandObj)
@@ -270,7 +270,7 @@ Public Sub OnInfo(Command As clsCommandObj)
         If (UserIndex > 0) Then
             With g_Channel.Users(UserIndex)
                 Command.Respond StringFormat("User {0} is logged on using {1} with {2}a ping time of {3}ms.", _
-                    .DisplayName, ProductCodeToFullName(.game), _
+                    .DisplayName, ProductCodeToFullName(.Game), _
                     IIf(.IsOperator, "ops, and ", vbNullString), .Ping)
             
                 Command.Respond StringFormat("He/she has been present in the channel for {0}.", ConvertTime(.TimeInChannel(), 1))
@@ -341,7 +341,7 @@ On Error GoTo ERROR_HANDLER
         
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnInitPerf()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnInitPerf()."
 End Sub
 
 Public Sub OnLastSeen(Command As clsCommandObj)
@@ -523,7 +523,7 @@ On Error GoTo ERROR_HANDLER
     End If
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnScriptDetail()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnScriptDetail()."
 End Sub
 
 Public Sub OnScripts(Command As clsCommandObj)
@@ -562,7 +562,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnScripts()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnScripts()."
 End Sub
 
 Public Sub OnServer(Command As clsCommandObj)
@@ -772,7 +772,7 @@ On Error GoTo ERROR_HANDLER
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.GetAllCommandsFor()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.GetAllCommandsFor()."
 End Function
 
 Public Function GetPing(ByVal Username As String) As Long
@@ -907,5 +907,5 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandCode.SearchDatabase()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modCommandCode.SearchDatabase()."
 End Sub

@@ -208,7 +208,6 @@ Public Function GetRandomQuote() As String
     Exit Function
 
 ERROR_HANDLER:
-frmChat.AddChat vbYellow, "" & iRand
     frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.GetRandomQuote()", _
     Err.Number, Err.description, OBJECT_NAME)
     

@@ -99,11 +99,9 @@ Public Function GetCommandCount(Optional ByVal strScriptOwner As String = vbNull
     Dim nodes                 As IXMLDOMNodeList
     Dim xpath                 As String
     
-    
     OpenDatabase
     
-    strScriptOwner = Replace$(strScriptOwner, "'", "&apos;")
-    
+    strScriptOwner = clsCommandObj.CleanXPathVar(strScriptOwner)
     
     '// create xpath expression based on strScriptOwner
     If strScriptOwner = vbNullString Then
@@ -132,8 +130,8 @@ Private Function GetCommandXPath(ByVal strCommand As String, Optional ByVal strS
     Dim AZ As String
     AZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
-    strCommand = Replace$(strCommand, "'", "&apos;")
-    strScriptOwner = Replace$(strScriptOwner, "'", "&apos;")
+    strCommand = clsCommandObj.CleanXPathVar(strCommand)
+    strScriptOwner = clsCommandObj.CleanXPathVar(strScriptOwner)
     
     If strScriptOwner = vbNullString Then
         GetCommandXPath = StringFormat("/commands/command[translate(@name, '{0}', '{1}')='{2}' and not(@owner)]", _
@@ -210,7 +208,12 @@ Public Function CreateCommand(ByVal strCommand As String, Optional ByVal strScri
     Dim l_description         As IXMLDOMElement
     Dim l_Parameters          As IXMLDOMElement
     Dim l_Access              As IXMLDOMElement
-        
+    
+    If (Not clsCommandObj.IsValidCommandName(strCommand)) Then
+        frmChat.AddChat RTBColors.ErrorMessageText, "Error: The provided command name was not valid."
+        Exit Function
+    End If
+    
     Call OpenDatabase
     
     '// create elements
@@ -308,7 +311,7 @@ Private Sub ShowXMLErrors(ByRef colErrorList As Collection)
         msg = StringFormat("{0}{1}{2}", msg, colErrorList(i), vbNewLine)
     Next i
     
-    frmChat.AddChat vbRed, msg
+    frmChat.AddChat RTBColors.ErrorMessageText, msg
     
 End Sub
 

@@ -104,9 +104,9 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                         '(DWORD)      ProductID
                         s = Mid$(Data, Position, 4)
                         If Conv(s) = 0 Then
-                            .game = "OFFL"
+                            .Game = "OFFL"
                         Else
-                            .game = StrReverse(s)
+                            .Game = StrReverse(s)
                         End If
                         Position = Position + 4
                         
@@ -128,7 +128,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                         
                         'frmChat.AddChat vbRed, flTemp.Name & ":" & flTemp.DisplayName
                         
-                        RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.game, flTemp.Location, flTemp.Status, _
+                        RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.Game, flTemp.Location, flTemp.Status, _
                              flTemp.LocationID)
                     'End If
                         
@@ -159,7 +159,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 '(DWORD) Product ID
                 s = Mid$(Data, Position, 4)
                 Position = Position + 4
-                .game = StrReverse(s)
+                .Game = StrReverse(s)
 
                 '(STRING) Location str (blank = private)
                 s = Mid$(Data, Position)
@@ -198,13 +198,13 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 '(DWORD)      ProductID
                 s = Mid$(Data, Position, 4)
                 Position = Position + 4
-                .game = IIf(Conv(s) > 0, StrReverse(s), "OFFL")
+                .Game = IIf(Conv(s) > 0, StrReverse(s), "OFFL")
                 
                 '(STRING)         Channel
                 s = KillNull(Mid$(Data, Position))
                 .Location = s
 
-                RaiseEvent FriendAdded(.DisplayName, .game, .LocationID, .Status, .Location)
+                RaiseEvent FriendAdded(.DisplayName, .Game, .LocationID, .Status, .Location)
             End With
             
             g_Friends.Add flTemp, flTemp.Name
@@ -240,7 +240,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
     Exit Sub
 
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: " & Err.description & " in ParsePacket()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: " & Err.description & " in ParsePacket()."
 
     Exit Sub
 
@@ -258,15 +258,15 @@ Public Sub ResetList()
 End Sub
 
 Public Function UsernameToFLIndex(ByVal sUsername As String) As Integer
-    Dim I As Integer
+    Dim i As Integer
     
     If g_Friends.Count > 0 Then
-        For I = 1 To g_Friends.Count
-            If StrComp(sUsername, g_Friends.Item(I).DisplayName, vbTextCompare) = 0 Then
-                UsernameToFLIndex = I
+        For i = 1 To g_Friends.Count
+            If StrComp(sUsername, g_Friends.Item(i).DisplayName, vbTextCompare) = 0 Then
+                UsernameToFLIndex = i
                 Exit Function
             End If
-        Next I
+        Next i
     End If
 End Function
 

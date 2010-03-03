@@ -90,7 +90,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Else
         ' ...
         If (g_Channel.IsSilent = False) Then
-            frmChat.AddChat vbRed, "Warning: There was a flags update received for a user that we do " & _
+            frmChat.AddChat RTBColors.ErrorMessageText, "Warning: There was a flags update received for a user that we do " & _
                     "not have a record for.  This may be indicative of a server split or other technical difficulty."
                     
             Exit Sub
@@ -338,7 +338,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     ' Give a message to them if they're in Clan SBs.
     If ((StrComp(ChannelName, "Clan SBs", vbTextCompare) = 0) And _
         (IsStealthBotTech() = False)) Then
-            frmChat.AddChat vbRed, "You have joined Clan SBs. For the consideration of the Technical Support Staff: greet, idle, and all scripted messages have been temporarily disabled."
+            frmChat.AddChat RTBColors.ErrorMessageText, "You have joined Clan SBs. For the consideration of the Technical Support Staff: greet, idle, and all scripted messages have been temporarily disabled."
     End If
     
     If (m_skipUICEvents) And ((StrComp(BotVars.HomeChannel, ChannelName, vbTextCompare) = 0) Or (g_Channel.IsSilent())) Then
@@ -1322,7 +1322,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
     ' ...
     If (MDebug("statstrings")) Then
-        frmChat.AddChat vbMagenta, "Username: " & Username & ", Statstring: " & _
+        frmChat.AddChat RTBColors.InformationText, "Username: " & Username & ", Statstring: " & _
             originalstatstring
     End If
 
@@ -1374,7 +1374,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     If (QueuedEventID > 0) Then
         ' ...
         If (UserIndex = 0) Then
-            frmChat.AddChat vbRed, "Error: We have received a queued join event for a user that we " & _
+            frmChat.AddChat RTBColors.ErrorMessageText, "Error: We have received a queued join event for a user that we " & _
                 "couldn't find in the channel."
         
             Exit Sub
@@ -1423,7 +1423,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             ' ...
             g_Channel.Users.Add UserObj
         Else
-            frmChat.AddChat vbRed, "Warning: We have received a join event for a user that we had thought was " & _
+            frmChat.AddChat RTBColors.ErrorMessageText, "Warning: We have received a join event for a user that we had thought was " & _
                     "already present within the channel.  This may be indicative of a server split or other technical difficulty."
             
             Exit Sub
@@ -1650,7 +1650,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         
         g_Channel.Users.Remove UserIndex
     Else
-        frmChat.AddChat vbRed, "Warning: We have received a leave event for a user that we didn't know " & _
+        frmChat.AddChat RTBColors.ErrorMessageText, "Warning: We have received a leave event for a user that we didn't know " & _
                 "was in the channel.  This may be indicative of a server split or other technical difficulty."
     
         Exit Sub

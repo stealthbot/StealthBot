@@ -1415,8 +1415,7 @@ Public Sub WriteDatabase(ByVal U As String)
                 Print #f, " " & IIf(DB(i).ModifiedOn > 0, DateCleanup(DB(i).ModifiedOn), "%");
                 Print #f, " " & IIf(Len(DB(i).Type) > 0, DB(i).Type, "USER");
                 Print #f, " " & IIf(Len(DB(i).Groups) > 0, DB(i).Groups, "%");
-                Print #f, " " & IIf(Len(DB(i).BanMessage) > 0, DB(i).BanMessage, "%");
-                Print #f, vbCr
+                Print #f, " " & IIf(Len(DB(i).BanMessage) > 0, DB(i).BanMessage, "%")
             End If
         Next i
 

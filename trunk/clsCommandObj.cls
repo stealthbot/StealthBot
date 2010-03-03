@@ -301,7 +301,7 @@ On Error GoTo ERROR_HANDLER
                         End If
                     End If
                 End If
-            Next
+            Next Restriction
         End If
         
         If (LenB(sTemp) = 0 And Not Param.IsOptional) Then
@@ -418,5 +418,5 @@ On Error GoTo ERROR_HANDLER
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in clsCommandObj.CheckMatch()"
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in clsCommandObj.CheckMatch()"
 End Function

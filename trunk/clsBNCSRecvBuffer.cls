@@ -75,14 +75,14 @@ Public Function FullPacket() As Boolean
                 If lngPacketLen < 10000 Then
                     FullPacket = True
                 Else
-                    frmChat.AddChat vbRed, "Error: Packet Length of unusually high Length detected! Packet " & _
+                    frmChat.AddChat RTBColors.ErrorMessageText, "Error: Packet Length of unusually high Length detected! Packet " & _
                             "dropped. Buffer content at this time: " & vbCrLf & DebugOutput(strData)
                             
                     Call ClearBuffer
                 End If
             End If
         Else
-            frmChat.AddChat vbRed, "Error: The front of the buffer is not a valid packet!"
+            frmChat.AddChat RTBColors.ErrorMessageText, "Error: The front of the buffer is not a valid packet!"
         
             If MDebug("showdrops") Then
                 frmChat.AddChat RTBColors.ErrorMessageText, "Error: The front of the buffer is not " & _

@@ -279,7 +279,7 @@ Public Sub ParseMCPPacket(ByVal Data As String)
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in ParseMCPPacket()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in ParseMCPPacket()."
     
     Exit Sub
 End Sub

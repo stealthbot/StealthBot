@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.0#0"; "vbalTreeView6.ocx"
+Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.1#0"; "vbalTreeView6.ocx"
 Begin VB.Form frmCommands 
    BackColor       =   &H00000000&
    BorderStyle     =   3  'Fixed Dialog
@@ -409,9 +409,11 @@ End Sub
 Private Sub cmdDeleteCommand_Click()
     
     Dim scriptName As String
+    Dim scriptIndex As Integer
 
     scriptName = Mid$(cboCommandGroup.Text, 1, InStr(1, cboCommandGroup.Text, "(") - 2)
-
+    
+    scriptIndex = cboCommandGroup.ListIndex
 
     If vbYes <> MsgBox(StringFormat("Are you sure you want to delete the {0} command for the {1} script?", m_SelectedElement.commandName, scriptName), vbYesNo + vbQuestion, frmCommands.Caption) Then
         Exit Sub
@@ -424,7 +426,7 @@ Private Sub cmdDeleteCommand_Click()
     
     Call PopulateOwnerComboBox
     Call ResetForm
-    Call PopulateTreeView(scriptName)
+    Call PopulateTreeView(scriptName, scriptIndex)
 
 End Sub
 
@@ -511,7 +513,7 @@ Private Sub PopulateOwnerComboBox()
     
 End Sub
 
-Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
+Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString, Optional intScriptIndex As Integer = -1)
     
     Dim commandNodes      As IXMLDOMNodeList
     Dim totalCommands     As Integer
@@ -537,7 +539,9 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     '// Counters
     Dim j                 As Integer
     Dim i                 As Integer
-    Dim X                 As Integer
+    Dim x                 As Integer
+    
+    strScriptOwner = clsCommandObj.CleanXPathVar(strScriptOwner)
 
     '// reset the treeview
     If trvCommands.nodes.Count > 0 Then
@@ -547,7 +551,7 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     Call ClearTreeViewNodes(trvCommands)
     
     '// create xpath expression based on strScriptOwner
-    If strScriptOwner = vbNullString Then
+    If LenB(strScriptOwner) = 0 Then
         xpath = "/commands/command[not(@owner)]"
         'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
     Else
@@ -559,25 +563,24 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     Set commandNodes = m_Commands.XMLDocument.documentElement.selectNodes(xpath)
     ReDim commandNameArray(commandNodes.length)
     
-    
     '// read them 1 at a time and add them to an array
-    X = 0
+    x = 0
     For Each xmlCommand In m_Commands.XMLDocument.documentElement.selectNodes(xpath)
-        commandNameArray(X) = xmlCommand.Attributes.getNamedItem("name").Text
-        X = X + 1
-    Next
+        commandNameArray(x) = xmlCommand.Attributes.getNamedItem("name").Text
+        x = x + 1
+    Next xmlCommand
     
     '// sort the command names
     Call BubbleSort1(commandNameArray)
-    
 
     '// loop through the sorted array and select the commands
-    For X = LBound(commandNameArray) To UBound(commandNameArray)
-
-        commandName = commandNameArray(X)
-        If Len(commandName) > 0 Then
+    For x = LBound(commandNameArray) To UBound(commandNameArray)
+        
+        commandName = commandNameArray(x)
+        commandName = clsCommandObj.CleanXPathVar(commandName)
+        If LenB(commandName) > 0 Then
             '// create xpath expression based on strScriptOwner
-            If strScriptOwner = vbNullString Then
+            If LenB(strScriptOwner) = 0 Then
                 xpath = StringFormat("/commands/command[@name='{0}' and not(@owner)]", commandName)
                 'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
             Else
@@ -628,7 +631,7 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
                 Next j
             Next i
         End If '// Len(commandName) > 0
-    Next
+    Next x
     
     '// 08/30/2008 JSM - click the first command alphabetically
     ' fixed to work with SelectedNodeChanged() -Ribose/2009-08-10
@@ -638,6 +641,10 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
         trvCommands_SelectedNodeChanged
     End If
     
+    If (intScriptIndex >= 0) Then
+        cboCommandGroup.ListIndex = intScriptIndex
+    End If
+
 End Sub
 
 
@@ -745,7 +752,6 @@ Private Sub FormIsDirty()
     cmdSave.Enabled = True
     cmdDiscard.Enabled = True
 End Sub
-
 
 '// Checks the hiarchy of the treenodes to determine what type of node it is.
 '// 08/29/2008 JSM - Created
@@ -992,12 +998,12 @@ End Sub
 '// 08/29/2008 JSM - Created
 Private Sub ResetForm()
     
-    txtRank.Text = ""
+    txtRank.Text = vbNullString
     cboAlias.Clear
     cboFlags.Clear
-    txtDescription.Text = ""
-    txtSpecialNotes.Text = ""
-    fraCommand.Caption = ""
+    txtDescription.Text = vbNullString
+    txtSpecialNotes.Text = vbNullString
+    fraCommand.Caption = vbNullString
     chkDisable.Value = 0
     
     txtRank.Enabled = False
@@ -1020,13 +1026,12 @@ Private Sub ResetForm()
     
     chkDisable.Visible = False
     
-    
     m_SelectedElement.IsDirty = False
     cmdSave.Enabled = False
     cmdDiscard.Enabled = False
     cmdDeleteCommand.Enabled = False
     
-    lblSyntax.Caption = ""
+    lblSyntax.Caption = vbNullString
     lblSyntax.ForeColor = RTBColors.ConsoleText
     
 End Sub

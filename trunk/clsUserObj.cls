@@ -102,14 +102,14 @@ Public Property Let CharacterName(ByVal str As String)
 
 End Property
 
-Public Property Get game() As String
+Public Property Get Game() As String
 
     ' ...
-    game = m_game
+    Game = m_game
 
 End Property
 
-Public Property Let game(ByVal str As String)
+Public Property Let Game(ByVal str As String)
 
     ' ...
     m_game = str
@@ -133,14 +133,14 @@ End Property
 Public Property Get IsUsingDII() As Boolean
 
     ' ...
-    IsUsingDII = ((game = "D2DV") Or (game = "D2XP"))
+    IsUsingDII = ((Game = "D2DV") Or (Game = "D2XP"))
 
 End Property
 
 Public Property Get IsUsingWarIII() As Boolean
 
     ' ...
-    IsUsingWarIII = ((game = "WAR3") Or (game = "W3XP"))
+    IsUsingWarIII = ((Game = "WAR3") Or (Game = "W3XP"))
 
 End Property
 
@@ -178,7 +178,7 @@ End Property
 Public Property Get DisplayName() As String
 
     ' ...
-    DisplayName = convertUsername(m_actual_name)
+    DisplayName = ConvertUsername(m_actual_name)
 
 End Property
 
@@ -353,7 +353,7 @@ Public Sub DisplayQueue()
         Set CurrentEvent = Queue(j)
     
         ' ...
-        Select Case (CurrentEvent.EventID)
+        Select Case (CurrentEvent.eventID)
             ' ...
             Case ID_USER
                 Call Event_UserInChannel(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, _
@@ -386,7 +386,7 @@ Public Sub DisplayQueue()
     Exit Sub
 
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, _
+    frmChat.AddChat RTBColors.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.description & " in clsUserObj::DisplayQueue()."
 
     Exit Sub
@@ -405,7 +405,7 @@ Public Function Clone() As Object
     Clone.Flags = Flags
     Clone.Clan = Clan
     Clone.CharacterName = CharacterName
-    Clone.game = game
+    Clone.Game = Game
     Clone.JoinTime = JoinTime
     Clone.LastTalkTime = LastTalkTime
     Clone.PassedChannelAuth = PassedChannelAuth

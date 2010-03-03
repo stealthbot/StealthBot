@@ -32,18 +32,18 @@ Private m_UniqName      As String
 
 Public Sub List()
     With frmChat
-        .AddChat vbRed, StringFormat("Logon Type:   0x{0}", ZeroOffset(LogonType, 8))
-        .AddChat vbRed, StringFormat("Server Token: 0x{0}", ZeroOffset(ServerToken, 8))
-        .AddChat vbRed, StringFormat("Client Token: 0x{0}", ZeroOffset(ClientToken, 8))
-        .AddChat vbRed, StringFormat("UDP Value:    0x{0}", ZeroOffset(UDPValue, 8))
-        .AddChat vbRed, "CRev Info: "
-        .AddChat vbRed, StringFormat("  FileTime: {0}", CRevFileTime)
-        .AddChat vbRed, StringFormat("  FileName: {0}", CRevFileName)
-        .AddChat vbRed, StringFormat("  Seed:     {0}", IIf(InStr(1, CRevSeed, "A=", vbTextCompare) = 0, StrToHex(CRevSeed), CRevSeed))
-        .AddChat vbRed, StringFormat("  Version:  0x{0}", ZeroOffset(CRevVersion, 8))
-        .AddChat vbRed, StringFormat("  Checksum: 0x{0}", ZeroOffset(CRevChecksum, 8))
-        .AddChat vbRed, StringFormat("  Result:   {0}", IIf(InStr(1, CRevSeed, "A=", vbTextCompare) = 0, StrToHex(CRevResult), CRevResult))
-        .AddChat vbRed, StringFormat("MCP Data:{0}{1}", vbNewLine, DebugOutput(m_MCPData))
+        .AddChat RTBColors.ErrorMessageText, StringFormat("Logon Type:   0x{0}", ZeroOffset(LogonType, 8))
+        .AddChat RTBColors.ErrorMessageText, StringFormat("Server Token: 0x{0}", ZeroOffset(ServerToken, 8))
+        .AddChat RTBColors.ErrorMessageText, StringFormat("Client Token: 0x{0}", ZeroOffset(ClientToken, 8))
+        .AddChat RTBColors.ErrorMessageText, StringFormat("UDP Value:    0x{0}", ZeroOffset(UDPValue, 8))
+        .AddChat RTBColors.ErrorMessageText, "CRev Info: "
+        .AddChat RTBColors.ErrorMessageText, StringFormat("  FileTime: {0}", CRevFileTime)
+        .AddChat RTBColors.ErrorMessageText, StringFormat("  FileName: {0}", CRevFileName)
+        .AddChat RTBColors.ErrorMessageText, StringFormat("  Seed:     {0}", IIf(InStr(1, CRevSeed, "A=", vbTextCompare) = 0, StrToHex(CRevSeed), CRevSeed))
+        .AddChat RTBColors.ErrorMessageText, StringFormat("  Version:  0x{0}", ZeroOffset(CRevVersion, 8))
+        .AddChat RTBColors.ErrorMessageText, StringFormat("  Checksum: 0x{0}", ZeroOffset(CRevChecksum, 8))
+        .AddChat RTBColors.ErrorMessageText, StringFormat("  Result:   {0}", IIf(InStr(1, CRevSeed, "A=", vbTextCompare) = 0, StrToHex(CRevResult), CRevResult))
+        .AddChat RTBColors.ErrorMessageText, StringFormat("MCP Data:{0}{1}", vbNewLine, DebugOutput(m_MCPData))
     End With
 End Sub
 

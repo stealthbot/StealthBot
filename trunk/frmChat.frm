@@ -1985,7 +1985,7 @@ Private Sub Form_GotFocus()
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in Form_GotFocus()."
+    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in Form_GotFocus()."
 
     Exit Sub
 End Sub
@@ -2618,7 +2618,7 @@ Sub Form_Resize()
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in Form_Resize()."
+    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in Form_Resize()."
 End Sub
 
 Function GenerateTooltip() As String
@@ -2668,7 +2668,7 @@ Private Sub ClanHandler_CandidateList(ByVal Status As Byte, Users() As String)
 End Sub
 
 Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
-    AddChat vbYellow, "[CLAN] " & Member & " has left the clan."
+    AddChat RTBColors.InformationText, "[CLAN] " & Member & " has left the clan."
     
     Dim x   As ListItem
     Dim pos As Integer
@@ -3295,7 +3295,7 @@ Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLInd
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in FriendUpdate()."
+    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in FriendUpdate()."
     
     Exit Sub
 End Sub
@@ -3905,7 +3905,7 @@ Private Sub mnuHideBans_Click()
     mnuHideBans.Checked = (Not mnuHideBans.Checked)
 
     WriteINI "Main", "HideBanMessages", IIf(mnuHideBans.Checked, "Y", "N")
-    AddChat vbYellow, "Ban messages " & IIf(mnuHideBans.Checked, "disabled", "enabled") & "."
+    AddChat RTBColors.InformationText, "Ban messages " & IIf(mnuHideBans.Checked, "disabled", "enabled") & "."
 End Sub
 
 Private Sub mnuHideWhispersInrtbChat_Click()
@@ -4303,12 +4303,12 @@ ERROR_HANDLER:
 
     ' Cannot call this method while the script is executing
     If (Err.Number = -2147467259) Then
-        frmChat.AddChat vbRed, "Error: Script is still executing."
+        frmChat.AddChat RTBColors.ErrorMessageText, "Error: Script is still executing."
         
         Exit Sub
     End If
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & _
         " in mnuReloadScripts_Click()."
     
 End Sub
@@ -4789,7 +4789,7 @@ Private Sub tmrAccountLock_Timer()
         Exit Sub
     End If
     
-    AddChat vbRed, "[BNCS] Your account appears to be locked, likely due to an excessive number of " & _
+    AddChat RTBColors.ErrorMessageText, "[BNCS] Your account appears to be locked, likely due to an excessive number of " & _
         "invalid logins.  Please try connecting again in 15-20 minutes."
         
     DoDisconnect
@@ -5714,7 +5714,7 @@ Private Sub sckMCP_DataArrival(ByVal bytesTotal As Long)
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, _
+    AddChat RTBColors.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.description & " in sckMCP_DataArrival()."
 
     Exit Sub
@@ -5870,7 +5870,7 @@ Send:
 
 ERROR_HANDLER:
 
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in Timer_Timer()."
+    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in Timer_Timer()."
     
     Exit Sub
     
@@ -5966,7 +5966,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error: " & Err.description & " in tmrSilentChannel_Timer(" & Index & ")."
+    AddChat RTBColors.ErrorMessageText, "Error: " & Err.description & " in tmrSilentChannel_Timer(" & Index & ")."
     
     Exit Sub
 End Sub
@@ -6263,7 +6263,7 @@ Private Sub UpTimer_Timer()
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in UpTimer_Timer()."
+    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in UpTimer_Timer()."
 
     Exit Sub
     
@@ -6355,7 +6355,7 @@ Private Function GetAuth(ByVal Username As String) As Long
 
 ERROR_HANDLER:
 
-    AddChat vbRed, "Beta Auth Error: #", vbRed, Err.Number, vbRed, ": ", vbRed, Err.description
+    AddChat RTBColors.ErrorMessageText, "Beta Auth Error: #", vbRed, Err.Number, vbRed, ": ", vbRed, Err.description
     Set clsCRC32 = Nothing
     GetAuth = False
     Exit Function
@@ -7303,7 +7303,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
 
 ERROR_HANDLER:
     If (Err.Number = 10049) Then
-        AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in ReloadConfig()."
+        AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in ReloadConfig()."
     End If
     
     Resume Next
@@ -7540,7 +7540,7 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in sckBNet_DataArrival()."
+    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in sckBNet_DataArrival()."
     
     Exit Sub
 End Sub
@@ -7690,7 +7690,7 @@ Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, _
+    AddChat RTBColors.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.description & " in sckBNLS_DataArrival()."
 
     Exit Sub
@@ -8000,8 +8000,10 @@ On Error GoTo ERROR_HANDLER:
     
     With lvClanList
         .ListItems.Add .ListItems.Count + 1, , Name, , visible_rank
-        If (StrComp(GetCurrentUsername, Name) = 0) Then
-            .ListItems(.ListItems.Count).ForeColor = FormColors.ChannelListSelf
+        If (BotVars.NoColoring = False) Then
+            If (StrComp(GetCurrentUsername, Name) = 0) Then
+                .ListItems(.ListItems.Count).ForeColor = FormColors.ChannelListSelf
+            End If
         End If
         .ListItems(.ListItems.Count).ListSubItems.Add , , , Online + 6
         .ListItems(.ListItems.Count).ListSubItems.Add , , visible_rank
@@ -8017,7 +8019,7 @@ On Error GoTo ERROR_HANDLER:
     RunInAll "Event_ClanInfo", Name, Rank, Online
     Exit Sub
 ERROR_HANDLER:
-    AddChat vbRed, StringFormat("Error: #{0}: {1} in frmChat.AddClanMember", Err.Number, Err.description)
+    AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddClanMember", Err.Number, Err.description)
 End Sub
 
 Private Function GetClanSelectedUser() As String
@@ -8337,7 +8339,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in DoDisconnect()."
+    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in DoDisconnect()."
     
     Exit Sub
 End Sub

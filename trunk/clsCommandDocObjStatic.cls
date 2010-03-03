@@ -31,7 +31,7 @@ Public Function GetCommands(Optional ByVal scriptName As String = vbNullString) 
   
     doc.Load GetFilePath("Commands.xml")
     
-    scriptName = Replace$(scriptName, "'", "&apos;")
+    scriptName = clsCommandObj.CleanXPathVar(scriptName)
     
     If scriptName = vbNullString Then
          xpath = StringFormat("./commands/command[not(@owner) and (not(@enabled) or @enable = 1)]", _
