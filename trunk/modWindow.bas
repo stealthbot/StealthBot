@@ -29,6 +29,12 @@ Private Type TEXTRANGE
     lpstrText As String
 End Type
 
+Private Type COPYDATASTRUCT
+    dwData As Long
+    cbData As Long
+    lpData As Long
+End Type
+
 Public ID_TASKBARICON       As Integer
 Public TASKBARCREATED_MSGID As Long
 
@@ -44,6 +50,7 @@ Private Const SW_SHOW = 5
 Private Const WM_COMMAND = &H111
 Private Const WM_USER = &H400
 Private Const WM_NCDESTROY = &H82
+Private Const WM_COPYDATA = &H4A
 Public Const WM_ICONNOTIFY = WM_USER + 100
 
 Private hWndSet As New Dictionary
@@ -88,6 +95,9 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wPara
     Dim eText  As TEXTRANGE
     Dim sText  As String
     Dim lLen   As Long
+    Dim cds As COPYDATASTRUCT
+    Dim buf(0 To 255) As Byte
+    Dim Data As String
     
     If msg = TASKBARCREATED_MSGID Then
         Shell_NotifyIcon NIM_ADD, nid
@@ -127,6 +137,16 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wPara
     ElseIf msg = WM_COMMAND Then
         If lParam = 0 Then
             MenuClick hWnd, wParam
+        End If
+    ElseIf msg = WM_COPYDATA Then
+        Call CopyMemory(cds, ByVal lParam, Len(cds))
+        If (cds.cbData < UBound(buf)) Then
+            Call CopyMemory(buf(0), ByVal cds.lpData, cds.cbData)
+            Data = StrConv(buf, vbUnicode)
+            Data = Left$(Data, InStr(1, Data, Chr$(0)) - 1)
+            If (StrComp(Data, "-reloadscripts", vbTextCompare) = 0) Then
+                SharedScriptSupport.ReloadScript
+            End If
         End If
     End If
     

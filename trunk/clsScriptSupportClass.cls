@@ -904,6 +904,12 @@ Public Function GetApphInstance() As Long
     GetApphInstance = App.hInstance
 End Function
 
+'// GETCHATHWND
+'//     Returns the hWnd for the main chat window
+Public Function GetChathWnd() As Long
+    GetChathWnd = frmChat.hWnd
+End Function
+
 
 '// DOSTATSTRINGPARSE
 '//     Parses a statstring given to you by GetInternalData (or elsewhere)
