@@ -139,7 +139,7 @@ Option Explicit
 Private ClosedProperly As Boolean
 
 Private Sub CloseEmailReg()
-    If Not g_Online Then
+    If g_Connected And Not g_Online Then
         If Dii And BotVars.UseRealm Then
             frmRealm.Show
         Else

@@ -777,6 +777,7 @@ Private Sub MCPHandler_CharListEntry(ByVal CharName As String, ByVal Statstring 
                 
                 If (.ListItems.Count = CharacterCount) Then
                     optCreateNew.Enabled = True
+                    tmrLoginTimeout.Enabled = True
                 End If
             End If
         End If
@@ -800,7 +801,6 @@ Private Sub MCPHandler_RealmStartup(ByVal Status As Byte, ByVal Message As Strin
     If Status = 0 Then
         frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
         MCPHandler.RequestCharacterList
-        tmrLoginTimeout.Enabled = True
     Else
         frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
         RealmError = True

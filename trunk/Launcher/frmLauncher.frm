@@ -55,6 +55,7 @@ Begin VB.Form frmLauncher
    End
    Begin VB.CommandButton cmdLaunchThis 
       Caption         =   "&Launch Selected Profile"
+      Default         =   -1  'True
       Enabled         =   0   'False
       BeginProperty Font 
          Name            =   "Tahoma"
@@ -91,7 +92,7 @@ Begin VB.Form frmLauncher
       View            =   3
       LabelEdit       =   1
       LabelWrap       =   -1  'True
-      HideSelection   =   -1  'True
+      HideSelection   =   0   'False
       HideColumnHeaders=   -1  'True
       FullRowSelect   =   -1  'True
       _Version        =   393217
@@ -516,7 +517,7 @@ End Sub
 ' so neither has to be done anywhere else
 Private Sub SetupColumns(ByVal Alignment As ListColumnAlignmentConstants)
 On Error GoTo ERROR_HANDLER:
-    Const COLUMN_WIDTH_PX As Integer = 206
+    Const COLUMN_WIDTH_PX As Integer = 200
 
     lstProfiles.ListItems.Clear
     Select Case Alignment
