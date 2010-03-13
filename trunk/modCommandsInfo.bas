@@ -29,7 +29,7 @@ Public Sub OnBanListCount(Command As clsCommandObj)
     If (g_Channel.Banlist.Count = 0) Then
         Command.Respond "There are no users on the internal ban list."
     Else
-        Command.Respond StringFormat("There {0} currently {1} user{1} on the internal ban list.", _
+        Command.Respond StringFormat("There {0} currently {1} user{2} on the internal ban list.", _
             IIf(g_Channel.Banlist.Count > 1, "are", "is"), g_Channel.Banlist.Count, _
             IIf(g_Channel.Banlist.Count > 1, "s", vbNullString))
     End If
