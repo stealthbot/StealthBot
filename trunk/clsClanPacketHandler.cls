@@ -81,6 +81,9 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
                 For iTemp = 1 To bRank
                     ary(iTemp - 1) = inBuf.GetString
                 Next iTemp
+            Else
+                ReDim ary(0)
+                ary(0) = vbNullString
             End If
             RaiseEvent CandidateList(bStatus, ary())
             

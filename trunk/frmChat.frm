@@ -1020,7 +1020,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1046,6 +1045,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -7244,8 +7244,13 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     txtPost.Text = ""
     
     s = ReadCfg(OT, "DisablePrefix")
-    If s = "Y" Then txtPre.Visible = False Else txtPre.Visible = True
-    mnuPopAddLeft.Enabled = txtPre.Visible
+    If s = "Y" Then
+        txtPre.Visible = False
+        mnuPopAddLeft.Enabled = False
+    Else
+        txtPre.Visible = True
+        mnuPopAddLeft.Enabled = True
+    End If
     
     s = ReadCfg(OT, "DisableSuffix")
     If s = "Y" Then txtPost.Visible = False Else txtPost.Visible = True
@@ -8377,4 +8382,3 @@ Public Sub RecordcboSendSelInfo()
     cboSendSelLength = cboSend.selLength
     cboSendSelStart = cboSend.selStart
 End Sub
-
