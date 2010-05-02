@@ -307,8 +307,11 @@ Public Function GetUser(ByVal Username As String, Optional ByVal SearchLimit As 
     Dim Index As Integer ' ...
     
     ' ...
-    If (StrictIsNumeric(Username)) Then
+    If (StrictIsNumeric(Username) And (Len(Username) <= 4)) Then
         Index = CInt(Val(Username))
+		If (Index > Users.Count) Then
+			Index = GetUserIndex(Username, SearchLimit)
+		End If
     Else
         Index = GetUserIndex(Username, SearchLimit)
     End If
