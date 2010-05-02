@@ -1101,7 +1101,7 @@ Public Function GetSafelist(ByVal Username As String) As Boolean
         
         If (Not InStr(1, gAcc.Flags, "S", vbBinaryCompare) = 0) Then
             GetSafelist = True
-        ElseIf (gAcc.Rank >= 20) Then
+        ElseIf (gAcc.Rank >= AutoModSafelistValue) Then
             GetSafelist = True
         End If
     Else
