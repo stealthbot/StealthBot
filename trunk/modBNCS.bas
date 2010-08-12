@@ -116,6 +116,16 @@ On Error GoTo ERROR_HANDLER:
         ds.CRevSeed = .GetString
     End With
     
+    If (MDebug("all") Or MDebug("crev")) Then
+        frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Name: {0}", ds.CRevFileName)
+        frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Time: {0}", ds.CRevFileTime)
+        If (InStr(1, ds.CRevFileName, "lockdown", vbTextCompare) > 0) Then
+            frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Seed: {0}", StrToHex(ds.CRevSeed))
+        Else
+            frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Seed: {0}", ds.CRevSeed)
+        End If
+    End If
+    
     If (BotVars.BNLS) Then
         Call modBNLS.SEND_BNLS_VERSIONCHECKEX2(ds.CRevFileTimeRaw, ds.CRevFileName, ds.CRevSeed)
     Else
@@ -348,7 +358,7 @@ End Sub
 Private Sub RECV_SID_CHATEVENT(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
     
-    Dim eventID   As Long
+    Dim EventID   As Long
     Dim lFlags    As Long
     Dim lPing     As Long
     Dim sUsername As String
@@ -359,7 +369,7 @@ On Error GoTo ERROR_HANDLER:
     Dim sClanTag As String
     Dim sW3Icon  As String
     
-    eventID = pBuff.GetDWORD
+    EventID = pBuff.GetDWORD
     lFlags = pBuff.GetDWORD
     lPing = pBuff.GetDWORD
     pBuff.GetDWORD 'IP Address
@@ -373,7 +383,7 @@ On Error GoTo ERROR_HANDLER:
         Dim cUserStats As New clsUserStats
         With cUserStats
             .Statstring = sText
-            sProduct = .game
+            sProduct = .Game
             sParsed = .ToString
             sClanTag = .Clan
         End With
@@ -384,7 +394,7 @@ On Error GoTo ERROR_HANDLER:
         If Len(sText) > 4 Then sW3Icon = StrReverse(Mid$(sText, 6, 4))
     End If
                 
-    Select Case eventID
+    Select Case EventID
         Case ID_JOIN:        Call Event_UserJoins(sUsername, lFlags, sParsed, lPing, sProduct, sClanTag, sText, sW3Icon)
         Case ID_LEAVE:       Call Event_UserLeaves(sUsername, lFlags)
         Case ID_USER:        Call Event_UserInChannel(sUsername, lFlags, sParsed, lPing, sProduct, sClanTag, sText, sW3Icon)
@@ -400,7 +410,7 @@ On Error GoTo ERROR_HANDLER:
         Case ID_EMOTE:       Call Event_UserEmote(sUsername, lFlags, sText)
         Case Else:
             If MDebug("debug") Then
-                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Unhandled SID_CHATEVENT Event: 0x{0}", ZeroOffset(eventID, 8)))
+                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Unhandled SID_CHATEVENT Event: 0x{0}", ZeroOffset(EventID, 8)))
                 Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Packet data: {0}{1}", vbNewLine, DebugOutput(pBuff.Data)))
             End If
     End Select
