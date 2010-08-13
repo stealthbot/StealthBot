@@ -6649,6 +6649,8 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             Send = Splt(i)
             If (LenB(Command) > 0) Then
                 Send = StringFormat("{0} {1}", Command, Send)
+            ElseIf (Left(Send, 1) = "/" And i > LBound(Splt)) Then
+                Send = StringFormat(" {0}", Send)
             End If
             
             ' create the queue object
