@@ -203,35 +203,27 @@ Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Inte
 End Function
 
 Public Function GetGamePath(ByVal Client As String) As String
+    ' [override] XXHashes= functionality replaced by checkrevision.ini -> [CRev_XX] Path=
+    ' removed ~Ribose/2010-08-12
+    Dim CRevINIPath As String
     Dim Key As String
+    Dim Path As String
+    Dim sep1 As String
+    Dim sep2 As String
     
+    CRevINIPath = GetFilePath("CheckRevision.ini", StringFormat("{0}\", App.Path))
     Key = GetProductKey(Client)
+    Path = ReadINI$(StringFormat("CRev_{0}", Key), "Path", CRevINIPath)
+    sep1 = vbNullString
+    sep2 = vbNullString
     
-    If (LenB(ReadCfg("Override", Key & "Hashes")) > 0) Then
-        GetGamePath = ReadCfg("Override", Key & "Hashes")
-        
-        If (Not Right$(GetGamePath, 1) = "\") Then
-            GetGamePath = GetGamePath & "\"
-        End If
-    Else
-        Select Case (UCase$(Client))
-            Case "W2BN", "NB2W": GetGamePath = StringFormat("{0}\W2BN\", App.Path)
-            Case "STAR", "RATS": GetGamePath = StringFormat("{0}\STAR\", App.Path)
-            Case "SEXP", "PXES": GetGamePath = StringFormat("{0}\STAR\", App.Path)
-            Case "D2DV", "VD2D": GetGamePath = StringFormat("{0}\D2DV\", App.Path)
-            Case "D2XP", "PX2D": GetGamePath = StringFormat("{0}\D2XP\", App.Path)
-            Case "W3XP", "PX3W": GetGamePath = StringFormat("{0}\WAR3\", App.Path)
-            Case "WAR3", "3RAW": GetGamePath = StringFormat("{0}\WAR3\", App.Path)
-            Case "DRTL", "LTRD": GetGamePath = StringFormat("{0}\DRTL\", App.Path)
-            Case "DSHR", "RHSD": GetGamePath = StringFormat("{0}\DSHR\", App.Path)
-            Case "JSTR", "RTSJ": GetGamePath = StringFormat("{0}\JSTR\", App.Path)
-            Case "SSHR", "RHSS": GetGamePath = StringFormat("{0}\SSHR\", App.Path)
-            
-            Case Else
-                frmChat.AddChat RTBColors.ErrorMessageText, _
-                    "Warning: Invalid game client in GetGamePath()"
-        End Select
+    If (InStr(1, Path, ":\") = 0) Then
+        If (Left$(Path, 1) <> "\") Then sep1 = "\"
+        If (Right$(Path, 1) <> "\") Then sep2 = "\"
+        Path = StringFormat("{0}{1}{2}{3}", App.Path, sep1, Path, sep2)
     End If
+    
+    GetGamePath = Path
 End Function
 
 Function MKL(Value As Long) As String
@@ -2746,7 +2738,7 @@ Function GetProductKey(Optional ByVal Product As String) As String
         Case "WAR3", "3RAW": GetProductKey = "W3"
         Case "W3XP", "PX3W": GetProductKey = "W3"
         Case "DRTL", "LTRD": GetProductKey = "D1"
-        Case "DSHR", "RHSD": GetProductKey = "D1"
+        Case "DSHR", "RHSD": GetProductKey = "DS"
         Case "JSTR", "RTSJ": GetProductKey = "JS"
         Case "SSHR", "RHSS": GetProductKey = "SS"
         Case Else:           GetProductKey = Product

@@ -2026,6 +2026,9 @@ On Error GoTo ERROR_HANDLER:
         
         Case 9:
             frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
+            
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your expansion CD-key is banned. " & _
+                "For more information, visit http://us.blizzard.com/support/article.xml?locale=en_US&articleId=20637 ."
         
         Case 10:
             frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"

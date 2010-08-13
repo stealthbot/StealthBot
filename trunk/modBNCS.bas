@@ -21,7 +21,9 @@ Public Const SID_MESSAGEBOX             As Byte = &H19
 Public Const SID_LOGONCHALLENGEEX       As Byte = &H1D
 Public Const SID_CLIENTID2              As Byte = &H1E
 Public Const SID_PING                   As Byte = &H25
+Public Const SID_LOGONCHALLENGE         As Byte = &H28
 Public Const SID_ICONDATA               As Byte = &H2D
+Public Const SID_CDKEY                  As Byte = &H30
 Public Const SID_CDKEY2                 As Byte = &H36
 Public Const SID_LOGONRESPONSE2         As Byte = &H3A
 Public Const SID_CREATEACCOUNT2         As Byte = &H3D
@@ -72,7 +74,9 @@ On Error GoTo ERROR_HANDLER:
         Case SID_MESSAGEBOX:             Call RECV_SID_MESSAGEBOX(pBuff)             '0x19
         Case SID_LOGONCHALLENGEEX:       Call RECV_SID_LOGONCHALLENGEEX(pBuff)       '0x1D
         Case SID_PING:                   Call RECV_SID_PING(pBuff)                   '0x25
+        Case SID_LOGONCHALLENGE:         Call RECV_SID_LOGONCHALLENGE(pBuff)         '0x28
         Case SID_ICONDATA:               'Don't Throw Unknown Error                  '0x2D
+        Case SID_CDKEY:                  Call RECV_SID_CDKEY(pBuff)                  '0x30
         Case SID_CDKEY2:                 Call RECV_SID_CDKEY2(pBuff)                 '0x36
         Case SID_LOGONRESPONSE2:         Call RECV_SID_LOGONRESPONSE2(pBuff)         '0x3A
         Case SID_CREATEACCOUNT2:         Call RECV_SID_CREATEACCOUNT2(pBuff)         '0x3D
@@ -100,6 +104,39 @@ ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNCSRecvPacket()", Err.Number, Err.description, OBJECT_NAME))
 End Function
 
+'*********************************
+' SID_CLIENTID (0x05) C->S
+'*********************************
+' (DWORD) Registration Version
+' (DWORD) Registration Authority
+' (DWORD) Account Number
+' (DWORD) Registration Token
+' (STRING) LAN computer name
+' (STRING) LAN username
+'*********************************
+'For legacy login system (JSTR, SSHR).
+'*********************************
+Public Sub SEND_SID_CLIENTID()
+On Error GoTo ERROR_HANDLER:
+
+    Dim pBuff As New clsDataBuffer
+    With pBuff
+        .InsertDWord 0
+        .InsertDWord 0
+        .InsertDWord 0
+        .InsertDWord 0
+        .InsertNTString vbNullString
+        .InsertNTString vbNullString
+        .SendPacket SID_CLIENTID
+    End With
+    Set pBuff = Nothing
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CLIENTID()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
 '*******************************
 'SID_STARTVERSIONING (0x06) S->C
 '*******************************
@@ -116,6 +153,7 @@ On Error GoTo ERROR_HANDLER:
         ds.CRevSeed = .GetString
     End With
     
+    Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Checking version...")
     If (MDebug("all") Or MDebug("crev")) Then
         frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Name: {0}", ds.CRevFileName)
         frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Time: {0}", ds.CRevFileTime)
@@ -174,26 +212,42 @@ End Sub
 '*******************************
 Private Sub RECV_SID_REPORTVERSION(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
-    Dim lResult As Long
-    Dim sPatch  As String
+    Dim lResult  As Long
+    Dim sInfo    As String
+    Dim bSuccess As Boolean
     
     lResult = pBuff.GetDWORD
-    sPatch = pBuff.GetDWORD
+    sInfo = pBuff.GetString
+    bSuccess = False
     
     Select Case lResult
-        Case 0: Call Event_VersionCheck(1, sPatch) 'Failed Version Check
-        Case 1: Call Event_VersionCheck(1, sPatch) 'Old Game Version
+        Case 0: Call Event_VersionCheck(1, sInfo) 'Failed Version Check
+        Case 1: Call Event_VersionCheck(1, sInfo) 'Old Game Version
         Case 2: 'Success
-            Call Event_VersionCheck(0, sPatch)
-            If (GetCDKeyCount > 0) Then
-                SEND_SID_CDKEY2
-            Else
-                SEND_SID_LOGONRESPONSE2
-            End If
-        Case 3: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Version Check Failed, Invalid game version" 'Reinstall required
+            bSuccess = True
+            Call Event_VersionCheck(0, sInfo)
+        Case 3: Call Event_VersionCheck(1, sInfo) '"Reinstall Required", Invalid version
         Case Else:
             Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown SID_REPORTVERSION Response: 0x" & ZeroOffset(lResult, 8))
     End Select
+
+    If (frmChat.sckBNet.State = 7 And bSuccess) Then
+        If (GetCDKeyCount > 0) Then
+            Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Sending CDKey information...")
+            Select Case GetLogonSystem()
+                Case BNCS_OLS: Call SEND_SID_CDKEY2
+                Case BNCS_LLS: Call SEND_SID_CDKEY
+                Case Else:
+                    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", modBNCS.GetLogonSystem())
+                    frmChat.AddChat RTBColors.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
+                    frmChat.DoDisconnect
+            End Select
+        Else
+            Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Sending login information...")
+            frmChat.tmrAccountLock.Enabled = True
+            SEND_SID_LOGONRESPONSE2
+        End If
+    End If
     
     Exit Sub
 ERROR_HANDLER:
@@ -642,6 +696,103 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_PING()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
+'********************************
+'SID_LOGONCHALLENGE (0x28) S->C
+'********************************
+' (DWORD) Server Token
+'********************************
+Private Sub RECV_SID_LOGONCHALLENGE(pBuff As clsDataBuffer)
+On Error GoTo ERROR_HANDLER:
+    
+    ds.ServerToken = pBuff.GetDWORD
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONCHALLENGE()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
+'*******************************
+'SID_CDKEY (0x30) S->C
+'*******************************
+' (DWORD) Result
+' (STRING) Key owner
+'*******************************
+Private Sub RECV_SID_CDKEY(pBuff As clsDataBuffer)
+On Error GoTo ERROR_HANDLER:
+    Dim lResult As Long
+    Dim sInfo   As String
+    
+    lResult = pBuff.GetDWORD
+    sInfo = pBuff.GetString
+    
+    Select Case lResult
+        Case 1:
+            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Your CDKey was accepted!"
+            frmChat.AddChat RTBColors.InformationText, "[BNCS] Sending login information..."
+            frmChat.tmrAccountLock.Enabled = True
+            SEND_SID_LOGONRESPONSE2
+            Exit Sub
+        Case 2: Call Event_VersionCheck(2, sInfo) 'Invalid CDKey
+        Case 3: Call Event_VersionCheck(4, sInfo) 'CDKey is for the wrong product
+        Case 4: Call Event_VersionCheck(5, sInfo) 'CDKey is Banned
+        Case 5: Call Event_VersionCheck(6, sInfo) 'CDKey is In Use
+        Case Else: frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Unknown SID_CDKEY Response 0x{0}: {1}", ZeroOffset(lResult, 8), sInfo)
+    End Select
+    CloseAllConnections
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CDKEY()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
+'*******************************
+'SID_CDKEY (0x30) C->S
+'*******************************
+' (DWORD) Spawn (0/1)
+' (STRING) Key
+' (STRING) Key owner
+'*******************************
+Public Sub SEND_SID_CDKEY()
+On Error GoTo ERROR_HANDLER:
+    Dim lResult  As Long
+    
+    Dim pBuff As New clsDataBuffer
+    
+    lResult = kd_init()
+    
+    If (lResult = 0) Then
+        frmChat.AddChat RTBColors.ErrorMessageText, "BNCSUtil: kd_init() failed! Please use BNLS to connect."
+        frmChat.DoDisconnect
+    Else
+        lResult = kd_create(BotVars.CDKey, Len(BotVars.CDKey))
+        If (kd_isValid(lResult) = 0) Then
+            frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
+            frmChat.DoDisconnect
+        End If
+        Call kd_free(lResult)
+    End If
+    
+    With pBuff
+        .InsertDWord IIf(ReadCfg$("Override", "SpawnKey") = "Y", 1, 0)
+        .InsertNTString BotVars.CDKey
+        
+        If (LenB(ReadCfg("Override", "OwnerName")) > 0) Then
+            .InsertNTString ReadCfg("Override", "OwnerName")
+        Else
+            .InsertNTString BotVars.Username
+        End If
+        .SendPacket SID_CDKEY
+    End With
+    Set pBuff = Nothing
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CDKEY()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
 '*******************************
 'SID_CDKEY2 (0x36) S->C
 '*******************************
@@ -659,12 +810,14 @@ On Error GoTo ERROR_HANDLER:
     Select Case lResult
         Case 1:
             frmChat.AddChat RTBColors.SuccessText, "[BNCS] Your CDKey was accepted!"
+            frmChat.AddChat RTBColors.InformationText, "[BNCS] Sending login information..."
+            frmChat.tmrAccountLock.Enabled = True
             SEND_SID_LOGONRESPONSE2
             Exit Sub
-        Case 2: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your CDKey is invalid"
-        Case 3: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your CDKey is invalid, Bad Product"
-        Case 4: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your CDKey is banned from Battle.net"
-        Case 5: frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Your CDKey is in use by {0}", sInfo)
+        Case 2: Call Event_VersionCheck(2, sInfo) 'Invalid CDKey
+        Case 3: Call Event_VersionCheck(4, sInfo) 'CDKey is for the wrong product
+        Case 4: Call Event_VersionCheck(5, sInfo) 'CDKey is Banned
+        Case 5: Call Event_VersionCheck(6, sInfo) 'CDKey is In Use
         Case Else: frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Unknown SID_CDKEY2 Response 0x{0}: {1}", ZeroOffset(lResult, 8), sInfo)
     End Select
     CloseAllConnections
@@ -1600,7 +1753,7 @@ On Error GoTo ERROR_HANDLER:
         Case "3RAW", "WAR3": lRet = 1
         Case "PX3W", "W3XP": lRet = 2
         Case "LTRD", "DRTL": lRet = 0
-        Case "RSHD", "DSHR": lRet = 0
+        Case "RHSD", "DSHR": lRet = 0
         Case "RHSS", "SSHR": lRet = 0
         Case Else:           lRet = &H0
     End Select
@@ -1699,12 +1852,12 @@ On Error GoTo ERROR_HANDLER:
         Case "NB2W", "W2BN": lRet = BNCS_OLS
         Case "VD2D", "D2DV": lRet = BNCS_NLS
         Case "PX2D", "D2XP": lRet = BNCS_NLS
-        'Case "RTSJ", "JSTR": lRet = BNCS_LLS
+        Case "RTSJ", "JSTR": lRet = BNCS_LLS
         Case "3RAW", "WAR3": lRet = BNCS_NLS
         Case "PX3W", "W3XP": lRet = BNCS_NLS
         Case "LTRD", "DRTL": lRet = BNCS_OLS
-        Case "RSHD", "DSHR": lRet = BNCS_OLS
-        'Case "RHSS", "SSHR": lRet = BNCS_LLS
+        Case "RHSD", "DSHR": lRet = BNCS_OLS
+        Case "RHSS", "SSHR": lRet = BNCS_LLS
         Case Else:           lRet = &H0
     End Select
     

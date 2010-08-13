@@ -158,6 +158,9 @@ On Error GoTo ERROR_HANDLER:
                 modBNCS.SEND_SID_CLIENTID2
                 modBNCS.SEND_SID_LOCALEINFO
                 modBNCS.SEND_SID_STARTVERSIONING lVerByte
+            Case modBNCS.BNCS_LLS:
+                modBNCS.SEND_SID_CLIENTID
+                modBNCS.SEND_SID_STARTVERSIONING lVerByte
             Case Else:
                 frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", modBNCS.GetLogonSystem())
                 frmChat.AddChat RTBColors.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
@@ -217,6 +220,7 @@ On Error GoTo ERROR_HANDLER:
         Select Case modBNCS.GetLogonSystem()
             Case modBNCS.BNCS_NLS: Call modBNCS.SEND_SID_AUTH_CHECK
             Case modBNCS.BNCS_OLS: Call modBNCS.SEND_SID_REPORTVERSION(lVersionByte)
+            Case modBNCS.BNCS_LLS: Call modBNCS.SEND_SID_REPORTVERSION(lVersionByte)
             Case Else:
                 frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", modBNCS.GetLogonSystem())
                 frmChat.AddChat RTBColors.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
@@ -278,7 +282,7 @@ Public Function GetBNLSProductID(Optional ByVal sProdID As String = vbNullString
         Case "3RAW", "WAR3": GetBNLSProductID = &H7
         Case "PX3W", "W3XP": GetBNLSProductID = &H8
         Case "LTRD", "DRTL": GetBNLSProductID = &H9
-        Case "RSHD", "DSHR": GetBNLSProductID = &HA
+        Case "RHSD", "DSHR": GetBNLSProductID = &HA
         Case "RHSS", "SSHR": GetBNLSProductID = &HB
         Case Else:           GetBNLSProductID = &H0
     End Select

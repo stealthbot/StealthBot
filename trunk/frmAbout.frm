@@ -34,29 +34,9 @@ Begin VB.Form frmAbout
       Left            =   360
       MultiLine       =   -1  'True
       ScrollBars      =   2  'Vertical
-      TabIndex        =   9
+      TabIndex        =   7
       Top             =   840
       Width           =   7935
-   End
-   Begin VB.Label lblURL 
-      Alignment       =   2  'Center
-      BackColor       =   &H00000000&
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   255
-      Index           =   2
-      Left            =   6960
-      TabIndex        =   11
-      Top             =   4920
-      Width           =   1335
    End
    Begin VB.Label lblURL 
       Alignment       =   2  'Center
@@ -73,30 +53,10 @@ Begin VB.Form frmAbout
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Index           =   5
+      Index           =   2
       Left            =   4560
-      TabIndex        =   10
-      Top             =   4680
-      Width           =   2175
-   End
-   Begin VB.Label lblURL 
-      Alignment       =   2  'Center
-      BackColor       =   &H00000000&
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   255
-      Index           =   4
-      Left            =   4800
       TabIndex        =   8
-      Top             =   4920
+      Top             =   4680
       Width           =   2175
    End
    Begin VB.Label lblSpecialThanks 
@@ -114,7 +74,7 @@ Begin VB.Form frmAbout
       ForeColor       =   &H00FFFFFF&
       Height          =   375
       Left            =   360
-      TabIndex        =   7
+      TabIndex        =   6
       Top             =   480
       UseMnemonic     =   0   'False
       Width           =   8055
@@ -134,9 +94,9 @@ Begin VB.Form frmAbout
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Index           =   6
+      Index           =   3
       Left            =   6960
-      TabIndex        =   6
+      TabIndex        =   5
       Top             =   4680
       Width           =   1215
    End
@@ -155,31 +115,11 @@ Begin VB.Form frmAbout
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
-      Index           =   3
+      Index           =   1
       Left            =   2880
-      TabIndex        =   5
+      TabIndex        =   4
       Top             =   4680
       Width           =   1335
-   End
-   Begin VB.Label lblURL 
-      Alignment       =   2  'Center
-      BackColor       =   &H00000000&
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   255
-      Index           =   1
-      Left            =   2640
-      TabIndex        =   4
-      Top             =   4920
-      Width           =   2055
    End
    Begin VB.Label lblURL 
       Alignment       =   2  'Center
@@ -333,14 +273,23 @@ End Sub
 
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim i As Byte
-    For i = 0 To 6
+    For i = 0 To 3
         lblURL(i).ForeColor = vbWhite
     Next i
+    lblOK.ForeColor = vbWhite
 End Sub
 
 Private Sub lblOK_Click()
     lNumClicks = 0
     Unload Me
+End Sub
+
+Private Sub lblOK_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
+    Dim i As Byte
+    For i = 0 To 3
+        lblURL(i).ForeColor = vbWhite
+    Next i
+    lblOK.ForeColor = vbBlue
 End Sub
 
 Private Sub lblTitle_Click()
@@ -364,21 +313,19 @@ Sub TitleClicked()
 End Sub
 
 Private Sub lblURL_Click(Index As Integer)
-    If Index = 3 Then
-        ShellExecute Me.hWnd, "Open", "mailto:stealth@stealthbot.net", vbNullString, vbNullString, vbNormalFocus
-    ElseIf Index = 0 Then
-        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net", vbNullString, vbNullString, vbNormalFocus
-    ElseIf Index = 6 Then
-        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/wiki/", vbNullString, vbNullString, vbNormalFocus
-    ElseIf Index = 5 Then
-        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/sb/contributors/", vbNullString, vbNullString, vbNormalFocus
-    End If
+    Select Case Index
+        Case 0: ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net", vbNullString, vbNullString, vbNormalFocus
+        Case 1: ShellExecute Me.hWnd, "Open", "mailto:stealth@stealthbot.net", vbNullString, vbNullString, vbNormalFocus
+        Case 2: ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/sb/contributors/", vbNullString, vbNullString, vbNormalFocus
+        Case 3: ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/wiki/", vbNullString, vbNullString, vbNormalFocus
+    End Select
 End Sub
 
 Private Sub lblURL_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim i As Byte
-    For i = 0 To 6
+    For i = 0 To 3
         lblURL(i).ForeColor = vbWhite
     Next i
+    lblOK.ForeColor = vbWhite
     lblURL(Index).ForeColor = vbBlue
 End Sub

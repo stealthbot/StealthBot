@@ -897,8 +897,8 @@ Begin VB.Form frmChat
    Begin MSWinsockLib.Winsock sckBNLS 
       Left            =   5760
       Top             =   2760
-      _ExtentX        =   741
-      _ExtentY        =   741
+      _ExtentX        =   593
+      _ExtentY        =   593
       _Version        =   393216
       RemotePort      =   9367
    End
@@ -1020,6 +1020,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -5670,6 +5671,9 @@ Sub InitBNetConnection()
                 modBNCS.SEND_SID_CLIENTID2
                 modBNCS.SEND_SID_LOCALEINFO
                 modBNCS.SEND_SID_STARTVERSIONING
+            Case modBNCS.BNCS_LLS:
+                modBNCS.SEND_SID_CLIENTID
+                modBNCS.SEND_SID_STARTVERSIONING
             Case Else:
                 AddChat RTBColors.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", modBNCS.GetLogonSystem())
                 AddChat RTBColors.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
@@ -5985,6 +5989,8 @@ End Sub
 
 Sub Connect()
     Dim BNLS As Byte
+    Dim NotEnoughInfo As Boolean
+    Dim MissingInfo As String
     
     ' ...
     g_username = BotVars.Username
@@ -5993,21 +5999,62 @@ Sub Connect()
     
         Const f As String = "Main" ', p As String = "config.ini"
         'Vars
-        If BotVars.Username = vbNullString Or _
-            BotVars.Password = vbNullString Or _
-                BotVars.CDKey = vbNullString Or _
-                    BotVars.Server = vbNullString Or _
-                        BotVars.HomeChannel = vbNullString _
-                            Or BotVars.Product = vbNullString Then
-                            
-                MsgBox "You haven't provided enough information to connect! " & _
-                    "Please edit your connection settings by choosing Bot Settings under the Settings menu." & _
-                    vbNewLine & "Required information to connect: Username, Password, CDKey, Home channel, " & _
-                    "Server, your choice of Client and Trigger."
-                
-                Call DoDisconnect(1)
-                
-                Exit Sub
+        NotEnoughInfo = False
+        MissingInfo = "Information required to connect: "
+        If BotVars.Username = vbNullString Then
+            MissingInfo = MissingInfo & "Username, "
+            NotEnoughInfo = True
+        End If
+        If BotVars.Password = vbNullString Then
+            MissingInfo = MissingInfo & "Password, "
+            NotEnoughInfo = True
+        End If
+        If BotVars.Server = vbNullString Then
+            MissingInfo = MissingInfo & "Server, "
+            NotEnoughInfo = True
+        End If
+        If BotVars.HomeChannel = vbNullString Then
+            MissingInfo = MissingInfo & "Home Channel, "
+            NotEnoughInfo = True
+        End If
+        If BotVars.BotOwner = vbNullString Then
+            MissingInfo = MissingInfo & "Bot Owner, "
+            NotEnoughInfo = True
+        End If
+        If BotVars.Trigger = vbNullString Then
+            MissingInfo = MissingInfo & "Trigger, "
+            NotEnoughInfo = True
+        End If
+        If BotVars.Product = vbNullString Then
+            MissingInfo = MissingInfo & "your choice of Client, "
+            NotEnoughInfo = True
+        Else
+            Select Case StrReverse$(UCase$(BotVars.Product))
+                Case "SSHR", "DRTL", "DSHR"
+                Case "STAR", "SEXP", "JSTR", "D2DV", "W2BN", "WAR3"
+                    If BotVars.CDKey = vbNullString Then
+                        MissingInfo = MissingInfo & "CDKey, "
+                        NotEnoughInfo = True
+                    End If
+                Case "D2XP", "W3XP"
+                    If BotVars.CDKey = vbNullString Or BotVars.ExpKey = vbNullString Then
+                        MissingInfo = MissingInfo & "CDKey, "
+                        NotEnoughInfo = True
+                    End If
+                Case Else
+                    MissingInfo = MissingInfo & "your choice of Client, "
+                    NotEnoughInfo = True
+            End Select
+        End If
+        
+        If NotEnoughInfo Then
+            MsgBox "You haven't provided enough information to connect! " & _
+                "Please edit your connection settings by choosing Bot Settings under the Settings menu." & _
+                vbNewLine & Left$(MissingInfo, Len(MissingInfo) - 2) & ".", vbInformation
+            
+            Call DoDisconnect(1)
+            
+            Exit Sub
         End If
         
         SetTitle "Connecting..."
@@ -6073,7 +6120,7 @@ Sub Connect()
                     .RemotePort = BotVars.ProxyPort
                 Else
                     MsgBox "You have selected to use proxies, but no proxy is configured. Please set one up in the Advanced " & _
-                        " section of Bot Settings."
+                        " section of Bot Settings.", vbInformation
                         
                     DoDisconnect
                     
