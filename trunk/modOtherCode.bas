@@ -2997,6 +2997,8 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim arrCount       As Long
     Dim selStart       As Long
     Dim selLength      As Long
+    Dim blnHasFocus    As Boolean
+    Dim blnAtEnd       As Boolean
 
     ' *****************************************
     '              SANITY CHECKS
@@ -3064,6 +3066,15 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             blUnlock = True
         End If
         
+        ' store rtb carat and whether rtb has focus
+        With rtb
+            selStart = .selStart
+            selLength = .selLength
+            blnHasFocus = (rtb.Parent.ActiveControl Is rtb)
+            ' whether it's at the end or within one vbCrLf of the end
+            blnAtEnd = (selStart >= rtbChatLength - 2)
+        End With
+        
         ' ...
         If (rtb = frmChat.rtbChat) Then
             LogThis = (BotVars.Logging > 0)
@@ -3082,6 +3093,17 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             With rtb
                 .selStart = 0
                 .selLength = InStr(1, .Text, vbLf, vbBinaryCompare)
+                ' remove line from stored selection
+                selStart = selStart - .selLength
+                ' if selection included part of what was removed, add negative start point
+                ' to length to get difference length and start selection at 0
+                If selStart < 0 Then
+                    selLength = selLength + selStart
+                    selStart = 0
+                    ' if new length is negative, then the selection is now gone, so selection
+                    ' length should be 0
+                    If selLength < 0 Then selLength = 0
+                End If
                 .SelFontName = rtb.Font.Name
                 .SelText = ""
             End With
@@ -3149,6 +3171,17 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         End If
 
         ColorModify rtb, L
+        
+        With rtb
+            ' restore carat location and selection if not previously at end
+            If Not blnAtEnd Then
+                .selStart = selStart
+                .selLength = selLength
+            End If
+            
+            ' restore focus if previously had focus
+            If blnHasFocus Then .SetFocus
+        End With
 
         If (blUnlock) Then
             SendMessage rtb.hWnd, WM_VSCROLL, _
