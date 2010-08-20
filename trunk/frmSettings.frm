@@ -171,6 +171,7 @@ Begin VB.Form frmSettings
          Left            =   4800
          TabIndex        =   199
          Top             =   3480
+         Visible         =   0   'False
          Width           =   1212
       End
       Begin VB.CheckBox chkJPN 
@@ -190,6 +191,7 @@ Begin VB.Form frmSettings
          Left            =   4800
          TabIndex        =   198
          Top             =   3720
+         Visible         =   0   'False
          Width           =   1212
       End
       Begin VB.CheckBox chkSpawn 
@@ -209,6 +211,7 @@ Begin VB.Form frmSettings
          Left            =   3240
          TabIndex        =   197
          Top             =   4080
+         Visible         =   0   'False
          Width           =   3252
       End
       Begin VB.TextBox txtOwner 
@@ -4053,6 +4056,7 @@ Private InitChanSize        As Integer
 Private InitChatSize        As Integer
 Private PanelsInitialized   As Boolean
 Private OldBotOwner         As String
+Private ShowLegacyClients   As Boolean
 
 Const SC    As Byte = 0
 Const BW    As Byte = 1
@@ -4264,6 +4268,8 @@ Private Sub Form_Load()
         "%mp3 = Current MP3" & vbNewLine & _
         "%quote = Random quote" & vbNewLine & _
         "%rnd = Random person in the channel" & vbNewLine
+        
+    ShowLegacyClients = YesToTrue(ReadCfg("Override", "ShowConfigLegacyClients"), 0)
     
     '##########################################
     'COLOR STUFF
@@ -5046,17 +5052,19 @@ Private Sub optQuote_Click()
 End Sub
 
 Sub optSTAR_Click()
-    chkSHR.Visible = True
-    chkSpawn.Visible = True
-    chkJPN.Visible = True
+    If (ShowLegacyClients) Then
+        chkSHR.Visible = True
+        chkSpawn.Visible = True
+        chkJPN.Visible = True
+    End If
     cboCDKey.Enabled = True
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
-    If (chkSHR.Value) Then
+    If (chkSHR.Value And ShowLegacyClients) Then
         lblHashPath.Caption = GetGamePath("RHSS")
         chkSpawn.Visible = False
         cboCDKey.Enabled = False
-    ElseIf (chkJPN.Value) Then
+    ElseIf (chkJPN.Value And ShowLegacyClients) Then
         lblHashPath.Caption = GetGamePath("RTSJ")
     Else
         lblHashPath.Caption = GetGamePath("RATS")
@@ -5088,7 +5096,7 @@ End Sub
 
 Sub optW2BN_Click()
     chkSHR.Visible = False
-    chkSpawn.Visible = True
+    If (ShowLegacyClients) Then chkSpawn.Visible = True
     chkJPN.Visible = False
     cboCDKey.Enabled = True
     txtExpKey.Enabled = False
@@ -5397,6 +5405,11 @@ Private Sub InitBasicConfig()
         Case "JSTR":    Call optSTAR_Click: optSTAR.Value = True: chkJPN.Value = vbChecked ' unchecks shr
         Case Else:      Call optSTAR_Click: optSTAR.Value = True: chkSHR.Value = vbUnchecked: chkJPN.Value = vbUnchecked
     End Select
+    
+    If (Not ShowLegacyClients) Then
+        optDRTL.Visible = False
+        If (optDRTL.Value) Then optSTAR.Value = True
+    End If
     
     chkSpawn.Value = YesToTrue(ReadCfg("Override", "SpawnKey"), 0)
     
