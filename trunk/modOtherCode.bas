@@ -3,6 +3,10 @@ Option Explicit
 Private Const OBJECT_NAME As String = "modOtherCode"
 Private Declare Function GetEnvironmentVariable Lib "kernel32" Alias "GetEnvironmentVariableA" (ByVal lpName As String, ByVal lpBuffer As String, ByVal nSize As Long) As Long
 Private Declare Function SetEnvironmentVariable Lib "kernel32" Alias "SetEnvironmentVariableA" (ByVal lpName As String, ByVal lpValue As String) As Long
+Public Declare Function GetComputerName Lib "kernel32" Alias "GetComputerNameA" (ByVal sBuffer As String, lSize As Long) As Long
+Public Declare Function GetUserName Lib "advapi32.dll" Alias "GetUserNameA" (ByVal lpBuffer As String, nSize As Long) As Long
+Private Const MAX_COMPUTERNAME_LENGTH As Long = 31
+Private Const MAX_USERNAME_LENGTH As Long = 256
 
 Public Type COMMAND_DATA
     Name         As String
@@ -11,6 +15,29 @@ Public Type COMMAND_DATA
     PublicOutput As Boolean
 End Type
 
+Public Function GetComputerLanName() As String
+    Dim buff As String
+    Dim length As Long
+    buff = String(MAX_COMPUTERNAME_LENGTH + 1, Chr$(0))
+    length = Len(buff)
+    If (GetComputerName(buff, length)) Then
+        GetComputerLanName = Left(buff, length)
+    Else
+        GetComputerLanName = vbNullString
+    End If
+End Function
+
+Public Function GetComputerUsername() As String
+    Dim buff As String
+    Dim length As Long
+    buff = String(MAX_USERNAME_LENGTH + 1, Chr$(0))
+    length = Len(buff)
+    If (GetUserName(buff, length)) Then
+        GetComputerUsername = KillNull(buff)
+    Else
+        GetComputerUsername = vbNullString
+    End If
+End Function
  
 Public Function aton(sIPAddress As String) As Long
     Dim sIP() As String
@@ -1228,10 +1255,10 @@ End Sub
 '// parses a system time and returns in the format:
 '//     mm/dd/yy, hh:mm:ss
 '//
-Public Function SystemTimeToString(ByRef st As SYSTEMTIME) As String
+Public Function SystemTimeToString(ByRef sT As SYSTEMTIME) As String
     Dim buf As String
 
-    With st
+    With sT
         buf = buf & .wMonth & "/"
         buf = buf & .wDay & "/"
         buf = buf & .wYear & ", "
@@ -1244,10 +1271,10 @@ Public Function SystemTimeToString(ByRef st As SYSTEMTIME) As String
 End Function
 
 Public Function GetCurrentMS() As String
-    Dim st As SYSTEMTIME
-    GetLocalTime st
+    Dim sT As SYSTEMTIME
+    GetLocalTime sT
     
-    GetCurrentMS = Right$("000" & st.wMilliseconds, 3)
+    GetCurrentMS = Right$("000" & sT.wMilliseconds, 3)
 End Function
 
 Public Function ZeroOffset(ByVal lInpt As Long, ByVal lDigits As Long) As String

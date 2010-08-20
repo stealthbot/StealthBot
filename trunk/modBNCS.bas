@@ -125,8 +125,8 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord 0
         .InsertDWord 0
         .InsertDWord 0
-        .InsertNTString vbNullString
-        .InsertNTString vbNullString
+        .InsertNTString GetComputerLanName
+        .InsertNTString GetComputerUsername
         .SendPacket SID_CLIENTID
     End With
     Set pBuff = Nothing
@@ -641,8 +641,8 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord 0
         .InsertDWord 0
         .InsertDWord 0
-        .InsertNTString vbNullString
-        .InsertNTString vbNullString
+        .InsertNTString GetComputerLanName
+        .InsertNTString GetComputerUsername
         .SendPacket SID_CLIENTID2
     End With
     Set pBuff = Nothing
