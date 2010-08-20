@@ -240,21 +240,15 @@ Public Sub SetProfile(ByVal Location As String, ByVal description As String, Opt
     Const MAX_LOC As Long = 200
     
     '// Sanity checks
-    If LenB(description) = 0 Then
-        description = Space(1)
-    ElseIf Len(description) > MAX_DESCR Then
+    If Len(description) > MAX_DESCR Then
         description = Left$(description, MAX_DESCR)
     End If
     
-    If LenB(Sex) = 0 Then
-        Sex = Space(1)
-    ElseIf Len(Sex) > MAX_SEX Then
+    If Len(Sex) > MAX_SEX Then
         Sex = Left$(Sex, MAX_SEX)
     End If
     
-    If LenB(Location) = 0 Then
-        Location = Space(1)
-    ElseIf Len(Location) > MAX_LOC Then
+    If Len(Location) > MAX_LOC Then
         Location = Left$(Location, MAX_LOC)
     End If
     
@@ -940,7 +934,7 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                     .selLength = 3
                     .SelText = vbNullString
                     .selStart = i - 1
-                    .selLength = Len(.Text) - i
+                    .selLength = Len(.Text) + 1 - i
                     .SelColor = s
                 Else
                     Select Case Mid$(.Text, i + 2, 1)
@@ -949,7 +943,7 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             .selLength = 3
                             .SelText = vbNullString
                             .selStart = i - 1
-                            .selLength = Len(.Text) - 1
+                            .selLength = Len(.Text) + 1 - 1
                             If .SelItalic = True Then
                                 .SelItalic = False
                             Else
@@ -961,7 +955,7 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             .selLength = 3
                             .SelText = vbNullString
                             .selStart = i - 1
-                            .selLength = Len(.Text) - 1
+                            .selLength = Len(.Text) + 1 - 1
                             If .SelBold = True Then
                                 .SelBold = False
                             Else
@@ -973,7 +967,7 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             .selLength = 3
                             .SelText = vbNullString
                             .selStart = i - 1
-                            .selLength = Len(.Text) - 1
+                            .selLength = Len(.Text) + 1 - 1
                             If .SelUnderline = True Then
                                 .SelUnderline = False
                             Else
@@ -985,7 +979,7 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             .selLength = 3
                             .SelText = vbNullString
                             .selStart = i - 1
-                            .selLength = Len(.Text) - 1
+                            .selLength = Len(.Text) + 1 - 1
                             .SelColor = HTMLToRGBColor("8D00CE")    'Purple
                             
                         Case ":"
@@ -993,7 +987,7 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             .selLength = 3
                             .SelText = vbNullString
                             .selStart = i - 1
-                            .selLength = Len(.Text) - 1
+                            .selLength = Len(.Text) + 1 - 1
                             .SelColor = 186408      '// Lighter green
                             
                         Case "<"
@@ -1001,7 +995,7 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             .selLength = 3
                             .SelText = vbNullString
                             .selStart = i - 1
-                            .selLength = Len(.Text) - 1
+                            .selLength = Len(.Text) + 1 - 1
                             .SelColor = HTMLToRGBColor("00A200")    'Dark green
                         'Case Else: Debug.Print s
                     End Select
@@ -1027,7 +1021,7 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                     .selLength = 2
                     .SelText = vbNullString
                     .selStart = i - 1
-                    .selLength = Len(.Text) - 1
+                    .selLength = Len(.Text) + 1 - 1
                     .SelColor = s
                     .Visible = True
                 End If

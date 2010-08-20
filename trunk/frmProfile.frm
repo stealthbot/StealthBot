@@ -385,3 +385,99 @@ End Sub
 '
 '    Call ColorModify(rtb, L)
 'End Sub
+
+Private Sub rtbAge_KeyDown(KeyCode As Integer, Shift As Integer)
+    HandleColorKeyCodes rtbAge, KeyCode, Shift
+End Sub
+
+Private Sub rtbSex_KeyDown(KeyCode As Integer, Shift As Integer)
+    HandleColorKeyCodes rtbSex, KeyCode, Shift
+End Sub
+
+Private Sub rtbLocation_KeyDown(KeyCode As Integer, Shift As Integer)
+    HandleColorKeyCodes rtbLocation, KeyCode, Shift
+End Sub
+
+Private Sub rtbProfile_KeyDown(KeyCode As Integer, Shift As Integer)
+    HandleColorKeyCodes rtbProfile, KeyCode, Shift
+End Sub
+
+Private Sub HandleColorKeyCodes(rtb As RichTextBox, KeyCode As Integer, Shift As Integer)
+    Const S_CTRL As Integer = 2
+    
+    If (rtb.Locked) Then
+    
+        Select Case (KeyCode)
+            Case KEY_ENTER
+                cmdOK_Click
+                
+            Case vbKeyEscape
+                cmdCancel_Click
+        
+            Case vbKeyA, vbKeyC, vbKeyX, vbKeyV, KEY_ENTER, vbKeyUp, vbKeyDown, vbKeyLeft, vbKeyRight
+                ' don't disable these
+                
+            Case Else
+                ' disable CTRL+L, CTRL+E, CTRL+R, CTRL+I and lots of funny ones
+                If (Shift = S_CTRL) Then KeyCode = 0
+        End Select
+        
+        Exit Sub
+    End If
+    
+    If (rtb.SelColor <> vbWhite) Then rtb.SelColor = vbWhite
+    
+    Select Case (KeyCode)
+        Case KEY_B
+            If (Shift = S_CTRL) Then
+                rtb.SelText = "ÿcb"
+            End If
+            
+        Case KEY_U
+            If (Shift = S_CTRL) Then
+                rtb.SelText = "ÿcu"
+            End If
+            
+        Case KEY_I
+            If (Shift = S_CTRL) Then
+                rtb.SelText = "ÿci"
+            End If
+            
+        Case KEY_ENTER
+            If (Shift = S_CTRL) Then
+                cmdOK_Click
+            End If
+                
+        Case vbKeyEscape
+            cmdCancel_Click
+            
+        Case vbKeyA, vbKeyC, vbKeyX, vbKeyV, vbKeyUp, vbKeyDown, vbKeyLeft, vbKeyRight
+            ' don't disable these
+            
+        Case Else
+            ' disable CTRL+L, CTRL+E, CTRL+R, CTRL+I and lots of funny ones
+            If (Shift = S_CTRL) Then KeyCode = 0
+            
+    End Select
+End Sub
+
+Private Sub rtbAge_KeyPress(ascii As Integer)
+    If (ascii = 13) Then
+        ascii = 0
+        rtbSex.SetFocus
+    End If
+End Sub
+
+Private Sub rtbSex_KeyPress(ascii As Integer)
+    If (ascii = 13) Then
+        ascii = 0
+        rtbLocation.SetFocus
+    End If
+End Sub
+
+Private Sub rtbLocation_KeyPress(ascii As Integer)
+    If (ascii = 13) Then
+        ascii = 0
+        rtbProfile.SetFocus
+    End If
+End Sub
