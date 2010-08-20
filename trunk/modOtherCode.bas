@@ -3054,6 +3054,15 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
     ' ...
     If ((BotVars.LockChat = False) Or (rtb <> frmChat.rtbChat)) Then
+        
+        ' store rtb carat and whether rtb has focus
+        With rtb
+            selStart = .selStart
+            selLength = .selLength
+            blnHasFocus = (rtb.Parent.ActiveControl Is rtb)
+            ' whether it's at the end or within one vbCrLf of the end
+            blnAtEnd = (selStart >= rtbChatLength - 2)
+        End With
  
         lngVerticalPos = IsScrolling(rtb)
     
@@ -3065,15 +3074,6 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         
             blUnlock = True
         End If
-        
-        ' store rtb carat and whether rtb has focus
-        With rtb
-            selStart = .selStart
-            selLength = .selLength
-            blnHasFocus = (rtb.Parent.ActiveControl Is rtb)
-            ' whether it's at the end or within one vbCrLf of the end
-            blnAtEnd = (selStart >= rtbChatLength - 2)
-        End With
         
         ' ...
         If (rtb = frmChat.rtbChat) Then
@@ -3171,17 +3171,6 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         End If
 
         ColorModify rtb, L
-        
-        With rtb
-            ' restore carat location and selection if not previously at end
-            If Not blnAtEnd Then
-                .selStart = selStart
-                .selLength = selLength
-            End If
-            
-            ' restore focus if previously had focus
-            If blnHasFocus Then .SetFocus
-        End With
 
         If (blUnlock) Then
             SendMessage rtb.hWnd, WM_VSCROLL, _
@@ -3192,6 +3181,20 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             ' below causes smooth scrolling, but also screen flickers :(
             'LockWindowUpdate &H0
         End If
+        
+        With rtb
+            ' if has focus
+            If blnHasFocus Then
+                ' restore carat location and selection if not previously at end
+                If Not blnAtEnd Then
+                    .selStart = selStart
+                    .selLength = selLength
+                End If
+                
+                ' restore focus
+                .SetFocus
+            End If
+        End With
     End If
     
     Exit Sub

@@ -5391,10 +5391,10 @@ Private Sub InitBasicConfig()
         Case "W2BN":    Call optW2BN_Click: optW2BN.Value = True
         Case "WAR3":    Call optWAR3_Click: optWAR3.Value = True
         Case "W3XP":    Call optW3XP_Click: optW3XP.Value = True
-        Case "DRTL":    Call optDRTL_Click: optDRTL.Value = True
-        Case "DSHR":    Call optDRTL_Click: optDRTL.Value = True: chkSHR.Value = vbUnchecked
-        Case "SSHR":    Call optSTAR_Click: optSTAR.Value = True: chkSHR.Value = vbChecked
-        Case "JSTR":    Call optSTAR_Click: optSTAR.Value = True: chkSHR.Value = vbUnchecked: chkJPN.Value = vbChecked
+        Case "DRTL":    Call optDRTL_Click: optDRTL.Value = True: chkSHR.Value = vbUnchecked
+        Case "DSHR":    Call optDRTL_Click: optDRTL.Value = True: chkSHR.Value = vbChecked
+        Case "SSHR":    Call optSTAR_Click: optSTAR.Value = True: chkSHR.Value = vbChecked ' unchecks jpn
+        Case "JSTR":    Call optSTAR_Click: optSTAR.Value = True: chkJPN.Value = vbChecked ' unchecks shr
         Case Else:      Call optSTAR_Click: optSTAR.Value = True: chkSHR.Value = vbUnchecked: chkJPN.Value = vbUnchecked
     End Select
     

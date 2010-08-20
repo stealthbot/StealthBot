@@ -6590,7 +6590,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                     End If
                 Else
                     Command = StringFormat("/{0}", Command)
-                    strTmp = Mid$(strTmp, Len(Command) + 1)
+                    strTmp = Mid$(strTmp, Len(Command) + 2)
                 End If
                 
                 If (Len(Command) >= BNET_MSG_LENGTH) Then
@@ -6648,7 +6648,11 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             ' store working copy
             Send = Splt(i)
             If (LenB(Command) > 0) Then
-                Send = StringFormat("{0} {1}", Command, Send)
+                If (LenB(Send) > 0) Then
+                    Send = StringFormat("{0} {1}", Command, Send)
+                Else
+                    Send = Command
+                End If
             ElseIf (Left(Send, 1) = "/" And i > LBound(Splt)) Then
                 Send = StringFormat(" {0}", Send)
             End If

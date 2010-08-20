@@ -893,6 +893,8 @@ End Sub
 '//  The result will come back to you in an Event_KeyReturn.
 Public Sub RequestProfileKey(ByVal sUsername As String, ByVal sKey As String)
     SuppressProfileOutput = True
+    
+    SpecificProfileKey = sKey
 
     RequestSpecificKey sUsername, sKey
 End Sub

@@ -368,6 +368,8 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
     Dim U   As String
     Dim i   As Integer
     
+    Static KeysReceived As Integer
+    
     'MsgBox PPL
 
     ' Some of the oldest code in this project lives right here
@@ -378,17 +380,44 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
         ' // the description comes in, and of course hadn it over to the scripters
         RunInAll "Event_KeyReturn", KeyName, KeyValue
         
-        If KeyName = "Profile\Description" Then
-            SuppressProfileOutput = False
-        End If
+        ' clean up variables once profile keys are received:
+        Select Case KeyName
+            Case "Profile\Age", "Profile\Sex", "Profile\Location", "Profile\Description"
+                If (StrComp(SpecificProfileKey, KeyName, vbBinaryCompare) = 0) Then
+                    ' SSC.RequestProfileKey() called for one of the profile keys
+                    SuppressProfileOutput = False
+                    SpecificProfileKey = vbNullString
+                Else
+                    ' normal: wait for 4 keys then reset suppress
+                    KeysReceived = KeysReceived + 1
+                    If (KeysReceived >= 4) Then
+                        SuppressProfileOutput = False
+                        KeysReceived = 0
+                    End If
+                End If
+                
+            Case Else
+                ' SSC.RequestProfileKey() called for a different key
+                SuppressProfileOutput = False
+                SpecificProfileKey = vbNullString
+                
+        End Select
     
     ElseIf ProfileRequest = True Then
         
         'MsgBox "!!"
+        ' writing profile
         
         frmProfile.SetKey KeyName, KeyValue
         
         RunInAll "Event_KeyReturn", KeyName, KeyValue
+        
+        ' wait for 4 keys then reset request var
+        KeysReceived = KeysReceived + 1
+        If KeysReceived >= 4 Then
+            ProfileRequest = False
+            KeysReceived = 0
+        End If
         
     ' Public Profile Listing
     ElseIf PPL = True Then
@@ -398,7 +427,7 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
         If LenB(PPLRespondTo) > 0 Then
             U = "/w " & PPLRespondTo & " "
         Else
-            U = ""
+            U = vbNullString
         End If
         
         If KeyName = "Profile\Location" Then
@@ -446,7 +475,7 @@ Repeat2:
             PPL = False
             
             If LenB(PPLRespondTo) > 0 Then
-                PPLRespondTo = ""
+                PPLRespondTo = vbNullString
             End If
             
         ElseIf KeyName = "Profile\Sex" Then
@@ -524,6 +553,8 @@ Repeat4:
         End If
         
     Else
+        
+        ' viewing profile (or &H26 sent by script and &H26 isn't veto'd in script)
         
         frmProfile.SetKey KeyName, KeyValue
         

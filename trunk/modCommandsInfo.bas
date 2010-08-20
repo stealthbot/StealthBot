@@ -452,8 +452,8 @@ Public Sub OnProfile(Command As clsCommandObj)
             End If
             Call RequestProfile(Command.Argument("Username"))
         Else
-            Call RequestProfile(Command.Argument("Username"))
             frmProfile.PrepareForProfile Command.Argument("Username"), False
+            Call RequestProfile(Command.Argument("Username"))
         End If
     End If
 End Sub

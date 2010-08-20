@@ -188,6 +188,7 @@ Public Phrases() As String
 Public ClientBans() As String
 Public PhraseBans As Boolean
 Public SuppressProfileOutput As Boolean
+Public SpecificProfileKey As String
 Public Catch() As String
 Public gChannel As udtChanList
 Public gBans() As udtBanList

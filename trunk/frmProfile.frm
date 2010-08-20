@@ -355,6 +355,8 @@ Public Sub SetKey(ByVal KeyName As String, ByVal KeyValue As String)
     
     If m_IsWriting = False Then Call ColorModify(rtb, 0)
     
+    Set rtb = Nothing
+    
     SetFocus
 End Sub
 

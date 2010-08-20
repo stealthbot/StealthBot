@@ -917,12 +917,18 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
     Dim i As Long
     Dim s As String
     Dim temp As Long
+    Dim selStart As Long
+    Dim selLength As Long
     
     If L = 0 Then L = 1
     
     temp = L
     
     With rtb
+        ' store previous selstart and len
+        selStart = .selStart
+        selLength = .selLength
+        
         If InStr(temp, .Text, "ÿc", vbTextCompare) > 0 Then
             .Visible = False
             Do
@@ -1010,6 +1016,7 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
         temp = L
         
         If InStr(temp, .Text, "Á", vbBinaryCompare) > 0 Then
+            .Visible = False
             Do
                 i = InStr(temp, .Text, "Á", vbBinaryCompare)
                 s = GetScriptColorString(Mid$(.Text, i + 1, 1))
@@ -1028,7 +1035,12 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                 temp = temp + 1
                 
             Loop While InStr(temp, .Text, "Á", vbBinaryCompare) > 0
+            .Visible = True
         End If
+        
+        ' restore previous selstart and len
+        .selStart = selStart
+        .selLength = selLength
     End With
 End Sub
 
@@ -1071,20 +1083,29 @@ Public Sub ProfileParse(Data As String)
     ProfileEnd = Mid(Data, 17, Len(Data))
     SplitProfile = Split(ProfileEnd, Chr(&H0))
     
-    If AwaitingSystemKeys = 1 Then
+    If (UBound(SplitProfile) = 4) Then
+    
+        If AwaitingSystemKeys = 1 Then
+            
+            Event_KeyReturn "System\Account Created", SplitProfile(0)
+            Event_KeyReturn "System\Last Logon", SplitProfile(1)
+            Event_KeyReturn "System\Last Logoff", SplitProfile(2)
+            Event_KeyReturn "System\Time Logged", SplitProfile(3)
+            AwaitingSystemKeys = 0
+            
+        Else
         
-        Event_KeyReturn "System\Account Created", SplitProfile(0)
-        Event_KeyReturn "System\Last Logon", SplitProfile(1)
-        Event_KeyReturn "System\Last Logoff", SplitProfile(2)
-        Event_KeyReturn "System\Time Logged", SplitProfile(3)
-        AwaitingSystemKeys = 0
-        
+            Event_KeyReturn "Profile\Age", SplitProfile(0)
+            Event_KeyReturn "Profile\Sex", SplitProfile(1)
+            Event_KeyReturn "Profile\Location", SplitProfile(2)
+            Event_KeyReturn "Profile\Description", SplitProfile(3)
+            
+        End If
+    
     Else
     
-        Event_KeyReturn "Profile\Age", SplitProfile(0)
-        Event_KeyReturn "Profile\Sex", SplitProfile(1)
-        Event_KeyReturn "Profile\Location", SplitProfile(2)
-        Event_KeyReturn "Profile\Description", SplitProfile(3)
+        ' for SSC.RequestProfileKey()
+        Event_KeyReturn SpecificProfileKey, SplitProfile(0)
         
     End If
 End Sub

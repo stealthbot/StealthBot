@@ -47,7 +47,7 @@ Public Sub HandleNews(ByVal s As String)
             '##############
             
             If Val(Splt(1)) <> App.REVISION Or (lLauncherVersion > 0 And Val(Splt(2)) <> lLauncherVersion) Then '// old version
-                If (Val(Splt(0)) = App.REVISION) Then
+                If (Val(Splt(0)) <= App.REVISION) Then
                     frmChat.AddChat RTBColors.InformationText, "ÿcbYou are running a development release of StealthBot, visit http://www.stealthbot.net/wiki/BuildLog for more information"
                 Else
                     frmChat.AddChat RTBColors.ErrorMessageText, "ÿcbYou are running an outdated version of StealthBot."
