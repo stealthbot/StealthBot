@@ -2108,114 +2108,114 @@ On Error GoTo ERROR_HANDLER:
     'If ((GetTickCount() - LastWhisperTime) > _
     '    BotVars.AutofilterMS) Then
 
-    If (0 = 0) Then
-        If (Not (CheckBlock(Username))) Then
-            LastWhisper = Username
-            LastWhisperFromTime = Now
-            
-        End If
-        
-        If (Catch(0) <> vbNullString) Then
-            Call CheckPhrase(Username, Message, CPWHISPER)
-        End If
-        
-        If (frmChat.mnuFlash.Checked) Then
-            FlashWindow
-        End If
-        
-        If (StrComp(Message, BotVars.ChannelPassword, vbTextCompare) = 0) Then
-            lCarats = g_Channel.GetUserIndex(Username)
-            
-            If (lCarats > 0) Then
-                ' ...
-                With g_Channel.Users(lCarats)
-                    .PassedChannelAuth = True
-                End With
-                
-                frmChat.AddQ "/w " & Username & " Password accepted."
-            End If
-        End If
-        
-        If (VoteDuration > 0) Then
-            If (InStr(1, Message, "yes", vbTextCompare) > 0) Then
-                Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDYES, Username)
-            ElseIf (InStr(1, Message, "no", vbTextCompare) > 0) Then
-                Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDNO, Username)
-            End If
-        End If
-                
-        lCarats = RTBColors.WhisperCarats
-        
-        If (Flags And &H1) Then
-            lCarats = COLOR_BLUE
-        End If
-        
-        '####### Mail check
-        If (mail) Then
-            If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim msg As udtMail
-                
-                If (GetMailCount(Username) > 0) Then
-                    Call GetMailMessage(Username, msg)
-                    
-                    If (Len(RTrim(msg.To)) > 0) Then
-                        frmChat.AddQ "/w " & Username & " Message from " & _
-                            RTrim$(msg.From) & ": " & RTrim$(msg.Message)
-                    End If
-                End If
-            End If
-        End If
-        '#######
-        
-        If ((Not (CheckMsg(Message, Username, -5))) And (Not (CheckBlock(Username)))) Then
-        
-            If (Not (frmChat.mnuHideWhispersInrtbChat.Checked)) Then
-                frmChat.AddChat lCarats, "<From ", RTBColors.WhisperUsernames, _
-                    Username, lCarats, "> ", RTBColors.WhisperText, Message
-            End If
-            
-            frmChat.AddWhisper lCarats, "<From ", RTBColors.WhisperUsernames, _
-                Username, lCarats, "> ", RTBColors.WhisperText, Message
-                
-            frmChat.rtbWhispers.Visible = rtbWhispersVisible
-                           
-            If (frmChat.mnuToggleWWUse.Checked) Then
-            'If ((frmChat.mnuToggleWWUse.Checked) And _
-                '(frmChat.WindowState <> vbMinimized)) Then
-                
-                If (Not (IrrelevantWhisper(Message, Username))) Then
-                    WWIndex = AddWhisperWindow(Username)
-                    
-                    With colWhisperWindows.Item(WWIndex)
-                        If (.Shown = False) Then
-                            'window was previously hidden
-                            
-                            ShowWW WWIndex
-                        End If
-                        
-                        .Caption = "Whisper Window: " & Username
-                        
-                        .AddWhisper RTBColors.WhisperUsernames, "> " & Username, lCarats, _
-                            ": ", RTBColors.WhisperText, Message
-                    End With
-                End If
-            End If
-        
-            Call ProcessCommand(Username, Message, False, True)
-        End If
-        
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        ' call event script function
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        
-        If BotIsClosing Then Exit Sub
-        
-        On Error Resume Next
-        
-        g_lastQueueUser = Username
-        
-        RunInAll "Event_WhisperFromUser", Username, Flags, Message, Ping
+    'If (0 = 0) Then ' ...?
+    
+    If (Catch(0) <> vbNullString) Then
+        Call CheckPhrase(Username, Message, CPWHISPER)
     End If
+    
+    If (frmChat.mnuFlash.Checked) Then
+        FlashWindow
+    End If
+    
+    If (StrComp(Message, BotVars.ChannelPassword, vbTextCompare) = 0) Then
+        lCarats = g_Channel.GetUserIndex(Username)
+        
+        If (lCarats > 0) Then
+            ' ...
+            With g_Channel.Users(lCarats)
+                .PassedChannelAuth = True
+            End With
+            
+            frmChat.AddQ "/w " & Username & " Password accepted."
+        End If
+    End If
+    
+    If (VoteDuration > 0) Then
+        If (InStr(1, Message, "yes", vbTextCompare) > 0) Then
+            Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDYES, Username)
+        ElseIf (InStr(1, Message, "no", vbTextCompare) > 0) Then
+            Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDNO, Username)
+        End If
+    End If
+            
+    lCarats = RTBColors.WhisperCarats
+    
+    If (Flags And &H1) Then
+        lCarats = COLOR_BLUE
+    End If
+    
+    '####### Mail check
+    If (mail) Then
+        If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
+            Dim msg As udtMail
+            
+            If (GetMailCount(Username) > 0) Then
+                Call GetMailMessage(Username, msg)
+                
+                If (Len(RTrim(msg.To)) > 0) Then
+                    frmChat.AddQ "/w " & Username & " Message from " & _
+                        RTrim$(msg.From) & ": " & RTrim$(msg.Message)
+                End If
+            End If
+        End If
+    End If
+    '#######
+    
+    If ((Not (CheckMsg(Message, Username, -5))) And (Not (CheckBlock(Username)))) Then
+    
+        If (Not (frmChat.mnuHideWhispersInrtbChat.Checked)) Then
+            frmChat.AddChat lCarats, "<From ", RTBColors.WhisperUsernames, _
+                Username, lCarats, "> ", RTBColors.WhisperText, Message
+        End If
+        
+        frmChat.AddWhisper lCarats, "<From ", RTBColors.WhisperUsernames, _
+            Username, lCarats, "> ", RTBColors.WhisperText, Message
+            
+        frmChat.rtbWhispers.Visible = rtbWhispersVisible
+                       
+        If (frmChat.mnuToggleWWUse.Checked) Then
+        'If ((frmChat.mnuToggleWWUse.Checked) And _
+            '(frmChat.WindowState <> vbMinimized)) Then
+            
+            If (Not (IrrelevantWhisper(Message, Username))) Then
+                WWIndex = AddWhisperWindow(Username)
+                
+                With colWhisperWindows.Item(WWIndex)
+                    If (.Shown = False) Then
+                        'window was previously hidden
+                        
+                        ShowWW WWIndex
+                    End If
+                    
+                    .Caption = "Whisper Window: " & Username
+                    
+                    .AddWhisper RTBColors.WhisperUsernames, "> " & Username, lCarats, _
+                        ": ", RTBColors.WhisperText, Message
+                End With
+            End If
+        End If
+    
+        Call ProcessCommand(Username, Message, False, True)
+    End If
+    
+    If (Not (CheckBlock(Username))) Then
+        LastWhisper = Username
+        LastWhisperFromTime = Now
+    End If
+    
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' call event script function
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    
+    If BotIsClosing Then Exit Sub
+    
+    On Error Resume Next
+    
+    g_lastQueueUser = Username
+    
+    RunInAll "Event_WhisperFromUser", Username, Flags, Message, Ping
+    'End If
     
     LastWhisperTime = GetTickCount
 
