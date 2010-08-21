@@ -4213,6 +4213,11 @@ Private Sub mnuRepairVerbytes_Click()
     WriteINI "Main", "W3VerByte", Hex(GetVerByte("3RAW", 1))
     WriteINI "Main", "SCVerByte", Hex(GetVerByte("RATS", 1))
     WriteINI "Main", "D2VerByte", Hex(GetVerByte("VD2D", 1))
+    WriteINI "Main", "D2XVerByte", Hex(GetVerByte("PX2D", 1))
+    WriteINI "Main", "D1VerByte", Hex(GetVerByte("LTRD", 1))
+    WriteINI "Main", "DSVerByte", Hex(GetVerByte("RHSD", 1))
+    WriteINI "Main", "SSVerByte", Hex(GetVerByte("RHSS", 1))
+    WriteINI "Main", "JSVerByte", Hex(GetVerByte("RTSJ", 1))
     
     frmChat.AddChat RTBColors.SuccessText, "The version bytes stored in config.ini have been restored to their defaults."
 End Sub
@@ -4439,6 +4444,9 @@ Private Sub rtbChat_KeyDown(KeyCode As Integer, Shift As Integer)
         
         'Disable Ctrl+L, Ctrl+E, and Ctrl+R
         KeyCode = 0
+    ElseIf (Shift = vbShiftMask) And (KeyCode = vbKeyDelete) Then
+        'Call Shift+DEL keyboard shortcut since it doens't work with RTB focus.
+        Call mnuClear_Click
     End If
 End Sub
 
@@ -4467,6 +4475,9 @@ Private Sub rtbWhispers_KeyDown(KeyCode As Integer, Shift As Integer)
         
         'Disable Ctrl+L, Ctrl+E, and Ctrl+R
         KeyCode = 0
+    ElseIf (Shift = vbShiftMask) And (KeyCode = vbKeyDelete) Then
+        'Call Shift+DEL keyboard shortcut since it doens't work with RTB focus.
+        Call mnuClear_Click
     End If
 End Sub
 

@@ -214,13 +214,14 @@ Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Inte
             Case "W2BN": GetVerByte = &H4F
             Case "STAR": GetVerByte = &HD3
             Case "SEXP": GetVerByte = &HD3
-            Case "D2DV": GetVerByte = &HC
-            Case "D2XP": GetVerByte = &HC
+            Case "D2DV": GetVerByte = &HD
+            Case "D2XP": GetVerByte = &HD
             Case "W3XP": GetVerByte = &H18
             Case "WAR3": GetVerByte = &H18
             Case "DRTL": GetVerByte = &H2A
             Case "DSHR": GetVerByte = &H2A
-            Case "JSTR": GetVerByte = &HA5
+            Case "JSTR": GetVerByte = &HA9
+            Case "SSHR": GetVerByte = &HA5
         End Select
     Else
         GetVerByte = _
@@ -1255,10 +1256,10 @@ End Sub
 '// parses a system time and returns in the format:
 '//     mm/dd/yy, hh:mm:ss
 '//
-Public Function SystemTimeToString(ByRef sT As SYSTEMTIME) As String
+Public Function SystemTimeToString(ByRef st As SYSTEMTIME) As String
     Dim buf As String
 
-    With sT
+    With st
         buf = buf & .wMonth & "/"
         buf = buf & .wDay & "/"
         buf = buf & .wYear & ", "
@@ -1271,10 +1272,10 @@ Public Function SystemTimeToString(ByRef sT As SYSTEMTIME) As String
 End Function
 
 Public Function GetCurrentMS() As String
-    Dim sT As SYSTEMTIME
-    GetLocalTime sT
+    Dim st As SYSTEMTIME
+    GetLocalTime st
     
-    GetCurrentMS = Right$("000" & sT.wMilliseconds, 3)
+    GetCurrentMS = Right$("000" & st.wMilliseconds, 3)
 End Function
 
 Public Function ZeroOffset(ByVal lInpt As Long, ByVal lDigits As Long) As String

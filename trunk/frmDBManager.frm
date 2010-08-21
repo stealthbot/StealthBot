@@ -446,7 +446,7 @@ Private Sub cbxGroups_Click()
     Next i
     
     ' enable entry save command
-    btnSave(1).enabled = True
+    btnSave(1).Enabled = True
     
     m_group_change = True
 End Sub
@@ -945,7 +945,7 @@ Private Sub btnSave_Click(Index As Integer)
         Next i
         
         ' disable entry save command
-        btnSave(1).enabled = False
+        btnSave(1).Enabled = False
         
         ' ...
         If (m_group_change) Then
@@ -987,7 +987,7 @@ Private Sub lvGroups_Click()
     Next i
     
     ' enable entry save command
-    btnSave(1).enabled = True
+    btnSave(1).Enabled = True
     
     Set trvUsers.DropHighlight = Nothing
     Set lvGroups.SelectedItem = Nothing
@@ -1192,7 +1192,7 @@ Private Sub tbsTabs_Click()
             Next i
             
             ' enable create user button
-            btnCreateUser.enabled = True
+            btnCreateUser.Enabled = True
             
         Case 2: ' Clans
             ' loop through database searching for clans
@@ -1213,7 +1213,7 @@ Private Sub tbsTabs_Click()
             Next i
 
             ' disable create user button
-            btnCreateUser.enabled = False
+            btnCreateUser.Enabled = False
             
         Case 3: ' Games
             ' loop through database searching for games
@@ -1234,7 +1234,7 @@ Private Sub tbsTabs_Click()
             Next i
             
             ' disable create user button
-            btnCreateUser.enabled = False
+            btnCreateUser.Enabled = False
     End Select
     
     ' does our treeview contain any nodes?  hope so...
@@ -1278,22 +1278,22 @@ Private Sub LockGUI()
     End With
 
     ' disable & clear rank
-    txtRank.enabled = False
+    txtRank.Enabled = False
     txtRank.Text = vbNullString
     
     ' disable & clear flags
-    txtFlags.enabled = False
+    txtFlags.Enabled = False
     txtFlags.Text = vbNullString
     
     ' loop through listbox and clear selected items
     Call ClearGroupList
     
     ' disable group lists
-    lvGroups.enabled = False
-    cbxGroups.enabled = False
+    lvGroups.Enabled = False
+    cbxGroups.Enabled = False
     
     ' disable & clear ban message
-    txtBanMessage.enabled = False
+    txtBanMessage.Enabled = False
     txtBanMessage.Text = vbNullString
     
     ' reset created on & modified on labels
@@ -1305,8 +1305,8 @@ Private Sub LockGUI()
     lblModifiedBy.Caption = vbNullString
     
     ' disable entry buttons
-    btnSave(1).enabled = False
-    btnDelete.enabled = False
+    btnSave(1).Enabled = False
+    btnDelete.Enabled = False
 End Sub
 
 Private Sub ClearGroupList()
@@ -1327,23 +1327,23 @@ Private Sub UnlockGUI()
     Dim i As Integer ' ...
 
     ' enable rank field
-    txtRank.enabled = True
+    txtRank.Enabled = True
 
     ' enable flags field
-    txtFlags.enabled = True
+    txtFlags.Enabled = True
     
     ' enable ban message field
-    txtBanMessage.enabled = True
+    txtBanMessage.Enabled = True
     
     ' disable entry save button
-    btnSave(1).enabled = False
+    btnSave(1).Enabled = False
     
     ' enable entry delete button
-    btnDelete.enabled = True
+    btnDelete.Enabled = True
     
     ' enable group lists
-    lvGroups.enabled = True
-    cbxGroups.enabled = True
+    lvGroups.Enabled = True
+    cbxGroups.Enabled = True
 End Sub
 
 ' handle node collapse
@@ -1466,28 +1466,28 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
     Call trvUsers.Refresh
 End Sub
 
-Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     If (Button = vbLeftButton) Then
-        Set trvUsers.SelectedItem = trvUsers.HitTest(X, y)
+        Set trvUsers.SelectedItem = trvUsers.HitTest(x, y)
         Call trvUsers_NodeClick(trvUsers.SelectedItem)
     End If
 End Sub
 
-Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     If (Button = vbRightButton) Then
         Dim gAcc As udtGetAccessResponse
         If (Not (trvUsers.SelectedItem Is Nothing)) Then
             If (trvUsers.SelectedItem.Index > 1) Then
                 If (StrComp(trvUsers.SelectedItem.Tag, "Group", vbTextCompare) = 0) Then
-                    mnuRename.enabled = True
+                    mnuRename.Enabled = True
                 Else
-                    mnuRename.enabled = False
+                    mnuRename.Enabled = False
                 End If
                 
-                mnuDelete.enabled = True
+                mnuDelete.Enabled = True
             Else
-                mnuRename.enabled = False
-                mnuDelete.enabled = False
+                mnuRename.Enabled = False
+                mnuDelete.Enabled = False
             End If
             
             Call Me.PopupMenu(mnuContext)
@@ -1496,13 +1496,13 @@ Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, y
 End Sub
 
 Private Sub trvUsers_OLEDragOver(Data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
-    Shift As Integer, X As Single, y As Single, State As Integer)
+    Shift As Integer, x As Single, y As Single, State As Integer)
     
-    Set trvUsers.DropHighlight = trvUsers.HitTest(X, y)
+    Set trvUsers.DropHighlight = trvUsers.HitTest(x, y)
 End Sub
 
 Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
-    Shift As Integer, X As Single, y As Single)
+    Shift As Integer, x As Single, y As Single)
     
     On Error GoTo ERROR_HANDLER
     
@@ -1545,7 +1545,7 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
                     If (nodeNow.Index = 1) Then
                         Set trvUsers.DropHighlight = nodeNow
                     
-                        Call trvUsers_OLEDragDrop(Data, Effect, Button, Shift, X, y)
+                        Call trvUsers_OLEDragDrop(Data, Effect, Button, Shift, x, y)
                         Exit Sub
                     End If
                 End If
@@ -1802,26 +1802,63 @@ End Function
 
 Private Sub txtBanMessage_Change()
     ' enable entry save button
-    btnSave(1).enabled = True
+    btnSave(1).Enabled = True
+End Sub
+
+Private Sub txtFlags_KeyPress(KeyAscii As Integer)
+    
+    Const AZ As String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    
+    ' disallow entering space
+    If (KeyAscii = 32) Then KeyAscii = 0
+    
+    ' if key is A-Z, then make uppercase
+    If (InStr(1, AZ, Chr$(KeyAscii), vbTextCompare) > 0) Then
+        If (BotVars.CaseSensitiveFlags = False) Then
+            If (KeyAscii > 90) Then ' lowercase if greater than "Z"
+                KeyAscii = Asc(UCase(Chr(KeyAscii)))
+            End If
+        End If
+    ' else disallow entering that character (if not a control character)
+    ElseIf (KeyAscii > 32) Then
+        KeyAscii = 0
+    End If
+    
 End Sub
 
 Private Sub txtFlags_Change()
 
-    If (BotVars.CaseSensitiveFlags = False) Then
-        txtFlags.Text = UCase$(txtFlags.Text)
-    End If
-
     ' enable entry save button
-    btnSave(1).enabled = True
+    btnSave(1).Enabled = True
+End Sub
+
+Private Sub txtRank_KeyPress(KeyAscii As Integer)
+    
+    Const n09 As String = "0123456789"
+    
+    ' disallow entering space
+    If (KeyAscii = 32) Then KeyAscii = 0
+    
+    ' if key is not 0-9, disallow entering that character (if not a control character)
+    If (InStr(1, n09, Chr$(KeyAscii), vbTextCompare) = 0 And KeyAscii > 32) Then
+        KeyAscii = 0
+    End If
+    
 End Sub
 
 Private Sub txtRank_Change()
+    Dim selStart As Long
+    
     If (Val(txtRank.Text) > 200) Then
-        txtRank.Text = "200"
+        With txtRank
+            selStart = .selStart
+            .Text = "200"
+            .selStart = selStart
+        End With
     End If
 
     ' enable entry save button
-    btnSave(1).enabled = True
+    btnSave(1).Enabled = True
 End Sub
 
 ' ...
