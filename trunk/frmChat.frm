@@ -2975,7 +2975,7 @@ Private Sub ClanHandler_RemoveUserReply(ByVal Result As Byte)
                 ListviewTabs.TabEnabled(2) = False
                 lvClanList.ListItems.Clear
                 
-                ListviewTabs.TabIndex = 0
+                ListviewTabs.Tab = 0
                 Call ListviewTabs_Click(2)
                 
                 Set g_Clan = New clsClanObj
@@ -5136,25 +5136,29 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 
             Case KEY_A
                 If (Shift = S_CTRL) Then
-                    c = ListviewTabs.TabIndex
-                    ListviewTabs.TabIndex = 0
-                    Call ListviewTabs_Click(c)
+                    c = ListviewTabs.Tab
+                    If (c <> LVW_BUTTON_CHANNEL) Then
+                        ListviewTabs.Tab = LVW_BUTTON_CHANNEL
+                        Call ListviewTabs_Click(c)
+                    End If
                 End If
                 
             Case KEY_S
                 If (Shift = S_CTRL) Then
-                    c = ListviewTabs.TabIndex
-                    ListviewTabs.TabIndex = 1
-                    Call ListviewTabs_Click(c)
+                    c = ListviewTabs.Tab
+                    If (c <> LVW_BUTTON_FRIENDS) And (ListviewTabs.TabEnabled(LVW_BUTTON_FRIENDS)) Then
+                        ListviewTabs.Tab = LVW_BUTTON_FRIENDS
+                        Call ListviewTabs_Click(c)
+                    End If
                 End If
                 
             Case KEY_D
                 If (Shift = S_CTRL) Then
-                    c = ListviewTabs.TabIndex
-                    
-                    ListviewTabs.TabIndex = 2
-                    
-                    Call ListviewTabs_Click(c)
+                    c = ListviewTabs.Tab
+                    If (c <> LVW_BUTTON_CLAN) And (ListviewTabs.TabEnabled(LVW_BUTTON_CLAN)) Then
+                        ListviewTabs.Tab = LVW_BUTTON_CLAN
+                        Call ListviewTabs_Click(c)
+                    End If
                 End If
                 
             Case KEY_B
@@ -7110,6 +7114,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     If BotVars.MaxBacklogSize < 0 Then BotVars.MaxBacklogSize = 10000
     If BotVars.MaxLogFileSize < 0 Then BotVars.MaxLogFileSize = 50000000
+    
+    ' reload quotes file
+    Set g_Quotes = New clsQuotesObj
     
     '// this section must read _absolutely correctly_ or the SetTimer API call will fail
     s = ReadCfg(MN, "ReconnectDelay")

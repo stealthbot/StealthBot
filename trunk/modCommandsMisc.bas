@@ -4,7 +4,7 @@ Option Explicit
 
 Public Sub OnAddQuote(Command As clsCommandObj)
     If (g_Quotes Is Nothing) Then
-        Set g_Quotes = New Collection
+        Set g_Quotes = New clsQuotesObj
     End If
     If (Command.IsValid) Then
         g_Quotes.Add Command.Argument("Quote")
@@ -182,7 +182,7 @@ Public Sub OnIdleType(Command As clsCommandObj)
 End Sub
 
 Public Sub OnInbox(Command As clsCommandObj)
-    Dim msg      As udtMail
+    Dim Msg      As udtMail
     Dim mcount   As Integer
     Dim Index    As Integer
     Dim dbAccess As udtGetAccessResponse
@@ -197,9 +197,9 @@ Public Sub OnInbox(Command As clsCommandObj)
     
     If (GetMailCount(Command.Username) > 0) Then
         Do
-            GetMailMessage Command.Username, msg
-            If (Len(RTrim$(msg.To)) > 0) Then
-                Command.Respond StringFormat("Message from: {0}: {1}", Trim$(msg.From), Trim$(msg.Message))
+            GetMailMessage Command.Username, Msg
+            If (Len(RTrim$(Msg.To)) > 0) Then
+                Command.Respond StringFormat("Message from: {0}: {1}", Trim$(Msg.From), Trim$(Msg.Message))
             End If
         Loop While (GetMailCount(Command.Username) > 0)
     Else
