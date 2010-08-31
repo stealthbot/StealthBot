@@ -5010,7 +5010,7 @@ End Sub
 Private Sub tmrAccountLock_Timer()
     tmrAccountLock.Enabled = False
     
-    If (Not g_Online) Then
+    If (Not sckBNet.State = sckConnected) Then 'g_online is set to true AFTER we login... makes this moot, changed to socket being connected.
         Exit Sub
     End If
     
@@ -7730,10 +7730,12 @@ Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
 End Sub
 
 Private Sub sckBNLS_Close()
+    If MDebug("all") Then
+        AddChat COLOR_BLUE, "BNLS CLOSE"
+    End If
     If (Not BNLSAuthorized) Then
-        AddChat RTBColors.ErrorMessageText, "This version of StealthBot has been disabled."
-        AddChat RTBColors.ErrorMessageText, "Please visit http://www.stealthbot.net for more information and to download an updated version."
-        AddChat RTBColors.ErrorMessageText, "If you are receiving this message in error, please check your firewall settings, especially programs such as Norton Internet Security. NIS is notorious for blocking the connection to the BNLS server."
+        AddChat RTBColors.ErrorMessageText, "You have been disconnected from the BNLS server. You may be IPbanned from the server, it may be having issues, or there is something blocking your connection."
+        AddChat RTBColors.ErrorMessageText, "Try using another BNLS server to connect, and check your firewall settings."
     End If
 End Sub
 
