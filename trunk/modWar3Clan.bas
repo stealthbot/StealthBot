@@ -29,6 +29,9 @@ End Function
 Public Sub RequestClanList()
     AwaitingClanList = 1
     
+    g_Clan.Clear
+    frmChat.lvClanList.ListItems.Clear
+    
     PBuffer.InsertDWord &H1
     PBuffer.SendPacket &H7D
 End Sub

@@ -3027,6 +3027,8 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim selLength      As Long
     Dim blnHasFocus    As Boolean
     Dim blnAtEnd       As Boolean
+    
+    Static RichTextErrorCounter As Integer
 
     ' *****************************************
     '              SANITY CHECKS
@@ -3087,7 +3089,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         With rtb
             selStart = .selStart
             selLength = .selLength
-            blnHasFocus = (rtb.Parent.ActiveControl Is rtb)
+            blnHasFocus = (rtb.Parent.ActiveControl Is rtb And rtb.Parent.WindowState <> vbMinimized)
             ' whether it's at the end or within one vbCrLf of the end
             blnAtEnd = (selStart >= rtbChatLength - 2)
         End With
@@ -3220,14 +3222,22 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 End If
                 
                 ' restore focus
-                .SetFocus
+                '.SetFocus
             End If
         End With
     End If
     
+    RichTextErrorCounter = 0
+    
     Exit Sub
     
 ERROR_HANDLER:
+
+    RichTextErrorCounter = RichTextErrorCounter + 1
+    If RichTextErrorCounter > 2 Then
+        RichTextErrorCounter = 0
+        Exit Sub
+    End If
     
     ' ...
     If (Err.Number = 13 Or Err.Number = 91) Then

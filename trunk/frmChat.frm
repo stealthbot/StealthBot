@@ -2830,9 +2830,6 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
     Dim i          As Long
     
     If AwaitingClanList = 1 Then
-        g_Clan.Clear
-        lvClanList.ListItems.Clear
-    
         For i = 0 To UBound(Members) Step 4
             Set ClanMember = New clsClanMemberObj
             
@@ -3007,7 +3004,7 @@ Private Sub ClanHandler_RemoveUserReply(ByVal Result As Byte)
                 AddChat RTBColors.SuccessText, "[CLAN] You have successfully left the clan."
             Else
                 AddChat RTBColors.SuccessText, "[CLAN] User removed successfully."
-                lvClanList.ListItems.Clear
+                
                 RequestClanList
             End If
             
