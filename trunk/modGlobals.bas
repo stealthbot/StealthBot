@@ -351,11 +351,8 @@ Public Const NLS_GET_K_             As Long = 40
 Public Const NLS_GET_M1_            As Long = 20
 
 Public Function isDebug() As Boolean
-
-    ' ...
     If (MDebug("all")) Then
         isDebug = True
     End If
-
 End Function
 

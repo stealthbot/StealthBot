@@ -142,7 +142,6 @@ End Sub
 
 
 Public Function GetTimeStamp(Optional DateTime As Date) As String
-    ' ...
     If (DateDiff("s", DateTime, "00:00:00 12/30/1899") = 0) Then
         DateTime = Now
     End If
@@ -203,7 +202,7 @@ Public Function ConvertTime(ByVal dblMS As Double, Optional seconds As Byte) As 
 End Function
 
 Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Integer) As Long
-    Dim Key As String ' ...
+    Dim Key As String 
     
     Key = GetProductKey(Product)
     
@@ -459,13 +458,11 @@ End Function
 
 Public Function StripRealm(ByVal Username As String) As String
     If (InStr(1, Username, "@", vbBinaryCompare) > 0) Then
-        ' ...
         Username = Replace(Username, "@USWest", vbNullString, 1)
         Username = Replace(Username, "@USEast", vbNullString, 1)
         Username = Replace(Username, "@Asia", vbNullString, 1)
         Username = Replace(Username, "@Euruope", vbNullString, 1)
         
-        ' ...
         Username = Replace(Username, "@Lordaeron", vbNullString, 1)
         Username = Replace(Username, "@Azeroth", vbNullString, 1)
         Username = Replace(Username, "@Kalimdor", vbNullString, 1)
@@ -492,7 +489,6 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
         End With
         
         If (Tag = "request_receipt") Then
-            ' ...
             g_request_receipt = True
         
             With PBuffer
@@ -501,7 +497,6 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
         End If
     End If
     
-    ' ...
     If (Left$(Message, 1) <> "/") Then
         If (g_Channel.IsSilent) Then
             frmChat.AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, GetCurrentUsername, _
@@ -512,7 +507,6 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
         End If
     End If
 
-    ' ...
     If (bFlood = False) Then
         On Error Resume Next
         
@@ -646,8 +640,8 @@ End Function
 Public Function GetAccess(ByVal Username As String, Optional dbType As String = _
     vbNullString) As udtGetAccessResponse
     
-    Dim i   As Integer ' ...
-    Dim bln As Boolean ' ...
+    Dim i   As Integer 
+    Dim bln As Boolean 
 
     'If (Left$(Username, 1) = "*") Then
     '    Username = Mid$(Username, 2)
@@ -716,29 +710,28 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Static dynGroups() As udtDatabase
     Static dModified   As Date
     
-    Dim gAcc      As udtGetAccessResponse ' ...
+    Dim gAcc      As udtGetAccessResponse 
     
-    Dim f         As File   ' ...
+    Dim f         As File   
     Dim fso       As FileSystemObject
-    Dim i         As Integer  ' ...
-    Dim K         As Integer  ' ...
-    Dim j         As Integer  ' ...
-    Dim found     As Boolean  ' ...
-    Dim dbIndex   As Integer  ' ...
-    Dim dbCount   As Integer  ' ...
-    Dim Splt()    As String   ' ...
-    Dim bln       As Boolean  ' ...
-    Dim modified  As FILETIME ' ...
-    Dim creation  As FILETIME ' ...
-    Dim Access    As FILETIME ' ...
-    Dim nModified As Date     ' ...
+    Dim i         As Integer  
+    Dim K         As Integer  
+    Dim j         As Integer  
+    Dim found     As Boolean  
+    Dim dbIndex   As Integer  
+    Dim dbCount   As Integer  
+    Dim Splt()    As String   
+    Dim bln       As Boolean  
+    Dim modified  As FILETIME 
+    Dim creation  As FILETIME
+    Dim Access    As FILETIME 
+    Dim nModified As Date     
     
     ' default index to negative one to
     ' indicate that no matching users have
     ' been found
     dbIndex = -1
     
-    ' ...
     Set fso = New FileSystemObject
     
     ' If for some reason the users file doesn't exist, create it. ' 10/13/08 ~Pyro
@@ -746,57 +739,42 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
         Call fso.CreateTextFile("./users.txt", False)
     End If
         
-    ' ...
     'Set f = fso.GetFile("./users.txt")
     
-    ' ...
     'nModified = f.DateLastModified
     'nModified = dbLastModified
     
     'frmChat.AddChat vbRed, DateDiff("s", dModified, dbLastModified)
     
-    ' ...
     If (DateDiff("s", dModified, dbLastModified) > 0) Then
-        ' ...
         ReDim dynGroups(0)
         
-        ' ...
         With dynGroups(0)
             .Username = vbNullString
         End With
     
-        ' ...
         For i = LBound(DB) To UBound(DB)
-            ' ...
             If ((InStr(1, DB(i).Username, "*", vbBinaryCompare) <> 0) Or _
                 (InStr(1, DB(i).Username, "?", vbBinaryCompare) <> 0) Or _
                     (DB(i).Type = "GAME") Or _
                     (DB(i).Type = "CLAN")) Then
                                 
-                ' ...
                 If (dynGroups(0).Username <> vbNullString) Then
                     ReDim Preserve dynGroups(0 To UBound(dynGroups) + 1)
                 End If
                 
-                ' ...
                 dynGroups(UBound(dynGroups)) = DB(i)
             End If
         Next i
         
-        ' ...
         dModified = nModified
     End If
     
-    ' ...
     'Set fso = Nothing
 
-    ' ...
     If (DB(LBound(DB)).Username <> vbNullString) Then
-        ' ...
         For i = LBound(DB) To UBound(DB)
-            ' ...
             If (StrComp(Username, DB(i).Username, vbTextCompare) = 0) Then
-                ' ...
                 If ((dbType = vbNullString) Or _
                         (dbType <> vbNullString) And (StrComp(dbType, DB(i).Type, vbTextCompare) = 0)) Then
                 
@@ -817,76 +795,55 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                     End With
                     
                     If ((Len(DB(i).Groups) > 0) And (DB(i).Groups <> "%")) Then
-                        ' ...
                         If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
-                            ' ...
                             Splt() = Split(DB(i).Groups, ",")
                         Else
-                            ' ...
                             ReDim Preserve Splt(0)
                             
-                            ' ...
                             Splt(0) = DB(i).Groups
                         End If
                         
-                        ' ...
                         For j = 0 To UBound(Splt)
-                            ' ...
                             gAcc = GetCumulativeGroupAccess(Splt(j))
                         
-                            ' ...
                             If (GetCumulativeAccess.Rank < gAcc.Rank) Then
-                                ' ...
                                 GetCumulativeAccess.Rank = gAcc.Rank
                                 
-                                ' ...
                                 bln = True
                             End If
                             
-                            ' ...
                             For K = 1 To Len(gAcc.Flags)
-                                ' ...
                                 If (InStr(1, GetCumulativeAccess.Flags, Mid$(gAcc.Flags, K, 1), _
                                     vbBinaryCompare) = 0) Then
                                     
-                                    ' ...
                                     GetCumulativeAccess.Flags = GetCumulativeAccess.Flags & _
                                         Mid$(gAcc.Flags, K, 1)
                                         
-                                    ' ...
                                     bln = True
                                 End If
                             Next K
                             
-                            ' ...
                             If ((GetCumulativeAccess.BanMessage = vbNullString) Or _
                                 (GetCumulativeAccess.BanMessage = "%")) Then
                                 
-                                ' ...
                                 GetCumulativeAccess.BanMessage = gAcc.BanMessage
                                 
-                                ' ...
                                 bln = True
                             End If
                             
-                            ' ...
                             If (bln) Then
-                                ' ...
                                 If (dbCount = 0) Then
                                     GetCumulativeAccess.Username = GetCumulativeAccess.Username & _
                                         IIf((i + 1), Space(1), vbNullString) & "["
                                 End If
                                         
-                                ' ...
                                 GetCumulativeAccess.Username = GetCumulativeAccess.Username & gAcc.Username & _
                                     IIf(((gAcc.Type <> "%") And (StrComp(gAcc.Type, "USER", vbTextCompare) <> 0)), _
                                         " (" & LCase$(gAcc.Type) & ")", vbNullString) & ", "
                                     
-                                ' ...
                                 dbCount = (dbCount + 1)
                             End If
                             
-                            ' ...
                             bln = False
                         Next j
                     End If
@@ -898,18 +855,15 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
             End If
         Next i
     
-        ' ...
         If (InStr(1, GetCumulativeAccess.Flags, "I", vbBinaryCompare) = 0) Then
-            ' ...
             If ((InStr(1, Username, "*", vbBinaryCompare) = 0) And _
                 (InStr(1, Username, "?", vbBinaryCompare) = 0) And _
                 (GetCumulativeAccess.Type <> "GAME") And _
                 (GetCumulativeAccess.Type <> "CLAN") And _
                 (GetCumulativeAccess.Type <> "GROUP")) Then
                 
-                ' ...
                 For i = LBound(dynGroups) To UBound(dynGroups)
-                    Dim doCheck As Boolean ' ...
+                    Dim doCheck As Boolean 
                     
                     If (i <> dbIndex) Then
                         ' default type to user
@@ -917,19 +871,15 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             dynGroups(i).Type, "USER")
                     
                         If (StrComp(dynGroups(i).Type, "USER", vbTextCompare) = 0) Then
-                            ' ...
                             If ((LCase$(PrepareCheck(Username))) Like _
                                 (LCase$(PrepareCheck(dynGroups(i).Username)))) Then
                                 
-                                ' ...
                                 doCheck = True
                             End If
                         ElseIf (StrComp(dynGroups(i).Type, "GAME", vbTextCompare) = 0) Then
-                            ' ...
                             For j = 1 To g_Channel.Users.Count
                                 If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
                                     If (StrComp(dynGroups(i).Username, g_Channel.Users(j).Game, vbTextCompare) = 0) Then
-                                        ' ...
                                         doCheck = True
                                     End If
                                     
@@ -937,11 +887,9 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                                 End If
                             Next j
                         ElseIf (StrComp(dynGroups(i).Type, "CLAN", vbTextCompare) = 0) Then
-                            ' ...
                             For j = 1 To g_Channel.Users.Count
                                 If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
                                     If (StrComp(dynGroups(i).Username, g_Channel.Users(j).Clan, vbTextCompare) = 0) Then
-                                        ' ...
                                         doCheck = True
                                     End If
                                     
@@ -950,114 +898,84 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             Next j
                         End If
                         
-                        ' ...
                         If (doCheck = True) Then
-                            Dim tmp As udtDatabase ' ...
+                            Dim tmp As udtDatabase 
                             
-                            ' ...
                             tmp = dynGroups(i)
             
-                            ' ...
                             If ((Len(tmp.Groups) > 0) And (tmp.Groups <> "%")) Then
-                                ' ...
                                 If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
-                                    ' ...
                                     Splt() = Split(tmp.Groups, ",")
                                 Else
-                                    ' ...
                                     ReDim Preserve Splt(0)
                                     
-                                    ' ...
                                     Splt(0) = tmp.Groups
                                 End If
                                 
-                                ' ...
                                 For j = 0 To UBound(Splt)
-                                    ' ...
                                     gAcc = GetCumulativeGroupAccess(Splt(j))
                                 
-                                    ' ...
                                     If (tmp.Rank < gAcc.Rank) Then
                                         tmp.Rank = gAcc.Rank
                                     End If
                                     
-                                    ' ...
                                     For K = 1 To Len(gAcc.Flags)
-                                        ' ...
                                         If (InStr(1, tmp.Flags, Mid$(gAcc.Flags, K, 1), _
                                             vbBinaryCompare) = 0) Then
                                             
-                                            ' ...
                                             tmp.Flags = tmp.Flags & _
                                                 Mid$(gAcc.Flags, K, 1)
                                         End If
                                     Next K
                                     
-                                    ' ...
                                     If ((tmp.BanMessage = vbNullString) Or _
                                         (tmp.BanMessage = "%")) Then
                                         
-                                        ' ...
                                         tmp.BanMessage = gAcc.BanMessage
                                     End If
                                 Next j
                             End If
     
-                            ' ...
                             If (GetCumulativeAccess.Rank < tmp.Rank) Then
-                                ' ...
                                 GetCumulativeAccess.Rank = tmp.Rank
                                 
-                                ' ...
                                 bln = True
                             End If
                             
-                            ' ...
                             For j = 1 To Len(tmp.Flags)
-                                ' ...
                                 If (InStr(1, GetCumulativeAccess.Flags, Mid$(tmp.Flags, j, 1), _
                                         vbBinaryCompare) = 0) Then
                                     
-                                    ' ...
                                     GetCumulativeAccess.Flags = GetCumulativeAccess.Flags & _
                                         Mid$(tmp.Flags, j, 1)
                                     
-                                    ' ...
                                     bln = True
                                 End If
                             Next j
                             
-                            ' ...
                             If ((GetCumulativeAccess.BanMessage = vbNullString) Or _
                                 (GetCumulativeAccess.BanMessage = "%")) Then
                                 
-                                ' ...
                                 GetCumulativeAccess.BanMessage = tmp.BanMessage
                                 
-                                ' ...
                                 bln = True
                             End If
        
                             If (bln) Then
-                                ' ...
                                 If (dbCount = 0) Then
-                                    ' ...
                                     GetCumulativeAccess.Username = GetCumulativeAccess.Username & _
                                         IIf((dbIndex + 1), Space(1), vbNullString) & "["
                                 End If
                             
-                                ' ...
                                 GetCumulativeAccess.Username = GetCumulativeAccess.Username & tmp.Username & _
                                     IIf(((tmp.Type <> "%") And (StrComp(tmp.Type, "USER", vbTextCompare) <> 0)), _
                                         " (" & LCase$(tmp.Type) & ")", vbNullString) & ", "
                                     
-                                ' ...
                                 dbCount = (dbCount + 1)
                             End If
                         End If
                     End If
                     
-                    ' ...
                     bln = False
                     doCheck = False
                 Next i
@@ -1073,7 +991,6 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                 End With
             End If
         Else
-            ' ...
             GetCumulativeAccess.Username = Left$(GetCumulativeAccess.Username, _
                 Len(GetCumulativeAccess.Username) - 2) & "]"
         End If
@@ -1091,119 +1008,91 @@ ERROR_HANDLER:
     Exit Function
 End Function
 
-' ...
 Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccessResponse
-    Dim gAcc   As udtGetAccessResponse ' ...
-    Dim Splt() As String               ' ...
+    Dim gAcc   As udtGetAccessResponse 
+    Dim Splt() As String              
     
-    ' ...
     gAcc = GetAccess(Group, "GROUP")
     
-    ' ...
     If ((Len(gAcc.Groups) > 0) And (gAcc.Groups <> "%")) Then
-        Dim recAcc As udtGetAccessResponse ' ...
+        Dim recAcc As udtGetAccessResponse 
     
-        ' ...
         If (InStr(1, gAcc.Groups, ",", vbBinaryCompare) <> 0) Then
-            Dim i As Integer ' ...
-            Dim j As Integer ' ...
+            Dim i As Integer 
+            Dim j As Integer 
         
-            ' ...
             Splt() = Split(gAcc.Groups, ",")
             
-            ' ...
             For i = 0 To UBound(Splt)
-                ' ...
                 recAcc = GetCumulativeGroupAccess(Splt(i))
                     
-                ' ...
                 If (gAcc.Rank < recAcc.Rank) Then
                     gAcc.Rank = recAcc.Rank
                 End If
                 
-                ' ...
                 For j = 1 To Len(recAcc.Flags)
-                    ' ...
                     If (InStr(1, gAcc.Flags, Mid$(recAcc.Flags, j, 1), _
                         vbBinaryCompare) = 0) Then
                         
-                        ' ...
                         gAcc.Flags = gAcc.Flags & _
                             Mid$(recAcc.Flags, j, 1)
                     End If
                 Next j
                 
-                ' ...
                 If ((gAcc.BanMessage = vbNullString) Or _
                     (gAcc.BanMessage = "%")) Then
                     
-                    ' ...
                     gAcc.BanMessage = recAcc.BanMessage
                 End If
             Next i
         Else
-            ' ...
             recAcc = GetCumulativeGroupAccess(gAcc.Groups)
         
-            ' ...
             If (gAcc.Rank < recAcc.Rank) Then
                 gAcc.Rank = recAcc.Rank
             End If
             
-            ' ...
             For j = 1 To Len(recAcc.Flags)
-                ' ...
                 If (InStr(1, gAcc.Flags, Mid$(recAcc.Flags, j, 1), _
                     vbBinaryCompare) = 0) Then
                     
-                    ' ...
                     gAcc.Flags = gAcc.Flags & _
                         Mid$(recAcc.Flags, j, 1)
                 End If
             Next j
             
-            ' ...
             If ((gAcc.BanMessage = vbNullString) Or _
                 (gAcc.BanMessage = "%")) Then
                 
-                ' ...
                 gAcc.BanMessage = recAcc.BanMessage
             End If
         End If
     End If
     
-    ' ...
     GetCumulativeGroupAccess = gAcc
 End Function
 
-' ...
 Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Boolean
-    Dim gAcc   As udtGetAccessResponse ' ...
-    Dim Splt() As String               ' ...
+    Dim gAcc   As udtGetAccessResponse
+    Dim Splt() As String          
     
-    ' ...
     gAcc = GetAccess(Group, "GROUP")
     
-    ' ...
     If ((Len(gAcc.Groups) > 0) And (gAcc.Groups <> "%")) Then
-        Dim recAcc As Boolean ' ...
+        Dim recAcc As Boolean
     
-        ' ...
         If (InStr(1, gAcc.Groups, ",", vbBinaryCompare) <> 0) Then
-            Dim i As Integer ' ...
-            Dim j As Integer ' ...
+            Dim i As Integer
+            Dim j As Integer
         
-            ' ...
             Splt() = Split(gAcc.Groups, ",")
             
-            ' ...
             For i = 0 To UBound(Splt)
                 If (StrComp(Splt(i), Check, vbTextCompare) = 0) Then
                     CheckGroup = True
                     
                     Exit Function
                 Else
-                    ' ...
                     recAcc = CheckGroup(Splt(i), Check)
                 
                     If (recAcc) Then
@@ -1219,7 +1108,6 @@ Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Bool
                 
                 Exit Function
             Else
-                ' ...
                 recAcc = CheckGroup(gAcc.Groups, Check)
             
                 If (recAcc) Then
@@ -1231,7 +1119,6 @@ Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Bool
         End If
     End If
     
-    ' ...
     CheckGroup = False
 End Function
 
@@ -1418,41 +1305,32 @@ Public Sub AddName(ByVal Username As String, ByVal AccountName As String, ByVal 
     End If
         
     With frmChat.lvChannel
-        ' ...
         .Enabled = False
         
-        ' ...
         .ListItems.Add isPriority, , Username, , i
         
         ' store account name here so popup menus work
         .ListItems.Item(isPriority).Tag = AccountName
         
-        ' ...
         If (.ColumnHeaders(2).Width > 0) Then
             .ListItems.Item(isPriority).ListSubItems.Add , , Clan
         End If
         
-        ' ...
         If (.ColumnHeaders(3).Width > 0) Then
             .ListItems.Item(isPriority).ListSubItems.Add , , , LagIcon
         End If
         
-        ' ...
         If (BotVars.NoColoring = False) Then
             .ListItems.Item(isPriority).ForeColor = GetNameColor(Flags, 0, IsSelf)
         End If
         
-        ' ...
         .Enabled = True
         
-        ' ...
         .Refresh
     End With
     
-    ' ...
     g_ThisIconCode = -1
     
-    ' ...
     frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
 End Sub
 
@@ -1487,7 +1365,7 @@ End Function
 Public Function CheckMsg(ByVal msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
         Long) As Boolean
     
-    Dim i As Integer ' ...
+    Dim i As Integer 
     
     msg = PrepareCheck(msg)
     
@@ -1915,21 +1793,17 @@ End Sub
 
 'Checks the queue for duplicate bans
 Public Sub RemoveBanFromQueue(ByVal sUser As String)
-    Dim tmp As String ' ...
+    Dim tmp As String 
 
-    ' ...
     tmp = "/ban " & sUser
         
-    ' ...
     g_Queue.RemoveLines tmp & "*"
 
-    ' ...
     If ((StrReverse$(BotVars.Product) = "WAR3") Or _
         (StrReverse$(BotVars.Product) = "W3XP")) Then
         
-        Dim strGateway As String ' ...
+        Dim strGateway As String 
         
-        ' ...
         Select Case (BotVars.Gateway)
             Case "Lordaeron": strGateway = "@USWest"
             Case "Azeroth":   strGateway = "@USEast"
@@ -1937,7 +1811,6 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
             Case "Northrend": strGateway = "@Europe"
         End Select
         
-        ' ...
         If (InStr(1, tmp, strGateway, vbTextCompare) = 0) Then
             g_Queue.RemoveLines tmp & strGateway & "*"
         End If
@@ -1968,9 +1841,7 @@ Public Function AllowedToTalk(ByVal sUser As String, ByVal msg As String) As Boo
     '    End With
     'End If
     
-    ' ...
     If (Filters) Then
-        ' ...
         If ((CheckBlock(sUser)) Or (CheckMsg(msg, sUser, -5))) Then
             AllowedToTalk = False
         End If
@@ -2011,8 +1882,8 @@ End Sub
 Public Sub AddBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     Const MAX_BAN_COUNT As Integer = 80
 
-    Dim i      As Integer ' ...
-    Dim bCount As Integer ' ...
+    Dim i      As Integer
+    Dim bCount As Integer 
     
     ' check for duplicate entry in banlist
     For i = 0 To UBound(gBans)
@@ -2563,7 +2434,7 @@ Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String,
     'Dim sPath  As String
     'Dim Action As String
     'Dim f      As Integer
-    Dim str As String ' ...
+    Dim str As String 
     
     If ((LenB(Caller) = 0) Or (StrComp(Caller, "(console)", vbTextCompare) = 0)) Then
         Caller = "console"
@@ -2788,7 +2659,6 @@ End Function
 Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Long, ByRef StringRet() As String, Optional ByVal LinePrefix As String = _
     vbNullString, Optional ByVal LinePostfix As String, Optional ByVal OversizeDelimiter As String = " ") As Long
     
-    ' ...
     On Error GoTo ERROR_HANDLER
 
     ' maximum size of battle.net messages
@@ -2819,17 +2689,14 @@ Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Lon
     ' default our first index
     StringRet(0) = vbNullString
     
-    ' ...
     If (SplitLength = 0) Then
         SplitLength = BNET_MSG_LENGTH
     End If
     
-    ' ...
     If (Len(LinePrefix) >= SplitLength) Then
         Exit Function
     End If
     
-    ' ...
     If (Len(LinePostfix) >= SplitLength) Then
         Exit Function
     End If
@@ -2900,10 +2767,8 @@ Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Lon
         lineCount = (lineCount + 1)
     Loop
     
-    ' ...
     SplitByLen = lineCount
     
-    ' ...
     Exit Function
     
 ERROR_HANDLER:
@@ -2937,10 +2802,8 @@ Public Function convertAlias(ByVal cmdName As String) As String
         Dim commands As DOMDocument60
         Dim Alias    As IXMLDOMNode
         
-        ' ...
         Set commands = commandDoc.XMLDocument
         
-        '' ...
         'If (Dir$(sCommandsPath) = vbNullString) Then
         '    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
         '        "working directory.")
@@ -2948,10 +2811,8 @@ Public Function convertAlias(ByVal cmdName As String) As String
         '    Exit Function
         'End If
         '
-        '' ...
         'Call commands.Load(sCommandsPath)
         
-        ' ...
         If (InStr(1, cmdName, "'", vbBinaryCompare) > 0) Then
             Set commandDoc = Nothing
             Exit Function
@@ -2965,7 +2826,6 @@ Public Function convertAlias(ByVal cmdName As String) As String
             commands.documentElement.selectSingleNode( _
                 "./command/aliases/alias[translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase$(cmdName) & "']")
         
-        ' ...
         'Set Alias = _
         '    commands.documentElement.selectSingleNode( _
         '        "./command/aliases/alias[contains(text(), '" & cmdName & "')]")
@@ -2979,20 +2839,16 @@ Public Function convertAlias(ByVal cmdName As String) As String
         End If
     End If
     
-    ' ...
     convertAlias = cmdName
     Set commandDoc = Nothing
 
-    ' ...
     Exit Function
     
-' ...
 ERROR_HANDLER:
 
     Call frmChat.AddChat(RTBColors.ErrorMessageText, "Error: XML Database Processor has encountered an error " & _
         "during alias lookup.")
         
-    ' ...
     convertAlias = cmdName
 
     Exit Function
@@ -3034,55 +2890,41 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     '              SANITY CHECKS
     ' *****************************************
     
-    ' ...
     If (StrictIsNumeric(saElements(0))) Then
-        ' ...
         Count = 2
     
-        ' ...
         For i = LBound(saElements) To UBound(saElements) Step 2
-            ' ...
             ReDim Preserve arr(0 To Count) As Variant
             
-            ' ...
             arr(Count) = saElements(i + 1)
             arr(Count - 1) = saElements(i)
             arr(Count - 2) = rtb.Font.Name
             
-            ' ...
             Count = Count + 3
         Next i
         
-        ' ...
         saElements() = arr()
     End If
     
-    ' ...
     rtbChatLength = Len(rtb.Text)
 
-    ' ...
     For i = LBound(saElements) To UBound(saElements) Step 3
-        ' ...
         If (i >= UBound(saElements)) Then
             Exit Sub
         End If
     
-        ' ...
         If (StrictIsNumeric(saElements(i + 1)) = False) Then
             Exit Sub
         End If
         
-        ' ...
         length = _
             length + Len(KillNull(saElements(i + 2)))
     Next i
     
-    ' ...
     If (length = 0) Then
         Exit Sub
     End If
 
-    ' ...
     If ((BotVars.LockChat = False) Or (rtb <> frmChat.rtbChat)) Then
         
         ' store rtb carat and whether rtb has focus
@@ -3105,7 +2947,6 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             blUnlock = True
         End If
         
-        ' ...
         If (rtb = frmChat.rtbChat) Then
             LogThis = (BotVars.Logging > 0)
         ElseIf (rtb = frmChat.rtbWhispers) Then
@@ -3191,7 +3032,6 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         Next i
         
-        ' ...
         If (LogThis) Then
             If (rtb = frmChat.rtbChat) Then
                 g_Logger.WriteChat str
@@ -3239,7 +3079,6 @@ ERROR_HANDLER:
         Exit Sub
     End If
     
-    ' ...
     If (Err.Number = 13 Or Err.Number = 91) Then
         Exit Sub
     End If

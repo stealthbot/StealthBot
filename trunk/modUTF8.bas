@@ -15,22 +15,18 @@ Private Const MB_ERR_INVALID_CHARS As Long = &H8
 Private Const CP_ACP               As Long = 0
 Private Const CP_UTF8              As Long = 65001
 
-' ...
 Public Function UTF8Encode(ByRef str As String) As Byte()
-    Dim UTF8Buffer() As Byte   ' ...
-    Dim UTF8Chars    As Long   ' ...
-    Dim lstr         As String ' ...
+    Dim UTF8Buffer() As Byte  
+    Dim UTF8Chars    As Long   
+    Dim lstr         As String 
     
-    ' ...
     lstr = str
     
     ' grab Length of string after conversion
     UTF8Chars = WideCharToMultiByte(CP_UTF8, 0, ByVal StrPtr(lstr), Len(lstr), 0, 0, _
         vbNullString, 0)
     
-    ' ...
     If (UTF8Chars = 0) Then
-        ' ...
         Exit Function
     End If
 
@@ -45,22 +41,18 @@ Public Function UTF8Encode(ByRef str As String) As Byte()
     UTF8Encode = UTF8Buffer
 End Function
 
-' ...
 Public Function UTF8Decode(ByRef str As String, Optional LocaleID As Long = 1252) As String
-    Dim UnicodeBuffer As String ' ...
-    Dim UnicodeChars  As Long   ' ...
-    Dim lstr          As String ' ...
+    Dim UnicodeBuffer As String 
+    Dim UnicodeChars  As Long   
+    Dim lstr          As String 
     
-    ' ...
     lstr = str
     
     ' grab Length of string after conversion
     UnicodeChars = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, lstr, Len(lstr), _
         vbNullString, 0)
             
-    ' ...
     If (UnicodeChars = 0) Then
-        ' ...
         Exit Function
     End If
     

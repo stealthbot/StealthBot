@@ -164,7 +164,6 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 '(STRING) Location str (blank = private)
                 s = Mid$(Data, Position)
                 
-                ' ...
                 If (Len(s) > 1) Then
                     s = Left$(s, Len(s) - 1)
                 End If
@@ -249,10 +248,8 @@ ERROR_HANDLER:
 End Sub
 
 Public Sub ResetList()
-    ' ...
     'frmChat.lvFriendList.ListItems.Clear
     
-    ' ...
     Set g_Friends = Nothing
     Set g_Friends = New Collection
 End Sub

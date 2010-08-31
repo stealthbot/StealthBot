@@ -11,7 +11,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' ...
 
 Option Explicit
 
@@ -101,12 +100,12 @@ Private Const WA_DIALOGSKINSELECTOR = 40219
 Private Const WA_DIALOGCONFIGUREVISUALPLUGIN = 40221
 Private Const WA_RELOADSKIN = 40291
 Private Const WA_CLOSE = 40001
-Private Const WA_PREVTRACK   As Long = 40044 ' ...
-Private Const WA_NEXTTRACK   As Long = 40048 ' ...
-Private Const WA_PLAY        As Long = 40045 ' ...
-Private Const WA_PAUSE       As Long = 40046 ' ...
-Private Const WA_STOP        As Long = 40047 ' ...
-Private Const WA_FADEOUTSTOP As Long = 40147 ' ...
+Private Const WA_PREVTRACK   As Long = 40044
+Private Const WA_NEXTTRACK   As Long = 40048
+Private Const WA_PLAY        As Long = 40045 
+Private Const WA_PAUSE       As Long = 40046 
+Private Const WA_STOP        As Long = 40047 
+Private Const WA_FADEOUTSTOP As Long = 40147 
 
 Private Type extendedFileInfoStruct
     FileName As String
@@ -128,50 +127,36 @@ End Type
 
 Private m_hWnd As Long
 
-' ...
 Private Sub Class_Initialize()
-
-    ' ...
     m_hWnd = GetWindowHandle()
-    
 End Sub
 
-' ...
 Private Function GetWindowHandle() As Long
-
-    Dim lRet As Long ' ...
+    Dim lRet As Long 
     
-    ' ...
     lRet = (FindWindow("Winamp v1.x", vbNullString))
     
-    ' ...
     If (lRet = False) Then
         lRet = (FindWindow("STUDIO", vbNullString))
     End If
     
-    ' ...
     GetWindowHandle = lRet
-    
 End Function
 
 ' Winamp 2.04+ Only
 Private Function GetWinampSongTitle(Optional ByVal entryNumber As Integer = 0) As String
-
-    Dim SongTitle       As String ' ...
-    Dim WinampProcessID As Long   ' ...
-    Dim ProcessHandle   As Long   ' ...
-    Dim SongTitleRemote As Long   ' ...
-    Dim ret             As String ' ...
+    Dim SongTitle       As String
+    Dim WinampProcessID As Long  
+    Dim ProcessHandle   As Long  
+    Dim SongTitleRemote As Long   
+    Dim ret             As String
     
-    ' ...
     If (IsLoaded() = False) Then
         Exit Function
     End If
     
-    ' ...
     SongTitle = String$(1024, vbNullChar)
     
-    ' ...
     If (entryNumber = 0) Then
         entryNumber = PlaylistPosition() - 1
     End If
@@ -180,14 +165,11 @@ Private Function GetWinampSongTitle(Optional ByVal entryNumber As Integer = 0) A
     GetWindowThreadProcessId m_hWnd, WinampProcessID
     
     '// Open process
-    ProcessHandle = _
-        CLng(OpenProcess(PROCESS_VM_READ, False, WinampProcessID))
+    ProcessHandle = CLng(OpenProcess(PROCESS_VM_READ, False, WinampProcessID))
     
-    ' ...
     If (ProcessHandle > 0) Then
         '// Get pointer
-        SongTitleRemote = _
-            CStr(SendMessage(m_hWnd, WM_WA_IPC, entryNumber, IPC_GETPLAYLISTTITLE))
+        SongTitleRemote = CStr(SendMessage(m_hWnd, WM_WA_IPC, entryNumber, IPC_GETPLAYLISTTITLE))
         
         If (SongTitleRemote > 0) Then
             '// Try to read it
@@ -196,23 +178,17 @@ Private Function GetWinampSongTitle(Optional ByVal entryNumber As Integer = 0) A
             End If
         End If
         
-        ' ...
         CloseHandle ProcessHandle
     End If
     
-    ' ...
     GetWinampSongTitle = ret
-    
 End Function
 
 Public Property Get Name() As String
-
     Name = "Winamp"
-    
 End Property
 
 Public Function IsLoaded() As Boolean
-
     m_hWnd = GetWindowHandle()
 
     If (m_hWnd = 0) Then
@@ -220,295 +196,193 @@ Public Function IsLoaded() As Boolean
     Else
         IsLoaded = True
     End If
-    
 End Function
 
-' ...
 Public Function Start(Optional filePath As String) As Boolean
-
-    ' ...
     If ((Dir$(filePath) <> vbNullString) And (filePath <> vbNullString)) Then
-        ' ...
         Start = True
         
-        ' ...
         Shell filePath, vbNormalFocus
     Else
         If (Dir$(WA_DEFAULT_PATH) <> vbNullString) Then
-            ' ...
             Start = True
             
-            ' ...
             Shell WA_DEFAULT_PATH, vbNormalFocus
         End If
     End If
-    
 End Function
 
 Public Sub NextTrack()
-
-   PlayTrack PlaylistPosition + 1
-   
+   PlayTrack PlaylistPosition + 1   
 End Sub
 
 Public Sub PreviousTrack()
-
     PlayTrack PlaylistPosition - 1
-
 End Sub
 
-' ...
 Public Sub PlayTrack(Optional ByVal Track As Variant = vbNullString)
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Sub
     End If
     
-    ' ...
     If (Track <> vbNullString) Then
-        ' ...
         QuitPlayback
         
-        ' ...
         If (StrictIsNumeric(Track)) Then
             SendMessage m_hWnd, WM_USER, Track - 1, IPC_SETPLAYLISTPOS
         Else
-            Dim lngJumpto  As Long    ' ...
-            Dim lngEdit    As Long    ' ...
-            Dim lngListBox As Long    ' ...
-            Dim iterations As Integer ' ...
+            Dim lngJumpto  As Long  
+            Dim lngEdit    As Long  
+            Dim lngListBox As Long   
+            Dim iterations As Integer 
    
-            ' ...
             PostMessage m_hWnd, WA_SENDCUSTOMDATA, WA_DIALOGJUMPTOFILE, 0
             
-            ' ...
             Do
-                ' ...
                 lngJumpto = FindWindow("#32770", "Jump to file")
                 
-                ' ...
                 lngEdit = FindWindowEx(lngJumpto, 0, "Edit", vbNullString)
                 
-                ' ...
                 lngListBox = FindWindowEx(lngJumpto, 0, "ListBox", vbNullString)
                 
-                ' ...
                 iterations = (iterations + 1)
                 
-                ' ...
                 DoEvents
             Loop Until lngListBox <> 0 And lngJumpto <> 0 And lngEdit <> 0 Or iterations > 3000
             
-            ' ...
             SendMessageByString lngEdit, &HC, 0, Track
             
-            ' ...
             PostMessage lngListBox, WM_LBUTTONDBLCLK, 0, 0
         End If
     End If
-
-    ' ...
     SendMessage m_hWnd, WM_COMMAND, WA_PLAY, 0
-    
 End Sub
 
-' ...
 Public Property Let Volume(ByVal lngVol As Long)
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Property
     End If
 
     SendMessage m_hWnd, WM_WA_IPC, (lngVol * 2.55), WA_SETVOLUME
-    
 End Property
 
-' ...
 Public Property Get Volume() As Long
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Property
     End If
 
-    Volume = _
-        (CLng(SendMessage(m_hWnd, WM_WA_IPC, -666, WA_SETVOLUME) / 2.55))
-    
+    Volume = (CLng(SendMessage(m_hWnd, WM_WA_IPC, -666, WA_SETVOLUME) / 2.55))
 End Property
 
-' ...
 Public Sub PausePlayback()
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Sub
     End If
 
     SendMessage m_hWnd, WM_COMMAND, WA_PAUSE, 0
-    
 End Sub
 
-' ...
 Public Sub QuitPlayback()
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Sub
     End If
 
     SendMessage m_hWnd, WM_COMMAND, WA_STOP, 0
-    
 End Sub
 
 Public Sub FadeOutToStop()
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Sub
     End If
 
     SendMessage m_hWnd, WM_COMMAND, WA_FADEOUTSTOP, 0
-    
 End Sub
 
 ' Winamp 2.05+ Only
 Public Property Get PlaylistPosition() As Long
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Property
     End If
     
-    ' ...
-    PlaylistPosition = _
-        CLng((SendMessage(m_hWnd, WM_WA_IPC, 0&, IPC_GETLISTPOS) + 1))
-    
+    PlaylistPosition = CLng((SendMessage(m_hWnd, WM_WA_IPC, 0&, IPC_GETLISTPOS) + 1))
 End Property
 
-' ...
 Public Property Get PlaylistCount() As Long
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Property
     End If
 
-    PlaylistCount = _
-        CLng(SendMessage(m_hWnd, WM_WA_IPC, 0&, IPC_GETLISTLENGTH))
-    
+    PlaylistCount = CLng(SendMessage(m_hWnd, WM_WA_IPC, 0&, IPC_GETLISTLENGTH))
 End Property
 
-' ...
 Public Property Get TrackName() As String
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Property
     End If
-
-    ' ...
-    TrackName = GetWinampSongTitle()
     
+    TrackName = GetWinampSongTitle()
 End Property
 
-' ...
 Public Property Let Shuffle(ByVal blnShuffle As Boolean)
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Property
     End If
 
     SendMessage m_hWnd, WM_WA_IPC, blnShuffle, IPC_SET_SHUFFLE
-    
 End Property
 
-' ...
 Public Property Get Shuffle() As Boolean
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Property
     End If
 
-    Shuffle = _
-        CBool(SendMessage(m_hWnd, WM_WA_IPC, 0&, IPC_GET_SHUFFLE))
-    
+    Shuffle = CBool(SendMessage(m_hWnd, WM_WA_IPC, 0&, IPC_GET_SHUFFLE))
 End Property
 
-' ...
 Public Property Let Repeat(ByVal blnRepeat As Boolean)
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Property
     End If
 
     SendMessage m_hWnd, WM_WA_IPC, blnRepeat, IPC_SET_REPEAT
-    
 End Property
 
-' ...
 Public Property Get Repeat() As Boolean
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Property
     End If
 
-    Repeat = _
-        CBool(SendMessage(m_hWnd, WM_WA_IPC, 0&, IPC_GET_REPEAT))
-    
+    Repeat = CBool(SendMessage(m_hWnd, WM_WA_IPC, 0&, IPC_GET_REPEAT))
 End Property
 
 Public Property Get TrackTime() As Long
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Property
     End If
 
-    TrackTime = _
-        CLng((SendMessage(m_hWnd, WM_WA_IPC, 0&, WA_GETTRACKPOSITION) / 1000))
-    
+    TrackTime = CLng((SendMessage(m_hWnd, WM_WA_IPC, 0&, WA_GETTRACKPOSITION) / 1000))
 End Property
 
 Public Property Get TrackLength() As Long
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Property
     End If
 
-    TrackLength = _
-        CLng(SendMessage(m_hWnd, WM_WA_IPC, 1&, WA_GETTRACKLENGTH))
-    
+    TrackLength = CLng(SendMessage(m_hWnd, WM_WA_IPC, 1&, WA_GETTRACKLENGTH))
 End Property
 
-' ...
 Public Property Get IsPlaying() As Boolean
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Property
     End If
 
-    IsPlaying = _
-        CBool((SendMessage(m_hWnd, WM_WA_IPC, 0, WA_GETSTATUS) = 1))
-    
+    IsPlaying =  CBool((SendMessage(m_hWnd, WM_WA_IPC, 0, WA_GETSTATUS) = 1))
 End Property
 
-' ...
 Public Property Get IsPaused() As Boolean
-
-    ' ...
     If (IsLoaded() = False) Then
         Exit Property
     End If
 
-    IsPaused = _
-        CBool((SendMessage(m_hWnd, WM_WA_IPC, 0, WA_GETSTATUS) = 3))
-    
+    IsPaused = CBool((SendMessage(m_hWnd, WM_WA_IPC, 0, WA_GETSTATUS) = 3))
 End Property

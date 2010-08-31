@@ -145,17 +145,14 @@ Public Sub ParseMCPPacket(ByVal Data As String)
             Data = Mid$(sBuffer, 1, PacketLen)
             PacketID = Asc(Mid$(Data, 3, 1))
             
-            ' ...
             CachePacket StoC, stMCP, PacketID, Len(Data), Data
     
-            ' ...
             WritePacketData stMCP, StoC, PacketID, Len(Data), Data
             
             If InStr(1, CommandLine, "-all") > 0 Then
                 frmChat.AddChat COLOR_BLUE, "MCP RECV 0x" & ZeroOffset(PacketID, 2)
             End If
                 
-            ' ...
             If (RunInAll("Event_PacketReceived", "MCP", Asc(Mid$(Data, 3, 1)), Len(Data), Data)) Then
                 Exit Sub
             End If

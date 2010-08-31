@@ -2,14 +2,14 @@ VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   165
+   ClientLeft      =   225
    ClientTop       =   855
    ClientWidth     =   11400
    ForeColor       =   &H00000000&
@@ -897,8 +897,8 @@ Begin VB.Form frmChat
    Begin MSWinsockLib.Winsock sckBNLS 
       Left            =   5760
       Top             =   2760
-      _ExtentX        =   593
-      _ExtentY        =   593
+      _ExtentX        =   741
+      _ExtentY        =   741
       _Version        =   393216
       RemotePort      =   9367
    End
@@ -1020,7 +1020,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1046,7 +1045,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1956,10 +1954,8 @@ Public Sub cacheTimer_Timer()
         'ret = CacheChannelList(vbNullString, 0, Y)
         ret = CacheChannelList(enRetrieve, y)
         
-        ' ...
         lPos = InStr(1, ret, ", ", vbBinaryCompare)
         
-        ' ...
         If (lPos) Then
             strArray() = Split(ret, ", ")
         Else
@@ -2035,27 +2031,19 @@ End Sub
 ' Updated 4/17/07 to not flash the desktop when the scrollbar is held up
 ' Updated 8/07/07 with greater precision
 Sub AddChat(ParamArray saElements() As Variant)
-    Dim arr() As Variant ' ...
-    Dim i     As Integer ' ...
+    Dim arr() As Variant
+    Dim i     As Integer
 
-    ' ...
     arr() = saElements
-    
-    ' ...
     Call DisplayRichText(frmChat.rtbChat, arr)
 End Sub
 
 Sub AddWhisper(ParamArray saElements() As Variant)
+    Dim arr() As Variant
     
-    Dim arr() As Variant ' ...
-    
-    ' ...
     arr() = saElements
     
-    ' ...
     Call DisplayRichText(frmChat.rtbWhispers, arr)
-
-    ' ...
     Exit Sub
     
     
@@ -2372,17 +2360,13 @@ Public Sub FindAltBNLS()
                 strReturn = INet.OpenURL(ReadCfg("Override", "BNLSSource"))
             End If
             
-            ' ...
             If ((strReturn = vbNullString) Or (Right(strReturn, 2) <> vbCrLf)) Then
-                
                 strReturn = INet.OpenURL("http://stealthbot.net/sb/bnls.php")
                 If ((strReturn = vbNullString) Or (Left(strReturn, 1) <> vbLf)) Then
-                    ' ...
                     AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured while trying to locate an alternative BNLS server."
                     AddChat RTBColors.ErrorMessageText, "[BNLS]   You may not be connected to the internet or may be having DNS resolution issues."
                     AddChat RTBColors.ErrorMessageText, "[BNLS]   Visit http://www.stealthbot.net/ and check the Technical Support forum for more information."
                     
-                    ' ...
                     Call DoDisconnect
             
                     ' ensure that we update our listing on following connection(s)
@@ -2391,7 +2375,6 @@ Public Sub FindAltBNLS()
                     ' ensure checker starts at 0 again on following connection(s)
                     intCounter = 0
             
-                    ' ...
                     Exit Sub
                 Else
                     ' Split the page up into an array of servers.
@@ -2429,7 +2412,6 @@ Public Sub FindAltBNLS()
         End If
     Loop
     
-    ' ...
     BotVars.BNLSServer = strBNLS(intCounter)
     
     'Reconnect BNLS using the newly located BNLS server
@@ -2438,7 +2420,6 @@ Public Sub FindAltBNLS()
         .Connect
     End With
     
-    ' ...
     AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
 
     Exit Sub
@@ -2466,11 +2447,6 @@ BNLS_Alt_Finder_Error:
 
     Exit Sub
 End Sub
-
-' This code commented out 10/18/06 - what's it for? I dunno. It's old.
-'Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
-'    Call Form_Resize
-'End Sub
 
 ' Updated 8/8/07 to support new prefix/suffix box feature
 Sub Form_Resize()
@@ -2700,7 +2676,6 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     
     pos = g_Clan.GetUserIndexEx(Member)
     
-    ' ...
     If (pos > 0) Then
         g_Clan.Members.Remove pos
     End If
@@ -2803,7 +2778,6 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
     
     'frmChat.ClanHandler.RequestClanMotd 1
     
-    ' ...
     frmChat.ListviewTabs_Click 0
 End Sub
 
@@ -2872,10 +2846,8 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     Else
         Dim ClanMember As clsClanMemberObj
         
-        ' ...
         Set ClanMember = New clsClanMemberObj
         
-        ' ...
         With ClanMember
             .Name = Username
             .Rank = Rank
@@ -2883,7 +2855,6 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
             .Location = Location
         End With
         
-        ' ...
         g_Clan.Members.Add ClanMember
     End If
     
@@ -2913,14 +2884,11 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
 End Sub
 
 Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
-    ' ...
     g_Clan.MOTD = Message
     
-    ' ...
     If (cookie = 1) Then
         PassedClanMotdCheck = True
         
-        ' ...
         'If (g_Clan.MOTD <> vbNullString) Then
         '    frmChat.AddChat vbBlue, Message
         'End If
@@ -3228,10 +3196,8 @@ Public Sub AddFriend(ByVal Username As String, ByVal Product As String, IsOnline
         Set f = Nothing
     End If
     
-    ' ...
     lblCurrentChannel.Caption = GetChannelString()
     
-    ' ...
     frmChat.ListviewTabs_Click 0
 End Sub
 
@@ -3329,36 +3295,28 @@ Private Sub INet_StateChanged(ByVal State As Integer)
 End Sub
 
 Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
-    Dim i As Integer ' ...
+    Dim i As Integer
  
-    ' ...
     If ((mnuPublicChannels(0).Caption <> vbNullString) Or _
             (mnuCustomChannels(0).Caption <> vbNullString)) Then
     
-        ' ...
         If ((mnuPublicChannels(0).Caption <> vbNullString) And _
                 (mnuCustomChannels(0).Caption <> vbNullString)) Then
             
-            ' ...
             frmChat.mnuDash.Visible = True
         Else
-            ' ...
             frmChat.mnuDash.Visible = False
         End If
         
-        ' ...
         For i = 0 To mnuPublicChannels.Count - 1
-            ' ...
             If (mnuPublicChannels(i).Caption <> vbNullString) Then
                 mnuPublicChannels(i).Visible = True
             End If
         Next i
         
-        ' ...
         mnuQCEdit.Visible = False
         mnuBlank.Visible = False
         
-        ' ...
         PopupMenu mnuQCTop
     End If
 End Sub
@@ -3371,26 +3329,20 @@ Public Sub ListviewTabs_Click(PreviousTab As Integer)
     'If PreviousTab <> CurrentTab And ListviewTabs.TabEnabled(CurrentTab) Then
         Select Case CurrentTab
             Case LVW_BUTTON_CHANNEL ' = 0 = Channel button clicked
-                ' ...
                 lblCurrentChannel.ToolTipText = "Currently in " & g_Channel.SType() & _
                     " channel " & g_Channel.Name & " (" & g_Channel.Users.Count & ")"
                 
-                ' ...
                 lvChannel.ZOrder vbBringToFront
                 
             Case LVW_BUTTON_FRIENDS ' = 1 = Friends button clicked
-                ' ...
                 lblCurrentChannel.ToolTipText = "Currently viewing " & g_Friends.Count & " friends"
             
-                ' ...
                 lvFriendList.ZOrder vbBringToFront
                 
             Case LVW_BUTTON_CLAN ' = 2 = Clan button clicked
-                ' ...
                 lblCurrentChannel.ToolTipText = "Currently viewing " & _
                     g_Clan.Members.Count & " members of clan " & Clan.Name
             
-                ' ...
                 lvClanList.ZOrder vbBringToFront
                 
         End Select
@@ -3512,7 +3464,6 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, 
     Dim aInx As Integer
     Dim sProd As String * 4
     
-    ' ...
     If (lvChannel.SelectedItem Is Nothing) Then
         Exit Sub
     End If
@@ -3545,7 +3496,6 @@ Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, x As Singl
     Dim sProd As String * 4
     Dim bIsOn As Boolean
     
-    ' ...
     If (lvFriendList.SelectedItem Is Nothing) Then
         Exit Sub
     End If
@@ -3589,14 +3539,11 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single
         If m_lCurItemIndex = 0 Then   ' no item under the mouse pointer
             ListToolTip.Destroy
         Else
-            ' ...
             'UserAccess = GetCumulativeAccess(lvChannel.ListItems(m_lCurItemIndex).text, "USER")
         
-            ' ...
             ListToolTip.Title = _
                 "Information for " & lvChannel.ListItems(m_lCurItemIndex).Text
                 
-            ' ...
             'If (UserAccess.Name <> vbNullString) Then
             '    sTemp = sTemp & "["
             '
@@ -3777,15 +3724,12 @@ Private Sub mnuBot_Click()
         mnuIgnoreInvites.Enabled = False
     End If
     
-    ' ...
     mnuDash.Visible = False
 
-    ' ...
     For i = 0 To mnuPublicChannels.Count - 1
         mnuPublicChannels(i).Visible = False
     Next i
     
-    ' ...
     mnuQCEdit.Visible = True
     mnuBlank.Visible = True
 End Sub
@@ -4208,26 +4152,22 @@ Private Sub mnuPopUserlistWhois_Click()
 End Sub
 
 Private Sub mnuPublicChannels_Click(Index As Integer)
-    ' ...
     If (StrComp(mnuPublicChannels(Index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
         Exit Sub
     End If
     
     'FullJoin mnuChannels(Index).Caption
     
-    ' ...
     AddQ "/join " & mnuPublicChannels(Index).Caption, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuCustomChannels_Click(Index As Integer)
-    ' ...
     If (StrComp(mnuCustomChannels(Index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
         Exit Sub
     End If
 
     'FullJoin mnuChannels(Index).Caption
     
-    ' ...
     AddQ "/join " & mnuCustomChannels(Index).Caption, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
@@ -4811,15 +4751,11 @@ Private Sub rtbChat_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub rtbChat_KeyPress(KeyAscii As Integer)
-    ' ...
     If (KeyAscii < 32) Then
         Exit Sub
     End If
 
-    ' ...
     cboSend.SetFocus
-    
-    ' ...
     cboSend.SelText = Chr$(KeyAscii)
 End Sub
 
@@ -4842,15 +4778,11 @@ Private Sub rtbWhispers_KeyDown(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub rtbWhispers_KeyPress(KeyAscii As Integer)
-    ' ...
     If (KeyAscii < 32) Then
         Exit Sub
     End If
 
-    ' ...
     cboSend.SetFocus
-    
-    ' ...
     cboSend.SelText = Chr$(KeyAscii)
 End Sub
 
@@ -4995,134 +4927,87 @@ Private Sub mnuUsers_Click()
 End Sub
 
 Private Sub mnuScript_Click(Index As Integer)
-
     On Error Resume Next
 
-    Dim obj As scObj ' ...
+    Dim obj As scObj
     
-    ' ...
     obj = GetScriptObjByIndex("Menu", Index)
-
-    ' ...
     RunInSingle obj.SCModule, obj.ObjName & "_Click"
-
 End Sub
 
 Private Sub sckScript_Connect(Index As Integer)
-
     On Error Resume Next
 
-    Dim obj As scObj ' ...
+    Dim obj As scObj
     
-    ' ...
     obj = GetScriptObjByIndex("Winsock", Index)
-
-    ' ...
     RunInSingle obj.SCModule, obj.ObjName & "_Connect"
-    
-    
 End Sub
 
 Private Sub sckScript_ConnectionRequest(Index As Integer, ByVal requestID As Long)
-
     On Error Resume Next
 
-    Dim obj As scObj ' ...
+    Dim obj As scObj
     
-    ' ...
     obj = GetScriptObjByIndex("Winsock", Index)
-
-    ' ...
     RunInSingle obj.SCModule, obj.ObjName & "_ConnectionRequest", requestID
-
 End Sub
 
 Private Sub sckScript_DataArrival(Index As Integer, ByVal bytesTotal As Long)
-
     On Error Resume Next
 
-    Dim obj As scObj ' ...
+    Dim obj As scObj
     
-    ' ...
     obj = GetScriptObjByIndex("Winsock", Index)
-
-    ' ...
     RunInSingle obj.SCModule, obj.ObjName & "_DataArrival", bytesTotal
-    
 End Sub
 
 Private Sub sckScript_SendComplete(Index As Integer)
-
     On Error Resume Next
 
-    Dim obj As scObj ' ...
+    Dim obj As scObj
     
-    ' ...
     obj = GetScriptObjByIndex("Winsock", Index)
-
-    ' ...
     RunInSingle obj.SCModule, obj.ObjName & "_SendComplete"
-
 End Sub
 
 Private Sub sckScript_SendProgress(Index As Integer, ByVal bytesSent As Long, ByVal bytesRemaining As Long)
-
     On Error Resume Next
 
-    Dim obj As scObj ' ...
+    Dim obj As scObj
     
-    ' ...
     obj = GetScriptObjByIndex("Winsock", Index)
-
-    ' ...
     RunInSingle obj.SCModule, obj.ObjName & "_SendProgress", bytesSent, bytesRemaining
-
 End Sub
 
 Private Sub sckScript_Close(Index As Integer)
-
     On Error Resume Next
 
-    Dim obj As scObj ' ...
+    Dim obj As scObj
     
-    ' ...
     obj = GetScriptObjByIndex("Winsock", Index)
-
-    ' ...
     RunInSingle obj.SCModule, obj.ObjName & "_Close"
-    
 End Sub
 
 Private Sub sckScript_Error(Index As Integer, ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-
     On Error Resume Next
 
-    Dim obj As scObj ' ...
+    Dim obj As scObj
     
-    ' ...
     obj = GetScriptObjByIndex("Winsock", Index)
-
-    ' ...
     RunInSingle obj.SCModule, obj.ObjName & "_Error", Number, description, Scode, source, HelpFile, HelpContext, CancelDisplay
-
 End Sub
 
 Private Sub itcScript_StateChanged(Index As Integer, ByVal State As Integer)
-
     On Error Resume Next
 
-    Dim obj As scObj ' ...
+    Dim obj As scObj
     
-    ' ...
     obj = GetScriptObjByIndex("Inet", Index)
-    
-    ' ...
     RunInSingle obj.SCModule, obj.ObjName & "_StateChanged", State
-
 End Sub
 
 Private Sub tmrAccountLock_Timer()
-    
     tmrAccountLock.Enabled = False
     
     If (Not g_Online) Then
@@ -5133,44 +5018,30 @@ Private Sub tmrAccountLock_Timer()
         "invalid logins.  Please try connecting again in 15-20 minutes."
         
     DoDisconnect
-    
 End Sub
 
 Private Sub tmrScript_Timer(Index As Integer)
-
     On Error Resume Next
 
-    Dim obj As scObj ' ...
+    Dim obj As scObj
     
-    ' ...
     obj = GetScriptObjByIndex("Timer", Index)
-    
-    ' ...
     RunInSingle obj.SCModule, obj.ObjName & "_Timer"
-    
 End Sub
 
 Private Sub tmrScriptLong_Timer(Index As Integer)
-
     On Error Resume Next
 
-    Dim obj As scObj ' ...
+    Dim obj As scObj
     
-    ' ...
     obj = GetScriptObjByIndex("LongTimer", Index)
-    
-    ' ...
     obj.obj.Counter = (obj.obj.Counter + 1)
     
-    ' ...
     If (obj.obj.Counter >= obj.obj.Interval) Then
-        ' ...
         RunInSingle obj.SCModule, obj.ObjName & "_Timer"
         
-        ' ...
         obj.obj.Counter = 0
     End If
-    
 End Sub
 
 Private Sub txtPre_GotFocus()
@@ -5182,29 +5053,22 @@ Private Sub txtPost_GotFocus()
 End Sub
 
 Private Sub cboSend_GotFocus()
-    ' ...
     On Error Resume Next
 
-    Dim i As Integer ' ...
-
+    Dim i As Integer
     cboSend.selStart = cboSendSelStart
     cboSend.selLength = cboSendSelLength
 
     If (BotVars.NoAutocompletion = False) Then
-        ' ..
         For i = 0 To (Controls.Count - 1)
-            ' ...
             If (TypeOf Controls(i) Is ListView) Or _
                     (TypeOf Controls(i) Is SSTab) Or _
                         (TypeOf Controls(i) Is RichTextBox) Or _
                             (TypeOf Controls(i) Is TextBox) Then
-                            
-                ' ...
                 If (Controls(i).TabStop = False) Then
                     Controls(i).Tag = "False"
                 End If
 
-                ' ...
                 Controls(i).TabStop = False
             End If
         Next i
@@ -5222,21 +5086,17 @@ Private Sub txtPost_LostFocus()
 End Sub
 
 Private Sub cboSend_LostFocus()
-    ' ...
     On Error Resume Next
 
-    Dim i As Integer ' ...
+    Dim i As Integer
     
     If (BotVars.NoAutocompletion = False) Then
-        ' ...
         For i = 0 To (Controls.Count - 1)
-            ' ...
             If (TypeOf Controls(i) Is ListView) Or _
                     (TypeOf Controls(i) Is TabStrip) Or _
                         (TypeOf Controls(i) Is RichTextBox) Or _
                             (TypeOf Controls(i) Is TextBox) Then
                             
-                ' ...
                 If (Controls(i).Tag <> "False") Then
                     Controls(i).TabStop = True
                 End If
@@ -5308,9 +5168,9 @@ End Sub
 Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     On Error GoTo ERROR_HANDLER
     
-    Static strbuf        As String ' ...
-    Static user          As String ' ...
-    Static spaceIndex(2) As Long   ' ...
+    Static strbuf        As String
+    Static user          As String
+    Static spaceIndex(2) As Long
 
     Dim temp As udtGetAccessResponse
     
@@ -5516,9 +5376,9 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 strbuf = vbNullString
                 
             Case vbKeyTab
-                Dim prevStart As Long   ' ...
-                Dim tmpStr    As String ' ...
-                Dim res       As String ' ...
+                Dim prevStart As Long
+                Dim tmpStr    As String
+                Dim res       As String
             
                 If (Shift) Then
                     Call cboSend_LostFocus
@@ -5530,12 +5390,9 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     End If
                 Else
                     With cboSend
-                        ' ...
                         If (user = vbNullString) Then
-                            ' ...
                             strbuf = .Text
                             
-                            ' ...
                             If (.selStart > 0) Then
                                 ' grab space before cursor
                                 spaceIndex(0) = _
@@ -5546,7 +5403,6 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     InStr(.selStart, strbuf, Space$(1), vbBinaryCompare)
                             End If
                             
-                            ' ...
                             If (spaceIndex(0) > 0) Then
                                 user = Mid$(strbuf, spaceIndex(0), _
                                     IIf(spaceIndex(1), spaceIndex(1) - spaceIndex(0), Len(.Text)))
@@ -5554,41 +5410,33 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 user = Mid$(strbuf, 1, IIf(spaceIndex(1), spaceIndex(1) - 1, Len(.Text)))
                             End If
                             
-                            ' ...
                             MatchIndex = 1
                         Else
                             MatchIndex = MatchIndex + 1
                         End If
                         
-                        ' ...
                         If (user <> vbNullString) Then
                             res = MatchClosest(user, IIf(MatchIndex, MatchIndex, 1))
 
                             ' final check
                             If (res <> vbNullString) Then
-                                Dim selStart As Long   ' ...
-                                Dim tmp      As String ' ...
+                                Dim selStart As Long
+                                Dim tmp      As String
 
-                                ' ...
                                 If (spaceIndex(0) > 0) Then
                                     tmp = Left$(strbuf, spaceIndex(0))
                                 End If
                                 
-                                ' ...
                                 tmp = tmp & res
                                 
-                                ' ...
                                 selStart = Len(tmp)
                                 
-                                ' ...
                                 If (spaceIndex(1) > 0) Then
                                     tmp = tmp & Mid$(strbuf, spaceIndex(1))
                                 End If
                                 
-                                ' ...
                                 .Text = tmp
                                 
-                                ' ...
                                 .selStart = selStart
                             End If
                         End If
@@ -5670,7 +5518,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 '    GoTo theEnd
                                     
                                 'ElseIf (LCase$(s) = "/lvchandims") Then
-                                '    Dim j As Integer ' ...
+                                '    Dim j As Integer 
                                 '
                                 '    AddChat vbRed, "lvChannel:"
                                 '    AddChat vbRed, " Height: " & lvChannel.Height
@@ -5788,15 +5636,11 @@ theEnd:
         End Select
     End With
     
-    ' ...
     If (KeyCode <> vbKeyTab) Then
-        ' ...
         user = vbNullString
         
-        ' ...
         strbuf = vbNullString
         
-        ' ...
         spaceIndex(0) = 0
         spaceIndex(1) = 0
     End If
@@ -5905,13 +5749,11 @@ End Sub
 '            QueueLoad = (QueueLoad + 1)
 '            QueueMaster = (QueueMaster + 3)
 '
-'            ' ...
 '            Call g_Queue.Pop
 '        Else
 '            If ((StrComp(Left$(Message, 11), "/unsquelch ", vbTextCompare) = 0) Or _
 '                (StrComp(Left$(Message, 10), "/unignore ", vbTextCompare) = 0)) Then
 '
-'                ' ...
 '                Unsquelching = True
 '            End If
 '
@@ -5937,15 +5779,12 @@ End Sub
 '        End If
 '
 '        If (Sent = 1) Then
-'            ' ...
 '            Call g_Queue.Pop
 '
 '            ' are we issuing a ban or kick command?
 '            If (g_Queue.Peek.PRIORITY = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
-'                ' ...
 '                delay = g_BNCSQueue.BanDelay()
 '
-'                ' ...
 '                QueueTimer.Interval = (QueueTimer.Interval + delay)
 '            End If
 '        End If
@@ -6227,7 +6066,6 @@ ERROR_HANDLER:
 End Sub
 
 Private Sub tmrClanUpdate_Timer()
-    ' ...
     If (g_Channel.Self.Clan <> vbNullString) Then
         RequestClanMOTD
     End If
@@ -6249,66 +6087,50 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
     Dim user    As clsUserObj
     Dim Item    As ListItem
     
-    Dim i       As Integer ' ...
-    Dim j       As Integer ' ...
-    Dim found   As Boolean ' ...
-    Dim WasZero As Boolean ' ...
+    Dim i       As Integer
+    Dim j       As Integer
+    Dim found   As Boolean
+    Dim WasZero As Boolean
     
-    ' ...
     If (g_Channel.IsSilent = False) Then
         Exit Sub
     End If
 
-    ' ...
     If (Index = 0) Then
-        ' ...
         If (frmChat.mnuDisableVoidView.Checked = False) Then
-            ' ...
             'For i = 1 To g_Channel.Users.Count
             '    ' with our doevents, we can miss our cue indicating that we
             '    ' need to stop silent channel processing and cause an rte.
             '    If (i > g_Channel.Users.Count) Then
             '        Exit For
             '    End If
-           '
-           '     ' ...
-           '     Set user = g_Channel.Users(i)
-           '
-            '    ' ...
-            '    If (lvChannel.FindItem(user.DisplayName) Is Nothing) Then
-            '        Dim Stats As String ' ...
-            '        Dim Clan  As String ' ...
             '
-            '        ' ...
+            '     Set user = g_Channel.Users(i)
+            '
+            '    If (lvChannel.FindItem(user.DisplayName) Is Nothing) Then
+            '        Dim Stats As String
+            '        Dim Clan  As String
+            '
             '        ParseStatstring user.Statstring, Stats, Clan
-            ''
-            '        ' ...
+            '
             '        AddName user.DisplayName, user.Game, user.Flags, user.Ping, user.Clan
             '    End If
             'Next i
             
-            ' ...
             Call LockWindowUpdate(&H0)
             
-            ' ...
             lblCurrentChannel.Caption = GetChannelString()
         End If
     
-        ' ...
         tmrSilentChannel(0).Enabled = False
     ElseIf (Index = 1) Then
-        ' ...
         If (mnuDisableVoidView.Checked = False) Then
-            ' ...
             If (g_Channel.IsSilent) Then
-                ' ...
                 Call g_Channel.ClearUsers
                 
-                ' ...
                 frmChat.lvChannel.ListItems.Clear
             End If
         
-            ' ...
             Call AddQ("/unsquelch " & GetCurrentUsername, PRIORITY.SPECIAL_MESSAGE)
         End If
     End If
@@ -6338,7 +6160,6 @@ Sub Connect()
     Dim NotEnoughInfo As Boolean
     Dim MissingInfo As String
     
-    ' ...
     g_username = BotVars.Username
     
     If sckBNet.State = 0 And sckBNLS.State = 0 Then
@@ -6503,37 +6324,6 @@ Error:
     Exit Sub
 End Sub
 
-'OLD GETACCESS
-'Function GetAccess(ByVal Username As String) As Integer
-'    On Error Resume Next
-'    Dim strCompare As String
-'    Dim Acc As Integer, f As Integer
-'    Username = LCase(Username)
-'    If Dir$(App.Path & "\users.txt") = vbNullString Then Exit Function
-'
-'    f = FreeFile
-'    Open (App.Path & "\users.txt") For Input As #f
-'    If LOF(f) < 2 Then Exit Function
-'    Do
-'        Input #f, strCompare
-'        On Error Resume Next
-'        Acc = Right(strCompare, 3)
-'        strCompare = LCase(Left$(strCompare, Len(strCompare) - 3))
-'        strCompare = Replace(strCompare, " ", vbNullString)
-'        If StrComp(Username, strCompare, vbTextCompare) = 0 Then
- '           GetAccess = Acc
- '           Close #f
-'            Exit Function
-'        End If
-'    Loop While Not EOF(f)
-'    Close #f
-'End Function
-
-'Function Evaluate(ByVal Username As String, ByVal Flag As String, ByVal Access As Integer, ByVal Mode As Byte) As Boolean
-'
-'End Function
-
-
 Public Sub Pause(ByVal fSeconds As Single, Optional ByVal AllowEvents As Boolean = True)
     Dim i As Integer
     If AllowEvents Then
@@ -6580,31 +6370,20 @@ Private Sub UpTimer_Timer()
         Ban vbNullString, 0, 3
     End If
 
-    ' ...
     If (g_Channel.IsSilent = False) Then
-        ' ...
         doCheck = True
     
-        ' ...
         For i = 1 To g_Channel.Users.Count
-            ' ...
             With g_Channel.Users(i)
-                ' ...
                 If (g_Channel.Self.IsOperator) Then
-                    ' ...
                     If (.IsOperator = False) Then
                         ' channel password
                         If ((BotVars.ChannelPasswordDelay > 0) And (Len(BotVars.ChannelPassword) > 0)) Then
-                            ' ...
                             If (.PassedChannelAuth = False) Then
-                                ' ...
                                 If (.TimeInChannel() > BotVars.ChannelPasswordDelay) Then
-                                    ' ...
                                     If (GetSafelist(.DisplayName) = False) Then
-                                        ' ...
                                         Ban .DisplayName & " Password time is up", (AutoModSafelistValue - 1)
                                          
-                                        ' ...
                                         doCheck = False
                                     End If
                                 End If
@@ -6613,15 +6392,11 @@ Private Sub UpTimer_Timer()
                         
                         ' idle bans
                         If ((doCheck) And ((BotVars.IB_On = BTRUE) And (BotVars.IB_Wait > 0))) Then
-                            ' ...
                             If (.TimeSinceTalk() > BotVars.IB_Wait) Then
-                                ' ...
                                 If (GetSafelist(.DisplayName) = False) Then
-                                    ' ...
                                     Ban .DisplayName & " Idle for " & BotVars.IB_Wait & "+ seconds", _
                                         (AutoModSafelistValue - 1), IIf(BotVars.IB_Kick, 1, 0)
                                         
-                                    ' ...
                                     doCheck = False
                                 End If
                             End If
@@ -6629,18 +6404,13 @@ Private Sub UpTimer_Timer()
                     End If
                 End If
                 
-                ' ...
                 If (BotVars.NoColoring = False) Then
-                    ' ...
                     pos = checkChannel(.DisplayName)
                 
-                    ' ...
                     If (pos > 0) Then
-                        ' ...
                         newColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
                             GetCurrentUsername, vbBinaryCompare) = 0)
                         
-                        ' ...
                         If (lvChannel.ListItems(pos).ForeColor <> newColor) Then
                             lvChannel.ListItems(pos).ForeColor = newColor
                         End If
@@ -6648,7 +6418,6 @@ Private Sub UpTimer_Timer()
                 End If
             End With
             
-            ' ...
             doCheck = True
         Next i
     End If
@@ -6666,26 +6435,22 @@ End Sub
 Private Function GetAuth(ByVal Username As String) As Long
     On Error GoTo ERROR_HANDLER
 
-    Static lastAuth     As Long    ' ...
-    Static lastAuthName As String  ' ...
+    Static lastAuth     As Long
+    Static lastAuthName As String
     
-    Dim clsCRC32 As New clsCRC32 ' ...
-    Dim hostFile As String       ' ...
-    Dim hostPath As String       ' ...
-    Dim f        As Integer      ' ...
-    Dim tmp      As String       ' ...
+    Dim clsCRC32 As New clsCRC32
+    Dim hostFile As String
+    Dim hostPath As String
+    Dim f        As Integer
+    Dim tmp      As String
     Dim Result   As Integer      ' string variable for storing beta authorization result
                                  ' 0  == unauthorized
                                  ' >0 == authorized
                                  
-    ' ...
     If (lastAuth) Then
-        ' ...
         If (StrComp(Username, lastAuthName, vbTextCompare) = 0) Then
-            ' ...
             GetAuth = lastAuth
             
-            ' ...
             Exit Function
         End If
     End If
@@ -6715,35 +6480,28 @@ Private Function GetAuth(ByVal Username As String) As Long
             Loop
         Close #f
     End If
-    ' ...
+    
     If (clsCRC32.CRC32(BETA_AUTH_URL) = BETA_AUTH_URL_CRC32) Then
         If (InStr(1, hostFile, Split(BETA_AUTH_URL, ".")(1), vbTextCompare) = 0) Then
             Result = CInt(Val(INet.OpenURL(BETA_AUTH_URL & Username)))
         End If
     End If
     
-    ' ...
     Do While INet.StillExecuting
         DoEvents
     Loop
     
-    ' ...
     If (Result = 1) Then
-        ' ...
         lastAuth = Result
         lastAuthName = Username
     
-        ' ...
         GetAuth = True
         
-        ' ...
         AUTH_CHECKED = True
     End If
     
-    ' ...
     Set clsCRC32 = Nothing
 
-    ' ...
     Exit Function
 
 ERROR_HANDLER:
@@ -6768,11 +6526,9 @@ Private Function ReplaceEnvironmentVars(ByVal str As String) As String
     i = 1
 
     While (Environ$(i) <> "")
-        Name = _
-            Mid$(Environ$(i), 1, InStr(1, Environ$(i), "=") - 1)
+        Name = Mid$(Environ$(i), 1, InStr(1, Environ$(i), "=") - 1)
 
-        Value = _
-            Mid$(Environ$(i), InStr(1, Environ$(i), "=") + 1)
+        Value = Mid$(Environ$(i), InStr(1, Environ$(i), "=") + 1)
 
         tmp = Replace(tmp, "%" & Name & "%", Value)
     
@@ -6783,10 +6539,6 @@ Private Function ReplaceEnvironmentVars(ByVal str As String) As String
 
 End Function
 
-
-
-
-' ...
 Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optional ByVal user As String = _
     vbNullString, Optional ByVal Tag As String = vbNullString, Optional OversizeDelimiter As String = " ") As Integer
 
@@ -6795,19 +6547,19 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
     ' maximum size of battle.net messages
     Const BNET_MSG_LENGTH = 223
     
-    Dim Splt()         As String      ' ...
+    Dim Splt()         As String
     Dim strTmp         As String
-    Dim i              As Long        ' ...
-    Dim currChar       As Long        ' ...
-    Dim Send           As String      ' ...
-    Dim Command        As String      ' ...
-    Dim GTC            As Double      ' ...
-    Dim Q              As clsQueueOBj ' ...
-    Dim delay          As Long        ' ...
-    Dim Index          As Long        ' ...
+    Dim i              As Long
+    Dim currChar       As Long
+    Dim Send           As String
+    Dim Command        As String
+    Dim GTC            As Double
+    Dim Q              As clsQueueOBj
+    Dim delay          As Long
+    Dim Index          As Long
     Dim s              As String      ' temp string for settings
     Dim MaxLength      As Integer     ' stores max length for split (with override)
-    '
+    
     Static LastGTC  As Double
     Static BanCount As Integer
 
@@ -6818,12 +6570,10 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
         msg_priority = 100
     End If
     
-    ' ...
     If (g_Queue.Count = 0) Then
         BanCount = 0
     End If
     
-    ' ...
     If (strTmp <> vbNullString) Then
         ReDim Splt(0)
     
@@ -7259,37 +7009,27 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         BotVars.ShowFlagsIcons = True
     End If
     
-    ' ...
     If (g_Online) Then
-        Dim found       As ListItem ' ...
+        Dim found       As ListItem
         Dim CurrentUser As Object
         Dim outbuf      As String
 
-        ' ...
         SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
         
-        ' ...
         lvChannel.ListItems.Clear
         
-        ' ...
         For i = 1 To g_Channel.Users.Count
-            ' ...
             Set CurrentUser = g_Channel.Users(i)
         
-            ' ...
             AddName CurrentUser.DisplayName, CurrentUser.Name, CurrentUser.Game, CurrentUser.Flags, CurrentUser.Ping, _
                 CurrentUser.Stats.IconCode, CurrentUser.Clan
         Next i
         
-        ' ...
         frmChat.lvFriendList.ListItems.Clear
         
-        ' ...
         For i = 1 To g_Friends.Count
-            ' ...
             Set CurrentUser = g_Friends(i)
         
-            ' ...
             AddFriend CurrentUser.DisplayName, CurrentUser.Game, CurrentUser.Status
         Next i
     End If
@@ -7364,15 +7104,11 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = ReadCfg(OT, "DefaultShitlistGroup")
     BotVars.DefaultShitlistGroup = s
     
-    ' ...
     If (BotVars.DefaultShitlistGroup <> vbNullString) Then
-        ' ...
         default_group_access = _
                 GetAccess(BotVars.DefaultShitlistGroup, "GROUP")
         
-        ' ...
         If (default_group_access.Username = vbNullString) Then
-            ' ...
             Call ProcessCommand(GetCurrentUsername, "/add " & BotVars.DefaultShitlistGroup & _
                     " B --type group --banmsg Shitlisted", True, False, False)
         End If
@@ -7381,15 +7117,11 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = ReadCfg(OT, "DefaultTagbansGroup")
     BotVars.DefaultTagbansGroup = s
     
-    ' ...
     If (BotVars.DefaultTagbansGroup <> vbNullString) Then
-        ' ...
         default_group_access = _
                 GetAccess(BotVars.DefaultTagbansGroup, "GROUP")
         
-        ' ...
         If (default_group_access.Username = vbNullString) Then
-            ' ...
             Call ProcessCommand(CurrentUsername, "/add " & BotVars.DefaultTagbansGroup & _
                     " B --type group --banmsg Tagbanned", True, False, False)
         End If
@@ -7398,15 +7130,11 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = ReadCfg(OT, "DefaultSafelistGroup")
     BotVars.DefaultSafelistGroup = s
     
-    ' ...
     If (BotVars.DefaultSafelistGroup <> vbNullString) Then
-        ' ...
         default_group_access = _
                 GetAccess(BotVars.DefaultSafelistGroup, "GROUP")
         
-        ' ...
         If (default_group_access.Username = vbNullString) Then
-            ' ...
             Call ProcessCommand(GetCurrentUsername, "/add " & BotVars.DefaultSafelistGroup & _
                     " S --type group", True, False, False)
         End If
@@ -7566,9 +7294,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     End If
     
     s = ReadCfg(MN, "ProxyIsSocks5")
-    'Debug.Print s
     If s = "Y" Then BotVars.ProxyIsSocks5 = True Else BotVars.ProxyIsSocks5 = False
-    'Debug.Print BotVars.ProxyIsSocks5
     
     s = ReadCfg(OT, "NoTray")
     If s = "Y" Then BotVars.NoTray = True Else BotVars.NoTray = False
@@ -7684,7 +7410,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Call ChatQueue_Initialize
 
     ' I reluctantly add the queue variables here.
-    
     
     If (g_Online) Then
         Call g_Channel.CheckUsers
@@ -7925,7 +7650,6 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
             
             Call BNCSParsePacket(strTemp)
             
-            ' ...
             'interations = (interations + 1)
            
             'If (interations >= 2000) Then
@@ -8031,17 +7755,6 @@ Private Sub sckBNLS_Connect()
     'frmChat.sckBNet.Connect 'BNLS is authorized, proceed to initiate BNet connection.
 End Sub
 
-'Private Function DebugFormat(ByVal sIn As String) As String
-'    Dim buf As String
-'    Dim i As Integer
-'
-'    For i = 1 To Len(sIn)
-'        buf = buf &
-'    Next i
-'
-'    DebugFormat = buf
-'End Function
-
 Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
     On Error GoTo ERROR_HANDLER
 
@@ -8142,7 +7855,7 @@ Private Function PopupMenuCLUserCheck() As Boolean
 End Function
 
 Function GetSelectedUsers() As Collection
-    Dim i As Integer ' ...
+    Dim i As Integer
 
     Set GetSelectedUsers = New Collection
     
@@ -8174,17 +7887,13 @@ Function GetFriendsSelectedUser() As String
 End Function
 
 Function GetRandomPerson() As String
-    Dim i As Integer ' ...
+    Dim i As Integer
     
-    ' ...
     If (g_Channel.Users.Count > 0) Then
-        ' ...
         Randomize
         
-        ' ...
         i = Int(g_Channel.Users.Count * Rnd + 1)
 
-        ' ...
         GetRandomPerson = g_Channel.Users(i).DisplayName
     End If
 End Function
@@ -8192,11 +7901,11 @@ End Function
 Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) As String
     Dim lstView     As ListView
 
-    Dim i           As Integer ' ...
-    Dim CurrentName As String  ' ...
-    Dim atChar      As Integer ' ...
-    Dim Index       As Integer ' ...
-    Dim Loops       As Integer ' ...
+    Dim i           As Integer
+    Dim CurrentName As String
+    Dim atChar      As Integer
+    Dim Index       As Integer
+    Dim Loops       As Integer
 
     i = InStr(1, toMatch, " ", vbBinaryCompare)
     
@@ -8215,7 +7924,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     
     With lstView.ListItems
         If (.Count > 0) Then
-            Dim c As Integer ' ...
+            Dim c As Integer
             
             If (startIndex > .Count) Then
                 Index = 1
@@ -8247,14 +7956,11 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                     End If
                 Next i
                 
-                ' ...
                 Index = 1
                 
-                ' ...
                 Loops = (Loops + 1)
             Wend
             
-            ' ...
             Loops = 0
         End If
     End With
@@ -8262,13 +7968,11 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     atChar = InStr(1, toMatch, "@", vbBinaryCompare)
     
     If (atChar <> 0) Then
-        Dim tmp      As String  ' ...
-        Dim realms() As String  ' ...
+        Dim tmp      As String
+        Dim realms() As String
         
-        ' ...
         ReDim realms(0 To 8)
         
-        ' ...
         realms(0) = "USWest"
         realms(1) = "USEast"
         realms(2) = "Asia"
@@ -8284,20 +7988,16 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
             Index = (startIndex - 1)
         End If
         
-        ' ...
         If (Len(toMatch) >= (atChar + 1)) Then
             tmp = Mid$(toMatch, atChar + 1)
 
             While (Loops < 2)
-                ' ...
                 For i = Index To UBound(realms)
-                    ' ...
                     If (Len(realms(i)) >= Len(tmp)) Then
-                        ' ...
                         If (StrComp(Left$(realms(i), Len(tmp)), tmp, _
                             vbTextCompare) = 0) Then
                             
-                            Dim j As Integer ' ...
+                            Dim j As Integer
                         
                             MatchClosest = Left$(toMatch, atChar) & realms(i) & _
                                     BotVars.AutoCompletePostfix
@@ -8309,15 +8009,12 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                     End If
                 Next i
                 
-                ' ...
                 Index = 0
                 
-                ' ...
                 Loops = (Loops + 1)
             Wend
         Else
             If (tmp = vbNullString) Then
-                ' ...
                 MatchClosest = Left$(toMatch, atChar) & realms(Index) & _
                         BotVars.AutoCompletePostfix
                     
@@ -8328,10 +8025,8 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
         End If
     End If
     
-    ' ...
     MatchClosest = vbNullString
     
-    ' ...
     MatchIndex = 1
 End Function
 
@@ -8367,12 +8062,6 @@ Sub DeconstructSettings()
         Set SettingsForm = Nothing
     End If
 End Sub
-
-'Sub DeconstructMonitor()
-'    If Not (MonitorForm Is Nothing) Then
-'        Set MonitorForm = Nothing
-'    End If
-'End Sub
 
 'SHOW/HIDE STUFF
 Public Sub cmdShowHide_Click()
@@ -8669,7 +8358,6 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         lvClanList.ListItems.Clear
         lvFriendList.ListItems.Clear
         
-        ' ...
         'tmrSilentChannel(0).Enabled = False
         
         Call g_Queue.Clear

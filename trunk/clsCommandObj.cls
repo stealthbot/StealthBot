@@ -13,7 +13,6 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' clsCommandObj.cls
 ' Copyright (C) 2008 Eric Evans
-' ...
 
 Option Explicit
 
@@ -103,8 +102,7 @@ Public Property Get source() As Integer
 End Property
 
 
-Public Sub Class_Initialize()
-    
+Public Sub Class_Initialize()    
     '// initialize values
     m_valid = False
     Set m_command_docs = New clsCommandDocObj
@@ -120,20 +118,16 @@ Public Sub Class_Initialize()
     m_splithasrun = False
     m_waswhispered = False
     Set m_response = New Collection
-    Set m_restrictions = New Dictionary
-    
+    Set m_restrictions = New Dictionary    
 End Sub
 
-Public Sub Class_Terminate()
-    
+Public Sub Class_Terminate()    
     '// clean up
     Set m_command_docs = Nothing
-    Set m_arguments = Nothing
-    
+    Set m_arguments = Nothing    
 End Sub
 
-Public Property Get docs() As clsCommandDocObj
-    
+Public Property Get docs() As clsCommandDocObj    
     If m_command_docs Is Nothing Then
         '// this command is nothing, lets create it
         Set m_command_docs = New clsCommandDocObj
@@ -152,6 +146,7 @@ Public Property Get docs() As clsCommandDocObj
         End If
     End If
 End Property
+
 Public Property Let docs(ByRef cmd As clsCommandDocObj)
     Set m_command_docs = cmd
 End Property

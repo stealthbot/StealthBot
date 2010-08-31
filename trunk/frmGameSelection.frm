@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmGameSelection 
    BackColor       =   &H80000007&
    BorderStyle     =   4  'Fixed ToolWindow
@@ -154,25 +154,24 @@ Private Sub cmdCancel_Click()
 End Sub
 
 Private Sub cmdOK_Click()
-    Dim game As String ' ...
+    Dim Game As String
     
     Select Case (lvGames.SelectedItem.Index)
-        Case 1:  game = "CHAT"
-        Case 2:  game = "STAR"
-        Case 3:  game = "SSHR"
-        Case 4:  game = "JSTR"
-        Case 5:  game = "SEXP"
-        Case 6:  game = "DRTL"
-        Case 7:  game = "DSHR"
-        Case 8:  game = "D2DV"
-        Case 9:  game = "D2XP"
-        Case 10: game = "W2BN"
-        Case 11: game = "WAR3"
-        Case 12: game = "W3XP"
+        Case 1:  Game = "CHAT"
+        Case 2:  Game = "STAR"
+        Case 3:  Game = "SSHR"
+        Case 4:  Game = "JSTR"
+        Case 5:  Game = "SEXP"
+        Case 6:  Game = "DRTL"
+        Case 7:  Game = "DSHR"
+        Case 8:  Game = "D2DV"
+        Case 9:  Game = "D2XP"
+        Case 10: Game = "W2BN"
+        Case 11: Game = "WAR3"
+        Case 12: Game = "W3XP"
     End Select
 
-    frmDBManager.m_game = _
-        game
+    frmDBManager.m_game = Game
     
     Call Unload(frmGameSelection)
 End Sub

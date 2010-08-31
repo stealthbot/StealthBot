@@ -60,30 +60,22 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private m_path As String ' ...
+Private m_path As String
 
 Private Sub Form_Load()
-    ' ...
     cbxChoice.ListIndex = 0
 End Sub
 
 Private Sub btnDelete_Click()
-    ' ...
     Call Unload(Me)
 End Sub
 
 Private Sub btnSave_Click(Index As Integer)
-    ' ...
     Call frmDBManager.ImportDatabase(m_path, cbxChoice.ListIndex)
     
-    ' ...
     Call Unload(Me)
-    
 End Sub
 
 Public Sub setFilePath(strPath As String)
-
-    ' ...
     m_path = strPath
-    
 End Sub

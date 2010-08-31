@@ -43,13 +43,11 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             frmChat.AddChat COLOR_BLUE, "BNET RECV 0x" & ZeroOffset(PacketID, 2)
         End If
         
-        ' ...
         CachePacket StoC, stBNCS, PacketID, Len(PacketData), PacketData
         
         ' Added 2007-06-08 for a packet logging menu feature to aid tech support
         WritePacketData stBNCS, StoC, PacketID, PacketLen, PacketData
                 
-        ' ...-
         If (RunInAll("Event_PacketReceived", "BNCS", PacketID, Len(PacketData), PacketData)) Then
             Exit Sub
         End If

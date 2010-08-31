@@ -1,7 +1,6 @@
 Attribute VB_Name = "modCommandDocsObj"
 ' modCommandDocsObj.mod
 ' Copyright (C) 2007 Eric Evans
-' ...
 
 
 '// 07/08/2009 JSM

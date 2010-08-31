@@ -44,20 +44,15 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
     ' check whether the override is disabling the script system
     If m_SystemDisabled Then Exit Sub
     
-    ' ...
     m_is_reloading = True
 
-    ' ...
     SC.Reset
 
-    ' ...
     frmChat.INet.Cancel
     frmChat.scTimer.Enabled = False
     
-    ' ...
     DestroyObjs
 
-    ' ...
     If (ReadINI("Other", "ScriptAllowUI", GetConfigFilePath()) <> "N") Then
         SC.AllowUI = True
     End If
@@ -68,13 +63,11 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
     SC.addObject "scINet", frmChat.INet
     SC.addObject "BotVars", BotVars
 
-    ' ...
     Set m_sc_control = SC
     
     Set m_ScriptObservers = New Collection
     Set m_FunctionObservers = New Collection
     
-    ' ...
     m_is_reloading = False
     
     ' this will always be true after first successful load
@@ -84,19 +77,18 @@ End Sub
 
 Public Sub LoadScripts()
 
-    ' ...
     On Error GoTo ERROR_HANDLER
 
     Dim CurrentModule As Module
     Dim Paths         As New Collection
-    Dim strPath       As String  ' ...
-    Dim FileName      As String  ' ...
-    Dim fileExt       As String  ' ...
-    Dim i             As Integer ' ...
-    Dim j             As Integer ' ...
-    Dim str           As String  ' ...
-    Dim tmp           As String  ' ...
-    Dim res           As Boolean ' ...
+    Dim strPath       As String  
+    Dim FileName      As String  
+    Dim fileExt       As String  
+    Dim i             As Integer 
+    Dim j             As Integer 
+    Dim str           As String 
+    Dim tmp           As String  
+    Dim res           As Boolean 
 
     ' check whether the override is disabling the script system
     If m_SystemDisabled Then Exit Sub
@@ -175,18 +167,14 @@ Public Sub LoadScripts()
         Next i
     End If
     
-    ' ...
     InitMenus
 
     frmChat.AddChat RTBColors.SuccessText, "Scripts loaded."
         
-    ' ...
     Exit Sub
 
-' ...
 ERROR_HANDLER:
 
-    ' ...
     frmChat.AddChat RTBColors.ErrorMessageText, _
         "Error (" & Err.Number & "): " & Err.description & " in LoadScripts()."
 
@@ -196,11 +184,11 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
 
     On Error GoTo ERROR_HANDLER
 
-    Static strContent    As String  ' ...
+    Static strContent    As String  
     Static includes      As Collection
     
-    Dim strLine          As String  ' ...
-    Dim f                As Integer ' ...
+    Dim strLine          As String  
+    Dim f                As Integer 
     Dim blnCheckOperands As Boolean
     Dim blnKeepLine      As Boolean
     Dim blnScriptData    As Boolean
@@ -209,51 +197,42 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
     Dim blnIncIsValid    As Boolean
     Dim strInclude       As String
 
-    ' ...
     blnCheckOperands = True
     
-    ' ...
     f = FreeFile
     
     If (defaults) Then
         Set includes = New Collection
     End If
 
-    ' ...
     Open filePath For Input As #f
-        ' ...
         Do While (EOF(f) = False)
-            ' ...
             Line Input #f, strLine
             
-            ' ...
             strLine = Trim$(strLine)
             
             ' default to keep line
             blnKeepLine = True
             
-            ' ...
             If (Len(strLine) >= 1) Then
                 If ((blnCheckOperands) And (Left$(strLine, 1) = "#")) Then
                     ' this line is a directive, parse and don't keep in code
                     blnKeepLine = False
                     If (InStr(1, strLine, " ") <> 0) Then
                         If (Len(strLine) >= 2) Then
-                            Dim strCommand As String ' ...
+                            Dim strCommand As String 
                         
                             strCommand = _
                                 LCase$(Mid$(strLine, 2, InStr(1, strLine, " ") - 2))
     
                             If (strCommand = "include") Then
                                 If (Len(strLine) >= 12) Then
-                                    Dim strPath As String ' ...
+                                    Dim strPath As String 
                                     Dim strFullPath As String
                                     
-                                    ' ...
                                     strPath = _
                                         Mid$(strLine, 11, Len(strLine) - 11)
                                     
-                                    ' ...
                                     If (Left$(strPath, 1) = "\") Then
                                         strFullPath = StringFormat("{0}\Scripts{1}", CurDir$(), strPath)
                                     Else
@@ -371,7 +350,6 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
     
 ERROR_HANDLER:
 
-    ' ...
     strContent = vbNullString
     
     Set includes = Nothing
@@ -489,25 +467,21 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
 
     On Error Resume Next
 
-    Dim j            As Integer ' ...
-    Dim str          As String  ' ...
-    Dim tmp          As String  ' ...
+    Dim j            As Integer
+    Dim str          As String  
+    Dim tmp          As String 
     Dim nameDisallow As String
     
-    ' ...
     str = GetScriptName(CurrentModule.Name)
 
-    ' ...
     If (str = vbNullString) Then
         IsScriptNameValid = False
                 
         Exit Function
     End If
     
-    ' ...
     nameDisallow = "\/:*?<>|"""
 
-    ' ...
     For j = 1 To Len(str)
         If (InStr(1, nameDisallow, Mid$(str, j, 1), vbTextCompare) <> 0) Then
             IsScriptNameValid = False
@@ -516,9 +490,7 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
         End If
     Next j
 
-    ' ...
     For j = 2 To m_sc_control.Modules.Count
-        ' ...
         If (m_sc_control.Modules(j).Name <> CurrentModule.Name) Then
             tmp = GetScriptName(CStr(j))
                 
@@ -530,7 +502,6 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
         End If
     Next j
     
-    ' ...
     IsScriptNameValid = True
 
 End Function
@@ -539,11 +510,10 @@ Public Sub InitScripts()
 
     On Error Resume Next
     
-    Static reloading As Boolean ' ...
+    Static reloading As Boolean 
     
-    Dim i   As Integer ' ...
-    Dim tmp As String  ' ...
-
+    Dim i   As Integer
+    Dim tmp As String  
     ' check whether the override is disabling the script system
     If m_SystemDisabled Then Exit Sub
     
@@ -569,17 +539,14 @@ Public Sub InitScript(ByVal SCModule As Module)
 
     On Error Resume Next
 
-    Dim i          As Integer ' ...
+    Dim i          As Integer 
     Dim startTime  As Long
     Dim finishTime As Long
 
-    ' ...
     startTime = GetTickCount()
     
-    ' ...
     RunInSingle SCModule, "Event_Load"
     
-    ' ...
     finishTime = GetTickCount()
  
     '// 03/27/2009 52 - added default Script property for the load time
@@ -810,7 +777,6 @@ Public Sub CallByNameEx(obj As Object, ProcName As String, CallType As VbCallTyp
 
 ERROR_HANDLER:
 
-    ' ...
     If (frmChat.SControl.Error) Then
         Exit Sub
     End If
@@ -830,7 +796,7 @@ End Function
 
 Private Function ObjCount(Optional ObjType As String, Optional ByVal SCModule As Module = Nothing) As Integer
     
-    Dim i As Integer ' ...
+    Dim i As Integer 
 
     If (ObjType <> vbNullString) Then
         For i = 0 To m_objCount - 1
@@ -856,7 +822,7 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
 
     On Error Resume Next
 
-    Dim obj As scObj ' ...
+    Dim obj As scObj 
     Dim scriptName As String
     
     If SCModule Is Nothing Then Exit Function
@@ -940,11 +906,9 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
         Case "FORM"
             Set obj.obj = New frmScript
             
-            ' ...
             obj.obj.setName ObjName
             obj.obj.setSCModule SCModule
             
-            ' ...
             HookWindowProc obj.obj.hWnd
             
         Case "MENU"
@@ -958,17 +922,13 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
                 tmp.Caption = "-"
             End If
         
-            ' ...
             Set obj.obj = New clsMenuObj
             
-            ' ...
             obj.obj.Name = ObjName
             
-            ' ...
             obj.obj.Parent = _
                 DynamicMenus("mnu" & scriptName)
                 
-            ' ...
             DynamicMenus.Add obj.obj
     End Select
 
@@ -997,9 +957,8 @@ Public Sub DestroyObjs(Optional ByVal SCModule As Object = Nothing)
 
     On Error GoTo ERROR_HANDLER
 
-    Dim i As Integer ' ...
+    Dim i As Integer 
     
-    ' ...
     For i = m_objCount - 1 To 0 Step -1
         If (SCModule Is Nothing) Then
             DestroyObj m_arrObjs(i).SCModule, m_arrObjs(i).ObjName
@@ -1025,20 +984,17 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
 
     On Error GoTo ERROR_HANDLER
 
-    Dim i     As Integer ' ...
-    Dim Index As Integer ' ...
+    Dim i     As Integer 
+    Dim Index As Integer 
     
     If SCModule Is Nothing Then Exit Sub
     
-    ' ...
     If (m_objCount = 0) Then
         Exit Sub
     End If
     
-    ' ...
     Index = m_objCount
     
-    ' ...
     For i = 0 To m_objCount - 1
         If (m_arrObjs(i).SCModule.Name = SCModule.Name) Then
             If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
@@ -1049,12 +1005,10 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
         End If
     Next i
     
-    ' ...
     If (Index >= m_objCount) Then
         Exit Sub
     End If
     
-    ' ...
     Select Case (UCase$(m_arrObjs(Index).ObjType))
         Case "TIMER"
             If (m_arrObjs(Index).obj.Index > 0) Then
@@ -1122,30 +1076,24 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
             m_arrObjs(Index).obj.Class_Terminate
     End Select
 
-    ' ...
     Set m_arrObjs(Index).obj = Nothing
     
-    ' ...
     If (Index < m_objCount - 1) Then
         For i = Index To ((m_objCount - 1) - 1)
             m_arrObjs(i) = m_arrObjs(i + 1)
         Next i
     End If
     
-    ' ...
     If (m_objCount > 1) Then
         ReDim Preserve m_arrObjs(0 To m_objCount - 1)
     Else
         ReDim m_arrObjs(0)
     End If
     
-    ' ...
     SCModule.ExecuteStatement "Set " & ObjName & " = Nothing"
     
-    ' ...
     m_objCount = (m_objCount - 1)
     
-    ' ...
     Exit Sub
     
 ERROR_HANDLER:
@@ -1164,11 +1112,10 @@ End Sub
 
 Public Function GetObjByName(ByRef SCModule As Module, ByVal ObjName As String) As Object
 
-    Dim i As Integer ' ...
+    Dim i As Integer 
     
     If SCModule Is Nothing Then Exit Function
     
-    ' ...
     For i = 0 To m_objCount - 1
         If (m_arrObjs(i).SCModule.Name = SCModule.Name) Then
             If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
@@ -1183,8 +1130,8 @@ End Function
 
 Public Function GetScriptObjByMenuID(ByVal MenuID As Long) As scObj
 
-    Dim i As Integer ' ...
-    Dim j As Integer ' ...
+    Dim i As Integer 
+    Dim j As Integer 
 
     For i = 0 To ObjCount() - 1
         If (StrComp("Menu", Objects(i).ObjType, vbTextCompare) = 0) Then
@@ -1210,7 +1157,7 @@ End Function
 
 Public Function GetScriptObjByIndex(ByVal ObjType As String, ByVal Index As Integer) As scObj
 
-    Dim i As Integer ' ...
+    Dim i As Integer 
 
     For i = 0 To ObjCount() - 1
         If (StrComp(ObjType, Objects(i).ObjType, vbTextCompare) = 0) Then
@@ -1228,9 +1175,9 @@ Public Function InitMenus()
 
     On Error GoTo ERROR_HANDLER
 
-    Dim tmp  As clsMenuObj ' ...
-    Dim Name As String     ' ...
-    Dim i    As Integer    ' ...
+    Dim tmp  As clsMenuObj 
+    Dim Name As String     
+    Dim i    As Integer    
 
     ' destroy all the menus and start over
     DestroyMenus
@@ -1313,7 +1260,7 @@ Public Function DestroyMenus()
 
     On Error GoTo ERROR_HANDLER
 
-    Dim i As Integer ' ...
+    Dim i As Integer 
     
     frmChat.mnuScriptingDash(0).Visible = False
     
@@ -1346,8 +1293,8 @@ Public Function Scripts() As Object
 
     On Error Resume Next
 
-    Dim i   As Integer ' ...
-    Dim str As String  ' ...
+    Dim i   As Integer 
+    Dim str As String  
     Dim SCModule As Module
     Dim scriptName As String
 
@@ -1406,18 +1353,15 @@ End Function
 
 Private Function IsValidFileExtension(ByVal ext As String) As Boolean
 
-    Dim exts() As String  ' ...
-    Dim i      As Integer ' ...
+    Dim exts() As String  
+    Dim i      As Integer 
 
-    ' ...
     ReDim exts(0 To 1)
     
-    ' ...
     'exts(0) = "dat"
     exts(0) = "txt"
     exts(1) = "vbs"
     
-    ' ...
     For i = LBound(exts) To UBound(exts)
         If (StrComp(ext, exts(i), vbTextCompare) = 0) Then
             IsValidFileExtension = True
@@ -1434,7 +1378,6 @@ Private Function CleanFileName(ByVal FileName As String) As String
     
     On Error Resume Next
     
-    ' ...
     If (InStr(1, FileName, ".") > 1) Then
         CleanFileName = _
             Left$(FileName, InStr(1, FileName, ".") - 1)

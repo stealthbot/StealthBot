@@ -1,7 +1,6 @@
 Attribute VB_Name = "modMediaPlayer"
 ' modMediaPlayer.bas
 ' Copyright (C) 2008 Eric Evans
-' ...
 
 Option Explicit
 

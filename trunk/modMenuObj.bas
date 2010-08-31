@@ -82,9 +82,8 @@ Public Function GetMenuByID(ByVal lng As Long) As Object
 
     On Error GoTo ERROR_HANDLER
 
-    Dim i As Integer ' ...
+    Dim i As Integer
     
-    ' ...
     For i = 1 To DynamicMenus.Count
         If (DynamicMenus(i).ID = lng) Then
             Set GetMenuByID = DynamicMenus(i)
@@ -108,9 +107,8 @@ Public Sub MenuClick(hWnd As Long, lngMenuCommand As Long)
     
     On Error GoTo ERROR_HANDLER
     
-    Dim obj As scObj ' ...
+    Dim obj As scObj 
 
-    ' ...
     obj = GetScriptObjByMenuID(lngMenuCommand)
     
     ' is this a dynamic scripting menu?
@@ -119,14 +117,14 @@ Public Sub MenuClick(hWnd As Long, lngMenuCommand As Long)
 
         RunInSingle obj.SCModule, obj.ObjName & "_Click"
     Else
-        Dim i As Integer ' ...
+        Dim i As Integer 
         
         For i = 1 To DynamicMenus.Count
             If (DynamicMenus(i).ID = lngMenuCommand) Then
                 ' is this a default scripting menu?
                 If (Left$(DynamicMenus(i).Name, 1) = Chr$(0)) Then
-                    Dim s_name   As String ' ...
-                    Dim sub_name As String ' ...
+                    Dim s_name   As String
+                    Dim sub_name As String 
 
                     s_name = _
                         Split(Mid$(DynamicMenus(i).Name, 2), Chr$(0))(0)

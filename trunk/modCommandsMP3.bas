@@ -42,11 +42,11 @@ End Sub
 Public Sub OnMP3(Command As clsCommandObj)
 
     Dim tmpbuf       As String  ' temporary output buffer
-    Dim TrackName    As String  ' ...
-    Dim ListPosition As Long    ' ...
-    Dim ListCount    As Long    ' ...
-    Dim TrackTime    As Long    ' ...
-    Dim TrackLength  As Long    ' ...
+    Dim TrackName    As String  
+    Dim ListPosition As Long    
+    Dim ListCount    As Long    
+    Dim TrackTime    As Long    
+    Dim TrackLength  As Long    
     
     If (BotVars.DisableMP3Commands) Then Exit Sub
     

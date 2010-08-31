@@ -156,7 +156,6 @@ Public Sub CleanUpMailFile()
             If (Len(Trim(tMail(i).To)) > 0) Then
                 Put #CurrentOpenFile, c, tMail(i)
                 
-                ' ...
                 c = (c + 1)
             End If
         Next i

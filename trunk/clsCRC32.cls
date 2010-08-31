@@ -19,7 +19,6 @@ Private CRC32Table(0 To 255) As Long
 
 'Public Functions
 Private Sub InitCRC32()
-
     Static CRC32Initialized As Boolean
     
     Dim i      As Long
@@ -43,12 +42,10 @@ Private Sub InitCRC32()
         Next
         
         CRC32Table(i) = K
-    Next
-    
+    Next    
 End Sub
 
 Public Function CRC32(ByVal Data As String) As Long
-
     Dim i As Long
     Dim j As Long
     
@@ -69,14 +66,12 @@ Public Function CRC32(ByVal Data As String) As Long
     Next
     
     CRC32 = (Not (CRC32))
-    
 End Function
 
 Public Function GetFileCRC32(ByVal filePath As String) As Long
-
-    Dim str As String  ' ...
-    Dim tmp As String  ' ...
-    Dim f   As Integer ' ...
+    Dim str As String  
+    Dim tmp As String 
+    Dim f   As Integer 
     
     f = FreeFile
     
@@ -89,12 +84,10 @@ Public Function GetFileCRC32(ByVal filePath As String) As Long
     Close #f
     
     GetFileCRC32 = CRC32(str)
-
 End Function
 
 'Modified from code given to me by David Fritts (sneakcharm@yahoo.com)
 Public Function ValidateExecutable() As Boolean
-
     On Error GoTo ValidateExecutable_Error
     
     'Dim CRC32          As clsCRC32
@@ -147,8 +140,5 @@ ValidateExecutable_Error:
     Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure " & _
         "ValidateExecutable of Module modCRC32Checksum"
         
-    Resume ValidateExecutable_Exit
-    
+    Resume ValidateExecutable_Exit    
 End Function
-
-

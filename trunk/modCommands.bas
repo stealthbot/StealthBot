@@ -13,8 +13,8 @@ Attribute VB_Name = "modCommandCode"
 
 Option Explicit
 
-Public flood    As String ' ...?
-Public floodCap As Byte   ' ...?
+Public flood    As String
+Public floodCap As Byte  
 
 ' prepares commands for processing, and calls helper functions associated with processing
 Public Function ProcessCommand(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As _
@@ -259,14 +259,14 @@ End Function
 Public Function OnRemOld(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim sUsername  As String  ' ...
+    Dim sUsername  As String  
     Dim tmpbuf     As String  ' temporary output buffer
     Dim user       As udtGetAccessResponse
-    Dim dbType     As String  ' ...
-    Dim Index      As Long    ' ...
-    Dim params     As String  ' ...
-    Dim strArray() As String  ' ...
-    Dim i          As Integer ' ...
+    Dim dbType     As String  
+    Dim Index      As Long   
+    Dim params     As String  
+    Dim strArray() As String
+    Dim i          As Integer 
 
     ' check for presence of optional add command parameters
     Index = InStr(1, msgData, " --", vbBinaryCompare)
@@ -283,8 +283,8 @@ Public Function OnRemOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
         
         ' loop through paramter list
         For i = 1 To UBound(strArray)
-            Dim parameter As String ' ...
-            Dim pmsg      As String ' ...
+            Dim parameter As String 
+            Dim pmsg      As String 
             
             Index = InStr(1, strArray(i), Space(1), vbBinaryCompare)
             If (Index > 0) Then
@@ -328,7 +328,7 @@ Public Function OnRemOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
             
                 tmpbuf = "Error: That user is Locked."
         Else
-            Dim res As Boolean ' ...
+            Dim res As Boolean
         
             res = DB_remove(sUsername, dbType)
             
@@ -348,22 +348,21 @@ End Function
 Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
 
-    ' ...
     Dim gAcc       As udtGetAccessResponse
 
-    Dim strArray() As String  ' ...
-    Dim i          As Integer ' ...
+    Dim strArray() As String  
+    Dim i          As Integer 
     Dim tmpbuf     As String  ' temporary output buffer
-    Dim dbPath     As String  ' ...
-    Dim user       As String  ' ...
-    Dim Rank       As Integer ' ...
-    Dim Flags      As String  ' ...
-    Dim found      As Boolean ' ...
-    Dim params     As String  ' ...
-    Dim Index      As Integer ' ...
-    Dim sGrp       As String  ' ...
-    Dim dbType     As String  ' ...
-    Dim banmsg     As String  ' ...
+    Dim dbPath     As String  
+    Dim user       As String 
+    Dim Rank       As Integer 
+    Dim Flags      As String  
+    Dim found      As Boolean 
+    Dim params     As String  
+    Dim Index      As Integer 
+    Dim sGrp       As String  
+    Dim dbType     As String  
+    Dim banmsg     As String  
 
     ' check for presence of optional add command
     ' parameters
@@ -392,7 +391,6 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
         ' grab username
         user = strArray(0)
         
-        ' ...
         If (user = vbNullString) Then
             cmdRet(0) = "Error: You have specified an invalid entry name."
             
@@ -413,7 +411,6 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
             Flags = strArray(1)
         End If
         
-        ' ...
         If (BotVars.CaseSensitiveFlags = False) Then
             Flags = UCase$(Flags)
         End If
@@ -425,8 +422,8 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
             
             ' loop through paramter list
             For i = 1 To UBound(strArray)
-                Dim parameter As String ' ...
-                Dim pmsg      As String ' ...
+                Dim parameter As String
+                Dim pmsg      As String 
                 
                 ' check message for a space
                 Index = InStr(1, strArray(i), Space(1), vbBinaryCompare)
@@ -448,15 +445,14 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                 
                 ' handle parameters
                 Select Case (Trim$(parameter))
-                    Case "type" ' ...
+                    Case "type" 
                         ' do we have a valid parameter Length?
                         If (Len(pmsg)) Then
                             ' grab database entry type
                             dbType = UCase$(pmsg)
                             
-                            ' ...
                             If (dbType = "USER") Then
-                                ' ...
+                                ' Do nothing
                             ElseIf (dbType = "GROUP") Then
                                 ' check for presence of space in name
                                 If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
@@ -501,13 +497,13 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                             End If
                         End If
                 
-                    Case "banmsg" ' ...
+                    Case "banmsg" 
                         ' do we have a valid parameter Length?
                         If (Len(pmsg)) Then
                             banmsg = pmsg
                         End If
                         
-                    Case "group" ' ...
+                    Case "group" 
                         ' do we have a valid parameter Length?
                         If (Len(pmsg)) Then
                             Dim Splt() As String
@@ -530,9 +526,8 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                             End If
                             
                             For j = 0 To UBound(Splt)
-                                Dim tmp As udtGetAccessResponse ' ...
+                                Dim tmp As udtGetAccessResponse
                                 
-                                ' ...
                                 tmp = GetAccess(Splt(j), "GROUP")
                             
                                 If (dbAccess.Rank < tmp.Rank) Then
@@ -634,7 +629,6 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                     ' remove "+" prefix
                     Flags = Mid$(Flags, 2)
                 
-                    ' ...
                     If (Len(Flags) > 0) Then
                         ' set user flags & check for duplicate entries
                         For i = 1 To Len(Flags)
@@ -650,7 +644,6 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                             End If
                         Next i
                         
-                        ' ...
                         If (Len(gAcc.Flags) = 0) Then
                             ' return message
                             cmdRet(0) = "Error: The flag(s) that you have specified are invalid."
@@ -673,14 +666,12 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                     
                     ' are we modifying an existing user? we better be!
                     If (gAcc.Username <> vbNullString) Then
-                        ' ...
                         If (Len(tmpFlags) > 0) Then
                             ' check for special flags
                             If (InStr(1, tmpFlags, "B", vbBinaryCompare) <> 0) Then
                                 If (InStr(1, user, "*", vbBinaryCompare) <> 0) Then
                                     Call modCommandsOps.WildCardBan(user, vbNullString, 2)
                                 Else
-                                    ' ...
                                     If (g_Channel.IsOnBanList(user)) Then
                                         frmChat.AddQ ("/unban " & user)
                                     End If
@@ -710,7 +701,7 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                     If ((gAcc.Rank = 0) And (gAcc.Flags = vbNullString) And _
                         ((gAcc.Groups = vbNullString) Or (gAcc.Groups = "%"))) Then
                         
-                        Dim res As Boolean ' ...
+                        Dim res As Boolean 
                        
                         ' with no access a database entry is
                         ' pointless, so lets remove it
@@ -751,7 +742,6 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                         End If
                     Next i
                     
-                    ' ...
                     If (Len(gAcc.Flags) = 0) Then
                         ' return message
                         cmdRet(0) = "Error: The flag(s) that you have specified are invalid."
@@ -884,7 +874,6 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
             tmpbuf = tmpbuf & "."
         End If
         
-        ' ...
         Call g_Channel.CheckUsers
     End If
     
@@ -892,8 +881,7 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
     cmdRet(0) = tmpbuf
 End Function ' end function OnAdd
 
-Public Function RemoveItem(ByVal rItem As String, File As String, Optional ByVal dbType As String = vbNullString) As String
-    
+Public Function RemoveItem(ByVal rItem As String, File As String, Optional ByVal dbType As String = vbNullString) As String    
     Dim s()        As String
     Dim f          As Integer
     Dim Counter    As Integer
@@ -952,16 +940,15 @@ theEnd:
     Close #f
 End Function
 
-Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String = vbNullString) As Boolean
-    
+Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String = vbNullString) As Boolean    
     On Error GoTo ERROR_HANDLER
 
-    Dim i     As Integer ' ...
-    Dim found As Boolean ' ...
+    Dim i     As Integer 
+    Dim found As Boolean
     
     For i = LBound(DB) To UBound(DB)
         If (StrComp(DB(i).Username, entry, vbTextCompare) = 0) Then
-            Dim bln As Boolean ' ...
+            Dim bln As Boolean 
         
             If (Len(dbType)) Then
                 If (StrComp(DB(i).Type, dbType, vbTextCompare) = 0) Then
@@ -982,11 +969,10 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
     Next i
     
     If (found) Then
-        Dim bak As udtDatabase ' ...
+        Dim bak As udtDatabase 
         
-        Dim j   As Integer ' ...
+        Dim j   As Integer 
         
-        ' ...
         bak = DB(i)
 
         ' we aren't removing the last array
@@ -995,7 +981,6 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
             ' redefine array size
             ReDim DB(0)
             
-            ' ...
             With DB(0)
                 .Username = vbNullString
                 .Flags = vbNullString
@@ -1007,7 +992,6 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                 .ModifiedOn = Now
             End With
         Else
-            ' ...
             For j = i To UBound(DB) - 1
                 DB(j) = DB(j + 1)
             Next j
@@ -1018,7 +1002,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
             ' if we're removing a group, we need to also fix our
             ' group memberships, in case anything is broken now
             If (StrComp(bak.Type, "GROUP", vbBinaryCompare) = 0) Then
-                Dim res As Boolean ' ...
+                Dim res As Boolean 
            
                 ' if we remove a user from the database during the
                 ' execution of the inner loop, we have to reset our
@@ -1035,8 +1019,8 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                     For i = LBound(DB) To UBound(DB)
                         If (Len(DB(i).Groups) And DB(i).Groups <> "%") Then
                             If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
-                                Dim Splt()     As String ' ...
-                                Dim innerfound As Boolean ' ...
+                                Dim Splt()     As String 
+                                Dim innerfound As Boolean 
                                 
                                 Splt() = Split(DB(i).Groups, ",")
                                 
@@ -1049,7 +1033,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                                 Next j
                             
                                 If (innerfound) Then
-                                    Dim K As Integer ' ...
+                                    Dim K As Integer 
                                     
                                     For K = (j + 1) To UBound(Splt)
                                         Splt(K - 1) = Splt(K)
@@ -1091,8 +1075,7 @@ End Function
 
 ' requires public
 Public Function GetSafelist(ByVal Username As String) As Boolean
-
-    Dim i As Long ' ...
+    Dim i As Long
     
     If (bFlood = False) Then
         Dim gAcc As udtGetAccessResponse
@@ -1111,8 +1094,7 @@ Public Function GetSafelist(ByVal Username As String) As Boolean
                 Exit For
             End If
         Next i
-    End If
-    
+    End If    
 End Function
 
 Public Function GetShitlist(ByVal Username As String) As String
@@ -1326,71 +1308,6 @@ Public Sub LoadDatabase()
     
     If (SaveDB) Then Call WriteDatabase(Path)
 End Sub
-'
-''08/15/09 - Hdx - Converted to use clsCommandObj to check if the command has valid syntax
-''Removed outBuff ... What use was it?
-'Public Function IsCorrectSyntax(ByVal commandName As String, ByVal commandArgs As String, Optional scriptOwner As String = vbNullString) As Boolean
-'
-'    On Error GoTo ERROR_HANDLER
-'
-'    Dim docs As clsCommandDocObj
-'    Dim Command As New clsCommandObj
-'
-'    Set docs = OpenCommand(commandName, scriptOwner)
-'    If (docs Is Nothing) Then
-'        Set docs = OpenCommand(convertAlias(commandName), scriptOwner)
-'        If (docs Is Nothing) Then
-'            IsCorrectSyntax = False
-'            Exit Function
-'        End If
-'    End If
-'
-'    With Command
-'        .Name = docs.Name
-'        .Args = commandArgs
-'        IsCorrectSyntax = .IsValid
-'    End With
-'
-'    Set docs = Nothing
-'    Set Command = Nothing
-'    Exit Function
-'
-'ERROR_HANDLER:
-'    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in IsCorrectSyntax().")
-'End Function
-
-'08/15/09 - Hdx - Converted to use clsCommandObj to check if the user has enough access
-'Removed outBuff ... What use was it?
-'Public Function HasAccess(ByVal Username As String, ByVal commandName As String, Optional ByVal commandArgs As _
-'    String = vbNullString, Optional scriptOwner As String = vbNullString) As Boolean
-'
-'    On Error GoTo ERROR_HANDLER
-'    Dim docs As clsCommandDocObj
-'    Dim Command As clsCommandObj
-'
-'    Set docs = OpenCommand(commandName, scriptOwner)
-'    If (docs Is Nothing) Then
-'        Set docs = OpenCommand(convertAlias(commandName), scriptOwner)
-'        If (docs Is Nothing) Then
-'            HasAccess = False
-'            Exit Function
-'        End If
-'    End If
-'
-'    With Command
-'        .Name = docs.Name
-'        .Args = commandArgs
-'        .Username = Username
-'        HasAccess = .HasAccess
-'    End With
-'
-'    Set docs = Nothing
-'    Set Command = Nothing
-'    Exit Function
-'
-'ERROR_HANDLER:
-'    frmChat.AddChat vbRed, "Error: " & Err.description & " in HasAccess()."
-'End Function
 
 ' Writes database to disk
 ' Updated 9/13/06 for new features
@@ -1404,7 +1321,6 @@ Public Sub WriteDatabase(ByVal U As String)
     
     Open U For Output As #f
         For i = LBound(DB) To UBound(DB)
-            ' ...
             If (LenB(DB(i).Username) > 0) Then
                 Print #f, DB(i).Username;
                 Print #f, " " & DB(i).Rank;
@@ -1443,23 +1359,20 @@ End Function
 
 Private Function CheckUser(ByVal user As String, Optional ByVal allow_illegal As Boolean = False) As Boolean
     
-    Dim i       As Integer ' ...
-    Dim bln     As Boolean ' ...
-    Dim illegal As Boolean ' ...
-    Dim invalid As Boolean ' ...
+    Dim i       As Integer
+    Dim bln     As Boolean
+    Dim illegal As Boolean 
+    Dim invalid As Boolean 
     
-    ' ...
     If (Left$(user, 1) = "*") Then
         user = Mid$(user, 2)
     End If
     
-    ' ...
     user = Replace(user, "@USWest", vbNullString, 1)
     user = Replace(user, "@USEast", vbNullString, 1)
     user = Replace(user, "@Asia", vbNullString, 1)
     user = Replace(user, "@Europe", vbNullString, 1)
     
-    ' ...
     user = Replace(user, "@Lordaeron", vbNullString, 1)
     user = Replace(user, "@Azeroth", vbNullString, 1)
     user = Replace(user, "@Kalimdor", vbNullString, 1)

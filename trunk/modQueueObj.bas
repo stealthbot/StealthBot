@@ -1,7 +1,6 @@
 Attribute VB_Name = "modQueueObj"
 ' modQueueObj.mod
 ' Copyright (C) 2008 Eric Evans
-' ...
 
 Option Explicit
 

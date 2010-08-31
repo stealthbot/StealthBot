@@ -13,7 +13,6 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' clsCommandRestrictionObj.cls
 ' Copyright (C) 2008 Eric Evans
-' ...
 
 Option Explicit
 
@@ -28,42 +27,55 @@ Private m_fatal          As Boolean
 Public Property Get Name() As String
     Name = m_name
 End Property
+
 Public Property Let Name(strName As String)
     m_name = strName
 End Property
+
 Public Property Get RequiredRank() As Integer
     RequiredRank = m_req_rank
 End Property
+
 Public Property Let RequiredRank(Rank As Integer)
     m_req_rank = Rank
 End Property
+
 Public Property Get RequiredFlags() As String
     RequiredFlags = m_req_flags
 End Property
+
 Public Property Let RequiredFlags(Flags As String)
     m_req_flags = Flags
 End Property
+
 Public Property Get MatchMessage() As String
     MatchMessage = m_matchmessage
 End Property
+
 Public Property Let MatchMessage(str As String)
     m_matchmessage = str
 End Property
+
 Public Property Get MatchError() As String
     MatchError = m_error
 End Property
+
 Public Property Let MatchError(str As String)
     m_error = str
 End Property
+
 Public Property Get MatchCaseSensitive() As Boolean
     MatchCaseSensitive = m_casesensitive
 End Property
+
 Public Property Let MatchCaseSensitive(bln As Boolean)
     m_casesensitive = bln
 End Property
+
 Public Property Let Fatal(bFatal As Boolean)
     m_fatal = bFatal
 End Property
+
 Public Property Get Fatal() As Boolean
     Fatal = m_fatal
 End Property

@@ -81,9 +81,9 @@ End Function
 Public Function GetFileCRC32(ByVal filePath As String) As Long
 On Error GoTo ERROR_HANDLER:
 
-    Dim str As String  ' ...
-    Dim tmp As String  ' ...
-    Dim f   As Integer ' ...
+    Dim str As String  
+    Dim tmp As String  
+    Dim f   As Integer
     
     f = FreeFile
     
