@@ -476,7 +476,7 @@ Public Function StripRealm(ByVal Username As String) As String
 End Function
 
 Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNullString, Optional ByVal _
-    ID As Integer = 0)
+    ID As Double = 0)
     
     On Error GoTo ERROR_HANDLER
 
