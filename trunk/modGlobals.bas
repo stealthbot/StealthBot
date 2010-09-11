@@ -65,6 +65,7 @@ Public Const ICON_START_D2& = 110
 Public Const ICON_START_SC& = 117
 Public Const ICON_START_W2& = 128
 Public Const ICON_START_DRTL& = 139
+Public Const ICON_START_DSHR& = 142
 
 Public Const LVM_FIRST = &H1000&
 Public Const LVM_HITTEST = LVM_FIRST + 18

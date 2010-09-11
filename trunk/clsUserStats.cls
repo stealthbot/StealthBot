@@ -368,8 +368,8 @@ End Property
 Public Property Get CharacterClass() As String
     On Error GoTo ERROR_HANDLER
     
-    If ((Game = "DSHR") Or (Game = "DRTL")) Then        
-        Dim DIClasses(0 To 3) As String 
+    If ((Game = "DSHR") Or (Game = "DRTL")) Then
+        Dim DIClasses(0 To 3) As String
         
         DIClasses(0) = "Warrior"
         DIClasses(1) = "Rogue"
@@ -381,7 +381,7 @@ Public Property Get CharacterClass() As String
         
     ElseIf ((Game = "D2DV") Or (Game = "D2XP")) Then
     
-        Dim DIIClasses(0 To 7) As String 
+        Dim DIIClasses(0 To 7) As String
         
         DIIClasses(0) = "Amazon"
         DIIClasses(1) = "Sorceress"
@@ -434,11 +434,11 @@ Public Property Get IsCharacterDead() As Boolean
 End Property
 
 Public Property Let IsLadderCharacter(ByVal bln As Boolean)
-    m_character_ladder = bln    
+    m_character_ladder = bln
 End Property
 
 Public Property Get IsLadderCharacter() As Boolean
-    IsLadderCharacter = m_character_ladder    
+    IsLadderCharacter = m_character_ladder
 End Property
 
 Public Property Get ActsCompleted() As Integer
@@ -479,14 +479,14 @@ Public Property Get CurrentDifficultyID() As Integer
             difficulty = Fix(ActsCompleted / 5)
         End If
     End If
-    CurrentDifficultyID = difficulty    
+    CurrentDifficultyID = difficulty
 End Property
 
 Public Property Get CharacterTitle() As String
     On Error GoTo ERROR_HANDLER
 
     ' thanks c0ol for multi-dimensional array idea
-    Dim Classic(2, 3, 2)   As String 
+    Dim Classic(2, 3, 2)   As String
     Dim Expansion(2, 3, 2) As String
     
     ' softcore
@@ -543,7 +543,7 @@ Public Property Get CharacterTitle() As String
 ERROR_HANDLER:
     CharacterTitle = vbNullString
     
-    Exit Property    
+    Exit Property
 End Property
 
 Public Property Get Dots() As Long
@@ -603,7 +603,7 @@ Public Property Let Realm(ByVal str As String)
 End Property
 
 Public Property Get ToString() As String
-    Dim buf As String 
+    Dim buf As String
     
     buf = MakeLongGameName(Game)
     
@@ -632,7 +632,7 @@ Public Property Get ToString() As String
     ToString = buf
 End Property
 
-Public Property Get IconCode() As Integer    
+Public Property Get IconCode() As Integer
     Dim intWins As Integer
     
     If (BotVars.ShowStatsIcons) Then
@@ -651,7 +651,14 @@ Public Property Get IconCode() As Integer
         
         Select Case Game
             Case "DRTL"
-                IconCode = (ICON_START_DRTL + CharacterClassID)
+                If (IsValid) Then
+                    IconCode = (ICON_START_DRTL + CharacterClassID)
+                End If
+                
+            Case "DSHR"
+                If (IsValid) Then
+                    IconCode = ICON_START_DSHR
+                End If
             
             Case "D2DV", "D2XP"
                 If (LenB(Statstring) > 0) Then
@@ -730,7 +737,7 @@ Private Sub Parse()
 ERROR_HANDLER:
     IsValid = False
     
-    Exit Sub    
+    Exit Sub
 End Sub
 
 Private Sub ParseStarCraft()
@@ -754,7 +761,7 @@ Private Sub ParseStarCraft()
 End Sub
 
 Private Sub ParseDiablo()
-    Dim Values() As String 
+    Dim Values() As String
     
     ReDim Preserve Values(0)
     Values() = Split(Statstring, Space$(1))
@@ -777,8 +784,8 @@ Private Sub ParseDiablo()
 End Sub
 
 Private Sub ParseDiabloII()
-    Dim Values()   As String  
-    Dim charData() As Integer 
+    Dim Values()   As String
+    Dim charData() As Integer
     
     ReDim Preserve Values(0)
     Values() = Split(Statstring, ",", 3)
@@ -800,7 +807,7 @@ Private Sub ParseDiabloII()
                 IsLadderCharacter = (charData(30) <> &HFF)
             End If
         End If
-    End If    
+    End If
 End Sub
 
 Private Sub ParseWarCraftII()
@@ -822,11 +829,11 @@ Private Sub ParseWarCraftIII()
     
     If (UBound(Values) > 1) Then
         Clan = StrReverse$(Values(2))
-    End If    
+    End If
 End Sub
 
 Private Function StarCraft_ToString() As String
-    Dim buf As String 
+    Dim buf As String
     
     If ((Statstring = vbNullString) Or (IsValid = False)) Then
         buf = " (No stats available)"
@@ -889,7 +896,7 @@ Private Function WarCraftII_ToString() As String
 End Function
 
 Private Function WarCraftIII_ToString() As String
-    Dim buf As String 
+    Dim buf As String
     
     If ((Statstring = vbNullString) Or (IsValid = False)) Then
         buf = " (No stats available)"
@@ -912,7 +919,7 @@ Private Function WarCraftIII_ToString() As String
 End Function
 
 Private Sub MakeArr(ByVal str As String, ByRef arr() As Integer)
-    Dim i As Integer 
+    Dim i As Integer
     
     ReDim arr(0)
     

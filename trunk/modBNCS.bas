@@ -328,7 +328,7 @@ Private Sub SEND_SID_ENTERCHAT()
 On Error GoTo ERROR_HANDLER:
     Dim pBuff As New clsDataBuffer
     pBuff.InsertNTString BotVars.Username
-    pBuff.InsertNTString vbNullString
+    pBuff.InsertNTString ReadCfg("Override", "SetBotStatstring")
     pBuff.SendPacket SID_ENTERCHAT
     Set pBuff = Nothing
 

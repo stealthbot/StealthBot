@@ -169,7 +169,7 @@ Begin VB.Form frmChat
       MaskColor       =   12632256
       _Version        =   393216
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
-         NumListImages   =   141
+         NumListImages   =   142
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmChat.frx":6F6F
             Key             =   ""
@@ -734,6 +734,10 @@ Begin VB.Form frmChat
             Picture         =   "frmChat.frx":7688D
             Key             =   ""
          EndProperty
+         BeginProperty ListImage142 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmChat.frx":77A22
+            Key             =   ""
+         EndProperty
       EndProperty
    End
    Begin VB.Timer tmrScript 
@@ -839,15 +843,15 @@ Begin VB.Form frmChat
          Strikethrough   =   0   'False
       EndProperty
       TabCaption(0)   =   "Channel  "
-      TabPicture(0)   =   "frmChat.frx":77A22
+      TabPicture(0)   =   "frmChat.frx":789A4
       Tab(0).ControlEnabled=   0   'False
       Tab(0).ControlCount=   0
       TabCaption(1)   =   "Friends  "
-      TabPicture(1)   =   "frmChat.frx":77A3E
+      TabPicture(1)   =   "frmChat.frx":789C0
       Tab(1).ControlEnabled=   -1  'True
       Tab(1).ControlCount=   0
       TabCaption(2)   =   "Clan  "
-      TabPicture(2)   =   "frmChat.frx":77A5A
+      TabPicture(2)   =   "frmChat.frx":789DC
       Tab(2).ControlEnabled=   0   'False
       Tab(2).ControlCount=   0
    End
@@ -1020,10 +1024,11 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
-      TextRTF         =   $"frmChat.frx":77A76
+      TextRTF         =   $"frmChat.frx":789F8
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -1045,11 +1050,12 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
       OLEDropMode     =   0
-      TextRTF         =   $"frmChat.frx":77AF1
+      TextRTF         =   $"frmChat.frx":78A73
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   9
@@ -1736,9 +1742,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5518,7 +5524,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 '    GoTo theEnd
                                     
                                 'ElseIf (LCase$(s) = "/lvchandims") Then
-                                '    Dim j As Integer 
+                                '    Dim j As Integer
                                 '
                                 '    AddChat vbRed, "lvChannel:"
                                 '    AddChat vbRed, " Height: " & lvChannel.Height
