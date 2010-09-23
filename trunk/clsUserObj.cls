@@ -66,7 +66,7 @@ Private Sub Class_Terminate()
 End Sub
 
 Public Property Get Name() As String
-    Name = modEvents.CleanUsername(m_actual_name)    
+    Name = modEvents.CleanUsername(m_actual_name)
 End Property
 
 Public Property Let Name(ByVal str As String)
@@ -143,8 +143,17 @@ Public Property Let PassedChannelAuth(ByVal bln As Boolean)
     m_passed_chan_auth = bln
 End Property
 
+Public Property Get IsBnetAdmin() As Boolean
+    IsOperator = ((m_flags And USER_SYSOP&) = USER_SYSOP&)
+End Property
+
+Public Property Get IsBlizzRep() As Boolean
+    IsOperator = ((m_flags And USER_BLIZZREP&) = USER_BLIZZREP&)
+End Property
+
 Public Property Get IsOperator() As Boolean
-    IsOperator = ((m_flags And USER_CHANNELOP&) = USER_CHANNELOP&)
+    IsOperator = (((m_flags And USER_CHANNELOP&) = USER_CHANNELOP&) Or _
+                   IsBlizzRep() Or IsBnetAdmin())
 End Property
 
 Public Property Get IsSquelched() As Boolean
@@ -198,7 +207,7 @@ ERROR_HANDLER:
 End Function
 
 Public Sub ClearQueue()
-    Dim i As Integer 
+    Dim i As Integer
     
     For i = Queue.Count To 1 Step -1
         Queue.Remove i
@@ -230,7 +239,7 @@ Public Sub DisplayQueue()
     
         Set CurrentEvent = Queue(j)
     
-        Select Case (CurrentEvent.eventID)
+        Select Case (CurrentEvent.EventID)
             Case ID_USER
                 Call Event_UserInChannel(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, _
                     CurrentEvent.GameID, CurrentEvent.Clan, CurrentEvent.Statstring, CurrentEvent.IconCode, j)
@@ -263,7 +272,7 @@ ERROR_HANDLER:
 End Sub
 
 Public Function Clone() As Object
-    Dim i As Integer 
+    Dim i As Integer
 
     Set Clone = New clsUserObj
 

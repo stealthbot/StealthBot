@@ -10,6 +10,42 @@ Public Sub OnAdd(Command As clsCommandObj)
     Dim i          As Integer
     ReDim Preserve response(0)
     
+    ' special case: d2 naming conventions
+    If (BotVars.UseD2Naming) Then
+        Dim Username
+        Username = Command.Argument("Username")
+        If (Len(Username) > 1) Then
+            If (Left$(Username, 1) = "*") Then
+                If (InStr(2, Username, "*") = 0 And InStr(2, Username, "?") = 0) Then
+                    ' format: *user
+                    ' assume user means: user
+                    Command.Args = Mid$(Command.Args, 2)
+                End If
+            End If
+            
+            If (InStr(Username, "*") = 0 And InStr(Username, "?") = 0) Then
+                ' format: charname
+                Dim i As Integer, User As clsUserObj, IsChar As Boolean, Acct As String
+                For i = 1 To g_Channel.Users
+                    Set User = g_Channel.Users(i)
+                    If (StrComp(User.CharacterName, Username, vbTextCompare) = 0) Then
+                        ' the user provided is a character in the channel
+                        IsChar = True
+                        Acct = User.DisplayName
+                    End If
+                    If (StrComp(User.DisplayName, Username, vbTextCompare) = 0) Then
+                        ' if the user provided is ALSO an accountname, assume account name
+                        IsChar = False
+                        Exit For
+                    End If
+                Next i
+                If (IsChar) Then
+                    Command.Args = Replace$(Command.Args, Username, Acct, 1, 1, vbBinaryCompare)
+                End If
+            End If
+        End If
+    End If
+    
     dbAccess = GetCumulativeAccess(Command.Username)
     If (Command.IsLocal) Then
         dbAccess.Rank = 201

@@ -7977,20 +7977,45 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     
     If (atChar <> 0) Then
         Dim tmp      As String
-        Dim realms() As String
+        Dim Gateways(5, 2) As String
         
-        ReDim realms(0 To 8)
+        ' populate list
+        Gateways(0, 0) = "USWest"
+        Gateways(0, 1) = "Lordaeron"
+        Gateways(1, 0) = "USEast"
+        Gateways(1, 1) = "Azeroth"
+        Gateways(2, 0) = "Asia"
+        Gateways(2, 1) = "Kalimdor"
+        Gateways(3, 0) = "Europe"
+        Gateways(3, 1) = "Northrend"
+        Gateways(4, 0) = "Beta"
+        Gateways(4, 1) = "Westfall"
         
-        realms(0) = "USWest"
-        realms(1) = "USEast"
-        realms(2) = "Asia"
-        realms(3) = "Europe"
-        realms(4) = "Lordaeron"
-        realms(5) = "Azeroth"
-        realms(6) = "Kalimdor"
-        realms(7) = "Northrend"
+        Dim CurrentGateway As Integer
+        CurrentGateway = -1
+        If (LenB(BotVars.Gateway) > 0) Then
+            For i = 0 To UBound(Gateways, 1)
+                If (StrComp(BotVars.Gateway, Gateways(i, 0)) = 0 Or _
+                    StrComp(BotVars.Gateway, Gateways(i, 1)) = 0) Then
+                    CurrentGateway = i
+                    Exit For
+                End If
+            Next i
+            If (CurrentGateway = -1) Then ' BotVars.Gateway not known, @[tab]=@BotVars.Gateway
+                Gateways(0, 0) = BotVars.Gateway
+                Gateways(0, 1) = BotVars.Gateway
+                CurrentGateway = 0
+            End If
+        Else ' BotVars.Gateway is nothing, @[tab]
+            MatchClosest = vbNullString
+            
+            MatchIndex = 1
+            
+            Exit Function
+        End If
         
-        If (startIndex > UBound(realms)) Then
+    
+        If (startIndex > UBound(Gateways, 2)) Then
             Index = 0
         Else
             Index = (startIndex - 1)
@@ -8000,14 +8025,14 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
             tmp = Mid$(toMatch, atChar + 1)
 
             While (Loops < 2)
-                For i = Index To UBound(realms)
-                    If (Len(realms(i)) >= Len(tmp)) Then
-                        If (StrComp(Left$(realms(i), Len(tmp)), tmp, _
+                For i = Index To UBound(Gateways, 2)
+                    If (Len(Gateways(CurrentGateway, i)) >= Len(tmp)) Then
+                        If (StrComp(Left$(Gateways(CurrentGateway, i), Len(tmp)), tmp, _
                             vbTextCompare) = 0) Then
                             
                             Dim j As Integer
                         
-                            MatchClosest = Left$(toMatch, atChar) & realms(i) & _
+                            MatchClosest = Left$(toMatch, atChar) & Gateways(CurrentGateway, i) & _
                                     BotVars.AutoCompletePostfix
                             
                             MatchIndex = (i + 1)
@@ -8023,7 +8048,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
             Wend
         Else
             If (tmp = vbNullString) Then
-                MatchClosest = Left$(toMatch, atChar) & realms(Index) & _
+                MatchClosest = Left$(toMatch, atChar) & Gateways(CurrentGateway, Index) & _
                         BotVars.AutoCompletePostfix
                     
                 MatchIndex = (Index + 1)

@@ -467,7 +467,7 @@ Private Function CreateCommandInstance(ByRef commandString As String, ByVal strU
         .Args = commandArgs
         '.docs = Me
         .Arguments = SplitArguments(commandArgs)
-        .Username = ConvertUsername(strUsername)
+        .Username = strUsername
     End With
     
     '// all good in the hood :)

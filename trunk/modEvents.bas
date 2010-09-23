@@ -219,6 +219,21 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         .JoinTime = UtcNow
     End With
     
+    ' if UserInChannel events are off, -Ribose/2010-09-17
+    If m_skipUICEvents Then
+        If (StrComp(ChannelName, BotVars.HomeChannel, vbTextCompare) = 0) Then
+            ' this is home, turn on UserInChannel events
+            m_skipUICEvents = False
+        ElseIf (g_Channel.IsSilent()) Then
+            ' this isn't home yet, but we are in a silent channel,
+            ' then home was not joinable, turn on UserInChannel events. ~Ribose
+            m_skipUICEvents = False
+        Else
+            ' this isn't home yet, join home.
+            Call FullJoin(BotVars.HomeChannel, 2)
+        End If
+    End If
+    
     If (Len(g_Clan.Name) > 0) Then
         If (StrComp(g_Channel.Name, "Clan " & g_Clan.Name, vbTextCompare) = 0) Then
             RequestClanMOTD 1
@@ -297,10 +312,6 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     If ((StrComp(ChannelName, "Clan SBs", vbTextCompare) = 0) And _
         (IsStealthBotTech() = False)) Then
             frmChat.AddChat RTBColors.ErrorMessageText, "You have joined Clan SBs. For the consideration of the Technical Support Staff: greet, idle, and all scripted messages have been temporarily disabled."
-    End If
-    
-    If (m_skipUICEvents) And ((StrComp(BotVars.HomeChannel, ChannelName, vbTextCompare) = 0) Or (g_Channel.IsSilent())) Then
-        m_skipUICEvents = False
     End If
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -598,14 +609,8 @@ On Error GoTo ERROR_HANDLER:
         Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
     End If
     
-    m_skipUICEvents = True
-    
-    Call FullJoin(BotVars.HomeChannel, 5)
-    Call FullJoin(BotVars.HomeChannel, 2)
-    
-    'Call FullJoin(BotVars.HomeChannel)
-    
-    RunInAll "Event_LoggedOn", Username, BotVars.Product
+    RequestSystemKeys
+    SEND_SID_CHATCOMMAND "/whoami"
     
     Exit Sub
 ERROR_HANDLER:
@@ -767,6 +772,14 @@ On Error GoTo ERROR_HANDLER:
                 BotVars.Gateway = Mid$(Message, i + 1)
                 
                 SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
+                
+                m_skipUICEvents = True
+                
+                Call FullJoin(BotVars.HomeChannel, 5)
+                
+                Call InsertDummyQueueEntry
+                
+                RunInAll "Event_LoggedOn", CurrentUsername, BotVars.Product
 
                 Exit Sub
             End If
@@ -797,7 +810,7 @@ On Error GoTo ERROR_HANDLER:
         If (Len(temp) > 0) Then
             Dim Banning    As Boolean
             Dim Unbanning  As Boolean
-            Dim user       As String
+            Dim User       As String
             Dim cOperator  As String
             Dim msgPos     As Integer
             Dim pos        As Integer
@@ -807,7 +820,7 @@ On Error GoTo ERROR_HANDLER:
             Dim Reason     As String
             
             If (InStr(1, Message, MSG_BANNED, vbTextCompare) > 0) Then
-                user = Left$(Message, _
+                User = Left$(Message, _
                     (InStr(1, Message, MSG_BANNED, vbBinaryCompare) - 1))
                 
                 Reason = Mid$(Message, InStr(1, Message, MSG_BANNED, vbBinaryCompare) + Len(MSG_BANNED) + 1) ' trim out username and banned message
@@ -818,13 +831,13 @@ On Error GoTo ERROR_HANDLER:
                   Reason = vbNullString
                 End If
                 
-                If (Len(user) > 0) Then
+                If (Len(User) > 0) Then
                     pos = g_Channel.GetUserIndex(Username)
                     
                     If (pos > 0) Then
                         Dim BanlistObj As clsBanlistUserObj
                                                 
-                        banpos = g_Channel.IsOnBanList(user, Username)
+                        banpos = g_Channel.IsOnBanList(User, Username)
                         
                         If (banpos > 0) Then
                             g_Channel.Banlist.Remove banpos
@@ -838,15 +851,15 @@ On Error GoTo ERROR_HANDLER:
                             Set BanlistObj = New clsBanlistUserObj
                             
                             With BanlistObj
-                                .Name = user
+                                .Name = User
                                 .Operator = Username
                                 .DateOfBan = UtcNow
-                                .IsDuplicateBan = (g_Channel.IsOnBanList(user) > 0)
+                                .IsDuplicateBan = (g_Channel.IsOnBanList(User) > 0)
                                 .Reason = Reason
                             End With
                         
                             If (BanlistObj.IsDuplicateBan) Then
-                                With g_Channel.Banlist(g_Channel.IsOnBanList(user))
+                                With g_Channel.Banlist(g_Channel.IsOnBanList(User))
                                     .IsDuplicateBan = False
                                 End With
                             End If
@@ -855,21 +868,21 @@ On Error GoTo ERROR_HANDLER:
                         End If
                     End If
                     
-                    Call RemoveBanFromQueue(user)
+                    Call RemoveBanFromQueue(User)
                 End If
                 
                 If (frmChat.mnuHideBans.Checked) Then
                     bHide = True
                 End If
             ElseIf (InStr(1, Message, MSG_UNBANNED, vbTextCompare) > 0) Then
-                user = Left$(Message, _
+                User = Left$(Message, _
                     (InStr(1, Message, MSG_UNBANNED, vbBinaryCompare) - 1))
                                 
-                If (Len(user) > 0) Then
+                If (Len(User) > 0) Then
                     g_Channel.BanCount = (g_Channel.BanCount - 1)
                     
                     Do
-                        banpos = g_Channel.IsOnBanList(user)
+                        banpos = g_Channel.IsOnBanList(User)
                     
                         If (banpos > 0) Then
                             g_Channel.Banlist.Remove banpos
@@ -1916,14 +1929,14 @@ On Error GoTo ERROR_HANDLER:
     '####### Mail check
     If (mail) Then
         If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-            Dim Msg As udtMail
+            Dim msg As udtMail
             
             If (GetMailCount(Username) > 0) Then
-                Call GetMailMessage(Username, Msg)
+                Call GetMailMessage(Username, msg)
                 
-                If (Len(RTrim(Msg.To)) > 0) Then
+                If (Len(RTrim(msg.To)) > 0) Then
                     frmChat.AddQ "/w " & Username & " Message from " & _
-                        RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
+                        RTrim$(msg.From) & ": " & RTrim$(msg.Message)
                 End If
             End If
         End If

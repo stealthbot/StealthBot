@@ -1954,12 +1954,6 @@ On Error GoTo ERROR_HANDLER:
     Num = (1 + Rnd() * 1000)
     FullJoin BotVars.HomeChannel & ":" & Num, 0
     
-    RequestSystemKeys
-    SEND_SID_CHATCOMMAND "/whoami"
-    
-    
-    Call InsertDummyQueueEntry
-    
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
