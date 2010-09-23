@@ -253,8 +253,8 @@ End Sub
 '// PINGBYNAME
 '// Returns the cached ping of the specified user.
 '// If the user is not present in the channel, it returns -3.
-Public Function PingByName(ByVal Username As String) As Long    
-    PingByName = GetPing(Username)    
+Public Function PingByName(ByVal Username As String) As Long
+    PingByName = GetPing(Username)
 End Function
 
 
@@ -338,6 +338,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
         .CreatedBy = temp.AddedBy
         .ModifiedOn = temp.ModifiedOn
         .ModifiedBy = temp.ModifiedBy
+        .BanMessage = temp.BanMessage
     End With
 
     If ((temp.Groups <> vbNullString) And (temp.Groups <> "%")) Then
@@ -389,8 +390,8 @@ End Function
 
 '// GETGTC
 '// Returns the current system uptime in milliseconds as reported by the GetTickCount() API call
-Public Function GetGTC() As Long    
-    GetGTC = GetTickCount()    
+Public Function GetGTC() As Long
+    GetGTC = GetTickCount()
 End Function
 
 
@@ -398,7 +399,7 @@ End Function
 '// DOBEEP
 '// Executes a call to the Beep() API function
 Public Function DoBeep(ByVal lFreq As Long, ByVal lDuration As Long) As Long
-    DoBeep = Beep(lFreq, lDuration)    
+    DoBeep = Beep(lFreq, lDuration)
 End Function
 
 
@@ -414,7 +415,7 @@ Public Function match(ByVal sString As String, ByVal sPattern As String, ByVal D
         sPattern = PrepareCheck(sPattern)
     End If
     
-    match = (sString Like sPattern)    
+    match = (sString Like sPattern)
 End Function
 
 
@@ -425,22 +426,22 @@ End Function
 '//     so this data is no longer writeable.
 '// To maintain backwards-compatibility this method's signature will not change,
 '//     but be aware that the sNewSex value will not affect anything.
-Public Sub SetBotProfile(ByVal sNewSex As String, ByVal sNewLocation As String, ByVal sNewDescription As String)    
-    Call SetProfileEx(sNewLocation, sNewDescription)    
+Public Sub SetBotProfile(ByVal sNewSex As String, ByVal sNewLocation As String, ByVal sNewDescription As String)
+    Call SetProfileEx(sNewLocation, sNewDescription)
 End Sub
 
 
 '// GETUSERPROFILE
 '// Gets the profile of a specified user. The profile is returned in three pieces via the _KeyReturn() event.
 '// If Username is null, the bot's current username will be used instead.
-Public Sub GetUserProfile(Optional ByVal Username As String)    
+Public Sub GetUserProfile(Optional ByVal Username As String)
     SuppressProfileOutput = True
     
     If LenB(Username) > 0 Then
         Call RequestProfile(Username)
     Else
         Call RequestProfile(GetCurrentUsername)
-    End If    
+    End If
 End Sub
 
 
@@ -450,23 +451,23 @@ End Sub
 '// @param DoNotLoadFontSettings - when passed a value of 1 the bot will not
 '//     attempt to alter the main richtextbox font settings, which causes its contents to be erased
 Public Sub ReloadSettings(ByVal DoNotLoadFontSettings As Byte)
-    Call frmChat.ReloadConfig(DoNotLoadFontSettings)    
+    Call frmChat.ReloadConfig(DoNotLoadFontSettings)
 End Sub
 
 
 '// BOTPATH
 '// Returns the bot's current path. Future compatibility with multiple user profiles is already in place.
 '//     Return value includes the trailing "\".
-Public Function BotPath() As String    
-    BotPath = GetProfilePath()    
+Public Function BotPath() As String
+    BotPath = GetProfilePath()
 End Function
 
 
 '// GETINTERNALUSERCOUNT
 '// Returns the highest index for use when calling GetInternalDataByIndex
 '//     this allows you to call that function with (1 to GetInternalUserCount())
-Public Function GetInternalUserCount() As Integer    
-    GetInternalUserCount = Channel.Users.Count    
+Public Function GetInternalUserCount() As Integer
+    GetInternalUserCount = Channel.Users.Count
 End Function
 
 
@@ -538,37 +539,37 @@ End Function
 
 '// ISONLINE
 '// Returns a boolean denoting teh bot's status ONLINE=TRUE, OFFLINE=FALSE.
-Public Function IsOnline() As Boolean    
-    IsOnline = g_Online    
+Public Function IsOnline() As Boolean
+    IsOnline = g_Online
 End Function
 
 
 '// GETPOSITIONBYNAME
 '// Returns the channel list position of a user by their username
 '// Returns 0 if the user is not present
-Public Function GetPositionByName(ByVal sUser As String) As Integer    
-    GetPositionByName = checkChannel(sUser)    
+Public Function GetPositionByName(ByVal sUser As String) As Integer
+    GetPositionByName = checkChannel(sUser)
 End Function
 
 
 '// GETNAMEBYPOSITION
 '// Returns the name of the person at position X in the channel list.
 '// Positions are 1-based. Returns an empty string if the user isn't present
-Public Function GetNameByPosition(ByVal iPosition As Integer) As String    
+Public Function GetNameByPosition(ByVal iPosition As Integer) As String
     With frmChat.lvChannel.ListItems
         If iPosition > 0 And iPosition <= .Count Then
             GetNameByPosition = .Item(iPosition).Text
         Else
             GetNameByPosition = vbNullString
         End If
-    End With    
+    End With
 End Function
 
 
 '// GETBOTVERSION
 '// Returns the current StealthBot app version as a string.
-Public Function GetBotVersion() As String    
-    GetBotVersion = CVERSION    
+Public Function GetBotVersion() As String
+    GetBotVersion = CVERSION
 End Function
 
 
@@ -593,24 +594,24 @@ End Function
 
 '// CONNECT
 '// Connects the bot. Will disconnect an already-existent connection.
-Public Sub Connect()    
-    Call frmChat.DoConnect    
+Public Sub Connect()
+    Call frmChat.DoConnect
 End Sub
 
 
 
 '// DISCONNECT
 '// Closes any current connections within the bot.
-Public Sub Disconnect()    
-    Call frmChat.DoDisconnect    
+Public Sub Disconnect()
+    Call frmChat.DoDisconnect
 End Sub
 
 
 '// BOTCLOSE
 '// Shuts down StealthBot
-Public Sub BotClose()    
+Public Sub BotClose()
     'Call frmChat.Form_Unload(0)
-    Unload frmChat    
+    Unload frmChat
 End Sub
 
 
@@ -624,7 +625,7 @@ End Sub
 '// This function will adapt to any filepath hacks the user has in place
 '// You can also use it to read out of your own config file, by specifying a full path
 '//     in the sFileName argument
-Public Function GetConfigEntry(ByVal sSection As String, ByVal sEntryName As String, ByVal sFileName As String) As String    
+Public Function GetConfigEntry(ByVal sSection As String, ByVal sEntryName As String, ByVal sFileName As String) As String
     If LenB(sFileName) = 0 Then
         sFileName = GetConfigFilePath()
     End If
@@ -641,7 +642,7 @@ Public Function GetConfigEntry(ByVal sSection As String, ByVal sEntryName As Str
         Exit Function
     End If
     
-    GetConfigEntry = ReadINI(sSection, sEntryName, sFileName)    
+    GetConfigEntry = ReadINI(sSection, sEntryName, sFileName)
 End Function
 
 
@@ -656,7 +657,7 @@ End Function
 '// This function will adapt to any filepath hacks the user has in place
 '// You can also use it to read out of your own config file, by specifying a full path
 '//     in the sFileName argument
-Public Sub WriteConfigEntry(ByVal sSection As String, ByVal sEntryName As String, ByVal sValue As String, ByVal sFileName As String)    
+Public Sub WriteConfigEntry(ByVal sSection As String, ByVal sEntryName As String, ByVal sValue As String, ByVal sFileName As String)
     If LenB(sFileName) = 0 Then
         sFileName = GetConfigFilePath()
     End If
@@ -679,7 +680,7 @@ Public Sub WriteConfigEntry(ByVal sSection As String, ByVal sEntryName As String
         Exit Sub
     End If
 
-    WriteINI sSection, sEntryName, sValue, sFileName    
+    WriteINI sSection, sEntryName, sValue, sFileName
 End Sub
 
 
@@ -688,16 +689,16 @@ End Sub
 '// Used with PressedEnter event to prevent a message from being sent to Battle.net
 '// For use processing scripts entirely internally
 Public Sub VetoThisMessage()
-    SetVeto True    
+    SetVeto True
 End Sub
 
 '// PRINTURLTOFILE
 '// Mirror function for the Windows API URLDownloadToFile() function
 '// Currently you are restricted to placing files in the StealthBot install directory only
-Public Sub PrintURLToFile(ByVal sFileName As String, ByVal sURL As String)    
+Public Sub PrintURLToFile(ByVal sFileName As String, ByVal sURL As String)
     sFileName = StringFormat("{0}\{1}", CurDir$(), sFileName)
     
-    URLDownloadToFile 0, sURL, sFileName, 0, 0    
+    URLDownloadToFile 0, sURL, sFileName, 0, 0
 End Sub
 
 
@@ -706,15 +707,15 @@ End Sub
 '// Mirror function for the Windows API DeleteUrlCacheEntry() function
 '// Call before using PrintURLToFile() to clear any residual IE cache entries for
 '//     the URL you're retrieving
-Public Sub DeleteURLCache(ByVal sURL As String)    
-    DeleteURLCacheEntry sURL    
+Public Sub DeleteURLCache(ByVal sURL As String)
+    DeleteURLCacheEntry sURL
 End Sub
 
 
 
 '// PADQUEUECOUNTER
 '// Pads the queue so further messages will be sent more slowly
-Public Sub PadQueueCounter()    
+Public Sub PadQueueCounter()
     'QueueLoad = QueueLoad + 1
     'Does nothing now
 End Sub
@@ -723,15 +724,15 @@ End Sub
 
 '// PADQUEUE
 '// Inserts a blank message into the queue
-Public Sub PadQueue()    
-    InsertDummyQueueEntry    
+Public Sub PadQueue()
+    InsertDummyQueueEntry
 End Sub
 
 
 
 '// GETQUEUESIZE
 '// Returns the number of items currently in the outgoing message queue
-Public Function GetQueueSize() As Integer    
+Public Function GetQueueSize() As Integer
     GetQueueSize = g_Queue.Count
 End Function
 
@@ -740,7 +741,7 @@ End Function
 '// FLASHBOTWINDOW
 '// Flashes the bot's entry in the taskbar to get attention.
 Public Sub FlashBotWindow()
-    Call FlashWindow    
+    Call FlashWindow
 End Sub
 
 
@@ -750,7 +751,7 @@ End Sub
 '//  that menu option on the bot's Settings menu
 '// The command must wait before reloading the script so all operations are cleared.
 Public Sub ReloadScript()
-    SCReloadTimerID = SetTimer(frmChat.hWnd, 0, 400, AddressOf ScriptReload_TimerProc)    
+    SCReloadTimerID = SetTimer(frmChat.hWnd, 0, 400, AddressOf ScriptReload_TimerProc)
 End Sub
 
 
@@ -802,8 +803,8 @@ End Function
 '//   1 = clear chat window
 '//   2 = clear whisper window
 '//   3 (default) = clear both chat and whisper window
-Public Function ClearScreen(Optional ByVal ClearOption As Integer) As String    
-    Call frmChat.ClearChatScreen(ClearOption)    
+Public Function ClearScreen(Optional ByVal ClearOption As Integer) As String
+    Call frmChat.ClearChatScreen(ClearOption)
 End Function
 
 
@@ -977,7 +978,7 @@ End Function
 '// UTCNOW
 '// Returns the current UTC time and date value
 Public Function UtcNow() As Date
-    UtcNow = modDateTime.UtcNow    
+    UtcNow = modDateTime.UtcNow
 End Function
 
 '// LOGGER
@@ -989,13 +990,13 @@ End Function
 '// ISDEBUG
 '// Returns whether the bot was started with the debug command line
 Public Function isDebug() As Boolean
-    isDebug = modGlobals.isDebug()    
+    isDebug = modGlobals.isDebug()
 End Function
 
 '// FILETIMETODATE
 '// Returns a date/time from two long values, as either "value value" or value, value
 Public Function FileTimeToDate(ByVal strTime As Variant, Optional ByVal HighValue As Long = 0) As Date
-    Dim FTime As FILETIME 
+    Dim FTime As FILETIME
     
     If (HighValue <> 0) Then
         With FTime
@@ -1010,7 +1011,7 @@ Public Function FileTimeToDate(ByVal strTime As Variant, Optional ByVal HighValu
         End With
     End If
     
-    FileTimeToDate = modDateTime.FileTimeToDate(FTime)    
+    FileTimeToDate = modDateTime.FileTimeToDate(FTime)
 End Function
 
 '// QUOTES
@@ -1022,31 +1023,31 @@ End Function
 '// MEDIAPLAYER
 '// Returns the WinAmp or iTunes media player object
 Public Function MediaPlayer() As Object
-    Set MediaPlayer = modMediaPlayer.MediaPlayer()    
+    Set MediaPlayer = modMediaPlayer.MediaPlayer()
 End Function
 
 '// CHANNEL
 '// Returns the channel object
 Public Function Channel() As Object
-    Set Channel = g_Channel.Clone()    
+    Set Channel = g_Channel.Clone()
 End Function
 
 '// CLAN
 '// Returns the clan object
 Public Function Clan() As Object
-    Set Clan = g_Clan.Clone()    
+    Set Clan = g_Clan.Clone()
 End Function
 
 '// FRIENDS
 '// Returns a collection of friends objects
-Public Function Friends() As Object    
-    Dim i As Integer 
+Public Function Friends() As Object
+    Dim i As Integer
 
     Set Friends = New Collection
     
     For i = 1 To g_Friends.Count
         Friends.Add g_Friends(i).Clone()
-    Next i    
+    Next i
 End Function
 
 '// QUEUE
@@ -1150,7 +1151,7 @@ End Function
 '// Returns the currently executing script module object
 '// PARAMETERS
 '//     ScriptName - this function will return that script's module
-Public Function GetScriptModule(ByVal scriptName As String) As Object    
+Public Function GetScriptModule(ByVal scriptName As String) As Object
     Set GetScriptModule = modScripting.GetScriptModule(scriptName)
 End Function
 
@@ -1177,7 +1178,7 @@ End Function
 '// It is recommended to use this over BotPath() for script-specific information
 '// PARAMETERS
 '//     ScriptName - this function will return that script's working directory
-Public Function GetWorkingDirectory(ByVal scriptName As String) As String    
+Public Function GetWorkingDirectory(ByVal scriptName As String) As String
     ' if none provided, get current script name
     If LenB(scriptName) = 0 Then scriptName = modScripting.GetScriptName
     
@@ -1251,7 +1252,7 @@ End Function
 '//                   vbNullString to get internal commands
 '//                   Chr(0) to get commands from any script that is enabled
 Public Function GetCommands(ByVal scriptName As String) As Collection
-    Set GetCommands = clsCommandDocObj.GetCommands(scriptName)    
+    Set GetCommands = clsCommandDocObj.GetCommands(scriptName)
 End Function
 
 '// CREATECOMMAND
@@ -1277,7 +1278,7 @@ Public Function CreateCommand(ByVal commandName As String, ByVal scriptName As S
     
     Set CreateCommand = Command
     
-    Set Command = Nothing    
+    Set Command = Nothing
 End Function
 
 '// OPENCOMMAND
@@ -1287,7 +1288,7 @@ End Function
 '//     ScriptName -  this function will get the command for the specified script
 '//                   vbNullString to get internal commands
 '//                   Chr(0) to get commands from any script that is enabled
-Public Function OpenCommand(ByVal commandName As String, ByVal scriptName As String) As Object    
+Public Function OpenCommand(ByVal commandName As String, ByVal scriptName As String) As Object
     Dim Command As clsCommandDocObj
     
     Set Command = New clsCommandDocObj
@@ -1296,7 +1297,7 @@ Public Function OpenCommand(ByVal commandName As String, ByVal scriptName As Str
         Set OpenCommand = Command
     End If
     
-    Set Command = Nothing    
+    Set Command = Nothing
 End Function
 
 '// DELETECOMMAND
@@ -1306,7 +1307,7 @@ End Function
 '//     ScriptName -  this function will delete the command for the specified script
 '//                   vbNullString to get internal commands
 '//                   Chr(0) to get commands from any script
-Public Function DeleteCommand(ByVal commandName As String, ByVal scriptName As String) As Object    
+Public Function DeleteCommand(ByVal commandName As String, ByVal scriptName As String) As Object
     Dim Command As clsCommandDocObj
     
     Set Command = New clsCommandDocObj
@@ -1316,26 +1317,26 @@ Public Function DeleteCommand(ByVal commandName As String, ByVal scriptName As S
     
     Set DeleteCommand = Command
     
-    Set Command = Nothing    
+    Set Command = Nothing
 End Function
 
 '// OBSERVESCRIPT
 '// Add the currently runnign script as an Observer of the Specified script
 '// The current script will have all events of the observed script duplicated and executed
-Public Sub ObserveScript(ByVal Script As String)    
-    modScripting.AddScriptObserver modScripting.GetScriptName, Script    
+Public Sub ObserveScript(ByVal Script As String)
+    modScripting.AddScriptObserver modScripting.GetScriptName, Script
 End Sub
 
 '// GETOBSERVED
 '// Returns a collection of script names that this script is observing
-Public Function GetObserved() As Collection    
-    Set GetObserved = modScripting.GetScriptObservers(modScripting.GetScriptName, True)    
+Public Function GetObserved() As Collection
+    Set GetObserved = modScripting.GetScriptObservers(modScripting.GetScriptName, True)
 End Function
 
 '// GETOBSERVERS
 '// Returns a collection of script names that are observing this script
-Public Function GetObservers() As Collection    
-    Set GetObservers = modScripting.GetScriptObservers(modScripting.GetScriptName, False)    
+Public Function GetObservers() As Collection
+    Set GetObservers = modScripting.GetScriptObservers(modScripting.GetScriptName, False)
 End Function
 
 '// OBSERVEFUNCTION
@@ -1350,7 +1351,7 @@ End Sub
 '// PARAMETERS
 '//     sEntryName - the name of the entry to look up
 '//     ScriptName - this function will return the specified script's setting
-Public Function GetSettingsEntry(ByVal sEntryName As String, ByVal scriptName As String) As String    
+Public Function GetSettingsEntry(ByVal sEntryName As String, ByVal scriptName As String) As String
     On Error Resume Next
     
     Dim Path As String
@@ -1386,7 +1387,7 @@ End Function
 Public Sub WriteSettingsEntry(ByVal sEntryName As String, ByVal sValue As String, Optional ByVal sDescription As String, Optional ByVal scriptName As String)
     On Error GoTo ERROR_HANDLER
 
-    Dim Path As String 
+    Dim Path As String
     
     If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
@@ -1418,7 +1419,7 @@ ERROR_HANDLER:
     
     Close #f
     
-    Resume Next    
+    Resume Next
 End Sub
 
 '// SCRIPTS
