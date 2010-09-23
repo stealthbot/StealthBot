@@ -144,11 +144,11 @@ Public Property Let PassedChannelAuth(ByVal bln As Boolean)
 End Property
 
 Public Property Get IsBnetAdmin() As Boolean
-    IsOperator = ((m_flags And USER_SYSOP&) = USER_SYSOP&)
+    IsBnetAdmin = ((m_flags And USER_SYSOP&) = USER_SYSOP&)
 End Property
 
 Public Property Get IsBlizzRep() As Boolean
-    IsOperator = ((m_flags And USER_BLIZZREP&) = USER_BLIZZREP&)
+    IsBlizzRep = ((m_flags And USER_BLIZZREP&) = USER_BLIZZREP&)
 End Property
 
 Public Property Get IsOperator() As Boolean

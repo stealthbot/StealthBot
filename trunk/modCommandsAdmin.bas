@@ -25,8 +25,8 @@ Public Sub OnAdd(Command As clsCommandObj)
             
             If (InStr(Username, "*") = 0 And InStr(Username, "?") = 0) Then
                 ' format: charname
-                Dim i As Integer, User As clsUserObj, IsChar As Boolean, Acct As String
-                For i = 1 To g_Channel.Users
+                Dim User As clsUserObj, IsChar As Boolean, Acct As String
+                For i = 1 To g_Channel.Users.Count
                     Set User = g_Channel.Users(i)
                     If (StrComp(User.CharacterName, Username, vbTextCompare) = 0) Then
                         ' the user provided is a character in the channel
