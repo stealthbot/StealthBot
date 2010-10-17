@@ -140,7 +140,7 @@ Public Function DispatchCommand(Command As clsCommandObj)
         Case "stop":           Call modCommandsMP3.OnStop(Command)
         Case "useitunes":      Call modCommandsMP3.OnUseiTunes(Command)
         Case "usewinamp":      Call modCommandsMP3.OnUseWinamp(Command)
-        Case "usewmp":         Call modCommandsMP3.OnUseWMPlayer(Command)
+        'Case "usewmp":         Call modCommandsMP3.OnUseWMPlayer(Command)
         
         'Chat Commands
         Case "away":           Call modCommandsChat.OnAway(Command)
