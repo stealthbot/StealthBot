@@ -1742,9 +1742,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -4550,15 +4550,15 @@ Private Sub mnuRepairDataFiles_Click()
 End Sub
 
 Private Sub mnuRepairVerbytes_Click()
-    WriteINI "Main", "W2VerByte", Hex(GetVerByte("NB2W", 1))
-    WriteINI "Main", "W3VerByte", Hex(GetVerByte("3RAW", 1))
-    WriteINI "Main", "SCVerByte", Hex(GetVerByte("RATS", 1))
-    WriteINI "Main", "D2VerByte", Hex(GetVerByte("VD2D", 1))
-    WriteINI "Main", "D2XVerByte", Hex(GetVerByte("PX2D", 1))
-    WriteINI "Main", "D1VerByte", Hex(GetVerByte("LTRD", 1))
-    WriteINI "Main", "DSVerByte", Hex(GetVerByte("RHSD", 1))
-    WriteINI "Main", "SSVerByte", Hex(GetVerByte("RHSS", 1))
-    WriteINI "Main", "JSVerByte", Hex(GetVerByte("RTSJ", 1))
+    WriteINI "Override", "W2VerByte", Hex(GetVerByte("NB2W", 1))
+    WriteINI "Override", "W3VerByte", Hex(GetVerByte("3RAW", 1))
+    WriteINI "Override", "SCVerByte", Hex(GetVerByte("RATS", 1))
+    WriteINI "Override", "D2VerByte", Hex(GetVerByte("VD2D", 1))
+    WriteINI "Override", "D2XVerByte", Hex(GetVerByte("PX2D", 1))
+    WriteINI "Override", "D1VerByte", Hex(GetVerByte("LTRD", 1))
+    WriteINI "Override", "DSVerByte", Hex(GetVerByte("RHSD", 1))
+    WriteINI "Override", "SSVerByte", Hex(GetVerByte("RHSS", 1))
+    WriteINI "Override", "JSVerByte", Hex(GetVerByte("RTSJ", 1))
     
     frmChat.AddChat RTBColors.SuccessText, "The version bytes stored in config.ini have been restored to their defaults."
 End Sub
@@ -4604,6 +4604,7 @@ Private Sub mnuUpdateVerbytes_Click()
             For i = 0 To 3
                 WriteINI "Override", keys(i) & "VerByte", ary(i)
             Next i
+            WriteINI "Override", "D2XVerByte", ary(2)
             
             AddChat RTBColors.SuccessText, "Your config.ini file has been loaded with current version bytes."
         Else
@@ -5175,7 +5176,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     On Error GoTo ERROR_HANDLER
     
     Static strbuf        As String
-    Static user          As String
+    Static User          As String
     Static spaceIndex(2) As Long
 
     Dim temp As udtGetAccessResponse
@@ -5396,7 +5397,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     End If
                 Else
                     With cboSend
-                        If (user = vbNullString) Then
+                        If (User = vbNullString) Then
                             strbuf = .Text
                             
                             If (.selStart > 0) Then
@@ -5410,10 +5411,10 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                             End If
                             
                             If (spaceIndex(0) > 0) Then
-                                user = Mid$(strbuf, spaceIndex(0), _
+                                User = Mid$(strbuf, spaceIndex(0), _
                                     IIf(spaceIndex(1), spaceIndex(1) - spaceIndex(0), Len(.Text)))
                             Else
-                                user = Mid$(strbuf, 1, IIf(spaceIndex(1), spaceIndex(1) - 1, Len(.Text)))
+                                User = Mid$(strbuf, 1, IIf(spaceIndex(1), spaceIndex(1) - 1, Len(.Text)))
                             End If
                             
                             MatchIndex = 1
@@ -5421,8 +5422,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                             MatchIndex = MatchIndex + 1
                         End If
                         
-                        If (user <> vbNullString) Then
-                            res = MatchClosest(user, IIf(MatchIndex, MatchIndex, 1))
+                        If (User <> vbNullString) Then
+                            res = MatchClosest(User, IIf(MatchIndex, MatchIndex, 1))
 
                             ' final check
                             If (res <> vbNullString) Then
@@ -5643,7 +5644,7 @@ theEnd:
     End With
     
     If (KeyCode <> vbKeyTab) Then
-        user = vbNullString
+        User = vbNullString
         
         strbuf = vbNullString
         
@@ -6090,7 +6091,7 @@ End Sub
 Private Sub tmrSilentChannel_Timer(Index As Integer)
     On Error GoTo ERROR_HANDLER
 
-    Dim user    As clsUserObj
+    Dim User    As clsUserObj
     Dim Item    As ListItem
     
     Dim i       As Integer
@@ -6545,7 +6546,7 @@ Private Function ReplaceEnvironmentVars(ByVal str As String) As String
 
 End Function
 
-Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optional ByVal user As String = _
+Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optional ByVal User As String = _
     vbNullString, Optional ByVal Tag As String = vbNullString, Optional OversizeDelimiter As String = " ") As Integer
 
     On Error GoTo ERROR_HANDLER
@@ -7978,6 +7979,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     If (atChar <> 0) Then
         Dim tmp      As String
         Dim Gateways(5, 2) As String
+        Dim OtherGateway As String
         
         ' populate list
         Gateways(0, 0) = "USWest"
@@ -7995,15 +7997,19 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
         CurrentGateway = -1
         If (LenB(BotVars.Gateway) > 0) Then
             For i = 0 To UBound(Gateways, 1)
-                If (StrComp(BotVars.Gateway, Gateways(i, 0)) = 0 Or _
-                    StrComp(BotVars.Gateway, Gateways(i, 1)) = 0) Then
+                If (StrComp(BotVars.Gateway, Gateways(i, 0)) = 0) Then
                     CurrentGateway = i
+                    OtherGateway = Gateways(i, 1)
+                    Exit For
+                End If
+                If (StrComp(BotVars.Gateway, Gateways(i, 1)) = 0) Then
+                    CurrentGateway = i
+                    OtherGateway = Gateways(i, 0)
                     Exit For
                 End If
             Next i
             If (CurrentGateway = -1) Then ' BotVars.Gateway not known, @[tab]=@BotVars.Gateway
-                Gateways(0, 0) = BotVars.Gateway
-                Gateways(0, 1) = BotVars.Gateway
+                OtherGateway = BotVars.Gateway
                 CurrentGateway = 0
             End If
         Else ' BotVars.Gateway is nothing, @[tab]
@@ -8025,22 +8031,20 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
             tmp = Mid$(toMatch, atChar + 1)
 
             While (Loops < 2)
-                For i = Index To UBound(Gateways, 2)
-                    If (Len(Gateways(CurrentGateway, i)) >= Len(tmp)) Then
-                        If (StrComp(Left$(Gateways(CurrentGateway, i), Len(tmp)), tmp, _
-                            vbTextCompare) = 0) Then
-                            
-                            Dim j As Integer
+                If (Len(OtherGateway) >= Len(tmp)) Then
+                    If (StrComp(Left$(OtherGateway, Len(tmp)), tmp, _
+                        vbTextCompare) = 0) Then
                         
-                            MatchClosest = Left$(toMatch, atChar) & Gateways(CurrentGateway, i) & _
-                                    BotVars.AutoCompletePostfix
-                            
-                            MatchIndex = (i + 1)
-                            
-                            Exit Function
-                        End If
+                        Dim j As Integer
+                    
+                        MatchClosest = Left$(toMatch, atChar) & Gateways(CurrentGateway, i) & _
+                                BotVars.AutoCompletePostfix
+                        
+                        MatchIndex = (i + 1)
+                        
+                        Exit Function
                     End If
-                Next i
+                End If
                 
                 Index = 0
                 
@@ -8048,7 +8052,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
             Wend
         Else
             If (tmp = vbNullString) Then
-                MatchClosest = Left$(toMatch, atChar) & Gateways(CurrentGateway, Index) & _
+                MatchClosest = Left$(toMatch, atChar) & OtherGateway & _
                         BotVars.AutoCompletePostfix
                     
                 MatchIndex = (Index + 1)

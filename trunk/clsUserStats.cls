@@ -680,10 +680,12 @@ Public Property Get IconCode() As Integer
                     GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(Game), _
                         IIf(IsWCG, Icon, ""))
 
-                If (Game = "W3XP") Then
-                    IconCode = (ICON_START_W3XP + IconCode)
-                Else
-                    IconCode = (ICON_START_WAR3 + IconCode)
+                If (IconCode <> ICUNKNOWN) Then
+                    If (Game = "W3XP") Then
+                        IconCode = (ICON_START_W3XP + IconCode)
+                    Else
+                        IconCode = (ICON_START_WAR3 + IconCode)
+                    End If
                 End If
             
         End Select

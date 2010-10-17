@@ -159,6 +159,9 @@ Public Function GetTimeStamp(Optional DateTime As Date) As String
             GetTimeStamp = _
                 " [" & Format(DateTime, "HH:MM:SS") & "." & Right$("000" & GetCurrentMS, 3) & "] "
         
+        Case 3
+            GetTimeStamp = vbNullString
+        
         Case Else
             GetTimeStamp = _
                 " [" & Format(DateTime, "HH:MM:SS AM/PM") & "] "
@@ -202,7 +205,7 @@ Public Function ConvertTime(ByVal dblMS As Double, Optional seconds As Byte) As 
 End Function
 
 Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Integer) As Long
-    Dim Key As String 
+    Dim Key As String
     
     Key = GetProductKey(Product)
     
@@ -640,8 +643,8 @@ End Function
 Public Function GetAccess(ByVal Username As String, Optional dbType As String = _
     vbNullString) As udtGetAccessResponse
     
-    Dim i   As Integer 
-    Dim bln As Boolean 
+    Dim i   As Integer
+    Dim bln As Boolean
 
     'If (Left$(Username, 1) = "*") Then
     '    Username = Mid$(Username, 2)
@@ -710,22 +713,22 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Static dynGroups() As udtDatabase
     Static dModified   As Date
     
-    Dim gAcc      As udtGetAccessResponse 
+    Dim gAcc      As udtGetAccessResponse
     
-    Dim f         As File   
+    Dim f         As File
     Dim fso       As FileSystemObject
-    Dim i         As Integer  
-    Dim K         As Integer  
-    Dim j         As Integer  
-    Dim found     As Boolean  
-    Dim dbIndex   As Integer  
-    Dim dbCount   As Integer  
-    Dim Splt()    As String   
-    Dim bln       As Boolean  
-    Dim modified  As FILETIME 
+    Dim i         As Integer
+    Dim K         As Integer
+    Dim j         As Integer
+    Dim found     As Boolean
+    Dim dbIndex   As Integer
+    Dim dbCount   As Integer
+    Dim Splt()    As String
+    Dim bln       As Boolean
+    Dim modified  As FILETIME
     Dim creation  As FILETIME
-    Dim Access    As FILETIME 
-    Dim nModified As Date     
+    Dim Access    As FILETIME
+    Dim nModified As Date
     
     ' default index to negative one to
     ' indicate that no matching users have
@@ -863,7 +866,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                 (GetCumulativeAccess.Type <> "GROUP")) Then
                 
                 For i = LBound(dynGroups) To UBound(dynGroups)
-                    Dim doCheck As Boolean 
+                    Dim doCheck As Boolean
                     
                     If (i <> dbIndex) Then
                         ' default type to user
@@ -899,7 +902,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                         End If
                         
                         If (doCheck = True) Then
-                            Dim tmp As udtDatabase 
+                            Dim tmp As udtDatabase
                             
                             tmp = dynGroups(i)
             
@@ -1009,17 +1012,17 @@ ERROR_HANDLER:
 End Function
 
 Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccessResponse
-    Dim gAcc   As udtGetAccessResponse 
-    Dim Splt() As String              
+    Dim gAcc   As udtGetAccessResponse
+    Dim Splt() As String
     
     gAcc = GetAccess(Group, "GROUP")
     
     If ((Len(gAcc.Groups) > 0) And (gAcc.Groups <> "%")) Then
-        Dim recAcc As udtGetAccessResponse 
+        Dim recAcc As udtGetAccessResponse
     
         If (InStr(1, gAcc.Groups, ",", vbBinaryCompare) <> 0) Then
-            Dim i As Integer 
-            Dim j As Integer 
+            Dim i As Integer
+            Dim j As Integer
         
             Splt() = Split(gAcc.Groups, ",")
             
@@ -1074,7 +1077,7 @@ End Function
 
 Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Boolean
     Dim gAcc   As udtGetAccessResponse
-    Dim Splt() As String          
+    Dim Splt() As String
     
     gAcc = GetAccess(Group, "GROUP")
     
@@ -1362,24 +1365,24 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
     End If
 End Function
 
-Public Function CheckMsg(ByVal msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
+Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
         Long) As Boolean
     
-    Dim i As Integer 
+    Dim i As Integer
     
-    msg = PrepareCheck(msg)
+    Msg = PrepareCheck(Msg)
     
     For i = 0 To UBound(gFilters)
         If (Len(gFilters(i)) > 0) Then
             If (InStr(1, gFilters(i), "%", vbBinaryCompare) > 0) Then
-                If (msg Like PrepareCheck(DoReplacements(gFilters(i), Username, Ping))) Then
+                If (Msg Like PrepareCheck(DoReplacements(gFilters(i), Username, Ping))) Then
                     
                     CheckMsg = True
                     
                     Exit Function
                 End If
             Else
-                If (msg Like gFilters(i)) Then
+                If (Msg Like gFilters(i)) Then
                     CheckMsg = True
                     
                     Exit Function
@@ -1793,7 +1796,7 @@ End Sub
 
 'Checks the queue for duplicate bans
 Public Sub RemoveBanFromQueue(ByVal sUser As String)
-    Dim tmp As String 
+    Dim tmp As String
 
     tmp = "/ban " & sUser
         
@@ -1802,7 +1805,7 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
     If ((StrReverse$(BotVars.Product) = "WAR3") Or _
         (StrReverse$(BotVars.Product) = "W3XP")) Then
         
-        Dim strGateway As String 
+        Dim strGateway As String
         
         Select Case (BotVars.Gateway)
             Case "Lordaeron": strGateway = "@USWest"
@@ -1819,7 +1822,7 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
     'frmChat.AddChat vbRed, tmp & "*" & " : " & tmp & strGateway & "*"
 End Sub
 
-Public Function AllowedToTalk(ByVal sUser As String, ByVal msg As String) As Boolean
+Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boolean
     Dim i As Integer
     
     ' default to true
@@ -1842,7 +1845,7 @@ Public Function AllowedToTalk(ByVal sUser As String, ByVal msg As String) As Boo
     'End If
     
     If (Filters) Then
-        If ((CheckBlock(sUser)) Or (CheckMsg(msg, sUser, -5))) Then
+        If ((CheckBlock(sUser)) Or (CheckMsg(Msg, sUser, -5))) Then
             AllowedToTalk = False
         End If
     End If
@@ -1883,7 +1886,7 @@ Public Sub AddBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     Const MAX_BAN_COUNT As Integer = 80
 
     Dim i      As Integer
-    Dim bCount As Integer 
+    Dim bCount As Integer
     
     ' check for duplicate entry in banlist
     For i = 0 To UBound(gBans)
@@ -2323,7 +2326,7 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
 End Function
 
 
-Public Sub CheckPhrase(ByRef Username As String, ByRef msg As String, ByVal mType As Byte)
+Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mType As Byte)
     Dim i As Integer
     
     If UBound(Catch) = 0 Then
@@ -2332,8 +2335,8 @@ Public Sub CheckPhrase(ByRef Username As String, ByRef msg As String, ByVal mTyp
     
     For i = LBound(Catch) To UBound(Catch)
         If (Catch(i) <> vbNullString) Then
-            If (InStr(1, LCase(msg), Catch(i), vbTextCompare) <> 0) Then
-                Call CaughtPhrase(Username, msg, Catch(i), mType)
+            If (InStr(1, LCase(Msg), Catch(i), vbTextCompare) <> 0) Then
+                Call CaughtPhrase(Username, Msg, Catch(i), mType)
                 
                 Exit Sub
             End If
@@ -2342,7 +2345,7 @@ Public Sub CheckPhrase(ByRef Username As String, ByRef msg As String, ByVal mTyp
 End Sub
 
 
-Public Sub CaughtPhrase(ByVal Username As String, ByVal msg As String, ByVal Phrase As String, ByVal mType As Byte)
+Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phrase As String, ByVal mType As Byte)
     Dim i As Integer
     Dim s As String
     
@@ -2373,12 +2376,12 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal msg As String, ByVal Phr
             Open GetFilePath("CaughtPhrases.htm") For Output As #i
         End If
         
-        msg = Replace(msg, "<", "&lt;", 1)
-        msg = Replace(msg, ">", "&gt;", 1)
+        Msg = Replace(Msg, "<", "&lt;", 1)
+        Msg = Replace(Msg, ">", "&gt;", 1)
         
         Print #i, "<B>" & Format(Date, "MM-dd-yyyy") & " - " & Time & _
             " - " & s & Space(1) & Username & ": </B>" & _
-                Replace(msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
+                Replace(Msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
                     "<br>"
     Close #i
 End Sub
@@ -2434,7 +2437,7 @@ Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String,
     'Dim sPath  As String
     'Dim Action As String
     'Dim f      As Integer
-    Dim str As String 
+    Dim str As String
     
     If ((LenB(Caller) = 0) Or (StrComp(Caller, "(console)", vbTextCompare) = 0)) Then
         Caller = "console"

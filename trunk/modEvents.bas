@@ -610,7 +610,16 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     RequestSystemKeys
-    SEND_SID_CHATCOMMAND "/whoami"
+    If (LenB(BotVars.Gateway) = 0) Then
+        SEND_SID_CHATCOMMAND "/whoami"
+    Else
+        ' PvPGN: we already have our gateway, we're logged in
+        SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
+        
+        Call InsertDummyQueueEntry
+        
+        RunInAll "Event_LoggedOn", CurrentUsername, BotVars.Product
+    End If
     
     Exit Sub
 ERROR_HANDLER:
@@ -1929,14 +1938,14 @@ On Error GoTo ERROR_HANDLER:
     '####### Mail check
     If (mail) Then
         If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-            Dim msg As udtMail
+            Dim Msg As udtMail
             
             If (GetMailCount(Username) > 0) Then
-                Call GetMailMessage(Username, msg)
+                Call GetMailMessage(Username, Msg)
                 
-                If (Len(RTrim(msg.To)) > 0) Then
+                If (Len(RTrim(Msg.To)) > 0) Then
                     frmChat.AddQ "/w " & Username & " Message from " & _
-                        RTrim$(msg.From) & ": " & RTrim$(msg.Message)
+                        RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
                 End If
             End If
         End If

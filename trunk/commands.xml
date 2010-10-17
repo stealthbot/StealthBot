@@ -38,6 +38,9 @@
 
     <access>
       <rank>50</rank>
+      <flags>
+        <flag>M</flag>
+      </flags>
     </access>
   </command>
 
@@ -62,6 +65,9 @@
 
     <access>
       <rank>90</rank>
+      <flags>
+        <flag>M</flag>
+      </flags>
     </access>
   </command>
 
@@ -86,6 +92,9 @@
 
     <access>
       <rank>90</rank>
+      <flags>
+        <flag>M</flag>
+      </flags>
     </access>
   </command>
 
@@ -112,6 +121,9 @@
 
     <access>
       <rank>90</rank>
+      <flags>
+        <flag>M</flag>
+      </flags>
     </access>
   </command>
 
@@ -226,6 +238,9 @@
 
     <access>
       <rank>100</rank>
+      <flags>
+        <flag>M</flag>
+      </flags>
     </access>
   </command>
 
@@ -240,6 +255,9 @@
 
     <access>
       <rank>100</rank>
+      <flags>
+        <flag>M</flag>
+      </flags>
     </access>
   </command>
 
@@ -4199,6 +4217,33 @@
     </access>
   </command>
 
+  <command name="setbnlsserver">
+    <aliases />
+
+    <documentation>
+      <description>
+        Changes the configuration entry for the BNLS server to the server specified.
+      </description>
+    </documentation>
+
+    <arguments>
+      <argument name="server" type="word">
+        <documentation>
+          <description>
+            The BNLS server to use next time you login.
+          </description>
+        </documentation>
+      </argument>
+    </arguments>
+
+    <access>
+      <rank>90</rank>
+      <flags>
+        <flag>M</flag>
+      </flags>
+    </access>
+  </command>
+
   <command name="rejoin">
     <aliases>
       <alias>rj</alias>
@@ -4367,7 +4412,9 @@
 
     <access>
       <rank>70</rank>
-      <flags />
+      <flags>
+        <flag>M</flag>
+      </flags>
     </access>
   </command>
 

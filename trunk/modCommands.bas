@@ -188,6 +188,7 @@ Public Function DispatchCommand(Command As clsCommandObj)
         Case "setpass":        Call modCommandsAdmin.OnSetPass(Command)
         Case "setpmsg":        Call modCommandsAdmin.OnSetPMsg(Command)
         Case "setserver":      Call modCommandsAdmin.OnSetServer(Command)
+        Case "setbnlsserver":  Call modCommandsAdmin.OnSetBnlsServer(Command)
         Case "settrigger":     Call modCommandsAdmin.OnSetTrigger(Command)
         Case "whispercmds":    Call modCommandsAdmin.OnWhisperCmds(Command)
         

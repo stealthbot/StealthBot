@@ -1949,10 +1949,18 @@ On Error GoTo ERROR_HANDLER:
     SEND_SID_ENTERCHAT
     SEND_SID_GETCHANNELLIST
     
-    'Why were we joining a random channel?
-    Randomize
-    Num = (1 + Rnd() * 1000)
-    FullJoin BotVars.HomeChannel & ":" & Num, 0
+    BotVars.Gateway = ReadCfg("Override", "PredefinedGateway")
+    If (LenB(BotVars.Gateway) = 0) Then
+        'Why were we joining a random channel?
+        Randomize
+        Num = (1 + Rnd() * 1000)
+        FullJoin BotVars.HomeChannel & ":" & Num, 0
+    Else
+        'PvPGN: Straight home
+        'modEvents.m_skipUICEvents = True
+        
+        FullJoin BotVars.HomeChannel, 5
+    End If
     
     Exit Sub
 ERROR_HANDLER:
