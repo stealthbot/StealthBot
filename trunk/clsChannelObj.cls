@@ -36,7 +36,7 @@ Private m_banlist          As Collection
 
 Public Property Get SType() As String
     
-    Dim tmp As String 
+    Dim tmp As String
     
     If ((Flags And CHAN_RESTRICTED) = CHAN_RESTRICTED) Then
         tmp = tmp & "restricted, "
@@ -199,7 +199,7 @@ End Sub
 
 Public Property Get Self() As clsUserObj
 
-    Dim i As Integer 
+    Dim i As Integer
 
     Set Self = New clsUserObj
     
@@ -215,7 +215,7 @@ End Property
 
 Public Function GetUserEx(ByVal AccountName As String, Optional ByVal SearchLimit As Integer = 0) As Object
 
-    Dim Index As Integer 
+    Dim Index As Integer
     
     If (StrictIsNumeric(AccountName)) Then
         Index = CInt(Val(AccountName))
@@ -233,7 +233,7 @@ End Function
 
 Public Function GetUserIndexEx(ByVal AccountName As String, Optional ByVal SearchLimit As Integer = 0) As Integer
 
-    Dim i As Integer 
+    Dim i As Integer
     
     AccountName = modEvents.CleanUsername(AccountName)
 
@@ -257,13 +257,13 @@ End Function
 
 Public Function GetUser(ByVal Username As String, Optional ByVal SearchLimit As Integer = 0) As Object
 
-    Dim Index As Integer 
+    Dim Index As Integer
     
     If (StrictIsNumeric(Username) And (Len(Username) <= 4)) Then
         Index = CInt(Val(Username))
-		If (Index > Users.Count) Then
-			Index = GetUserIndex(Username, SearchLimit)
-		End If
+                If (Index > Users.Count) Then
+                        Index = GetUserIndex(Username, SearchLimit)
+                End If
     Else
         Index = GetUserIndex(Username, SearchLimit)
     End If
@@ -278,7 +278,7 @@ End Function
 
 Public Function GetUserIndex(ByVal Username As String, Optional ByVal SearchLimit As Integer = 0) As Integer
 
-    Dim i As Integer 
+    Dim i As Integer
 
     For i = 1 To m_users.Count
         If (SearchLimit > 0) Then
@@ -306,7 +306,7 @@ End Property
 
 Public Function IsOnBanList(ByVal Username As String, Optional ByVal Operator As String = vbNullString) As Integer
 
-    Dim i   As Integer 
+    Dim i   As Integer
     Dim bln As Boolean
     
     Username = CleanUsername(Username)
@@ -335,8 +335,8 @@ End Function
 
 Public Function IsOnRecentBanList(ByVal Username As String, Optional ByVal Operator As String = vbNullString) As Integer
 
-    Dim i   As Integer 
-    Dim bln As Boolean 
+    Dim i   As Integer
+    Dim bln As Boolean
     
     Username = CleanUsername(Username)
     
@@ -372,10 +372,10 @@ End Function
 
 Public Sub RemoveBansFromOperator(ByVal Username As String)
 
-    Dim i    As Integer 
-    Dim bln  As Boolean 
+    Dim i    As Integer
+    Dim bln  As Boolean
     Dim pos  As Integer
-    Dim Name As String  
+    Dim Name As String
     
     Username = CleanUsername(Username)
 
@@ -415,8 +415,8 @@ Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsU
 
     If (Self.IsOperator) Then
         Dim DBEntry  As udtGetAccessResponse
-        Dim i        As Integer 
-        Dim Message  As String  
+        Dim i        As Integer
+        Dim Message  As String
         
         If (CurrentUser Is Nothing) Then
             Set CurrentUser = Users(GetUserIndex(Username))
@@ -442,7 +442,7 @@ Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsU
                         
                         doCheck = False
                     Else
-                        Dim j As Integer 
+                        Dim j As Integer
                         
                         If ((doCheck) And (BotVars.BanEvasion)) Then
                             If (IsOnBanList(CurrentUser.Name)) Then
@@ -472,8 +472,22 @@ Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsU
                             If (CurrentUser.IsUsingDII) Then
                                 If (BotVars.BanD2UnderLevel) Then
                                     If (CurrentUser.Stats.Level < BotVars.BanD2UnderLevel) Then
-                                        Ban CurrentUser.DisplayName & Space$(1) & "You are under the required " & _
-                                            "level for entry.", (AutoModSafelistValue - 1)
+                                        Message = BotVars.BanUnderLevelMsg
+                                        
+                                        If LenB(Message) = 0 Then
+                                            Message = "You are below the required level for entry."
+                                        End If
+                                        
+                                        If InStr(1, Message, "%cl", vbTextCompare) > 0 Then
+                                            Message = Replace$(Message, "%cl", CStr(CurrentUser.Stats.Level))
+                                        End If
+                                        
+                                        If InStr(1, Message, "%rl", vbTextCompare) > 0 Then
+                                            Message = Replace$(Message, "%rl", CStr(BotVars.BanD2UnderLevel))
+                                        End If
+                                        
+                                        Ban CurrentUser.DisplayName & Space$(1) & Message, _
+                                            (AutoModSafelistValue - 1)
                                         
                                         doCheck = False
                                     End If
@@ -483,7 +497,28 @@ Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsU
                                     If (StrComp(CurrentUser.Stats.IconName, "peon", vbTextCompare) = 0) Then
                                         Ban CurrentUser.DisplayName & Space$(1) & "PeonBan", _
                                             (AutoModSafelistValue - 1)
-                                    
+                                        
+                                        doCheck = False
+                                    End If
+                                ElseIf (BotVars.BanUnderLevel) Then
+                                    If (CurrentUser.Stats.Level < BotVars.BanUnderLevel) Then
+                                        Message = BotVars.BanUnderLevelMsg
+                                        
+                                        If LenB(Message) = 0 Then
+                                            Message = "You are below the required level for entry."
+                                        End If
+                                        
+                                        If InStr(1, Message, "%cl", vbTextCompare) > 0 Then
+                                            Message = Replace$(Message, "%cl", CStr(CurrentUser.Stats.Level))
+                                        End If
+                                        
+                                        If InStr(1, Message, "%rl", vbTextCompare) > 0 Then
+                                            Message = Replace$(Message, "%rl", CStr(BotVars.BanUnderLevel))
+                                        End If
+                                        
+                                        Ban CurrentUser.DisplayName & Space$(1) & Message, _
+                                            (AutoModSafelistValue - 1)
+                                        
                                         doCheck = False
                                     End If
                                 End If
@@ -529,10 +564,10 @@ Public Function CheckUsers() As Integer
         Dim CurrentUser As clsUserObj
         Dim DBEntry     As udtGetAccessResponse
         Dim i           As Integer
-        Dim Message     As String  
+        Dim Message     As String
         Dim doCheck     As Boolean
-        Dim HighRank    As Integer 
-        Dim HighIndex   As Integer 
+        Dim HighRank    As Integer
+        Dim HighIndex   As Integer
         Dim Count       As Integer
         
         doCheck = True

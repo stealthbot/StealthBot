@@ -28,6 +28,7 @@ Private m_sProduct                      As String
 Private m_sServer                       As String
 Private m_byBanUnderLevel               As Byte
 Private m_byBanD2UnderLevel             As Byte
+Private m_sBanUnderLevelMsg             As String
 Private m_byKickOnYell                  As Byte
 Private m_sHashFilePath                 As String
 Private m_bBNLS                         As Boolean
@@ -177,6 +178,14 @@ End Property
 
 Public Property Let BanD2UnderLevel(ByVal byBanD2UnderLevel As Byte)
     m_byBanD2UnderLevel = byBanD2UnderLevel
+End Property
+
+Public Property Get BanUnderLevelMsg() As String
+    BanUnderLevelMsg = m_sBanUnderLevelMsg
+End Property
+
+Public Property Let BanUnderLevelMsg(ByVal sBanUnderLevelMsg As String)
+    m_sBanUnderLevelMsg = sBanUnderLevelMsg
 End Property
 
 Public Property Get KickOnYell() As Byte
@@ -622,7 +631,7 @@ Public Property Let NoRTBAutomaticCopy(ByVal bNoRTBAutomaticCopy As Boolean)
 End Property
 
 Public Property Get GatewayConventions() As Byte
-    GatewayConventions = m_byGatewayConventions    
+    GatewayConventions = m_byGatewayConventions
 End Property
 
 Public Property Let GatewayConventions(ByVal byGatewayConventions As Byte)

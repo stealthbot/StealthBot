@@ -1,19 +1,19 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
-Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.1#0"; "vbalTreeView6.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.1#0"; "vbaltreeview6.ocx"
 Begin VB.Form frmSettings 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "StealthBot Settings"
-   ClientHeight    =   5310
-   ClientLeft      =   1575
-   ClientTop       =   1935
-   ClientWidth     =   9735
+   ClientHeight    =   5316
+   ClientLeft      =   1572
+   ClientTop       =   1932
+   ClientWidth     =   9744
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   5310
-   ScaleWidth      =   9735
+   ScaleHeight     =   5316
+   ScaleWidth      =   9744
    StartUpPosition =   1  'CenterOwner
    WhatsThisHelp   =   -1  'True
    Begin VB.ComboBox cboProfile 
@@ -4819,7 +4819,7 @@ Private Function SaveSettings() As Boolean
     WINI "IdleBans", Cv(chkIdlebans.Value), secOther
     WINI "KickIdle", Cv(chkIdleKick.Value), secOther
     WINI "IdleBanDelay", txtIdleBanDelay.Text, secOther
-    WINI "PeonBans", chkPeonbans.Value, secOther
+    WINI "PeonBans", Cv(chkPeonbans.Value), secOther
     WINI "BanUnderLevel", Val(txtBanW3.Text), secOther
     WINI "BanD2UnderLevel", Val(txtBanD2.Text), secOther
     WINI "LevelBanMsg", txtLevelBanMsg.Text, secOther
@@ -5414,7 +5414,10 @@ Private Sub InitGenMod()
     chkQuiet.Value = YesToTrue(ReadCfg(MN, "QuietTime"), 0)
     chkKOY.Value = YesToTrue(ReadCfg(OT, "KickOnYell"), 0)
     chkPlugban.Value = YesToTrue(ReadCfg(OT, "PlugBans"), 0)
-    chkPeonbans.Value = IIf(ReadCfg(OT, "PeonBans") = "1", 1, 0)
+    chkPeonbans.Value = YesToTrue(ReadCfg(OT, "PeonBans"), 0)
+    ' someone messed up and made peonbans = 1 or 0 in previous versions
+    ' check for that here ~Ribose
+    If ReadCfg(OT, "PeonBans") = "1" Then chkPeonbans.Value = vbChecked
     chkBanEvasion.Value = YesToTrue(ReadCfg(OT, "BanEvasion"), 1)
     
     chkProtect.Value = YesToTrue(ReadCfg(MN, "Protect"), 0)
@@ -5472,7 +5475,7 @@ Private Sub InitGenMod()
         chkCBan(W3X).Value = 1
     End If
 
-    txtLevelBanMsg.Text = ReadCfg(OT, "LevelbanMsg")
+    txtLevelBanMsg.Text = ReadCfg(OT, "LevelBanMsg")
     If LenB(txtLevelBanMsg.Text) = 0 Then txtLevelBanMsg.Text = "You are below the required level for entry."
     
     txtBanD2.Text = Val(ReadCfg(OT, "BanD2UnderLevel"))

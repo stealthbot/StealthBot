@@ -8,14 +8,14 @@ Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
-   ClientHeight    =   7950
-   ClientLeft      =   225
-   ClientTop       =   855
+   ClientHeight    =   7956
+   ClientLeft      =   192
+   ClientTop       =   816
    ClientWidth     =   11400
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   7950
+   ScaleHeight     =   7956
    ScaleWidth      =   11400
    StartUpPosition =   3  'Windows Default
    Begin MSComctlLib.ListView lvChannel 
@@ -25,8 +25,8 @@ Begin VB.Form frmChat
       TabStop         =   0   'False
       Top             =   240
       Width           =   3705
-      _ExtentX        =   6535
-      _ExtentY        =   11245
+      _ExtentX        =   6541
+      _ExtentY        =   11240
       View            =   3
       LabelEdit       =   1
       LabelWrap       =   0   'False
@@ -41,7 +41,7 @@ Begin VB.Form frmChat
       Appearance      =   1
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   8.25
+         Size            =   8.4
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -72,14 +72,14 @@ Begin VB.Form frmChat
    Begin MSScriptControlCtl.ScriptControl SControl 
       Left            =   120
       Top             =   720
-      _ExtentX        =   1005
-      _ExtentY        =   1005
+      _ExtentX        =   995
+      _ExtentY        =   995
    End
    Begin MSScriptControlCtl.ScriptControl SCRestricted 
       Left            =   5880
       Top             =   3360
-      _ExtentX        =   1005
-      _ExtentY        =   1005
+      _ExtentX        =   995
+      _ExtentY        =   995
    End
    Begin VB.Timer tmrScriptLong 
       Enabled         =   0   'False
@@ -91,8 +91,8 @@ Begin VB.Form frmChat
       Index           =   0
       Left            =   120
       Top             =   120
-      _ExtentX        =   1005
-      _ExtentY        =   1005
+      _ExtentX        =   995
+      _ExtentY        =   995
       _Version        =   393216
       RequestTimeout  =   7
    End
@@ -100,8 +100,8 @@ Begin VB.Form frmChat
       Index           =   0
       Left            =   720
       Top             =   120
-      _ExtentX        =   741
-      _ExtentY        =   741
+      _ExtentX        =   593
+      _ExtentY        =   593
       _Version        =   393216
    End
    Begin VB.Timer ChatQueueTimer 
@@ -119,8 +119,8 @@ Begin VB.Form frmChat
    Begin MSComctlLib.ImageList imlClan 
       Left            =   6480
       Top             =   3360
-      _ExtentX        =   1005
-      _ExtentY        =   1005
+      _ExtentX        =   995
+      _ExtentY        =   995
       BackColor       =   -2147483643
       ImageWidth      =   37
       ImageHeight     =   23
@@ -161,8 +161,8 @@ Begin VB.Form frmChat
    Begin MSComctlLib.ImageList imlIcons 
       Left            =   7080
       Top             =   3360
-      _ExtentX        =   1005
-      _ExtentY        =   1005
+      _ExtentX        =   995
+      _ExtentY        =   995
       BackColor       =   -2147483643
       ImageWidth      =   28
       ImageHeight     =   18
@@ -770,7 +770,7 @@ Begin VB.Form frmChat
       BackColor       =   &H00000000&
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   8.25
+         Size            =   8.4
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -788,7 +788,7 @@ Begin VB.Form frmChat
       BackColor       =   &H00000000&
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   8.25
+         Size            =   8.4
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -806,7 +806,7 @@ Begin VB.Form frmChat
       BackColor       =   &H00000000&
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   8.25
+         Size            =   8.4
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -826,8 +826,8 @@ Begin VB.Form frmChat
       TabIndex        =   0
       Top             =   6600
       Width           =   3705
-      _ExtentX        =   6535
-      _ExtentY        =   661
+      _ExtentX        =   6541
+      _ExtentY        =   656
       _Version        =   393216
       TabOrientation  =   1
       Style           =   1
@@ -835,7 +835,7 @@ Begin VB.Form frmChat
       TabHeight       =   520
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   8.25
+         Size            =   8.4
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -864,7 +864,7 @@ Begin VB.Form frmChat
       Caption         =   " ^^^^"
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   5.25
+         Size            =   5.4
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
@@ -881,8 +881,8 @@ Begin VB.Form frmChat
    Begin MSWinsockLib.Winsock sckMCP 
       Left            =   5280
       Top             =   2760
-      _ExtentX        =   741
-      _ExtentY        =   741
+      _ExtentX        =   593
+      _ExtentY        =   593
       _Version        =   393216
    End
    Begin VB.Timer scTimer 
@@ -893,24 +893,24 @@ Begin VB.Form frmChat
    Begin InetCtlsObjects.Inet INet 
       Left            =   5280
       Top             =   3360
-      _ExtentX        =   1005
-      _ExtentY        =   1005
+      _ExtentX        =   995
+      _ExtentY        =   995
       _Version        =   393216
       RequestTimeout  =   7
    End
    Begin MSWinsockLib.Winsock sckBNLS 
       Left            =   5760
       Top             =   2760
-      _ExtentX        =   741
-      _ExtentY        =   741
+      _ExtentX        =   593
+      _ExtentY        =   593
       _Version        =   393216
       RemotePort      =   9367
    End
    Begin MSWinsockLib.Winsock sckBNet 
       Left            =   6240
       Top             =   2760
-      _ExtentX        =   741
-      _ExtentY        =   741
+      _ExtentX        =   593
+      _ExtentY        =   593
       _Version        =   393216
       RemotePort      =   6112
    End
@@ -929,8 +929,8 @@ Begin VB.Form frmChat
       TabStop         =   0   'False
       Top             =   240
       Width           =   3705
-      _ExtentX        =   6535
-      _ExtentY        =   11245
+      _ExtentX        =   6541
+      _ExtentY        =   11240
       View            =   3
       LabelEdit       =   1
       LabelWrap       =   0   'False
@@ -945,7 +945,7 @@ Begin VB.Form frmChat
       Appearance      =   1
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   8.25
+         Size            =   8.4
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -978,8 +978,8 @@ Begin VB.Form frmChat
       TabStop         =   0   'False
       Top             =   240
       Width           =   3705
-      _ExtentX        =   6535
-      _ExtentY        =   11245
+      _ExtentX        =   6541
+      _ExtentY        =   11240
       View            =   3
       LabelEdit       =   1
       LabelWrap       =   0   'False
@@ -995,7 +995,7 @@ Begin VB.Form frmChat
       Appearance      =   1
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   8.25
+         Size            =   8.4
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -1020,18 +1020,17 @@ Begin VB.Form frmChat
       TabStop         =   0   'False
       Top             =   6960
       Width           =   12375
-      _ExtentX        =   21828
-      _ExtentY        =   2990
+      _ExtentX        =   21823
+      _ExtentY        =   2985
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
       TextRTF         =   $"frmChat.frx":789F8
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   8.25
+         Size            =   8.4
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -1046,11 +1045,10 @@ Begin VB.Form frmChat
       TabStop         =   0   'False
       Top             =   0
       Width           =   8895
-      _ExtentX        =   15690
-      _ExtentY        =   11668
+      _ExtentX        =   15685
+      _ExtentY        =   11663
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1071,7 +1069,7 @@ Begin VB.Form frmChat
       BackColor       =   &H00CC3300&
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   8.25
+         Size            =   8.4
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -6870,8 +6868,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     BotVars.Product = ReadCfg(MN, "Product")
     BotVars.Server = ReadCfg(MN, "Server")
-    BotVars.BanUnderLevel = Val(ReadCfg(OT, "BanUnderLevel"))
-    BotVars.BanD2UnderLevel = Val(ReadCfg(OT, "BanD2UnderLevel"))
     BotVars.HomeChannel = ReadCfg(MN, "HomeChan")
     BotVars.BotOwner = ReadCfg(MN, "Owner")
     
@@ -7092,6 +7088,10 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             End If
         End If
     End If
+    
+    BotVars.BanUnderLevel = Val(ReadCfg(OT, "BanUnderLevel"))
+    BotVars.BanD2UnderLevel = Val(ReadCfg(OT, "BanD2UnderLevel"))
+    BotVars.BanUnderLevelMsg = ReadCfg(OT, "LevelBanMsg")
     
     BotVars.BanPeons = (ReadCfg(OT, "PeonBans") = "Y")
     
