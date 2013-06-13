@@ -102,7 +102,7 @@ Public Property Get Peons() As Collection
     Set Peons = New Collection
     
     For i = 1 To Members.Count
-        If ((Members(i).Rank >= 0) And (Members(i).Rank <= 0)) Then
+        If ((Members(i).Rank = 0) Or (Members(i).Rank = 1)) Then
             Peons.Add Members(i)
         End If
     Next i
