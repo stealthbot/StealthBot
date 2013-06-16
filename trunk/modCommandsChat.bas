@@ -54,7 +54,7 @@ Public Sub OnBlock(Command As clsCommandObj)
         If (CheckBlock(Command.Argument("Username"))) Then 'Should prevent adding filters that are the same as other filters
             Command.Respond "That username is already in the block list, or is under a wildcard block."
         Else
-            TotalString = ReadINI("TextFilters", "Total", FiltersPath)
+            TotalString = ReadINI("BlockList", "Total", FiltersPath)
             If (LenB(TotalString) = 0) Then TotalString = "0"
             
             If (StrictIsNumeric(TotalString)) Then
