@@ -882,10 +882,7 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
                 End If
                 
                 If (res = True) Then
-                    tmpbuf = tmpbuf & DB(i).Username
-                    If (Not (DB(i).Type = "%") And (Not StrComp(DB(i).Type, "USER", vbTextCompare) = 0)) Then
-                        tmpbuf = StringFormat("{0} ({1})", tmpbuf, LCase$(DB(i).Type))
-                    End If
+                    tmpbuf = tmpbuf & DBUserToString(DB(i).Username, DB(i).Type)
                     tmpbuf = StringFormat("{0}{1}{2}, ", tmpbuf, _
                         IIf(DB(i).Rank > 0, "\" & DB(i).Rank, vbNullString), _
                         IIf(LenB(DB(i).Flags) > 0, "\" & DB(i).Flags, vbNullString))

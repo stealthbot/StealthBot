@@ -761,16 +761,50 @@ End Sub
 
 Public Sub OnTagDel(Command As clsCommandObj)
     If (Command.IsValid) Then
-        If (Not InStr(Command.Argument("Tag"), "*") = 0) Then
-            Command.Args = Command.Argument("Tag") & " -B --Type USER"
-            Call OnAdd(Command)
+        ' this code is OLD and needs to be redone when OnAddOld() is redone.
+        ' but nobody's going to read this anyway -Ribose
+        Dim dbAccess       As udtGetAccessResponse
+        Dim ResponseTag()  As String
+        Dim ResponseClan() As String
+        Dim i              As Integer
+        ReDim Preserve ResponseTag(0)
+        ReDim Preserve ResponseClan(0)
+        
+        dbAccess = GetCumulativeAccess(Command.Username)
+        If (Command.IsLocal) Then
+            dbAccess.Rank = 201
+            dbAccess.Flags = "A"
+        End If
+        
+        If (InStr(Command.Argument("Tag"), "*") <> 0) Then
             Command.Args = Command.Argument("Tag") & " -B --Type CLAN"
-            Call OnAdd(Command)
         Else
-            Command.Args = StringFormat("*{0}* -B --Type USER", Command.Argument("Tag"))
-            Call OnAdd(Command)
-            Command.Args = StringFormat("*{0}* -B --Type CLAN", Command.Argument("Tag"))
-            Call OnAdd(Command)
+            Command.Args = StringFormat("{0} -B --Type CLAN", Command.Argument("Tag"))
+        End If
+        
+        Call OnAddOld(Command.Username, dbAccess, Command.Args, Command.IsLocal, ResponseClan())
+        
+        If UBound(ResponseClan) = 0 Then
+            If (StrComp(Left$(ResponseClan(0), 7), "Error: ") = 0) Then
+                If (InStr(Command.Argument("Tag"), "*") <> 0) Then
+                    Command.Args = Command.Argument("Tag") & " -B --Type USER"
+                Else
+                    Command.Args = StringFormat("*{0}* -B --Type USER", Command.Argument("Tag"))
+                End If
+                
+                Call OnAddOld(Command.Username, dbAccess, Command.Args, Command.IsLocal, ResponseTag())
+                
+                For i = LBound(ResponseTag) To UBound(ResponseTag)
+                    Command.Respond ResponseTag(i)
+                Next i
+            Else
+                Command.Respond ResponseClan(i)
+            End If
+        Else
+            ' something went wrong? print all
+            For i = LBound(ResponseClan) To UBound(ResponseClan)
+                Command.Respond ResponseClan(i)
+            Next i
         End If
     End If
 End Sub

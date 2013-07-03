@@ -258,6 +258,24 @@ Public Function DispatchCommand(Command As clsCommandObj)
     End Select
 End Function
 
+Public Function DBUserToString(ByVal User As String, ByVal dbType As String) As String
+    
+    Dim TypeStr As String
+    
+    If (Len(dbType) > 0 And StrComp(dbType, "%") <> 0 And StrComp(dbType, "user", vbTextCompare) <> 0) Then
+        TypeStr = StringFormat(" ({0})", LCase$(dbType))
+    Else
+        TypeStr = vbNullString
+    End If
+    
+    DBUserToString = User & TypeStr
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in DBUserToString().")
+End Function
+
 Public Function OnRemOld(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
@@ -331,6 +349,8 @@ Public Function OnRemOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                 tmpbuf = "Error: That user is Locked."
         Else
             Dim res As Boolean
+            
+            dbType = User.Type
         
             res = DB_remove(sUsername, dbType)
             
@@ -338,7 +358,7 @@ Public Function OnRemOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                 If (BotVars.LogDBActions) Then
                     Call LogDBAction(RemEntry, IIf(InBot, "console", Username), sUsername, dbType)
                 End If
-                tmpbuf = StringFormat("Successfully removed database entry {0}{1}{0}.", Chr$(34), sUsername)
+                tmpbuf = StringFormat("{0} has been removed from the database.", DBUserToString(sUsername, dbType))
             Else
                 tmpbuf = "Error: There was a problem removing that entry from the database."
             End If
@@ -710,7 +730,7 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                         res = DB_remove(User, gAcc.Type)
                         
                         If (res) Then
-                            cmdRet(0) = Chr(34) & User & Chr(34) & " has been removed " & _
+                            cmdRet(0) = DBUserToString(User, dbType) & " has been removed " & _
                                 "from the database."
                         Else
                             cmdRet(0) = "Error: There was a problem removing that entry " & _
@@ -839,7 +859,7 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
             
             ' check for errors & create message
             If (gAcc.Rank > 0) Then
-                tmpbuf = Chr(34) & User & Chr(34) & " has been given rank " & _
+                tmpbuf = DBUserToString(User, dbType) & " has been given rank " & _
                     gAcc.Rank
                 
                 ' was the user given the specified flags, too?
@@ -855,7 +875,7 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
             Else
                 ' was the user given the specified flags?
                 If (Len(gAcc.Flags)) Then
-                    tmpbuf = Chr(34) & User & Chr(34) & " has been given flags " & _
+                    tmpbuf = DBUserToString(User, dbType) & " has been given flags " & _
                         gAcc.Flags
                 End If
             End If
@@ -866,9 +886,10 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                     tmpbuf = tmpbuf & ", and has been made a member of " & _
                         "the group(s): " & sGrp
                 Else
-                    tmpbuf = Chr(34) & User & Chr(34) & " has been made a member of " & _
+                    tmpbuf = DBUserToString(User, dbType) & " has been made a member of " & _
                         "the group(s): " & sGrp
                 End If
+                
             End If
             
             ' terminate sentence

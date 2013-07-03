@@ -2139,6 +2139,26 @@ On Error GoTo ERROR_HANDLER:
         sSetting = Split(Mid$(sTemp, 2) & Space$(1), Space$(1))(0)
         sTemp = Mid$(sTemp, Len(sSetting) + 3)
         Select Case LCase$(sSetting)
+            Case "ppath":
+                If (Left$(sTemp, 1) = Chr$(34)) Then
+                    If (InStr(2, sTemp, Chr$(34), vbTextCompare) > 0) Then
+                        sValue = Mid$(sTemp, 2, InStr(2, sTemp, Chr$(34), vbTextCompare) - 2)
+                        sTemp = Mid$(sTemp, Len(sValue) + 4)
+                    Else
+                        sValue = Mid$(Split(sTemp & " -", " -")(0), 2)
+                        sTemp = Mid$(sTemp, Len(sValue) + 3)
+                    End If
+                Else
+                    sValue = Split(sTemp & " -", " -")(0)
+                    sTemp = Mid$(sTemp, Len(sValue) + 2)
+                End If
+                
+                If (LenB(sValue) > 0) Then
+                    If Dir$(sValue) <> vbNullString Then
+                        ChDir sValue
+                        CommandLine = StringFormat("{0}-ppath {1}{2}{1} ", CommandLine, Chr$(34), sValue)
+                    End If
+                End If
         
             Case "cpath":
                 If (Left$(sTemp, 1) = Chr$(34)) Then

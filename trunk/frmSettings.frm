@@ -1,19 +1,19 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
-Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.1#0"; "vbaltreeview6.ocx"
+Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.1#0"; "vbalTreeView6.ocx"
 Begin VB.Form frmSettings 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "StealthBot Settings"
-   ClientHeight    =   5316
-   ClientLeft      =   1572
-   ClientTop       =   1932
-   ClientWidth     =   9744
+   ClientHeight    =   5310
+   ClientLeft      =   1575
+   ClientTop       =   1935
+   ClientWidth     =   9735
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   5316
-   ScaleWidth      =   9744
+   ScaleHeight     =   5310
+   ScaleWidth      =   9735
    StartUpPosition =   1  'CenterOwner
    WhatsThisHelp   =   -1  'True
    Begin VB.ComboBox cboProfile 
@@ -22,7 +22,7 @@ Begin VB.Form frmSettings
       Enabled         =   0   'False
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   8.4
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -41,7 +41,7 @@ Begin VB.Form frmSettings
       Caption         =   "&Website"
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   8.4
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -58,7 +58,7 @@ Begin VB.Form frmSettings
       Caption         =   "&Readme"
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   8.4
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -75,7 +75,7 @@ Begin VB.Form frmSettings
       Caption         =   "&Step-By-Step Configuration"
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   8.4
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -93,7 +93,7 @@ Begin VB.Form frmSettings
       Default         =   -1  'True
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   8.4
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -111,7 +111,7 @@ Begin VB.Form frmSettings
       Caption         =   "&Cancel"
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   8.4
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -130,14 +130,14 @@ Begin VB.Form frmSettings
       TabIndex        =   0
       Top             =   555
       Width           =   2775
-      _ExtentX        =   4890
+      _ExtentX        =   4895
       _ExtentY        =   8149
       BackColor       =   10040064
       ForeColor       =   16777215
       Style           =   2
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   9.6
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -159,7 +159,7 @@ Begin VB.Form frmSettings
          Caption         =   "Shareware"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -178,7 +178,7 @@ Begin VB.Form frmSettings
          Caption         =   "Japanese"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -197,7 +197,7 @@ Begin VB.Form frmSettings
          Caption         =   "Use Key as Spawned Client"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -215,7 +215,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -235,7 +235,7 @@ Begin VB.Form frmSettings
          Caption         =   "Use Diablo II Realms"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -253,7 +253,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -272,7 +272,7 @@ Begin VB.Form frmSettings
          Caption         =   "Diablo"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -292,7 +292,7 @@ Begin VB.Form frmSettings
          Caption         =   "The Frozen Throne"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -312,7 +312,7 @@ Begin VB.Form frmSettings
          Caption         =   "StarCraft"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -333,7 +333,7 @@ Begin VB.Form frmSettings
          Caption         =   "Brood War"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -353,7 +353,7 @@ Begin VB.Form frmSettings
          Caption         =   "Diablo II"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -373,7 +373,7 @@ Begin VB.Form frmSettings
          Caption         =   "Lord of Destruction"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -393,7 +393,7 @@ Begin VB.Form frmSettings
          Caption         =   "WarCraft II BNE"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -413,7 +413,7 @@ Begin VB.Form frmSettings
          Caption         =   "WarCraft III"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -432,7 +432,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -451,7 +451,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -471,7 +471,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -491,7 +491,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -510,7 +510,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -530,7 +530,7 @@ Begin VB.Form frmSettings
          Enabled         =   0   'False
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -550,7 +550,7 @@ Begin VB.Form frmSettings
          Caption         =   "Bot Owner"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -570,7 +570,7 @@ Begin VB.Form frmSettings
          Caption         =   "( add current )"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -590,7 +590,7 @@ Begin VB.Form frmSettings
          Caption         =   "( manage )"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -609,7 +609,7 @@ Begin VB.Form frmSettings
          Caption         =   "Expansion"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -660,7 +660,7 @@ Begin VB.Form frmSettings
          Caption         =   "Product"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -688,7 +688,7 @@ Begin VB.Form frmSettings
          Caption         =   "Trigger"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -708,7 +708,7 @@ Begin VB.Form frmSettings
          Caption         =   "Server"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -728,7 +728,7 @@ Begin VB.Form frmSettings
          Caption         =   "Username"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -748,7 +748,7 @@ Begin VB.Form frmSettings
          Caption         =   "Password"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -768,7 +768,7 @@ Begin VB.Form frmSettings
          Caption         =   "CDKey"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -788,7 +788,7 @@ Begin VB.Form frmSettings
          Caption         =   "Home Channel"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -808,7 +808,7 @@ Begin VB.Form frmSettings
          Caption         =   "Expansion CDKey"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -858,7 +858,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -879,7 +879,7 @@ Begin VB.Form frmSettings
          Caption         =   "Disable channel list name coloring"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -900,7 +900,7 @@ Begin VB.Form frmSettings
          Caption         =   "Disable name autocompletion"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -921,7 +921,7 @@ Begin VB.Form frmSettings
          Caption         =   "Do not minimize to the System Tray"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -942,7 +942,7 @@ Begin VB.Form frmSettings
          Caption         =   "Flash window on events"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -963,7 +963,7 @@ Begin VB.Form frmSettings
          Caption         =   "Use UTF-8 encoding/decoding when processing and sending messages"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -983,7 +983,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1003,7 +1003,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1024,7 +1024,7 @@ Begin VB.Form frmSettings
          Caption         =   "Show splash screen on startup"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1045,7 +1045,7 @@ Begin VB.Form frmSettings
          Caption         =   "Use chat filtering"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1066,7 +1066,7 @@ Begin VB.Form frmSettings
          Caption         =   "Show join/leave notifications"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1085,7 +1085,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1105,7 +1105,7 @@ Begin VB.Form frmSettings
          Caption         =   "Maximum backlog size"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1124,7 +1124,7 @@ Begin VB.Form frmSettings
          Caption         =   "  bytes (set to 0 for unlimited)"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1143,7 +1143,7 @@ Begin VB.Form frmSettings
          Caption         =   "Timestamp Settings"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1163,7 +1163,7 @@ Begin VB.Form frmSettings
          Caption         =   "  megabytes (set to 0 for unlimited)"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1183,7 +1183,7 @@ Begin VB.Form frmSettings
          Caption         =   "Maximum logfile size"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1203,7 +1203,7 @@ Begin VB.Form frmSettings
          Caption         =   "Channel text logging"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1223,7 +1223,7 @@ Begin VB.Form frmSettings
          Caption         =   $"frmSettings.frx":0000
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1280,7 +1280,7 @@ Begin VB.Form frmSettings
          Caption         =   "Sa&ve changes to this color"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1297,7 +1297,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1316,7 +1316,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1334,7 +1334,7 @@ Begin VB.Form frmSettings
          Caption         =   "Color Picker"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1351,7 +1351,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1369,7 +1369,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1387,7 +1387,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1405,7 +1405,7 @@ Begin VB.Form frmSettings
          Caption         =   "Generate New Value from RGB"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1422,7 +1422,7 @@ Begin VB.Form frmSettings
          Caption         =   "&Import ColorList"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1439,7 +1439,7 @@ Begin VB.Form frmSettings
          Caption         =   "Restore &Default Colors"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1456,7 +1456,7 @@ Begin VB.Form frmSettings
          Caption         =   "&Export ColorList"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1473,7 +1473,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1492,7 +1492,7 @@ Begin VB.Form frmSettings
          Caption         =   "Generate"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1510,7 +1510,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1529,7 +1529,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1548,7 +1548,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1568,7 +1568,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1594,7 +1594,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00000000&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1621,7 +1621,7 @@ Begin VB.Form frmSettings
          Caption         =   "Color to modify:"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1641,7 +1641,7 @@ Begin VB.Form frmSettings
          Caption         =   "New Value:                   Current Value:       Example:"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1660,7 +1660,7 @@ Begin VB.Form frmSettings
          Caption         =   "R:"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1679,7 +1679,7 @@ Begin VB.Form frmSettings
          Caption         =   "G:"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1698,7 +1698,7 @@ Begin VB.Form frmSettings
          Caption         =   "B:"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1717,7 +1717,7 @@ Begin VB.Form frmSettings
          Caption         =   "Use HTML hexadecimal colors:"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1737,7 +1737,7 @@ Begin VB.Form frmSettings
          Caption         =   "#"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1757,7 +1757,7 @@ Begin VB.Form frmSettings
          Caption         =   "Size"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1777,7 +1777,7 @@ Begin VB.Form frmSettings
          Caption         =   "Channel List"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1798,7 +1798,7 @@ Begin VB.Form frmSettings
          Caption         =   "Chat Window"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1819,7 +1819,7 @@ Begin VB.Form frmSettings
          Caption         =   "Font"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1839,7 +1839,7 @@ Begin VB.Form frmSettings
          Caption         =   "Size"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1859,7 +1859,7 @@ Begin VB.Form frmSettings
          Caption         =   "Font"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1907,7 +1907,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00000000&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1936,7 +1936,7 @@ Begin VB.Form frmSettings
          Caption         =   "Use Ban Evasion"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1956,7 +1956,7 @@ Begin VB.Form frmSettings
          Caption         =   "Kick instead of ban"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1976,7 +1976,7 @@ Begin VB.Form frmSettings
          Caption         =   "Ban Warcraft III Peons"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1995,7 +1995,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2016,7 +2016,7 @@ Begin VB.Form frmSettings
          Caption         =   "The Frozen Throne"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2036,7 +2036,7 @@ Begin VB.Form frmSettings
          Caption         =   "Lord of Destruction"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2056,7 +2056,7 @@ Begin VB.Form frmSettings
          Caption         =   "Enable Phrasebanning"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2076,7 +2076,7 @@ Begin VB.Form frmSettings
          Caption         =   "Enable IPBanning"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2096,7 +2096,7 @@ Begin VB.Form frmSettings
          Caption         =   "Starcraft"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2116,7 +2116,7 @@ Begin VB.Form frmSettings
          Caption         =   "Brood War"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2136,7 +2136,7 @@ Begin VB.Form frmSettings
          Caption         =   "Diablo II"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2156,7 +2156,7 @@ Begin VB.Form frmSettings
          Caption         =   "Warcraft II BNE"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2176,7 +2176,7 @@ Begin VB.Form frmSettings
          Caption         =   "Warcraft III"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2196,7 +2196,7 @@ Begin VB.Form frmSettings
          Caption         =   "Enable Quiet-Time"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2215,7 +2215,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2236,7 +2236,7 @@ Begin VB.Form frmSettings
          Caption         =   "Enable Channel Protection"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2256,7 +2256,7 @@ Begin VB.Form frmSettings
          Caption         =   "Enable Kick-On-Yell"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2275,7 +2275,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2295,7 +2295,7 @@ Begin VB.Form frmSettings
          Caption         =   "Enable PlugBans"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2314,7 +2314,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2334,7 +2334,7 @@ Begin VB.Form frmSettings
          Caption         =   "Ban idle users"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2353,7 +2353,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2374,7 +2374,7 @@ Begin VB.Form frmSettings
          Caption         =   "Levelban message"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2394,7 +2394,7 @@ Begin VB.Form frmSettings
          Caption         =   "Seconds before ban:"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2414,7 +2414,7 @@ Begin VB.Form frmSettings
          Caption         =   "Clientbans"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2434,7 +2434,7 @@ Begin VB.Form frmSettings
          Caption         =   "Protection ban message"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2455,7 +2455,7 @@ Begin VB.Form frmSettings
          Caption         =   "LevelBans: Set to 0 to disable."
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2476,7 +2476,7 @@ Begin VB.Form frmSettings
          Caption         =   "Diablo II"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2497,7 +2497,7 @@ Begin VB.Form frmSettings
          Caption         =   "Warcraft III"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2555,7 +2555,7 @@ Begin VB.Form frmSettings
          Caption         =   "Message"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2576,7 +2576,7 @@ Begin VB.Form frmSettings
          Caption         =   "Quote"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2596,7 +2596,7 @@ Begin VB.Form frmSettings
          Caption         =   "Uptime"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2616,7 +2616,7 @@ Begin VB.Form frmSettings
          Caption         =   "MP3"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2636,7 +2636,7 @@ Begin VB.Form frmSettings
          Caption         =   "Show anti-idle messages"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2654,7 +2654,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2725,7 +2725,7 @@ Begin VB.Form frmSettings
          Caption         =   "Idle message type"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2745,7 +2745,7 @@ Begin VB.Form frmSettings
          Caption         =   "Delay between messages (minutes)"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2765,7 +2765,7 @@ Begin VB.Form frmSettings
          Caption         =   "Idle message"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2793,7 +2793,7 @@ Begin VB.Form frmSettings
          Caption         =   "idle variable container label"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2843,7 +2843,7 @@ Begin VB.Form frmSettings
          Caption         =   "Show user flag-based icons"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2863,7 +2863,7 @@ Begin VB.Form frmSettings
          Caption         =   "Use Diablo II naming conventions"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2883,7 +2883,7 @@ Begin VB.Form frmSettings
          Caption         =   "Show all"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2905,7 +2905,7 @@ Begin VB.Form frmSettings
          Caption         =   "WarCraft III"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2927,7 +2927,7 @@ Begin VB.Form frmSettings
          Caption         =   "Legacy"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2949,7 +2949,7 @@ Begin VB.Form frmSettings
          Caption         =   "Default"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2973,7 +2973,7 @@ Begin VB.Form frmSettings
          Caption         =   "Show user game stats icons"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -2994,7 +2994,7 @@ Begin VB.Form frmSettings
          Caption         =   "Disable suffix box"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3015,7 +3015,7 @@ Begin VB.Form frmSettings
          Caption         =   "Disable prefix box"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3035,7 +3035,7 @@ Begin VB.Form frmSettings
          Caption         =   "Log all commands"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3055,7 +3055,7 @@ Begin VB.Form frmSettings
          Caption         =   "Log database changes"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3076,7 +3076,7 @@ Begin VB.Form frmSettings
          Caption         =   "Show offline friends"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3097,7 +3097,7 @@ Begin VB.Form frmSettings
          Caption         =   "Enable URL detection"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3118,7 +3118,7 @@ Begin VB.Form frmSettings
          Caption         =   "Do not use 0x65 internal friends' list"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3137,7 +3137,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3157,7 +3157,7 @@ Begin VB.Form frmSettings
          Caption         =   "Minimize on startup"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3177,7 +3177,7 @@ Begin VB.Form frmSettings
          Caption         =   "Connect on startup"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3198,7 +3198,7 @@ Begin VB.Form frmSettings
          Caption         =   "Allow MP3 commands"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3219,7 +3219,7 @@ Begin VB.Form frmSettings
          Caption         =   "Whisper command responses"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3240,7 +3240,7 @@ Begin VB.Form frmSettings
          Caption         =   "Use ProfileAmp"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3261,7 +3261,7 @@ Begin VB.Form frmSettings
          Caption         =   "Check users' mail"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3281,7 +3281,7 @@ Begin VB.Form frmSettings
          Caption         =   "Join a backup channel when kicked"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3302,7 +3302,7 @@ Begin VB.Form frmSettings
          Caption         =   "Gateway naming convention:"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3322,7 +3322,7 @@ Begin VB.Form frmSettings
          Caption         =   "Backup channel:"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3387,7 +3387,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3409,7 +3409,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3430,7 +3430,7 @@ Begin VB.Form frmSettings
          Caption         =   "SOCKS5"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3450,7 +3450,7 @@ Begin VB.Form frmSettings
          Caption         =   "SOCKS4"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3469,7 +3469,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3488,7 +3488,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3508,7 +3508,7 @@ Begin VB.Form frmSettings
          Caption         =   "Use a proxy to connect"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3528,7 +3528,7 @@ Begin VB.Form frmSettings
          Caption         =   "Use Lag Plug"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3547,7 +3547,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3566,7 +3566,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3586,7 +3586,7 @@ Begin VB.Form frmSettings
          Caption         =   "Enable Automatic BNLS Server Finder"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3605,7 +3605,7 @@ Begin VB.Form frmSettings
          Caption         =   "BNLS server, if applicable:"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3625,7 +3625,7 @@ Begin VB.Form frmSettings
          Caption         =   "(in milliseconds)"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3645,7 +3645,7 @@ Begin VB.Form frmSettings
          Caption         =   "Reconnect delay"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3666,7 +3666,7 @@ Begin VB.Form frmSettings
          Caption         =   "Proxy port"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3687,7 +3687,7 @@ Begin VB.Form frmSettings
          Caption         =   "Proxy IP address"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3714,7 +3714,7 @@ Begin VB.Form frmSettings
          Caption         =   $"frmSettings.frx":00DA
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3734,7 +3734,7 @@ Begin VB.Form frmSettings
          Caption         =   "Ping spoofing"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3754,7 +3754,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H80000012&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3773,7 +3773,7 @@ Begin VB.Form frmSettings
          Caption         =   "Connection method:"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3793,7 +3793,7 @@ Begin VB.Form frmSettings
          Caption         =   "Local hashing supports all game clients. Your current hash file path is:"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3851,7 +3851,7 @@ Begin VB.Form frmSettings
          Caption         =   "Whisper the greet message"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3869,7 +3869,7 @@ Begin VB.Form frmSettings
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3890,7 +3890,7 @@ Begin VB.Form frmSettings
          Caption         =   "Greet users who join the channel"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3909,7 +3909,7 @@ Begin VB.Form frmSettings
          Caption         =   "greet variable container label"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3928,7 +3928,7 @@ Begin VB.Form frmSettings
          Caption         =   "Greet Message"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   8.4
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -3986,7 +3986,7 @@ Begin VB.Form frmSettings
          Caption         =   "Splash message container label."
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   11.4
+            Size            =   11.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -4013,7 +4013,7 @@ Begin VB.Form frmSettings
          Caption         =   "Welcome to &StealthBot"
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   14.4
+            Size            =   14.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -4335,6 +4335,16 @@ Sub ShowPanel(ByVal Index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
     Static ActivePanel As Integer
     
     If PanelsInitialized Then
+        Dim nod As cTreeViewNode
+        Dim i As Integer
+        For i = 1 To tvw.NodeCount
+            Set nod = tvw.nodes.Item(i)
+            If Not nod.Selected And KeyToIndex(nod.Key) = Index Then
+                nod.Selected = True
+                Exit For
+            End If
+        Next i
+        Set nod = Nothing
         If Mode = 1 Then
             fraPanel(KeyToIndex("splash")).ZOrder vbBringToFront
             ActivePanel = KeyToIndex("splash")
@@ -5303,53 +5313,109 @@ Private Sub InitBasicConfig()
     
     With cboServer
         .AddItem "useast.battle.net"
-        .AddItem "63.240.202.139"
-        .AddItem "63.240.202.138"
-        .AddItem "63.240.202.134"
-        .AddItem "63.240.202.131"
-        .AddItem "63.240.202.130"
-        .AddItem "63.240.202.129"
-        .AddItem "63.240.202.128"
-        .AddItem "63.240.202.127"
-        .AddItem "63.240.202.126"
-        .AddItem "63.240.202.122"
-        .AddItem "63.240.202.121"
-        .AddItem "63.240.202.120"
+        .AddItem "206.17.175.51"
+        .AddItem "206.17.175.52"
+        .AddItem "206.17.175.53"
+        .AddItem "206.17.175.54"
+        .AddItem "206.17.175.55"
+        .AddItem "206.17.175.56"
+        .AddItem "206.17.175.57"
+        .AddItem "206.17.175.58"
+        .AddItem "206.17.175.120"
+        .AddItem "206.17.175.121"
+        .AddItem "206.17.175.122"
+        .AddItem "206.17.175.129"
+        '.AddItem "63.240.202.139"
+        '.AddItem "63.240.202.138"
+        '.AddItem "63.240.202.134"
+        '.AddItem "63.240.202.131"
+        '.AddItem "63.240.202.130"
+        '.AddItem "63.240.202.129"
+        '.AddItem "63.240.202.128"
+        '.AddItem "63.240.202.127"
+        '.AddItem "63.240.202.126"
+        '.AddItem "63.240.202.122"
+        '.AddItem "63.240.202.121"
+        '.AddItem "63.240.202.120"
         .AddItem ""
         .AddItem "uswest.battle.net"
-        .AddItem "63.241.83.7"
-        .AddItem "63.241.83.8"
-        .AddItem "63.241.83.9"
-        .AddItem "63.241.83.11"
-        .AddItem "63.241.83.12"
-        .AddItem "63.241.83.13"
-        .AddItem "63.241.83.107"
-        .AddItem "63.241.83.108"
-        .AddItem "63.241.83.109"
-        .AddItem "63.241.83.110"
-        .AddItem "63.241.83.111"
-        .AddItem "63.241.83.112"
+        .AddItem "12.129.236.11"
+        .AddItem "12.129.236.12"
+        .AddItem "12.129.236.13"
+        .AddItem "12.129.236.14"
+        .AddItem "12.129.236.15"
+        .AddItem "12.129.236.16"
+        .AddItem "12.129.236.17"
+        .AddItem "12.129.236.18"
+        .AddItem "12.129.236.19"
+        .AddItem "12.129.236.20"
+        .AddItem "12.129.236.21"
+        .AddItem "12.129.236.22"
+        '.AddItem "63.241.83.7"
+        '.AddItem "63.241.83.8"
+        '.AddItem "63.241.83.9"
+        '.AddItem "63.241.83.11"
+        '.AddItem "63.241.83.12"
+        '.AddItem "63.241.83.13"
+        '.AddItem "63.241.83.107"
+        '.AddItem "63.241.83.108"
+        '.AddItem "63.241.83.109"
+        '.AddItem "63.241.83.110"
+        '.AddItem "63.241.83.111"
+        '.AddItem "63.241.83.112"
         .AddItem ""
         .AddItem "europe.battle.net"
-        .AddItem "213.248.106.200"
-        .AddItem "213.248.106.201"
-        .AddItem "213.248.106.202"
-        .AddItem "213.248.106.204"
+        .AddItem "213.248.115.11"
+        .AddItem "213.248.115.12"
+        .AddItem "213.248.115.13"
+        .AddItem "213.248.115.14"
+        .AddItem "213.248.115.15"
+        .AddItem "213.248.115.16"
+        .AddItem "213.248.115.17"
+        .AddItem "213.248.115.18"
+        '.AddItem "213.248.106.200"
+        '.AddItem "213.248.106.201"
+        '.AddItem "213.248.106.202"
+        '.AddItem "213.248.106.204"
         .AddItem ""
         .AddItem "asia.battle.net"
-        .AddItem "211.233.0.49"
-        .AddItem "211.233.0.50"
-        .AddItem "211.233.0.51"
-        .AddItem "211.233.0.52"
-        .AddItem "211.233.0.53"
-        .AddItem "211.233.0.72"
-        .AddItem "211.233.0.73"
-        .AddItem "211.233.0.74"
-        .AddItem "211.233.0.75"
-        .AddItem "211.233.0.76"
-        .AddItem "211.233.0.78"
-        .AddItem "211.233.0.79"
-        .AddItem "211.233.0.80"
+        .AddItem "121.254.164.11"
+        .AddItem "121.254.164.12"
+        .AddItem "121.254.164.13"
+        .AddItem "121.254.164.14"
+        .AddItem "121.254.164.15"
+        .AddItem "121.254.164.16"
+        .AddItem "121.254.164.17"
+        .AddItem "121.254.164.18"
+        .AddItem "121.254.164.19"
+        .AddItem "121.254.164.20"
+        .AddItem "121.254.164.21"
+        .AddItem "121.254.164.22"
+        .AddItem "121.254.164.23"
+        .AddItem "121.254.164.24"
+        .AddItem "121.254.164.25"
+        .AddItem "121.254.164.26"
+        .AddItem "121.254.164.27"
+        .AddItem "121.254.164.28"
+        .AddItem "121.254.164.29"
+        .AddItem "121.254.164.30"
+        .AddItem "121.254.164.31"
+        .AddItem "121.254.164.32"
+        .AddItem "121.254.164.33"
+        .AddItem "121.254.164.34"
+        '.AddItem "211.233.0.49"
+        '.AddItem "211.233.0.50"
+        '.AddItem "211.233.0.51"
+        '.AddItem "211.233.0.52"
+        '.AddItem "211.233.0.53"
+        '.AddItem "211.233.0.72"
+        '.AddItem "211.233.0.73"
+        '.AddItem "211.233.0.74"
+        '.AddItem "211.233.0.75"
+        '.AddItem "211.233.0.76"
+        '.AddItem "211.233.0.78"
+        '.AddItem "211.233.0.79"
+        '.AddItem "211.233.0.80"
         .AddItem ""
         .AddItem s
         
@@ -5633,16 +5699,37 @@ Function CDKeyReplacements(ByVal inString As String) As String
 End Function
 
 Sub SaveFontSettings()
+    Dim ResizeChatElements As Boolean
+    Dim ResizeChannelElements As Boolean
+    
+    If (StrComp(InitChatFont, txtChatFont.Text, vbTextCompare)) Then
+        WINI "ChatFont", txtChatFont.Text, secOther
+        frmChat.rtbChat.Font.Name = txtChatFont.Text
+        frmChat.cboSend.Font.Name = txtChatFont.Text
+        frmChat.txtPre.Font.Name = txtChatFont.Text
+        frmChat.txtPost.Font.Name = txtChatFont.Text
+        frmChat.rtbWhispers.Font.Name = txtChatFont.Text
+        ResizeChatElements = True
+    End If
+    
+    If Not InitChatSize = CInt(txtChatSize.Text) Then
+        WINI "ChatSize", txtChatSize.Text, secOther
+        frmChat.rtbChat.Font.Size = CInt(txtChatSize.Text)
+        frmChat.cboSend.Font.Size = CInt(txtChatSize.Text)
+        frmChat.txtPre.Font.Size = CInt(txtChatSize.Text)
+        frmChat.txtPost.Font.Size = CInt(txtChatSize.Text)
+        frmChat.rtbWhispers.Font.Size = CInt(txtChatSize.Text)
+        ResizeChatElements = True
+    End If
+    
     If (StrComp(InitChanFont, txtChanFont.Text, vbTextCompare)) Then
         WINI "ChanFont", txtChanFont.Text, secOther
         frmChat.lvChannel.Font.Name = txtChanFont.Text
         frmChat.lvClanList.Font.Name = txtChanFont.Text
         frmChat.lvFriendList.Font.Name = txtChanFont.Text
-    End If
-    
-    If (StrComp(InitChatFont, txtChatFont.Text, vbTextCompare)) Then
-        WINI "ChatFont", txtChatFont.Text, secOther
-        frmChat.rtbChat.Font.Name = txtChatFont.Text
+        frmChat.ListviewTabs.Font.Name = txtChanFont.Text
+        frmChat.lblCurrentChannel.Font.Name = txtChanFont.Text
+        ResizeChannelElements = True
     End If
     
     If Not InitChanSize = CInt(txtChanSize.Text) Then
@@ -5650,11 +5737,21 @@ Sub SaveFontSettings()
         frmChat.lvChannel.Font.Size = CInt(txtChanSize.Text)
         frmChat.lvClanList.Font.Size = CInt(txtChanSize.Text)
         frmChat.lvFriendList.Font.Size = CInt(txtChanSize.Text)
+        frmChat.ListviewTabs.Font.Size = CInt(txtChanSize.Text)
+        frmChat.lblCurrentChannel.Font.Size = CInt(txtChanSize.Text)
+        ResizeChannelElements = True
     End If
     
-    If Not InitChatSize = CInt(txtChatSize.Text) Then
-        WINI "ChatSize", txtChatSize.Text, secOther
-        frmChat.rtbChat.Font.Size = CInt(txtChatSize.Text)
+    If ResizeChannelElements Then
+        Dim lblHeight As Single
+        frmChat.lblCurrentChannel.AutoSize = True
+        lblHeight = frmChat.lblCurrentChannel.Height + 40
+        frmChat.lblCurrentChannel.AutoSize = False
+        frmChat.lblCurrentChannel.Height = lblHeight
+        ResizeChatElements = True
+    End If
+    If ResizeChatElements Then
+        frmChat.Form_Resize
     End If
 End Sub
 

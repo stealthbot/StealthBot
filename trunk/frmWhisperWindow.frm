@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Begin VB.Form frmWhisperWindow 
    BackColor       =   &H00000000&
@@ -38,6 +38,7 @@ Begin VB.Form frmWhisperWindow
       _ExtentY        =   4683
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmWhisperWindow.frx":0000
@@ -124,7 +125,12 @@ Private Sub Form_Load()
         rtbWhispers.Font.Name = .Font.Name
         rtbWhispers.Font.Bold = .Font.Bold
         rtbWhispers.Font.Size = .Font.Size
+        txtSend.Font.Name = .Font.Name
+        txtSend.Font.Bold = .Font.Bold
+        txtSend.Font.Size = .Font.Size
     End With
+    
+    Form_Resize
     
 '    If Me.MyOldWndProc = 0 Then
 '        Me.MyOldWndProc = SetWindowLong(Me.hWnd, GWL_WNDPROC, AddressOf WWNewWndProc)
@@ -184,15 +190,15 @@ Private Sub mnuSave_Click()
         .Filter = ".htm|HTML Documents"
         .ShowSave
     
-        If LenB(.filename) > 0 Then
+        If LenB(.FileName) > 0 Then
             ToSave() = Split(rtbWhispers.Text, vbCrLf)
             f = FreeFile
             
-            If InStr(1, .filename, ".") = 0 Then
-                .filename = .filename & ".htm"
+            If InStr(1, .FileName, ".") = 0 Then
+                .FileName = .FileName & ".htm"
             End If
             
-            Open .filename For Output As #f
+            Open .FileName For Output As #f
                 Print #f, "<html><head>"
                 Print #f, "<title>StealthBot Conversation Log: " & GetCurrentUsername & " and " & m_sWhisperTo & "</title></head>"
                 Print #f, "<body bgcolor='#000000'>"
@@ -263,7 +269,7 @@ Private Sub txtSend_KeyPress(KeyAscii As Integer)
         txtSend.Text = ""
     End If
     
-    Dim X() As String
+    Dim x() As String
     Dim i As Integer
     
     If KeyAscii = 22 Then
@@ -271,15 +277,15 @@ Private Sub txtSend_KeyPress(KeyAscii As Integer)
         
         If InStr(1, Clipboard.GetText, Chr(13), vbTextCompare) <> 0 Then
         
-            X() = Split(Clipboard.GetText, Chr(10))
-            If UBound(X) > 0 Then
-                For i = LBound(X) To UBound(X)
-                    If i = LBound(X) Then X(i) = txtSend.Text & X(i)
+            x() = Split(Clipboard.GetText, Chr(10))
+            If UBound(x) > 0 Then
+                For i = LBound(x) To UBound(x)
+                    If i = LBound(x) Then x(i) = txtSend.Text & x(i)
                 
-                    X(i) = Replace(X(i), Chr(13), vbNullString)
+                    x(i) = Replace(x(i), Chr(13), vbNullString)
                     
-                    If X(i) <> vbNullString Then
-                        frmChat.AddQ "/w " & m_sWhisperTo & Space(1) & X(i)
+                    If x(i) <> vbNullString Then
+                        frmChat.AddQ "/w " & m_sWhisperTo & Space(1) & x(i)
                     End If
                 Next i
                 txtSend.Text = vbNullString

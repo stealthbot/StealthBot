@@ -8,14 +8,14 @@ Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
-   ClientHeight    =   7956
-   ClientLeft      =   192
-   ClientTop       =   816
+   ClientHeight    =   7965
+   ClientLeft      =   225
+   ClientTop       =   855
    ClientWidth     =   11400
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   7956
+   ScaleHeight     =   7965
    ScaleWidth      =   11400
    StartUpPosition =   3  'Windows Default
    Begin MSComctlLib.ListView lvChannel 
@@ -25,8 +25,8 @@ Begin VB.Form frmChat
       TabStop         =   0   'False
       Top             =   240
       Width           =   3705
-      _ExtentX        =   6541
-      _ExtentY        =   11240
+      _ExtentX        =   6535
+      _ExtentY        =   11245
       View            =   3
       LabelEdit       =   1
       LabelWrap       =   0   'False
@@ -41,7 +41,7 @@ Begin VB.Form frmChat
       Appearance      =   1
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   8.4
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -72,14 +72,14 @@ Begin VB.Form frmChat
    Begin MSScriptControlCtl.ScriptControl SControl 
       Left            =   120
       Top             =   720
-      _ExtentX        =   995
-      _ExtentY        =   995
+      _ExtentX        =   1005
+      _ExtentY        =   1005
    End
    Begin MSScriptControlCtl.ScriptControl SCRestricted 
       Left            =   5880
       Top             =   3360
-      _ExtentX        =   995
-      _ExtentY        =   995
+      _ExtentX        =   1005
+      _ExtentY        =   1005
    End
    Begin VB.Timer tmrScriptLong 
       Enabled         =   0   'False
@@ -91,8 +91,8 @@ Begin VB.Form frmChat
       Index           =   0
       Left            =   120
       Top             =   120
-      _ExtentX        =   995
-      _ExtentY        =   995
+      _ExtentX        =   1005
+      _ExtentY        =   1005
       _Version        =   393216
       RequestTimeout  =   7
    End
@@ -100,8 +100,8 @@ Begin VB.Form frmChat
       Index           =   0
       Left            =   720
       Top             =   120
-      _ExtentX        =   593
-      _ExtentY        =   593
+      _ExtentX        =   741
+      _ExtentY        =   741
       _Version        =   393216
    End
    Begin VB.Timer ChatQueueTimer 
@@ -119,8 +119,8 @@ Begin VB.Form frmChat
    Begin MSComctlLib.ImageList imlClan 
       Left            =   6480
       Top             =   3360
-      _ExtentX        =   995
-      _ExtentY        =   995
+      _ExtentX        =   1005
+      _ExtentY        =   1005
       BackColor       =   -2147483643
       ImageWidth      =   37
       ImageHeight     =   23
@@ -161,8 +161,8 @@ Begin VB.Form frmChat
    Begin MSComctlLib.ImageList imlIcons 
       Left            =   7080
       Top             =   3360
-      _ExtentX        =   995
-      _ExtentY        =   995
+      _ExtentX        =   1005
+      _ExtentY        =   1005
       BackColor       =   -2147483643
       ImageWidth      =   28
       ImageHeight     =   18
@@ -770,7 +770,7 @@ Begin VB.Form frmChat
       BackColor       =   &H00000000&
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   8.4
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -788,7 +788,7 @@ Begin VB.Form frmChat
       BackColor       =   &H00000000&
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   8.4
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -806,7 +806,7 @@ Begin VB.Form frmChat
       BackColor       =   &H00000000&
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   8.4
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -826,8 +826,8 @@ Begin VB.Form frmChat
       TabIndex        =   0
       Top             =   6600
       Width           =   3705
-      _ExtentX        =   6541
-      _ExtentY        =   656
+      _ExtentX        =   6535
+      _ExtentY        =   661
       _Version        =   393216
       TabOrientation  =   1
       Style           =   1
@@ -835,7 +835,7 @@ Begin VB.Form frmChat
       TabHeight       =   520
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   8.4
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -864,7 +864,7 @@ Begin VB.Form frmChat
       Caption         =   " ^^^^"
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   5.4
+         Size            =   5.25
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
@@ -881,8 +881,8 @@ Begin VB.Form frmChat
    Begin MSWinsockLib.Winsock sckMCP 
       Left            =   5280
       Top             =   2760
-      _ExtentX        =   593
-      _ExtentY        =   593
+      _ExtentX        =   741
+      _ExtentY        =   741
       _Version        =   393216
    End
    Begin VB.Timer scTimer 
@@ -893,24 +893,24 @@ Begin VB.Form frmChat
    Begin InetCtlsObjects.Inet INet 
       Left            =   5280
       Top             =   3360
-      _ExtentX        =   995
-      _ExtentY        =   995
+      _ExtentX        =   1005
+      _ExtentY        =   1005
       _Version        =   393216
       RequestTimeout  =   7
    End
    Begin MSWinsockLib.Winsock sckBNLS 
       Left            =   5760
       Top             =   2760
-      _ExtentX        =   593
-      _ExtentY        =   593
+      _ExtentX        =   741
+      _ExtentY        =   741
       _Version        =   393216
       RemotePort      =   9367
    End
    Begin MSWinsockLib.Winsock sckBNet 
       Left            =   6240
       Top             =   2760
-      _ExtentX        =   593
-      _ExtentY        =   593
+      _ExtentX        =   741
+      _ExtentY        =   741
       _Version        =   393216
       RemotePort      =   6112
    End
@@ -929,8 +929,8 @@ Begin VB.Form frmChat
       TabStop         =   0   'False
       Top             =   240
       Width           =   3705
-      _ExtentX        =   6541
-      _ExtentY        =   11240
+      _ExtentX        =   6535
+      _ExtentY        =   11245
       View            =   3
       LabelEdit       =   1
       LabelWrap       =   0   'False
@@ -945,7 +945,7 @@ Begin VB.Form frmChat
       Appearance      =   1
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   8.4
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -978,8 +978,8 @@ Begin VB.Form frmChat
       TabStop         =   0   'False
       Top             =   240
       Width           =   3705
-      _ExtentX        =   6541
-      _ExtentY        =   11240
+      _ExtentX        =   6535
+      _ExtentY        =   11245
       View            =   3
       LabelEdit       =   1
       LabelWrap       =   0   'False
@@ -995,7 +995,7 @@ Begin VB.Form frmChat
       Appearance      =   1
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   8.4
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -1020,8 +1020,8 @@ Begin VB.Form frmChat
       TabStop         =   0   'False
       Top             =   6960
       Width           =   12375
-      _ExtentX        =   21823
-      _ExtentY        =   2985
+      _ExtentX        =   21828
+      _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
       ReadOnly        =   -1  'True
@@ -1030,7 +1030,7 @@ Begin VB.Form frmChat
       TextRTF         =   $"frmChat.frx":789F8
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   8.4
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -1045,8 +1045,8 @@ Begin VB.Form frmChat
       TabStop         =   0   'False
       Top             =   0
       Width           =   8895
-      _ExtentX        =   15685
-      _ExtentY        =   11663
+      _ExtentX        =   15690
+      _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
       ReadOnly        =   -1  'True
@@ -1069,7 +1069,7 @@ Begin VB.Form frmChat
       BackColor       =   &H00CC3300&
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   8.4
+         Size            =   8.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -2456,6 +2456,7 @@ End Sub
 Sub Form_Resize()
     On Error Resume Next
     
+    Dim lblHeight As Integer
     Static WasMaximized As Boolean
     Static DoMaximize As Boolean
     
@@ -2548,9 +2549,9 @@ Sub Form_Resize()
                 Screen.TwipsPerPixelY)) * (Screen.TwipsPerPixelY)
         End If
         
-        lvChannel.Move rtbChat.Left + rtbChat.Width, lblCurrentChannel.Top + lblCurrentChannel.Height
-        lvFriendList.Move lvChannel.Left, lvChannel.Top
-        lvClanList.Move lvChannel.Left, lvChannel.Top
+        lvChannel.Move rtbChat.Left + rtbChat.Width, lblCurrentChannel.Top + lblCurrentChannel.Height, lvChannel.Width, rtbChat.Height - lblCurrentChannel.Height
+        lvFriendList.Move lvChannel.Left, lvChannel.Top, lvChannel.Width, rtbChat.Height - lblCurrentChannel.Height
+        lvClanList.Move lvChannel.Left, lvChannel.Top, lvChannel.Width, rtbChat.Height - lblCurrentChannel.Height
         lblCurrentChannel.Move lvChannel.Left, rtbChat.Top
         
         If txtPre.Visible Then
@@ -2578,7 +2579,7 @@ Sub Form_Resize()
         End With
         
         ListviewTabs.Height = cboSend.Height
-        ListviewTabs.Move lvChannel.Left, cboSend.Top - (Screen.TwipsPerPixelY), lvChannel.Width - _
+        ListviewTabs.Move lvChannel.Left, cboSend.Top + Screen.TwipsPerPixelY, lvChannel.Width - _
             cmdShowHide.Width - Screen.TwipsPerPixelX, cboSend.Height '+ 2 * Screen.TwipsPerPixelY
         
         If rtbWhispersVisible Then
@@ -3954,8 +3955,8 @@ Private Sub mnuPopFLDemote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
             If (.Index < lvFriendList.ListItems.Count) Then
-              AddQ "/f d " & .Text, PRIORITY.CONSOLE_MESSAGE
-              'MoveFriend .index, .index + 1
+                AddQ "/f d " & GetFriendsSelectedUser, PRIORITY.CONSOLE_MESSAGE
+                'MoveFriend .index, .index + 1
             End If
         End With
     End If
@@ -3978,8 +3979,8 @@ Private Sub mnuPopFLPromote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
             If (.Index > 1) Then
-              AddQ "/f p " & .Text, PRIORITY.CONSOLE_MESSAGE
-              'MoveFriend .index, .index - 1
+                AddQ "/f p " & GetFriendsSelectedUser, PRIORITY.CONSOLE_MESSAGE
+                'MoveFriend .index, .index - 1
             End If
         End With
     End If
@@ -3994,8 +3995,7 @@ Private Sub mnuPopFLRemove_Click()
     If Not PopupMenuFLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
     If Not (lvFriendList.SelectedItem Is Nothing) Then
-        AddQ "/f r " & CleanUsername(lvFriendList.SelectedItem.Text, True), _
-            PRIORITY.CONSOLE_MESSAGE
+        AddQ "/f r " & GetFriendsSelectedUser, PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -4360,7 +4360,7 @@ Private Sub mnuPopAddToFList_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     If Not (lvChannel.SelectedItem Is Nothing) Then
-        AddQ "/f a " & CleanUsername(GetSelectedUser, True), PRIORITY.CONSOLE_MESSAGE
+        AddQ "/f a " & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -6885,21 +6885,37 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Call oCommandGenerator.GenerateCommands
     
     If Mode <> 1 Then
+        Dim ResizeChatElements As Boolean
+        Dim ResizeChannelElements As Boolean
         s = ReadCfg(OT, "ChatFont")
         If s <> vbNullString And s <> rtbChat.Font.Name Then
             rtbChat.Font.Name = s
+            cboSend.Font.Name = s
+            rtbWhispers.Font.Name = s
+            txtPre.Font.Name = s
+            txtPost.Font.Name = s
+            ResizeChatElements = True
         End If
         
+        s = ReadCfg(OT, "ChanFont")
         If s <> vbNullString And s <> lvChannel.Font.Name Then
             lvChannel.Font.Name = s
             lvClanList.Font.Name = s
             lvFriendList.Font.Name = s
+            lblCurrentChannel.Font.Name = s
+            ListviewTabs.Font.Name = s
+            ResizeChatElements = True
         End If
         
         s = ReadCfg(OT, "ChatSize")
         If StrictIsNumeric(s) Then
             If CInt(s) <> rtbChat.Font.Size Then
                 rtbChat.Font.Size = s
+                cboSend.Font.Size = s
+                rtbWhispers.Font.Size = s
+                txtPre.Font.Size = s
+                txtPost.Font.Size = s
+                ResizeChannelElements = True
             End If
         End If
         
@@ -6909,7 +6925,22 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                 lvChannel.Font.Size = s
                 lvClanList.Font.Size = s
                 lvFriendList.Font.Size = s
+                lblCurrentChannel.Font.Size = s
+                ListviewTabs.Font.Size = s
+                ResizeChannelElements = True
             End If
+        End If
+    
+        If ResizeChannelElements Then
+            Dim lblHeight As Single
+            lblCurrentChannel.AutoSize = True
+            lblHeight = lblCurrentChannel.Height + 40
+            lblCurrentChannel.AutoSize = False
+            lblCurrentChannel.Height = lblHeight
+            ResizeChatElements = True
+        End If
+        If ResizeChatElements Then
+            Form_Resize
         End If
     End If
     
@@ -7892,7 +7923,7 @@ Function GetFriendsSelectedUser() As String
         Exit Function
     End If
     
-    GetFriendsSelectedUser = lvFriendList.SelectedItem.Text
+    GetFriendsSelectedUser = CleanUsername(ReverseConvertUsernameGateway(lvFriendList.SelectedItem.Text))
 End Function
 
 Function GetRandomPerson() As String
@@ -8193,7 +8224,7 @@ Private Function GetClanSelectedUser() As String
             If .SelectedItem.Index < 1 Then
                 GetClanSelectedUser = vbNullString: Exit Function
             Else
-                GetClanSelectedUser = ReverseConvertUsernameGateway(.SelectedItem.Text)
+                GetClanSelectedUser = CleanUsername(ReverseConvertUsernameGateway(.SelectedItem.Text))
             End If
         End If
     End With
