@@ -4337,14 +4337,16 @@ Sub ShowPanel(ByVal Index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
     If PanelsInitialized Then
         Dim nod As cTreeViewNode
         Dim i As Integer
-        For i = 1 To tvw.NodeCount
-            Set nod = tvw.nodes.Item(i)
-            If Not nod.Selected And KeyToIndex(nod.Key) = Index Then
-                nod.Selected = True
-                Exit For
-            End If
-        Next i
-        Set nod = Nothing
+        If Index <> 8 Then
+            For i = 1 To tvw.NodeCount
+                Set nod = tvw.nodes.Item(i)
+                If Not nod.Selected And KeyToIndex(nod.Key) = Index Then
+                    nod.Selected = True
+                    Exit For
+                End If
+            Next i
+            Set nod = Nothing
+        End If
         If Mode = 1 Then
             fraPanel(KeyToIndex("splash")).ZOrder vbBringToFront
             ActivePanel = KeyToIndex("splash")

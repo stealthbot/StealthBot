@@ -40,9 +40,10 @@ Public Function GetQC(ByVal Index As Integer) As String
 End Function
 
 Public Function GetDefaultQC(ByVal Index As Integer) As String
+    GetDefaultQC = vbNullString
     Select Case Index
-        Case 0: GetDefaultQC = "Clan SBS"
-        'Case 1: GetDefaultQC = "Clan BoT"
+        Case 0: GetDefaultQC = "Clan BoT"
+        Case 1: GetDefaultQC = "Public Chat 1"
         'Case 2: GetDefaultQC = "Clan TDA"
         'Case 3: GetDefaultQC = "Clan BNU"
         'Case 4: GetDefaultQC = "Op W@R"
