@@ -1449,7 +1449,7 @@ Begin VB.Form frmChat
          Caption         =   "&About..."
       End
       Begin VB.Menu mnuHelpReadme 
-         Caption         =   "&Readme and Command List"
+         Caption         =   "&Wiki"
       End
       Begin VB.Menu mnuHelpWebsite 
          Caption         =   "&Homepage"

@@ -1790,8 +1790,8 @@ Public Function GetProfilePath(Optional ByVal ProfileIndex As Integer) As String
 End Function
 
 Public Sub OpenReadme()
-    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/sb/redir/readme/", vbNullString, vbNullString, vbNormalFocus
-    frmChat.AddChat RTBColors.SuccessText, "You are being taken to the StealthBot Online Readme."
+    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/wiki/Main_Page", vbNullString, vbNullString, vbNormalFocus
+    frmChat.AddChat RTBColors.SuccessText, "You are being taken to the StealthBot Wiki pages."
 End Sub
 
 'Checks the queue for duplicate bans
