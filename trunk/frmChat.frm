@@ -6189,10 +6189,11 @@ Sub Connect()
             MissingInfo = MissingInfo & "Home Channel, "
             NotEnoughInfo = True
         End If
-        If BotVars.BotOwner = vbNullString Then
-            MissingInfo = MissingInfo & "Bot Owner, "
-            NotEnoughInfo = True
-        End If
+        ' I can't find any reason that this is required. -Pyro
+        'If BotVars.BotOwner = vbNullString Then
+        '    MissingInfo = MissingInfo & "Bot Owner, "
+        '    NotEnoughInfo = True
+        'End If
         If BotVars.Trigger = vbNullString Then
             MissingInfo = MissingInfo & "Trigger, "
             NotEnoughInfo = True
