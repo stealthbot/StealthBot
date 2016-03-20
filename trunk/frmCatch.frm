@@ -13,6 +13,25 @@ Begin VB.Form frmCatch
    ScaleHeight     =   5970
    ScaleWidth      =   3960
    StartUpPosition =   1  'CenterOwner
+   Begin VB.CheckBox chkFlashOnCaughtPhrase 
+      BackColor       =   &H00000000&
+      Caption         =   "Flash window on caught phrases"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   255
+      Left            =   600
+      TabIndex        =   8
+      Top             =   4920
+      Width           =   2775
+   End
    Begin VB.ListBox lbCatch 
       BackColor       =   &H00993300&
       BeginProperty Font 
@@ -25,7 +44,7 @@ Begin VB.Form frmCatch
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   3765
+      Height          =   3375
       Left            =   120
       TabIndex        =   6
       Top             =   480
@@ -45,7 +64,7 @@ Begin VB.Form frmCatch
       Height          =   255
       Left            =   2040
       TabIndex        =   3
-      Top             =   4920
+      Top             =   4560
       Width           =   1815
    End
    Begin VB.CommandButton cmdOutAdd 
@@ -62,7 +81,7 @@ Begin VB.Form frmCatch
       Height          =   255
       Left            =   2040
       TabIndex        =   1
-      Top             =   4680
+      Top             =   4320
       Width           =   1815
    End
    Begin VB.TextBox txtModify 
@@ -80,7 +99,7 @@ Begin VB.Form frmCatch
       Height          =   285
       Left            =   120
       TabIndex        =   0
-      Top             =   4320
+      Top             =   3960
       Width           =   3735
    End
    Begin VB.CommandButton cmdOutRem 
@@ -97,7 +116,7 @@ Begin VB.Form frmCatch
       Height          =   255
       Left            =   120
       TabIndex        =   2
-      Top             =   4920
+      Top             =   4560
       Width           =   1935
    End
    Begin VB.CommandButton cmdEdit 
@@ -114,7 +133,7 @@ Begin VB.Form frmCatch
       Height          =   255
       Left            =   120
       TabIndex        =   4
-      Top             =   4680
+      Top             =   4320
       Width           =   1935
    End
    Begin VB.Label Label2 
@@ -164,6 +183,10 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Private Sub chkFlashOnCaughtPhrase_Click()
+    WriteINI "Other", "FlashOnCatchPhrases", IIf(chkFlashOnCaughtPhrase.Value = vbChecked, "Y", vbNullString)
+End Sub
+
 Private Sub cmdDone_Click()
     Dim i As Integer, f As Integer
     ReDim Preserve Catch(0)
@@ -207,6 +230,10 @@ End Sub
 
 Private Sub Form_Load()
     Me.Icon = frmChat.Icon
+    If Len(ReadCfg("Other", "FlashOnCatchPhrases")) > 0 Then
+        chkFlashOnCaughtPhrase.Value = vbChecked
+    End If
+    
     Dim i As Integer
     For i = LBound(Catch) To UBound(Catch)
         If Catch(i) <> vbNullString Then
