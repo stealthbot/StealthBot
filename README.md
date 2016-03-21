@@ -9,22 +9,21 @@ If you'd like to explore or contribute to the project, I'd recommend reading the
 ## Debugging 
 You'll need Microsoft Visual Basic 6.0. 
 
-1. Go into the project properties and set the compilation argument "COMPILE_DEBUG = 1". If you don't do this, closing the program or encountering an error while debugging will cause the entire IDE to crash.
+1. Go into the project properties and set the compilation argument `COMPILE_DEBUG = 1`. If you don't do this, closing the program or encountering an error while debugging will cause the entire IDE to crash.
 
-2. Locate your visual studio installation folder.
-  * C:\Program Files (x86)\Microsot Visual Studio\VB98, or
+2. While still in the project properties, set the command line to `-ppath "C:\Path\To\Profile\"` with the quotes and an ending slash. This sets your profile to SOME PATH OF YOUR CHOOSING, for example the path to a profile just for development (such as the path to  `%APPDATA%\StealthBot\DevProfile\`, obviously using the full path to your AppData StealthBot profiles location). If you don't do this, the development bot will expect files like commands.xml to be in your VB98 folder (the install directory for VB 6.0) instead of somewhere sane. Too bad we can't do this for the required .DLL files...
+
+3. Locate your visual studio installation folder.
+  * `C:\Program Files (x86)\Microsot Visual Studio\VB98`, or
   * Start the debugger and when the main window appears, go to Settings -> View Files -> Open Bot Folder.
 
-3. Copy the following files from the repo into this folder:
+4. Copy the following files from the repo into this folder:
   * BNCSUtil.dll
-  * CheckRevision.ini
-  * commands.xml
   * Warden.dll
-  * Warden.ini
   * zlib1.dll
  
 ##### Visual Basic 6 Scroll Wheel Fix
 The Visual Basic 6 IDE does not have built-in support for scrolling by using the mouse wheel.
 To fix this, you need to download and follow instructions from [this KB article](https://support.microsoft.com/en-us/kb/837910).
 
-If you are on 64-bit Windows, you will need to use the 32-bit version of regsvr32, located in %systemroot%\SysWoW64\ (see [this KB article](https://support.microsoft.com/en-us/kb/249873)).
+If you are on 64-bit Windows, you will need to use the 32-bit version of regsvr32, located in `%systemroot%\SysWoW64\` (see [this KB article](https://support.microsoft.com/en-us/kb/249873)).
