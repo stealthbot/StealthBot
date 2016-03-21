@@ -129,7 +129,7 @@ On Error GoTo trap:
     stResult = String$(crev_max_result, Chr$(0))
     
     lRet = check_revision(sArchiveFileTime, sArchiveName, sSeed, _
-        GetFilePath("CheckRevision.ini", StringFormat("{0}\", App.Path)), sHeader, _
+        GetFilePath("CheckRevision.ini"), sHeader, _
         ltVersion, ltChecksum, stResult)
     
     i = InStr(1, stResult, Chr$(0))
