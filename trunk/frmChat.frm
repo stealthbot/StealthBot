@@ -1452,7 +1452,7 @@ Begin VB.Form frmChat
          Caption         =   "&Wiki"
       End
       Begin VB.Menu mnuHelpWebsite 
-         Caption         =   "&Homepage"
+         Caption         =   "&Forum"
       End
       Begin VB.Menu mnuTerms 
          Caption         =   "&End-User License Agreement"
