@@ -241,7 +241,10 @@ Public Function GetGamePath(ByVal Client As String) As String
     Dim sep1 As String
     Dim sep2 As String
     
-    CRevINIPath = GetFilePath("CheckRevision.ini", StringFormat("{0}\", App.Path))
+    ' Moved CheckRevision.ini to profile directory instead of install directory. -Pyro, 2016-03-21
+    'CRevINIPath = GetFilePath("CheckRevision.ini", StringFormat("{0}\", App.Path))
+    CRevINIPath = GetFilePath("CheckRevision.ini")
+    
     Key = GetProductKey(Client)
     Path = ReadINI$(StringFormat("CRev_{0}", Key), "Path", CRevINIPath)
     sep1 = vbNullString
