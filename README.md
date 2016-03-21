@@ -5,6 +5,7 @@ The non-development-focused wiki can be found [here](http://www.stealthbot.net/w
 
 If you'd like to explore or contribute to the project, I'd recommend reading the [StealthBot Developer Guide](https://github.com/stealthbot/StealthBot/blob/master/docs/StealthBot%20Developer%20Guide.pdf). It's a little bit out of date, but it'll help you find your way around.
 
+
 ## Debugging 
 You'll need Microsoft Visual Basic 6.0. 
 
@@ -21,3 +22,9 @@ You'll need Microsoft Visual Basic 6.0.
   * Warden.dll
   * Warden.ini
   * zlib1.dll
+ 
+##### Visual Basic 6 Scroll Wheel Fix
+The Visual Basic 6 IDE does not have built-in support for scrolling by using the mouse wheel.
+To fix this, you need to download and follow instructions from [this KB article](https://support.microsoft.com/en-us/kb/837910).
+
+If you are on 64-bit Windows, you will need to use the 32-bit version of regsvr32, located in %systemroot%\SysWoW64\ (see [this KB article](https://support.microsoft.com/en-us/kb/249873)).
