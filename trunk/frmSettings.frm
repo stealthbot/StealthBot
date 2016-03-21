@@ -225,6 +225,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   240
+         MaxLength       =   30
          TabIndex        =   6
          ToolTipText     =   "This account has full control over the bot. Use carefully!"
          Top             =   4080
@@ -481,6 +482,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   240
+         MaxLength       =   30
          TabIndex        =   5
          ToolTipText     =   "This is the channel that the bot will attempt to join when it logs on."
          Top             =   3480
@@ -5294,6 +5296,9 @@ End Sub
 Private Sub InitBasicConfig()
     Dim s As String
     Dim f As Integer
+    Dim i As Integer
+    Dim AddCurrent As Boolean
+    Dim Item As String
     
     txtUsername.Text = ReadCfg(MN, "Username")
     txtPassword.Text = ReadCfg(MN, "Password")
@@ -5314,114 +5319,14 @@ Private Sub InitBasicConfig()
     s = ReadCfg(MN, "Server")
     
     With cboServer
-        .AddItem "useast.battle.net"
-        .AddItem "206.17.175.51"
-        .AddItem "206.17.175.52"
-        .AddItem "206.17.175.53"
-        .AddItem "206.17.175.54"
-        .AddItem "206.17.175.55"
-        .AddItem "206.17.175.56"
-        .AddItem "206.17.175.57"
-        .AddItem "206.17.175.58"
-        .AddItem "206.17.175.120"
-        .AddItem "206.17.175.121"
-        .AddItem "206.17.175.122"
-        .AddItem "206.17.175.129"
-        '.AddItem "63.240.202.139"
-        '.AddItem "63.240.202.138"
-        '.AddItem "63.240.202.134"
-        '.AddItem "63.240.202.131"
-        '.AddItem "63.240.202.130"
-        '.AddItem "63.240.202.129"
-        '.AddItem "63.240.202.128"
-        '.AddItem "63.240.202.127"
-        '.AddItem "63.240.202.126"
-        '.AddItem "63.240.202.122"
-        '.AddItem "63.240.202.121"
-        '.AddItem "63.240.202.120"
-        .AddItem ""
-        .AddItem "uswest.battle.net"
-        .AddItem "12.129.236.11"
-        .AddItem "12.129.236.12"
-        .AddItem "12.129.236.13"
-        .AddItem "12.129.236.14"
-        .AddItem "12.129.236.15"
-        .AddItem "12.129.236.16"
-        .AddItem "12.129.236.17"
-        .AddItem "12.129.236.18"
-        .AddItem "12.129.236.19"
-        .AddItem "12.129.236.20"
-        .AddItem "12.129.236.21"
-        .AddItem "12.129.236.22"
-        '.AddItem "63.241.83.7"
-        '.AddItem "63.241.83.8"
-        '.AddItem "63.241.83.9"
-        '.AddItem "63.241.83.11"
-        '.AddItem "63.241.83.12"
-        '.AddItem "63.241.83.13"
-        '.AddItem "63.241.83.107"
-        '.AddItem "63.241.83.108"
-        '.AddItem "63.241.83.109"
-        '.AddItem "63.241.83.110"
-        '.AddItem "63.241.83.111"
-        '.AddItem "63.241.83.112"
-        .AddItem ""
-        .AddItem "europe.battle.net"
-        .AddItem "213.248.115.11"
-        .AddItem "213.248.115.12"
-        .AddItem "213.248.115.13"
-        .AddItem "213.248.115.14"
-        .AddItem "213.248.115.15"
-        .AddItem "213.248.115.16"
-        .AddItem "213.248.115.17"
-        .AddItem "213.248.115.18"
-        '.AddItem "213.248.106.200"
-        '.AddItem "213.248.106.201"
-        '.AddItem "213.248.106.202"
-        '.AddItem "213.248.106.204"
-        .AddItem ""
-        .AddItem "asia.battle.net"
-        .AddItem "121.254.164.11"
-        .AddItem "121.254.164.12"
-        .AddItem "121.254.164.13"
-        .AddItem "121.254.164.14"
-        .AddItem "121.254.164.15"
-        .AddItem "121.254.164.16"
-        .AddItem "121.254.164.17"
-        .AddItem "121.254.164.18"
-        .AddItem "121.254.164.19"
-        .AddItem "121.254.164.20"
-        .AddItem "121.254.164.21"
-        .AddItem "121.254.164.22"
-        .AddItem "121.254.164.23"
-        .AddItem "121.254.164.24"
-        .AddItem "121.254.164.25"
-        .AddItem "121.254.164.26"
-        .AddItem "121.254.164.27"
-        .AddItem "121.254.164.28"
-        .AddItem "121.254.164.29"
-        .AddItem "121.254.164.30"
-        .AddItem "121.254.164.31"
-        .AddItem "121.254.164.32"
-        .AddItem "121.254.164.33"
-        .AddItem "121.254.164.34"
-        '.AddItem "211.233.0.49"
-        '.AddItem "211.233.0.50"
-        '.AddItem "211.233.0.51"
-        '.AddItem "211.233.0.52"
-        '.AddItem "211.233.0.53"
-        '.AddItem "211.233.0.72"
-        '.AddItem "211.233.0.73"
-        '.AddItem "211.233.0.74"
-        '.AddItem "211.233.0.75"
-        '.AddItem "211.233.0.76"
-        '.AddItem "211.233.0.78"
-        '.AddItem "211.233.0.79"
-        '.AddItem "211.233.0.80"
-        .AddItem ""
-        .AddItem s
-        
         .Text = s
+        
+        .AddItem "useast.battle.net"
+        .AddItem "uswest.battle.net"
+        .AddItem "europe.battle.net"
+        .AddItem "asia.battle.net"
+        
+        .AddItem ""
         
         If LenB(Dir$(GetFilePath("Servers.txt"))) > 0 Then
             f = FreeFile
@@ -5439,7 +5344,17 @@ Private Sub InitBasicConfig()
             Close #f
         End If
         
+        AddCurrent = True
+        For i = 0 To .ListCount
+            Item = .List(i)
+            If StrComp(Item, s, vbBinaryCompare) = 0 Then
+                AddCurrent = False
+            End If
+        Next i
         
+        If AddCurrent Then
+            .AddItem s, 0
+        End If
     End With
     
     s = ReadCfg(MN, "Trigger")
