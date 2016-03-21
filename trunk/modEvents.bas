@@ -1857,7 +1857,7 @@ On Error GoTo ERROR_HANDLER:
         Case 10:
             frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your expansion CD-key is for the wrong game."
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your expansion CD-key is for another game."
         
         Case Else
             frmChat.AddChat RTBColors.ErrorMessageText, "Unhandled 0x51 response! Value: " & Message

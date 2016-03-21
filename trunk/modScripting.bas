@@ -81,14 +81,14 @@ Public Sub LoadScripts()
 
     Dim CurrentModule As Module
     Dim Paths         As New Collection
-    Dim strPath       As String  
-    Dim FileName      As String  
-    Dim fileExt       As String  
-    Dim i             As Integer 
-    Dim j             As Integer 
-    Dim str           As String 
-    Dim tmp           As String  
-    Dim res           As Boolean 
+    Dim strPath       As String
+    Dim FileName      As String
+    Dim fileExt       As String
+    Dim i             As Integer
+    Dim j             As Integer
+    Dim str           As String
+    Dim tmp           As String
+    Dim res           As Boolean
 
     ' check whether the override is disabling the script system
     If m_SystemDisabled Then Exit Sub
@@ -552,19 +552,19 @@ Public Sub InitScript(ByVal SCModule As Module)
     '// 03/27/2009 52 - added default Script property for the load time
     GetScriptDictionary(SCModule)("InitPerf") = (finishTime - startTime)
 
-    If (g_Online) Then
-        RunInSingle SCModule, "Event_LoggedOn", GetCurrentUsername, BotVars.Product
-        RunInSingle SCModule, "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
-    
-        If (g_Channel.Users.Count > 0) Then
-            For i = 1 To g_Channel.Users.Count
-                With g_Channel.Users(i)
-                     RunInSingle SCModule, "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, _
-                        .Game, False
-                End With
-             Next i
-         End If
-    End If
+    'If (g_Online) Then
+    '    RunInSingle SCModule, "Event_LoggedOn", GetCurrentUsername, BotVars.Product
+    '    RunInSingle SCModule, "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
+    '
+    '    If (g_Channel.Users.Count > 0) Then
+    '        For i = 1 To g_Channel.Users.Count
+    '            With g_Channel.Users(i)
+    '                 RunInSingle SCModule, "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, _
+    '                    .Game, False
+    '            End With
+    '         Next i
+    '     End If
+    'End If
 End Sub
 
 Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
@@ -1735,7 +1735,7 @@ Public Sub SetScriptSystemDisabled(ByVal SystemDisabled As Boolean)
         If SystemDisabled Then
             ' system is being disabled, close (if open)
             If m_SCInitialized Then
-                RunInAll "Event_LoggedOff"
+                'RunInAll "Event_LoggedOff"
                 RunInAll "Event_Close"
             End If
             ' hide scripting menu

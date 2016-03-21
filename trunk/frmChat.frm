@@ -4630,7 +4630,7 @@ Sub mnuReloadScripts_Click()
     
     On Error GoTo ERROR_HANDLER
 
-    RunInAll "Event_LoggedOff"
+    'RunInAll "Event_LoggedOff"
     RunInAll "Event_Close"
 
     InitScriptControl SControl

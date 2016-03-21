@@ -225,7 +225,7 @@ On Error GoTo ERROR_HANDLER:
         Case 1: Call Event_VersionCheck(1, sInfo) 'Old Game Version
         Case 2: 'Success
             bSuccess = True
-            Call Event_VersionCheck(0, sInfo)
+            'Call Event_VersionCheck(0, sInfo)
         Case 3: Call Event_VersionCheck(1, sInfo) '"Reinstall Required", Invalid version
         Case Else:
             Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown SID_REPORTVERSION Response: 0x" & ZeroOffset(lResult, 8))
@@ -233,7 +233,7 @@ On Error GoTo ERROR_HANDLER:
 
     If (frmChat.sckBNet.State = 7 And bSuccess) Then
         If (GetCDKeyCount > 0) Then
-            Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Sending CDKey information...")
+            'Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Sending CDKey information...")
             Select Case GetLogonSystem()
                 Case BNCS_OLS: Call SEND_SID_CDKEY2
                 Case BNCS_LLS: Call SEND_SID_CDKEY
@@ -243,6 +243,7 @@ On Error GoTo ERROR_HANDLER:
                     frmChat.DoDisconnect
             End Select
         Else
+            Call Event_VersionCheck(0, sInfo) ' display success here
             Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Sending login information...")
             frmChat.tmrAccountLock.Enabled = True
             SEND_SID_LOGONRESPONSE2
@@ -728,7 +729,8 @@ On Error GoTo ERROR_HANDLER:
     
     Select Case lResult
         Case 1:
-            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Your CDKey was accepted!"
+            Call Event_VersionCheck(0, sInfo) ' display success here
+            'frmChat.AddChat RTBColors.SuccessText, "[BNCS] Your CDKey was accepted!"
             frmChat.AddChat RTBColors.InformationText, "[BNCS] Sending login information..."
             frmChat.tmrAccountLock.Enabled = True
             SEND_SID_LOGONRESPONSE2
@@ -739,7 +741,7 @@ On Error GoTo ERROR_HANDLER:
         Case 5: Call Event_VersionCheck(6, sInfo) 'CDKey is In Use
         Case Else: frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Unknown SID_CDKEY Response 0x{0}: {1}", ZeroOffset(lResult, 8), sInfo)
     End Select
-    CloseAllConnections
+    'CloseAllConnections
     
     Exit Sub
 ERROR_HANDLER:
@@ -809,7 +811,8 @@ On Error GoTo ERROR_HANDLER:
     
     Select Case lResult
         Case 1:
-            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Your CDKey was accepted!"
+            Call Event_VersionCheck(0, sInfo) ' display success here
+            'frmChat.AddChat RTBColors.SuccessText, "[BNCS] Your CDKey was accepted!"
             frmChat.AddChat RTBColors.InformationText, "[BNCS] Sending login information..."
             frmChat.tmrAccountLock.Enabled = True
             SEND_SID_LOGONRESPONSE2
@@ -820,7 +823,7 @@ On Error GoTo ERROR_HANDLER:
         Case 5: Call Event_VersionCheck(6, sInfo) 'CDKey is In Use
         Case Else: frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Unknown SID_CDKEY2 Response 0x{0}: {1}", ZeroOffset(lResult, 8), sInfo)
     End Select
-    CloseAllConnections
+    'CloseAllConnections
     
     Exit Sub
 ERROR_HANDLER:
