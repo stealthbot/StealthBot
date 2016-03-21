@@ -38,7 +38,7 @@ Begin VB.Form frmSettings
       Width           =   2775
    End
    Begin VB.CommandButton cmdWebsite 
-      Caption         =   "&Website"
+      Caption         =   "&Forum"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -55,7 +55,7 @@ Begin VB.Form frmSettings
       Width           =   855
    End
    Begin VB.CommandButton cmdReadme 
-      Caption         =   "&Readme"
+      Caption         =   "&Wiki"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
