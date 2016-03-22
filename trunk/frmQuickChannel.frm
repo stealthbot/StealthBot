@@ -30,7 +30,7 @@ Begin VB.Form frmQuickChannel
       Height          =   285
       Index           =   8
       Left            =   600
-      MaxLength       =   200
+      MaxLength       =   31
       TabIndex        =   9
       Top             =   2400
       Width           =   4095
@@ -50,7 +50,7 @@ Begin VB.Form frmQuickChannel
       Height          =   285
       Index           =   7
       Left            =   600
-      MaxLength       =   200
+      MaxLength       =   31
       TabIndex        =   8
       Top             =   2160
       Width           =   4095
@@ -70,7 +70,7 @@ Begin VB.Form frmQuickChannel
       Height          =   285
       Index           =   6
       Left            =   600
-      MaxLength       =   200
+      MaxLength       =   31
       TabIndex        =   7
       Top             =   1920
       Width           =   4095
@@ -90,7 +90,7 @@ Begin VB.Form frmQuickChannel
       Height          =   285
       Index           =   5
       Left            =   600
-      MaxLength       =   200
+      MaxLength       =   31
       TabIndex        =   6
       Top             =   1680
       Width           =   4095
@@ -110,7 +110,7 @@ Begin VB.Form frmQuickChannel
       Height          =   285
       Index           =   4
       Left            =   600
-      MaxLength       =   200
+      MaxLength       =   31
       TabIndex        =   5
       Top             =   1440
       Width           =   4095
@@ -130,7 +130,7 @@ Begin VB.Form frmQuickChannel
       Height          =   285
       Index           =   3
       Left            =   600
-      MaxLength       =   200
+      MaxLength       =   31
       TabIndex        =   4
       Top             =   1200
       Width           =   4095
@@ -150,7 +150,7 @@ Begin VB.Form frmQuickChannel
       Height          =   285
       Index           =   2
       Left            =   600
-      MaxLength       =   200
+      MaxLength       =   31
       TabIndex        =   3
       Top             =   960
       Width           =   4095
@@ -170,7 +170,7 @@ Begin VB.Form frmQuickChannel
       Height          =   285
       Index           =   1
       Left            =   600
-      MaxLength       =   200
+      MaxLength       =   31
       TabIndex        =   2
       Top             =   720
       Width           =   4095
@@ -190,12 +190,13 @@ Begin VB.Form frmQuickChannel
       Height          =   285
       Index           =   0
       Left            =   600
-      MaxLength       =   200
+      MaxLength       =   31
       TabIndex        =   1
       Top             =   480
       Width           =   4095
    End
    Begin VB.CommandButton cmdCancel 
+      Cancel          =   -1  'True
       Caption         =   "&Cancel"
       BeginProperty Font 
          Name            =   "Tahoma"
@@ -214,6 +215,7 @@ Begin VB.Form frmQuickChannel
    End
    Begin VB.CommandButton cmdDone 
       Caption         =   "&Done"
+      Default         =   -1  'True
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -502,11 +504,12 @@ Private Sub Form_Load()
     
     frmQuickChannel.KeyPreview = True
     
-    Dim I As Integer
+    Dim i As Integer
     
-    For I = 0 To 8
-        Channel(I) = QC(I)
-    Next I
+    ' bounds of Channel controls
+    For i = 0 To 8
+        Channel(i) = QC(i + 1)
+    Next i
 End Sub
 
 Private Sub cmdCancel_Click()
@@ -520,17 +523,17 @@ Private Sub Form_KeyPress(KeyAscii As Integer)
 End Sub
 
 Private Sub cmdDone_Click()
-    Dim I As Integer
+    Dim i As Integer
     
     'write the qc list
-    For I = 0 To 8
-        WriteINI "QuickChannels", I, Channel(I).text, "quickchannels.ini"
-        'frmChat.mnuQC(I).Caption = Channel(I).text
-        frmChat.mnuCustomChannels(I).Caption = Channel(I).text
-        QC(I) = Channel(I).text
-    Next I
+    ' bounds of Channel controls
+    For i = 0 To 8
+        QC(i + 1) = Channel(i).Text
+    Next i
     
-    DoQCMenu
+    SaveQuickChannels
+    
+    DoQuickChannelMenu
     
     Unload Me
 End Sub

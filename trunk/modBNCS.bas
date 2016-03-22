@@ -459,7 +459,7 @@ On Error GoTo ERROR_HANDLER:
         Case ID_CHANNEL:     Call Event_JoinedChannel(sText, lFlags)
         Case ID_USERFLAGS:   Call Event_FlagsUpdate(sUsername, sText, lFlags, lPing, sProduct)
         Case ID_WHISPERSENT: Call Event_WhisperToUser(sUsername, lFlags, sText, lPing)
-        Case ID_CHANNELFULL, ID_CHANNELDOESNOTEXIST, ID_CHANNELRESTRICTED: 'Call Event_ServerError(sText)
+        Case ID_CHANNELFULL, ID_CHANNELDOESNOTEXIST, ID_CHANNELRESTRICTED: Call Event_ChannelJoinError(EventID, sText)
         Case ID_INFO:        Call Event_ServerInfo(sUsername, sText)
         Case ID_ERROR:       Call Event_ServerError(sText)
         Case ID_EMOTE:       Call Event_UserEmote(sUsername, lFlags, sText)
@@ -1969,19 +1969,47 @@ On Error GoTo ERROR_HANDLER:
     
     BotVars.Gateway = ReadCfg("Override", "PredefinedGateway")
     If (LenB(BotVars.Gateway) = 0) Then
-        'Why were we joining a random channel?
-        Randomize
-        Num = (1 + Rnd() * 1000)
-        FullJoin BotVars.HomeChannel & ":" & Num, 0
+        If ((Not BotVars.Product = "VD2D") And (Not BotVars.Product = "PX2D") And _
+            (Not BotVars.Product = "PX3W") And (Not BotVars.Product = "3RAW")) Then
+            ' join nowhere to force non-W3-non-D2 to enter chat environment
+            ' so they can use /whoami (see Event_ChannelJoinError for where this completes)
+            Call FullJoin(BotVars.Product & BotVars.Username & BotVars.HomeChannel, 0)
+        Else
+            SEND_SID_CHATCOMMAND "/whoami"
+        End If
     Else
         'PvPGN: Straight home
-        'modEvents.m_skipUICEvents = True
-        
-        FullJoin BotVars.HomeChannel, 5
+        Call DoChannelJoinHome
     End If
     
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SendEnterChatSequence()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
+Public Sub DoChannelJoinHome()
+On Error GoTo ERROR_HANDLER:
+
+    SkipUICEvents = True
+    
+    If (LenB(BotVars.HomeChannel) = 0) Or (ReadCfg("Override", "DoDefaultChannelJoin") = "Y") Then
+        ' empty homechannel or
+        ' config override to force joinhome
+        If BotVars.Product = "PX2D" Or BotVars.Product = "VD2D" Then
+            Call FullJoin(BotVars.Product, 5)
+        Else
+            Call FullJoin(BotVars.Product, 1)
+        End If
+    End If
+    
+    If (LenB(BotVars.HomeChannel) <> 0) Then
+        ' go home
+        Call FullJoin(BotVars.HomeChannel, 2)
+    End If
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.DoChannelJoinHome()", Err.Number, Err.description, OBJECT_NAME))
 End Sub

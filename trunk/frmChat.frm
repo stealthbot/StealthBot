@@ -1096,10 +1096,10 @@ Begin VB.Form frmChat
          Caption         =   "-"
       End
       Begin VB.Menu mnuUsers 
-         Caption         =   "&Database Manager"
+         Caption         =   "&Database Manager..."
       End
       Begin VB.Menu mnuCommandManager 
-         Caption         =   "Command Manager"
+         Caption         =   "Command Manager..."
       End
       Begin VB.Menu mnuSepTabcd 
          Caption         =   "-"
@@ -1116,7 +1116,7 @@ Begin VB.Form frmChat
          Caption         =   "Get &News and Check for Updates"
       End
       Begin VB.Menu mnuUpdateVerbytes 
-         Caption         =   "Update &version bytes from StealthBot.net"
+         Caption         =   "Update &Version Bytes from StealthBot.net"
       End
       Begin VB.Menu mnuSepZ 
          Caption         =   "-"
@@ -1128,21 +1128,10 @@ Begin VB.Form frmChat
          Caption         =   "-"
       End
       Begin VB.Menu mnuQCTop 
-         Caption         =   "&QuickChannels"
-         Begin VB.Menu mnuQCEdit 
-            Caption         =   "&Edit QuickChannels"
-         End
-         Begin VB.Menu mnuBlank 
-            Caption         =   "-"
-         End
-         Begin VB.Menu mnuPublicChannels 
-            Caption         =   ""
-            Index           =   0
-            Visible         =   0   'False
-         End
-         Begin VB.Menu mnuDash 
-            Caption         =   "-"
-            Visible         =   0   'False
+         Caption         =   "Channel &List"
+         Begin VB.Menu mnuQCHeader 
+            Caption         =   "- QuickChannels -"
+            Enabled         =   0   'False
          End
          Begin VB.Menu mnuCustomChannels 
             Caption         =   ""
@@ -1189,6 +1178,24 @@ Begin VB.Form frmChat
             Index           =   8
             Shortcut        =   {F9}
          End
+         Begin VB.Menu mnuCustomChannelAdd 
+            Caption         =   "&Add QuickChannel"
+            Visible         =   0   'False
+         End
+         Begin VB.Menu mnuCustomChannelEdit 
+            Caption         =   "&Edit QuickChannels..."
+         End
+         Begin VB.Menu mnuPCDash 
+            Caption         =   "-"
+         End
+         Begin VB.Menu mnuPCHeader 
+            Caption         =   "- Public Channels -"
+            Enabled         =   0   'False
+         End
+         Begin VB.Menu mnuPublicChannels 
+            Caption         =   ""
+            Index           =   0
+         End
       End
       Begin VB.Menu mnuSep2 
          Caption         =   "-"
@@ -1200,7 +1207,7 @@ Begin VB.Form frmChat
    Begin VB.Menu mnuSetTop 
       Caption         =   "&Settings"
       Begin VB.Menu mnuSetup 
-         Caption         =   "&Bot Settings"
+         Caption         =   "&Bot Settings..."
          Shortcut        =   ^P
       End
       Begin VB.Menu mnuUTF8 
@@ -1210,22 +1217,22 @@ Begin VB.Form frmChat
          Caption         =   "-"
       End
       Begin VB.Menu mnuProfile 
-         Caption         =   "Edit &Profile"
+         Caption         =   "Edit &Profile..."
       End
       Begin VB.Menu mnuFilters 
-         Caption         =   "&Edit Chat Filters"
+         Caption         =   "&Edit Chat Filters..."
       End
       Begin VB.Menu mnuCatchPhrases 
-         Caption         =   "Edit &Catch Phrases"
+         Caption         =   "Edit &Catch Phrases..."
       End
       Begin VB.Menu mnuSep5 
          Caption         =   "-"
       End
       Begin VB.Menu mnuEditCaught 
-         Caption         =   "View Caught P&hrases"
+         Caption         =   "View Caught P&hrases..."
       End
       Begin VB.Menu mnuFiles 
-         Caption         =   "View &Files..."
+         Caption         =   "View &Files"
          Begin VB.Menu mnuOpenBotFolder 
             Caption         =   "Open Bot &Folder"
          End
@@ -1240,25 +1247,22 @@ Begin VB.Form frmChat
          End
       End
       Begin VB.Menu mnuSettingsRepair 
-         Caption         =   "&Tools..."
+         Caption         =   "&Tools"
          Begin VB.Menu mnuToolsMenuWarning 
-            Caption         =   "Use carefully!"
+            Caption         =   "- Use Carefully -"
             Enabled         =   0   'False
          End
-         Begin VB.Menu mnuSep0607 
-            Caption         =   "-"
-         End
          Begin VB.Menu mnuRepairDataFiles 
-            Caption         =   "Delete &data files"
+            Caption         =   "Delete &Data Files"
          End
          Begin VB.Menu mnuRepairVerbytes 
-            Caption         =   "Restore default &version bytes"
+            Caption         =   "Restore Default &Version Bytes"
          End
          Begin VB.Menu mnuRepairCleanMail 
-            Caption         =   "Clean up &mail database"
+            Caption         =   "Clean Up &Mail Database"
          End
          Begin VB.Menu mnuPacketLog 
-            Caption         =   "Log StealthBot &packet traffic"
+            Caption         =   "Log StealthBot &Packet Traffic"
          End
       End
       Begin VB.Menu mnuSep6 
@@ -1855,6 +1859,8 @@ Private Sub Form_Load()
     frmChat.KeyPreview = True
     SetTitle "Disconnected"
     
+    frmChat.UpdateTrayTooltip
+    
     Me.Show
     Me.Refresh
     Me.AutoRedraw = True
@@ -2146,6 +2152,9 @@ Sub Event_BNetDisconnected()
     DoDisconnect (1)
     
     SetTitle "Disconnected"
+    
+    UpdateTrayTooltip
+    
     g_Online = False
     
     Call ClearChannel
@@ -2158,8 +2167,6 @@ Sub Event_BNetDisconnected()
     If sckBNLS.State <> 0 Then sckBNLS.Close
     
     BNLSAuthorized = False
-    
-    Call UpdateTrayTooltip
     
     'If Not UserCancelledConnect Then
     '    ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
@@ -2196,7 +2203,10 @@ Sub Event_BNetError(ErrorNumber As Integer, description As String)
     UserCancelledConnect = False
     
     DoDisconnect 1, True
+    
     SetTitle "Disconnected"
+    
+    frmChat.UpdateTrayTooltip
     
     Call ClearChannel
     lvClanList.ListItems.Clear
@@ -3306,29 +3316,22 @@ End Sub
 
 Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim i As Integer
- 
-    If ((mnuPublicChannels(0).Caption <> vbNullString) Or _
-            (mnuCustomChannels(0).Caption <> vbNullString)) Then
     
-        If ((mnuPublicChannels(0).Caption <> vbNullString) And _
-                (mnuCustomChannels(0).Caption <> vbNullString)) Then
-            
-            frmChat.mnuDash.Visible = True
-        Else
-            frmChat.mnuDash.Visible = False
-        End If
+    ' show quick channels
+    'frmChat.mnuQCDash.Visible = (mnuCustomChannels(0).Caption <> vbNullString)
+    'frmChat.mnuQCHeader.Visible = (mnuCustomChannels(0).Caption <> vbNullString)
+    'For i = 0 To mnuCustomChannels.Count - 1
+    '    mnuCustomChannels(i).Visible = (mnuCustomChannels(i).Caption <> vbNullString)
+    'Next i
+ 
+    ' show public channels
+    frmChat.mnuPCDash.Visible = (mnuPublicChannels(0).Caption <> vbNullString)
+    frmChat.mnuPCHeader.Visible = (mnuPublicChannels(0).Caption <> vbNullString)
+    For i = 0 To mnuPublicChannels.Count - 1
+        mnuPublicChannels(i).Visible = (mnuPublicChannels(i).Caption <> vbNullString)
+    Next i
         
-        For i = 0 To mnuPublicChannels.Count - 1
-            If (mnuPublicChannels(i).Caption <> vbNullString) Then
-                mnuPublicChannels(i).Visible = True
-            End If
-        Next i
-        
-        mnuQCEdit.Visible = False
-        mnuBlank.Visible = False
-        
-        PopupMenu mnuQCTop
-    End If
+    PopupMenu mnuQCTop
 End Sub
 
 Public Sub ListviewTabs_Click(PreviousTab As Integer)
@@ -3734,14 +3737,19 @@ Private Sub mnuBot_Click()
         mnuIgnoreInvites.Enabled = False
     End If
     
-    mnuDash.Visible = False
+    ' show quick channels
+    'frmChat.mnuQCDash.Visible = (mnuCustomChannels(0).Caption <> vbNullString)
+    'frmChat.mnuQCHeader.Visible = (mnuCustomChannels(0).Caption <> vbNullString)
+    'For i = 0 To mnuCustomChannels.Count - 1
+    '    mnuCustomChannels(i).Visible = (mnuCustomChannels(i).Caption <> vbNullString)
+    'Next i
 
+    ' show public channels
+    frmChat.mnuPCDash.Visible = (mnuPublicChannels(0).Caption <> vbNullString)
+    frmChat.mnuPCHeader.Visible = (mnuPublicChannels(0).Caption <> vbNullString)
     For i = 0 To mnuPublicChannels.Count - 1
-        mnuPublicChannels(i).Visible = False
+        mnuPublicChannels(i).Visible = (mnuPublicChannels(i).Caption <> vbNullString)
     Next i
-    
-    mnuQCEdit.Visible = True
-    mnuBlank.Visible = True
 End Sub
 
 Private Sub mnuCatchPhrases_Click()
@@ -4160,23 +4168,43 @@ Private Sub mnuPopUserlistWhois_Click()
 End Sub
 
 Private Sub mnuPublicChannels_Click(Index As Integer)
-    If (StrComp(mnuPublicChannels(Index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
-        Exit Sub
+    ' some public channels are redirects
+    'If (StrComp(mnuPublicChannels(Index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
+    '    Exit Sub
+    'End If
+    
+    Dim ChannelCreateOption As String
+    
+    If Not PublicChannels Is Nothing Then
+        ChannelCreateOption = UCase$(ReadCfg$("Override", "ChannelCreate"))
+        
+        Select Case ChannelCreateOption
+            Case "ALERT", "NEVER"
+                Call FullJoin(PublicChannels.Item(Index + 1), 0)
+            Case Else ' "ALWAYS"
+                Call FullJoin(PublicChannels.Item(Index + 1), 2)
+        End Select
+        'AddQ "/join " & PublicChannels.Item(Index + 1), PRIORITY.CONSOLE_MESSAGE
     End If
-    
-    'FullJoin mnuChannels(Index).Caption
-    
-    AddQ "/join " & mnuPublicChannels(Index).Caption, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuCustomChannels_Click(Index As Integer)
-    If (StrComp(mnuCustomChannels(Index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
+    Dim ChannelCreateOption As String
+    
+    If (StrComp(QC(Index + 1), g_Channel.Name, vbTextCompare) = 0) Then
         Exit Sub
     End If
-
-    'FullJoin mnuChannels(Index).Caption
     
-    AddQ "/join " & mnuCustomChannels(Index).Caption, PRIORITY.CONSOLE_MESSAGE
+    ChannelCreateOption = UCase$(ReadCfg$("Override", "ChannelCreate"))
+    
+    Select Case ChannelCreateOption
+        Case "ALERT", "NEVER"
+            Call FullJoin(QC(Index + 1), 0)
+        Case Else ' "ALWAYS"
+            Call FullJoin(QC(Index + 1), 2)
+    End Select
+    
+    'AddQ "/join " & QC(Index + 1), PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuCommandManager_Click()
@@ -4702,7 +4730,24 @@ Private Sub mnuProfile_Click()
     frmProfile.PrepareForProfile vbNullString, True
 End Sub
 
-Private Sub mnuQCEdit_Click()
+Private Sub mnuCustomChannelAdd_Click()
+    Dim i As Integer
+    
+    If LenB(g_Channel.Name) > 0 Then
+    
+        For i = LBound(QC) To UBound(QC)
+            If LenB(Trim$(QC(i))) = 0 Then
+                QC(i) = g_Channel.Name
+                DoQuickChannelMenu
+                
+                Exit Sub
+            End If
+        Next i
+    
+    End If
+End Sub
+
+Private Sub mnuCustomChannelEdit_Click()
     frmQuickChannel.Show
 End Sub
 
@@ -6187,10 +6232,11 @@ Sub Connect()
             MissingInfo = MissingInfo & "Server, "
             NotEnoughInfo = True
         End If
-        If BotVars.HomeChannel = vbNullString Then
-            MissingInfo = MissingInfo & "Home Channel, "
-            NotEnoughInfo = True
-        End If
+        ' I can't find any reason that this is required. -Ribose
+        'If BotVars.HomeChannel = vbNullString Then
+        '    MissingInfo = MissingInfo & "Home Channel, "
+        '    NotEnoughInfo = True
+        'End If
         ' I can't find any reason that this is required. -Pyro
         'If BotVars.BotOwner = vbNullString Then
         '    MissingInfo = MissingInfo & "Bot Owner, "
@@ -6212,8 +6258,12 @@ Sub Connect()
                         NotEnoughInfo = True
                     End If
                 Case "D2XP", "W3XP"
-                    If BotVars.CDKey = vbNullString Or BotVars.ExpKey = vbNullString Then
+                    If BotVars.CDKey = vbNullString Then
                         MissingInfo = MissingInfo & "CDKey, "
+                        NotEnoughInfo = True
+                    End If
+                    If BotVars.ExpKey = vbNullString Then
+                        MissingInfo = MissingInfo & "expansion CDKey, "
                         NotEnoughInfo = True
                     End If
                 Case Else
@@ -7052,6 +7102,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         Dim outbuf      As String
 
         SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
+        
+        frmChat.UpdateTrayTooltip
         
         lvChannel.ListItems.Clear
         
@@ -8368,6 +8420,8 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
     
         SetTitle "Disconnected"
         
+        frmChat.UpdateTrayTooltip
+        
         Call CloseAllConnections(DoNotShow = 0)
         
         Set g_Channel = Nothing
@@ -8385,6 +8439,8 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         If Not LeaveUCCAlone Then
             UserCancelledConnect = True
         End If
+        
+        DoQuickChannelMenu
         
         If (UserCancelledConnect) Then
             'AddChat vbRed, "DISC!"
@@ -8435,6 +8491,8 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
     
         BNLSAuthorized = False
         uTicks = 0
+        
+        Set PublicChannels = Nothing
         
         With mnuPublicChannels(0)
             .Caption = vbNullString

@@ -139,8 +139,10 @@ Public Property Get Items() As Collection
     ' clone the collection - modification to this collection ignored
     Set Items = New Collection
     For i = 1 To m_Quotes.Count
+    
         Items.Add m_Quotes(i)
-    Next
+        
+    Next i
     
 End Property
 
@@ -171,7 +173,7 @@ Public Function GetIndexOf(ByVal QuoteStr As String) As Long
             
         End If
     
-    Next
+    Next i
     
     GetIndexOf = 0
     
@@ -218,29 +220,9 @@ Private Sub LoadQuotes()
 
     On Error GoTo ERROR_HANDLER
     
-    Dim f As Integer
-    Dim s As String
-    Dim strPath As String
-    
     m_blnIsLoaded = False
     
-    strPath = GetFilePath("Quotes.txt")
-
-    Set m_Quotes = New Collection
-    
-    If (LenB(Dir$(strPath)) > 0) Then
-        f = FreeFile
-        
-        Open (strPath) For Input As #f
-            If (LOF(f) > 1) Then
-                Do
-                    Line Input #f, s
-                    
-                    Add s
-                Loop Until EOF(f)
-            End If
-        Close #f
-    End If
+    Set m_Quotes = ListFileLoad(GetFilePath("Quotes.txt"))
     
     m_blnIsLoaded = True
     
@@ -256,22 +238,7 @@ Private Sub SaveQuotes()
 
     On Error GoTo ERROR_HANDLER
 
-    Dim f As Integer
-    Dim i As Long
-    Dim strPath As String
-    
-    strPath = GetFilePath("Quotes.txt")
-    
-    If (LenB(Dir$(strPath)) > 0) Then
-        f = FreeFile
-        
-        Open (strPath) For Output As #f
-            ' print each quote
-            For i = 1 To m_Quotes.Count
-                Print #f, m_Quotes.Item(i)
-            Next
-        Close #f
-    End If
+    Call ListFileSave(GetFilePath("Quotes.txt"), m_Quotes)
     
     Exit Sub
     
@@ -285,23 +252,7 @@ Private Sub AppendQuote(ByVal QuoteStr As String)
 
     On Error GoTo ERROR_HANDLER
 
-    Dim f As Integer
-    Dim i As Long
-    Dim strPath As String
-    
-    strPath = GetFilePath("Quotes.txt")
-    
-    f = FreeFile
-    
-    If (LenB(Dir$(strPath)) > 0) Then
-        Open (strPath) For Append As #f
-            Print #f, QuoteStr
-        Close #f
-    Else
-        Open (strPath) For Output As #f
-            Print #f, QuoteStr
-        Close #f
-    End If
+    Call ListFileAppendItem(GetFilePath("Quotes.txt"), QuoteStr)
     
     Exit Sub
     

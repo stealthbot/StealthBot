@@ -17,7 +17,6 @@ End Type
 
 Private m_arrMsgEvents()  As MSGFILTER
 Private m_eventCount      As Integer
-Private m_skipUICEvents   As Boolean
 
 Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, ByVal Flags As Long, _
     ByVal Ping As Long, ByVal Product As String, Optional QueuedEventID As Integer = 0)
@@ -39,7 +38,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
 
     ' if this is the public channel before the home channel,
     ' skip userinchannel events for quick loading! -Ribose/2009-11-17
-    If m_skipUICEvents Then
+    If SkipUICEvents Then
         Exit Sub
     End If
     
@@ -194,12 +193,13 @@ End Sub
 Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     On Error GoTo ERROR_HANDLER
 
-    Dim mailCount As Integer
-    Dim ToANSI    As String
+    Dim mailCount         As Integer
+    Dim ToANSI            As String
+    Dim LeftAnotherChannel As Boolean
     
     ' if our channel is for some reason null, we don't
     ' want to continue, possibly causing further errors
-    If (Len(ChannelName) < 1) Then
+    If (LenB(ChannelName) = 0) Then
         Exit Sub
     End If
     
@@ -214,23 +214,31 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     End If
     
     With g_Channel
+        LeftAnotherChannel = (LenB(.Name) > 0)
+    
         .Name = ChannelName
         .Flags = Flags
         .JoinTime = UtcNow
     End With
     
+    SharedScriptSupport.MyChannel = ChannelName
+    
     ' if UserInChannel events are off, -Ribose/2010-09-17
-    If m_skipUICEvents Then
-        If (StrComp(ChannelName, BotVars.HomeChannel, vbTextCompare) = 0) Then
+    If SkipUICEvents Then
+        If LenB(BotVars.HomeChannel) = 0 Then
+            ' no home channel is set, any join is fine, turn on UserInChannel events
+            SkipUICEvents = False
+        ElseIf (StrComp(ChannelName, BotVars.HomeChannel, vbTextCompare) = 0) Then
             ' this is home, turn on UserInChannel events
-            m_skipUICEvents = False
+            SkipUICEvents = False
         ElseIf (g_Channel.IsSilent()) Then
             ' this isn't home yet, but we are in a silent channel,
             ' then home was not joinable, turn on UserInChannel events. ~Ribose
-            m_skipUICEvents = False
+            SkipUICEvents = False
         Else
             ' this isn't home yet, join home.
-            Call FullJoin(BotVars.HomeChannel, 2)
+            'FullJoin BotVars.HomeChannel
+            Exit Sub
         End If
     End If
     
@@ -252,26 +260,30 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     '    .Flags = Flags
     'End With
     
-    SharedScriptSupport.MyChannel = ChannelName
-    
     'If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
     '    PassedClanMotdCheck = False
     'End If
 
     ' if we've just left another channel, call event script
     ' function indicating that we've done so.
-    If (g_Channel.Name <> vbNullString) Then
+    If (LeftAnotherChannel) Then
         On Error Resume Next
         
         RunInAll "Event_ChannelLeave"
+        
+        On Error GoTo ERROR_HANDLER
     End If
 
     frmChat.AddChat RTBColors.JoinedChannelText, "-- Joined channel: ", _
         RTBColors.JoinedChannelName, ChannelName, RTBColors.JoinedChannelText, " --"
     
     SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
+    
+    frmChat.UpdateTrayTooltip
         
     frmChat.ListviewTabs_Click 0
+    
+    DoQuickChannelMenu
     
     ' have we just joined the void?
     If (g_Channel.IsSilent) Then
@@ -597,8 +609,6 @@ On Error GoTo ERROR_HANDLER:
         frmChat.sckBNLS.Close
     End If
     
-    Call frmChat.UpdateTrayTooltip
-    
     If (ExReconnectTimerID > 0) Then
         Call KillTimer(0, ExReconnectTimerID)
         
@@ -610,11 +620,9 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     RequestSystemKeys
-    If (LenB(BotVars.Gateway) = 0) Then
-        SEND_SID_CHATCOMMAND "/whoami"
-    Else
+    If (LenB(BotVars.Gateway) > 0) Then
         ' PvPGN: we already have our gateway, we're logged in
-        SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
+        'SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
         
         Call InsertDummyQueueEntry
         
@@ -675,36 +683,6 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.Event_LogonEvent()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
-Public Sub Event_RealmConnected()
-On Error GoTo ERROR_HANDLER:
-    frmChat.AddChat RTBColors.SuccessText, "Realm: Connected! Please wait, " & _
-        "logging in to the Diablo II realm may take a moment."
-        
-    Exit Sub
-ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_RealmConnected()", Err.Number, Err.description, OBJECT_NAME))
-End Sub
-
-Public Sub Event_RealmConnecting()
-On Error GoTo ERROR_HANDLER:
-    frmChat.AddChat RTBColors.InformationText, "Realm: Connecting..."
-    Exit Sub
-ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_RealmConnecting()", Err.Number, Err.description, OBJECT_NAME))
-End Sub
-
-Public Sub Event_RealmError(ErrorNumber As Integer, description As String)
-On Error GoTo ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Realm: Error " & _
-        ErrorNumber & ": " & description
-    Exit Sub
-ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_RealmError()", Err.Number, Err.description, OBJECT_NAME))
-End Sub
-
 Public Sub Event_ServerError(ByVal Message As String)
 On Error GoTo ERROR_HANDLER:
     frmChat.AddChat RTBColors.ErrorMessageText, Message
@@ -716,9 +694,71 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.Event_ServerError()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
+Public Sub Event_ChannelJoinError(ByVal EventID As Integer, ByVal ChannelName As String)
+On Error GoTo ERROR_HANDLER:
+    Dim ChannelJoinError As String
+    Dim ChannelJoinButtons As VbMsgBoxStyle
+    Dim ChannelJoinResult As VbMsgBoxResult
+    Dim Message As String
+    Dim ChannelCreateOption As String
+
+    'frmChat.AddChat RTBColors.ErrorMessageText, Message
+    
+    If (LenB(BotVars.Gateway) = 0) Then
+        ' continue gateway discovery
+        SEND_SID_CHATCOMMAND "/whoami"
+    Else
+        ChannelCreateOption = UCase$(ReadCfg$("Override", "ChannelCreate"))
+    
+        Select Case ChannelCreateOption
+            Case "ALERT"
+                Select Case EventID
+                    Case ID_CHANNELDOESNOTEXIST
+                        ChannelJoinError = "Channel does not exist." & vbNewLine & "Do you want to create it?"
+                        ChannelJoinButtons = vbYesNo Or vbQuestion Or vbDefaultButton1
+                    Case ID_CHANNELFULL
+                        ChannelJoinError = "Channel is full."
+                        ChannelJoinButtons = vbOKOnly Or vbExclamation Or vbDefaultButton1
+                    Case ID_CHANNELRESTRICTED
+                        ChannelJoinError = "Channel is restricted."
+                        ChannelJoinButtons = vbOKOnly Or vbExclamation Or vbDefaultButton1
+                End Select
+                
+                ChannelJoinResult = MsgBox("Failed to join " & ChannelName & ":" & vbNewLine & _
+                    ChannelJoinError, ChannelJoinButtons, "StealthBot")
+                
+                If ChannelJoinResult = vbYes Then
+                    Call FullJoin(ChannelName, 2)
+                End If
+                
+            Case Else
+            ' "ALWAYS" - handle it as error to bot
+            ' "NEVER" - failed to join or create
+                Select Case EventID
+                    Case ID_CHANNELDOESNOTEXIST
+                        Message = "[BNCS] Channel does not exist."
+                    Case ID_CHANNELFULL
+                        Message = "[BNCS] Channel is full."
+                    Case ID_CHANNELRESTRICTED
+                        Message = "[BNCS] Channel is restricted."
+                End Select
+                
+                frmChat.AddChat RTBColors.ErrorMessageText, Message
+                
+        End Select
+        
+        'should we expose?
+        'RunInAll "Event_ChannelJoinError", EventID, ChannelName
+    End If
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_ChannelJoinError()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
 Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
 On Error GoTo ERROR_HANDLER:
-    On Error GoTo ERROR_HANDLER
 
     Const MSG_BANNED      As String = " was banned by "
     Const MSG_UNBANNED    As String = " was unbanned by "
@@ -773,18 +813,17 @@ On Error GoTo ERROR_HANDLER:
         If (InStr(1, Message, "You are ", vbTextCompare) > 0) And (InStr(1, Message, ", using ", _
                 vbTextCompare) > 0) Then
                 
-            If ((InStr(1, Message, "channel", vbTextCompare) = 0) And _
-                    (InStr(1, Message, "game", vbTextCompare) = 0)) Then
+            If ((InStr(1, Message, " in channel ", vbTextCompare) = 0) And _
+                    (InStr(1, Message, " in game ", vbTextCompare) = 0) And _
+                    (InStr(1, Message, " a private ", vbTextCompare) = 0)) Then
                     
                 i = InStrRev(Message, Space$(1))
                 
                 BotVars.Gateway = Mid$(Message, i + 1)
                 
-                SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
+                'SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
                 
-                m_skipUICEvents = True
-                
-                Call FullJoin(BotVars.HomeChannel, 5)
+                Call DoChannelJoinHome
                 
                 Call InsertDummyQueueEntry
                 
@@ -1087,7 +1126,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
 
     ' if this is the public channel before the home channel,
     ' skip userinchannel events for quick loading! -Ribose/2009-08-11
-    If m_skipUICEvents Then
+    If SkipUICEvents Then
         Exit Sub
     End If
 
@@ -1276,7 +1315,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
 
     ' if this is the public channel before the home channel,
     ' skip userjoin events for quick loading! -Ribose/2009-09-08
-    If m_skipUICEvents Then
+    If SkipUICEvents Then
         Exit Sub
     End If
     
@@ -1515,7 +1554,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
 
     ' if this is the public channel before the home channel,
     ' skip userleaves events for quick loading! -Ribose/2009-09-08
-    If m_skipUICEvents Then
+    If SkipUICEvents Then
         Exit Sub
     End If
     
@@ -2081,17 +2120,29 @@ End Sub
 Public Sub Event_ChannelList(sChannels() As String)
 On Error GoTo ERROR_HANDLER:
     Dim x As Integer
+    Dim sChannel As String
         
     If (MDebug("all")) Then
         frmChat.AddChat RTBColors.InformationText, "Received Channel List: "
     End If
+    
+    Set PublicChannels = New Collection
     
     For x = 0 To UBound(sChannels)
         If (frmChat.mnuPublicChannels(0).Caption <> vbNullString) Then
             Call Load(frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.Count))
         End If
         
-        frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.Count - 1).Caption = sChannels(x)
+        sChannel = sChannels(x)
+        
+        PublicChannels.Add sChannel
+        
+        sChannel = Replace(sChannel, "&", "&&", , , vbBinaryCompare)
+        If StrComp(sChannel, "-", vbBinaryCompare) = 0 Then
+            sChannel = "&-"
+        End If
+        
+        frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.Count - 1).Caption = sChannel
     Next x
     
     RunInAll "Event_ChannelList", ConvertStringArray(sChannels)

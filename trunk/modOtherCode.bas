@@ -1796,12 +1796,12 @@ Public Sub OpenReadme()
     ShellOpenURL "http://www.stealthbot.net/wiki/Main_Page", "the StealthBot Wiki"
 End Sub
 
-Sub ShellOpenURL(ByVal FullURL As String, Optional ByVal Description As String = vbNullString, Optional ByVal DisplayMessage As Boolean = True, Optional ByVal Verb As String = "open")
+Sub ShellOpenURL(ByVal FullURL As String, Optional ByVal description As String = vbNullString, Optional ByVal DisplayMessage As Boolean = True, Optional ByVal Verb As String = "open")
     ShellExecute frmChat.hWnd, Verb, FullURL, vbNullString, vbNullString, vbNormalFocus
     
     If DisplayMessage Then
-        If LenB(Description) > 0 Then Description = Description & " at "
-        frmChat.AddChat RTBColors.ConsoleText, "Opening " & Description & "[ " & FullURL & " ]..."
+        If LenB(description) > 0 Then description = description & " at "
+        frmChat.AddChat RTBColors.ConsoleText, "Opening " & description & "[ " & FullURL & " ]..."
     End If
 End Sub
 
@@ -2443,6 +2443,91 @@ Public Function DoReplacements(ByVal s As String, Optional Username As String, _
     
     DoReplacements = s
 End Function
+
+Public Function ListFileLoad(ByVal sPath As String, Optional ByVal MaxItems As Integer = -1) As Collection
+    On Error GoTo ERROR_HANDLER
+    
+    Dim f As Integer
+    Dim i As Integer
+    Dim s As String
+    Dim List As New Collection
+    
+    If (LenB(Dir$(sPath)) > 0) Then
+        f = FreeFile
+        i = 0
+        
+        Open sPath For Input As #f
+            If (LOF(f) > 0) Then
+                Do
+                    Line Input #f, s
+                    
+                    If LenB(s) > 0 Then
+                        List.Add s
+                        i = i + 1
+                    End If
+                    
+                Loop Until EOF(f) Or (MaxItems >= 0 And i >= MaxItems)
+            End If
+        Close #f
+    End If
+    
+    Set ListFileLoad = List
+    
+    Exit Function
+    
+ERROR_HANDLER:
+
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.ListFileLoad()", _
+        Err.Number, Err.description, OBJECT_NAME)
+End Function
+
+Public Sub ListFileAppendItem(ByVal sPath As String, ByVal Item As String)
+    On Error GoTo ERROR_HANDLER
+
+    Dim f As Integer
+    
+    f = FreeFile
+    
+    If (LenB(Dir$(sPath)) > 0) Then
+        Open sPath For Append As #f
+            Print #f, Item
+        Close #f
+    Else
+        Open sPath For Output As #f
+            Print #f, Item
+        Close #f
+    End If
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.ListFileAppendItem()", _
+        Err.Number, Err.description, OBJECT_NAME)
+End Sub
+
+Public Sub ListFileSave(ByVal sPath As String, ByVal List As Collection)
+    On Error GoTo ERROR_HANDLER
+
+    Dim f As Integer
+    Dim i As Long
+    
+    f = FreeFile
+    
+    Open sPath For Output As #f
+        ' print each quote
+        For i = 1 To List.Count
+            Print #f, List.Item(i)
+        Next i
+    Close #f
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.ListFileSave()", _
+        Err.Number, Err.description, OBJECT_NAME)
+End Sub
 
 ' Updated 4/10/06 to support millisecond pauses
 '  If using milliseconds pause for at least 100ms
@@ -3211,6 +3296,8 @@ Public Sub CloseAllConnections(Optional ShowMessage As Boolean = True)
     BNLSAuthorized = False
     
     SetTitle "Disconnected"
+    
+    frmChat.UpdateTrayTooltip
     
     g_Online = False
     

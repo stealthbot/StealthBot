@@ -149,7 +149,9 @@ Public LocatingAltBNLS As Boolean
 Public CurrentUsername As String
 Public ProfileRequest As Boolean
 Public Protect As Boolean
-Public QC(0 To 8) As String
+Public QC(1 To 9) As String
+Public PublicChannels As Collection
+Public SkipUICEvents As Boolean
 
 Public DisableMonitor As Boolean
 Public JoinMessagesOff As Boolean
@@ -202,12 +204,6 @@ Public DB() As udtDatabase
 Public gFloodSafelist() As String
 Public Last4Messages(0 To 3) As String
 
-Public HashCmd As String
-Public MPQName As String
-Public Checksum As Long
-Public EXEInfo As String
-Public SessionKey As Long
-Public GTC As Long
 Public AutoModSafelistValue As Integer
 
 Public ExReconTicks As Long

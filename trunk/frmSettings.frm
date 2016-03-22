@@ -482,7 +482,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   240
-         MaxLength       =   30
+         MaxLength       =   31
          TabIndex        =   5
          ToolTipText     =   "This is the channel that the bot will attempt to join when it logs on."
          Top             =   3480
@@ -3149,7 +3149,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   3480
-         MaxLength       =   25
+         MaxLength       =   31
          TabIndex        =   54
          Top             =   2775
          Width           =   2535
@@ -5299,6 +5299,7 @@ Private Sub InitBasicConfig()
     Dim i As Integer
     Dim AddCurrent As Boolean
     Dim Item As String
+    Dim AdditionalServerList As Collection
     
     txtUsername.Text = ReadCfg(MN, "Username")
     txtPassword.Text = ReadCfg(MN, "Password")
@@ -5321,39 +5322,44 @@ Private Sub InitBasicConfig()
     With cboServer
         .Text = s
         
+        ' add the 4 default servers
         .AddItem "useast.battle.net"
         .AddItem "uswest.battle.net"
         .AddItem "europe.battle.net"
         .AddItem "asia.battle.net"
         
-        .AddItem ""
+        ' get additional servers
+        Set AdditionalServerList = ListFileLoad(GetFilePath("Servers.txt"))
         
-        If LenB(Dir$(GetFilePath("Servers.txt"))) > 0 Then
-            f = FreeFile
+        ' if additional servers, add a blank line, then add them
+        If AdditionalServerList.Count > 0 Then
+            .AddItem ""
             
-            Open GetFilePath("Servers.txt") For Input As #f
-                
-                If LOF(f) > 0 Then
-                    Do
-                        Line Input #f, s
-                        
-                        .AddItem s
-                    Loop While Not EOF(f)
-                End If
-                
-            Close #f
+            For i = 1 To AdditionalServerList.Count
+            
+                .AddItem AdditionalServerList.Item(i)
+            
+            Next i
         End If
         
+        ' check if "currently selected" is in list
         AddCurrent = True
+        
         For i = 0 To .ListCount
             Item = .List(i)
+            
             If StrComp(Item, s, vbBinaryCompare) = 0 Then
+            
                 AddCurrent = False
+                
             End If
         Next i
         
+        ' if not, add it (first)
         If AddCurrent Then
+        
             .AddItem s, 0
+            
         End If
     End With
     

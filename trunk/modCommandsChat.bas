@@ -152,7 +152,18 @@ Public Sub OnFRem(Command As clsCommandObj)
 End Sub
 
 Public Sub OnHome(Command As clsCommandObj)
-    Call frmChat.AddQ("/join " & BotVars.HomeChannel, PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+    If LenB(BotVars.HomeChannel) = 0 Then
+        ' empty homechannel
+        If BotVars.Product = "PX2D" Or BotVars.Product = "VD2D" Then
+            Call FullJoin(BotVars.Product, 5)
+        Else
+            Call FullJoin(BotVars.Product, 1)
+        End If
+    Else
+        ' go home
+        Call FullJoin(BotVars.HomeChannel, 2)
+    End If
+    'Call frmChat.AddQ("/join " & BotVars.HomeChannel, PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
 End Sub
 
 Public Sub OnIgnore(Command As clsCommandObj)

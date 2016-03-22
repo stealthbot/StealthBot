@@ -178,7 +178,7 @@ Public Sub OnSetBnlsServer(Command As clsCommandObj)
     If (Command.IsValid) Then
         Call WriteINI("Main", "BNLSServer", Command.Argument("Server"))
         BotVars.BNLSServer = Command.Argument("Server")
-        Command.Respond "New BNLS server set to " & BotVars.BNLSServer
+        Command.Respond StringFormat("New BNLS server set to {0}{1}{0}.", Chr$(34), BotVars.BNLSServer)
     Else
         Command.Respond "You must specify a server."
     End If
@@ -221,12 +221,18 @@ Public Sub OnSetExpKey(Command As clsCommandObj)
 End Sub
 
 Public Sub OnSetHome(Command As clsCommandObj)
+    Dim Channel As String
     If (Command.IsValid) Then
-        Call WriteINI("Main", "HomeChan", Command.Argument("Channel"))
-        BotVars.HomeChannel = Command.Argument("Channel")
-        Command.Respond StringFormat("New home channel set to {0}{1}{0}.", Chr$(34), BotVars.HomeChannel)
+        Channel = Command.Argument("Channel")
+        Call WriteINI("Main", "HomeChan", Channel)
+        BotVars.HomeChannel = Channel
+        If LenB(Channel) = 0 Then
+            Command.Respond StringFormat("Reset home channel to server default.", Chr$(34), BotVars.HomeChannel)
+        Else
+            Command.Respond StringFormat("New home channel set to {0}{1}{0}.", Chr$(34), BotVars.HomeChannel)
+        End If
     Else
-        Command.Respond "You must specify a channel."
+        Command.Respond "Homechannel command invalid."
     End If
 End Sub
 
@@ -257,7 +263,7 @@ Public Sub OnSetName(Command As clsCommandObj)
     If (Command.IsValid) Then
         Call WriteINI("Main", "Username", Command.Argument("Username"))
         BotVars.Username = Command.Argument("Username")
-        Command.Respond "New username set to " & BotVars.Username
+        Command.Respond StringFormat("New username set to {0}{1}{0}.", Chr$(34), BotVars.Username)
     Else
         Command.Respond "You must specify a username."
     End If
@@ -287,7 +293,7 @@ Public Sub OnSetServer(Command As clsCommandObj)
     If (Command.IsValid) Then
         Call WriteINI("Main", "Server", Command.Argument("Server"))
         BotVars.Server = Command.Argument("Server")
-        Command.Respond "New server set to " & BotVars.Server
+        Command.Respond StringFormat("New server set to {0}{1}{0}.", Chr$(34), BotVars.Server)
     Else
         Command.Respond "You must specify a server."
     End If

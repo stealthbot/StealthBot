@@ -114,13 +114,13 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub cmdAccept_Click()
-    frmChat.AddChat RTBColors.SuccessText, "Invitation accepted."
+    frmChat.AddChat RTBColors.SuccessText, "[CLAN] Invitation accepted."
     
     With PBuffer
         .InsertNonNTString Clan.Token
         .InsertNonNTString Clan.DWName
         .InsertNTString Clan.Creator
-        .InsertBYTE &H6
+        .InsertByte &H6
     
         If Clan.isNew = 1 Then
             .SendPacket &H72
@@ -135,13 +135,13 @@ Private Sub cmdAccept_Click()
 End Sub
 
 Sub cmdDecline_Click()
-    frmChat.AddChat RTBColors.ErrorMessageText, "Invitation declined."
+    frmChat.AddChat RTBColors.ErrorMessageText, "[CLAN] Invitation declined."
     
     With PBuffer
         .InsertNonNTString Clan.Token
         .InsertNonNTString Clan.DWName
         .InsertNTString Clan.Creator
-        .InsertBYTE &H4
+        .InsertByte &H4
     
         If Clan.isNew = 1 Then
             .SendPacket &H72
