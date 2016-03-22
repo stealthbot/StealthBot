@@ -1378,18 +1378,13 @@ Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String,
     For i = 0 To UBound(gFilters)
         If (Len(gFilters(i)) > 0) Then
             If (InStr(1, gFilters(i), "%", vbBinaryCompare) > 0) Then
-                If (Msg Like PrepareCheck(DoReplacements(gFilters(i), Username, Ping))) Then
-                    
-                    CheckMsg = True
-                    
-                    Exit Function
-                End If
-            Else
-                If (Msg Like gFilters(i)) Then
-                    CheckMsg = True
-                    
-                    Exit Function
-                End If
+                Msg = PrepareCheck(DoReplacements(gFilters(i), Username, Ping))
+            End If
+            
+            If (Msg Like "*" & gFilters(i) & "*") Then
+                CheckMsg = True
+                   
+                Exit Function
             End If
         End If
     Next i
