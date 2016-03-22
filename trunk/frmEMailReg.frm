@@ -14,6 +14,7 @@ Begin VB.Form frmEMailReg
    ScaleWidth      =   6495
    StartUpPosition =   1  'CenterOwner
    Begin VB.CommandButton cmdAskLater 
+      Cancel          =   -1  'True
       Caption         =   "&Ask Me Later"
       BeginProperty Font 
          Name            =   "Tahoma"
@@ -31,7 +32,7 @@ Begin VB.Form frmEMailReg
       Width           =   2895
    End
    Begin VB.CommandButton cmdIgnore 
-      Caption         =   "&Ignore"
+      Caption         =   "&Never Ask Again"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -49,6 +50,7 @@ Begin VB.Form frmEMailReg
    End
    Begin VB.CommandButton cmdGo 
       Caption         =   "&OK"
+      Default         =   -1  'True
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -78,6 +80,7 @@ Begin VB.Form frmEMailReg
       ForeColor       =   &H00FFFFFF&
       Height          =   285
       Left            =   120
+      MaxLength       =   254
       TabIndex        =   2
       Top             =   2040
       Width           =   3255
@@ -138,7 +141,50 @@ Attribute VB_Exposed = False
 Option Explicit
 Private ClosedProperly As Boolean
 
-Private Sub CloseEmailReg()
+' this is the main functionality of email registration
+' depending on the "Action", (result of clicking a button in the prompt OR the config values)
+' will do the specified task, then continue logon sequence
+Public Sub DoRegisterEmail(ByVal EMailAction As String, Optional ByVal EMailValue As String = vbNullString)
+    Select Case EMailAction
+        Case "ASKLATER"
+            ' "ASKLATER"/ask later: do nothing here
+            frmChat.AddChat RTBColors.SuccessText, "[EMAIL] E-mail address registration ignored. You may be prompted later."
+            
+            ContinueLogonSequence
+            
+        Case "NEVERASK"
+            ' "NEVERASK"/never ask: register an empty email address
+            frmChat.AddChat RTBColors.SuccessText, "[EMAIL] E-mail address registration declined."
+        
+            modBNCS.SEND_SID_SETEMAIL vbNullString
+            
+            ContinueLogonSequence
+        
+        Case Else
+            ' "VALUE" or "PROMPT" [default behavior]: use the provided value, or prompt with the form if empty
+            ' note that "VALUE" and "PROMPT" behave the same
+            If LenB(EMailValue) = 0 Then
+                ' prompt: show email registration form
+                ' this is the default behavior if no config value is specified
+                ' (then depending on the user's selection, another one of this functions' actions will happen)
+                Show
+                
+                On Error Resume Next
+                txtAddress.SetFocus
+            Else
+                ' value: send the provided email
+                frmChat.AddChat RTBColors.SuccessText, "[EMAIL] E-mail address registered."
+        
+                SEND_SID_SETEMAIL EMailValue
+                
+                ContinueLogonSequence
+            End If
+            
+    End Select
+End Sub
+
+' this function continues logon sequence from where it left off
+Private Sub ContinueLogonSequence()
     If g_Connected And Not g_Online Then
         If Dii And BotVars.UseRealm Then
             frmRealm.Show
@@ -152,27 +198,21 @@ Private Sub CloseEmailReg()
 End Sub
 
 Private Sub cmdGo_Click()
-
-    modBNCS.SEND_SID_SETEMAIL txtAddress.Text
-    
-    CloseEmailReg
-    
-    Unload Me
+    If LenB(txtAddress.Text) > 0 Then
+        Call DoRegisterEmail("VALUE", txtAddress.Text)
+        
+        Unload Me
+    End If
 End Sub
 
 Private Sub cmdIgnore_Click()
-    
-    modBNCS.SEND_SID_SETEMAIL vbNullString
-    
-    CloseEmailReg
+    Call DoRegisterEmail("NEVERASK")
     
     Unload Me
 End Sub
 
 Private Sub cmdAskLater_Click()
-    frmChat.AddChat RTBColors.SuccessText, ">> E-mail registration ignored."
-    
-    CloseEmailReg
+    Call DoRegisterEmail("ASKLATER")
     
     Unload Me
 End Sub
@@ -184,23 +224,31 @@ Private Sub Form_Load()
     
     Label1.Caption = "Battle.net would like to know if you want to register an e-mail address " & _
                     "with your account. If you want to do so, type a valid e-mail address in the box " & _
-                    "below. If you don't want to register an e-mail address, click Ignore." & _
-                    "To be asked again on your next login, click Ask Me Later. OK and Ignore are permanent."
+                    "below. If you don't want to register an e-mail address, click ""Never Ask Again""." & _
+                    "To be asked again on your next login, click ""Ask Me Later"". ""OK"" and ""Never Ask Again"" are permanent."
                     
     Label1.Caption = Label1.Caption & vbCrLf & vbCrLf & "Choose an option below to proceed."
     
     Label2.Caption = "Click here for more information."
+    
+    txtAddress.Text = vbNullString
+    cmdGo.Enabled = False
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     If Not ClosedProperly Then
-        frmChat.AddChat RTBColors.SuccessText, ">> E-mail registration ignored."
-        CloseEmailReg
+        Call DoRegisterEmail("ASKLATER")
     End If
 End Sub
 
 Private Sub txtAddress_KeyPress(KeyAscii As Integer)
     If KeyAscii = vbKeyReturn Then
         Call cmdGo_Click
+    ElseIf KeyAscii = vbKeyEscape Then
+        Call cmdAskLater_Click
     End If
+End Sub
+
+Private Sub txtAddress_Change()
+    cmdGo.Enabled = (LenB(txtAddress.Text) > 0)
 End Sub

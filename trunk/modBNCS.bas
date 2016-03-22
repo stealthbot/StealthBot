@@ -935,7 +935,7 @@ On Error GoTo ERROR_HANDLER:
                     SendEnterChatSequence
                 End If
             Else
-                frmEMailReg.Show
+                DoRegisterEmail
             End If
             
         Case &H1:  'Nonexistent account.
@@ -1627,7 +1627,7 @@ On Error GoTo ERROR_HANDLER:
             Call Event_LogonEvent(1)
             Call frmChat.DoDisconnect
             
-        Case &HE: frmEMailReg.Show 'Email registration requried
+        Case &HE: DoRegisterEmail 'Email registration requried
         Case &HF: 'Custom message
             Call Event_LogonEvent(5, sInfo)
             Call frmChat.DoDisconnect
@@ -1674,8 +1674,10 @@ End Sub
 Private Sub RECV_SID_SETEMAIL(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
 
+    ' do not call into EmailReg here,
+    ' let receiving a successful account logon response call into it!
+    ' XXX: is there any case in which SID_SETEMAIL will be received after a successful account logon (instead of before)?
     ds.WaitingForEmail = True
-    frmEMailReg.Show
     
     Exit Sub
 ERROR_HANDLER:
@@ -1698,16 +1700,29 @@ On Error GoTo ERROR_HANDLER:
     End With
     Set pBuff = Nothing
     
-    If LenB(sEMailAddress) > 0 Then
-        frmChat.AddChat RTBColors.SuccessText, ">> E-mail address registered."
-    Else
-        frmChat.AddChat RTBColors.SuccessText, ">> E-mail address registration declined."
-    End If
-    
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_SETEMAIL()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
+'=======================================================================================================
+'This function will open the form to prompt the user for their email, or if the overrides are set, automatically register an email.
+Private Sub DoRegisterEmail()
+On Error GoTo ERROR_HANDLER:
+
+    Dim EMailValue As String
+    Dim EMailAction As String
+    
+    EMailAction = UCase$(ReadCfg$("Override", "RegisterEmailAction"))
+    EMailValue = ReadCfg$("Override", "RegisterEmailDefault")
+    
+    Call frmEMailReg.DoRegisterEmail(EMailAction, EMailValue)
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.DoRegisterEmail()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 '=======================================================================================================
