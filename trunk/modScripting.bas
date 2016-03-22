@@ -53,7 +53,7 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
     
     DestroyObjs
 
-    If (ReadINI("Other", "ScriptAllowUI", GetConfigFilePath()) <> "N") Then
+    If (ReadCfg("Other", "ScriptAllowUI") <> "N") Then
         SC.AllowUI = True
     End If
 
