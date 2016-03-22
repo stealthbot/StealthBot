@@ -314,10 +314,10 @@ End Sub
 
 Private Sub lblURL_Click(Index As Integer)
     Select Case Index
-        Case 0: ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net", vbNullString, vbNullString, vbNormalFocus
-        Case 1: ShellExecute Me.hWnd, "Open", "mailto:stealth@stealthbot.net", vbNullString, vbNullString, vbNormalFocus
-        Case 2: ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/sb/contributors/", vbNullString, vbNullString, vbNormalFocus
-        Case 3: ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/wiki/", vbNullString, vbNullString, vbNormalFocus
+        Case 0: ShellOpenURL "http://www.stealthbot.net", "the StealthBot Forum"
+        Case 1: ShellOpenURL "mailto:stealth@stealthbot.net"
+        Case 2: ShellOpenURL "http://contributors.stealthbot.net", "the StealthBot Contributors List"
+        Case 3: ShellOpenURL "http://www.stealthbot.net/wiki/Main_Page", "the StealthBot Wiki"
     End Select
 End Sub
 

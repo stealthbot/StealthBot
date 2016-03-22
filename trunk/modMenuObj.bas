@@ -139,8 +139,7 @@ Public Sub MenuClick(hWnd As Long, lngMenuCommand As Long)
                         End If
                     ElseIf (sub_name = "VIEW_SCRIPT") Then
                         If (ReadCfg("Override", "ScriptViewer") = vbNullString) Then
-                            ShellExecute frmChat.hWnd, "Open", GetScriptDictionary(GetModuleByName(s_name))("Path"), vbNullString, vbNullString, _
-                                vbNormalFocus
+                            ShellOpenURL GetScriptDictionary(GetModuleByName(s_name))("Path"), , False
                         Else
                             Shell Chr(34) & ReadCfg("Override", "ScriptViewer") & Chr(34) & Space(1) & Chr(34) & GetScriptDictionary(GetModuleByName(s_name))("Path") & Chr(34)
                         End If

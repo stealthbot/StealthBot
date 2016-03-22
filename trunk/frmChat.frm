@@ -3749,8 +3749,7 @@ Private Sub mnuCatchPhrases_Click()
 End Sub
 
 Private Sub mnuChangeLog_Click()
-    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/sb/changelog", vbNullString, vbNullString, vbNormalFocus
-    AddChat RTBColors.InformationText, "Opening the bot's changelog at http://www.stealthbot.net/sb/changelog"
+    ShellOpenURL "http://www.stealthbot.net/wiki/changelog", "the StealthBot Changelog"
 End Sub
 
 Private Sub mnuOpenScriptFolder_Click()
@@ -4214,7 +4213,7 @@ Private Sub mnuEditCaught_Click()
         MsgBox "The bot has not caught any phrases yet."
         Exit Sub
     Else
-        ShellExecute Me.hWnd, "Open", GetFilePath("CaughtPhrases.htm"), vbNullString, vbNullString, vbNormalFocus
+        ShellOpenURL GetFilePath("CaughtPhrases.htm"), , False
     End If
 End Sub
 
@@ -4254,7 +4253,7 @@ Sub mnuHelpReadme_Click()
 End Sub
 
 Sub mnuHelpWebsite_Click()
-    ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net", vbNullString, vbNullString, vbNormalFocus
+    ShellOpenURL "http://www.stealthbot.net", "the StealthBot Forum"
 End Sub
 
 Private Sub mnuHideBans_Click()
@@ -4531,7 +4530,7 @@ Private Sub mnuClearedTxt_Click()
     If LenB(Dir$(sPath)) = 0 Then
         AddChat RTBColors.ErrorMessageText, "The log file for today is empty."
     Else
-        ShellExecute Me.hWnd, "Open", sPath, vbNullString, vbNullString, vbNormalFocus
+        ShellOpenURL sPath, , False
     End If
 End Sub
 
@@ -4623,12 +4622,12 @@ Private Sub mnuWhisperCleared_Click()
     If LenB(Dir$(sPath)) = 0 Then
         AddChat RTBColors.ErrorMessageText, "The whisper log file for today is empty."
     Else
-        ShellExecute Me.hWnd, "Open", sPath, vbNullString, vbNullString, vbNormalFocus
+        ShellOpenURL sPath, , False
     End If
 End Sub
 
 Private Sub mnuEditUsers_Click()
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("Users.txt"), vbNullString, vbNullString, vbNormalFocus
+    ShellOpenURL GetFilePath("Users.txt"), , False
 End Sub
 
 Sub mnuReloadScripts_Click()
@@ -4672,9 +4671,7 @@ End Sub
 'End Sub
 
 Private Sub mnuTerms_Click()
-    'ShellExecute frmChat.hWnd, "Open", App.Path & "\eula.txt", vbNullString, vbNullString, vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", "http://eula.stealthbot.net", vbNullString, vbNullString, vbNormalFocus
-    AddChat RTBColors.InformationText, "Opening the StealthBot EULA at http://eula.stealthbot.net."
+    ShellOpenURL "http://eula.stealthbot.net", "the StealthBot EULA"
 End Sub
 
 Private Sub mnuFilters_Click()

@@ -1607,10 +1607,15 @@ End Function
 
 '//10-15-2009 - Hdx - Updated url to new address
 Public Sub GetW3LadderProfile(ByVal sPlayer As String, ByVal eType As enuWebProfileTypes)
+    Const W3LadderURLFormat As String = "http://classic.battle.net/war3/ladder/{0}-player-profile.aspx?Gateway={1}&PlayerName={2}"
+    Dim W3LadderURL As String
+    Dim W3WebProfileType As String
+    
     If (LenB(sPlayer) > 0) Then
-        ShellExecute frmChat.hWnd, "Open", _
-        StringFormat("http://classic.battle.net/war3/ladder/{0}-player-profile.aspx?Gateway={1}&PlayerName={2}", _
-            IIf(eType = W3XP, "w3xp", "war3"), GetW3Realm(sPlayer), NameWithoutRealm(sPlayer, 1)), vbNullString, vbNullString, vbNormalFocus
+        W3WebProfileType = IIf(eType = W3XP, "w3xp", "war3")
+        W3LadderURL = StringFormat(W3LadderURLFormat, W3WebProfileType, GetW3Realm(sPlayer), NameWithoutRealm(sPlayer, 1))
+        
+        ShellOpenURL W3LadderURL, sPlayer & "'s " & UCase$(W3WebProfileType) & " ladder profile"
     End If
 End Sub
 
@@ -1788,8 +1793,16 @@ Public Function GetProfilePath(Optional ByVal ProfileIndex As Integer) As String
 End Function
 
 Public Sub OpenReadme()
-    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/wiki/Main_Page", vbNullString, vbNullString, vbNormalFocus
-    frmChat.AddChat RTBColors.SuccessText, "You are being taken to the StealthBot Wiki pages."
+    ShellOpenURL "http://www.stealthbot.net/wiki/Main_Page", "the StealthBot Wiki"
+End Sub
+
+Sub ShellOpenURL(ByVal FullURL As String, Optional ByVal Description As String = vbNullString, Optional ByVal DisplayMessage As Boolean = True, Optional ByVal Verb As String = "open")
+    ShellExecute frmChat.hWnd, Verb, FullURL, vbNullString, vbNullString, vbNormalFocus
+    
+    If DisplayMessage Then
+        If LenB(Description) > 0 Then Description = Description & " at "
+        frmChat.AddChat RTBColors.ConsoleText, "Opening " & Description & "[ " & FullURL & " ]..."
+    End If
 End Sub
 
 'Checks the queue for duplicate bans

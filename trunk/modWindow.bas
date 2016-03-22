@@ -130,15 +130,15 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wPara
                     lLen = SendMessageAny(uHead.hWndFrom, EM_GETTEXTRANGE, 0, eText)
                     sText = Left$(eText.lpstrText, lLen)
        
-                    ShellExecute hWnd, vbNullString, sText, vbNullString, vbNullString, vbNormalFocus
+                    ShellOpenURL sText, , False
                 End If
             End With
         End If
-    ElseIf msg = WM_COMMAND Then
+    ElseIf Msg = WM_COMMAND Then
         If lParam = 0 Then
             MenuClick hWnd, wParam
         End If
-    ElseIf msg = WM_COPYDATA Then
+    ElseIf Msg = WM_COPYDATA Then
         Call CopyMemory(cds, ByVal lParam, Len(cds))
         If (cds.cbData < UBound(buf)) Then
             Call CopyMemory(buf(0), ByVal cds.lpData, cds.cbData)
