@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
@@ -10,7 +10,7 @@ Begin VB.Form frmChat
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7965
    ClientLeft      =   225
-   ClientTop       =   855
+   ClientTop       =   870
    ClientWidth     =   11400
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -129,31 +129,31 @@ Begin VB.Form frmChat
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   7
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3332
+            Picture         =   "frmChat.frx":1B32
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":35C1
+            Picture         =   "frmChat.frx":1DC1
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3848
+            Picture         =   "frmChat.frx":2048
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B02
+            Picture         =   "frmChat.frx":2302
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3DAC
+            Picture         =   "frmChat.frx":25AC
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":428A
+            Picture         =   "frmChat.frx":2A8A
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":645D
+            Picture         =   "frmChat.frx":4C5D
             Key             =   ""
          EndProperty
       EndProperty
@@ -171,571 +171,571 @@ Begin VB.Form frmChat
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   142
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":85D7
+            Picture         =   "frmChat.frx":6DD7
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":B61D
+            Picture         =   "frmChat.frx":9E1D
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":E786
+            Picture         =   "frmChat.frx":CF86
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":119B2
+            Picture         =   "frmChat.frx":101B2
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":13FBA
+            Picture         =   "frmChat.frx":127BA
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":17485
+            Picture         =   "frmChat.frx":15C85
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":19C68
+            Picture         =   "frmChat.frx":18468
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":1CB4D
+            Picture         =   "frmChat.frx":1B34D
             Key             =   ""
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":1CEBD
+            Picture         =   "frmChat.frx":1B6BD
             Key             =   ""
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":1FFA0
+            Picture         =   "frmChat.frx":1E7A0
             Key             =   ""
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":2314B
+            Picture         =   "frmChat.frx":2194B
             Key             =   ""
          EndProperty
          BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":26194
+            Picture         =   "frmChat.frx":24994
             Key             =   ""
          EndProperty
          BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":29230
+            Picture         =   "frmChat.frx":27A30
             Key             =   ""
          EndProperty
          BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":2C207
+            Picture         =   "frmChat.frx":2AA07
             Key             =   ""
          EndProperty
          BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":2F74A
+            Picture         =   "frmChat.frx":2DF4A
             Key             =   ""
          EndProperty
          BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":320DB
+            Picture         =   "frmChat.frx":308DB
             Key             =   ""
          EndProperty
          BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":324A2
+            Picture         =   "frmChat.frx":30CA2
             Key             =   ""
          EndProperty
          BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":32818
+            Picture         =   "frmChat.frx":31018
             Key             =   ""
          EndProperty
          BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":32BA0
+            Picture         =   "frmChat.frx":313A0
             Key             =   ""
          EndProperty
          BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":32F39
+            Picture         =   "frmChat.frx":31739
             Key             =   ""
          EndProperty
          BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":332DE
+            Picture         =   "frmChat.frx":31ADE
             Key             =   ""
          EndProperty
          BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":33690
+            Picture         =   "frmChat.frx":31E90
             Key             =   ""
          EndProperty
          BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":33A55
+            Picture         =   "frmChat.frx":32255
             Key             =   ""
          EndProperty
          BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":33F83
+            Picture         =   "frmChat.frx":32783
             Key             =   ""
          EndProperty
          BeginProperty ListImage25 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3449D
+            Picture         =   "frmChat.frx":32C9D
             Key             =   ""
          EndProperty
          BeginProperty ListImage26 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":37557
+            Picture         =   "frmChat.frx":35D57
             Key             =   ""
          EndProperty
          BeginProperty ListImage27 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":377C1
+            Picture         =   "frmChat.frx":35FC1
             Key             =   ""
          EndProperty
          BeginProperty ListImage28 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":379D2
+            Picture         =   "frmChat.frx":361D2
             Key             =   ""
          EndProperty
          BeginProperty ListImage29 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":37C0C
+            Picture         =   "frmChat.frx":3640C
             Key             =   ""
          EndProperty
          BeginProperty ListImage30 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":37E70
+            Picture         =   "frmChat.frx":36670
             Key             =   ""
          EndProperty
          BeginProperty ListImage31 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":380CB
+            Picture         =   "frmChat.frx":368CB
             Key             =   ""
          EndProperty
          BeginProperty ListImage32 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38316
+            Picture         =   "frmChat.frx":36B16
             Key             =   ""
          EndProperty
          BeginProperty ListImage33 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38580
+            Picture         =   "frmChat.frx":36D80
             Key             =   ""
          EndProperty
          BeginProperty ListImage34 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":387A3
+            Picture         =   "frmChat.frx":36FA3
             Key             =   ""
          EndProperty
          BeginProperty ListImage35 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":389D0
+            Picture         =   "frmChat.frx":371D0
             Key             =   ""
          EndProperty
          BeginProperty ListImage36 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38BEC
+            Picture         =   "frmChat.frx":373EC
             Key             =   ""
          EndProperty
          BeginProperty ListImage37 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38E23
+            Picture         =   "frmChat.frx":37623
             Key             =   ""
          EndProperty
          BeginProperty ListImage38 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3906E
+            Picture         =   "frmChat.frx":3786E
             Key             =   ""
          EndProperty
          BeginProperty ListImage39 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":392D8
+            Picture         =   "frmChat.frx":37AD8
             Key             =   ""
          EndProperty
          BeginProperty ListImage40 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":394DB
+            Picture         =   "frmChat.frx":37CDB
             Key             =   ""
          EndProperty
          BeginProperty ListImage41 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39714
+            Picture         =   "frmChat.frx":37F14
             Key             =   ""
          EndProperty
          BeginProperty ListImage42 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39943
+            Picture         =   "frmChat.frx":38143
             Key             =   ""
          EndProperty
          BeginProperty ListImage43 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39B9F
+            Picture         =   "frmChat.frx":3839F
             Key             =   ""
          EndProperty
          BeginProperty ListImage44 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39DE9
+            Picture         =   "frmChat.frx":385E9
             Key             =   ""
          EndProperty
          BeginProperty ListImage45 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A053
+            Picture         =   "frmChat.frx":38853
             Key             =   ""
          EndProperty
          BeginProperty ListImage46 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A296
+            Picture         =   "frmChat.frx":38A96
             Key             =   ""
          EndProperty
          BeginProperty ListImage47 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A4EA
+            Picture         =   "frmChat.frx":38CEA
             Key             =   ""
          EndProperty
          BeginProperty ListImage48 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A72C
+            Picture         =   "frmChat.frx":38F2C
             Key             =   ""
          EndProperty
          BeginProperty ListImage49 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A994
+            Picture         =   "frmChat.frx":39194
             Key             =   ""
          EndProperty
          BeginProperty ListImage50 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3ABF3
+            Picture         =   "frmChat.frx":393F3
             Key             =   ""
          EndProperty
          BeginProperty ListImage51 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3AE5D
+            Picture         =   "frmChat.frx":3965D
             Key             =   ""
          EndProperty
          BeginProperty ListImage52 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B0AB
+            Picture         =   "frmChat.frx":398AB
             Key             =   ""
          EndProperty
          BeginProperty ListImage53 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B32A
+            Picture         =   "frmChat.frx":39B2A
             Key             =   ""
          EndProperty
          BeginProperty ListImage54 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B55F
+            Picture         =   "frmChat.frx":39D5F
             Key             =   ""
          EndProperty
          BeginProperty ListImage55 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B7CC
+            Picture         =   "frmChat.frx":39FCC
             Key             =   ""
          EndProperty
          BeginProperty ListImage56 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B9E3
+            Picture         =   "frmChat.frx":3A1E3
             Key             =   ""
          EndProperty
          BeginProperty ListImage57 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3BC4D
+            Picture         =   "frmChat.frx":3A44D
             Key             =   ""
          EndProperty
          BeginProperty ListImage58 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3BE87
+            Picture         =   "frmChat.frx":3A687
             Key             =   ""
          EndProperty
          BeginProperty ListImage59 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C0B0
+            Picture         =   "frmChat.frx":3A8B0
             Key             =   ""
          EndProperty
          BeginProperty ListImage60 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C303
+            Picture         =   "frmChat.frx":3AB03
             Key             =   ""
          EndProperty
          BeginProperty ListImage61 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C53C
+            Picture         =   "frmChat.frx":3AD3C
             Key             =   ""
          EndProperty
          BeginProperty ListImage62 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C792
+            Picture         =   "frmChat.frx":3AF92
             Key             =   ""
          EndProperty
          BeginProperty ListImage63 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3CA03
+            Picture         =   "frmChat.frx":3B203
             Key             =   ""
          EndProperty
          BeginProperty ListImage64 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3CC6D
+            Picture         =   "frmChat.frx":3B46D
             Key             =   ""
          EndProperty
          BeginProperty ListImage65 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3CEC5
+            Picture         =   "frmChat.frx":3B6C5
             Key             =   ""
          EndProperty
          BeginProperty ListImage66 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D0EA
+            Picture         =   "frmChat.frx":3B8EA
             Key             =   ""
          EndProperty
          BeginProperty ListImage67 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D33D
+            Picture         =   "frmChat.frx":3BB3D
             Key             =   ""
          EndProperty
          BeginProperty ListImage68 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D560
+            Picture         =   "frmChat.frx":3BD60
             Key             =   ""
          EndProperty
          BeginProperty ListImage69 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D7CA
+            Picture         =   "frmChat.frx":3BFCA
             Key             =   ""
          EndProperty
          BeginProperty ListImage70 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3DA0A
+            Picture         =   "frmChat.frx":3C20A
             Key             =   ""
          EndProperty
          BeginProperty ListImage71 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3DC4F
+            Picture         =   "frmChat.frx":3C44F
             Key             =   ""
          EndProperty
          BeginProperty ListImage72 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3DE9D
+            Picture         =   "frmChat.frx":3C69D
             Key             =   ""
          EndProperty
          BeginProperty ListImage73 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E0E4
+            Picture         =   "frmChat.frx":3C8E4
             Key             =   ""
          EndProperty
          BeginProperty ListImage74 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E34E
+            Picture         =   "frmChat.frx":3CB4E
             Key             =   ""
          EndProperty
          BeginProperty ListImage75 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E581
+            Picture         =   "frmChat.frx":3CD81
             Key             =   ""
          EndProperty
          BeginProperty ListImage76 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E7C6
+            Picture         =   "frmChat.frx":3CFC6
             Key             =   ""
          EndProperty
          BeginProperty ListImage77 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3EA02
+            Picture         =   "frmChat.frx":3D202
             Key             =   ""
          EndProperty
          BeginProperty ListImage78 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3EC6E
+            Picture         =   "frmChat.frx":3D46E
             Key             =   ""
          EndProperty
          BeginProperty ListImage79 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3EED8
+            Picture         =   "frmChat.frx":3D6D8
             Key             =   ""
          EndProperty
          BeginProperty ListImage80 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F11F
+            Picture         =   "frmChat.frx":3D91F
             Key             =   ""
          EndProperty
          BeginProperty ListImage81 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F367
+            Picture         =   "frmChat.frx":3DB67
             Key             =   ""
          EndProperty
          BeginProperty ListImage82 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F593
+            Picture         =   "frmChat.frx":3DD93
             Key             =   ""
          EndProperty
          BeginProperty ListImage83 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F7BA
+            Picture         =   "frmChat.frx":3DFBA
             Key             =   ""
          EndProperty
          BeginProperty ListImage84 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3FA24
+            Picture         =   "frmChat.frx":3E224
             Key             =   ""
          EndProperty
          BeginProperty ListImage85 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3FC29
+            Picture         =   "frmChat.frx":3E429
             Key             =   ""
          EndProperty
          BeginProperty ListImage86 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3FE24
+            Picture         =   "frmChat.frx":3E624
             Key             =   ""
          EndProperty
          BeginProperty ListImage87 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":40065
+            Picture         =   "frmChat.frx":3E865
             Key             =   ""
          EndProperty
          BeginProperty ListImage88 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":40275
+            Picture         =   "frmChat.frx":3EA75
             Key             =   ""
          EndProperty
          BeginProperty ListImage89 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":404E6
+            Picture         =   "frmChat.frx":3ECE6
             Key             =   ""
          EndProperty
          BeginProperty ListImage90 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":407F7
+            Picture         =   "frmChat.frx":3EFF7
             Key             =   ""
          EndProperty
          BeginProperty ListImage91 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":40B3D
+            Picture         =   "frmChat.frx":3F33D
             Key             =   ""
          EndProperty
          BeginProperty ListImage92 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4110E
+            Picture         =   "frmChat.frx":3F90E
             Key             =   ""
          EndProperty
          BeginProperty ListImage93 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":416DE
+            Picture         =   "frmChat.frx":3FEDE
             Key             =   ""
          EndProperty
          BeginProperty ListImage94 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":41C89
+            Picture         =   "frmChat.frx":40489
             Key             =   ""
          EndProperty
          BeginProperty ListImage95 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4231E
+            Picture         =   "frmChat.frx":40B1E
             Key             =   ""
          EndProperty
          BeginProperty ListImage96 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":429AF
+            Picture         =   "frmChat.frx":411AF
             Key             =   ""
          EndProperty
          BeginProperty ListImage97 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":43042
+            Picture         =   "frmChat.frx":41842
             Key             =   ""
          EndProperty
          BeginProperty ListImage98 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":435A9
+            Picture         =   "frmChat.frx":41DA9
             Key             =   ""
          EndProperty
          BeginProperty ListImage99 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":43B16
+            Picture         =   "frmChat.frx":42316
             Key             =   ""
          EndProperty
          BeginProperty ListImage100 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":44088
+            Picture         =   "frmChat.frx":42888
             Key             =   ""
          EndProperty
          BeginProperty ListImage101 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4462F
+            Picture         =   "frmChat.frx":42E2F
             Key             =   ""
          EndProperty
          BeginProperty ListImage102 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":44BD4
+            Picture         =   "frmChat.frx":433D4
             Key             =   ""
          EndProperty
          BeginProperty ListImage103 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":45181
+            Picture         =   "frmChat.frx":43981
             Key             =   ""
          EndProperty
          BeginProperty ListImage104 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":48164
+            Picture         =   "frmChat.frx":46964
             Key             =   ""
          EndProperty
          BeginProperty ListImage105 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4DEA1
+            Picture         =   "frmChat.frx":4C6A1
             Key             =   ""
          EndProperty
          BeginProperty ListImage106 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":53B66
+            Picture         =   "frmChat.frx":52366
             Key             =   ""
          EndProperty
          BeginProperty ListImage107 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":5977E
+            Picture         =   "frmChat.frx":57F7E
             Key             =   ""
          EndProperty
          BeginProperty ListImage108 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":5F211
+            Picture         =   "frmChat.frx":5DA11
             Key             =   ""
          EndProperty
          BeginProperty ListImage109 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":64E42
+            Picture         =   "frmChat.frx":63642
             Key             =   ""
          EndProperty
          BeginProperty ListImage110 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6AA60
+            Picture         =   "frmChat.frx":69260
             Key             =   ""
          EndProperty
          BeginProperty ListImage111 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6AF3D
+            Picture         =   "frmChat.frx":6973D
             Key             =   ""
          EndProperty
          BeginProperty ListImage112 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6B4F2
+            Picture         =   "frmChat.frx":69CF2
             Key             =   ""
          EndProperty
          BeginProperty ListImage113 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6BBB6
+            Picture         =   "frmChat.frx":6A3B6
             Key             =   ""
          EndProperty
          BeginProperty ListImage114 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6C1F7
+            Picture         =   "frmChat.frx":6A9F7
             Key             =   ""
          EndProperty
          BeginProperty ListImage115 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6C826
+            Picture         =   "frmChat.frx":6B026
             Key             =   ""
          EndProperty
          BeginProperty ListImage116 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6CE3D
+            Picture         =   "frmChat.frx":6B63D
             Key             =   ""
          EndProperty
          BeginProperty ListImage117 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6D350
+            Picture         =   "frmChat.frx":6BB50
             Key             =   ""
          EndProperty
          BeginProperty ListImage118 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6D98A
+            Picture         =   "frmChat.frx":6C18A
             Key             =   ""
          EndProperty
          BeginProperty ListImage119 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6DFC4
+            Picture         =   "frmChat.frx":6C7C4
             Key             =   ""
          EndProperty
          BeginProperty ListImage120 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6E5FE
+            Picture         =   "frmChat.frx":6CDFE
             Key             =   ""
          EndProperty
          BeginProperty ListImage121 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6EC38
+            Picture         =   "frmChat.frx":6D438
             Key             =   ""
          EndProperty
          BeginProperty ListImage122 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6F272
+            Picture         =   "frmChat.frx":6DA72
             Key             =   ""
          EndProperty
          BeginProperty ListImage123 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6F8AC
+            Picture         =   "frmChat.frx":6E0AC
             Key             =   ""
          EndProperty
          BeginProperty ListImage124 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6FEE6
+            Picture         =   "frmChat.frx":6E6E6
             Key             =   ""
          EndProperty
          BeginProperty ListImage125 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":70520
+            Picture         =   "frmChat.frx":6ED20
             Key             =   ""
          EndProperty
          BeginProperty ListImage126 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":70B5A
+            Picture         =   "frmChat.frx":6F35A
             Key             =   ""
          EndProperty
          BeginProperty ListImage127 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":71194
+            Picture         =   "frmChat.frx":6F994
             Key             =   ""
          EndProperty
          BeginProperty ListImage128 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":717CE
+            Picture         =   "frmChat.frx":6FFCE
             Key             =   ""
          EndProperty
          BeginProperty ListImage129 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":71E08
+            Picture         =   "frmChat.frx":70608
             Key             =   ""
          EndProperty
          BeginProperty ListImage130 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":72442
+            Picture         =   "frmChat.frx":70C42
             Key             =   ""
          EndProperty
          BeginProperty ListImage131 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":72A7C
+            Picture         =   "frmChat.frx":7127C
             Key             =   ""
          EndProperty
          BeginProperty ListImage132 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":730B6
+            Picture         =   "frmChat.frx":718B6
             Key             =   ""
          EndProperty
          BeginProperty ListImage133 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":736F0
+            Picture         =   "frmChat.frx":71EF0
             Key             =   ""
          EndProperty
          BeginProperty ListImage134 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":73D2A
+            Picture         =   "frmChat.frx":7252A
             Key             =   ""
          EndProperty
          BeginProperty ListImage135 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":74364
+            Picture         =   "frmChat.frx":72B64
             Key             =   ""
          EndProperty
          BeginProperty ListImage136 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":7499E
+            Picture         =   "frmChat.frx":7319E
             Key             =   ""
          EndProperty
          BeginProperty ListImage137 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":74FD8
+            Picture         =   "frmChat.frx":737D8
             Key             =   ""
          EndProperty
          BeginProperty ListImage138 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":75612
+            Picture         =   "frmChat.frx":73E12
             Key             =   ""
          EndProperty
          BeginProperty ListImage139 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":75C4C
+            Picture         =   "frmChat.frx":7444C
             Key             =   ""
          EndProperty
          BeginProperty ListImage140 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":76D5C
+            Picture         =   "frmChat.frx":7555C
             Key             =   ""
          EndProperty
          BeginProperty ListImage141 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":77EF5
+            Picture         =   "frmChat.frx":766F5
             Key             =   ""
          EndProperty
          BeginProperty ListImage142 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":7908A
+            Picture         =   "frmChat.frx":7788A
             Key             =   ""
          EndProperty
       EndProperty
@@ -843,15 +843,15 @@ Begin VB.Form frmChat
          Strikethrough   =   0   'False
       EndProperty
       TabCaption(0)   =   "Channel  "
-      TabPicture(0)   =   "frmChat.frx":7A00C
+      TabPicture(0)   =   "frmChat.frx":7880C
       Tab(0).ControlEnabled=   0   'False
       Tab(0).ControlCount=   0
       TabCaption(1)   =   "Friends  "
-      TabPicture(1)   =   "frmChat.frx":7A028
+      TabPicture(1)   =   "frmChat.frx":78828
       Tab(1).ControlEnabled=   -1  'True
       Tab(1).ControlCount=   0
       TabCaption(2)   =   "Clan  "
-      TabPicture(2)   =   "frmChat.frx":7A044
+      TabPicture(2)   =   "frmChat.frx":78844
       Tab(2).ControlEnabled=   0   'False
       Tab(2).ControlCount=   0
    End
@@ -1024,10 +1024,11 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
-      TextRTF         =   $"frmChat.frx":7A060
+      TextRTF         =   $"frmChat.frx":78860
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -1049,11 +1050,12 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
       OLEDropMode     =   0
-      TextRTF         =   $"frmChat.frx":7A0DB
+      TextRTF         =   $"frmChat.frx":788DB
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   9
