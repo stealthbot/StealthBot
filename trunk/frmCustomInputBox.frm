@@ -148,10 +148,10 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private CurrentPos As Integer
-Private InputMessages() As String
-Private InputValues() As String
-Private Captions() As String
-Private MaxLengthVal() As Integer
+Private InputMessages(0 To 9) As String
+Private InputValues(1 To 8) As String
+Private Captions(0 To 9) As String
+Private MaxLengthVal(1 To 8) As Integer
 Private IsExpansion As Boolean
 Private NeedsExpansionKey As Boolean
 
@@ -167,12 +167,9 @@ Private Const STEP_OWNR = 8
 Private Const STEP_DONE = 9
 
 Private Sub Form_Load()
+    Dim i As Integer
+
     Me.Icon = frmChat.Icon
-    
-    ReDim InputMessages(9)
-    ReDim Captions(9)
-    ReDim InputValues(7)
-    ReDim MaxLengthVal(7)
     
     InputMessages(STEP_WELC) = "Welcome to StealthBot's Step-By-Step Setup. Click Next to begin. You may click Cancel at any point and no changes will be made."
     InputMessages(STEP_NAME) = "Please enter the username you'd like your bot to use. If it's not already existent, the bot will create it."
@@ -180,33 +177,37 @@ Private Sub Form_Load()
     InputMessages(STEP_PROD) = "Which game would you like the bot to connect with?"
     InputMessages(STEP_KEY1) = "Please enter a valid CDKey for the game %s."
     InputMessages(STEP_KEY2) = "Please enter a valid CDKey for the %s expansion. (Both a Regular and an Expansion key are required.)"
-    InputMessages(STEP_CHAN) = "What channel would you like the bot to use as its home?"
+    InputMessages(STEP_CHAN) = "What channel would you like the bot to use as its home? An empty channel will take you to the server's default when you log on."
     InputMessages(STEP_SERV) = "To which Battle.net gateway will you be connecting? (USEast, USWest, Asia, Europe)"
     InputMessages(STEP_OWNR) = "Enter your main Battle.net account name. This will act as the bot's ""owner"" account -- you can leave it blank." & vbCrLf & vbCrLf & "IMPORTANT: Correct the Owner Name later if the bot sees your account name differently once it has connected -- it must be EXACT and include any @Realm stuff that the bot sees on your name."
     InputMessages(STEP_DONE) = "Congratulations, you're all set up! Enjoy your StealthBot, and remember to visit http://www.stealthbot.net if you have problems."
     
     Captions(STEP_WELC) = "Welcome to StealthBot!"
-    Captions(STEP_NAME) = "Username"
-    Captions(STEP_PASS) = "Password"
+    Captions(STEP_NAME) = "Set Username"
+    Captions(STEP_PASS) = "Set Password"
     Captions(STEP_PROD) = "Game Selection"
-    Captions(STEP_KEY1) = "CD-Key"
-    Captions(STEP_KEY2) = "Expansion CD-Key"
-    Captions(STEP_CHAN) = "Home Channel"
+    Captions(STEP_KEY1) = "Set CD-Key"
+    Captions(STEP_KEY2) = "Set Expansion CD-Key"
+    Captions(STEP_CHAN) = "Set Home Channel"
     Captions(STEP_SERV) = "Gateway Selection"
-    Captions(STEP_OWNR) = "Bot Owner"
+    Captions(STEP_OWNR) = "Set Bot Owner"
     Captions(STEP_DONE) = "Finished!"
     
-    MaxLengthVal(STEP_NAME - 1) = 15
-    MaxLengthVal(STEP_PASS - 1) = 0
-    MaxLengthVal(STEP_KEY1 - 1) = 60
-    MaxLengthVal(STEP_KEY2 - 1) = 60
-    MaxLengthVal(STEP_CHAN - 1) = 30
-    MaxLengthVal(STEP_OWNR - 1) = 30
+    MaxLengthVal(STEP_NAME) = 15
+    MaxLengthVal(STEP_KEY1) = 60
+    MaxLengthVal(STEP_KEY2) = 60
+    MaxLengthVal(STEP_CHAN) = 31
+    MaxLengthVal(STEP_OWNR) = 30
+    
+    For i = 1 To 8
+        InputValues(i) = vbNullString
+    Next i
     
     NeedsExpansionKey = False
     IsExpansion = False
     
     With cboGame
+        .Clear
         .AddItem "WarCraft II: Battle.net Edition"
         .AddItem "StarCraft"
         .AddItem "StarCraft: Brood War"
@@ -219,6 +220,7 @@ Private Sub Form_Load()
     End With
     
     With cboServer
+        .Clear
         .AddItem "USEast / Azeroth"
         .AddItem "USWest / Lordaeron"
         .AddItem "Asia / Kalimdor"
@@ -232,7 +234,7 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub cmdBack_Click()
-    If CurrentPos < STEP_DONE Then InputValues(CurrentPos - 1) = txtInput.Text
+    If CurrentPos > STEP_WELC And CurrentPos < STEP_DONE Then InputValues(CurrentPos) = txtInput.Text
     CurrentPos = CurrentPos - 1
     Call ShowCurrentPos(True)
 End Sub
@@ -243,12 +245,9 @@ End Sub
 
 Private Sub cmdNext_Click()
     If CurrentPos < STEP_DONE Then
-        If CurrentPos > STEP_WELC Then InputValues(CurrentPos - 1) = txtInput.Text
+        If CurrentPos > STEP_WELC And CurrentPos < STEP_DONE Then InputValues(CurrentPos) = txtInput.Text
         CurrentPos = CurrentPos + 1
         ShowCurrentPos
-        
-        On Error Resume Next
-        If (CurrentPos <> STEP_PROD And CurrentPos <> STEP_SERV) Then txtInput.SetFocus
     Else
         If frmChat.SettingsForm Is Nothing Then
             Set frmChat.SettingsForm = New frmSettings
@@ -257,8 +256,8 @@ Private Sub cmdNext_Click()
         
         With frmChat.SettingsForm
             .ShowPanel spConnectionConfig
-            .txtUsername.Text = InputValues(STEP_NAME - 1)
-            .txtPassword.Text = InputValues(STEP_PASS - 1)
+            .txtUsername.Text = InputValues(STEP_NAME)
+            .txtPassword.Text = InputValues(STEP_PASS)
             
 '            .AddItem "(Choose One)"
 '            .AddItem "Warcraft II Battle.Net Edition"
@@ -293,10 +292,10 @@ Private Sub cmdNext_Click()
                     Call .optW3XP_Click
             End Select
             
-            .cboCDKey.Text = InputValues(STEP_KEY1 - 1)
+            .cboCDKey.Text = InputValues(STEP_KEY1)
             .lblAddCurrentKey_Click
-            .txtExpKey.Text = InputValues(STEP_KEY2 - 1)
-            .txtHomeChan.Text = InputValues(STEP_CHAN - 1)
+            .txtExpKey.Text = InputValues(STEP_KEY2)
+            .txtHomeChan.Text = InputValues(STEP_CHAN)
             
 '            .AddItem "(Choose One)"
 '            .AddItem "USEast / Azeroth"
@@ -311,7 +310,7 @@ Private Sub cmdNext_Click()
                 Case 3: .cboServer.Text = "europe.battle.net"
             End Select
             
-            .txtOwner.Text = InputValues(STEP_OWNR - 1)
+            .txtOwner.Text = InputValues(STEP_OWNR)
             
             Unload Me
         End With
@@ -341,16 +340,25 @@ Private Sub ShowCurrentPos(Optional ByVal GoingBackwards As Boolean = False)
     
     Me.Caption = Captions(CurrentPos)
     
-    txtInput.Visible = ((CurrentPos > 0 And CurrentPos < 9) And (CurrentPos <> 3 And CurrentPos <> 7))
+    ' textbox visible: all steps except STEP_PROD, STEP_SERV
+    txtInput.Visible = (CurrentPos > STEP_WELC And CurrentPos < STEP_DONE And CurrentPos <> STEP_PROD And CurrentPos <> STEP_SERV)
+    ' server visible IF STEP_SERV
     cboServer.Visible = (CurrentPos = STEP_SERV)
+    ' game visible IF STEP_PROD
     cboGame.Visible = (CurrentPos = STEP_PROD)
+    ' back enabled IF > STEP_WELC
     cmdBack.Enabled = (CurrentPos > STEP_WELC)
+    ' password char IF STEP_PASS
     txtInput.PasswordChar = IIf(CurrentPos = STEP_PASS, "*", vbNullString)
     
+    ' get saved input for this value
     InputPresent = True
     If CurrentPos > STEP_WELC And CurrentPos < STEP_DONE Then
-        txtInput.Text = InputValues(CurrentPos - 1)
-        txtInput.MaxLength = MaxLengthVal(CurrentPos - 1)
+        ' get saved value
+        txtInput.Text = InputValues(CurrentPos)
+        ' get max length value
+        txtInput.MaxLength = MaxLengthVal(CurrentPos)
+        ' find "input present" state
         InputPresent = False
         If CurrentPos = STEP_PROD And StrComp(cboGame.Text, "- choose one -", vbBinaryCompare) <> 0 Then
             InputPresent = True
@@ -358,29 +366,44 @@ Private Sub ShowCurrentPos(Optional ByVal GoingBackwards As Boolean = False)
             InputPresent = True
         ElseIf LenB(txtInput.Text) > 0 Then
             InputPresent = True
-        ElseIf CurrentPos = STEP_OWNR Then
+        ElseIf CurrentPos = STEP_CHAN Or CurrentPos = STEP_OWNR Then
             InputPresent = True
         End If
     End If
+    ' use "input present" state
     cmdNext.Enabled = InputPresent
     
+    ' if STEP_DONE, set special caption for next button
     If CurrentPos = STEP_DONE Then
         cmdNext.Caption = "&Finish!"
     Else
         cmdNext.Caption = ">> &Next"
     End If
+    
+    ' set focus
+    On Error Resume Next
+    If txtInput.Visible Then
+        txtInput.SetFocus
+        txtInput.selStart = 0
+        txtInput.selLength = Len(txtInput.Text)
+    End If
+    If cboGame.Visible Then cboGame.SetFocus
+    If cboServer.Visible Then cboServer.SetFocus
 End Sub
 
 Function FormatOutput(ByVal sIn As String) As String
     FormatOutput = sIn
     If CurrentPos = STEP_KEY1 Then
         If IsExpansion Then
+            ' (STEP_KEY1) if IsExpansion, then "%s" is non-expansion name item
             FormatOutput = Replace(sIn, "%s", cboGame.List(cboGame.ListIndex - 1))
         Else
+            ' (STEP_KEY1) else "%s" is currently selected name item
             FormatOutput = Replace(sIn, "%s", cboGame.List(cboGame.ListIndex))
         End If
     ElseIf CurrentPos = STEP_KEY2 Then
         If NeedsExpansionKey Then
+            ' (STEP_KEY2) if needs expansion key, then "%s" is currently selected name item
             FormatOutput = Replace(sIn, "%s", cboGame.List(cboGame.ListIndex))
         End If
     End If
@@ -391,8 +414,11 @@ Sub cboGame_KeyPress(KeyAscii As Integer)
 End Sub
 
 Sub cboGame_Click()
+    ' needs expansion key: D2XP, W3XP
     NeedsExpansionKey = (cboGame.ListIndex = 4 Or cboGame.ListIndex = 6)
+    ' is expansion (name of KEY1 is non-expansion game's name): D2XP, W3XP, SEXP
     IsExpansion = (cboGame.ListIndex = 2 Or cboGame.ListIndex = 4 Or cboGame.ListIndex = 6)
+    ' enabled: product is not "- choose one -"
     cmdNext.Enabled = (StrComp(cboGame.Text, "- choose one -", vbBinaryCompare) <> 0)
     'debug.print "NeedsExpansionKey is now " & CBool(cboGame.ListIndex = 4 Or cboGame.ListIndex = 6)
 End Sub
@@ -402,6 +428,7 @@ Sub cboServer_KeyPress(KeyAscii As Integer)
 End Sub
 
 Sub cboServer_Click()
+    ' enabled: server is not "- choose one -"
     cmdNext.Enabled = (StrComp(cboServer.Text, "- choose one -", vbBinaryCompare) <> 0)
 End Sub
 
@@ -413,6 +440,8 @@ Private Sub txtInput_KeyPress(KeyAscii As Integer)
 End Sub
 
 Sub txtInput_Change()
+    ' enabled: text field has input
     cmdNext.Enabled = (LenB(txtInput.Text) > 0)
-    If CurrentPos = STEP_OWNR Then cmdNext.Enabled = True
+    ' always enabled for STEP_CHAN, STEP_OWNR
+    If CurrentPos = STEP_CHAN Or CurrentPos = STEP_OWNR Then cmdNext.Enabled = True
 End Sub
