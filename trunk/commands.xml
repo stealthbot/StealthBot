@@ -3392,12 +3392,12 @@
 
     <documentation>
       <description>
-        Sets the bot's home channel to the channel specified.
+        Sets the bot's home channel to the channel specified. If used with no arguments, sets the bot's home channel to join the server default channel.
       </description>
     </documentation>
 
     <arguments>
-      <argument name="channel" type="string">
+      <argument name="channel" type="string" optional="1">
         <documentation>
           <description>
             The channel to set as home.
