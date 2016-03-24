@@ -65,7 +65,7 @@ Public Sub GetColorLists(Optional sPath As String)
     Dim f As Integer
     f = FreeFile
     
-    If sPath = vbNullString Then sPath = GetFilePath("Colors.sclf")
+    If sPath = vbNullString Then sPath = GetFilePath(FILE_COLORS)
     
     ' Initialize
     With FormColors

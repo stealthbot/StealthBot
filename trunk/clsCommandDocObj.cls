@@ -37,7 +37,7 @@ Private Sub Class_Initialize()
 
     Set m_database = New DOMDocument60
     
-    m_defaultXMLPath = GetFilePath("Commands.xml")
+    m_defaultXMLPath = GetFilePath(FILE_COMMANDS)
     
     Call OpenDatabase(, True)
     
@@ -303,15 +303,15 @@ End Function
 Private Sub ShowXMLErrors(ByRef colErrorList As Collection)
     
     Dim i As Integer
-    Dim msg As String
+    Dim Msg As String
     
-    msg = StringFormat("The following errors were detected with commands.xml...{0}{0}", vbNewLine)
+    Msg = StringFormat("The following errors were detected with commands.xml...{0}{0}", vbNewLine)
     
     For i = 1 To colErrorList.Count
-        msg = StringFormat("{0}{1}{2}", msg, colErrorList(i), vbNewLine)
+        Msg = StringFormat("{0}{1}{2}", Msg, colErrorList(i), vbNewLine)
     Next i
     
-    frmChat.AddChat RTBColors.ErrorMessageText, msg
+    frmChat.AddChat RTBColors.ErrorMessageText, Msg
     
 End Sub
 
@@ -523,7 +523,7 @@ Public Function Save(Optional ByVal writeToFile As Boolean = True) As Boolean
         End If
 
         '// 08/302009 52 - getting rid of the clsXML class since it didnt write valid XML
-        Call writeDocToFile(GetFilePath("Commands.xml"))
+        Call writeDocToFile(GetFilePath(FILE_COMMANDS))
         
     End If
     

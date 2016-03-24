@@ -1024,7 +1024,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1050,7 +1049,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1749,9 +1747,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -4237,11 +4235,11 @@ Private Sub mnuDisconnect2_Click()
 End Sub
 
 Private Sub mnuEditCaught_Click()
-    If Dir$(GetFilePath("CaughtPhrases.htm")) = vbNullString Then
+    If Dir$(GetFilePath(FILE_CAUGHT_PHRASES)) = vbNullString Then
         MsgBox "The bot has not caught any phrases yet."
         Exit Sub
     Else
-        ShellOpenURL GetFilePath("CaughtPhrases.htm"), , False
+        ShellOpenURL GetFilePath(FILE_CAUGHT_PHRASES), , False
     End If
 End Sub
 
@@ -4574,7 +4572,7 @@ End Sub
 Private Sub mnuRepairDataFiles_Click()
     If MsgBox("Are you sure? This action will delete your mail.dat (Bot mail database) file.", vbYesNo, "Repair data files") = vbYes Then
         On Error Resume Next
-        Kill GetFilePath("Mail.dat")
+        Kill GetFilePath(FILE_MAILDB)
         AddChat RTBColors.SuccessText, "The bot's DAT data files have been removed."
     End If
 End Sub
@@ -4655,7 +4653,7 @@ Private Sub mnuWhisperCleared_Click()
 End Sub
 
 Private Sub mnuEditUsers_Click()
-    ShellOpenURL GetFilePath("Users.txt"), , False
+    ShellOpenURL GetFilePath(FILE_USERDB), , False
 End Sub
 
 Sub mnuReloadScripts_Click()
@@ -7557,7 +7555,7 @@ End Function
 
 Sub LoadOutFilters()
     Const o As String = "Outgoing"
-    Const f As String = "filters.ini"
+    Const f As String = FILE_FILTERS
     
     Dim s   As String
     Dim i   As Integer
@@ -7582,10 +7580,10 @@ Sub LoadOutFilters()
         End If
     Next i
     
-    If (Dir$(GetFilePath("CatchPhrases.txt")) <> vbNullString) Then
+    If (Dir$(GetFilePath(FILE_CATCH_PHRASES)) <> vbNullString) Then
         i = FreeFile
         
-        Open GetFilePath("CatchPhrases.txt") For Input As #i
+        Open GetFilePath(FILE_CATCH_PHRASES) For Input As #i
         
             If (LOF(i) < 2) Then
                 Close #i
@@ -7782,11 +7780,11 @@ Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
     
     Select Case Mode
         Case LOAD_FILTERS
-            Path = GetFilePath("Filters.ini")
+            Path = GetFilePath(FILE_FILTERS)
         Case LOAD_PHRASES
-            Path = GetFilePath("PhraseBans.txt")
+            Path = GetFilePath(FILE_PHRASE_BANS)
         Case LOAD_DB
-            Path = GetFilePath("Users.txt")
+            Path = GetFilePath(FILE_USERDB)
             Exit Sub
     End Select
     
@@ -7805,11 +7803,11 @@ Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
                     End If
                 Loop While Not EOF(f)
             Else
-                temp = ReadINI(FI, "Total", "filters.ini")
+                temp = ReadINI(FI, "Total", FILE_FILTERS)
                 If temp <> vbNullString And CInt(temp) > -1 Then
                     c = Int(temp)
                     For i = 1 To c
-                        temp = ReadINI(FI, "Filter" & i, "filters.ini")
+                        temp = ReadINI(FI, "Filter" & i, FILE_FILTERS)
                         If temp <> vbNullString Then
                             tArray(UBound(tArray)) = LCase(temp)
                             If i <> c Then ReDim Preserve tArray(UBound(tArray) + 1)

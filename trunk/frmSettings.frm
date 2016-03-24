@@ -4183,11 +4183,11 @@ Private Sub Form_Load()
             .ListIndex = 0
         End If
         
-        If LenB(Dir$(GetFilePath("AdditionalBNLSservers.txt"))) > 0 Then
+        If LenB(Dir$(GetFilePath(FILE_BNLS_LIST))) > 0 Then
             With cboBNLSServer
                 i = FreeFile
                 
-                Open GetFilePath("AdditionalBNLSservers.txt") For Input As #i
+                Open GetFilePath(FILE_BNLS_LIST) For Input As #i
                     While Not EOF(i)
                         Line Input #i, s
                         
@@ -4582,7 +4582,7 @@ Private Function SaveSettings() As Boolean
         If j >= 0 Or .ListCount > BNLS_SERVER_COUNT Then
             i = FreeFile
             
-            Open GetFilePath("AdditionalBNLSservers.txt") For Output As #i
+            Open GetFilePath(FILE_BNLS_LIST) For Output As #i
                 s = cboBNLSServer.Text
                         
                 Print #i, .Text
@@ -4741,7 +4741,7 @@ Private Function SaveSettings() As Boolean
                 End With
                 
                 ' commit modifications
-                Call WriteDatabase(GetFilePath("Users.txt"))
+                Call WriteDatabase(GetFilePath(FILE_USERDB))
                 
                 ' log actions
                 If (BotVars.LogDBActions) Then
@@ -4768,7 +4768,7 @@ Private Function SaveSettings() As Boolean
                             End If
                             
                             ' commit modifications
-                            Call WriteDatabase(GetFilePath("Users.txt"))
+                            Call WriteDatabase(GetFilePath(FILE_USERDB))
                             
                             ' break loop
                             Exit For
@@ -4802,7 +4802,7 @@ Private Function SaveSettings() As Boolean
                             End If
                             
                             ' commit modifications
-                            Call WriteDatabase(GetFilePath("Users.txt"))
+                            Call WriteDatabase(GetFilePath(FILE_USERDB))
                         Else
                             Call RemoveItem(Clients(i), "users", _
                                 "GAME")
@@ -4938,8 +4938,8 @@ Private Sub cmdDefaults_Click()
     If MsgBox("Are you sure you want to restore the default Values()?" & vbCrLf & _
             "(All current color data will be lost unless exported)", vbYesNo + vbExclamation) = vbYes Then
             
-        If LenB(Dir$(GetFilePath("Colors.sclf"))) > 0 Then
-            Kill GetFilePath("Colors.sclf")
+        If LenB(Dir$(GetFilePath(FILE_COLORS))) > 0 Then
+            Kill GetFilePath(FILE_COLORS)
             Call GetColorLists
             Call LoadColors
         End If
@@ -4952,7 +4952,7 @@ Private Sub SaveColors(Optional sPath As String)
     
     f = FreeFile
     
-    If LenB(sPath) = 0 Then sPath = GetFilePath("Colors.sclf")
+    If LenB(sPath) = 0 Then sPath = GetFilePath(FILE_COLORS)
     
     Open sPath For Random As #f Len = 4
     
@@ -5329,7 +5329,7 @@ Private Sub InitBasicConfig()
         .AddItem "asia.battle.net"
         
         ' get additional servers
-        Set AdditionalServerList = ListFileLoad(GetFilePath("Servers.txt"))
+        Set AdditionalServerList = ListFileLoad(GetFilePath(FILE_SERVER_LIST))
         
         ' if additional servers, add a blank line, then add them
         If AdditionalServerList.Count > 0 Then

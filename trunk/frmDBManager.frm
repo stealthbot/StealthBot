@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmDBManager 
    AutoRedraw      =   -1  'True
    BackColor       =   &H80000007&
@@ -543,7 +543,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
         
     ElseIf ((dbType = 1) Or (dbType = 2)) Then
         
-        Dim user As String
+        Dim User As String
         Dim Msg  As String
     
         Open strPath For Input As #f
@@ -552,20 +552,20 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                 
                 If (buf <> vbNullString) Then
                     If (Not InStr(1, buf, Space$(1), vbBinaryCompare) = 0) Then
-                        user = Left$(buf, InStr(1, buf, Space$(1), vbBinaryCompare) - 1)
+                        User = Left$(buf, InStr(1, buf, Space$(1), vbBinaryCompare) - 1)
                         
-                        Msg = Mid$(buf, Len(user) + 1)
+                        Msg = Mid$(buf, Len(User) + 1)
                     Else
-                        user = buf
+                        User = buf
                     End If
                 
-                    If (GetAccess(user, "USER").Username <> vbNullString) Then
+                    If (GetAccess(User, "USER").Username <> vbNullString) Then
                         For i = 0 To UBound(m_DB)
-                            If ((StrComp(m_DB(i).Username, user, vbTextCompare) = 0) And _
+                            If ((StrComp(m_DB(i).Username, User, vbTextCompare) = 0) And _
                                 (StrComp(m_DB(i).Type, "User", vbTextCompare) = 0)) Then
                                 
                                 With m_DB(i)
-                                    .Username = user
+                                    .Username = User
                                     .Type = "USER"
                                     .ModifiedBy = "(console)"
                                     .ModifiedOn = Now
@@ -576,7 +576,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                                     
                                     If (Not (trvUsers.DropHighlight Is Nothing)) Then
                                         If (StrComp(trvUsers.DropHighlight.Tag, "Group", vbTextCompare) = 0) Then
-                                            If (IsInGroup(user, trvUsers.DropHighlight.Text) = False) Then
+                                            If (IsInGroup(User, trvUsers.DropHighlight.Text) = False) Then
                                                 .Groups = .Groups & "," & trvUsers.DropHighlight.Text
                                             End If
                                         End If
@@ -594,7 +594,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                         
                         ' create new database entry
                         With m_DB(UBound(m_DB))
-                            .Username = user
+                            .Username = User
                             .Type = "USER"
                             .AddedBy = "(console)"
                             .AddedOn = Now
@@ -936,7 +936,7 @@ Private Sub btnSave_Click(Index As Integer)
         DB() = m_DB()
         
         ' save database
-        Call WriteDatabase(GetFilePath("Users.txt"))
+        Call WriteDatabase(GetFilePath(FILE_USERDB))
         
         ' check channel to find potential banned users
         Call g_Channel.CheckUsers
@@ -1986,7 +1986,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
         End If
         
         ' commit modifications
-        'Call WriteDatabase(GetFilePath("Users.txt"))
+        'Call WriteDatabase(GetFilePath(FILE_USERDB))
         
         DB_remove = True
         
