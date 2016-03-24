@@ -28,7 +28,7 @@
 
     <documentation>
       <description>
-        Lists all of the bot's currently loaded scripts.
+        Lists the bot's currently loaded scripts.
       </description>
 
       <specialnotes>
@@ -105,7 +105,7 @@
 
     <documentation>
       <description>
-        Returns additional details about the specified script.
+        Returns additional details about a script.
       </description>
     </documentation>
 
@@ -132,7 +132,7 @@
 
     <documentation>
       <description>
-        Executes the provided visual basic script code.
+        Executes the provided Visual Basic script code.
       </description>
     </documentation>
 
@@ -140,7 +140,7 @@
       <argument name="code" type="string">
         <documentation>
           <description>
-            The raw VBS code to be executed.
+            The code to be executed.
           </description>
         </documentation>
       </argument>
@@ -206,7 +206,7 @@
 
     <documentation>
       <description>
-        Stops watching for a user, They will no longer shop up as red.
+        Stops watching for a user (they will no longer shop up as red).
       </description>
     </documentation>
 
@@ -268,7 +268,7 @@
 
     <documentation>
       <description>
-        Finds users who match the search criteria.
+        Finds users who match the specified criteria.
       </description>
 
       <specialnotes>
@@ -280,7 +280,7 @@
       <argument name="Username/Rank" type="word">
         <documentation>
           <description>
-            The username to search for, May contain Wildcards, Or the Rank to search for.
+            The username or rank to search for (may contain wildcards).
           </description>
         </documentation>
       </argument>
@@ -288,7 +288,7 @@
       <argument name="UpperRank" type="numeic" optional="1">
         <documentation>
           <description>
-            Will find users Between this rank and the rank specified in the first parameter
+            Finds users between this rank and the rank specified in the first parameter
           </description>
 
           <specialnotes>
@@ -314,7 +314,7 @@
 
     <documentation>
       <description>
-        Lists all of the members of the specified group.
+        Lists the members of the specified group.
       </description>
     </documentation>
 
@@ -346,7 +346,7 @@
 
     <documentation>
       <description>
-        Retreives any stored mail for the requesting user.
+        Retrieves stored mail for the requesting user.
       </description>
 
       <specialnotes>
@@ -372,7 +372,7 @@
 
     <documentation>
       <description>
-        Returns the number of pending mail the user has.
+        Returns the number of pending messages the user has.
       </description>
       <specialnotes />
     </documentation>
@@ -395,7 +395,7 @@
 
     <documentation>
       <description>
-        States the specified users's rank and flags.
+        Returns the specified user's rank and flags.
       </description>
     </documentation>
 
@@ -423,7 +423,7 @@
 
     <documentation>
       <description>
-        States a random value between 0 and the specified value. (Defaults to 100)
+        Returns a random number between 0 and the specified value. (Defaults to 100)
       </description>
     </documentation>
 
@@ -521,7 +521,7 @@
 
     <documentation>
       <description>
-        States all users with the specified flag(s).
+        Lists all users with the specified flag(s).
       </description>
     </documentation>
 
@@ -593,7 +593,7 @@
 
     <documentation>
       <description>
-        States the requesting user's rank and flags.
+        Returns the requesting user's rank and flags.
       </description>
     </documentation>
 
@@ -617,7 +617,7 @@
 
     <documentation>
       <description>
-        Creates or modifies a specified database entry.
+        Creates or modifies a specified database entry, overwriting existing values.
       </description>
     </documentation>
 
@@ -869,7 +869,7 @@
 
     <documentation>
       <description>
-        States the address of the server that the bot is currently connected to.
+        Returns the address of the server that the bot is currently connected to.
       </description>
     </documentation>
 
@@ -913,7 +913,7 @@
 
     <documentation>
       <description>
-        States the requesting user's connection latency with the Battle.net server.
+        Returns the requesting user's connection latency with the Battle.net server.
       </description>
     </documentation>
 
@@ -1118,7 +1118,7 @@
 
     <documentation>
       <description>
-        Echos a specified phrase, placing a space after each character.
+        Echoes the specified phrase, placing a space after each character.
       </description>
     </documentation>
 
@@ -1308,7 +1308,7 @@
 
     <documentation>
       <description>
-        Echos a specified phrase
+        Echoes the specified phrase
       </description>
     </documentation>
 
@@ -1377,7 +1377,7 @@
 
     <documentation>
       <description>
-        Echos a specified phrase using all capital letters.
+        Echoes the specified phrase using all capital letters.
       </description>
     </documentation>
 
@@ -1445,7 +1445,7 @@
 
     <documentation>
       <description>
-        Instructs the bot to squelch a specified user.
+        Instructs the bot to squelch the specified user.
       </description>
     </documentation>
 
@@ -1492,7 +1492,7 @@
 
     <documentation>
       <description>
-        Instructs the bot to unsquelch a specified user.
+        Instructs the bot to unsquelch the specified user.
       </description>
     </documentation>
 
@@ -1546,7 +1546,7 @@
 
     <documentation>
       <description>
-        Echos a random quote from the quote database.
+        Returns a random quote from the quote database.
       </description>
     </documentation>
 
@@ -1568,7 +1568,7 @@
 
     <documentation>
       <description>
-        Instructs the bot to set an away message using the specified phrase.
+        Sets an away message using the specified phrase.
       </description>
     </documentation>
 
@@ -1595,7 +1595,7 @@
 
     <documentation>
       <description>
-        Instructs the bot to clear any currently set away message.
+        Clears any currently set away message.
       </description>
     </documentation>
 
@@ -1612,7 +1612,7 @@
 
     <documentation>
       <description>
-        States a specified user's latency with the Battle.net server if the user is present within the current channel.
+        States the specified user's latency with the Battle.net server if the user is present within the current channel.
       </description>
     </documentation>
 
@@ -1656,7 +1656,7 @@
 
     <documentation>
       <description>
-        Instructs the bot to remove a specified user from the bot's friends list.
+        Removes the specified user from the bot's friends list.
       </description>
     </documentation>
 
@@ -1855,7 +1855,7 @@
 
     <documentation>
       <description>
-        States if a specified user matches a tagban.
+        States if the specified user matches a tagban.
       </description>
     </documentation>
 
@@ -1883,7 +1883,7 @@
 
     <documentation>
       <description>
-        Instructs the bot to add a specified user to the bot's friends list.
+        Adds the specified user to the bot's friends list.
       </description>
     </documentation>
 
@@ -2514,7 +2514,7 @@
 
     <documentation>
       <description>
-        Adds a specified tag to the tagban list.
+        Adds the specified tag to the tagban list.
       </description>
     </documentation>
 
@@ -2550,7 +2550,7 @@
 
     <documentation>
       <description>
-        Removes a specifed tag from the tagban list.
+        Removes the specifed tag from the tagban list.
       </description>
     </documentation>
 
@@ -2580,7 +2580,7 @@
 
     <documentation>
       <description>
-        Adds a specified user to the shitlist.
+        Adds the specified user to the shitlist.
       </description>
     </documentation>
 
@@ -2664,7 +2664,7 @@
 
     <documentation>
       <description>
-        Enables, disables, or changes the settings of, a welcome message.
+        Enables, disables, or changes the settings of a welcome message.
       </description>
     </documentation>
 
@@ -2732,7 +2732,7 @@
 
     <documentation>
       <description>
-        Gets the bot's account's information from Battle.net.
+        Requests the bot's account information from Battle.net.
       </description>
     </documentation>
 
@@ -2773,7 +2773,7 @@
 
     <documentation>
       <description>
-        Filters any incoming messages containing the specified phrase.
+        Filters incoming messages containing the specified phrase.
       </description>
     </documentation>
 
@@ -2800,7 +2800,7 @@
 
     <documentation>
       <description>
-        Stops filtering any incoming messages containing the specified phrase.
+        Removes the specified incoming message filter.
       </description>
     </documentation>
 
@@ -2827,7 +2827,7 @@
 
     <documentation>
       <description>
-        Filters any incoming message from the specified user.
+        Filters incoming messages from the specified user.
       </description>
     </documentation>
 
@@ -2854,7 +2854,7 @@
 
     <documentation>
       <description>
-        Stops filtering any incoming message from the specified user.
+        Stops filtering incoming messages from the specified user.
       </description>
     </documentation>
 
@@ -2881,7 +2881,7 @@
 
     <documentation>
       <description>
-        Toggles the use of mp3 commands.
+        Toggles the use of MP3 commands.
       </description>
     </documentation>
 
@@ -2900,7 +2900,7 @@
 
     <documentation>
       <description>
-        Enables, disables, or displays the status of kicking users from the channel when they yell.
+        Controls the automatic kicking of users when they send a message using all uppercase characters.
       </description>
     </documentation>
 
@@ -2930,7 +2930,7 @@
 
     <documentation>
       <description>
-        Lists all of the bot's currently banned clients.
+        Lists all of the currently banned game clients.
       </description>
     </documentation>
 
@@ -2949,7 +2949,7 @@
 
     <documentation>
       <description>
-        Adds the specified client to the bot's list of banned clients.
+        Bans the specified game client from the channel.
       </description>
     </documentation>
 
@@ -2996,7 +2996,7 @@
 
     <documentation>
       <description>
-        removes the specified client from the bot's list of banned clients.
+        Removes the specified client from the list of banned clients.
       </description>
     </documentation>
 
@@ -3023,7 +3023,7 @@
 
     <documentation>
       <description>
-        The "plugban" command will enable, disable, or state the status of, UDP plug banning.
+        Controls the automatic banning of users with a UDP plug.
       </description>
     </documentation>
 
@@ -3050,7 +3050,7 @@
 
     <documentation>
       <description>
-        The "phrasebans" command will enable, disable, or state the status of, phrase banning.
+        Controls the automatic banning of users who say certain banned phrases.
       </description>
     </documentation>
 
@@ -3077,7 +3077,7 @@
 
     <documentation>
       <description>
-        Will attempt to use iTunes as the target media player for use with mp3 commands.
+        Attempts to use iTunes as the bot's media player.
       </description>
     </documentation>
 
@@ -3094,7 +3094,7 @@
 
     <documentation>
       <description>
-        Will attempt to use Winamp as the target media player for use with mp3 commands.
+        Attempts to use Winamp as the bot's media player.
       </description>
     </documentation>
 
@@ -3111,7 +3111,7 @@
 
     <documentation>
       <description>
-        Will set the bot's idle to the specified message.
+        Sets a message to be sent to the channel at regular intervals.
       </description>
     </documentation>
 
@@ -3151,7 +3151,7 @@
 
     <documentation>
       <description>
-        Set the bot's idle message to the specified type.
+        Sets the type of idle message.
       </description>
     </documentation>
 
@@ -3187,7 +3187,7 @@
 
     <documentation>
       <description>
-        Sets the bot's idle delay to the specified numer of minutes.
+        Sets the time between idle messages, in minutes.
       </description>
     </documentation>
 
@@ -3214,7 +3214,7 @@
 
     <documentation>
       <description>
-        Toggles the selected media player's repeat setting.
+        Toggles the media player's repeat setting.
       </description>
     </documentation>
 
@@ -3253,7 +3253,7 @@
 
     <documentation>
       <description>
-        Designates or displays the heir to the channel moderator position.
+        Designates a user to become an operator when the bot leaves the channel.
       </description>
 
       <specialnotes>
@@ -3301,7 +3301,7 @@
 
     <documentation>
       <description>
-        Sets the bot's command identifier to the specified.
+        Sets the bot's command identifier to the specified string.
       </description>
     </documentation>
 
@@ -3328,7 +3328,7 @@
 
     <documentation>
       <description>
-        Makes the bot ignore all messages within private chat channels from users not on the bot's friends list.
+        Ignores all messages within private chat channels from users not on the bot's friends list.
       </description>
     </documentation>
 
@@ -3345,7 +3345,7 @@
 
     <documentation>
       <description>
-        Makes the bot unignore all messages within private chat channels from users not on the bot's friends list.
+        Stops ignoring all messages within private chat channels from users not on the bot's friends list.
       </description>
     </documentation>
 
@@ -3360,11 +3360,13 @@
   <command name="rem">
     <aliases>
       <alias>del</alias>
+      <alias>remove</alias>
+      <alias>delete</alias>
     </aliases>
 
     <documentation>
       <description>
-        Removes a specified user from the bot's database.
+        Removes the specified user from the bot's database.
       </description>
     </documentation>
 
@@ -3392,7 +3394,7 @@
 
     <documentation>
       <description>
-        Sets the bot's home channel to the channel specified. If used with no arguments, sets the bot's home channel to join the server default channel.
+        Sets the bot's home channel. If used with no arguments, sets the home channel to the server default.
       </description>
     </documentation>
 
@@ -3572,7 +3574,7 @@
 
     <documentation>
       <description>
-        Skips to the next playlist entry in the selected media player's playlist.
+        Skips to the next song in the media player's playlist.
       </description>
     </documentation>
 
@@ -3591,7 +3593,7 @@
 
     <documentation>
       <description>
-        Skips to the pevious playlist entry in the selected media player's playlist.
+        Skips to the pevious song in the media player's playlist.
       </description>
     </documentation>
 
@@ -3610,7 +3612,7 @@
 
     <documentation>
       <description>
-        Will attempt to ban all users within the specified channel.
+        Attempts to ban all users within the specified channel.
       </description>
     </documentation>
 
@@ -3618,7 +3620,7 @@
       <argument name="channel" type="string">
         <documentation>
           <description>
-            The bot will attempt to ban the users who are in this channel.
+            The channel whos users should be banned.
           </description>
         </documentation>
       </argument>
@@ -3648,7 +3650,7 @@
       <argument name="channel" type="string">
         <documentation>
           <description>
-            The bot will attempt to squilch the users who are in this channel.
+            The channel whos users should be squelched.
           </description>
         </documentation>
       </argument>
@@ -3669,7 +3671,7 @@
 
     <documentation>
       <description>
-        Allows the requesting user to check or change the status of idle banning.
+        Controls the automatic banning of idle users.
       </description>
     </documentation>
 
@@ -3712,7 +3714,7 @@
 
     <documentation>
       <description>
-        Changes the bot's CD-Key configuration entry to the one specified.
+        Changes the bot's CD-Key.
       </description>
     </documentation>
 
@@ -3739,7 +3741,7 @@
 
     <documentation>
       <description>
-        Changes the bot's expansion CD-Key configuration entry to the one specified.
+        Changes the bot's expansion CD-Key.
       </description>
     </documentation>
 
@@ -3766,7 +3768,7 @@
 
     <documentation>
       <description>
-        Adds a specified user to the bot's shitlist and will then attempt to ban and ignore the user.
+        Adds the specified user to the shitlist and then attempts to ban and ignore the user.
       </description>
     </documentation>
 
@@ -3819,7 +3821,7 @@
 
     <documentation>
       <description>
-        Removes a specified user from the bot's shitlist, and will then attempt to unban and unignore the user.
+        Removes the specified user from the shitlist, and attempts to unban and unignore the user.
       </description>
     </documentation>
 
@@ -3849,7 +3851,7 @@
 
     <documentation>
       <description>
-        Clears the bot's internal banlist. Used for ban evasion and unbanning wildcards.
+        Clears the internal banlist. Used for ban evasion and unbanning wildcards.
       </description>
     </documentation>
 
@@ -3910,7 +3912,7 @@
 
     <documentation>
       <description>
-        Enables, disables, changes, or displays the channel password protection.
+        Controls channel password protection.
       </description>
     </documentation>
 
@@ -3952,7 +3954,7 @@
 
     <documentation>
       <description>
-        States the contents of a specified file within the bot's directory.
+        Outputs the contents of a specified file within the bot's directory.
       </description>
     </documentation>
 
@@ -4046,7 +4048,7 @@
 
     <documentation>
       <description>
-        Makes the bot join its home channel.
+        Makes the bot return to its home channel.
       </description>
     </documentation>
 
@@ -4063,7 +4065,7 @@
 
     <documentation>
       <description>
-        Promotes the specified user in the current WarCraft III clan.
+        Promotes the specified user in the bot's WarCraft III clan.
       </description>
     </documentation>
 
@@ -4102,7 +4104,7 @@
 
     <documentation>
       <description>
-        Demotes the specified user in the current WarCraft III clan.
+        Demotes the specified user in the bot's WarCraft III clan.
       </description>
     </documentation>
 
@@ -4141,7 +4143,7 @@
 
     <documentation>
       <description>
-        Changes the configuration entry for the username to the username specified.
+        Sets a new username for the bot to use.
       </description>
     </documentation>
 
@@ -4168,7 +4170,7 @@
 
     <documentation>
       <description>
-        Changes the configuration entry for the password to the password specified.
+        Sets a new password for the bot to use.
       </description>
     </documentation>
 
@@ -4195,7 +4197,7 @@
 
     <documentation>
       <description>
-        Changes the configuration entry for the server to the server specified.
+        Sets a new Battle.net server for the bot to connect to.
       </description>
     </documentation>
 
@@ -4218,11 +4220,13 @@
   </command>
 
   <command name="setbnlsserver">
-    <aliases />
+    <aliases>
+        <alias>setbnls</alias>
+    </aliases>
 
     <documentation>
       <description>
-        Changes the configuration entry for the BNLS server to the server specified.
+        Sets a new BNLS server for the bot to connect to.
       </description>
     </documentation>
 
@@ -4294,7 +4298,7 @@
 
     <documentation>
       <description>
-        Makes the bot forcefully (attempt to create if not exists) join the specified channel.
+        Makes the bot forcefully join the specified channel.
       </description>
     </documentation>
 
@@ -4318,7 +4322,7 @@
 
     <documentation>
       <description>
-        Enables/disables the use of quiettime, or displays the current status of quiet time.
+        Controls the banning of unauthorized users who talk in the channel.
       </description>
     </documentation>
 
@@ -4348,7 +4352,7 @@
 
     <documentation>
       <description>
-        Designates the specified user and resigns from channel moderator position.
+        Attempts to transfer operator status to the specified user.
       </description>
     </documentation>
 
@@ -4392,7 +4396,7 @@
 
     <documentation>
       <description>
-        Invites a specified user into the clan in which the bot is a member.
+        Invites a user into bot's WarCraft III clan.
       </description>
 
       <specialnotes>
@@ -4426,7 +4430,7 @@
 
     <documentation>
       <description>
-        Makes the specified clan member the chieftain of the bot's clan.
+        Transfers ownership of the bot's clan to the specified user.
       </description>
 
       <specialnotes>
@@ -4544,7 +4548,7 @@
 
     <documentation>
       <description>
-        Enables, disables, or displays the status of WarCraft III peon banning.
+        Controls the automatic banning of WarCraft III peons.
       </description>
     </documentation>
 
@@ -4613,7 +4617,7 @@
 
     <documentation>
       <description>
-        Lists each of the commands available to the specified attribute.
+        Lists the commands available to users with the specified flags/attributes.
       </description>
     </documentation>
 
@@ -4647,7 +4651,7 @@
 
     <documentation>
       <description>
-        Lists each of the commands available to the specified rank.
+        Lists the commands available to users with the specified rank.
       </description>
     </documentation>
 
@@ -4679,7 +4683,7 @@
 
     <documentation>
       <description>
-        Unbans, and UnSquelches the selected user.
+        Unbans and unsquelches the selected user.
       </description>
     </documentation>
 
