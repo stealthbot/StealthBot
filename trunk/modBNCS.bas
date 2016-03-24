@@ -6,7 +6,7 @@ Private Declare Sub GetSystemTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
 Private Declare Sub GetLocalTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
 Private Declare Function SystemTimeToFileTime Lib "kernel32" (lpSystemTime As SYSTEMTIME, lpFileTime As FILETIME) As Long
 
-
+' Packet IDs
 Public Const SID_NULL                   As Byte = &H0
 Public Const SID_CLIENTID               As Byte = &H5
 Public Const SID_STARTVERSIONING        As Byte = &H6
@@ -36,6 +36,42 @@ Public Const SID_AUTH_ACCOUNTCREATE     As Byte = &H52
 Public Const SID_AUTH_ACCOUNTLOGON      As Byte = &H53
 Public Const SID_AUTH_ACCOUNTLOGONPROOF As Byte = &H54
 Public Const SID_SETEMAIL               As Byte = &H59
+
+' SID_CHATEVENT EVENT IDs
+Public Const ID_USER = &H1
+Public Const ID_JOIN = &H2
+Public Const ID_LEAVE = &H3
+Public Const ID_WHISPER = &H4
+Public Const ID_TALK = &H5
+Public Const ID_BROADCAST = &H6
+Public Const ID_CHANNEL = &H7
+Public Const ID_USERFLAGS = &H9
+Public Const ID_WHISPERSENT = &HA
+Public Const ID_CHANNELFULL = &HD
+Public Const ID_CHANNELDOESNOTEXIST = &HE
+Public Const ID_CHANNELRESTRICTED = &HF
+Public Const ID_INFO = &H12
+Public Const ID_ERROR = &H13
+Public Const ID_EMOTE = &H17
+' Additional event constants for logging
+Public Const ID_CONNECTED = &H18
+Public Const ID_DISCONNECTED = &H19
+
+
+Public Const USER_BLIZZREP& = &H1
+Public Const USER_CHANNELOP& = &H2
+Public Const USER_SPEAKER& = &H4
+Public Const USER_SYSOP& = &H8
+Public Const USER_NOUDP& = &H10
+Public Const USER_BEEPENABLED& = &H100
+Public Const USER_KBKOFFICIAL& = &H1000
+Public Const USER_JAILED& = &H100000
+Public Const USER_SQUELCHED& = &H20
+Public Const USER_PGLPLAYER& = &H200
+Public Const USER_GFPLAYER& = &H200000
+Public Const USER_GUEST& = &H40
+Public Const USER_PGLOFFICIAL& = &H400
+Public Const USER_KBKPLAYER& = &H800
 
 Public Const BNCS_NLS As Long = 1 'New:    SID_AUTH_*
 Public Const BNCS_OLS As Long = 2 'Old:    SID_CLIENTID2
