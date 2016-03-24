@@ -784,7 +784,7 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
             End If
 
             ' grab path to database
-            dbPath = GetFilePath("Users.txt")
+            dbPath = GetFilePath(FILE_USERDB)
 
             ' does user already exist in database?
             For i = LBound(DB) To UBound(DB)
@@ -1080,7 +1080,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
         End If
         
         ' commit modifications
-        Call WriteDatabase(GetFilePath("Users.txt"))
+        Call WriteDatabase(GetFilePath(FILE_USERDB))
         
         DB_remove = True
         
@@ -1197,7 +1197,7 @@ Public Sub LoadDatabase()
     Dim SaveDB As Boolean
     
     ReDim DB(0)
-    Path = GetFilePath("Users.txt")
+    Path = GetFilePath(FILE_USERDB)
     
     If LenB(Dir$(Path)) > 0 Then
         f = FreeFile

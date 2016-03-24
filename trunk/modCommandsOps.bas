@@ -34,7 +34,7 @@ Public Sub OnAddPhrase(Command As clsCommandObj)
             
             Phrases(UBound(Phrases)) = sPhrase
             
-            Open GetFilePath("PhraseBans.txt") For Output As #iFile
+            Open GetFilePath(FILE_PHRASE_BANS) For Output As #iFile
                 For i = LBound(Phrases) To UBound(Phrases)
                     If (LenB(Trim$(Phrases(i))) > 0) Then
                         Print #iFile, Phrases(i)
@@ -179,7 +179,7 @@ Public Sub OnDelPhrase(Command As clsCommandObj)
         
         iFile = FreeFile
         
-        Open GetFilePath("PhraseBans.txt") For Output As #iFile
+        Open GetFilePath(FILE_PHRASE_BANS) For Output As #iFile
             For i = LBound(Phrases) To UBound(Phrases)
                 If (Not StrComp(Phrases(i), sPhrase, vbTextCompare) = 0) Then
                     Print #iFile, Phrases(i)

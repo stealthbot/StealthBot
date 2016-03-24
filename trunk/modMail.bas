@@ -86,7 +86,7 @@ Public Sub OpenMailFile()
     
     f = FreeFile
     
-    MailFile = GetFilePath("Mail.dat")
+    MailFile = GetFilePath(FILE_MAILDB)
     
     If (LenB(Dir$(MailFile)) = 0) Then
         Open MailFile For Output As #f

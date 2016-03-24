@@ -242,8 +242,8 @@ Public Function GetGamePath(ByVal Client As String) As String
     Dim sep2 As String
     
     ' Moved CheckRevision.ini to profile directory instead of install directory. -Pyro, 2016-03-21
-    'CRevINIPath = GetFilePath("CheckRevision.ini", StringFormat("{0}\", App.Path))
-    CRevINIPath = GetFilePath("CheckRevision.ini")
+    'CRevINIPath = GetFilePath(FILE_CREV_INI, StringFormat("{0}\", App.Path))
+    CRevINIPath = GetFilePath(FILE_CREV_INI)
     
     Key = GetProductKey(Client)
     Path = ReadINI$(StringFormat("CRev_{0}", Key), "Path", CRevINIPath)
@@ -1345,8 +1345,8 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
     Dim s As String
     Dim i As Integer
     
-    If (LenB(Dir$(GetFilePath("Filters.ini"))) > 0) Then
-        s = ReadINI("BlockList", "Total", GetFilePath("Filters.ini"))
+    If (LenB(Dir$(GetFilePath(FILE_FILTERS))) > 0) Then
+        s = ReadINI("BlockList", "Total", GetFilePath(FILE_FILTERS))
         
         If (StrictIsNumeric(s)) Then
             i = s
@@ -1357,7 +1357,7 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
         Username = PrepareCheck(Username)
         
         For i = 0 To i
-            s = ReadINI("BlockList", "Filter" & i, GetFilePath("Filters.ini"))
+            s = ReadINI("BlockList", "Filter" & i, GetFilePath(FILE_FILTERS))
             
             If (Username Like PrepareCheck(s)) Then
                 CheckBlock = True
@@ -2392,19 +2392,19 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phr
         Case CPWHISPER: s = "WHISPER"
     End Select
     
-    If (Dir$(GetFilePath("CaughtPhrases.htm")) = vbNullString) Then
-        Open GetFilePath("CaughtPhrases.htm") For Output As #i
+    If (Dir$(GetFilePath(FILE_CAUGHT_PHRASES)) = vbNullString) Then
+        Open GetFilePath(FILE_CAUGHT_PHRASES) For Output As #i
             Print #i, "<html>"
         Close #i
     End If
     
-    Open GetFilePath("CaughtPhrases.htm") For Append As #i
+    Open GetFilePath(FILE_CAUGHT_PHRASES) For Append As #i
         If (LOF(i) > 10000000) Then
             Close #i
             
-            Call Kill(GetFilePath("CaughtPhrases.htm"))
+            Call Kill(GetFilePath(FILE_CAUGHT_PHRASES))
             
-            Open GetFilePath("CaughtPhrases.htm") For Output As #i
+            Open GetFilePath(FILE_CAUGHT_PHRASES) For Output As #i
         End If
         
         Msg = Replace(Msg, "<", "&lt;", 1)

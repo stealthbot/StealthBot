@@ -29,7 +29,7 @@ Public Function GetCommands(Optional ByVal scriptName As String = vbNullString) 
     
     Set GetCommands = New Collection
   
-    doc.Load GetFilePath("Commands.xml")
+    doc.Load GetFilePath(FILE_COMMANDS)
     
     scriptName = clsCommandObj.CleanXPathVar(scriptName)
     

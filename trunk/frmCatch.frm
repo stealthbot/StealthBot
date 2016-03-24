@@ -196,7 +196,7 @@ Private Sub cmdDone_Click()
     End If
     
     f = FreeFile
-    Open GetFilePath("CatchPhrases.txt") For Output As #f
+    Open GetFilePath(FILE_CATCH_PHRASES) For Output As #f
     
     For i = 0 To lbCatch.ListCount
         Catch(i) = lbCatch.List(i)

@@ -128,7 +128,7 @@ Public Sub OnFind(Command As clsCommandObj)
     
     If (Not Command.IsValid) Then Exit Sub
     
-    If (LenB(Dir$(GetFilePath("Users.txt"))) = 0) Then
+    If (LenB(Dir$(GetFilePath(FILE_USERDB))) = 0) Then
        Command.Respond "No userlist available. Place a users.txt file in the bot's root directory."
        Exit Sub
     End If
@@ -720,7 +720,7 @@ On Error GoTo ERROR_HANDLER
     Dim Flag        As String
     AZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
-    'If (LenB(Dir$(GetFilePath("Commands.xml"))) = 0) Then
+    'If (LenB(Dir$(GetFilePath(FILE_COMMANDS))) = 0) Then
     '    Command.Respond "Error: The XML database could not be found in the working directory."
     '    Exit Function
     'End If

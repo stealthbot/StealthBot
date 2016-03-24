@@ -50,7 +50,7 @@ Public Sub OnBlock(Command As clsCommandObj)
     Dim TotalString As String
     
     If (Command.IsValid) Then
-        FiltersPath = GetFilePath("Filters.ini")
+        FiltersPath = GetFilePath(FILE_FILTERS)
         If (CheckBlock(Command.Argument("Username"))) Then 'Should prevent adding filters that are the same as other filters
             Command.Respond "That username is already in the block list, or is under a wildcard block."
         Else
@@ -118,7 +118,7 @@ Public Sub OnFilter(Command As clsCommandObj)
     Dim TotalString As String
     
     If (Command.IsValid) Then
-        FiltersPath = GetFilePath("Filters.ini")
+        FiltersPath = GetFilePath(FILE_FILTERS)
         If (CheckMsg(Command.Argument("Filter"))) Then 'Should prevent adding filters that are the same as other filters
             Command.Respond "That filter is already in the list, or is under a wildcard."
         Else
@@ -208,7 +208,7 @@ Public Sub OnUnBlock(Command As clsCommandObj)
     Dim FiltersPath As String
     
     If (Command.IsValid) Then
-        FiltersPath = GetFilePath("Filters.ini")
+        FiltersPath = GetFilePath(FILE_FILTERS)
         
         TotalString = ReadINI("BlockList", "Total", FiltersPath)
         If (LenB(TotalString) = 0) Then TotalString = "0"
@@ -244,7 +244,7 @@ Public Sub OnUnFilter(Command As clsCommandObj)
     Dim FiltersPath As String
     
     If (Command.IsValid) Then
-        FiltersPath = GetFilePath("Filters.ini")
+        FiltersPath = GetFilePath(FILE_FILTERS)
         
         TotalString = ReadINI("TextFilters", "Total", FiltersPath)
         If (LenB(TotalString) = 0) Then TotalString = "0"
