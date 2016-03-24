@@ -1099,24 +1099,14 @@ End Function
 ' requires public
 Public Function GetSafelist(ByVal Username As String) As Boolean
     Dim i As Long
-    
-    If (bFlood = False) Then
-        Dim gAcc As udtGetAccessResponse
+    Dim gAcc As udtGetAccessResponse
         
-        gAcc = GetCumulativeAccess(Username, "USER")
+    gAcc = GetCumulativeAccess(Username, "USER")
         
-        If (Not InStr(1, gAcc.Flags, "S", vbBinaryCompare) = 0) Then
-            GetSafelist = True
-        ElseIf (gAcc.Rank >= AutoModSafelistValue) Then
-            GetSafelist = True
-        End If
-    Else
-        For i = 0 To (UBound(gFloodSafelist) - 1)
-            If PrepareCheck(Username) Like gFloodSafelist(i) Then
-                GetSafelist = True
-                Exit For
-            End If
-        Next i
+    If (Not InStr(1, gAcc.Flags, "S", vbBinaryCompare) = 0) Then
+        GetSafelist = True
+    ElseIf (gAcc.Rank >= AutoModSafelistValue) Then
+        GetSafelist = True
     End If
 End Function
 

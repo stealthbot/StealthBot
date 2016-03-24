@@ -1,8 +1,6 @@
 Attribute VB_Name = "modConstants"
 Option Explicit
 
-
-Public CVERSION As String
 Public Const REVISION As String = ""
 Public Const VERCODE As String = "2697"
 Public Const BNCSUTIL_VERSION As String = "1.3.1"

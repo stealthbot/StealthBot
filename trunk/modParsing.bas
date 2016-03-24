@@ -388,9 +388,7 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outbuf As Stri
     
     'Debug.Print "Received statstring: " & Statstring
     If LenB(Statstring) > 0 Then
-        
-        g_ThisIconCode = -1
-    
+
         Select Case Left$(Statstring, 4)
             Case "3RAW", "PX3W"
                 If Len(Statstring) > 4 Then
@@ -411,8 +409,6 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outbuf As Stri
                         Values(3) = StrReverse(temp(3))
                     End If
                     
-                    g_ThisIconCode = GetRaceAndIcon(Values(1), Values(2), Left$(Statstring, 4), IIf(WCG, temp(1), ""))
-                    
                     sClan = IIf(UBound(Values) > 2, Values(3), "")
                     
                     If Left$(Statstring, 4) = "3RAW" Then
@@ -423,10 +419,8 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outbuf As Stri
                 Else
                     If Left$(Statstring, 4) = "3RAW" Then
                         Call StrCpy(outbuf, "Warcraft III: Reign of Chaos.")
-                        g_ThisIconCode = -56
                     Else
                         Call StrCpy(outbuf, "Warcraft III: The Frozen Throne.")
-                        g_ThisIconCode = -10
                     End If
                 End If
                 

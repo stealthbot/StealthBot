@@ -513,11 +513,9 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
         End If
     End If
 
-    If (bFlood = False) Then
-        On Error Resume Next
+    On Error Resume Next
         
-        RunInAll "Event_MessageSent", ID, Message, Tag
-    End If
+    RunInAll "Event_MessageSent", ID, Message, Tag
     
     Exit Sub
 
@@ -1334,8 +1332,6 @@ Public Sub AddName(ByVal Username As String, ByVal AccountName As String, ByVal 
         
         .Refresh
     End With
-    
-    g_ThisIconCode = -1
     
     frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
 End Sub
@@ -2722,25 +2718,6 @@ Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
     
     GetStringChunk = Trim(GetStringChunk)
 End Function
-
-'Public Sub SpamCheck(ByVal User As String, ByVal Msg As String)
-'    Static Top As Integer
-'    Dim i As Integer
-'
-'    If Len(Msg) > 8 Then
-'        i = InStr(User, "#")
-'
-'        If i > 0 Then
-'            user = left$(
-'
-'        Last4Messages(Top) = LCase(Msg)
-'        Last4Speakers(Top) = LCase(User)
-'        Top = Top + 1
-'
-'        If Top > 3 Then Top = 0
-'    End If
-'
-'End Sub
 
 Function GetProductKey(Optional ByVal Product As String) As String
     If (LenB(Product) = 0) Then

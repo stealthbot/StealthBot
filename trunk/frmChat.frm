@@ -1702,8 +1702,6 @@ Private Sub Form_Load()
     Set colLastSeen = New Collection
     Set GErrorHandler = New clsErrorHandler
     Set BotVars = New clsBotVars
-    Set colQueue = New Collection
-    Set colSafelist = New Collection
     
     sStr = SetCommandLine(Command())
     
@@ -1752,7 +1750,6 @@ Private Sub Form_Load()
     lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
-    ReDim ClientBans(0)
     ReDim Catch(0)
     ReDim gBans(0)
     ReDim gOutFilters(0)
@@ -3112,10 +3109,8 @@ Sub Form_Unload(Cancel As Integer)
     Set ListToolTip = Nothing
     Set GErrorHandler = Nothing
     Set FriendListHandler = Nothing
-    Set colQueue = Nothing
     Set colWhisperWindows = Nothing
     Set colLastSeen = Nothing
-    Set colSafelist = Nothing
     Set SharedScriptSupport = Nothing
     Set ds = Nothing
     
@@ -4350,7 +4345,6 @@ Private Sub mnuPacketLog_Click()
     If mnuPacketLog.Checked Then
         ' turning this feature off
         AddChat RTBColors.SuccessText, "StealthBot packet traffic will no longer be logged."
-        PacketLogFilePath = ""
     Else
         ' turning it on
         AddChat RTBColors.SuccessText, "StealthBot packet traffic will be logged in the bot's folder, in a file named " & Format(Date, "yyyy-MM-dd") & "-PacketLog.txt."
@@ -4968,7 +4962,6 @@ Private Sub mnuToggle_Click()
         AddChat RTBColors.InformationText, "Join/Leave messages enabled."
         JoinMessagesOff = False
         WriteINI "Other", "JoinLeaves", "Y"
-        If ForcedJoinsOn = 2 Then ForcedJoinsOn = 1
     End If
 End Sub
 
@@ -5529,11 +5522,6 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         End If
                 
                     Case Else 'normal ENTER - old rules apply
-                        'If (Highlighted) Then
-                        '    cboSend.SelText = vbNullString
-                        '
-                        '    Highlighted = False
-                        'End If
                     
                         If (LenB(cboSend.Text) > 0) Then
                             On Error Resume Next
@@ -5726,41 +5714,6 @@ Private Sub cboSend_KeyPress(KeyAscii As Integer)
             If (.ListCount > 15) Then
                 .RemoveItem 15
             End If
-            
-            'If ((OKToDoAutocompletion(.text, KeyAscii)) And _
-            '    (KeyAscii <> 8)) Then
-            '
-            '    If (Highlighted) Then
-            '        .SelText = ""
-            '        Highlighted = False
-            '    End If
-            '
-            '    If (.SelStart = Len(.text)) Then
-            '        If (MatchIndex > 0) Then
-            '            sClosest = MatchClosest(.text & Chr(KeyAscii), _
-            '                MatchIndex)
-            '        End If
-            '
-            '        If (Len(sClosest) = 0) Then
-            '            sClosest = MatchClosest(.text & Chr(KeyAscii), 1)
-            '        End If
-            '
-            '        oldSelStart = Len(.text) + 1 'text is "b" = 1 = 2
-            '
-            '        If (LenB(sClosest) > 0) Then
-            '            .SelStart = oldSelStart
-            '            .SelLength = 0
-            '            .SelText = Chr(KeyAscii) & Mid$(sClosest, (oldSelStart + 1) - InStr(.text, " "))
-            '            .SelStart = oldSelStart
-            '            .SelLength = Len(.text)
-            '
-            '            KeyAscii = 0
-            '            Highlighted = True
-            '        End If
-            '    End If
-            'Else
-            '    Highlighted = False
-            'End If
         End If
     End With
     
@@ -5770,87 +5723,6 @@ Private Sub cboSend_KeyPress(KeyAscii As Integer)
         cboSend.ForeColor = vbWhite
     End If
 End Sub
-
-
-'Private Sub QueueTimer_Timer()
-'    On Error GoTo ERROR_HANDLER
-'
-'    Static delay As Integer
-'    Static Count As Integer
-'
-'    Dim Message  As String
-'    Dim Tag      As String
-'    Dim Sent     As Byte
-'    Dim I        As Integer
-'    Dim override As Integer
-'    Dim pri      As Integer
-'    Dim ID       As Integer
-'
-'    If ((g_Queue.Count) And (g_Online)) Then
-'        With g_Queue.Peek
-'            Message = .Message
-'            Tag = .Tag
-'            pri = .PRIORITY
-'            ID = .ID
-'        End With
-'
-'        If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
-'            '// This is a dummy queue message faking a 70-character queue entry
-'            QueueLoad = (QueueLoad + 1)
-'            QueueMaster = (QueueMaster + 3)
-'
-'            Call g_Queue.Pop
-'        Else
-'            If ((StrComp(Left$(Message, 11), "/unsquelch ", vbTextCompare) = 0) Or _
-'                (StrComp(Left$(Message, 10), "/unignore ", vbTextCompare) = 0)) Then
-'
-'                Unsquelching = True
-'            End If
-'
-'            If ((QueueLoad < 3) And (QueueMaster < 16)) Then
-'                If (Len(Message) <= 70) Then
-'                    QueueLoad = (QueueLoad + 1)
-'                    QueueMaster = (QueueMaster + 3)
-'                ElseIf (Len(Message) <= 130) Then
-'                    QueueLoad = (QueueLoad + 2)
-'                    QueueMaster = (QueueMaster + 5)
-'                ElseIf (Len(Message) <= 170) Then
-'                    QueueLoad = (QueueLoad + 3)
-'                    QueueMaster = (QueueMaster + 7)
-'                Else
-'                    QueueLoad = (QueueLoad + 4)
-'                    QueueMaster = (QueueMaster + 9)
-'                End If
-'
-'                Sent = 1
-'
-'                Call bnetSend(Message, Tag, ID)
-'            End If
-'        End If
-'
-'        If (Sent = 1) Then
-'            Call g_Queue.Pop
-'
-'            ' are we issuing a ban or kick command?
-'            If (g_Queue.Peek.PRIORITY = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
-'                delay = g_BNCSQueue.BanDelay()
-'
-'                QueueTimer.Interval = (QueueTimer.Interval + delay)
-'            End If
-'        End If
-'
-'    End If
-'
-'    Exit Sub
-'
-'ERROR_HANDLER:
-'
-'    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in QueueTimer_Timer()."
-'
-'    Exit Sub
-'
-'End Sub
-
 
 Public Sub SControl_Error()
     Call modScripting.SC_Error
@@ -5990,20 +5862,6 @@ Private Sub Timer_Timer()
     If ReadCfg("Other", "ProfileAmp") = "Y" And g_Online Then Call UpdateProfile
     
     BotVars.JoinWatch = 0
-    
-    If (AutoChatFilter) Then
-        'If ((GetTickCount() - AutoChatFilter) >= 180000) Then
-        '    frmChat.AddChat RTBColors.TalkBotUsername, _
-        '        "Chat filters have been deactivated; " & _
-        '            "activate them by pressing CTRL + F."
-        '
-        '    Call WriteINI("Other", "Filters", "N")
-        '
-        '    Filters = False
-        '
-        '    AutoChatFilter = 0
-        'End If
-    End If
     
     iCounter = iCounter + 1
     
@@ -7124,16 +6982,12 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = ReadCfg(OT, "JoinLeaves")
     JoinMessagesOff = (Not (s = "Y"))
     mnuToggle.Checked = JoinMessagesOff
-    
+
     s = ReadCfg(OT, "Mail")
     If s = "N" Then mail = False Else mail = True
     
-'    s = ReadCFG(OT, "DisableMonitor")
-'    If s = "Y" Then DisableMonitor = True Else DisableMonitor = False
-'
     s = ReadCfg(OT, "BanEvasion")
     If s = "N" Then BotVars.BanEvasion = False Else BotVars.BanEvasion = True
-
     
     s = ReadCfg(OT, "Logging")
     If StrictIsNumeric(s) Then BotVars.Logging = Val(s) Else BotVars.Logging = 1
@@ -7304,20 +7158,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     LoadArray LOAD_PHRASES, Phrases()
     LoadArray LOAD_FILTERS, gFilters()
     
-    's = readcfg(ot, "SendDelay")
-    'If strictisnumeric(s) Then
-    '    quSend.Interval = s
-    'Else
-    '     quSend.Interval = 1150
-    'End If
-    
-    's = readcfg(ot, "LowerDelay")
-    'If strictisnumeric(s) Then
-    '    quLower.Interval = s
-    'Else
-         'quLower.Interval = 2500
-    'End If
-    
     ProtectMsg = ReadCfg(OT, "ProtectMsg")
     If ProtectMsg = vbNullString Then ProtectMsg = "Channel Protection"
     
@@ -7355,13 +7195,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     s = ReadCfg(MN, "UseAltBnls")
     If s = "Y" Then BotVars.UseAltBnls = True Else BotVars.UseAltBnls = False
-    
-    's = ReadCFG(OT, "ClientBansOn")
-    'If s = "Y" Then BotVars.ClientBans = True Else BotVars.ClientBans = False
-    
-    's = ReadCFG(OT, "ClientBans")
-    'ClientBans() = Split(s, " ")
-    'If UBound(ClientBans) = -1 Then ReDim ClientBans(0)
     
     s = ReadCfg(MN, "QuietTime")
     If s = "Y" Then BotVars.QuietTime = True Else BotVars.QuietTime = False
@@ -7621,77 +7454,6 @@ Function OutFilterMsg(ByVal strOut As String) As String
     OutFilterMsg = strOut
 End Function
 
-'Sub SetFloodbotMode(ByVal Mode As Byte)
-'    Dim I   As Integer
-'    Dim Add As Byte
-'
-'    Select Case (Mode)
-'        Case 0      'OFF
-'            bFlood = False
-'
-'            SetNagelStatus frmChat.sckBNet.SocketHandle, True
-'
-'            Call g_Queue.Clear
-'
-'            SetProcessPriority 0, frmChat.hWnd, ppNormal
-'
-'            AddChat RTBColors.TalkBotUsername, "The channel list is most likely not accurate. Please " & _
-'                "rejoin the bot to correct this."
-'
-'            ReDim gFloodSafelist(0)
-'
-'        Case 1      'ON
-'            bFlood = True
-'
-'            SetNagelStatus frmChat.sckBNet.SocketHandle, False
-'
-'            Call g_Queue.Clear
-'
-'            AddChat RTBColors.TalkBotUsername, "You have enabled Emergency Floodbot Protection:"
-'            AddChat RTBColors.InformationText, "- All message-queue actions have been suspended."
-'            AddChat RTBColors.InformationText, "- No greet messages or command responses will be displayed."
-'            AddChat RTBColors.InformationText, "- You can still use any commands from the channel or " & _
-'                "in-bot. You may not see their results."
-'            AddChat RTBColors.InformationText, "- Any user that joins and IS NOT SAFELISTED will be banned."
-'            AddChat RTBColors.InformationText, "- You can add users to the safelist using the safelist " & _
-'                "command in-bot or in-channel."
-'            AddChat RTBColors.TalkBotUsername, "Type '/efp off' to return to normal."
-'
-'            SetProcessPriority 0, frmChat.hWnd, ppHigh
-'
-'            ReDim gFloodSafelist(0)
-'
-'            For I = 1 To colSafelist.Count
-'                If (Not (GetSafelist(colSafelist.Item(I).Name))) Then
-'                    gFloodSafelist(UBound(gFloodSafelist)) = _
-'                        Replace(PrepareCheck(colSafelist.Item(I).Name), Space(1), _
-'                            vbNullString)
-'
-'                    ReDim Preserve gFloodSafelist(UBound(gFloodSafelist) + 1)
-'                End If
-'            Next I
-'
-'            For I = LBound(DB) To UBound(DB)
-'                With DB(I)
-'                    If (GetShitlist(DB(I).Username)) Then
-'                        Add = 1
-'                    End If
-'                End With
-'
-'                If (GetSafelist(DB(I).Username)) Then
-'                    Add = 1
-'                End If
-'
-'                If (Add = 0) Then
-'                    gFloodSafelist(UBound(gFloodSafelist)) = _
-'                        DB(I).Username
-'
-'                    ReDim Preserve gFloodSafelist(UBound(gFloodSafelist) + 1)
-'                End If
-'            Next I
-'    End Select
-'End Sub
-
 Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
     'On Error GoTo ERROR_HANDLER
 
@@ -7715,29 +7477,6 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
             
             'BNCSBuffer.WriteLog "Parsing the following packet:", True
             'BNCSBuffer.WriteLog strTemp
-            
-            ' EFP System now running under the parsing layer for extra-crispy efficiency
-            'If (bFlood) Then
-            '    If (Asc(Mid$(strTemp, 2, 1)) = &HF) Then
-            '        If (Conv(Mid$(strTemp, 5, 4)) = ID_JOIN) Then
-            '            fTemp = KillNull(Mid$(strTemp, 29))
-            '
-            '            If (StrComp(flood, fTemp, vbBinaryCompare) <> 0) Then
-            '                If (Not (GetSafelist(fTemp))) Then
-            '                    If (floodCap < 45) Then
-            '                        Call APISend("/ban " & fTemp)
-            '
-            '                        floodCap = (floodCap + 30)
-            '
-            '                        flood = fTemp
-            '
-            '                        Exit Sub
-            '                    End If
-            '                End If
-            '            End If
-            '        End If
-            '    End If
-            'End If
             
             Call BNCSParsePacket(strTemp)
             

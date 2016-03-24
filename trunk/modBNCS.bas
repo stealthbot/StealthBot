@@ -489,7 +489,7 @@ On Error GoTo ERROR_HANDLER:
         Case ID_JOIN:        Call Event_UserJoins(sUsername, lFlags, sParsed, lPing, sProduct, sClanTag, sText, sW3Icon)
         Case ID_LEAVE:       Call Event_UserLeaves(sUsername, lFlags)
         Case ID_USER:        Call Event_UserInChannel(sUsername, lFlags, sParsed, lPing, sProduct, sClanTag, sText, sW3Icon)
-        Case ID_WHISPER:     If (Not bFlood) Then Call Event_WhisperFromUser(sUsername, lFlags, sText, lPing)
+        Case ID_WHISPER:     Call Event_WhisperFromUser(sUsername, lFlags, sText, lPing)
         Case ID_TALK:        Call Event_UserTalk(sUsername, lFlags, sText, lPing)
         Case ID_BROADCAST:   Call Event_ServerInfo(sUsername, StringFormat("BROADCAST from {0}:{1}", sUsername, sText))
         Case ID_CHANNEL:     Call Event_JoinedChannel(sText, lFlags)

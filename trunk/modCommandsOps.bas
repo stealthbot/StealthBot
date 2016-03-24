@@ -812,19 +812,10 @@ End Sub
 Public Sub OnUnBan(Command As clsCommandObj)
     If (Command.IsValid) Then
         If (g_Channel.Self.IsOperator) Then
-            
-            ' what the hell is a flood cap?
-            If (bFlood) Then
-                If (floodCap < 45) Then
-                    floodCap = (floodCap + 15)
-                    Call frmChat.AddQ("/unban " & Command.Argument("UserName"), , Command.Username)
-                End If
+            If (InStr(1, Command.Argument("Username"), "*", vbBinaryCompare) <> 0) Then
+                Call WildCardBan(Command.Argument("Username"), vbNullString, 2)
             Else
-                If (InStr(1, Command.Argument("Username"), "*", vbBinaryCompare) <> 0) Then
-                    Call WildCardBan(Command.Argument("Username"), vbNullString, 2)
-                Else
-                    Call frmChat.AddQ("/unban " & Command.Argument("Username"), PRIORITY.CHANNEL_MODERATION_MESSAGE, Command.Username)
-                End If
+                Call frmChat.AddQ("/unban " & Command.Argument("Username"), PRIORITY.CHANNEL_MODERATION_MESSAGE, Command.Username)
             End If
         Else
             Command.Respond ERROR_NOT_OPS

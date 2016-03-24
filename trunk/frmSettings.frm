@@ -4630,7 +4630,6 @@ Private Function SaveSettings() As Boolean
     WINI "DisableSuffix", Cv(chkDisableSuffix.Value), secOther
     
     'Debug.Print "Writing: " & IIf(chkTTT.value = 1, "N", "Y")
-'    WINI "DisableMonitor", Cv(chkDisableMonitor.Value), secOther
     WINI "AllowMP3", Cv(chkAllowMP3.Value), secOther
     WINI "ConnectOnStartup", Cv(chkConnectOnStartup.Value), secMain
     WINI "MinimizeOnStartup", Cv(chkMinimizeOnStartup.Value), secMain
@@ -5219,7 +5218,6 @@ Private Sub InitGenMisc()
     
     'Debug.Print "Loaded value: " & YesToTrue(readcfg(OT, "TTT"), 1) & " converted to " & IIf(YesToTrue(readcfg(OT, "TTT"), 1) = 1, 0, 1)
     
-'    chkDisableMonitor.Value = YesToTrue(ReadCFG(OT, "DisableMonitor"), 1)
     chkAllowMP3.Value = YesToTrue(ReadCfg(OT, "AllowMP3"), 1)
     chkConnectOnStartup.Value = YesToTrue(ReadCfg(MN, "ConnectOnStartup"), 0)
     chkMinimizeOnStartup.Value = YesToTrue(ReadCfg(MN, "MinimizeOnStartup"), 0)

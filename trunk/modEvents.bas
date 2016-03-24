@@ -253,12 +253,6 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     'BotVars.JoinWatch = 0
     
     'frmChat.tmrSilentChannel(0).Enabled = False
-
-    
-    'With gChannel
-    '    .Current = ChannelName
-    '    .Flags = Flags
-    'End With
     
     'If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
     '    PassedClanMotdCheck = False
@@ -555,8 +549,6 @@ On Error GoTo ERROR_HANDLER:
     Call g_Queue.Clear
     
     g_Online = True
-        
-    AttemptedFirstReconnect = False
     
     Dim Stats As New clsUserStats
     Stats.Statstring = Statstring
@@ -597,12 +589,6 @@ On Error GoTo ERROR_HANDLER:
         .Timer.Interval = 30000
     
         .tmrClanUpdate.Enabled = True
-    
-        'If (Not (DisableMonitor)) Then
-        '    .AddChat RTBColors.SuccessText, "User monitor initialized."
-        '
-        '    InitMonitor
-        'End If
     End With
     
     If (frmChat.sckBNLS.State <> 0) Then
@@ -955,8 +941,6 @@ On Error GoTo ERROR_HANDLER:
             End If
             
             If (InStr(1, Message, " has been unsquelched", vbTextCompare) > 0) Then
-                'unsquelching = True
-                
                 If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
                     frmChat.lvChannel.ListItems.Clear
                 End If
@@ -1935,11 +1919,6 @@ On Error GoTo ERROR_HANDLER:
         End If
     End If
     
-    'If ((GetTickCount() - LastWhisperTime) > _
-    '    BotVars.AutofilterMS) Then
-
-    'If (0 = 0) Then ?
-    
     If (Catch(0) <> vbNullString) Then
         Call CheckPhrase(Username, Message, CPWHISPER)
     End If
@@ -2045,8 +2024,6 @@ On Error GoTo ERROR_HANDLER:
     
     RunInAll "Event_WhisperFromUser", Username, Flags, Message, Ping
     'End If
-    
-    LastWhisperTime = GetTickCount
 
     Exit Sub
 ERROR_HANDLER:
