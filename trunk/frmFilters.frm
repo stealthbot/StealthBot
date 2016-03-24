@@ -566,14 +566,14 @@ Private Sub Form_Load()
     
     optText.Value = True
     
-    s = ReadINI("TextFilters", "Total", "filters.ini")
+    s = ReadINI("TextFilters", "Total", FILE_FILTERS)
     If StrictIsNumeric(s) Then
         i = Val(s)
         OldMaxFilterIndex = i
         
         If i > 0 Then
             For i = 1 To i
-                s = ReadINI("TextFilters", "Filter" & i, "filters.ini")
+                s = ReadINI("TextFilters", "Filter" & i, FILE_FILTERS)
                 
                 If LenB(s) > 0 Then
                     lbText.AddItem s
@@ -582,14 +582,14 @@ Private Sub Form_Load()
         End If
     End If
     
-    s = ReadINI("BlockList", "Total", "filters.ini")
+    s = ReadINI("BlockList", "Total", FILE_FILTERS)
     If StrictIsNumeric(s) Then
         i = Val(s)
         OldMaxBlockIndex = i
         
         If i > 0 Then
             For i = 1 To i
-                s = ReadINI("BlockList", "Filter" & i, "filters.ini")
+                s = ReadINI("BlockList", "Filter" & i, FILE_FILTERS)
                 
                 If LenB(s) > 0 Then
                     lbBlock.AddItem s
@@ -598,16 +598,16 @@ Private Sub Form_Load()
         End If
     End If
     
-    s = ReadINI("Outgoing", "Total", "filters.ini")
+    s = ReadINI("Outgoing", "Total", FILE_FILTERS)
     If StrictIsNumeric(s) Then
         i = Val(s)
         
         For i = 1 To i
-            s = Replace(ReadINI("Outgoing", "Find" & i, "filters.ini"), "¦", " ")
+            s = Replace(ReadINI("Outgoing", "Find" & i, FILE_FILTERS), "¦", " ")
             
             If LenB(s) > 0 Then
                 lvReplace.ListItems.Add lvReplace.ListItems.Count + 1, , s
-                lvReplace.ListItems.Item(lvReplace.ListItems.Count).ListSubItems.Add , , Replace(ReadINI("Outgoing", "Replace" & i, "filters.ini"), "¦", " ")
+                lvReplace.ListItems.Item(lvReplace.ListItems.Count).ListSubItems.Add , , Replace(ReadINI("Outgoing", "Replace" & i, FILE_FILTERS), "¦", " ")
             End If
         Next i
     End If
@@ -657,18 +657,18 @@ Private Sub Form_Unload(Cancel As Integer)
     ' Write text filters
     If lbText.ListCount > 0 Then
         For i = 1 To lbText.ListCount
-            WriteINI "TextFilters", "Filter" & i, lbText.List(i - 1), "filters.ini"
+            WriteINI "TextFilters", "Filter" & i, lbText.List(i - 1), FILE_FILTERS
         Next i
         
-        WriteINI "TextFilters", "Total", lbText.ListCount, "filters.ini"
+        WriteINI "TextFilters", "Total", lbText.ListCount, FILE_FILTERS
     Else
-        WriteINI "TextFilters", "Total", 0, "filters.ini"
+        WriteINI "TextFilters", "Total", 0, FILE_FILTERS
     End If
     
     ' Erase old text filters
     If i >= 0 And i < OldMaxFilterIndex Then
         For i = i To OldMaxFilterIndex
-            WriteINI "TextFilters", "Filter" & i, "-", "filters.ini"
+            WriteINI "TextFilters", "Filter" & i, "-", FILE_FILTERS
         Next i
     End If
     
@@ -676,31 +676,31 @@ Private Sub Form_Unload(Cancel As Integer)
     i = -1
     If lbBlock.ListCount <> 0 Then
         For i = 1 To lbBlock.ListCount
-            WriteINI "BlockList", "Filter" & i, lbBlock.List(i - 1), "filters.ini"
+            WriteINI "BlockList", "Filter" & i, lbBlock.List(i - 1), FILE_FILTERS
         Next i
         
-        WriteINI "BlockList", "Total", lbBlock.ListCount, "filters.ini"
+        WriteINI "BlockList", "Total", lbBlock.ListCount, FILE_FILTERS
     Else
-        WriteINI "BlockList", "Total", 0, "filters.ini"
+        WriteINI "BlockList", "Total", 0, FILE_FILTERS
     End If
     
     ' Erase old blocked items
     If i >= 0 And i < OldMaxBlockIndex Then
         For i = i To OldMaxBlockIndex
-            WriteINI "BlockList", "Filter" & i, "-", "filters.ini"
+            WriteINI "BlockList", "Filter" & i, "-", FILE_FILTERS
         Next i
     End If
     
     ' Write new outgoing filters
     If lvReplace.ListItems.Count <> 0 Then
         For i = 1 To lvReplace.ListItems.Count
-            WriteINI "Outgoing", "Find" & i, Replace(lvReplace.ListItems.Item(i).text, " ", "¦"), "filters.ini"
-            WriteINI "Outgoing", "Replace" & i, Replace(lvReplace.ListItems.Item(i).ListSubItems.Item(1).text, " ", "¦"), "filters.ini"
+            WriteINI "Outgoing", "Find" & i, Replace(lvReplace.ListItems.Item(i).text, " ", "¦"), FILE_FILTERS
+            WriteINI "Outgoing", "Replace" & i, Replace(lvReplace.ListItems.Item(i).ListSubItems.Item(1).text, " ", "¦"), FILE_FILTERS
         Next i
         
-        WriteINI "Outgoing", "Total", lvReplace.ListItems.Count, "filters.ini"
+        WriteINI "Outgoing", "Total", lvReplace.ListItems.Count, FILE_FILTERS
     Else
-        WriteINI "Outgoing", "Total", 0, "filters.ini"
+        WriteINI "Outgoing", "Total", 0, FILE_FILTERS
     End If
     
     Call frmChat.LoadOutFilters
