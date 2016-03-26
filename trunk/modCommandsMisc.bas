@@ -85,24 +85,20 @@ Public Sub OnGreet(Command As clsCommandObj)
         Select Case LCase$(Command.Argument("SubCommand"))
             Case "on":
                 BotVars.UseGreet = True
-                Call WriteINI("Other", "UseGreets", "Y")
                 Command.Respond "Greet messages enabled."
                 
             Case "off":
                 BotVars.UseGreet = False
-                Call WriteINI("Other", "UseGreets", "N")
                 Command.Respond "Greet messages disabled."
             
             Case "whisper":
                 Select Case (LCase$(Command.Argument("Value")))
                     Case "on":
                         BotVars.WhisperGreet = True
-                        Call WriteINI("Other", "WhisperGreet", "Y")
                         Command.Respond "Greet messages will now be whispered."
                         
                     Case "off":
                         BotVars.WhisperGreet = False
-                        Call WriteINI("Other", "WhisperGreet", "N")
                         Command.Respond "Gree messages will no longer be whispered."
                 End Select
                 
@@ -120,12 +116,18 @@ Public Sub OnGreet(Command As clsCommandObj)
             Case "set":
                 If (LenB(Command.Argument("Value")) > 0) Then
                     BotVars.GreetMsg = Command.Argument("Value")
-                    Call WriteINI("Other", "GreetMsg", BotVars.GreetMsg)
                     Command.Respond "Greet message set." '1732 - 10/15/2009 - Hdx - Greet Set command will respond now.
                 Else
                     Command.Respond "You must supply a greet message."
                 End If
         End Select
+        
+        If LCase$(Command.Argument("SubCommand")) <> "status" Then
+            Config.UseGreetMessage = BotVars.UseGreet
+            Config.WhisperGreet = BotVars.WhisperGreet
+            Config.GreetMessage = BotVars.GreetMsg
+            Call Config.Save
+        End If
     End If
 End Sub
 
@@ -133,13 +135,15 @@ Public Sub OnIdle(Command As clsCommandObj)
     If (Command.IsValid) Then
         Select Case LCase$(Command.Argument("Enable"))
             Case "on", "true":
-                Call WriteINI("Main", "Idles", "Y")
+                Config.IdlesEnabled = True
                 Command.Respond "Idles activated."
             
             Case "off", "false":
-                Call WriteINI("Main", "Idles", "N")
+                Config.IdlesEnabled = False
                 Command.Respond "Idles deactivated."
         End Select
+        
+        Call Config.Save
     End If
 End Sub
 
@@ -147,7 +151,9 @@ Public Sub OnIdleTime(Command As clsCommandObj)
     Dim delay As Integer
     If (Command.IsValid) Then
         delay = Val(Command.Argument("Delay"))
-        Call WriteINI("Main", "IdleWait", 2 * delay)
+        Config.IdleDelay = (delay * 2)
+        Call Config.Save
+        
         Command.Respond StringFormat("Idle wait time set to {0} minute{1}.", delay, IIf(delay > 1, "s", vbNullString))
     Else
         Command.Respond "You must supply a delay when setting the idle time."
@@ -158,24 +164,26 @@ Public Sub OnIdleType(Command As clsCommandObj)
     If (Command.IsValid) Then
         Select Case (LCase$(Command.Argument("Type")))
             Case "msg", "message":
-                Call WriteINI("Main", "IdleType", "msg")
+                Config.IdleType = "msg"
                 Command.Respond "Idle type set to [ msg ]"
                 
             Case "quote", "quotes":
-                Call WriteINI("Main", "IdleType", "quote")
+                Config.IdleType = "quote"
                 Command.Respond "Idle type set to [ quote ]"
                 
             Case "uptime":
-                Call WriteINI("Main", "IdleType", "uptime")
+                Config.IdleType = "uptime"
                 Command.Respond "Idle type set to [ uptime ]"
                 
             Case "mp3":
-                Call WriteINI("Main", "IdleType", "p3")
+                Config.IdleType = "mp3"
                 Command.Respond "Idle type set to [ MP3 ]"
             
             Case Else:
                 Command.Respond "Unknown Idle type, Type must be: Msg, Quote, Uptime, or MP3"
         End Select
+        
+        Call Config.Save
     Else
         Command.Respond "You must specify an idle type."
     End If
@@ -372,7 +380,9 @@ End Sub
 
 Public Sub OnSetIdle(Command As clsCommandObj)
     If (Command.IsValid) Then
-        Call WriteINI("Main", "IdleMsg", Command.Argument("Message"))
+        Config.IdleMessage = Command.Argument("Message")
+        Call Config.Save
+        
         Command.Respond "Idle message set."
     End If
 End Sub

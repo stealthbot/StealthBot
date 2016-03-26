@@ -365,7 +365,7 @@ Private Sub SEND_SID_ENTERCHAT()
 On Error GoTo ERROR_HANDLER:
     Dim pBuff As New clsDataBuffer
     pBuff.InsertNTString BotVars.Username
-    pBuff.InsertNTString ReadCfg("Override", "SetBotStatstring")
+    pBuff.InsertNTString Config.SetBotStatstring
     pBuff.SendPacket SID_ENTERCHAT
     Set pBuff = Nothing
 
@@ -562,7 +562,7 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord ft.dwHighDateTime                                'LocalTime
         
         .InsertDWord GetTimeZoneBias                                  'Time Zone Bias
-        If (ReadCfg("Override", "ForceDefaultLocaleID") = "Y") Then
+        If Config.ForceDefaultLocaleId Then
             .InsertDWord 1033                                         'SystemDefaultLCID
             .InsertDWord 1033                                         'UserDefaultLCID
             .InsertDWord 1033                                         'UserDefaultLangID
@@ -597,8 +597,8 @@ On Error GoTo ERROR_HANDLER:
 
     Dim pBuff As New clsDataBuffer
 
-    If Len(ReadCfg("Override", "UDPString")) = 4 Then
-        pBuff.InsertNonNTString ReadCfg("Override", "UDPString")
+    If Len(Config.UdpString) = 4 Then
+        pBuff.InsertNonNTString Config.UdpString
     Else
         pBuff.InsertDWord &H626E6574 'bnet
     End If
@@ -804,7 +804,7 @@ On Error GoTo ERROR_HANDLER:
         frmChat.AddChat RTBColors.ErrorMessageText, "BNCSUtil: kd_init() failed! Please use BNLS to connect."
         frmChat.DoDisconnect
     Else
-        lResult = kd_create(BotVars.CDKey, Len(BotVars.CDKey))
+        lResult = kd_create(BotVars.CdKey, Len(BotVars.CdKey))
         If (kd_isValid(lResult) = 0) Then
             frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
             frmChat.DoDisconnect
@@ -813,11 +813,11 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     With pBuff
-        .InsertDWord IIf(ReadCfg$("Override", "SpawnKey") = "Y", 1, 0)
-        .InsertNTString BotVars.CDKey
+        .InsertDWord CInt(Config.UseSpawnKey)
+        .InsertNTString BotVars.CdKey
         
-        If (LenB(ReadCfg("Override", "OwnerName")) > 0) Then
-            .InsertNTString ReadCfg("Override", "OwnerName")
+        If (LenB(Config.KeyOwnerName) > 0) Then
+            .InsertNTString Config.KeyOwnerName
         Else
             .InsertNTString BotVars.Username
         End If
@@ -895,7 +895,7 @@ On Error GoTo ERROR_HANDLER:
         frmChat.AddChat RTBColors.ErrorMessageText, "BNCSUtil: kd_init() failed! Please use BNLS to connect."
         frmChat.DoDisconnect
     Else
-        lResult = kd_create(BotVars.CDKey, Len(BotVars.CDKey))
+        lResult = kd_create(BotVars.CdKey, Len(BotVars.CdKey))
         If (kd_isValid(lResult) = 0) Then
             frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
             frmChat.DoDisconnect
@@ -919,8 +919,8 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     With pBuff
-        .InsertDWord IIf(ReadCfg$("Override", "SpawnKey") = "Y", 1, 0)
-        .InsertDWord Len(BotVars.CDKey)
+        .InsertDWord CInt(Config.UseSpawnKey)
+        .InsertDWord Len(BotVars.CdKey)
         
         .InsertDWord lProduct
         .InsertDWord lPublic
@@ -928,8 +928,8 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord ds.ClientToken
         .InsertNonNTString sHash
         
-        If (LenB(ReadCfg("Override", "OwnerName")) > 0) Then
-            .InsertNTString ReadCfg("Override", "OwnerName")
+        If (LenB(Config.KeyOwnerName) > 0) Then
+            .InsertNTString Config.KeyOwnerName
         Else
             .InsertNTString BotVars.Username
         End If
@@ -1010,7 +1010,7 @@ On Error GoTo ERROR_HANDLER:
     Dim sHash As String
     Dim pBuff As New clsDataBuffer
     
-    If (ReadCfg("Override", "LowerCasePassword") = "N") Then
+    If Not Config.LowerCasePassword Then
         sHash = doubleHashPassword(BotVars.Password, ds.ClientToken, ds.ServerToken)
     Else
         sHash = doubleHashPassword(LCase(BotVars.Password), ds.ClientToken, ds.ServerToken)
@@ -1079,7 +1079,7 @@ Private Sub SEND_SID_CREATEACCOUNT2()
 On Error GoTo ERROR_HANDLER:
     
     Dim sHash As String
-    If (ReadCfg("Override", "LowerCasePassword") = "N") Then
+    If Not Config.LowerCasePassword Then
         sHash = hashPassword(BotVars.Password)
     Else
         sHash = hashPassword(LCase(BotVars.Password))
@@ -1340,7 +1340,7 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord GetLongOverride("ProdLang", 0)                           'Product Language
         .InsertDWord LocalIP                                                  'Local IP
         .InsertDWord GetTimeZoneBias                                          'Time Zone Bias
-        If (ReadCfg("Override", "ForceDefaultLocaleID") = "Y") Then
+        If Config.ForceDefaultLocaleId Then
             .InsertDWord 1033                                                 'LocalID
             .InsertDWord 1033                                                 'LangID
         Else
@@ -1395,7 +1395,7 @@ On Error GoTo ERROR_HANDLER:
         Case &H212: Call Event_VersionCheck(9, sInfo) 'Exp CDKey is Banned
         Case &H213: Call Event_VersionCheck(10, sInfo) 'Exp CDKey is for the wrong product
         Case Else:
-            If (ReadCfg("Override", "Ignore0x51Reply") = "Y") Then bSuccess = True
+            If Config.IgnoreVersionCheckResult Then bSuccess = True
             Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(lResult, 8))
     End Select
 
@@ -1465,11 +1465,11 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord ds.CRevVersion  'CRev Version
         .InsertDWord ds.CRevChecksum 'CRev Checksum
         .InsertDWord keys            'CDKey Count
-        .InsertDWord IIf(ReadCfg$("Override", "SpawnKey") = "Y", 1, 0)
+        .InsertDWord CInt(Config.UseSpawnKey)
         
         For i = 1 To keys
             If (i = 1) Then
-                sKey = BotVars.CDKey
+                sKey = BotVars.CdKey
             ElseIf (i = 2) Then
                 sKey = BotVars.ExpKey
             Else
@@ -1487,8 +1487,8 @@ On Error GoTo ERROR_HANDLER:
         Next i
         
         .InsertNTString ds.CRevResult
-        If (LenB(ReadCfg("Override", "OwnerName")) > 0) Then
-            .InsertNTString ReadCfg("Override", "OwnerName")
+        If (LenB(Config.KeyOwnerName) > 0) Then
+            .InsertNTString Config.KeyOwnerName
         Else
             .InsertNTString BotVars.Username
         End If
@@ -1750,8 +1750,8 @@ On Error GoTo ERROR_HANDLER:
     Dim EMailValue As String
     Dim EMailAction As String
     
-    EMailAction = UCase$(ReadCfg$("Override", "RegisterEmailAction"))
-    EMailValue = ReadCfg$("Override", "RegisterEmailDefault")
+    EMailAction = Config.RegisterEmailAction
+    EMailValue = Config.RegisterEmailDefault
     
     Call frmEMailReg.DoRegisterEmail(EMailAction, EMailValue)
     
@@ -1889,6 +1889,7 @@ Public Function GetLogonSystem(Optional sProduct As String = vbNullString) As Lo
 On Error GoTo ERROR_HANDLER:
 
     Dim sOverride As String
+    Dim tLng      As Long
     Dim lRet      As Long
     
     ' Temporary short-circuit:
@@ -1915,10 +1916,9 @@ On Error GoTo ERROR_HANDLER:
         Case Else:           lRet = &H0
     End Select
     
-    sOverride = ReadCfg$("Override", StringFormat("{0}LogonSystem", GetProductKey))
-    
-    If (LenB(sOverride) > 0 And StrictIsNumeric(sOverride)) Then
-        Select Case CLng(sOverride)
+    tLng = Config.GetLogonSystem(GetProductKey(sProduct))
+    If tLng > -1 Then
+        Select Case tLng
             Case BNCS_NLS: lRet = BNCS_NLS
             Case BNCS_LLS: lRet = BNCS_LLS
             Case BNCS_OLS: lRet = BNCS_OLS
@@ -2003,7 +2003,7 @@ On Error GoTo ERROR_HANDLER:
     SEND_SID_ENTERCHAT
     SEND_SID_GETCHANNELLIST
     
-    BotVars.Gateway = ReadCfg("Override", "PredefinedGateway")
+    BotVars.Gateway = Config.PredefinedGateway
     If (LenB(BotVars.Gateway) = 0) Then
         If ((Not BotVars.Product = "VD2D") And (Not BotVars.Product = "PX2D") And _
             (Not BotVars.Product = "PX3W") And (Not BotVars.Product = "3RAW")) Then
@@ -2029,7 +2029,7 @@ On Error GoTo ERROR_HANDLER:
 
     SkipUICEvents = True
     
-    If (LenB(BotVars.HomeChannel) = 0) Or (ReadCfg("Override", "DoDefaultChannelJoin") = "Y") Then
+    If (LenB(BotVars.HomeChannel) = 0) Or Config.DoDefaultChannelJoin Then
         ' empty homechannel or
         ' config override to force joinhome
         If BotVars.Product = "PX2D" Or BotVars.Product = "VD2D" Then

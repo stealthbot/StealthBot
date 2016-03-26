@@ -28,6 +28,7 @@ Public Const FILE_WARDEN_INI = "Warden.ini"
 Public Const FILE_BNLS_LIST = "AdditionalBNLSservers.txt"
 Public Const FILE_SERVER_LIST = "Servers.txt"
 
+Public Const BNET_MSG_LENGTH = 233
 
 ' Colors
 Public Const COLOR_TEAL& = &H99CC00

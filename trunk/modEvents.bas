@@ -300,7 +300,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     ' lets update our configuration file with the
     ' current channel name so that we join the channel
     ' again automatically if we disconnect or close the bot.
-    Call WriteINI("Other", "LastChannel", ChannelName)
+    'Call WriteINI("Other", "LastChannel", ChannelName)
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' check for mail
@@ -312,12 +312,6 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         frmChat.AddChat RTBColors.ConsoleText, "You have " & _
             mailCount & " new message" & IIf(mailCount = 1, "", "s") & _
                 ". Type /inbox to retrieve."
-    End If
-    
-    ' Give a message to them if they're in Clan SBs.
-    If ((StrComp(ChannelName, "Clan SBs", vbTextCompare) = 0) And _
-        (IsStealthBotTech() = False)) Then
-            frmChat.AddChat RTBColors.ErrorMessageText, "You have joined Clan SBs. For the consideration of the Technical Support Staff: greet, idle, and all scripted messages have been temporarily disabled."
     End If
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -694,7 +688,7 @@ On Error GoTo ERROR_HANDLER:
         ' continue gateway discovery
         SEND_SID_CHATCOMMAND "/whoami"
     Else
-        ChannelCreateOption = UCase$(ReadCfg$("Override", "ChannelCreate"))
+        ChannelCreateOption = Config.CreateEmptyChannels
     
         Select Case ChannelCreateOption
             Case "ALERT"
@@ -1474,15 +1468,11 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     
             If (BotVars.UseGreet) Then
                 If (LenB(BotVars.GreetMsg)) Then
-                    If ((StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) <> 0) Or _
-                        (IsStealthBotTech() = True)) Then
-                        
-                        If (BotVars.WhisperGreet) Then
-                            frmChat.AddQ "/w " & Username & _
-                                Space$(1) & DoReplacements(BotVars.GreetMsg, Username, Ping)
-                        Else
-                            frmChat.AddQ DoReplacements(BotVars.GreetMsg, Username, Ping)
-                        End If
+                    If (BotVars.WhisperGreet) Then
+                        frmChat.AddQ "/w " & Username & _
+                            Space$(1) & DoReplacements(BotVars.GreetMsg, Username, Ping)
+                    Else
+                        frmChat.AddQ DoReplacements(BotVars.GreetMsg, Username, Ping)
                     End If
                 End If
             End If
@@ -1811,7 +1801,10 @@ On Error GoTo ERROR_HANDLER:
             ' if using server finder
             If ((BotVars.BNLS) And (BotVars.UseAltBnls)) Then
                 ' save BNLS server so future instances of the bot won't need to get the list, connection succeeded
-                WriteINI "Main", "BNLSServer", BotVars.BNLSServer
+                If Config.BnlsServer <> BotVars.BnlsServer Then
+                    Config.BnlsServer = BotVars.BnlsServer
+                    Call Config.Save
+                End If
             End If
         
         Case 1:

@@ -4,6 +4,8 @@ Option Explicit
 
 Public CVERSION As String
 
+Public Config As New clsConfig
+
 'Timer variables
 Public uTicks As Long
 Public ReconnectTimerID As Long
@@ -17,7 +19,7 @@ Public cboSendSelStart As Long
 Public cboSendSelLength As Long
 Public RealmError As Boolean
 Public LogPacketTraffic As Boolean
-Public CfgVersion As Long
+Public cfgVersion As Long
 
 Public VoteInitiator As udtGetAccessResponse
 

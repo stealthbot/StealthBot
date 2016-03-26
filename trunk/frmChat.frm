@@ -1623,14 +1623,6 @@ Option Explicit
 
 'REVISION #1337!
 
-Private Declare Function RegQueryValueEx Lib "advapi32.dll" Alias "RegQueryValueExA" (ByVal hKey As Long, ByVal lpValueName As String, ByVal lpReserved As Long, lpType As Long, lpData As Any, lpcbData As Long) As Long
-
-Private Declare Function bind Lib "ws2_32.dll" (ByVal s As Long, ByRef Name As sockaddr_in, ByVal NameLen As Long) As Long
-Private Declare Function inet_addr Lib "wsock32.dll" (ByVal cp As String) As Long
-Private Declare Function htons Lib "wsock32.dll" (ByVal hostshort As Long) As Integer
-Private Declare Function WSAGetLastError Lib "wsock32.dll" () As Integer
-Private Const AF_INET = 2
-
 'Classes
 Public WithEvents ClanHandler As clsClanPacketHandler
 Attribute ClanHandler.VB_VarHelpID = -1
@@ -1705,12 +1697,6 @@ Private Sub Form_Load()
     
     sStr = SetCommandLine(Command())
     
-    ' SPLASH SCREEN
-    If ReadCfg("Main", "ShowSplash") <> "N" Then
-        frmSplash.Show
-        FrmSplashInUse = True
-    End If
-    
     ' EVERYTHING ELSE
     rtbWhispers.Visible = False 'default
     rtbWhispersVisible = False
@@ -1745,9 +1731,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim Catch(0)
@@ -1755,36 +1741,23 @@ Private Sub Form_Load()
     ReDim gOutFilters(0)
     ReDim gFilters(0)
     
-    s = ReadCfg("Main", "ShowWhisperWindow")
-    If s = "Y" Then
+    Set Config = New clsConfig
+    Config.Load GetConfigFilePath()
+    
+    ' SPLASH SCREEN
+    If Config.ShowSplashScreen Then
+        frmSplash.Show
+        FrmSplashInUse = True
+    End If
+    
+    If Config.ShowWhisperWindow Then
         If Not rtbWhispersVisible Then Call cmdShowHide_Click
     Else
         If rtbWhispersVisible Then Call cmdShowHide_Click
     End If
     
-    CfgVersion = Val(ReadCfg("Main", "ConfigVersion"))
-
-'    If CfgVersion < 3 Then
-'
-'        s = ReadCFG("Position", "Left")
-'        If LenB(s) > 0 And StrictIsNumeric(s) Then Me.Left = IIf(CLng(s) < 100, 100, CLng(s))
-'
-'        s = ReadCFG("Position", "Top")
-'        If LenB(s) > 0 And StrictIsNumeric(s) Then Me.Top = IIf(CLng(s) < 100, 100, CLng(s))
-'
-'    Else
-'
-'        s = ReadCFG("Position", "Left")
-'        If LenB(s) > 0 And StrictIsNumeric(s) Then Me.Left = (IIf(CLng(s) < 100, 100, CLng(s)) * Screen.TwipsPerPixelX)
-'
-'        s = ReadCFG("Position", "Top")
-'        If LenB(s) > 0 And StrictIsNumeric(s) Then Me.Top = (IIf(CLng(s) < 100, 100, CLng(s)) * Screen.TwipsPerPixelY)
-'
-'    End If
-
-    s = ReadCfg("Position", "Height")
-    If LenB(s) > 0 And StrictIsNumeric(s) Then
-        L = (IIf(CLng(s) < 200, 200, CLng(s)) * Screen.TwipsPerPixelY)
+    If Config.Height > 0 Then
+        L = (IIf(CLng(Config.Height) < 200, 200, CLng(Config.Height)) * Screen.TwipsPerPixelY)
         
         If (rtbWhispersVisible) Then
             L = L - (rtbWhispers.Height / Screen.TwipsPerPixelY)
@@ -1793,31 +1766,20 @@ Private Sub Form_Load()
         Me.Height = L
     End If
     
-    s = ReadCfg("Position", "Width")
-    If LenB(s) > 0 And StrictIsNumeric(s) Then
-        Me.Width = (IIf(CLng(s) < 300, 300, CLng(s)) * Screen.TwipsPerPixelX)
+    If Config.Width > 0 Then
+        Me.Width = (IIf(CLng(Config.Width) < 300, 300, CLng(Config.Width)) * Screen.TwipsPerPixelX)
     End If
 
-    ' 2.7 must discard old position data
-    If CfgVersion >= 4 Then
-        s = ReadCfg("Position", "Left")
-        If LenB(s) > 0 And StrictIsNumeric(s) Then
-            Me.Left = CLng(s) * Screen.TwipsPerPixelX
-        End If
+    If Config.Left > 0 Then
+        Me.Left = CLng(Config.Left) * Screen.TwipsPerPixelX
+    End If
         
-        s = ReadCfg("Position", "Top")
-        If LenB(s) > 0 And StrictIsNumeric(s) Then
-            Me.Top = CLng(s) * Screen.TwipsPerPixelY
-        End If
-    Else
-        Me.Left = (Screen.Width - Me.Width) / 2
-        Me.Top = (Screen.Height - Me.Height) / 2
+    If Config.Top > 0 Then
+        Me.Top = CLng(Config.Top) * Screen.TwipsPerPixelY
     End If
     
     'Support for recording maxmized position. - FrOzeN
-    s = ReadCfg("Position", "Maximized")
-    
-    If s = "Y" Then
+    If Config.Maximized Then
         Me.WindowState = vbMaximized
     End If
 
@@ -1900,9 +1862,7 @@ Private Sub Form_Load()
     On Error Resume Next
     'News call and scripting events
     
-    s = ReadCfg("Override", "DisableSBNews")
-    
-    If (LenB(s) = 0) Then DisplayNews
+    If Not Config.DisableNews Then DisplayNews
     
     LoadScripts
     'InitMenus
@@ -1915,13 +1875,13 @@ Private Sub Form_Load()
     End If
     
     '#If BETA = 0 Then
-        If ReadCfg("Main", "ConnectOnStartup") = "Y" Then
+        If Config.ConnectOnStartup Then
             Call DoConnect
         End If
     '#End If
     
     #If COMPILE_DEBUG = 0 Then
-        If ReadCfg("Main", "MinimizeOnStartup") = "Y" Then
+        If Config.MinimizeOnStartup Then
             frmChat.WindowState = vbMinimized
             Call Form_Resize
         End If
@@ -2248,7 +2208,7 @@ Sub Event_BNLSConnected()
 End Sub
 
 Sub Event_BNLSConnecting()
-    AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
+    AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BnlsServer & "..."
 End Sub
 
 Sub Event_BNLSDataError(Message As Byte)
@@ -2283,47 +2243,15 @@ Public Function CheckFindAltBNLS(ByVal ErrorMessage As String) As Boolean
     
     sckBNet.Close
     
-    s = ReadCfg("Main", "UseAltBnls")
-    ' Check the user has using BNLS server finder enabled
-    If (s = "Y") Then
-        ' we can use the finder
+    ' Is the BNLS server finder enabled?
+    If Config.UseBnlsFinder Then
         LocatingAltBNLS = True
         Call FindAltBNLS
     Else
-        ' check if we don't have UseAltBnls set
         AddChat RTBColors.ErrorMessageText, ErrorMessage
         UserCancelledConnect = False
         
         DoDisconnect 1, True
-        
-        ' if the finder is set to N in the config, don't ask.
-        If s = "N" Then askedBnls = True
-             
-        ' check if we've already asked the user
-        If (askedBnls = False) Then
-            ' set to true so that recursion does not occur
-            askedBnls = True
-            
-            'Ask the user if they would like to enable the BNLS Automatic Server finder
-            Dim msgResult As VbMsgBoxResult
-            msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
-                               "Would you like to enable the BNLS Automatic Server Finder?", _
-                               vbYesNo, "BNLS Error")
-            
-            If (msgResult = vbYes) Then
-                ' save their answer to the config
-                WriteINI "Main", "UseAltBNLS", "Y"
-                BotVars.UseAltBnls = True
-                
-                ' we can use the finder
-                LocatingAltBNLS = True
-                Call FindAltBNLS
-            Else
-                ' save their answer to the config
-                WriteINI "Main", "UseAltBNLS", "N"
-                BotVars.UseAltBnls = False
-            End If
-        End If
     End If
     
     ' return the BotVars
@@ -2351,7 +2279,7 @@ Public Sub FindAltBNLS()
     
     'Notify user the current BNLS server failed
     'If (intCounter > 1) Then
-    AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BNLSServer & " failed."
+    AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BnlsServer & " failed."
     'End If
     
     'Notify user other BNLS servers are being located
@@ -2366,12 +2294,12 @@ Public Sub FindAltBNLS()
                 
         If (INet.StillExecuting = False) Then
             ' store first bnls server used so that we can avoid connecting to it again
-            firstServer = BotVars.BNLSServer
+            firstServer = BotVars.BnlsServer
         
             'Get the servers as a list from http://stealthbot.net/p/bnls.php
             strReturn = vbNullString
-            If (LenB(ReadCfg("Override", "BNLSSource")) > 0) Then
-                strReturn = INet.OpenURL(ReadCfg("Override", "BNLSSource"))
+            If (LenB(Config.BnlsSource) > 0) Then
+                strReturn = INet.OpenURL(Config.BnlsSource)
             End If
             
             If ((strReturn = vbNullString) Or (Right(strReturn, 2) <> vbCrLf)) Then
@@ -2426,15 +2354,15 @@ Public Sub FindAltBNLS()
         End If
     Loop
     
-    BotVars.BNLSServer = strBNLS(intCounter)
+    BotVars.BnlsServer = strBNLS(intCounter)
     
     'Reconnect BNLS using the newly located BNLS server
     With sckBNLS
-        .RemoteHost = BotVars.BNLSServer
+        .RemoteHost = BotVars.BnlsServer
         .Connect
     End With
     
-    AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
+    AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BnlsServer & "..."
 
     Exit Sub
     
@@ -2700,7 +2628,7 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     Set x = lvClanList.FindItem(Member)
     
     If (Not (x Is Nothing)) Then
-        lvClanList.ListItems.Remove x.Index
+        lvClanList.ListItems.Remove x.index
         
         lvClanList.Refresh
         
@@ -2888,7 +2816,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     End If
     
     If Not (x Is Nothing) Then
-        lvClanList.ListItems.Remove x.Index
+        lvClanList.ListItems.Remove x.index
         Set x = Nothing
     End If
     
@@ -3038,7 +2966,7 @@ Public Function GetLogFilePath() As String
 End Function
 
 Sub Form_Unload(Cancel As Integer)
-    Dim Key As String, L As Long
+    Dim key As String, L As Long
     
     'Me.WindowState = vbNormal
     'Me.Show
@@ -3059,7 +2987,7 @@ Sub Form_Unload(Cancel As Integer)
             Call RecordWindowPosition(CBool(Me.WindowState = vbMaximized))
         End If
         
-        WriteINI "Main", "ConfigVersion", CONFIG_VERSION
+        Call Config.Save
     End If
     
     'With frmChat.INet
@@ -3508,7 +3436,7 @@ Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, x As Singl
 
     If Button = vbRightButton Then
         If Not (lvFriendList.SelectedItem Is Nothing) Then
-            aInx = lvFriendList.SelectedItem.Index
+            aInx = lvFriendList.SelectedItem.index
             
             If aInx > 0 Then
                 sProd = g_Friends(aInx).Game
@@ -3778,7 +3706,7 @@ Private Sub mnuPopClanDemote_Click()
         With PBuffer
             .InsertDWord &H1
             .InsertNTString GetClanSelectedUser
-            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon - 1
+            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.index).SmallIcon - 1
             .SendPacket &H7A
         End With
         
@@ -3816,7 +3744,7 @@ Private Sub mnuPopClanPromote_Click()
         With PBuffer
             .InsertDWord &H3
             .InsertNTString GetClanSelectedUser
-            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon + 1
+            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.index).SmallIcon + 1
             .SendPacket &H7A
         End With
         
@@ -3838,7 +3766,7 @@ Private Sub mnuPopClanRemove_Click()
                 "StealthBot") = vbYes Then
                 
             With PBuffer
-                If lvClanList.SelectedItem.Index > 0 Then
+                If lvClanList.SelectedItem.index > 0 Then
                     .InsertDWord 1 'lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon
                     .InsertNTString GetClanSelectedUser
                     .SendPacket &H78
@@ -3959,7 +3887,7 @@ Private Sub mnuPopFLDemote_Click()
     
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
-            If (.Index < lvFriendList.ListItems.Count) Then
+            If (.index < lvFriendList.ListItems.Count) Then
                 AddQ "/f d " & GetFriendsSelectedUser, PRIORITY.CONSOLE_MESSAGE
                 'MoveFriend .index, .index + 1
             End If
@@ -3983,7 +3911,7 @@ Private Sub mnuPopFLPromote_Click()
     
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
-            If (.Index > 1) Then
+            If (.index > 1) Then
                 AddQ "/f p " & GetFriendsSelectedUser, PRIORITY.CONSOLE_MESSAGE
                 'MoveFriend .index, .index - 1
             End If
@@ -4010,7 +3938,7 @@ Private Sub mnuPopFLStats_Click()
     Dim aInx As Integer
     Dim sProd As String
     
-    aInx = lvFriendList.SelectedItem.Index
+    aInx = lvFriendList.SelectedItem.index
     sProd = g_Friends(aInx).Game
     Select Case sProd
         Case "STAR", "SEXP", "W2BN", "WAR3", "W3XP", "JSTR", "SSHR"
@@ -4160,41 +4088,33 @@ Private Sub mnuPopUserlistWhois_Click()
     End With
 End Sub
 
-Private Sub mnuPublicChannels_Click(Index As Integer)
+Private Sub mnuPublicChannels_Click(index As Integer)
     ' some public channels are redirects
     'If (StrComp(mnuPublicChannels(Index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
     '    Exit Sub
     'End If
     
-    Dim ChannelCreateOption As String
-    
     If Not PublicChannels Is Nothing Then
-        ChannelCreateOption = UCase$(ReadCfg$("Override", "ChannelCreate"))
-        
-        Select Case ChannelCreateOption
+        Select Case Config.CreateEmptyChannels
             Case "ALERT", "NEVER"
-                Call FullJoin(PublicChannels.Item(Index + 1), 0)
+                Call FullJoin(PublicChannels.Item(index + 1), 0)
             Case Else ' "ALWAYS"
-                Call FullJoin(PublicChannels.Item(Index + 1), 2)
+                Call FullJoin(PublicChannels.Item(index + 1), 2)
         End Select
         'AddQ "/join " & PublicChannels.Item(Index + 1), PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
-Private Sub mnuCustomChannels_Click(Index As Integer)
-    Dim ChannelCreateOption As String
-    
-    If (StrComp(QC(Index + 1), g_Channel.Name, vbTextCompare) = 0) Then
+Private Sub mnuCustomChannels_Click(index As Integer)
+    If (StrComp(QC(index + 1), g_Channel.Name, vbTextCompare) = 0) Then
         Exit Sub
     End If
-    
-    ChannelCreateOption = UCase$(ReadCfg$("Override", "ChannelCreate"))
-    
-    Select Case ChannelCreateOption
+
+    Select Case Config.CreateEmptyChannels
         Case "ALERT", "NEVER"
-            Call FullJoin(QC(Index + 1), 0)
+            Call FullJoin(QC(index + 1), 0)
         Case Else ' "ALWAYS"
-            Call FullJoin(QC(Index + 1), 2)
+            Call FullJoin(QC(index + 1), 2)
     End Select
     
     'AddQ "/join " & QC(Index + 1), PRIORITY.CONSOLE_MESSAGE
@@ -4211,13 +4131,13 @@ End Sub
 
 Private Sub mnuDisableVoidView_Click()
     mnuDisableVoidView.Checked = Not (mnuDisableVoidView.Checked)
-    
-    WriteINI "Other", "DisableVoidView", IIf(mnuDisableVoidView.Checked, "Y", "N")
+    Config.DisableVoidView = CBool(mnuDisableVoidView.Checked)
+    Call Config.Save
 End Sub
 
 Private Sub mnuDisconnect2_Click()
-    Dim Key As String, L As Long
-    Key = GetProductKey()
+    Dim key As String, L As Long
+    key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
 '        AttemptedNewVerbyte = False
@@ -4239,13 +4159,9 @@ Private Sub mnuEditCaught_Click()
 End Sub
 
 Private Sub mnuFlash_Click()
-    If mnuFlash.Checked Then
-        mnuFlash.Checked = False
-        WriteINI "Other", "FlashWindow", "N"
-    Else
-        mnuFlash.Checked = True
-        WriteINI "Other", "FlashWindow", "Y"
-    End If
+    mnuFlash.Checked = (Not mnuFlash.Checked)
+    Config.FlashOnEvents = CBool(mnuFlash.Checked)
+    Call Config.Save
 End Sub
 
 'Moves a person in the friends list view.
@@ -4279,30 +4195,33 @@ End Sub
 
 Private Sub mnuHideBans_Click()
     mnuHideBans.Checked = (Not mnuHideBans.Checked)
-
-    WriteINI "Main", "HideBanMessages", IIf(mnuHideBans.Checked, "Y", "N")
+    Config.HideBanMessages = CBool(mnuHideBans.Checked)
+    Call Config.Save
     AddChat RTBColors.InformationText, "Ban messages " & IIf(mnuHideBans.Checked, "disabled", "enabled") & "."
 End Sub
 
 Private Sub mnuHideWhispersInrtbChat_Click()
     mnuHideWhispersInrtbChat.Checked = (Not mnuHideWhispersInrtbChat.Checked)
-    
-    WriteINI "Main", "HideWhispersInMain", IIf(mnuHideWhispersInrtbChat.Checked, "Y", "N")
+    Config.HideWhispersInMain = CBool(mnuHideWhispersInrtbChat.Checked)
+    Call Config.Save
 End Sub
 
 Private Sub mnuIgnoreInvites_Click()
     If mnuIgnoreInvites.Checked Then
         mnuIgnoreInvites.Checked = False
-        WriteINI "Main", "IgnoreClanInvitations", "N"
     Else
         mnuIgnoreInvites.Checked = True
-        WriteINI "Main", "IgnoreClanInvitations", "Y"
     End If
+    
+    Config.IgnoreClanInvitations = CBool(mnuIgnoreInvites.Checked)
+    Call Config.Save
 End Sub
 
 Private Sub mnuLog0_Click()
     BotVars.Logging = 2
-    WriteINI "Other", "Logging", "2"
+    Config.LoggingLevel = BotVars.Logging
+    Call Config.Save
+    
     AddChat RTBColors.InformationText, "Full text logging enabled."
     mnuLog1.Checked = False
     mnuLog0.Checked = True
@@ -4314,7 +4233,9 @@ End Sub
 
 Private Sub mnuLog1_Click()
     BotVars.Logging = 1
-    WriteINI "Other", "Logging", "1"
+    Config.LoggingLevel = BotVars.Logging
+    Call Config.Save
+    
     AddChat RTBColors.InformationText, "Partial text logging enabled."
     mnuLog1.Checked = True
     mnuLog0.Checked = False
@@ -4326,7 +4247,9 @@ End Sub
 
 Private Sub mnuLog2_Click()
     BotVars.Logging = 0
-    WriteINI "Other", "Logging", "0"
+    Config.LoggingLevel = BotVars.Logging
+    Call Config.Save
+    
     AddChat RTBColors.InformationText, "Logging disabled."
     mnuLog1.Checked = False
     mnuLog0.Checked = False
@@ -4365,14 +4288,14 @@ End Sub
 Private Sub mnuPopAddLeft_Click()
     On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
-    Dim Index As Integer
+    Dim index As Integer
     Dim s As String
     
     If txtPre.Enabled Then 'fix for topic 25290 -a
-        Index = g_Channel.GetUserIndex(GetSelectedUser)
+        index = g_Channel.GetUserIndex(GetSelectedUser)
         s = vbNullString
         If Dii Then s = "*"
-        s = StringFormat("/w {0}{1} ", s, g_Channel.Users(Index).Name)
+        s = StringFormat("/w {0}{1} ", s, g_Channel.Users(index).Name)
         txtPre.Text = s
         
         cboSend.SetFocus
@@ -4572,15 +4495,17 @@ Private Sub mnuRepairDataFiles_Click()
 End Sub
 
 Private Sub mnuRepairVerbytes_Click()
-    WriteINI "Override", "W2VerByte", Hex(GetVerByte("NB2W", 1))
-    WriteINI "Override", "W3VerByte", Hex(GetVerByte("3RAW", 1))
-    WriteINI "Override", "SCVerByte", Hex(GetVerByte("RATS", 1))
-    WriteINI "Override", "D2VerByte", Hex(GetVerByte("VD2D", 1))
-    WriteINI "Override", "D2XVerByte", Hex(GetVerByte("PX2D", 1))
-    WriteINI "Override", "D1VerByte", Hex(GetVerByte("LTRD", 1))
-    WriteINI "Override", "DSVerByte", Hex(GetVerByte("RHSD", 1))
-    WriteINI "Override", "SSVerByte", Hex(GetVerByte("RHSS", 1))
-    WriteINI "Override", "JSVerByte", Hex(GetVerByte("RTSJ", 1))
+    Config.SetVersionByte "W2", GetVerByte("NB2W", 1)
+    Config.SetVersionByte "W3", GetVerByte("3RAW", 1)
+    Config.SetVersionByte "SC", GetVerByte("RATS", 1)
+    Config.SetVersionByte "D2", GetVerByte("VD2D", 1)
+    Config.SetVersionByte "D2X", GetVerByte("PX2D", 1)
+    Config.SetVersionByte "D1", GetVerByte("LTRD", 1)
+    Config.SetVersionByte "DS", GetVerByte("RHSD", 1)
+    Config.SetVersionByte "SS", GetVerByte("RHSS", 1)
+    Config.SetVersionByte "JS", GetVerByte("RTSJ", 1)
+    
+    Call Config.Save
     
     frmChat.AddChat RTBColors.SuccessText, "The version bytes stored in config.ini have been restored to their defaults."
 End Sub
@@ -4591,14 +4516,15 @@ End Sub
 
 Private Sub mnuToggleShowOutgoing_Click()
     mnuToggleShowOutgoing.Checked = (Not mnuToggleShowOutgoing.Checked)
-    
-    WriteINI "Main", "ShowOutgoingWhispers", IIf(mnuToggleShowOutgoing.Checked, "Y", "N")
+    Config.ShowOutgoingWhispers = CBool(mnuToggleShowOutgoing.Checked)
+    Call Config.Save
 End Sub
 
 Private Sub mnuToggleWWUse_Click()
     mnuToggleWWUse.Checked = (Not mnuToggleWWUse.Checked)
     
-    WriteINI "Main", "UseWWs", IIf(mnuToggleWWUse.Checked, "Y", "N")
+    Config.UseWhisperWindows = CBool(mnuToggleWWUse.Checked)
+    Call Config.Save
     
     If Not mnuToggleWWUse.Checked Then
         DestroyAllWWs
@@ -4624,9 +4550,11 @@ Private Sub mnuUpdateVerbytes_Click()
             ary() = Split(s, " ")
             
             For i = 0 To 3
-                WriteINI "Override", keys(i) & "VerByte", ary(i)
+                Config.SetVersionByte keys(i), CLng(Val("&H" & ary(i)))
             Next i
-            WriteINI "Override", "D2XVerByte", ary(2)
+            Config.SetVersionByte "D2X", CLng(Val("&H" & ary(2)))
+            
+            Call Config.Save
             
             AddChat RTBColors.SuccessText, "Your config.ini file has been loaded with current version bytes."
         Else
@@ -4752,14 +4680,14 @@ End Sub
 Private Sub mnuUTF8_Click()
     If mnuUTF8.Checked Then
         mnuUTF8.Checked = False
-        WriteINI "Main", "UTF8", "N"
         AddChat RTBColors.ConsoleText, "Messages will no longer be UTF-8-decoded."
     Else
         mnuUTF8.Checked = True
-        WriteINI "Main", "UTF8", "Y"
         AddChat RTBColors.ConsoleText, "Messages will now be UTF-8-decoded."
-        
     End If
+    
+    Config.UTF8 = CBool(mnuUTF8.Checked)
+    Call Config.Save
 End Sub
 
 Private Sub mnuWindow_Click()
@@ -4856,12 +4784,13 @@ Private Sub mnuToggleFilters_Click()
     If Filters Then
         Filters = False
         AddChat RTBColors.InformationText, "Chat filtering disabled."
-        WriteINI "Other", "Filters", "N"
     Else
         Filters = True
         AddChat RTBColors.InformationText, "Chat filtering enabled."
-        WriteINI "Other", "Filters", "Y"
     End If
+    
+    Config.UseChatFilters = Filters
+    Call Config.Save
 End Sub
 
 Private Sub mnuConnect_Click()
@@ -4921,8 +4850,8 @@ Sub mnuLock_Click()
 End Sub
 
 Sub mnuDisconnect_Click()
-    Dim Key As String, L As Long
-    Key = GetProductKey()
+    Dim key As String, L As Long
+    key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
 '        AttemptedNewVerbyte = False
@@ -4957,96 +4886,97 @@ Private Sub mnuToggle_Click()
     If JoinMessagesOff = False Then
         AddChat RTBColors.InformationText, "Join/Leave messages disabled."
         JoinMessagesOff = True
-        WriteINI "Other", "JoinLeaves", "N"
     Else
         AddChat RTBColors.InformationText, "Join/Leave messages enabled."
         JoinMessagesOff = False
-        WriteINI "Other", "JoinLeaves", "Y"
     End If
+    
+    Config.ShowJoinLeaves = Not JoinMessagesOff
+    Call Config.Save
 End Sub
 
 Private Sub mnuUsers_Click()
     frmDBManager.Show
 End Sub
 
-Private Sub mnuScript_Click(Index As Integer)
+Private Sub mnuScript_Click(index As Integer)
     On Error Resume Next
 
     Dim obj As scObj
     
-    obj = GetScriptObjByIndex("Menu", Index)
+    obj = GetScriptObjByIndex("Menu", index)
     RunInSingle obj.SCModule, obj.ObjName & "_Click"
 End Sub
 
-Private Sub sckScript_Connect(Index As Integer)
+Private Sub sckScript_Connect(index As Integer)
     On Error Resume Next
 
     Dim obj As scObj
     
-    obj = GetScriptObjByIndex("Winsock", Index)
+    obj = GetScriptObjByIndex("Winsock", index)
     RunInSingle obj.SCModule, obj.ObjName & "_Connect"
 End Sub
 
-Private Sub sckScript_ConnectionRequest(Index As Integer, ByVal requestID As Long)
+Private Sub sckScript_ConnectionRequest(index As Integer, ByVal requestID As Long)
     On Error Resume Next
 
     Dim obj As scObj
     
-    obj = GetScriptObjByIndex("Winsock", Index)
+    obj = GetScriptObjByIndex("Winsock", index)
     RunInSingle obj.SCModule, obj.ObjName & "_ConnectionRequest", requestID
 End Sub
 
-Private Sub sckScript_DataArrival(Index As Integer, ByVal bytesTotal As Long)
+Private Sub sckScript_DataArrival(index As Integer, ByVal bytesTotal As Long)
     On Error Resume Next
 
     Dim obj As scObj
     
-    obj = GetScriptObjByIndex("Winsock", Index)
+    obj = GetScriptObjByIndex("Winsock", index)
     RunInSingle obj.SCModule, obj.ObjName & "_DataArrival", bytesTotal
 End Sub
 
-Private Sub sckScript_SendComplete(Index As Integer)
+Private Sub sckScript_SendComplete(index As Integer)
     On Error Resume Next
 
     Dim obj As scObj
     
-    obj = GetScriptObjByIndex("Winsock", Index)
+    obj = GetScriptObjByIndex("Winsock", index)
     RunInSingle obj.SCModule, obj.ObjName & "_SendComplete"
 End Sub
 
-Private Sub sckScript_SendProgress(Index As Integer, ByVal bytesSent As Long, ByVal bytesRemaining As Long)
+Private Sub sckScript_SendProgress(index As Integer, ByVal bytesSent As Long, ByVal bytesRemaining As Long)
     On Error Resume Next
 
     Dim obj As scObj
     
-    obj = GetScriptObjByIndex("Winsock", Index)
+    obj = GetScriptObjByIndex("Winsock", index)
     RunInSingle obj.SCModule, obj.ObjName & "_SendProgress", bytesSent, bytesRemaining
 End Sub
 
-Private Sub sckScript_Close(Index As Integer)
+Private Sub sckScript_Close(index As Integer)
     On Error Resume Next
 
     Dim obj As scObj
     
-    obj = GetScriptObjByIndex("Winsock", Index)
+    obj = GetScriptObjByIndex("Winsock", index)
     RunInSingle obj.SCModule, obj.ObjName & "_Close"
 End Sub
 
-Private Sub sckScript_Error(Index As Integer, ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckScript_Error(index As Integer, ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     On Error Resume Next
 
     Dim obj As scObj
     
-    obj = GetScriptObjByIndex("Winsock", Index)
+    obj = GetScriptObjByIndex("Winsock", index)
     RunInSingle obj.SCModule, obj.ObjName & "_Error", Number, description, Scode, source, HelpFile, HelpContext, CancelDisplay
 End Sub
 
-Private Sub itcScript_StateChanged(Index As Integer, ByVal State As Integer)
+Private Sub itcScript_StateChanged(index As Integer, ByVal State As Integer)
     On Error Resume Next
 
     Dim obj As scObj
     
-    obj = GetScriptObjByIndex("Inet", Index)
+    obj = GetScriptObjByIndex("Inet", index)
     RunInSingle obj.SCModule, obj.ObjName & "_StateChanged", State
 End Sub
 
@@ -5063,21 +4993,21 @@ Private Sub tmrAccountLock_Timer()
     DoDisconnect
 End Sub
 
-Private Sub tmrScript_Timer(Index As Integer)
+Private Sub tmrScript_Timer(index As Integer)
     On Error Resume Next
 
     Dim obj As scObj
     
-    obj = GetScriptObjByIndex("Timer", Index)
+    obj = GetScriptObjByIndex("Timer", index)
     RunInSingle obj.SCModule, obj.ObjName & "_Timer"
 End Sub
 
-Private Sub tmrScriptLong_Timer(Index As Integer)
+Private Sub tmrScriptLong_Timer(index As Integer)
     On Error Resume Next
 
     Dim obj As scObj
     
-    obj = GetScriptObjByIndex("LongTimer", Index)
+    obj = GetScriptObjByIndex("LongTimer", index)
     obj.obj.Counter = (obj.obj.Counter + 1)
     
     If (obj.obj.Counter >= obj.obj.Interval) Then
@@ -5246,7 +5176,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     With lvChannel
 
         If (Not (.SelectedItem Is Nothing)) Then
-            i = .SelectedItem.Index
+            i = .SelectedItem.index
         End If
         
         'MsgBox KeyCode
@@ -5543,89 +5473,6 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
                                     
                                     GoTo theEnd
-                                    
-                                'ElseIf (LCase$(s) = "/fl" And MDebug("debug")) Then
-                                '    For n = 1 To g_Friends.Count
-                                '        AddChat vbMagenta, g_Friends.Item(n).Name & _
-                                '            " - " & g_Friends.Item(n).game
-                                '    Next n
-                                
-                                'ElseIf (LCase$(s) = "/accountinfo") Then
-                                '    RequestSystemKeys
-                                '
-                                '    GoTo theEnd
-                                    
-                                'ElseIf (LCase$(s) = "/lvchandims") Then
-                                '    Dim j As Integer
-                                '
-                                '    AddChat vbRed, "lvChannel:"
-                                '    AddChat vbRed, " Height: " & lvChannel.Height
-                                '    AddChat vbRed, " Width: " & lvChannel.Width
-                                '
-                                '    For j = 1 To lvChannel.ColumnHeaders.Count
-                                '        AddChat vbRed, " Column " & j & ":"
-                                '        AddChat vbRed, "  Width:" & lvChannel.ColumnHeaders(j).Width
-                                '    Next j
-                                '
-                                'ElseIf (LCase$(s) = "/cls") Then
-                                '    Call mnuClear_Click
-                                '
-                                '    GoTo theEnd
-                                '
-                                'ElseIf (LCase$(s) = "/ds_list") Then
-                                '    Call ds.List
-                                '
-                                '    GoTo theEnd
-                                '
-                                'ElseIf (Left$(LCase$(s), 7) = "/setcl ") Then
-                                '    CommandLine = Mid$(s, 8)
-                                '    frmChat.AddChat RTBColors.SuccessText, _
-                                '            "The command line for this instance has been changed."
-                                '
-                                '    GoTo theEnd
-                                '
-                                'ElseIf ((s = "/force") And (MDebug("debug"))) Then
-                                '    MyFlags = 2
-                                '    SharedScriptSupport.BotFlags = MyFlags
-                                '    AddChat RTBColors.ConsoleText, "Flags forced to 2."
-                                '
-                                'ElseIf ((s = "/flags") And (MDebug("debug"))) Then
-                                '    For n = 1 To g_Channel.Users.Count
-                                '        With g_Channel.Users(n)
-                                '            AddChat RTBColors.ConsoleText, .Name & Space$(4) & .Flags
-                                '        End With
-                                '    Next n
-                                '
-                                '    n = 0
-                                '
-                                '    GoTo theEnd
-                                '
-                                'ElseIf LCase(Left$(s, 7)) = "/watch " Then
-                                '    WatchUser = LCase(Right(s, Len(s) - 7))
-                                '    AddChat RTBColors.ConsoleText, "Watching " & Right(s, Len(s) - 7)
-                                '
-                                '    GoTo theEnd
-                                '
-                                'ElseIf LCase$(s) = "/watchoff" Then
-                                '    WatchUser = vbNullString
-                                '    AddChat RTBColors.ConsoleText, "Watch off."
-                                '    GoTo theEnd
-                                'ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
-                                '
-                                '   m = Right(s, (Len(s) - 7))
-                                'ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
-                                '    m = Right(s, (Len(s) - 7))
-                                '
-                                '    AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m), _
-                                '        PRIORITY.CONSOLE_MESSAGE
-                                    
-                                'ElseIf (LCase(Left$(s, 9)) = "/profile ") Then
-                                '    If (sckBNet.State = 7) Then
-                                '        RequestProfile Right(s, Len(s) - 9)
-                                '    End If
-                                '
-                                '    frmProfile.lblUsername.Caption = Right(s, Len(s) - 9)
-                                '    frmProfile.Show
                                 
                                 ElseIf (LCase(Left$(s, 1)) = "/") Then
                                     Dim commandResult As Boolean ' ..
@@ -5859,7 +5706,7 @@ Private Sub Timer_Timer()
      
     If iCounter >= 32760 Then iCounter = 0
 
-    If ReadCfg("Other", "ProfileAmp") = "Y" And g_Online Then Call UpdateProfile
+    If Config.UseProfileAmp And g_Online Then Call UpdateProfile
     
     BotVars.JoinWatch = 0
     
@@ -5871,22 +5718,15 @@ Private Sub Timer_Timer()
         End If
     End If
     
-    IdleMsg = ReadCfg("Main", "Idles")
+    If Not Config.IdlesEnabled Then Exit Sub
     
-    If IdleMsg <> "Y" Then Exit Sub
+    IdleMsg = Config.IdleMessage
+    IdleWait = Config.IdleDelay
+    IdleType = Config.IdleType
     
-    If ((StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) = 0) And _
-        (IsStealthBotTech = False)) Then Exit Sub
-    
-    IdleMsg = ReadCfg("Main", "IdleMsg")
-    IdleWaitS = ReadCfg("Main", "IdleWait")
-    IdleType = ReadCfg("Main", "IdleType")
-    
-    If StrictIsNumeric(IdleWaitS) Then IdleWait = IdleWaitS
-
     If IdleWait < 2 Then Exit Sub
     
-    If iCounter >= IdleWait And StrComp(LCase(g_Channel.Name), "op [vl]", vbTextCompare) <> 0 Then
+    If iCounter >= IdleWait Then
         iCounter = 0
         'on error resume next
         If IdleType = "msg" Or IdleType = vbNullString Then
@@ -5989,7 +5829,7 @@ Private Sub tmrFriendlistUpdate_Timer()
     End If
 End Sub
 
-Private Sub tmrSilentChannel_Timer(Index As Integer)
+Private Sub tmrSilentChannel_Timer(index As Integer)
     On Error GoTo ERROR_HANDLER
 
     Dim User    As clsUserObj
@@ -6004,7 +5844,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
         Exit Sub
     End If
 
-    If (Index = 0) Then
+    If (index = 0) Then
         If (frmChat.mnuDisableVoidView.Checked = False) Then
             'For i = 1 To g_Channel.Users.Count
             '    ' with our doevents, we can miss our cue indicating that we
@@ -6031,7 +5871,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
         End If
     
         tmrSilentChannel(0).Enabled = False
-    ElseIf (Index = 1) Then
+    ElseIf (index = 1) Then
         If (mnuDisableVoidView.Checked = False) Then
             If (g_Channel.IsSilent) Then
                 Call g_Channel.ClearUsers
@@ -6046,7 +5886,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, "Error: " & Err.description & " in tmrSilentChannel_Timer(" & Index & ")."
+    AddChat RTBColors.ErrorMessageText, "Error: " & Err.description & " in tmrSilentChannel_Timer(" & index & ")."
     
     Exit Sub
 End Sub
@@ -6109,12 +5949,12 @@ Sub Connect()
             Select Case StrReverse$(UCase$(BotVars.Product))
                 Case "SSHR", "DRTL", "DSHR"
                 Case "STAR", "SEXP", "JSTR", "D2DV", "W2BN", "WAR3"
-                    If BotVars.CDKey = vbNullString Then
+                    If BotVars.CdKey = vbNullString Then
                         MissingInfo = MissingInfo & "CDKey, "
                         NotEnoughInfo = True
                     End If
                 Case "D2XP", "W3XP"
-                    If BotVars.CDKey = vbNullString Then
+                    If BotVars.CdKey = vbNullString Then
                         MissingInfo = MissingInfo & "CDKey, "
                         NotEnoughInfo = True
                     End If
@@ -6175,7 +6015,7 @@ Sub Connect()
             With sckBNLS
                 If .State <> 0 Then .Close
                 
-                .RemoteHost = BotVars.BNLSServer
+                .RemoteHost = BotVars.BnlsServer
                 .RemotePort = 9367
                 .Connect
             End With
@@ -6208,18 +6048,6 @@ Sub Connect()
                     Exit Sub
                 End If
             End If
-            
-           '             Dim blah As sockaddr_in
-           '
-           '             blah.sin_family = AF_INET
-            'blah.sin_addr = inet_addr("192.168.1.155")
-            'blah.sin_port = 0
-           ' blah.sin_zero = 0
-            
-            'sckBNet.bind , "192.168.1.155"
-            
-            'bind sckBNet.SocketHandle, blah, LenB(blah)
-            'MsgBox WSAGetLastError
 
             If Not BotVars.BNLS Then .Connect
 
@@ -6432,7 +6260,7 @@ Private Function ReplaceEnvironmentVars(ByVal str As String) As String
 
     Dim i     As Integer
     Dim Name  As String
-    Dim Value As String
+    Dim value As String
     Dim tmp   As String
     
     tmp = str
@@ -6442,9 +6270,9 @@ Private Function ReplaceEnvironmentVars(ByVal str As String) As String
     While (Environ$(i) <> "")
         Name = Mid$(Environ$(i), 1, InStr(1, Environ$(i), "=") - 1)
 
-        Value = Mid$(Environ$(i), InStr(1, Environ$(i), "=") + 1)
+        value = Mid$(Environ$(i), InStr(1, Environ$(i), "=") + 1)
 
-        tmp = Replace(tmp, "%" & Name & "%", Value)
+        tmp = Replace(tmp, "%" & Name & "%", value)
     
         i = i + 1
     Wend
@@ -6458,9 +6286,6 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
 
     On Error GoTo ERROR_HANDLER
     
-    ' maximum size of battle.net messages
-    Const BNET_MSG_LENGTH = 223
-    
     Dim Splt()         As String
     Dim strTmp         As String
     Dim i              As Long
@@ -6470,7 +6295,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
     Dim GTC            As Double
     Dim Q              As clsQueueOBj
     Dim delay          As Long
-    Dim Index          As Long
+    Dim index          As Long
     Dim s              As String      ' temp string for settings
     Dim MaxLength      As Integer     ' stores max length for split (with override)
     
@@ -6523,12 +6348,12 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             End If
 
             ' Find the next instance of a space (the end of the command word)
-            Index = InStr(1, strTmp, Space(1), vbBinaryCompare)
+            index = InStr(1, strTmp, Space(1), vbBinaryCompare)
             
             ' is it a valid command word?
-            If (Index > 2) Then
+            If (index > 2) Then
                 ' extract the command word
-                Command = LCase$(Mid$(strTmp, 2, (Index - 2)))
+                Command = LCase$(Mid$(strTmp, 2, (index - 2)))
 
                 ' test it for being battle.net commands we need to process now
                 If ((Command = "w") Or _
@@ -6638,13 +6463,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             End Select
         End If
         
-        ' check for custom maxlength
-        s = ReadCfg("Override", "AddQMaxLength")
-        If Val(s) > 0 And Val(s) < BNET_MSG_LENGTH Then
-            MaxLength = Val(s)
-        Else
-            MaxLength = BNET_MSG_LENGTH
-        End If
+        MaxLength = Config.AddQMaxLength
         
         Call SplitByLen(strTmp, (MaxLength - Len(Command)), Splt(), vbNullString, , OversizeDelimiter)
 
@@ -6747,56 +6566,47 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Dim s                    As String
     Dim i                    As Integer
     Dim f                    As Integer
-    Dim Index                As Integer
+    Dim index                As Integer
     Dim bln                  As Boolean
     Dim doConvert            As Boolean
     Dim command_output()     As String
     
     Dim oCommandGenerator    As New clsCommandGeneratorObj
-        
-    s = ReadCfg(OT, "Timestamp")
-    If StrictIsNumeric(s) And Val(s) < 4 Then BotVars.TSSetting = CInt(s) Else BotVars.TSSetting = 0
     
-    s = BotVars.Username
-    
-    BotVars.Username = ReadCfg(MN, "Username")
-    
-    If LenB(s) > 0 Then
-        If StrComp(BotVars.Username, s, vbTextCompare) <> 0 Then
-            AddChat RTBColors.ServerInfoText, "Username set to " & BotVars.Username & "."
-        End If
+    If Mode <> 0 Then
+        Config.Load GetConfigFilePath()
     End If
     
-    BotVars.Password = ReadCfg(MN, "Password")
-    BotVars.CDKey = UCase$(ReadCfg(MN, "CDKey"))
-    BotVars.ExpKey = UCase$(ReadCfg(MN, "ExpKey"))
-    
-    If BotVars.ExpKey = "" Then
-        BotVars.ExpKey = UCase$(ReadCfg(MN, "LODKey"))
+    BotVars.TSSetting = Config.Timestamp
+
+    ' Client settings
+    If LenB(BotVars.Username) > 0 And StrComp(BotVars.Username, Config.Username, vbTextCompare) <> 0 Then
+        AddChat RTBColors.ServerInfoText, "Username set to " & BotVars.Username & "."
     End If
+    BotVars.Username = Config.Username
+    BotVars.Password = Config.Password
+    BotVars.CdKey = Config.CdKey
+    BotVars.ExpKey = Config.ExpKey
+    BotVars.Product = Config.Product
+    BotVars.Server = Config.Server
+    BotVars.HomeChannel = Config.HomeChannel
+    BotVars.BotOwner = Config.BotOwner
     
-    BotVars.Product = ReadCfg(MN, "Product")
-    BotVars.Server = ReadCfg(MN, "Server")
-    BotVars.HomeChannel = ReadCfg(MN, "HomeChan")
-    BotVars.BotOwner = ReadCfg(MN, "Owner")
+    BotVars.Trigger = Config.Trigger
+    'If (BotVars.TriggerLong = vbNullString) Then
+    '    BotVars.Trigger = "."
+    'End If
     
-    ' filter out the { }'s that were left
-    s = ReadCfg(MN, "Trigger")
-    s = Mid(s, 2, Len(s) - 2)
-    
-    BotVars.Trigger = s
-    
-    If (BotVars.TriggerLong = vbNullString) Then
-        BotVars.Trigger = "."
-    End If
-    
+    ' Load database and commands
     Call LoadDatabase
     Call oCommandGenerator.GenerateCommands
     
+    ' Set UI fonts
     If Mode <> 1 Then
         Dim ResizeChatElements As Boolean
         Dim ResizeChannelElements As Boolean
-        s = ReadCfg(OT, "ChatFont")
+        
+        s = Config.ChatFont
         If s <> vbNullString And s <> rtbChat.Font.Name Then
             rtbChat.Font.Name = s
             cboSend.Font.Name = s
@@ -6806,7 +6616,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             ResizeChatElements = True
         End If
         
-        s = ReadCfg(OT, "ChanFont")
+        s = Config.ChannelFont
         If s <> vbNullString And s <> lvChannel.Font.Name Then
             lvChannel.Font.Name = s
             lvClanList.Font.Name = s
@@ -6816,7 +6626,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             ResizeChatElements = True
         End If
         
-        s = ReadCfg(OT, "ChatSize")
+        s = Config.ChatSize
         If StrictIsNumeric(s) Then
             If CInt(s) <> rtbChat.Font.Size Then
                 rtbChat.Font.Size = s
@@ -6828,7 +6638,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             End If
         End If
         
-        s = ReadCfg(OT, "ChanSize")
+        s = Config.ChannelSize
         If StrictIsNumeric(s) Then
             If CInt(s) <> lvChannel.Font.Size Then
                 lvChannel.Font.Size = s
@@ -6848,109 +6658,47 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             lblCurrentChannel.Height = lblHeight
             ResizeChatElements = True
         End If
+        
         If ResizeChatElements Then
             Form_Resize
         End If
     End If
     
-    s = ReadCfg(OT, "Filters")
-    Filters = (s = "Y")
+    Filters = Config.UseChatFilters
     mnuToggleFilters.Checked = Filters
     If (Not Filters) Then
         BotVars.JoinWatch = 0
     End If
     
-    BotVars.AutofilterMS = 300 'default
-    s = ReadCfg(MN, "AutofilterMS")
+    BotVars.AutoFilterMS = 0
     
-    If LenB(s) > 0 Then
-        If StrictIsNumeric(s) Then
-            BotVars.AutofilterMS = Val(s)
-        End If
-    End If
+    AutoModSafelistValue = Config.AutoModSafelistLevel
+    BotVars.BnlsServer = Config.BnlsServer
+    BotVars.ShowOfflineFriends = Config.ShowOfflineFriends
     
-    s = ReadCfg("Override", "AutoModerationSafelistValue")
-    If Val(s) > 0 And Val(s) < 201 Then
-        AutoModSafelistValue = Val(s)
-    Else
-        AutoModSafelistValue = 20
-    End If
-    
-    s = ReadCfg(MN, "BNLSServer")
-    If LenB(s) = 0 Then
-        s = "jbls.org"
-    End If
-    
-    BotVars.BNLSServer = s
-        
-    s = ReadCfg(MN, "ShowOfflineFriends")
-    
-    If s = "Y" Then
-        BotVars.ShowOfflineFriends = True
-    Else
-        BotVars.ShowOfflineFriends = False
-    End If
-    
-    s = ReadCfg(OT, "HideClanDisplay")
-    If (s = "Y") Then
+    If Config.HideClanDisplay Then
         With lvChannel
             .Width = (.Width - .ColumnHeaders(2).Width)
             .ColumnHeaders(2).Width = 0
         End With
     End If
     
-    s = ReadCfg(OT, "HidePingDisplay")
-    If (s = "Y") Then
+    If Config.HidePingDisplay Then
         With lvChannel
             .Width = (.Width - .ColumnHeaders(3).Width)
             .ColumnHeaders(3).Width = 0
         End With
     End If
     
-    s = ReadCfg(OT, "RetainOldBans")
-    If (s = "Y") Then
-        BotVars.RetainOldBans = True
-    Else
-        BotVars.RetainOldBans = False
-    End If
+    BotVars.RetainOldBans = Config.RetainOldBans
+    BotVars.StoreAllBans = Config.StoreAllBans
     
-    s = ReadCfg(OT, "StoreAllBans")
-    If (s = "Y") Then
-        BotVars.StoreAllBans = True
-    Else
-        BotVars.StoreAllBans = False
-    End If
+    BotVars.GatewayConventions = Config.NamespaceConvention
+    BotVars.UseD2Naming = Config.UseD2Naming
+    BotVars.D2NamingFormat = Config.D2NamingFormat
     
-    i = 0
-    s = ReadCfg(OT, "NamespaceConvention")
-    If (StrictIsNumeric(s)) Then
-        If (CDbl(s) < 4) Then
-            i = CDbl(s)
-        End If
-    End If
-    BotVars.GatewayConventions = i
-    
-    s = ReadCfg(OT, "UseD2Naming")
-    BotVars.UseD2Naming = (s = "Y")
-    
-    BotVars.D2NamingFormat = ReadCfg(OV, "D2NamingFormat")
-    If (LenB(BotVars.D2NamingFormat) = 0) Then
-        BotVars.D2NamingFormat = "char (*name)"
-    End If
-    
-    s = ReadCfg(OT, "ShowStatsIcons")
-    If s = "N" Then
-        BotVars.ShowStatsIcons = False
-    Else
-        BotVars.ShowStatsIcons = True
-    End If
-    
-    s = ReadCfg(OT, "ShowFlagsIcons")
-    If s = "N" Then
-        BotVars.ShowFlagsIcons = False
-    Else
-        BotVars.ShowFlagsIcons = True
-    End If
+    BotVars.ShowStatsIcons = Config.ShowStatsIcons
+    BotVars.ShowFlagsIcons = Config.ShowFlagIcons
     
     If (g_Online) Then
         Dim found       As ListItem
@@ -6979,76 +6727,36 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         Next i
     End If
     
-    s = ReadCfg(OT, "JoinLeaves")
-    JoinMessagesOff = (Not (s = "Y"))
+    JoinMessagesOff = Not Config.ShowJoinLeaves
     mnuToggle.Checked = JoinMessagesOff
 
-    s = ReadCfg(OT, "Mail")
-    If s = "N" Then mail = False Else mail = True
+    mail = Config.EnableMail
     
-    s = ReadCfg(OT, "BanEvasion")
-    If s = "N" Then BotVars.BanEvasion = False Else BotVars.BanEvasion = True
+    BotVars.BanEvasion = Config.EnforceBanEvasion
+    BotVars.Logging = Config.LoggingLevel
     
-    s = ReadCfg(OT, "Logging")
-    If StrictIsNumeric(s) Then BotVars.Logging = Val(s) Else BotVars.Logging = 1
-        
-    mnuToggleWWUse.Checked = (ReadCfg("Main", "UseWWs") = "Y")
-    
-    s = ReadCfg(MN, "WhisperBack")
-    If s = "N" Then BotVars.WhisperCmds = False Else BotVars.WhisperCmds = True
-    
-    s = ReadCfg(OT, "Phrasebans")
-    If s = "Y" Then PhraseBans = True Else PhraseBans = False
-    
-    s = ReadCfg(OT, "CaseSensitiveFlags")
-    If s = "Y" Then BotVars.CaseSensitiveFlags = True Else BotVars.CaseSensitiveFlags = False
-    
-    s = ReadCfg(OT, "AutoCompletePostfix")
-    BotVars.AutoCompletePostfix = s
-    
-    s = ReadCfg(MN, "UseBNLS")
-    If s = "N" Then BotVars.BNLS = False Else BotVars.BNLS = True
-    
-    s = ReadCfg(MN, "LogDBActions")
-    If s = "Y" Then BotVars.LogDBActions = True Else BotVars.LogDBActions = False
-    
-    s = ReadCfg(MN, "LogCommands")
-    If s = "Y" Then BotVars.LogCommands = True Else BotVars.LogCommands = False
-    
+    mnuToggleWWUse.Checked = Config.UseWhisperWindows
+    BotVars.WhisperCmds = Config.WhisperResponses
+    PhraseBans = Config.EnablePhrasebans
+    BotVars.CaseSensitiveFlags = Config.CaseSensitiveFlags
+    BotVars.AutoCompletePostfix = Config.AutoCompletePostfix
+    BotVars.BNLS = Config.UseBnls
+    BotVars.LogDBActions = Config.LogDbAction
+    BotVars.LogCommands = Config.LogCommands
+
     '/* time to idle: defaults to 600 seconds / 10 minutes idle */
-    BotVars.SecondsToIdle = 600
+    BotVars.SecondsToIdle = Config.SecondsToIdle
     
-    s = ReadCfg("Override", "SecondsToIdle")
-    If LenB(s) > 0 Then
-        If StrictIsNumeric(s) Then
-            If Val(s) < 1000000 Then
-                BotVars.SecondsToIdle = Val(s)
-            End If
-        End If
-    End If
+    BotVars.BanUnderLevel = Config.BanUnderLevel
+    BotVars.BanUnderLevelMsg = Config.LevelBanMessage
+    BotVars.BanPeons = Config.BanWc3Peons
     
-    BotVars.BanUnderLevel = Val(ReadCfg(OT, "BanUnderLevel"))
-    BotVars.BanD2UnderLevel = Val(ReadCfg(OT, "BanD2UnderLevel"))
-    BotVars.BanUnderLevelMsg = ReadCfg(OT, "LevelBanMsg")
-    
-    BotVars.BanPeons = (ReadCfg(OT, "PeonBans") = "Y")
-    
-    s = ReadCfg(OT, "KickOnYell")
-    If s = "Y" Then BotVars.KickOnYell = 1 Else BotVars.KickOnYell = 0
+    BotVars.KickOnYell = Config.KickOnYell
     
     ' Capped at 32767, topic=29986 -Andy
-    s = ReadCfg(OT, "IdleBanDelay")
-    If StrictIsNumeric(s) Then
-        If Val(s) < 32767 Then
-            BotVars.IB_Wait = CInt(s)
-        Else
-            BotVars.IB_Wait = 32767
-        End If
-    End If
-    
-    s = ReadCfg(OT, "DefaultShitlistGroup")
-    BotVars.DefaultShitlistGroup = s
-    
+    BotVars.IB_Wait = Config.IdleBanDelay
+
+    BotVars.DefaultShitlistGroup = Config.DefaultShitlistGroup
     If (BotVars.DefaultShitlistGroup <> vbNullString) Then
         default_group_access = _
                 GetAccess(BotVars.DefaultShitlistGroup, "GROUP")
@@ -7059,9 +6767,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    s = ReadCfg(OT, "DefaultTagbansGroup")
-    BotVars.DefaultTagbansGroup = s
-    
+    BotVars.DefaultTagbansGroup = Config.DefaultTagbanGroup
     If (BotVars.DefaultTagbansGroup <> vbNullString) Then
         default_group_access = _
                 GetAccess(BotVars.DefaultTagbansGroup, "GROUP")
@@ -7072,9 +6778,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    s = ReadCfg(OT, "DefaultSafelistGroup")
-    BotVars.DefaultSafelistGroup = s
-    
+    BotVars.DefaultSafelistGroup = Config.DefaultSafelistGroup
     If (BotVars.DefaultSafelistGroup <> vbNullString) Then
         default_group_access = _
                 GetAccess(BotVars.DefaultSafelistGroup, "GROUP")
@@ -7085,248 +6789,97 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    s = ReadCfg(OT, "AllowMP3")
-    If s = "N" Then BotVars.DisableMP3Commands = True Else BotVars.DisableMP3Commands = False
+    BotVars.DisableMP3Commands = Not Config.AllowMp3Commands
     
-    s = ReadCfg(MN, "MaxBacklogSize")
-    If ((s = vbNullString) Or (StrictIsNumeric(s) = False)) Then
-        BotVars.MaxBacklogSize = 10000
-    Else
-        BotVars.MaxBacklogSize = Val(s)
-    End If
+    BotVars.MaxBacklogSize = Config.MaxBacklogSize
+    BotVars.MaxLogFileSize = Config.MaxLogFileSize
     
-    s = ReadCfg(MN, "MaxLogFileSize")
-    If ((s = vbNullString) Or (StrictIsNumeric(s) = False)) Then
-        BotVars.MaxLogFileSize = 50000000
-    Else
-        BotVars.MaxLogFileSize = Val(s)
-    End If
+    BotVars.UsingDirectFList = Config.DoNotUseDirectFList
     
-    s = ReadCfg(MN, "DoNotUseDirectFList")
-    If s = "Y" Then
-        BotVars.UsingDirectFList = False
-    Else
-        BotVars.UsingDirectFList = True
-    End If
-    
-    s = ReadCfg(MN, "URLDetect")
-    If s = "Y" Then
+    If Config.DetectUrls Then
         EnableURLDetect rtbChat.hWnd
     Else
-        DisableURLDetect frmChat.rtbChat.hWnd
+        DisableURLDetect rtbChat.hWnd
     End If
-    
-    If BotVars.MaxBacklogSize < 0 Then BotVars.MaxBacklogSize = 10000
-    If BotVars.MaxLogFileSize < 0 Then BotVars.MaxLogFileSize = 50000000
     
     ' reload quotes file
     Set g_Quotes = New clsQuotesObj
     
-    '// this section must read _absolutely correctly_ or the SetTimer API call will fail
-    s = ReadCfg(MN, "ReconnectDelay")
-    If LenB(s) > 0 Then
-        If StrictIsNumeric(s) Then
-            If Val(s) < 60000 Then
-                If Val(s) > 0 Then
-                    BotVars.ReconnectDelay = Val(s)
-                Else
-                    BotVars.ReconnectDelay = 1000
-                End If
-            Else
-                BotVars.ReconnectDelay = 60000
-            End If
-        Else
-            BotVars.ReconnectDelay = 1000
-        End If
-    Else
-        BotVars.ReconnectDelay = 1000
-    End If
+    BotVars.UseBackupChan = Config.UseBackupChannel
+    BotVars.BackupChan = Config.BackupChannel
+
+    mnuUTF8.Checked = Config.UTF8
     
-    s = ReadCfg(MN, "UseBackupChan")
-    If s = "Y" Then BotVars.UseBackupChan = True Else BotVars.UseBackupChan = False
-    
-    BotVars.BackupChan = ReadCfg(MN, "BackupChan")
-    
-    s = ReadCfg("Main", "UTF8")
-    If s = "N" Then mnuUTF8.Checked = False Else mnuUTF8.Checked = True
-    
-    mnuToggleShowOutgoing.Checked = (ReadCfg("Main", "ShowOutgoingWhispers") = "Y")
-    mnuHideWhispersInrtbChat.Checked = (ReadCfg("Main", "HideWhispersInMain") = "Y")
-    mnuIgnoreInvites.Checked = (ReadCfg("Main", "IgnoreClanInvitations") = "Y")
+    mnuToggleShowOutgoing.Checked = Config.ShowOutgoingWhispers
+    mnuHideWhispersInrtbChat.Checked = Config.HideWhispersInMain
+    mnuIgnoreInvites.Checked = Config.IgnoreClanInvitations
     
     'LoadSafelist
     LoadArray LOAD_PHRASES, Phrases()
     LoadArray LOAD_FILTERS, gFilters()
     
-    ProtectMsg = ReadCfg(OT, "ProtectMsg")
-    If ProtectMsg = vbNullString Then ProtectMsg = "Channel Protection"
-    
+    ProtectMsg = Config.ChannelProtectionMessage
+
     Call LoadOutFilters
     
-    s = ReadCfg(OT, "IdleBans")
-    If s = "Y" Then BotVars.IB_On = BTRUE Else BotVars.IB_On = BFALSE
+    BotVars.IB_On = Config.EnforceIdleBans
+    BotVars.IB_Kick = Config.KickIdleUsers
+    BotVars.IB_Wait = Config.IdleBanDelay
+
+    BotVars.Spoof = Config.PingSpoofing
     
-    s = ReadCfg(OT, "KickIdle")
-    If s = "Y" Then BotVars.IB_Kick = True Else BotVars.IB_Kick = False
+    Protect = Config.ChannelProtection
+    BotVars.UseUDP = Config.UseUDP
+    BotVars.IpBans = Config.IpBans
+    BotVars.UseAltBnls = Config.UseBnlsFinder
+    BotVars.QuietTime = Config.QuietTime
     
-    s = ReadCfg(OT, "IdleBanDelay")
-    If (StrictIsNumeric(s) And s <> vbNullString) Then BotVars.IB_Wait = CInt(s) Else BotVars.IB_Wait = 0
+    mnuFlash.Checked = Config.FlashOnEvents
     
-    s = ReadCfg(MN, "Spoof")
-    If StrictIsNumeric(Left$(s, 1)) Then
-        Select Case Left$(s, 1)
-            Case "0": BotVars.Spoof = 0
-            Case "1": BotVars.Spoof = 1
-            Case "2": BotVars.Spoof = 2
-            Case Else: BotVars.Spoof = 0
-        End Select
-    Else
-        BotVars.Spoof = 0
-    End If
+    BotVars.UseProxy = Config.UseProxy
+    If BotVars.UseProxy And sckBNet.State = sckConnected Then BotVars.ProxyStatus = psOnline
+    BotVars.ProxyPort = Config.ProxyPort
+    BotVars.ProxyIsSocks5 = Config.ProxyIsSocks5
+    BotVars.NoTray = Not Config.MinimizeToTray
+    BotVars.NoAutocompletion = Config.DisableAutoComplete
+    BotVars.NoColoring = Config.DisableNameColoring
     
-    s = ReadCfg(MN, "Protect")
-    If s = "Y" Then Protect = True Else Protect = False
+    mnuDisableVoidView.Checked = Config.DisableVoidView
     
-    s = ReadCfg(MN, "UDP")
-    If s = "Y" Then BotVars.UseUDP = True Else BotVars.UseUDP = False
+    BotVars.MediaPlayer = Config.MediaPlayer
     
-    s = ReadCfg(OT, "IPBans")
-    If s = "Y" Then BotVars.IPBans = True Else BotVars.IPBans = False
-    
-    s = ReadCfg(MN, "UseAltBnls")
-    If s = "Y" Then BotVars.UseAltBnls = True Else BotVars.UseAltBnls = False
-    
-    s = ReadCfg(MN, "QuietTime")
-    If s = "Y" Then BotVars.QuietTime = True Else BotVars.QuietTime = False
-    
-    s = ReadCfg(OT, "FlashWindow")
-    If s = "Y" Then mnuFlash.Checked = True Else mnuFlash.Checked = False
-    
-    s = ReadCfg(MN, "UseProxy")
-    If s = "Y" Then
-        BotVars.UseProxy = True 'Added comment so the thing would let me commit. To shut Swent up
-        If (sckBNet.State = sckConnected) Then BotVars.ProxyStatus = psOnline
-    Else
-        BotVars.UseProxy = False
-    End If
-    
-    s = ReadCfg(MN, "ProxyPort")
-    If StrictIsNumeric(s) Then
-        If Val(s) < 65536 Then BotVars.ProxyPort = CLng(s) Else BotVars.ProxyPort = 0
-    Else
-        BotVars.ProxyPort = 0
-    End If
-    
-    s = ReadCfg(MN, "ProxyIsSocks5")
-    If s = "Y" Then BotVars.ProxyIsSocks5 = True Else BotVars.ProxyIsSocks5 = False
-    
-    s = ReadCfg(OT, "NoTray")
-    If s = "Y" Then BotVars.NoTray = True Else BotVars.NoTray = False
-    
-    s = ReadCfg(OT, "NoAutocomplete")
-    If s = "Y" Then BotVars.NoAutocompletion = True Else BotVars.NoAutocompletion = False
-    
-    s = ReadCfg(OT, "NoColoring")
-    If s = "Y" Then BotVars.NoColoring = True Else BotVars.NoColoring = False
-    
-    s = ReadCfg(OT, "DisableVoidView")
-    If s = "Y" Then mnuDisableVoidView.Checked = True Else mnuDisableVoidView.Checked = False
-    
-    s = ReadCfg(OT, "MediaPlayer")
-    If s <> vbNullString Then
-        BotVars.MediaPlayer = s
-    Else
-        BotVars.MediaPlayer = "Winamp"
-    End If
     
     ' Load some queue stuff, reluctantly
-    s = ReadCfg(OV, "QueueMaxCredits")
-    If StrictIsNumeric(s) And Val(s) > 0 Then
-        BotVars.QueueMaxCredits = Val(s)
-    Else
-        BotVars.QueueMaxCredits = g_BNCSQueue.DefaultMaxCredits
-    End If
-    
-    s = ReadCfg(OV, "QueueCostPerPacket")
-    If StrictIsNumeric(s) And Val(s) > 0 Then
-        BotVars.QueueCostPerPacket = Val(s)
-    Else
-        BotVars.QueueCostPerPacket = g_BNCSQueue.DefaultCostPerPacket
-    End If
-    
-    s = ReadCfg(OV, "QueueCostPerByte")
-    If StrictIsNumeric(s) And Val(s) > 0 Then
-        BotVars.QueueCostPerByte = Val(s)
-    Else
-        BotVars.QueueCostPerByte = g_BNCSQueue.DefaultCostPerByte
-    End If
-    
-    s = ReadCfg(OV, "QueueCostPerByteOverThreshhold")
-    If StrictIsNumeric(s) And Val(s) > 0 Then
-        BotVars.QueueCostPerByteOverThreshhold = Val(s)
-    Else
-        BotVars.QueueCostPerByteOverThreshhold = g_BNCSQueue.DefaultCostPerByteOverThreshhold
-    End If
-    
-    s = ReadCfg(OV, "QueueStartingCredits")
-    If StrictIsNumeric(s) And Val(s) > 0 Then
-        BotVars.QueueStartingCredits = Val(s)
-    Else
-        BotVars.QueueStartingCredits = g_BNCSQueue.DefaultStartingCredits
-    End If
-    
-    s = ReadCfg(OV, "QueueThreshholdBytes")
-    If StrictIsNumeric(s) And Val(s) > 0 Then
-        BotVars.QueueThreshholdBytes = Val(s)
-    Else
-        BotVars.QueueThreshholdBytes = g_BNCSQueue.DefaultThreshholdBytes
-    End If
-    
-    s = ReadCfg(OV, "QueueCreditRate")
-    If StrictIsNumeric(s) And Val(s) > 0 Then
-        BotVars.QueueCreditRate = Val(s)
-    Else
-        BotVars.QueueCreditRate = g_BNCSQueue.DefaultCreditRate
-    End If
+    BotVars.QueueMaxCredits = Config.QueueMaxCredits
+    BotVars.QueueCostPerPacket = Config.QueueCostPerPacket
+    BotVars.QueueCostPerByte = Config.QueueCostPerByte
+    BotVars.QueueCostPerByteOverThreshhold = Config.QueueCostPerByteOver
+    BotVars.QueueStartingCredits = Config.QueueStartingCredits
+    BotVars.QueueThreshholdBytes = Config.QueueThreshholdBytes
+    BotVars.QueueCreditRate = Config.QueueCreditRate
 
-    s = ReadCfg(MN, "UseRealm")
-    If s = "Y" Then BotVars.UseRealm = True Else BotVars.UseRealm = False
-    
+    BotVars.UseRealm = Config.UseRealm
+
     txtPre.Text = ""
     txtPost.Text = ""
     
-    s = ReadCfg(OT, "DisablePrefix")
-    If s = "Y" Then
-        txtPre.Visible = False
-        mnuPopAddLeft.Enabled = False
-    Else
-        txtPre.Visible = True
-        mnuPopAddLeft.Enabled = True
-    End If
-    
-    s = ReadCfg(OT, "DisableSuffix")
-    If s = "Y" Then txtPost.Visible = False Else txtPost.Visible = True
+    txtPre.Visible = Not Config.DisablePrefixBox
+    mnuPopAddLeft.Enabled = Not Config.DisablePrefixBox
+
+    txtPost.Visible = Not Config.DisableSuffixBox
     
     '[Other] MathAllowUI - Will allow People to use MessageBox/InputBox or other UI related commands in the .eval/.math commands ~Hdx 09-25-07
-    s = ReadCfg(OT, "MathAllowUI")
-    If s = "Y" Then SCRestricted.AllowUI = True Else SCRestricted.AllowUI = False
+    SCRestricted.AllowUI = Config.MathAllowUI
+    BotVars.NoRTBAutomaticCopy = Config.DisableRtbAutoCopy
+    BotVars.GreetMsg = Config.GreetMessage
+    BotVars.UseGreet = Config.UseGreetMessage
+    BotVars.WhisperGreet = Config.WhisperGreet
     
-    BotVars.NoRTBAutomaticCopy = (ReadCfg("Override", "NoRTBAutomaticCopy") = "Y")
+    BotVars.ProxyIP = Config.ProxyIP
     
-    BotVars.GreetMsg = ReadCfg(OT, "GreetMsg")
-    BotVars.UseGreet = (ReadCfg(OT, "UseGreets") = "Y")
-    BotVars.WhisperGreet = (ReadCfg(OT, "WhisperGreet") = "Y")
+    BotVars.ChatDelay = Config.ChatDelay
     
-    BotVars.ProxyIP = ReadCfg(MN, "ProxyIP")
-    
-    s = ReadCfg(OT, "ChatDelay")
-    If (s = vbNullString) Then
-        BotVars.ChatDelay = 500
-    Else
-        BotVars.ChatDelay = CLng(Val(s))
-    End If
-    
-    s = ReadCfg("FilePaths", "Logs")
+    s = Config.GetFilePath("Logs")
     If (Not (s = vbNullString)) Then
         g_Logger.LogPath = s
     End If
@@ -7348,10 +6901,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         'End If
     End If
     
-    ' check for script disable override and act accordingly ~Ribose
-    s = ReadCfg(OV, "DisableScripts")
-    ' tell the script system what the override is set to
-    modScripting.SetScriptSystemDisabled (s = "Y")
+    ' disable the script system if override is set
+    modScripting.SetScriptSystemDisabled Config.DisableScripts
     
     Set oCommandGenerator = Nothing
     
@@ -7609,7 +7160,7 @@ Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
                     If InStr(1, strTemp, Chr(0)) > 0 Then
                         UpdateProxyStatus psLoggingIn, PROXY_LOGGING_IN
                         
-                        LogonToProxy sckBNLS, BotVars.BNLSServer, 9367, False
+                        LogonToProxy sckBNLS, BotVars.BnlsServer, 9367, False
                     Else
                         UpdateProxyStatus psNotConnected, PROXY_IS_NOT_PUBLIC
                         sckBNLS.Close
@@ -7736,7 +7287,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     Dim i           As Integer
     Dim CurrentName As String
     Dim atChar      As Integer
-    Dim Index       As Integer
+    Dim index       As Integer
     Dim Loops       As Integer
 
     i = InStr(1, toMatch, " ", vbBinaryCompare)
@@ -7759,13 +7310,13 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
             Dim c As Integer
             
             If (startIndex > .Count) Then
-                Index = 1
+                index = 1
             Else
-                Index = startIndex
+                index = startIndex
             End If
         
             While (Loops < 2)
-                For i = Index To .Count 'for each user
+                For i = index To .Count 'for each user
                     CurrentName = .Item(i).Text
                 
                     If (Len(CurrentName) >= Len(toMatch)) Then
@@ -7788,7 +7339,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                     End If
                 Next i
                 
-                Index = 1
+                index = 1
                 
                 Loops = (Loops + 1)
             Wend
@@ -7845,9 +7396,9 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
         
     
         If (startIndex > UBound(Gateways, 2)) Then
-            Index = 0
+            index = 0
         Else
-            Index = (startIndex - 1)
+            index = (startIndex - 1)
         End If
         
         If (Len(toMatch) >= (atChar + 1)) Then
@@ -7869,7 +7420,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                     End If
                 End If
                 
-                Index = 0
+                index = 0
                 
                 Loops = (Loops + 1)
             Wend
@@ -7878,7 +7429,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                 MatchClosest = Left$(toMatch, atChar) & OtherGateway & _
                         BotVars.AutoCompletePostfix
                     
-                MatchIndex = (Index + 1)
+                MatchIndex = (index + 1)
                     
                 Exit Function
             End If
@@ -7927,7 +7478,8 @@ End Sub
 Public Sub cmdShowHide_Click()
     rtbWhispersVisible = (StrComp(cmdShowHide.Caption, CAP_HIDE))
     rtbWhispers.Visible = rtbWhispersVisible
-    WriteINI "Main", "ShowWhisperWindow", IIf(rtbWhispersVisible, "Y", "N")
+    Config.ShowWhisperWindow = CBool(rtbWhispers.Visible)
+    Call Config.Save
     
     If Me.WindowState <> vbMaximized And Me.WindowState <> vbMinimized Then
         If rtbWhispersVisible Then
@@ -8013,7 +7565,7 @@ End Sub
 Private Function GetClanSelectedUser() As String
     With lvClanList
         If Not (.SelectedItem Is Nothing) Then
-            If .SelectedItem.Index < 1 Then
+            If .SelectedItem.index < 1 Then
                 GetClanSelectedUser = vbNullString: Exit Function
             Else
                 GetClanSelectedUser = CleanUsername(ReverseConvertUsernameGateway(.SelectedItem.Text))
@@ -8041,7 +7593,7 @@ Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single,
             'lvClanList.ListItems(lItemIndex).Selected = True
             
         If Not (lvClanList.SelectedItem Is Nothing) Then
-            If lvClanList.SelectedItem.Index < 0 Then
+            If lvClanList.SelectedItem.index < 0 Then
                 
                 mnuPopClanWhisper.Enabled = False
                 
@@ -8277,14 +7829,14 @@ End Sub
 Public Sub RecordWindowPosition(Optional Maximized As Boolean = False)
     'Don't record other position information if maximized, otherwise when they unmaximize it will be fullscreen width and height. - FrOzeN
     If Not Maximized Then
-        WriteINI "Position", "Left", Int(Me.Left / Screen.TwipsPerPixelX)
-        WriteINI "Position", "Top", Int(Me.Top / Screen.TwipsPerPixelY)
-        WriteINI "Position", "Height", Int(Me.Height / Screen.TwipsPerPixelY)
-        WriteINI "Position", "Width", Int(Me.Width / Screen.TwipsPerPixelX)
+        Config.Left = Int(Me.Left / Screen.TwipsPerPixelX)
+        Config.Top = Int(Me.Top / Screen.TwipsPerPixelY)
+        Config.Height = Int(Me.Height / Screen.TwipsPerPixelY)
+        Config.Width = Int(Me.Width / Screen.TwipsPerPixelX)
     End If
     
-    WriteINI "Position", "Maximized", IIf(Maximized, "Y", "N")
-    WriteINI "Main", "ConfigVersion", CONFIG_VERSION
+    Config.Maximized = Maximized
+    Call Config.Save
 End Sub
 
 Public Sub MakeLoggingDirectory()

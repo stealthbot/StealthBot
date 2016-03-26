@@ -4174,10 +4174,10 @@ Private Sub Form_Load()
         .AddItem "jbls.org"
         .AddItem "bnls.valhallalegends.com"
         
-        If BotVars.BNLSServer = "jbls.org" Then
+        If BotVars.BnlsServer = "jbls.org" Then
             .ListIndex = 0
-        ElseIf Len(BotVars.BNLSServer) > 0 And BotVars.BNLSServer <> "bnls.valhallalegends.com" Then
-            .AddItem BotVars.BNLSServer
+        ElseIf Len(BotVars.BnlsServer) > 0 And BotVars.BnlsServer <> "bnls.valhallalegends.com" Then
+            .AddItem BotVars.BnlsServer
             .ListIndex = BNLS_SERVER_COUNT
         Else
             .ListIndex = 0
@@ -4208,8 +4208,8 @@ Private Sub Form_Load()
         
         ' Get some servers from the status page. (these should always be online)
         s = vbNullString
-        If (LenB(ReadCfg("Override", "BNLSSource")) > 0) Then
-            s = frmChat.INet.OpenURL(ReadCfg("Override", "BNLSSource"))
+        If (LenB(Config.BnlsSource) > 0) Then
+            s = frmChat.INet.OpenURL(Config.BnlsSource)
         End If
         If ((LenB(s) > 0) And (Right(s, 2) = vbCrLf)) Then
             serverList = Split(s, vbCrLf)
@@ -4286,22 +4286,10 @@ Private Sub Form_Load()
     '   LAST SETTINGS PANEL
     '##########################################
     
-    s = ReadCfg("Position", "LastSettingsPanel")
-    
-    If LenB(s) > 0 Then
-        If StrictIsNumeric(s) Then
-            'Debug.Print "Reading: " & s
-            
-            If Val(s) < 9 Then
-                ShowPanel CInt(s)
-            Else
-                ShowPanel spSplash, 1
-            End If
-        Else
-            ShowPanel spSplash, 1
-        End If
-    Else
+    If Config.LastSettingsPanel = -1 Then
         ShowPanel spSplash, 1
+    Else
+        ShowPanel CInt(Config.LastSettingsPanel)
     End If
 End Sub
 
@@ -4332,17 +4320,17 @@ Function KeyToIndex(ByVal sKey As String) As Byte
     
 End Function
 
-Sub ShowPanel(ByVal Index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
+Sub ShowPanel(ByVal index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
 
     Static ActivePanel As Integer
     
     If PanelsInitialized Then
         Dim nod As cTreeViewNode
         Dim i As Integer
-        If Index <> 8 Then
+        If index <> 8 Then
             For i = 1 To tvw.NodeCount
                 Set nod = tvw.nodes.Item(i)
-                If Not nod.Selected And KeyToIndex(nod.Key) = Index Then
+                If Not nod.Selected And KeyToIndex(nod.key) = index Then
                     nod.Selected = True
                     Exit For
                 End If
@@ -4354,9 +4342,9 @@ Sub ShowPanel(ByVal Index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
             ActivePanel = KeyToIndex("splash")
         Else
             'fraPanel(ActivePanel).ZOrder vbSendToBack
-            fraPanel(Index).ZOrder vbBringToFront
-            ActivePanel = Index
-            WriteINI "Position", "LastSettingsPanel", ActivePanel
+            fraPanel(index).ZOrder vbBringToFront
+            ActivePanel = index
+            Config.LastSettingsPanel = ActivePanel
             
             'Debug.Print "Writing: " & ActivePanel
         End If
@@ -4441,7 +4429,7 @@ Sub Form_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single
     lblManageKeys.ForeColor = vbWhite
 End Sub
 
-Sub fraPanel_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
+Sub fraPanel_MouseMove(index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
     lblAddCurrentKey.ForeColor = vbWhite
     lblManageKeys.ForeColor = vbWhite
 End Sub
@@ -4460,14 +4448,14 @@ End Sub
 
 Private Sub tvw_SelectedNodeChanged()
     If FirstRun = 0 Then
-        ShowPanel KeyToIndex(tvw.SelectedItem.Key)
+        ShowPanel KeyToIndex(tvw.SelectedItem.key)
     Else
         FirstRun = 0
     End If
 End Sub
 
-Private Sub WINI(ByVal sKey As String, ByVal sVal As String, ByVal Section As enuConfigSection)
-    Select Case Section
+Private Sub WINI(ByVal sKey As String, ByVal sVal As String, ByVal section As enuConfigSection)
+    Select Case section
         Case secMain
             WriteINI "Main", sKey, sVal
         
@@ -4483,6 +4471,7 @@ Private Function DoCDKeyLengthCheck(ByVal sKey As String, ByVal sProd As String)
     sKey = CDKeyReplacements(sKey)
     
     DoCDKeyLengthCheck = True
+    If Config.SetKeyIgnoreLength Then Exit Function
     
     Select Case sProd
         Case "STAR", "SEXP"
@@ -4515,22 +4504,22 @@ Private Function SaveSettings() As Boolean
     
     '// First, CDKey Length check and corresponding stuff that needs to run first:
     Select Case True
-        Case optSTAR.Value:
-            If (chkSHR.Value) Then
+        Case optSTAR.value:
+            If (chkSHR.value) Then
                 s = "SSHR"
-            ElseIf (chkJPN.Value) Then
+            ElseIf (chkJPN.value) Then
                 s = "JSTR"
             Else
                 s = "STAR"
             End If
-        Case optSEXP.Value: s = "SEXP"
-        Case optD2DV.Value: s = "D2DV"
-        Case optD2XP.Value: s = "D2XP"
-        Case optWAR3.Value: s = "WAR3"
-        Case optW3XP.Value: s = "W3XP"
-        Case optW2BN.Value: s = "W2BN"
-        Case optDRTL.Value:
-            If (chkSHR.Value) Then
+        Case optSEXP.value: s = "SEXP"
+        Case optD2DV.value: s = "D2DV"
+        Case optD2XP.value: s = "D2XP"
+        Case optWAR3.value: s = "WAR3"
+        Case optW3XP.value: s = "W3XP"
+        Case optW2BN.value: s = "W2BN"
+        Case optDRTL.value:
+            If (chkSHR.value) Then
                 s = "DSHR"
             Else
                 s = "DRTL"
@@ -4556,19 +4545,19 @@ Private Function SaveSettings() As Boolean
         End If
     End If
     
-    WINI "Product", StrReverse(s), secMain
+    Config.Product = StrReverse(s)
     
     '// The rest of the basic config now
-    WINI "Username", txtUsername.Text, secMain
-    WINI "Password", txtPassword.Text, secMain
-    WINI "CDKey", CDKeyReplacements(cboCDKey.Text), secMain
-    WINI "ExpKey", CDKeyReplacements(txtExpKey.Text), secMain
-    WINI "LODKey", vbNullString, secMain
-    WINI "HomeChan", txtHomeChan.Text, secMain
-    WINI "Server", cboServer.Text, secMain
-    WINI "BNLSServer", cboBNLSServer.Text, secMain
-    WINI "SpawnKey", Cv(chkSpawn.Value), secOverride
+    Config.Username = txtUsername.Text
+    Config.Password = txtPassword.Text
+    Config.CdKey = CDKeyReplacements(cboCDKey.Text)
+    Config.ExpKey = CDKeyReplacements(txtExpKey.Text)
+    Config.HomeChannel = txtHomeChan.Text
+    Config.Server = cboServer.Text
+    Config.BnlsServer = cboBNLSServer.Text
+    Config.UseSpawnKey = CBool(chkSpawn.value)
     
+    ' What's going on here?
     With cboBNLSServer
         j = -1
         
@@ -4593,125 +4582,100 @@ Private Function SaveSettings() As Boolean
             Close #i
         End If
     End With
-    ' there is WINI and WriteINI? =\
-    WINI "Trigger", "{" & txtTrigger.Text & "}", secMain
-    WINI "ConfigVersion", CONFIG_VERSION, secMain
-    WINI "Owner", txtOwner.Text, secMain
     
-    WINI "UseRealm", Cv(chkUseRealm.Value), secMain
+    Config.Trigger = txtTrigger.Text
+    Config.BotOwner = txtOwner.Text
+    Config.UseRealm = CBool(chkUseRealm.value)
     
     '// General Interface settings
-    WINI "JoinLeaves", Cv(chkJoinLeaves.Value), secOther
-    WINI "Filters", Cv(chkFilter.Value), secOther
-    WINI "ShowSplash", Cv(chkSplash.Value), secMain
-    WINI "FlashWindow", Cv(chkFlash.Value), secOther
-    WINI "Timestamp", cboTimestamp.ListIndex, secOther
-    WINI "UTF8", Cv(chkUTF8.Value), secMain
+    Config.ShowJoinLeaves = CBool(chkJoinLeaves.value)
+    Config.UseChatFilters = CBool(chkFilter.value)
+    Config.ShowSplashScreen = CBool(chkSplash.value)
+    Config.FlashOnEvents = CBool(chkFlash.value)
+    Config.Timestamp = cboTimestamp.ListIndex
+    Config.UTF8 = CBool(chkUTF8.value)
     
     If (cboLogging.ListIndex = 0) Then
-        WINI "Logging", 2, secOther
+        Config.LoggingLevel = 2
     ElseIf (cboLogging.ListIndex = 1) Then
-        WINI "Logging", 1, secOther
+        Config.LoggingLevel = 1
     ElseIf (cboLogging.ListIndex = 2) Then
-        WINI "Logging", 0, secOther
+        Config.LoggingLevel = 0
     End If
     
-    WINI "MaxBacklogSize", txtMaxBackLogSize.Text, secMain
-    WINI "MaxLogFileSize", txtMaxLogSize.Text, secMain
-    WINI "NoTray", Cv(chkNoTray.Value), secOther
-    WINI "NoAutocomplete", Cv(chkNoAutocomplete.Value), secOther
-    WINI "NoColoring", Cv(chkNoColoring.Value), secOther
+    Config.MaxBacklogSize = CLng(txtMaxBackLogSize.Text)
+    Config.MaxLogFileSize = CLng(txtMaxLogSize.Text)
+    Config.MinimizeToTray = Not CBool(chkNoTray.value)
+    Config.DisableAutoComplete = CBool(chkNoAutocomplete.value)
+    Config.DisableNameColoring = CBool(chkNoColoring.value)
     
     '// Misc General Settings
-    WINI "ProfileAmp", Cv(chkPAmp.Value), secOther
-    WINI "WhisperBack", Cv(chkWhisperCmds.Value), secMain
-    WINI "Mail", Cv(chkMail.Value), secOther
-    WINI "DisablePrefix", Cv(chkDisablePrefix.Value), secOther
-    WINI "DisableSuffix", Cv(chkDisableSuffix.Value), secOther
+    Config.UseProfileAmp = CBool(chkPAmp.value)
+    Config.WhisperResponses = CBool(chkWhisperCmds.value)
+    Config.EnableMail = CBool(chkMail.value)
+    Config.DisablePrefixBox = CBool(chkDisablePrefix.value)
+    Config.DisableSuffixBox = CBool(chkDisableSuffix.value)
     
     'Debug.Print "Writing: " & IIf(chkTTT.value = 1, "N", "Y")
-    WINI "AllowMP3", Cv(chkAllowMP3.Value), secOther
-    WINI "ConnectOnStartup", Cv(chkConnectOnStartup.Value), secMain
-    WINI "MinimizeOnStartup", Cv(chkMinimizeOnStartup.Value), secMain
-    WINI "UseBackupChan", Cv(chkBackup.Value), secMain
-    WINI "BackupChan", txtBackupChan.Text, secMain
-    WINI "DoNotUseDirectFList", Cv(chkDoNotUsePacketFList.Value), secMain
-    WINI "URLDetect", Cv(chkURLDetect.Value), secMain
-    WINI "ShowOfflineFriends", Cv(chkShowOffline.Value), secMain
+    Config.AllowMp3Commands = CBool(chkAllowMP3.value)
+    Config.ConnectOnStartup = CBool(chkConnectOnStartup.value)
+    Config.MinimizeOnStartup = CBool(chkMinimizeOnStartup.value)
+    Config.UseBackupChannel = CBool(chkBackup.value)
+    Config.BackupChannel = txtBackupChan.Text
+    Config.DoNotUseDirectFList = CBool(chkDoNotUsePacketFList.value)
+    Config.DetectUrls = CBool(chkURLDetect.value)
+    Config.ShowOfflineFriends = CBool(chkShowOffline.value)
+    
+    
     For i = 0 To 3
-        If optNaming(i).Value Then Exit For ' i = index of opt checked
+        If optNaming(i).value Then Exit For ' i = index of opt checked
     Next i
     If i = 4 Then i = 0 ' if none were checked, then set to default
-    WINI "NamespaceConvention", i, secOther
-    WINI "UseD2Naming", Cv(chkD2Naming.Value), secOther
-    WINI "ShowStatsIcons", Cv(chkShowUserGameStatsIcons.Value), secOther
-    WINI "ShowFlagsIcons", Cv(chkShowUserFlagsIcons.Value), secOther
-    WINI "LogDBActions", Cv(chkLogDBActions.Value), secMain
-    WINI "LogCommands", Cv(chkLogAllCommands.Value), secMain
+    Config.NamespaceConvention = i
+    
+    Config.UseD2Naming = CBool(chkD2Naming.value)
+    Config.ShowStatsIcons = CBool(chkShowUserGameStatsIcons.value)
+    Config.ShowFlagIcons = CBool(chkShowUserFlagsIcons.value)
+    Config.LogDbAction = CBool(chkLogDBActions.value)
+    Config.LogCommands = CBool(chkLogAllCommands.value)
     
     '// Advanced Connection Settings
-    WINI "UseBNLS", IIf(cboConnMethod.ListIndex = 0, "Y", "N"), secMain
-    WINI "Spoof", cboSpoof.ListIndex, secMain
-    WINI "UseProxy", Cv(chkUseProxies.Value), secMain
-    WINI "ProxyPort", Trim$(txtProxyPort.Text), secMain
-    WINI "ProxyIP", Trim$(txtProxyIP.Text), secMain
-    'special case, proxyissocks5 didn't like being set properly
-    WINI "ProxyIsSocks5", IIf(optSocks5.Value, "Y", "N"), secMain
-    WINI "UDP", Cv(chkUDP.Value), secMain
+    Config.UseBnls = CBool(cboConnMethod.ListIndex = 0)
+    Config.PingSpoofing = cboSpoof.ListIndex
+    Config.UseProxy = CBool(chkUseProxies.value)
+    Config.ProxyPort = CLng(Trim$(txtProxyPort.Text))
+    Config.ProxyIP = Trim$(txtProxyIP.Text)
+    Config.ProxyIsSocks5 = CBool(optSocks5.value)
+    Config.UseUDP = CBool(chkUDP.value)
     
-    'Don't save this value until the user has been prompted once, or at least specifically enabled it
-    s = ReadCfg(secMain, "UseAltBNLS")
-    If ((s = "Y") Or (s = "N") Or (chkBNLSAlt.Value = vbChecked)) Then
-        WINI "UseAltBNLS", Cv(chkBNLSAlt.Value), secMain
-    End If
-    BotVars.UseAltBnls = ((s = "Y") Or (chkBNLSAlt.Value = vbChecked))
+    Config.UseBnlsFinder = CBool(chkBNLSAlt.value)
     
-    '// this section must written _absolutely correctly_ or the SetTimer API call will fail
-    s = txtReconDelay.Text
-    If LenB(s) > 0 Then
-        If StrictIsNumeric(s) Then
-            If Val(s) < 60000 Then
-                If Val(s) > 0 Then
-                    i = Val(s)
-                Else
-                    i = 1000
-                End If
-            Else
-                i = 60000
-            End If
-        Else
-            i = 1000
-        End If
-    Else
-        i = 1000
-    End If
-    
-    WINI "ReconnectDelay", CStr(i), secMain
+    Config.ReconnectDelay = CLng(txtReconDelay.Text)
     
     '// Interface Settings
-    WINI "ChatFont", txtChatFont.Text, secOther
-    WINI "ChatSize", txtChatSize.Text, secOther
-    WINI "ChanFont", txtChanFont.Text, secOther
-    WINI "ChanSize", txtChatSize.Text, secOther
+    Config.ChatFont = txtChatFont.Text
+    Config.ChatSize = CLng(txtChatSize.Text)
+    Config.ChannelFont = txtChanFont.Text
+    Config.ChannelSize = CLng(txtChanSize.Text)
     
     '// Idle message settings
-    WINI "Idles", Cv(chkIdles.Value), secMain
-    WINI "IdleWait", (Val(txtIdleWait.Text) * 2), secMain
+    Config.IdlesEnabled = CBool(chkIdles.value)
+    Config.IdleDelay = (Val(txtIdleWait.Text) * 2)
     
     Select Case True
-        Case optMsg.Value:       WINI "IdleType", "msg", secMain
-        Case optUptime.Value:    WINI "IdleType", "uptime", secMain
-        Case optMP3.Value:       WINI "IdleType", "mp3", secMain
-        Case optQuote.Value:     WINI "IdleType", "quote", secMain
-        Case Else: WINI "IdleType", "msg", secMain
+        Case optMsg.value:       Config.IdleType = "msg"
+        Case optUptime.value:    Config.IdleType = "uptime"
+        Case optMP3.value:       Config.IdleType = "mp3"
+        Case optQuote.value:     Config.IdleType = "quote"
+        Case Else: Config.IdleType = "msg"
     End Select
     
-    WINI "IdleMsg", txtIdleMsg.Text, secMain
+    Config.IdleMessage = txtIdleMsg.Text
     
     '// General Moderation settings
-    WINI "Phrasebans", Cv(chkPhrasebans.Value), secOther
-    WINI "IPBans", Cv(chkIPBans.Value), secOther
-    WINI "BanEvasion", Cv(chkBanEvasion.Value), secOther
+    Config.EnablePhrasebans = CBool(chkPhrasebans.value)
+    Config.IpBans = CBool(chkIPBans.value)
+    Config.EnforceBanEvasion = CBool(chkBanEvasion.value)
     
     Clients(SC) = "STAR"
     Clients(BW) = "SEXP"
@@ -4722,7 +4686,7 @@ Private Function SaveSettings() As Boolean
     Clients(W2) = "W2BN"
 
     For i = 0 To 6
-        If (chkCBan(i).Value = 1) Then
+        If (chkCBan(i).value = 1) Then
             If (GetAccess(Clients(i), "GAME").Username = _
                 vbNullString) Then
                 
@@ -4744,7 +4708,7 @@ Private Function SaveSettings() As Boolean
                 
                 ' log actions
                 If (BotVars.LogDBActions) Then
-                    Call LogDBAction(AddEntry, "console", DB(UBound(DB)).Username, "game", _
+                    Call LogDbAction(AddEntry, "console", DB(UBound(DB)).Username, "game", _
                         DB(UBound(DB)).Rank, DB(UBound(DB)).Flags)
                 End If
             Else
@@ -4762,7 +4726,7 @@ Private Function SaveSettings() As Boolean
                             
                             ' log actions
                             If (BotVars.LogDBActions) Then
-                                Call LogDBAction(ModEntry, "console", DB(j).Username, "game", _
+                                Call LogDbAction(ModEntry, "console", DB(j).Username, "game", _
                                     DB(j).Rank, DB(j).Flags)
                             End If
                             
@@ -4796,7 +4760,7 @@ Private Function SaveSettings() As Boolean
                             
                             ' log actions
                             If (BotVars.LogDBActions) Then
-                                Call LogDBAction(ModEntry, "console", DB(j).Username, "game", _
+                                Call LogDbAction(ModEntry, "console", DB(j).Username, "game", _
                                     DB(j).Rank, DB(j).Flags)
                             End If
                             
@@ -4808,7 +4772,7 @@ Private Function SaveSettings() As Boolean
                                 
                             ' log actions
                             If (BotVars.LogDBActions) Then
-                                Call LogDBAction(RemEntry, "console", DB(j).Username, "game", _
+                                Call LogDbAction(RemEntry, "console", DB(j).Username, "game", _
                                     DB(j).Rank, DB(j).Flags)
                             End If
                             
@@ -4824,25 +4788,28 @@ Private Function SaveSettings() As Boolean
         End If
     Next i
     
-    WINI "QuietTime", Cv(chkQuiet.Value), secMain
-    WINI "KickOnYell", Cv(chkKOY.Value), secOther
-    WINI "PlugBans", Cv(chkPlugban.Value), secOther
-    WINI "Protect", Cv(chkProtect.Value), secMain
-    WINI "ProtectMsg", txtProtectMsg.Text, secOther
-    WINI "IdleBans", Cv(chkIdlebans.Value), secOther
-    WINI "KickIdle", Cv(chkIdleKick.Value), secOther
-    WINI "IdleBanDelay", txtIdleBanDelay.Text, secOther
-    WINI "PeonBans", Cv(chkPeonbans.Value), secOther
-    WINI "BanUnderLevel", Val(txtBanW3.Text), secOther
-    WINI "BanD2UnderLevel", Val(txtBanD2.Text), secOther
-    WINI "LevelBanMsg", txtLevelBanMsg.Text, secOther
-    
+    Config.QuietTime = CBool(chkQuiet.value)
+    Config.KickOnYell = CBool(chkKOY.value)
+    Config.BanUdpPlugs = CBool(chkPlugban.value)
+    Config.ChannelProtection = CBool(chkProtect.value)
+    Config.ChannelProtectionMessage = txtProtectMsg.Text
+    Config.EnforceIdleBans = CBool(chkIdlebans.value)
+    Config.KickIdleUsers = CBool(chkIdleKick.value)
+    Config.IdleBanDelay = CLng(txtIdleBanDelay.Text)
+    Config.BanWc3Peons = CBool(chkPeonbans.value)
+    Config.BanUnderLevel = CLng(txtBanW3.Text)
+    Config.BanD2UnderLevel = CLng(txtBanD2.Text)
+    Config.LevelBanMessage = txtLevelBanMsg.Text
+
     '// Greet Message Settings
-    WINI "GreetMsg", txtGreetMsg.Text, secOther
-    WINI "WhisperGreet", Cv(chkWhisperGreet.Value), secOther
-    WINI "UseGreets", Cv(chkGreetMsg.Value), secOther
+    Config.GreetMessage = txtGreetMsg.Text
+    Config.WhisperGreet = CBool(chkWhisperGreet.value)
+    Config.UseGreetMessage = CBool(chkGreetMsg.value)
     
-    '// RELOAD CONFIG
+    '// Save the config class to disk
+    Call Config.Save
+    
+    '// Load the config into the form
     Call frmChat.ReloadConfig(1)
     
     '// RESIZE FORM TO FIX ANY UI CHANGES
@@ -4867,9 +4834,9 @@ Public Function InvalidConfigValues() As Boolean
 
     Dim s As String
     
-    If optW3XP.Value Or optD2XP.Value Then
+    If optW3XP.value Or optD2XP.value Then
         If LenB(txtExpKey.Text) = 0 Then
-            If optW3XP.Value Then
+            If optW3XP.value Then
                 s = "Warcraft III and a Frozen Throne"
             Else
                 s = "Diablo II and a Lord of Destruction"
@@ -4901,10 +4868,10 @@ End Sub
 
 Private Sub cmdExport_Click()
     With cDLG
-        .FileName = vbNullString
+        .fileName = vbNullString
         .ShowSave
-        If .FileName <> vbNullString Then
-            SaveColors .FileName
+        If .fileName <> vbNullString Then
+            SaveColors .fileName
             MsgBox "ColorList exported.", vbOKOnly
         End If
     End With
@@ -4912,10 +4879,10 @@ End Sub
 
 Private Sub cmdImport_Click()
     With cDLG
-        .FileName = vbNullString
+        .fileName = vbNullString
         .ShowOpen
-        If .FileName <> vbNullString Then
-            GetColorLists (.FileName)
+        If .fileName <> vbNullString Then
+            GetColorLists (.fileName)
             cboColorList.Clear
             Call Form_Load
         End If
@@ -5018,28 +4985,28 @@ End Sub
 '##########################################
 
 Private Sub chkUseProxies_Click()
-    txtProxyIP.Enabled = chkUseProxies.Value
-    txtProxyPort.Enabled = chkUseProxies.Value
-    optSocks4.Enabled = chkUseProxies.Value
-    optSocks5.Enabled = chkUseProxies.Value
+    txtProxyIP.Enabled = chkUseProxies.value
+    txtProxyPort.Enabled = chkUseProxies.value
+    optSocks4.Enabled = chkUseProxies.value
+    optSocks5.Enabled = chkUseProxies.value
 End Sub
 
 Private Sub chkBackup_Click()
-    txtBackupChan.Enabled = chkBackup.Value
+    txtBackupChan.Enabled = chkBackup.value
 End Sub
 
 Private Sub chkIdlebans_click()
-    chkIdleKick.Enabled = chkIdlebans.Value
-    txtIdleBanDelay.Enabled = chkIdlebans.Value
+    chkIdleKick.Enabled = chkIdlebans.value
+    txtIdleBanDelay.Enabled = chkIdlebans.value
 End Sub
 
 Private Sub chkIdles_Click()
-    optMsg.Enabled = chkIdles.Value
-    optUptime.Enabled = chkIdles.Value
-    optMP3.Enabled = chkIdles.Value
-    optQuote.Enabled = chkIdles.Value
-    txtIdleWait.Enabled = chkIdles.Value
-    txtIdleMsg.Enabled = (optMsg.Enabled And optMsg.Value)
+    optMsg.Enabled = chkIdles.value
+    optUptime.Enabled = chkIdles.value
+    optMP3.Enabled = chkIdles.value
+    optQuote.Enabled = chkIdles.value
+    txtIdleWait.Enabled = chkIdles.value
+    txtIdleMsg.Enabled = (optMsg.Enabled And optMsg.value)
 End Sub
 
 Private Sub optMsg_Click()
@@ -5065,11 +5032,11 @@ Sub optSTAR_Click()
     cboCDKey.Enabled = True
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
-    If (chkSHR.Value) Then
+    If (chkSHR.value) Then
         lblHashPath.Caption = GetGamePath("RHSS")
         chkSpawn.Visible = False
         cboCDKey.Enabled = False
-    ElseIf (chkJPN.Value) Then
+    ElseIf (chkJPN.value) Then
         lblHashPath.Caption = GetGamePath("RTSJ")
     Else
         lblHashPath.Caption = GetGamePath("RATS")
@@ -5150,7 +5117,7 @@ Sub optDRTL_Click()
     cboCDKey.Enabled = False
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
-    If (chkSHR.Value) Then
+    If (chkSHR.value) Then
         lblHashPath.Caption = GetGamePath("RHSD")
     Else
         lblHashPath.Caption = GetGamePath("LTRD")
@@ -5160,9 +5127,9 @@ End Sub
 
 Private Sub chkJPN_Click()
     Dim Checked As Boolean
-    Checked = CBool(chkJPN.Value)
-    If (Checked) Then chkSHR.Value = vbUnchecked
-    If (optSTAR.Value) Then
+    Checked = CBool(chkJPN.value)
+    If (Checked) Then chkSHR.value = vbUnchecked
+    If (optSTAR.value) Then
         If (Checked) Then
             lblHashPath.Caption = GetGamePath("RTSJ")
         Else
@@ -5173,9 +5140,9 @@ End Sub
 
 Private Sub chkSHR_Click()
     Dim Checked As Boolean
-    Checked = CBool(chkSHR.Value)
-    If (Checked) Then chkJPN.Value = vbUnchecked
-    If (optSTAR.Value) Then
+    Checked = CBool(chkSHR.value)
+    If (Checked) Then chkJPN.value = vbUnchecked
+    If (optSTAR.value) Then
         chkSpawn.Visible = Not Checked
         cboCDKey.Enabled = Not Checked
         If (Checked) Then
@@ -5183,7 +5150,7 @@ Private Sub chkSHR_Click()
         Else
             lblHashPath.Caption = GetGamePath("RATS")
         End If
-    ElseIf (optDRTL.Value) Then
+    ElseIf (optDRTL.value) Then
         If (Checked) Then
             lblHashPath.Caption = GetGamePath("RHSD")
         Else
@@ -5193,12 +5160,12 @@ Private Sub chkSHR_Click()
 End Sub
 
 Private Sub chkGreetMsg_Click()
-    chkWhisperGreet.Enabled = chkGreetMsg.Value
-    txtGreetMsg.Enabled = chkGreetMsg.Value
+    chkWhisperGreet.Enabled = chkGreetMsg.value
+    txtGreetMsg.Enabled = chkGreetMsg.value
 End Sub
 
 Private Sub chkProtect_Click()
-    txtProtectMsg.Enabled = chkProtect.Value
+    txtProtectMsg.Enabled = chkProtect.value
 End Sub
 
 '##########################################
@@ -5209,86 +5176,75 @@ Private Sub InitGenMisc()
     Dim s As String
     Dim i As Integer
     
-    chkPAmp.Value = YesToTrue(ReadCfg(OT, "ProfileAmp"), 0)
-    chkWhisperCmds.Value = YesToTrue(ReadCfg(MN, "WhisperBack"), 0)
-    chkMail.Value = YesToTrue(ReadCfg(OT, "Mail"), 1)
+    chkPAmp.value = Abs(Config.UseProfileAmp)
+    chkWhisperCmds.value = Abs(Config.WhisperResponses)
+    chkMail.value = Abs(Config.EnableMail)
     
-    chkDisablePrefix.Value = YesToTrue(ReadCfg(OT, "DisablePrefix"), 0)
-    chkDisableSuffix.Value = YesToTrue(ReadCfg(OT, "DisableSuffix"), 0)
+    chkDisablePrefix.value = Abs(Config.DisablePrefixBox)
+    chkDisableSuffix.value = Abs(Config.DisableSuffixBox)
     
     'Debug.Print "Loaded value: " & YesToTrue(readcfg(OT, "TTT"), 1) & " converted to " & IIf(YesToTrue(readcfg(OT, "TTT"), 1) = 1, 0, 1)
     
-    chkAllowMP3.Value = YesToTrue(ReadCfg(OT, "AllowMP3"), 1)
-    chkConnectOnStartup.Value = YesToTrue(ReadCfg(MN, "ConnectOnStartup"), 0)
-    chkMinimizeOnStartup.Value = YesToTrue(ReadCfg(MN, "MinimizeOnStartup"), 0)
-    chkShowOffline.Value = YesToTrue(ReadCfg(MN, "ShowOfflineFriends"), 0)
+    chkAllowMP3.value = Abs(Config.AllowMp3Commands)
+    chkConnectOnStartup.value = Abs(Config.ConnectOnStartup)
+    chkMinimizeOnStartup.value = Abs(Config.MinimizeOnStartup)
+    chkShowOffline.value = Abs(Config.ShowOfflineFriends)
     
-    i = 0
-    s = ReadCfg(OT, "NamespaceConvention")
-    If (StrictIsNumeric(s)) Then
-        If (CDbl(s) < 4) Then
-            i = CDbl(s)
-        End If
-    End If
-    optNaming(i).Value = True
-    chkD2Naming.Value = YesToTrue(ReadCfg(OT, "UseD2Naming"), 0)
+    optNaming(Config.NamespaceConvention).value = True
+    chkD2Naming.value = Abs(Config.UseD2Naming)
     
-    chkShowUserGameStatsIcons.Value = YesToTrue(ReadCfg(OT, "ShowStatsIcons"), 1)
-    chkShowUserFlagsIcons.Value = YesToTrue(ReadCfg(OT, "ShowFlagsIcons"), 1)
+    chkShowUserGameStatsIcons.value = Abs(Config.ShowStatsIcons)
+    chkShowUserFlagsIcons.value = Abs(Config.ShowFlagIcons)
     
-    chkURLDetect.Value = YesToTrue(ReadCfg(MN, "URLDetect"), 1)
-    chkDoNotUsePacketFList.Value = YesToTrue(ReadCfg(MN, "DoNotUseDirectFList"), 0)
+    chkURLDetect.value = Abs(Config.DetectUrls)
+    chkDoNotUsePacketFList.value = Abs(Config.DoNotUseDirectFList)
           
-    chkBackup.Value = YesToTrue(ReadCfg(MN, "UseBackupChan"), 0)
+    chkBackup.value = Abs(Config.UseBackupChannel)
     Call chkBackup_Click
     
-    txtBackupChan.Text = ReadCfg(MN, "BackupChan")
+    txtBackupChan.Text = Config.BackupChannel
     
-    chkLogDBActions.Value = YesToTrue(ReadCfg(MN, "LogDBActions"), 0)
-    chkLogAllCommands.Value = YesToTrue(ReadCfg(MN, "LogCommands"), 0)
+    chkLogDBActions.value = Abs(Config.LogDbAction)
+    chkLogAllCommands.value = Abs(Config.LogCommands)
 End Sub
 
 Private Sub InitGenIdles()
     Dim s As String
     
-    s = ReadCfg(MN, "IdleWait")
-    If StrictIsNumeric(s) Then
-        txtIdleWait.Text = Val(s) / 2
-    End If
+    txtIdleWait.Text = Config.IdleDelay / 2
     
-    s = ReadCfg(MN, "IdleType")
-    Select Case s
+    Select Case Config.IdleType
         Case "msg", vbNullString
-            optMsg.Value = True
+            optMsg.value = True
             Call optMsg_Click
         Case "quote"
-            optQuote.Value = True
+            optQuote.value = True
             Call optQuote_Click
         Case "uptime"
-            optUptime.Value = True
+            optUptime.value = True
             Call optUptime_Click
         Case "mp3"
-            optMP3.Value = True
+            optMP3.value = True
             Call optMP3_Click
         Case Else
-            optMsg.Value = True
+            optMsg.value = True
             Call optMsg_Click
     End Select
     
-    txtIdleMsg.Text = ReadCfg(MN, "IdleMsg")
+    txtIdleMsg.Text = Config.IdleMessage
     If LenB(txtIdleMsg.Text) = 0 Then txtIdleMsg.Text = "/me is a %v by Stealth - http://www.stealthbot.net"
     
-    chkIdles.Value = YesToTrue(ReadCfg(MN, "Idles"), 0)
+    chkIdles.value = Abs(Config.IdlesEnabled)
     Call chkIdles_Click
     
 End Sub
 
 Private Sub InitGenGreets()
-    txtGreetMsg.Text = ReadCfg(OT, "GreetMsg")
-    chkGreetMsg.Value = YesToTrue(ReadCfg(OT, "UseGreets"), 0)
+    txtGreetMsg.Text = Config.GreetMessage
+    chkGreetMsg.value = Abs(Config.UseGreetMessage)
     Call chkGreetMsg_Click
     
-    chkWhisperGreet.Value = YesToTrue(ReadCfg(OT, "WhisperGreet"), 0)
+    chkWhisperGreet.value = Abs(Config.WhisperGreet)
 End Sub
 
 Private Sub InitBasicConfig()
@@ -5299,26 +5255,19 @@ Private Sub InitBasicConfig()
     Dim Item As String
     Dim AdditionalServerList As Collection
     
-    txtUsername.Text = ReadCfg(MN, "Username")
-    txtPassword.Text = ReadCfg(MN, "Password")
-    cboCDKey.Text = ReadCfg(MN, "CDKey")
+    txtUsername.Text = Config.Username
+    txtPassword.Text = Config.Password
+    cboCDKey.Text = Config.CdKey
     
-    ' Backwards compatibility for old LODKey config entry -a
-    txtExpKey.Text = ReadCfg(MN, "ExpKey")
+    txtExpKey.Text = Config.ExpKey
     
-    If (txtExpKey.Text = vbNullString) Then
-        txtExpKey.Text = ReadCfg(MN, "LODKey")
-    End If
-    
-    txtHomeChan.Text = ReadCfg(MN, "HomeChan")
-    txtOwner.Text = ReadCfg(MN, "Owner")
+    txtHomeChan.Text = Config.HomeChannel
+    txtOwner.Text = Config.BotOwner
     
     OldBotOwner = txtOwner.Text
-    
-    s = ReadCfg(MN, "Server")
-    
+
     With cboServer
-        .Text = s
+        .Text = Config.Server
         
         ' add the 4 default servers
         .AddItem "useast.battle.net"
@@ -5361,33 +5310,27 @@ Private Sub InitBasicConfig()
         End If
     End With
     
-    s = ReadCfg(MN, "Trigger")
-    If Len(s) > 1 Then
-        s = Mid(s, 2, Len(s) - 2) ' fix it! nou
-    Else
-        s = "."
-    End If
-    txtTrigger.Text = s
+    txtTrigger.Text = Config.Trigger
     
-    s = ReadCfg(MN, "Product")
+    s = Config.Product
     Select Case StrReverse(UCase(s))
-        Case "STAR":    Call optSTAR_Click: optSTAR.Value = True: chkSHR.Value = vbUnchecked: chkJPN.Value = vbUnchecked
-        Case "SEXP":    Call optSEXP_Click: optSEXP.Value = True
-        Case "D2DV":    Call optD2DV_Click: optD2DV.Value = True
-        Case "D2XP":    Call optD2XP_Click: optD2XP.Value = True
-        Case "W2BN":    Call optW2BN_Click: optW2BN.Value = True
-        Case "WAR3":    Call optWAR3_Click: optWAR3.Value = True
-        Case "W3XP":    Call optW3XP_Click: optW3XP.Value = True
-        Case "DRTL":    Call optDRTL_Click: optDRTL.Value = True: chkSHR.Value = vbUnchecked
-        Case "DSHR":    Call optDRTL_Click: optDRTL.Value = True: chkSHR.Value = vbChecked
-        Case "SSHR":    Call optSTAR_Click: optSTAR.Value = True: chkSHR.Value = vbChecked ' unchecks jpn
-        Case "JSTR":    Call optSTAR_Click: optSTAR.Value = True: chkJPN.Value = vbChecked ' unchecks shr
-        Case Else:      Call optSTAR_Click: optSTAR.Value = True: chkSHR.Value = vbUnchecked: chkJPN.Value = vbUnchecked
+        Case "STAR":    Call optSTAR_Click: optSTAR.value = True: chkSHR.value = vbUnchecked: chkJPN.value = vbUnchecked
+        Case "SEXP":    Call optSEXP_Click: optSEXP.value = True
+        Case "D2DV":    Call optD2DV_Click: optD2DV.value = True
+        Case "D2XP":    Call optD2XP_Click: optD2XP.value = True
+        Case "W2BN":    Call optW2BN_Click: optW2BN.value = True
+        Case "WAR3":    Call optWAR3_Click: optWAR3.value = True
+        Case "W3XP":    Call optW3XP_Click: optW3XP.value = True
+        Case "DRTL":    Call optDRTL_Click: optDRTL.value = True: chkSHR.value = vbUnchecked
+        Case "DSHR":    Call optDRTL_Click: optDRTL.value = True: chkSHR.value = vbChecked
+        Case "SSHR":    Call optSTAR_Click: optSTAR.value = True: chkSHR.value = vbChecked ' unchecks jpn
+        Case "JSTR":    Call optSTAR_Click: optSTAR.value = True: chkJPN.value = vbChecked ' unchecks shr
+        Case Else:      Call optSTAR_Click: optSTAR.value = True: chkSHR.value = vbUnchecked: chkJPN.value = vbUnchecked
     End Select
     
-    chkSpawn.Value = YesToTrue(ReadCfg("Override", "SpawnKey"), 0)
+    chkSpawn.value = Abs(Config.UseSpawnKey)
     
-    chkUseRealm.Value = YesToTrue(ReadCfg(MN, "UseRealm"), 0)
+    chkUseRealm.value = Abs(Config.UseRealm)
     
     Call LoadCDKeys(cboCDKey)
     
@@ -5396,120 +5339,103 @@ End Sub
 Private Sub InitGenMod()
     'Dim s As String
     
-    chkPhrasebans.Value = YesToTrue(ReadCfg(OT, "Phrasebans"), 1)
-    chkIPBans.Value = YesToTrue(ReadCfg(OT, "IPBans"), 0)
-    chkQuiet.Value = YesToTrue(ReadCfg(MN, "QuietTime"), 0)
-    chkKOY.Value = YesToTrue(ReadCfg(OT, "KickOnYell"), 0)
-    chkPlugban.Value = YesToTrue(ReadCfg(OT, "PlugBans"), 0)
-    chkPeonbans.Value = YesToTrue(ReadCfg(OT, "PeonBans"), 0)
-    ' someone messed up and made peonbans = 1 or 0 in previous versions
-    ' check for that here ~Ribose
-    If ReadCfg(OT, "PeonBans") = "1" Then chkPeonbans.Value = vbChecked
-    chkBanEvasion.Value = YesToTrue(ReadCfg(OT, "BanEvasion"), 1)
+    chkPhrasebans.value = Abs(Config.EnablePhrasebans)
+    chkIPBans.value = Abs(Config.IpBans)
+    chkQuiet.value = Abs(Config.QuietTime)
+    chkKOY.value = Abs(Config.KickOnYell)
+    chkPlugban.value = Abs(Config.BanUdpPlugs)
+    chkPeonbans.value = Abs(Config.BanWc3Peons)
+
+    chkBanEvasion.value = Abs(Config.EnforceBanEvasion)
     
-    chkProtect.Value = YesToTrue(ReadCfg(MN, "Protect"), 0)
+    chkProtect.value = Abs(Config.ChannelProtection)
     Call chkProtect_Click
     
-    txtProtectMsg.Text = ReadCfg(OT, "ProtectMsg")
+    txtProtectMsg.Text = Config.ChannelProtectionMessage
     
-    chkIdlebans.Value = YesToTrue(ReadCfg(OT, "IdleBans"), 0)
-    chkIdleKick.Value = YesToTrue(ReadCfg(OT, "KickIdle"), 0)
+    chkIdlebans.value = Abs(Config.EnforceIdleBans)
+    chkIdleKick.value = Abs(Config.KickIdleUsers)
     Call chkIdlebans_click
     
-    txtIdleBanDelay.Text = ReadCfg(OT, "IdleBanDelay")
+    txtIdleBanDelay.Text = Config.IdleBanDelay
     
     ' grab client ban settings from database
     
     If (InStr(1, GetAccess("STAR", "GAME").Flags, "B", _
         vbBinaryCompare) <> 0) Then
     
-        chkCBan(SC).Value = 1
+        chkCBan(SC).value = 1
     End If
     
     If (InStr(1, GetAccess("SEXP", "GAME").Flags, "B", _
         vbBinaryCompare) <> 0) Then
     
-        chkCBan(BW).Value = 1
+        chkCBan(BW).value = 1
     End If
     
     If (InStr(1, GetAccess("D2DV", "GAME").Flags, "B", _
         vbBinaryCompare) <> 0) Then
     
-        chkCBan(D2).Value = 1
+        chkCBan(D2).value = 1
     End If
     
     If (InStr(1, GetAccess("D2XP", "GAME").Flags, "B", _
         vbBinaryCompare) <> 0) Then
     
-        chkCBan(D2X).Value = 1
+        chkCBan(D2X).value = 1
     End If
     
     If (InStr(1, GetAccess("W2BN", "GAME").Flags, "B", _
         vbBinaryCompare) <> 0) Then
     
-        chkCBan(W2).Value = 1
+        chkCBan(W2).value = 1
     End If
     
     If (InStr(1, GetAccess("WAR3", "GAME").Flags, "B", _
         vbBinaryCompare) <> 0) Then
     
-        chkCBan(W3).Value = 1
+        chkCBan(W3).value = 1
     End If
     
     If (InStr(1, GetAccess("W3XP", "GAME").Flags, "B", _
         vbBinaryCompare) <> 0) Then
     
-        chkCBan(W3X).Value = 1
+        chkCBan(W3X).value = 1
     End If
 
-    txtLevelBanMsg.Text = ReadCfg(OT, "LevelBanMsg")
+    txtLevelBanMsg.Text = Config.LevelBanMessage
     If LenB(txtLevelBanMsg.Text) = 0 Then txtLevelBanMsg.Text = "You are below the required level for entry."
     
-    txtBanD2.Text = Val(ReadCfg(OT, "BanD2UnderLevel"))
-    txtBanW3.Text = Val(ReadCfg(OT, "BanUnderLevel"))
+    txtBanD2.Text = Config.BanD2UnderLevel
+    txtBanW3.Text = Config.BanUnderLevel
 End Sub
 
 Private Sub InitGenInterface()
     Dim s As String
     
-    chkJoinLeaves.Value = YesToTrue(ReadCfg(OT, "JoinLeaves"), 1)
-    chkFilter.Value = YesToTrue(ReadCfg(OT, "Filters"), 1)
-    chkSplash.Value = YesToTrue(ReadCfg(MN, "ShowSplash"), 0)
-    chkUTF8.Value = YesToTrue(ReadCfg(MN, "UTF8"), 1)
-    chkFlash.Value = YesToTrue(ReadCfg(OT, "FlashWindow"), 0)
-    chkNoTray.Value = YesToTrue(ReadCfg(OT, "NoTray"), 0)
-    chkNoAutocomplete.Value = YesToTrue(ReadCfg(OT, "NoAutocomplete"), 0)
-    chkNoColoring.Value = YesToTrue(ReadCfg(OT, "NoColoring"), 0)
+    chkJoinLeaves.value = Abs(Config.ShowJoinLeaves)
+    chkFilter.value = Abs(Config.UseChatFilters)
+    chkSplash.value = Abs(Config.ShowSplashScreen)
+    chkUTF8.value = Abs(Config.UTF8)
+    chkFlash.value = Abs(Config.FlashOnEvents)
+    chkNoTray.value = Abs(Not Config.MinimizeToTray)
+    chkNoAutocomplete.value = Abs(Config.DisableAutoComplete)
+    chkNoColoring.value = Abs(Config.DisableNameColoring)
     
-    s = ReadCfg(OT, "Logging")
-    If Len(s) > 1 Then s = Left$(s, 1)
-    
-    If StrictIsNumeric(s) And Val(s) < 5 Then
-        If (Val(s) = 2) Then
-            cboLogging.ListIndex = 0
-        ElseIf (Val(s) = 1) Then
-            cboLogging.ListIndex = 1
-        ElseIf (Val(s) = 0) Then
+    Select Case Config.LoggingLevel
+        Case 0:
             cboLogging.ListIndex = 2
-        End If
-    End If
+        Case 1:
+            cboLogging.ListIndex = 1
+        Case Else:
+            cboLogging.ListIndex = 0
+    End Select
     
-    s = ReadCfg(OT, "Timestamp")
-    If Len(s) > 1 Then s = Left$(s, 1)
-    'Debug.Print "Loaded: " & s
-    If StrictIsNumeric(s) And Val(s) < 5 Then
-        cboTimestamp.ListIndex = Val(s)
-    End If
+    cboTimestamp.ListIndex = Config.Timestamp
     
-    s = ReadCfg(MN, "MaxBacklogSize")
+    txtMaxBackLogSize.Text = Config.MaxBacklogSize
     
-    If (s <> vbNullString) Then
-        txtMaxBackLogSize.Text = Val(ReadCfg(MN, "MaxBacklogSize"))
-    Else
-        txtMaxBackLogSize.Text = 10000
-    End If
-    
-    txtMaxLogSize.Text = Val(ReadCfg(MN, "MaxLogFileSize"))
+    txtMaxLogSize.Text = Config.MaxLogFileSize
     
 End Sub
 
@@ -5535,43 +5461,31 @@ End Sub
 Private Sub InitConnAdvanced()
     Dim s As String
     
-    s = ReadCfg(MN, "UseBNLS")
-    If s = "N" Then cboConnMethod.ListIndex = 1 Else cboConnMethod.ListIndex = 0
+    cboConnMethod.ListIndex = CInt(Abs(Not Config.UseBnls))
     
-    s = ReadCfg(MN, "Spoof")
-    If StrictIsNumeric(s) Then
-        If Val(s) < 3 Then
-            cboSpoof.ListIndex = Val(s)
-        Else
-            cboSpoof.ListIndex = 0
-        End If
-    Else
-        cboSpoof.ListIndex = 0
-    End If
+    cboSpoof.ListIndex = Config.PingSpoofing
         
-    s = ReadCfg(MN, "UDP")
-    If s = "Y" Then chkUDP.Value = 1 Else chkUDP.Value = 0
+    chkUDP.value = Abs(Config.UseUDP)
+
+    chkBNLSAlt.value = Abs(Config.UseBnlsFinder)
     
-    s = ReadCfg(MN, "UseAltBNLS")
-    If s = "Y" Then chkBNLSAlt.Value = 1 Else chkBNLSAlt.Value = 0
-    
-    txtReconDelay.Text = ReadCfg(MN, "ReconnectDelay")
+    txtReconDelay.Text = Config.ReconnectDelay
     If LenB(txtReconDelay.Text) = 0 Then txtReconDelay.Text = 1000
     
-    chkUseProxies.Value = YesToTrue(ReadCfg(MN, "UseProxy"), 0)
+    chkUseProxies.value = Abs(Config.UseProxy)
     Call chkUseProxies_Click
 '    Call chkUseProxies_Click
 '    If Not YesToTrue(readcfg(MN, "UseProxy"), 0) = 0 Then Call chkUseProxies_Click
     
-    txtProxyPort.Text = ReadCfg(MN, "ProxyPort")
-    txtProxyIP.Text = ReadCfg(MN, "ProxyIP")
+    txtProxyPort.Text = Config.ProxyPort
+    txtProxyIP.Text = Config.ProxyIP
     
-    If ReadCfg(MN, "ProxyIsSocks5") = "Y" Then
-        optSocks5.Value = True
-        optSocks4.Value = False
+    If Config.ProxyIsSocks5 Then
+        optSocks5.value = True
+        optSocks4.value = False
     Else
-        optSocks5.Value = False
-        optSocks4.Value = True
+        optSocks5.value = False
+        optSocks4.value = True
     End If
     
     ' Adjust this label 2 pixels down
@@ -5588,7 +5502,7 @@ Private Sub InitAllPanels()
     InitGenGreets
     InitGenIdles
     
-    If LenB(Dir$(GetConfigFilePath())) > 0 Then
+    If Config.FileExists Then
         ShowPanel spConnectionConfig
         FirstRun = 1
     End If
@@ -5624,7 +5538,7 @@ Sub SaveFontSettings()
     Dim ResizeChannelElements As Boolean
     
     If (StrComp(InitChatFont, txtChatFont.Text, vbTextCompare)) Then
-        WINI "ChatFont", txtChatFont.Text, secOther
+        Config.ChatFont = txtChatFont.Text
         frmChat.rtbChat.Font.Name = txtChatFont.Text
         frmChat.cboSend.Font.Name = txtChatFont.Text
         frmChat.txtPre.Font.Name = txtChatFont.Text
@@ -5634,7 +5548,7 @@ Sub SaveFontSettings()
     End If
     
     If Not InitChatSize = CInt(txtChatSize.Text) Then
-        WINI "ChatSize", txtChatSize.Text, secOther
+        Config.ChatSize = txtChatSize.Text
         frmChat.rtbChat.Font.Size = CInt(txtChatSize.Text)
         frmChat.cboSend.Font.Size = CInt(txtChatSize.Text)
         frmChat.txtPre.Font.Size = CInt(txtChatSize.Text)
@@ -5644,7 +5558,7 @@ Sub SaveFontSettings()
     End If
     
     If (StrComp(InitChanFont, txtChanFont.Text, vbTextCompare)) Then
-        WINI "ChanFont", txtChanFont.Text, secOther
+        Config.ChannelFont = txtChanFont.Text
         frmChat.lvChannel.Font.Name = txtChanFont.Text
         frmChat.lvClanList.Font.Name = txtChanFont.Text
         frmChat.lvFriendList.Font.Name = txtChanFont.Text
@@ -5654,7 +5568,7 @@ Sub SaveFontSettings()
     End If
     
     If Not InitChanSize = CInt(txtChanSize.Text) Then
-        WINI "ChanSize", txtChanSize.Text, secOther
+        Config.ChannelSize = txtChanSize.Text
         frmChat.lvChannel.Font.Size = CInt(txtChanSize.Text)
         frmChat.lvClanList.Font.Size = CInt(txtChanSize.Text)
         frmChat.lvFriendList.Font.Size = CInt(txtChanSize.Text)

@@ -53,7 +53,7 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
     
     DestroyObjs
 
-    If (ReadCfg("Other", "ScriptAllowUI") <> "N") Then
+    If Config.ScriptAllowUI Then
         SC.AllowUI = True
     End If
 
@@ -82,7 +82,7 @@ Public Sub LoadScripts()
     Dim CurrentModule As Module
     Dim Paths         As New Collection
     Dim strPath       As String
-    Dim FileName      As String
+    Dim fileName      As String
     Dim fileExt       As String
     Dim i             As Integer
     Dim j             As Integer
@@ -103,17 +103,17 @@ Public Sub LoadScripts()
     ' ensure scripts folder exists
     If (LenB(Dir$(strPath)) > 0) Then
         ' grab initial script file name
-        FileName = Dir$(strPath)
+        fileName = Dir$(strPath)
         
         ' grab script files
         ' note: if we don't enumerate this list prior to script loading,
         ' scripting errors can kill further script loading.
-        Do While (FileName <> vbNullString)
+        Do While (fileName <> vbNullString)
             ' add script file to collection
-            Paths.Add FileName
+            Paths.Add fileName
         
             ' grab next script file name
-            FileName = Dir$()
+            fileName = Dir$()
         Loop
 
         ' Cycle through each of the files.
@@ -184,11 +184,11 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
 
     On Error GoTo ERROR_HANDLER
 
-    Static strContent    As String  
+    Static strContent    As String
     Static includes      As Collection
     
-    Dim strLine          As String  
-    Dim f                As Integer 
+    Dim strLine          As String
+    Dim f                As Integer
     Dim blnCheckOperands As Boolean
     Dim blnKeepLine      As Boolean
     Dim blnScriptData    As Boolean
@@ -220,14 +220,14 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
                     blnKeepLine = False
                     If (InStr(1, strLine, " ") <> 0) Then
                         If (Len(strLine) >= 2) Then
-                            Dim strCommand As String 
+                            Dim strCommand As String
                         
                             strCommand = _
                                 LCase$(Mid$(strLine, 2, InStr(1, strLine, " ") - 2))
     
                             If (strCommand = "include") Then
                                 If (Len(strLine) >= 12) Then
-                                    Dim strPath As String 
+                                    Dim strPath As String
                                     Dim strFullPath As String
                                     
                                     strPath = _
@@ -468,8 +468,8 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
     On Error Resume Next
 
     Dim j            As Integer
-    Dim str          As String  
-    Dim tmp          As String 
+    Dim str          As String
+    Dim tmp          As String
     Dim nameDisallow As String
     
     str = GetScriptName(CurrentModule.Name)
@@ -510,10 +510,10 @@ Public Sub InitScripts()
 
     On Error Resume Next
     
-    Static reloading As Boolean 
+    Static reloading As Boolean
     
     Dim i   As Integer
-    Dim tmp As String  
+    Dim tmp As String
     ' check whether the override is disabling the script system
     If m_SystemDisabled Then Exit Sub
     
@@ -539,7 +539,7 @@ Public Sub InitScript(ByVal SCModule As Module)
 
     On Error Resume Next
 
-    Dim i          As Integer 
+    Dim i          As Integer
     Dim startTime  As Long
     Dim finishTime As Long
 
@@ -796,7 +796,7 @@ End Function
 
 Private Function ObjCount(Optional ObjType As String, Optional ByVal SCModule As Module = Nothing) As Integer
     
-    Dim i As Integer 
+    Dim i As Integer
 
     If (ObjType <> vbNullString) Then
         For i = 0 To m_objCount - 1
@@ -822,7 +822,7 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
 
     On Error Resume Next
 
-    Dim obj As scObj 
+    Dim obj As scObj
     Dim scriptName As String
     
     If SCModule Is Nothing Then Exit Function
@@ -957,7 +957,7 @@ Public Sub DestroyObjs(Optional ByVal SCModule As Object = Nothing)
 
     On Error GoTo ERROR_HANDLER
 
-    Dim i As Integer 
+    Dim i As Integer
     
     For i = m_objCount - 1 To 0 Step -1
         If (SCModule Is Nothing) Then
@@ -984,8 +984,8 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
 
     On Error GoTo ERROR_HANDLER
 
-    Dim i     As Integer 
-    Dim Index As Integer 
+    Dim i     As Integer
+    Dim Index As Integer
     
     If SCModule Is Nothing Then Exit Sub
     
@@ -1112,7 +1112,7 @@ End Sub
 
 Public Function GetObjByName(ByRef SCModule As Module, ByVal ObjName As String) As Object
 
-    Dim i As Integer 
+    Dim i As Integer
     
     If SCModule Is Nothing Then Exit Function
     
@@ -1130,8 +1130,8 @@ End Function
 
 Public Function GetScriptObjByMenuID(ByVal MenuID As Long) As scObj
 
-    Dim i As Integer 
-    Dim j As Integer 
+    Dim i As Integer
+    Dim j As Integer
 
     For i = 0 To ObjCount() - 1
         If (StrComp("Menu", Objects(i).ObjType, vbTextCompare) = 0) Then
@@ -1157,7 +1157,7 @@ End Function
 
 Public Function GetScriptObjByIndex(ByVal ObjType As String, ByVal Index As Integer) As scObj
 
-    Dim i As Integer 
+    Dim i As Integer
 
     For i = 0 To ObjCount() - 1
         If (StrComp(ObjType, Objects(i).ObjType, vbTextCompare) = 0) Then
@@ -1175,9 +1175,9 @@ Public Function InitMenus()
 
     On Error GoTo ERROR_HANDLER
 
-    Dim tmp  As clsMenuObj 
-    Dim Name As String     
-    Dim i    As Integer    
+    Dim tmp  As clsMenuObj
+    Dim Name As String
+    Dim i    As Integer
 
     ' destroy all the menus and start over
     DestroyMenus
@@ -1260,7 +1260,7 @@ Public Function DestroyMenus()
 
     On Error GoTo ERROR_HANDLER
 
-    Dim i As Integer 
+    Dim i As Integer
     
     frmChat.mnuScriptingDash(0).Visible = False
     
@@ -1293,8 +1293,8 @@ Public Function Scripts() As Object
 
     On Error Resume Next
 
-    Dim i   As Integer 
-    Dim str As String  
+    Dim i   As Integer
+    Dim str As String
     Dim SCModule As Module
     Dim scriptName As String
 
@@ -1337,11 +1337,11 @@ Public Function GetVeto() As Boolean
     
 End Function
 
-Private Function GetFileExtension(ByVal FileName As String)
+Private Function GetFileExtension(ByVal fileName As String)
         
     Dim arr() As String
 
-    arr = Split(FileName, ".")
+    arr = Split(fileName, ".")
     
     If UBound(arr) = 0 Then
         GetFileExtension = ""
@@ -1353,8 +1353,8 @@ End Function
 
 Private Function IsValidFileExtension(ByVal ext As String) As Boolean
 
-    Dim exts() As String  
-    Dim i      As Integer 
+    Dim exts() As String
+    Dim i      As Integer
 
     ReDim exts(0 To 1)
     
@@ -1374,13 +1374,13 @@ Private Function IsValidFileExtension(ByVal ext As String) As Boolean
 
 End Function
 
-Private Function CleanFileName(ByVal FileName As String) As String
+Private Function CleanFileName(ByVal fileName As String) As String
     
     On Error Resume Next
     
-    If (InStr(1, FileName, ".") > 1) Then
+    If (InStr(1, fileName, ".") > 1) Then
         CleanFileName = _
-            Left$(FileName, InStr(1, FileName, ".") - 1)
+            Left$(fileName, InStr(1, fileName, ".") - 1)
     End If
 
 End Function

@@ -205,29 +205,28 @@ Public Function ConvertTime(ByVal dblMS As Double, Optional seconds As Byte) As 
 End Function
 
 Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Integer) As Long
-    Dim Key As String
+    Dim key As String
     
-    Key = GetProductKey(Product)
+    key = GetProductKey(Product)
     
-    If ((ReadCfg("Override", Key & "VerByte") = vbNullString) Or _
+    If ((Config.GetVersionByte(key) = -1) Or _
         (UseHardcode = 1)) Then
         
         Select Case StrReverse(Product)
             Case "W2BN": GetVerByte = &H4F
             Case "STAR": GetVerByte = &HD3
             Case "SEXP": GetVerByte = &HD3
-            Case "D2DV": GetVerByte = &HD
-            Case "D2XP": GetVerByte = &HD
-            Case "W3XP": GetVerByte = &H18
-            Case "WAR3": GetVerByte = &H18
+            Case "D2DV": GetVerByte = &HE
+            Case "D2XP": GetVerByte = &HE
+            Case "W3XP": GetVerByte = &H1B
+            Case "WAR3": GetVerByte = &H1B
             Case "DRTL": GetVerByte = &H2A
             Case "DSHR": GetVerByte = &H2A
             Case "JSTR": GetVerByte = &HA9
             Case "SSHR": GetVerByte = &HA5
         End Select
     Else
-        GetVerByte = _
-            CLng(Val("&H" & ReadCfg("Override", Key & "VerByte")))
+        GetVerByte = Config.GetVersionByte(key)
     End If
     
 End Function
@@ -236,7 +235,7 @@ Public Function GetGamePath(ByVal Client As String) As String
     ' [override] XXHashes= functionality replaced by checkrevision.ini -> [CRev_XX] Path=
     ' removed ~Ribose/2010-08-12
     Dim CRevINIPath As String
-    Dim Key As String
+    Dim key As String
     Dim Path As String
     Dim sep1 As String
     Dim sep2 As String
@@ -245,8 +244,8 @@ Public Function GetGamePath(ByVal Client As String) As String
     'CRevINIPath = GetFilePath(FILE_CREV_INI, StringFormat("{0}\", App.Path))
     CRevINIPath = GetFilePath(FILE_CREV_INI)
     
-    Key = GetProductKey(Client)
-    Path = ReadINI$(StringFormat("CRev_{0}", Key), "Path", CRevINIPath)
+    key = GetProductKey(Client)
+    Path = ReadINI$(StringFormat("CRev_{0}", key), "Path", CRevINIPath)
     sep1 = vbNullString
     sep2 = vbNullString
     
@@ -259,18 +258,18 @@ Public Function GetGamePath(ByVal Client As String) As String
     GetGamePath = Path
 End Function
 
-Function MKL(Value As Long) As String
+Function MKL(value As Long) As String
     Dim Result As String * 4
     
-    Call CopyMemory(ByVal Result, Value, 4)
+    Call CopyMemory(ByVal Result, value, 4)
     
     MKL = Result
 End Function
 
-Function MKI(Value As Integer) As String
+Function MKI(value As Integer) As String
     Dim Result As String * 2
     
-    Call CopyMemory(ByVal Result, Value, 2)
+    Call CopyMemory(ByVal Result, value, 2)
     
     MKI = Result
 End Function
@@ -1676,34 +1675,34 @@ Public Function GetW3Realm(Optional ByVal Username As String) As String
 End Function
 
 Public Function GetConfigFilePath() As String
-    Static filePath As String
+    Static FilePath As String
     
-    If (LenB(filePath) = 0) Then
+    If (LenB(FilePath) = 0) Then
         If ((LenB(ConfigOverride) > 0)) Then
-            filePath = ConfigOverride
+            FilePath = ConfigOverride
         Else
-            filePath = StringFormat("{0}Config.ini", GetProfilePath())
+            FilePath = StringFormat("{0}Config.ini", GetProfilePath())
         End If
     End If
     
-    If (InStr(1, filePath, "\", vbBinaryCompare) = 0) Then
-        filePath = StringFormat("{0}\{1}", CurDir$(), filePath)
+    If (InStr(1, FilePath, "\", vbBinaryCompare) = 0) Then
+        FilePath = StringFormat("{0}\{1}", CurDir$(), FilePath)
     End If
     
-    GetConfigFilePath = filePath
+    GetConfigFilePath = FilePath
 End Function
 
-Public Function GetFilePath(ByVal FileName As String, Optional DefaultPath As String = vbNullString) As String
+Public Function GetFilePath(ByVal fileName As String, Optional DefaultPath As String = vbNullString) As String
     Dim s As String
     
-    If (InStr(FileName, "\") = 0) Then
+    If (InStr(fileName, "\") = 0) Then
         If (LenB(DefaultPath) = 0) Then
-            GetFilePath = StringFormat("{0}{1}", GetProfilePath(), FileName)
+            GetFilePath = StringFormat("{0}{1}", GetProfilePath(), fileName)
         Else
-            GetFilePath = StringFormat("{0}{1}", DefaultPath, FileName)
+            GetFilePath = StringFormat("{0}{1}", DefaultPath, fileName)
         End If
         
-        s = ReadCfg("FilePaths", FileName)
+        s = ReadCfg("FilePaths", fileName)
         
         If (LenB(s) > 0) Then
             If (LenB(Dir$(s))) Then
@@ -1711,7 +1710,7 @@ Public Function GetFilePath(ByVal FileName As String, Optional DefaultPath As St
             End If
         End If
     Else
-        GetFilePath = FileName
+        GetFilePath = fileName
     End If
 End Function
 
@@ -1834,22 +1833,6 @@ Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boo
     
     ' default to true
     AllowedToTalk = True
-    
-    'For each condition where the user is NOT allowed to talk, set to false
-    
-    'i = UsernameToIndex(sUser)
-    '
-    'If i > 0 Then
-    '    Dim CurrentGTC As Long
-    '
-    '    CurrentGTC = GetTickCount()
-    '
-    '    With colUsersInChannel.Item(i)
-    '        If ((CurrentGTC - .JoinTime) < BotVars.AutofilterMS) Then
-    '            AllowedToTalk = False
-    '        End If
-    '    End With
-    'End If
     
     If (Filters) Then
         If ((CheckBlock(sUser)) Or (CheckMsg(Msg, sUser, -5))) Then
@@ -2378,7 +2361,7 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phr
     
     i = FreeFile
     
-    If (LenB(ReadCfg("Other", "FlashOnCatchPhrases")) > 0) Then
+    If Config.FlashOnCatchPhrases Then
         Call FlashWindow
     End If
     
@@ -2542,7 +2525,7 @@ Public Sub Pause(ByVal fSeconds As Single, Optional ByVal AllowEvents As Boolean
     End If
 End Sub
 
-Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String, ByVal Target As String, _
+Public Sub LogDbAction(ByVal ActionType As enuDBActions, ByVal Caller As String, ByVal Target As String, _
     ByVal TargetType As String, Optional ByVal Rank As Integer, Optional ByVal Flags As String, _
         Optional ByVal Group As String)
     
@@ -2768,7 +2751,7 @@ Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Lon
     Dim s         As String  ' stores temp string for settings
     
     ' check for custom line postfix
-    s = ReadCfg("Override", "AddQLinePostfix")
+    s = Config.AddQLinePostfix
     If LenB(s) > 0 Then
         If Left$(s, 1) = "{" And Right$(s, 1) = "}" Then
             LinePostfix = Mid$(s, 2, Len(s) - 2)

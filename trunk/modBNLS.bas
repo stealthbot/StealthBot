@@ -150,7 +150,8 @@ On Error GoTo ERROR_HANDLER:
     
     If (Not pBuff.GetDWORD = 0) Then
         lVerByte = pBuff.GetDWORD
-        Call WriteINI("Override", GetProductKey() & "VerByte", Hex(lVerByte)) 'Save BNLS's Version Byte
+        Config.SetVersionByte GetProductKey(), lVerByte 'Save BNLS's Version Byte
+        Call Config.Save
         
         Select Case modBNCS.GetLogonSystem()
             Case modBNCS.BNCS_NLS: Call modBNCS.SEND_SID_AUTH_INFO(lVerByte)
