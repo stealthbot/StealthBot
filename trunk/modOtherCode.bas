@@ -528,16 +528,6 @@ ERROR_HANDLER:
     
 End Sub
 
-Public Sub APISend(ByRef s As String) '// faster API-based sending for EFP
-
-    Dim i As Long
-    
-    i = Len(s) + 5
-    
-    Call Send(frmChat.sckBNet.SocketHandle, "ÿ" & "" & Chr(i) & _
-        Chr(0) & s & Chr(0), i, 0)
-End Sub
-
 Public Function Voting(ByVal Mode1 As Byte, Optional Mode2 As Byte, Optional Username As String) As String
 On Error GoTo ERROR_HANDLER:
     Static Voted()  As String
@@ -1868,7 +1858,7 @@ End Function
 Public Function IrrelevantWhisper(ByVal sIn As String, ByVal sUser As String) As Boolean
     IrrelevantWhisper = False
     
-    If InStr(sIn, "ß~ß") Then
+    If InStr(sIn, Chr(223) & Chr(126) & Chr(223)) Then
         IrrelevantWhisper = True
         Exit Function
     End If
@@ -2234,9 +2224,9 @@ On Error GoTo ERROR_HANDLER:
                     sValue = Split(sTemp & " -", " -")(0)
                     sTemp = Mid$(sTemp, Len(sValue) + 2)
                 End If
-                sRet = StringFormat("{0}ÁYThe StealthBot Profile Launcher had and error!|", sRet)
+                sRet = StringFormat("{0}{1}YThe StealthBot Profile Launcher had an error!|", Chr(193), sRet)
                 If (LenB(sValue) > 0) Then
-                    sRet = StringFormat("{0}ÁYOpen {1} for more information|", sRet, sValue)
+                    sRet = StringFormat("{0}{1}YOpen {2} for more information|", sRet, Chr(195), sValue)
                 End If
                 
                 CommandLine = StringFormat("{0}-launchererror {1}{2}{1} ", CommandLine, Chr$(34), sValue)

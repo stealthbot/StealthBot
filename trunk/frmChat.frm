@@ -7718,29 +7718,6 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
             'BNCSBuffer.WriteLog "Parsing the following packet:", True
             'BNCSBuffer.WriteLog strTemp
             
-            ' EFP System now running under the parsing layer for extra-crispy efficiency
-            'If (bFlood) Then
-            '    If (Asc(Mid$(strTemp, 2, 1)) = &HF) Then
-            '        If (Conv(Mid$(strTemp, 5, 4)) = ID_JOIN) Then
-            '            fTemp = KillNull(Mid$(strTemp, 29))
-            '
-            '            If (StrComp(flood, fTemp, vbBinaryCompare) <> 0) Then
-            '                If (Not (GetSafelist(fTemp))) Then
-            '                    If (floodCap < 45) Then
-            '                        Call APISend("/ban " & fTemp)
-            '
-            '                        floodCap = (floodCap + 30)
-            '
-            '                        flood = fTemp
-            '
-            '                        Exit Sub
-            '                    End If
-            '                End If
-            '            End If
-            '        End If
-            '    End If
-            'End If
-            
             Call BNCSParsePacket(strTemp)
             
             'interations = (interations + 1)
