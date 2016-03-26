@@ -5557,109 +5557,22 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
                                     
                                     GoTo theEnd
-                                    
-                                'ElseIf (LCase$(s) = "/fl" And MDebug("debug")) Then
-                                '    For n = 1 To g_Friends.Count
-                                '        AddChat vbMagenta, g_Friends.Item(n).Name & _
-                                '            " - " & g_Friends.Item(n).game
-                                '    Next n
-                                
-                                'ElseIf (LCase$(s) = "/accountinfo") Then
-                                '    RequestSystemKeys
-                                '
-                                '    GoTo theEnd
-                                    
-                                'ElseIf (LCase$(s) = "/lvchandims") Then
-                                '    Dim j As Integer
-                                '
-                                '    AddChat vbRed, "lvChannel:"
-                                '    AddChat vbRed, " Height: " & lvChannel.Height
-                                '    AddChat vbRed, " Width: " & lvChannel.Width
-                                '
-                                '    For j = 1 To lvChannel.ColumnHeaders.Count
-                                '        AddChat vbRed, " Column " & j & ":"
-                                '        AddChat vbRed, "  Width:" & lvChannel.ColumnHeaders(j).Width
-                                '    Next j
-                                '
-                                'ElseIf (LCase$(s) = "/cls") Then
-                                '    Call mnuClear_Click
-                                '
-                                '    GoTo theEnd
-                                '
-                                'ElseIf (LCase$(s) = "/ds_list") Then
-                                '    Call ds.List
-                                '
-                                '    GoTo theEnd
-                                '
-                                'ElseIf (Left$(LCase$(s), 7) = "/setcl ") Then
-                                '    CommandLine = Mid$(s, 8)
-                                '    frmChat.AddChat RTBColors.SuccessText, _
-                                '            "The command line for this instance has been changed."
-                                '
-                                '    GoTo theEnd
-                                '
-                                'ElseIf ((s = "/force") And (MDebug("debug"))) Then
-                                '    MyFlags = 2
-                                '    SharedScriptSupport.BotFlags = MyFlags
-                                '    AddChat RTBColors.ConsoleText, "Flags forced to 2."
-                                '
-                                'ElseIf ((s = "/flags") And (MDebug("debug"))) Then
-                                '    For n = 1 To g_Channel.Users.Count
-                                '        With g_Channel.Users(n)
-                                '            AddChat RTBColors.ConsoleText, .Name & Space$(4) & .Flags
-                                '        End With
-                                '    Next n
-                                '
-                                '    n = 0
-                                '
-                                '    GoTo theEnd
-                                '
-                                'ElseIf LCase(Left$(s, 7)) = "/watch " Then
-                                '    WatchUser = LCase(Right(s, Len(s) - 7))
-                                '    AddChat RTBColors.ConsoleText, "Watching " & Right(s, Len(s) - 7)
-                                '
-                                '    GoTo theEnd
-                                '
-                                'ElseIf LCase$(s) = "/watchoff" Then
-                                '    WatchUser = vbNullString
-                                '    AddChat RTBColors.ConsoleText, "Watch off."
-                                '    GoTo theEnd
-                                'ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
-                                '
-                                '   m = Right(s, (Len(s) - 7))
-                                'ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
-                                '    m = Right(s, (Len(s) - 7))
-                                '
-                                '    AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m), _
-                                '        PRIORITY.CONSOLE_MESSAGE
-                                    
-                                'ElseIf (LCase(Left$(s, 9)) = "/profile ") Then
-                                '    If (sckBNet.State = 7) Then
-                                '        RequestProfile Right(s, Len(s) - 9)
-                                '    End If
-                                '
-                                '    frmProfile.lblUsername.Caption = Right(s, Len(s) - 9)
-                                '    frmProfile.Show
                                 
                                 ElseIf (LCase(Left$(s, 1)) = "/") Then
-                                    Dim commandResult As Boolean ' ..
-                                
-                                    'If ((Left$(s, 3) = "/w ") Or (Left$(s, 3) = "/m ")) Then
-                                    '    If (Dii) Then
-                                    '        If (StrComp(Mid$(s, 4, 1), "*") <> 0) Then
-                                    '            s = Mid$(s, 1, 3) & "*" & _
-                                    '                Mid$(s, 4)
-                                    '        End If
-                                    '    End If
-                                    'End If
+                                    Dim splt() As String
+                                    splt = Split(s, " ", 3)
                                     
-                                    temp.Rank = 201
-                                    temp.Flags = "A"
-                                    
-                                    m = OutFilterMsg(s)
-                                    
-                                    commandResult = ProcessCommand(GetCurrentUsername, m, _
-                                        True, False)
+                                    ' Don't do replacements for a command unless it involves text that will be seen by someone else
+                                    '  and don't replace text in the command itself or the target username
+                                    Select Case LCase$(splt(0))
+                                        Case "/w", "/m", "/whisper", "/msg", "/ban", "/kick"
+                                            m = splt(0) & Space(1) & splt(1) & Space(1) & OutFilterMsg(splt(2))
+                                        Case "/away", "/dnd"
+                                            m = splt(0) & Space(1) & OutFilterMsg(splt(1) & Space(1) & splt(2))
+                                        Case Else
+                                            m = s
+                                    End Select
+                                    ProcessCommand GetCurrentUsername, m, True, False
                                 Else
                                     Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
                                 End If
