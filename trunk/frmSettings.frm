@@ -5375,8 +5375,6 @@ Private Sub InitBasicConfig()
     
     chkUseRealm.Value = YesToTrue(ReadCfg(MN, "UseRealm"), 0)
     
-    Call LoadCDKeys(cboCDKey)
-    
 End Sub
 
 Private Sub InitGenMod()

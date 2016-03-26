@@ -60,15 +60,15 @@ Begin VB.Form frmDBManager
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   3
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":08D0
+            Picture         =   "frmDBManager.frx":0889
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":0E22
+            Picture         =   "frmDBManager.frx":08E7
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":1374
+            Picture         =   "frmDBManager.frx":0945
             Key             =   ""
          EndProperty
       EndProperty
@@ -85,7 +85,6 @@ Begin VB.Form frmDBManager
       Caption         =   "&Group"
       Height          =   375
       Left            =   1800
-      Picture         =   "frmDBManager.frx":18C6
       TabIndex        =   2
       ToolTipText     =   "Create Group"
       Top             =   5378
@@ -96,7 +95,6 @@ Begin VB.Form frmDBManager
       Height          =   375
       Left            =   120
       MaskColor       =   &H00000000&
-      Picture         =   "frmDBManager.frx":1D2E
       TabIndex        =   1
       ToolTipText     =   "Create User"
       Top             =   5378
@@ -131,6 +129,7 @@ Begin VB.Form frmDBManager
       BackColor       =   10040064
       ForeColor       =   16777215
       HotTracking     =   0   'False
+      Style           =   5
       OLEDropMode     =   1
       OLEDragMode     =   1
       DragAutoExpand  =   -1
@@ -471,7 +470,8 @@ Private Sub Form_Load()
     Me.Icon = frmChat.Icon
     
     ' this line is gay but for some reason I can't set the ImageList for vbalTV in the designer/VB properties -Ribose
-    trvUsers.ImageList = icons.hImageList
+    'trvUsers.ImageList = icons.hImageList
+    'TODO get images, because i broke the imagelist we had... :(
     
     ' has our database been loaded?
     If (DB(0).Username = vbNullString) Then
