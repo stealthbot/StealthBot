@@ -5566,9 +5566,16 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     '  and don't replace text in the command itself or the target username
                                     Select Case LCase$(splt(0))
                                         Case "/w", "/m", "/whisper", "/msg", "/ban", "/kick"
-                                            m = splt(0) & Space(1) & splt(1) & Space(1) & OutFilterMsg(splt(2))
+                                            m = StringFormat("{0} {1} {2}", splt(0), splt(1), OutFilterMsg(splt(2)))
                                         Case "/away", "/dnd"
-                                            m = splt(0) & Space(1) & OutFilterMsg(splt(1) & Space(1) & splt(2))
+                                            m = StringFormat("{0} {1}", splt(0), OutFilterMsg(splt(1) & Space(1) & splt(2)))
+                                        Case "/f"
+                                            ' friend list messaging
+                                            If ((LCase$(splt(1)) = "m") Or (LCase$(splt(1)) = "msg")) Then
+                                                m = StringFormat("{0} {1} {2}", splt(0), splt(1), OutFilterMsg(splt(2)))
+                                            Else
+                                                m = s
+                                            End If
                                         Case Else
                                             m = s
                                     End Select
