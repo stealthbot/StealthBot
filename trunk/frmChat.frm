@@ -5932,9 +5932,6 @@ Private Sub Timer_Timer()
     
     If IdleMsg <> "Y" Then Exit Sub
     
-    If ((StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) = 0) And _
-        (IsStealthBotTech = False)) Then Exit Sub
-    
     IdleMsg = ReadCfg("Main", "IdleMsg")
     IdleWaitS = ReadCfg("Main", "IdleWait")
     IdleType = ReadCfg("Main", "IdleType")
@@ -5943,7 +5940,7 @@ Private Sub Timer_Timer()
 
     If IdleWait < 2 Then Exit Sub
     
-    If iCounter >= IdleWait And StrComp(LCase(g_Channel.Name), "op [vl]", vbTextCompare) <> 0 Then
+    If iCounter >= IdleWait Then
         iCounter = 0
         'on error resume next
         If IdleType = "msg" Or IdleType = vbNullString Then

@@ -320,12 +320,6 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
                 ". Type /inbox to retrieve."
     End If
     
-    ' Give a message to them if they're in Clan SBs.
-    If ((StrComp(ChannelName, "Clan SBs", vbTextCompare) = 0) And _
-        (IsStealthBotTech() = False)) Then
-            frmChat.AddChat RTBColors.ErrorMessageText, "You have joined Clan SBs. For the consideration of the Technical Support Staff: greet, idle, and all scripted messages have been temporarily disabled."
-    End If
-    
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' call event script function
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -941,16 +935,12 @@ On Error GoTo ERROR_HANDLER:
     
             '// backup channel
             If (InStr(1, Message, "kicked you out", vbTextCompare) > 0) Then
-                If ((StrComp(g_Channel.Name, "Op [vL]", vbTextCompare) <> 0) And _
-                    (StrComp(g_Channel.Name, "Op Fatal-Error", vbTextCompare) <> 0)) Then
-                        
-                    If (BotVars.UseBackupChan) Then
-                        If (Len(BotVars.BackupChan) > 1) Then
-                            frmChat.AddQ "/join " & BotVars.BackupChan
-                        End If
-                    Else
-                        frmChat.AddQ "/join " & g_Channel.Name
+                If (BotVars.UseBackupChan) Then
+                    If (Len(BotVars.BackupChan) > 1) Then
+                        frmChat.AddQ "/join " & BotVars.BackupChan
                     End If
+                Else
+                    frmChat.AddQ "/join " & g_Channel.Name
                 End If
             End If
             
@@ -1490,15 +1480,11 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     
             If (BotVars.UseGreet) Then
                 If (LenB(BotVars.GreetMsg)) Then
-                    If ((StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) <> 0) Or _
-                        (IsStealthBotTech() = True)) Then
-                        
-                        If (BotVars.WhisperGreet) Then
-                            frmChat.AddQ "/w " & Username & _
-                                Space$(1) & DoReplacements(BotVars.GreetMsg, Username, Ping)
-                        Else
-                            frmChat.AddQ DoReplacements(BotVars.GreetMsg, Username, Ping)
-                        End If
+                    If (BotVars.WhisperGreet) Then
+                        frmChat.AddQ "/w " & Username & _
+                            Space$(1) & DoReplacements(BotVars.GreetMsg, Username, Ping)
+                    Else
+                        frmChat.AddQ DoReplacements(BotVars.GreetMsg, Username, Ping)
                     End If
                 End If
             End If

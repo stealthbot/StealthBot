@@ -214,10 +214,6 @@ End Sub
 '// Nonzero priority messages will be sent with precedence over 0-priority messages.
 Public Function AddQ(ByVal sText As String, Optional ByVal msg_priority As Integer = -1, Optional ByVal _
     Tag As String = vbNullString) As Integer
-    
-    '// Disabled while in Clan SBs.
-    If ((StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) = 0) And _
-        (IsStealthBotTech() = False)) Then Exit Function
 
     AddQ = frmChat.AddQ(sText, msg_priority, g_lastQueueUser, Tag)
 End Function

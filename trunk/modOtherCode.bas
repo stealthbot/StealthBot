@@ -3227,17 +3227,6 @@ Public Function IsScrolling(ByRef rtb As RichTextBox) As Long
 
 End Function
 
-Public Function IsStealthBotTech() As Boolean
-    'Dim ConfigHacked As Boolean
-    'Dim InClanSBs As Boolean
-    
-    IsStealthBotTech = True
-    
-    'ConfigHacked = CBool(ReadCfg("Override", "TechOverride") = "sbth4x")
-    'InClanSBs = CBool(StrComp(g_Clan.Name, "SBs", vbTextCompare) = 0)
-    'IsStealthBotTech = (InClanSBs Or ConfigHacked)
-End Function
-
 Public Function ResolveHost(ByVal strHostName As String) As String
     Dim lServer As Long
     Dim HostInfo As HOSTENT
