@@ -329,3 +329,9 @@ Private Sub lblURL_MouseMove(Index As Integer, Button As Integer, Shift As Integ
     lblOK.ForeColor = vbWhite
     lblURL(Index).ForeColor = vbBlue
 End Sub
+
+Private Sub txtDescr_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Or KeyAscii = vbKeyEscape Then
+        Unload Me
+    End If
+End Sub

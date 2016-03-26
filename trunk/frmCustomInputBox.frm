@@ -52,6 +52,7 @@ Begin VB.Form frmCustomInputBox
       Width           =   3975
    End
    Begin VB.CommandButton cmdCancel 
+      Cancel          =   -1  'True
       Caption         =   "X &Cancel"
       BeginProperty Font 
          Name            =   "Tahoma"
@@ -436,6 +437,8 @@ Private Sub txtInput_KeyPress(KeyAscii As Integer)
     If KeyAscii = vbKeyReturn Then
         Call cmdNext_Click
         KeyAscii = 0
+    ElseIf KeyAscii = vbKeyEscape Then
+        Call cmdCancel_Click
     End If
 End Sub
 

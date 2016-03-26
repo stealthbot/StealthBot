@@ -67,13 +67,13 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub btnDelete_Click()
-    Call Unload(Me)
+    Unload Me
 End Sub
 
 Private Sub btnSave_Click(Index As Integer)
     Call frmDBManager.ImportDatabase(m_path, cbxChoice.ListIndex)
     
-    Call Unload(Me)
+    Unload Me
 End Sub
 
 Public Sub setFilePath(strPath As String)

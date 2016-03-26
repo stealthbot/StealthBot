@@ -517,8 +517,10 @@ Private Sub cmdCancel_Click()
 End Sub
 
 Private Sub Form_KeyPress(KeyAscii As Integer)
-    If KeyAscii = 13 Then
+    If KeyAscii = vbKeyReturn Then
         Call cmdDone_Click
+    ElseIf KeyAscii = vbKeyEscape Then
+        Call cmdCancel_Click
     End If
 End Sub
 

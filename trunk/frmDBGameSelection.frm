@@ -1,9 +1,9 @@
 VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Begin VB.Form frmGameSelection 
+Begin VB.Form frmDBGameSelection 
    BackColor       =   &H80000007&
    BorderStyle     =   4  'Fixed ToolWindow
-   Caption         =   "Game Selection"
+   Caption         =   "New Entry - Select Game"
    ClientHeight    =   3600
    ClientLeft      =   45
    ClientTop       =   315
@@ -37,51 +37,51 @@ Begin VB.Form frmGameSelection
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   12
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmGameSelection.frx":0000
+            Picture         =   "frmDBGameSelection.frx":0000
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmGameSelection.frx":3046
+            Picture         =   "frmDBGameSelection.frx":3046
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmGameSelection.frx":61AF
+            Picture         =   "frmDBGameSelection.frx":61AF
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmGameSelection.frx":93DB
+            Picture         =   "frmDBGameSelection.frx":93DB
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmGameSelection.frx":B9E3
+            Picture         =   "frmDBGameSelection.frx":B9E3
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmGameSelection.frx":EEAE
+            Picture         =   "frmDBGameSelection.frx":EEAE
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmGameSelection.frx":11691
+            Picture         =   "frmDBGameSelection.frx":11691
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmGameSelection.frx":1483C
+            Picture         =   "frmDBGameSelection.frx":1483C
             Key             =   ""
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmGameSelection.frx":17885
+            Picture         =   "frmDBGameSelection.frx":17885
             Key             =   ""
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmGameSelection.frx":1A921
+            Picture         =   "frmDBGameSelection.frx":1A921
             Key             =   ""
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmGameSelection.frx":1DE64
+            Picture         =   "frmDBGameSelection.frx":1DE64
             Key             =   ""
          EndProperty
          BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmGameSelection.frx":207F5
+            Picture         =   "frmDBGameSelection.frx":207F5
             Key             =   ""
          EndProperty
       EndProperty
@@ -112,15 +112,17 @@ Begin VB.Form frmGameSelection
       EndProperty
    End
    Begin VB.CommandButton cmdCancel 
+      Cancel          =   -1  'True
       Caption         =   "Cancel"
       Height          =   255
-      Left            =   1680
+      Left            =   1800
       TabIndex        =   2
       Top             =   3220
       Width           =   855
    End
    Begin VB.CommandButton cmdOK 
       Caption         =   "&OK"
+      Default         =   -1  'True
       Height          =   255
       Left            =   2602
       TabIndex        =   3
@@ -139,7 +141,7 @@ Begin VB.Form frmGameSelection
       Width           =   2775
    End
 End
-Attribute VB_Name = "frmGameSelection"
+Attribute VB_Name = "frmDBGameSelection"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
@@ -147,46 +149,58 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub cmdCancel_Click()
-    frmDBManager.m_game = _
-        vbNullString
+    frmDBManager.m_entryname = vbNullString
 
-    Call Unload(frmGameSelection)
+    Unload Me
 End Sub
 
 Private Sub cmdOK_Click()
     Dim Game As String
     
     Select Case (lvGames.SelectedItem.Index)
-        Case 1:  Game = "CHAT"
+        Case 1:  Game = "W2BN"
         Case 2:  Game = "STAR"
-        Case 3:  Game = "SSHR"
-        Case 4:  Game = "JSTR"
-        Case 5:  Game = "SEXP"
-        Case 6:  Game = "DRTL"
-        Case 7:  Game = "DSHR"
-        Case 8:  Game = "D2DV"
-        Case 9:  Game = "D2XP"
-        Case 10: Game = "W2BN"
-        Case 11: Game = "WAR3"
-        Case 12: Game = "W3XP"
+        Case 3:  Game = "SEXP"
+        Case 4:  Game = "D2DV"
+        Case 5:  Game = "D2XP"
+        Case 6:  Game = "WAR3"
+        Case 7:  Game = "W3XP"
+        Case 8:  Game = "SSHR"
+        Case 9:  Game = "JSTR"
+        Case 10: Game = "DRTL"
+        Case 11: Game = "DSHR"
+        Case 12: Game = "CHAT"
     End Select
 
-    frmDBManager.m_game = Game
+    frmDBManager.m_entryname = Game
     
-    Call Unload(frmGameSelection)
+    Unload Me
 End Sub
 
 Private Sub Form_Load()
-    Call lvGames.ListItems.Add(, , "Chat", , 7)
+    Call lvGames.ListItems.Add(, , "WarCraft II: Battle.net Edition", , 5)
     Call lvGames.ListItems.Add(, , "StarCraft", , 1)
-    Call lvGames.ListItems.Add(, , "StarCraft: Shareware", , 12)
-    Call lvGames.ListItems.Add(, , "StarCraft: Japanese", , 10)
     Call lvGames.ListItems.Add(, , "StarCraft: Brood War", , 2)
-    Call lvGames.ListItems.Add(, , "Diablo I: Retail", , 8)
-    Call lvGames.ListItems.Add(, , "Diablo I: Shareware", , 9)
     Call lvGames.ListItems.Add(, , "Diablo II", , 3)
     Call lvGames.ListItems.Add(, , "Diablo II: Lord of Destruction", , 4)
-    Call lvGames.ListItems.Add(, , "WarCraft II: Battle.net Edition", , 5)
     Call lvGames.ListItems.Add(, , "WarCraft III: Reign of Chaos", , 6)
     Call lvGames.ListItems.Add(, , "WarCraft III: The Frozen Throne", , 11)
+    Call lvGames.ListItems.Add(, , "StarCraft: Shareware", , 12)
+    Call lvGames.ListItems.Add(, , "StarCraft: Japanese", , 10)
+    Call lvGames.ListItems.Add(, , "Diablo I: Retail", , 8)
+    Call lvGames.ListItems.Add(, , "Diablo I: Shareware", , 9)
+    Call lvGames.ListItems.Add(, , "Chat", , 7)
 End Sub
+
+Private Sub lvGames_DblClick()
+    Call cmdOK_Click
+End Sub
+
+Private Sub lvGames_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Then
+        Call cmdOK_Click
+    ElseIf KeyAscii = vbKeyEscape Then
+        Call cmdCancel_Click
+    End If
+End Sub
+

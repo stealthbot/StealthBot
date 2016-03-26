@@ -1024,7 +1024,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1050,7 +1049,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3135,7 +3133,8 @@ Sub Form_Unload(Cancel As Integer)
     Unload frmDBType
     Unload frmEMailReg
     Unload frmFilters
-    Unload frmGameSelection
+    Unload frmDBGameSelection
+    Unload frmDBNameEntry
     Unload frmManageKeys
     'Unload frmMonitor
     Unload frmProfile

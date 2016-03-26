@@ -136,6 +136,7 @@ Begin VB.Form frmFilters
    End
    Begin VB.CommandButton cmdDone 
       Caption         =   "&Done"
+      Default         =   -1  'True
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
