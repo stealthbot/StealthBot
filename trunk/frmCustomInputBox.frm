@@ -292,7 +292,7 @@ Private Sub cmdNext_Click()
                     Call .optW3XP_Click
             End Select
             
-            .cboCDKey.Text = InputValues(STEP_KEY1)
+            .txtCdKey.Text = InputValues(STEP_KEY1)
             .lblAddCurrentKey_Click
             .txtExpKey.Text = InputValues(STEP_KEY2)
             .txtHomeChan.Text = InputValues(STEP_CHAN)

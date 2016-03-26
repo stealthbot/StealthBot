@@ -1446,40 +1446,6 @@ Public Function StrictIsNumeric(ByVal sCheck As String, Optional AllowNegatives 
     End If
 End Function
 
-
-'---------------------------------------------------------------------------------------
-' These two bad boys are cdkey writing/loading for frmSettings and frmManageKeys
-'---------------------------------------------------------------------------------------
-'
-Public Sub LoadCDKeys(ByRef cboCDKey As ComboBox)
-    Dim Count As Integer
-    Dim sKey  As String
-    
-    Count = Val(ReadCfg("StoredKeys", "Count"))
-    
-    If (Count) Then
-        For Count = 1 To Count
-            sKey = ReadCfg("StoredKeys", "Key" & Count)
-            
-            If (Len(sKey) > 0) Then
-                cboCDKey.AddItem sKey
-            End If
-        Next Count
-    End If
-End Sub
-
-Public Sub WriteCDKeys(ByRef cboCDKey As ComboBox)
-    Dim i As Integer
-    
-    Call WriteINI("StoredKeys", "Count", cboCDKey.ListCount + 1)
-    
-    For i = 0 To cboCDKey.ListCount
-        If (Len(cboCDKey.List(i)) > 0) Then
-            WriteINI "StoredKeys", "Key" & (i + 1), cboCDKey.List(i)
-        End If
-    Next i
-End Sub
-
 Public Sub GetCountryData(ByRef CountryAbbrev As String, ByRef CountryName As String, ByRef sCountryCode As String)
     Const LOCALE_USER_DEFAULT    As Long = &H400
     Const LOCALE_ICOUNTRY        As Long = &H5     'Country Code

@@ -154,6 +154,15 @@ Begin VB.Form frmSettings
       TabIndex        =   112
       Top             =   0
       Width           =   6615
+      Begin VB.TextBox txtCdKey 
+         BackColor       =   &H00993300&
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   240
+         TabIndex        =   3
+         Top             =   2280
+         Width           =   2535
+      End
       Begin VB.CheckBox chkSHR 
          BackColor       =   &H00000000&
          Caption         =   "Shareware"
@@ -249,24 +258,6 @@ Begin VB.Form frmSettings
          TabIndex        =   9
          Top             =   1575
          Width           =   1935
-      End
-      Begin VB.ComboBox cboCDKey 
-         BackColor       =   &H00993300&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   315
-         Left            =   240
-         TabIndex        =   3
-         Top             =   2280
-         Width           =   2535
       End
       Begin VB.OptionButton optDRTL 
          BackColor       =   &H00000000&
@@ -4305,12 +4296,6 @@ Private Sub Form_Load()
     End If
 End Sub
 
-Private Sub Form_GotFocus()
-    If Len(cboCDKey.Text) = 0 And cboCDKey.ListCount > 0 Then
-        cboCDKey.ListIndex = 1
-    End If
-End Sub
-
 Function KeyToIndex(ByVal sKey As String) As Byte
     
     Select Case sKey
@@ -4401,28 +4386,30 @@ Private Sub Form_Unload(Cancel As Integer)
 End Sub
 
 Sub lblAddCurrentKey_Click()
-    Dim i As Integer
+    Dim keys As Collection
+    Dim item As Variant
     Dim s As String
     
-    s = CDKeyReplacements(cboCDKey.Text)
+    s = UCase$(CDKeyReplacements(txtCdKey.Text))
     
-    If cboCDKey.ListCount > -1 Then
-        For i = 0 To cboCDKey.ListCount
-            If StrComp(cboCDKey.List(i), s, vbTextCompare) = 0 Then
-                Exit Sub
-            End If
-        Next i
-    End If
+    ' Load the list and if it's already there, do nothing.
+    Set keys = ListFileLoad(GetFilePath("Keys.txt"))
+    For Each item In keys
+        If StrComp(CStr(item), s, vbTextCompare) = 0 Then Exit Sub
+    Next
     
-    cboCDKey.AddItem s
+    ' Add the key
+    keys.Add s
+    
+    ' Save the list
+    ListFileSave GetFilePath("Keys.txt"), keys
 End Sub
 
 Private Sub lblManageKeys_Click()
-    If LenB(cboCDKey.Text) > 0 Then
+    If LenB(txtCdKey.Text) > 0 Then
         Call lblAddCurrentKey_Click
     End If
     
-    Call WriteCDKeys(cboCDKey)
     frmManageKeys.Show
 End Sub
 
@@ -4538,10 +4525,10 @@ Private Function SaveSettings() As Boolean
         'Case optCHAT.Value: s = "CHAT"
     End Select
     
-    If Not DoCDKeyLengthCheck(cboCDKey.Text, s) Then
+    If Not DoCDKeyLengthCheck(txtCdKey.Text, s) Then
         If MsgBox("Your CD key is of an invalid Length for the product you have chosen. Do you want to save anyway?", vbExclamation + vbYesNo, "StealthBot Settings") = vbNo Then
             ShowPanel spConnectionConfig
-            cboCDKey.SetFocus
+            txtCdKey.SetFocus
             SaveSettings = False
             Exit Function
         End If
@@ -4561,7 +4548,7 @@ Private Function SaveSettings() As Boolean
     '// The rest of the basic config now
     WINI "Username", txtUsername.Text, secMain
     WINI "Password", txtPassword.Text, secMain
-    WINI "CDKey", CDKeyReplacements(cboCDKey.Text), secMain
+    WINI "CDKey", CDKeyReplacements(txtCdKey.Text), secMain
     WINI "ExpKey", CDKeyReplacements(txtExpKey.Text), secMain
     WINI "LODKey", vbNullString, secMain
     WINI "HomeChan", txtHomeChan.Text, secMain
@@ -4857,9 +4844,6 @@ Private Function SaveSettings() As Boolean
     
     SaveFontSettings
     
-    '// Store cdkeys
-    Call WriteCDKeys(cboCDKey)
-    
     SaveSettings = True
 End Function
 
@@ -5063,13 +5047,13 @@ Sub optSTAR_Click()
     chkSHR.Visible = True
     chkSpawn.Visible = True
     chkJPN.Visible = True
-    cboCDKey.Enabled = True
+    txtCdKey.Enabled = True
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     If (chkSHR.Value) Then
         lblHashPath.Caption = GetGamePath("RHSS")
         chkSpawn.Visible = False
-        cboCDKey.Enabled = False
+        txtCdKey.Enabled = False
     ElseIf (chkJPN.Value) Then
         lblHashPath.Caption = GetGamePath("RTSJ")
     Else
@@ -5082,7 +5066,7 @@ Sub optWAR3_Click()
     chkSHR.Visible = False
     chkSpawn.Visible = False
     chkJPN.Visible = False
-    cboCDKey.Enabled = True
+    txtCdKey.Enabled = True
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     lblHashPath.Caption = GetGamePath("3RAW")
@@ -5093,7 +5077,7 @@ Sub optD2DV_Click()
     chkSHR.Visible = False
     chkSpawn.Visible = False
     chkJPN.Visible = False
-    cboCDKey.Enabled = True
+    txtCdKey.Enabled = True
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = True
     lblHashPath.Caption = GetGamePath("VD2D")
@@ -5104,7 +5088,7 @@ Sub optW2BN_Click()
     chkSHR.Visible = False
     chkSpawn.Visible = True
     chkJPN.Visible = False
-    cboCDKey.Enabled = True
+    txtCdKey.Enabled = True
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     lblHashPath.Caption = GetGamePath("NB2W")
@@ -5115,7 +5099,7 @@ Sub optSEXP_Click()
     chkSHR.Visible = False
     chkSpawn.Visible = False
     chkJPN.Visible = False
-    cboCDKey.Enabled = True
+    txtCdKey.Enabled = True
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     lblHashPath.Caption = GetGamePath("RATS")
@@ -5126,7 +5110,7 @@ Sub optD2XP_Click()
     chkSHR.Visible = False
     chkSpawn.Visible = False
     chkJPN.Visible = False
-    cboCDKey.Enabled = True
+    txtCdKey.Enabled = True
     txtExpKey.Enabled = True
     chkUseRealm.Enabled = True
     lblHashPath.Caption = GetGamePath("PX2D")
@@ -5137,7 +5121,7 @@ Sub optW3XP_Click()
     chkSHR.Visible = False
     chkSpawn.Visible = False
     chkJPN.Visible = False
-    cboCDKey.Enabled = True
+    txtCdKey.Enabled = True
     txtExpKey.Enabled = True
     chkUseRealm.Enabled = False
     lblHashPath.Caption = GetGamePath("PX3W")
@@ -5148,7 +5132,7 @@ Sub optDRTL_Click()
     chkSHR.Visible = True
     chkSpawn.Visible = False
     chkJPN.Visible = False
-    cboCDKey.Enabled = False
+    txtCdKey.Enabled = False
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     If (chkSHR.Value) Then
@@ -5178,7 +5162,7 @@ Private Sub chkSHR_Click()
     If (Checked) Then chkJPN.Value = vbUnchecked
     If (optSTAR.Value) Then
         chkSpawn.Visible = Not Checked
-        cboCDKey.Enabled = Not Checked
+        txtCdKey.Enabled = Not Checked
         If (Checked) Then
             lblHashPath.Caption = GetGamePath("RHSS")
         Else
@@ -5303,7 +5287,7 @@ Private Sub InitBasicConfig()
     
     txtUsername.Text = ReadCfg(MN, "Username")
     txtPassword.Text = ReadCfg(MN, "Password")
-    cboCDKey.Text = ReadCfg(MN, "CDKey")
+    txtCdKey.Text = ReadCfg(MN, "CDKey")
     
     ' Backwards compatibility for old LODKey config entry -a
     txtExpKey.Text = ReadCfg(MN, "ExpKey")
