@@ -216,10 +216,10 @@ Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Inte
             Case "W2BN": GetVerByte = &H4F
             Case "STAR": GetVerByte = &HD3
             Case "SEXP": GetVerByte = &HD3
-            Case "D2DV": GetVerByte = &HD
-            Case "D2XP": GetVerByte = &HD
-            Case "W3XP": GetVerByte = &H18
-            Case "WAR3": GetVerByte = &H18
+            Case "D2DV": GetVerByte = &HE
+            Case "D2XP": GetVerByte = &HE
+            Case "W3XP": GetVerByte = &H1B
+            Case "WAR3": GetVerByte = &H1B
             Case "DRTL": GetVerByte = &H2A
             Case "DSHR": GetVerByte = &H2A
             Case "JSTR": GetVerByte = &HA9
@@ -534,7 +534,7 @@ Public Sub APISend(ByRef s As String) '// faster API-based sending for EFP
     
     i = Len(s) + 5
     
-    Call Send(frmChat.sckBNet.SocketHandle, "ˇ" & "" & Chr(i) & _
+    Call Send(frmChat.sckBNet.SocketHandle, "√ø" & "" & Chr(i) & _
         Chr(0) & s & Chr(0), i, 0)
 End Sub
 
@@ -1868,7 +1868,7 @@ End Function
 Public Function IrrelevantWhisper(ByVal sIn As String, ByVal sUser As String) As Boolean
     IrrelevantWhisper = False
     
-    If InStr(sIn, "ﬂ~ﬂ") Then
+    If InStr(sIn, "√ü~√ü") Then
         IrrelevantWhisper = True
         Exit Function
     End If
@@ -2234,9 +2234,9 @@ On Error GoTo ERROR_HANDLER:
                     sValue = Split(sTemp & " -", " -")(0)
                     sTemp = Mid$(sTemp, Len(sValue) + 2)
                 End If
-                sRet = StringFormat("{0}¡YThe StealthBot Profile Launcher had and error!|", sRet)
+                sRet = StringFormat("{0}√ÅYThe StealthBot Profile Launcher had and error!|", sRet)
                 If (LenB(sValue) > 0) Then
-                    sRet = StringFormat("{0}¡YOpen {1} for more information|", sRet, sValue)
+                    sRet = StringFormat("{0}√ÅYOpen {1} for more information|", sRet, sValue)
                 End If
                 
                 CommandLine = StringFormat("{0}-launchererror {1}{2}{1} ", CommandLine, Chr$(34), sValue)
