@@ -29,35 +29,27 @@ Option Explicit
 '  DLL Imports
 '---------------------------
 
-' Library Information
-Public Declare Function BNCSutil_getVersion Lib "BNCSutil.dll" () As Long
-Public Declare Function BNCSutil_getVersionString_Raw Lib "BNCSutil.dll" _
-    Alias "BNCSutil_getVersionString" (ByVal outbuf As String) As Long
-
 ' CheckRevision
-Public Declare Function extractMPQNumber Lib "BNCSutil.dll" _
+Private Declare Function extractMPQNumber Lib "BNCSutil.dll" _
     (ByVal MPQName As String) As Long
 ' [!] You should use checkRevision and getExeInfo (see below) instead of their
 '     _Raw counterparts.
-Public Declare Function checkRevision_Raw Lib "BNCSutil.dll" Alias "checkRevisionFlat" _
+Private Declare Function checkRevision_Raw Lib "BNCSutil.dll" Alias "checkRevisionFlat" _
     (ByVal ValueString As String, ByVal File1 As String, ByVal File2 As String, _
      ByVal File3 As String, ByVal mpqNumber As Long, ByRef Checksum As Long) As Long
-Public Declare Function getExeInfo_Raw Lib "BNCSutil.dll" Alias "getExeInfo" _
+Private Declare Function getExeInfo_Raw Lib "BNCSutil.dll" Alias "getExeInfo" _
     (ByVal FileName As String, ByVal exeInfoString As String, _
     ByVal infoBufferSize As Long, Version As Long, ByVal Platform As Long) As Long
 
 ' Old Logon System
 ' [!] You should use doubleHashPassword and hashPassword instead of their
 '     _Raw counterparts.  (See below for those functions.)
-Public Declare Sub doubleHashPassword_Raw Lib "BNCSutil.dll" Alias "doubleHashPassword" _
-    (ByVal Password As String, ByVal ClientToken As Long, ByVal ServerToken As Long, _
+Private Declare Sub doubleHashPassword_Raw Lib "BNCSutil.dll" Alias "doubleHashPassword" _
+    (ByVal Password As String, ByVal clientToken As Long, ByVal serverToken As Long, _
     ByVal outBuffer As String)
-Public Declare Sub hashPassword_Raw Lib "BNCSutil.dll" Alias "hashPassword" _
+Private Declare Sub hashPassword_Raw Lib "BNCSutil.dll" Alias "hashPassword" _
     (ByVal Password As String, ByVal outBuffer As String)
 
-' Broken SHA-1
-Public Declare Sub calcHashBuf Lib "BNCSutil.dll" _
-    (ByVal Data As String, ByVal length As Long, ByVal Hash As String)
 
 ' CD-Key Decoding
 
@@ -68,30 +60,8 @@ Public Declare Sub calcHashBuf Lib "BNCSutil.dll" _
 ' Call kd_free() on the handle when finished with the decoder to free the
 ' memory it is using.
 
-Public Declare Function kd_quick Lib "BNCSutil.dll" _
-    (ByVal CDKey As String, ByVal ClientToken As Long, ByVal ServerToken As Long, _
-    PublicValue As Long, Product As Long, ByVal HashBuffer As String, ByVal BufferLen As Long) As Long
-Public Declare Function kd_init Lib "BNCSutil.dll" () As Long
-Public Declare Function kd_create Lib "BNCSutil.dll" _
-    (ByVal CDKey As String, ByVal keyLength As Long) As Long
-Public Declare Function kd_free Lib "BNCSutil.dll" _
-    (ByVal decoder As Long) As Long
-Public Declare Function kd_val2Length Lib "BNCSutil.dll" _
-    (ByVal decoder As Long) As Long
-Public Declare Function kd_product Lib "BNCSutil.dll" _
-    (ByVal decoder As Long) As Long
-Public Declare Function kd_val1 Lib "BNCSutil.dll" _
-    (ByVal decoder As Long) As Long
-Public Declare Function kd_val2 Lib "BNCSutil.dll" _
-    (ByVal decoder As Long) As Long
-Public Declare Function kd_longVal2 Lib "BNCSutil.dll" _
-    (ByVal decoder As Long, ByVal Out As String) As Long
-Public Declare Function kd_calculateHash Lib "BNCSutil.dll" _
-    (ByVal decoder As Long, ByVal ClientToken As Long, ByVal ServerToken As Long) As Long
-Public Declare Function kd_getHash Lib "BNCSutil.dll" _
-    (ByVal decoder As Long, ByVal Out As String) As Long
-Public Declare Function kd_isValid Lib "BNCSutil.dll" _
-    (ByVal decoder As Long) As Long
+' Key decoding declarations and logic moved to clsKeyDecoder. (2016-3-26, -Pyro)
+
     
 'New Logon System
 
@@ -103,39 +73,9 @@ Public Declare Function kd_isValid Lib "BNCSutil.dll" _
 ' nls_account_create() and nls_account_logon() generate the bodies of
 ' SID_AUTH_ACCOUNTCREATE and SID_AUTH_ACCOUNTLOGIN packets, respectively.
 
-Public Declare Function nls_init Lib "BNCSutil.dll" _
-    (ByVal Username As String, ByVal Password As String) As Long 'really returns a POINTER!
-Public Declare Function nls_init_l Lib "BNCSutil.dll" _
-    (ByVal Username As String, ByVal Username_Length As Long, _
-    ByVal Password As String, ByVal Password_Length As Long) As Long
-Public Declare Function nls_reinit Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Username As String, ByVal Password As String) As Long
-Public Declare Function nls_reinit_l Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Username As String, ByVal Username_Length As Long, _
-    ByVal Password As String, ByVal Password_Length As Long) As Long
-Public Declare Sub nls_free Lib "BNCSutil.dll" _
-    (ByVal NLS As Long)
-Public Declare Function nls_account_create Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Buffer As String, ByVal BufLen As Long) As Long
-Public Declare Function nls_account_logon Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Buffer As String, ByVal BufLen As Long) As Long
-Public Declare Sub nls_get_A Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Out As String)
-Public Declare Sub nls_get_M1 Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Out As String, ByVal B As String, ByVal Salt As String)
-Public Declare Sub nls_get_v Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Out As String, ByVal Salt As String)
-Public Declare Function nls_check_M2 Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal M2 As String, ByVal B As String, ByVal Salt As String) As Long
-Public Declare Function nls_check_signature Lib "BNCSutil.dll" _
-    (ByVal Address As Long, ByVal Signature As String) As Long
-Public Declare Function nls_account_change_proof Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Buffer As String, ByVal NewPassword As String, _
-    ByVal B As String, ByVal Salt As String) As Long 'returns a new NLS pointer for the new password
-Public Declare Sub nls_get_S Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Out As String, ByVal B As String, ByVal Salt As String)
-Public Declare Sub nls_get_K Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Out As String, ByVal s As String)
+' Logon system declarations and logic moved to clsNLS.
+
+
     
 '  Constants
 '---------------------------

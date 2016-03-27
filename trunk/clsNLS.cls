@@ -18,6 +18,40 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+
+' BNCSutil.dll functions
+Private Declare Function nls_init Lib "BNCSutil.dll" _
+    (ByVal Username As String, ByVal Password As String) As Long    ' returns a pointer
+    
+Private Declare Sub nls_free Lib "BNCSutil.dll" _
+    (ByVal NLS As Long)
+    
+Private Declare Sub nls_get_A Lib "BNCSutil.dll" _
+    (ByVal NLS As Long, ByVal Out As String)
+    
+Private Declare Sub nls_get_M1 Lib "BNCSutil.dll" _
+    (ByVal NLS As Long, ByVal Out As String, ByVal B As String, ByVal Salt As String)
+    
+Private Declare Sub nls_get_v Lib "BNCSutil.dll" _
+    (ByVal NLS As Long, ByVal Out As String, ByVal Salt As String)
+    
+Private Declare Function nls_check_M2 Lib "BNCSutil.dll" _
+    (ByVal NLS As Long, ByVal M2 As String, ByVal B As String, ByVal Salt As String) As Long
+
+Private Declare Function nls_check_signature Lib "BNCSutil.dll" _
+    (ByVal Address As Long, ByVal Signature As String) As Long
+    
+Private Declare Sub nls_get_S Lib "BNCSutil.dll" _
+    (ByVal NLS As Long, ByVal Out As String, ByVal B As String, ByVal Salt As String)
+    
+Private Declare Sub nls_get_K Lib "BNCSutil.dll" _
+    (ByVal NLS As Long, ByVal Out As String, ByVal s As String)
+    
+Private Declare Function nls_account_change_proof Lib "BNCSutil.dll" _
+    (ByVal NLS As Long, ByVal Buffer As String, ByVal NewPassword As String, _
+    ByVal B As String, ByVal Salt As String) As Long 'returns a new NLS pointer for the new password
+    
+
 Private m_NlsHandle As Long
 Private m_NewNlsHandle As Long
 Private m_OldNlsHandle As Long
