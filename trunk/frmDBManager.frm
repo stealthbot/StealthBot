@@ -193,8 +193,8 @@ Begin VB.Form frmDBManager
          Left            =   240
          TabIndex        =   18
          Top             =   2520
-         Width           =   2565
-         _ExtentX        =   4524
+         Width           =   2535
+         _ExtentX        =   4471
          _ExtentY        =   2328
          View            =   3
          LabelEdit       =   1
@@ -470,7 +470,7 @@ Private Sub Form_Load()
     Me.Icon = frmChat.Icon
     
     ' this line is gay but for some reason I can't set the ImageList for vbalTV in the designer/VB properties -Ribose
-    'trvUsers.ImageList = icons.hImageList
+    trvUsers.ImageList = icons.hImageList
     'TODO get images, because i broke the imagelist we had... :(
     
     ' has our database been loaded?
@@ -859,7 +859,9 @@ Private Function PlaceNewNode(EntryName As String, EntryType As String, EntryIma
 End Function
 
 Private Sub btnCancel_Click()
-    Call Unload(frmDBManager)
+    m_modified = False
+    
+    Unload Me
 End Sub
 
 Private Sub btnSaveUser_Click()
