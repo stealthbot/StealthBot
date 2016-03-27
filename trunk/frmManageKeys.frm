@@ -283,15 +283,15 @@ Private Sub AddItem(ByVal Text As String, ByVal image As Integer)
 End Sub
 
 ' Extracts the product code from a CD key (using BNCSutil)
-Private Function GetKeyProduct(ByVal key As String) As Long
-    Dim result As Long
-    result = kd_create(key, Len(key))
-    If (kd_isValid(result) = 0) Then
+Private Function GetKeyProduct(ByVal Key As String) As Long
+    Dim oKey As New clsKeyDecoder
+    oKey.Initialize Key
+    If Not oKey.IsValid Then
         GetKeyProduct = -1
     Else
-        GetKeyProduct = kd_product(result)
+        GetKeyProduct = oKey.Product
     End If
-    Call kd_free(result)
+    Set oKey = Nothing
 End Function
 
 ' Returns the image used to identify the key.
