@@ -758,22 +758,14 @@ End Sub
 '*******************************
 Public Sub SEND_SID_CDKEY()
 On Error GoTo ERROR_HANDLER:
-    Dim lResult  As Long
-    
+    Dim oKey As New clsKeyDecoder
     Dim pBuff As New clsDataBuffer
     
-    lResult = kd_init()
-    
-    If (lResult = 0) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "BNCSUtil: kd_init() failed! Please use BNLS to connect."
+    oKey.Initialize BotVars.CDKey
+    If Not oKey.IsValid Then
+        frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
         frmChat.DoDisconnect
-    Else
-        lResult = kd_create(BotVars.CDKey, Len(BotVars.CDKey))
-        If (kd_isValid(lResult) = 0) Then
-            frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
-            frmChat.DoDisconnect
-        End If
-        Call kd_free(lResult)
+        Exit Sub
     End If
     
     With pBuff
@@ -787,7 +779,9 @@ On Error GoTo ERROR_HANDLER:
         End If
         .SendPacket SID_CDKEY
     End With
+    
     Set pBuff = Nothing
+    Set oKey = Nothing
     
     Exit Sub
 ERROR_HANDLER:
@@ -845,52 +839,27 @@ End Sub
 '*******************************
 Public Sub SEND_SID_CDKEY2()
 On Error GoTo ERROR_HANDLER:
-    Dim sHash    As String
-    Dim lResult  As Long
-    Dim lProduct As Long
-    Dim lPrivate As Long
-    Dim lPublic  As Long
-    
+    Dim oKey     As New clsKeyDecoder
     Dim pBuff As New clsDataBuffer
     
-    lResult = kd_init()
-    
-    If (lResult = 0) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "BNCSUtil: kd_init() failed! Please use BNLS to connect."
+    oKey.Initialize BotVars.CDKey
+    If Not oKey.IsValid Then
+        frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
         frmChat.DoDisconnect
-    Else
-        lResult = kd_create(BotVars.CDKey, Len(BotVars.CDKey))
-        If (kd_isValid(lResult) = 0) Then
-            frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
-            frmChat.DoDisconnect
-        Else
-            lProduct = kd_product(lResult)
-            lPublic = kd_val1(lResult)
-            lPrivate = kd_val2(lResult)
-            Call kd_free(lResult)
-            
-            With pBuff
-                .InsertDWord ds.ClientToken
-                .InsertDWord ds.ServerToken
-                .InsertDWord lProduct
-                .InsertDWord lPublic
-                .InsertDWord lPrivate
-                sHash = String$(20, 0)
-                Call modBNCSutil.calcHashBuf(.Data, 20, sHash)
-                .Clear
-            End With
-        End If
+        Exit Sub
     End If
+
+    If Not oKey.CalculateHash(ds.clientToken, ds.serverToken) Then Exit Sub
     
     With pBuff
         .InsertDWord IIf(ReadCfg$("Override", "SpawnKey") = "Y", 1, 0)
-        .InsertDWord Len(BotVars.CDKey)
+        .InsertDWord oKey.KeyLength
         
-        .InsertDWord lProduct
-        .InsertDWord lPublic
-        .InsertDWord ds.ServerToken
-        .InsertDWord ds.ClientToken
-        .InsertNonNTString sHash
+        .InsertDWord oKey.Product
+        .InsertDWord oKey.PublicValue
+        .InsertDWord ds.serverToken
+        .InsertDWord ds.clientToken
+        .InsertNonNTString oKey.Hash
         
         If (LenB(ReadCfg("Override", "OwnerName")) > 0) Then
             .InsertNTString ReadCfg("Override", "OwnerName")
@@ -899,7 +868,9 @@ On Error GoTo ERROR_HANDLER:
         End If
         .SendPacket SID_CDKEY2
     End With
+    
     Set pBuff = Nothing
+    Set oKey = Nothing
     
     Exit Sub
 ERROR_HANDLER:
@@ -1405,9 +1376,7 @@ On Error GoTo ERROR_HANDLER:
     Dim i        As Long
     Dim keys     As Long
     Dim sKey     As String
-    Dim sKeyHash As String
-    Dim lKeyPub  As Long
-    Dim lKeyProd As Long
+    Dim oKey     As New clsKeyDecoder
     
     If (Not BotVars.BNLS) Then
         If (Not CompileCheckrevision()) Then
@@ -1440,14 +1409,22 @@ On Error GoTo ERROR_HANDLER:
                 sKey = ReadCfg$("Main", StringFormat("CDKey{0}", i))
             End If
             
-            Call DecodeCDKey(sKey, ds.ServerToken, ds.ClientToken, sKeyHash, lKeyPub, lKeyProd)
-            If (LenB(sKeyHash) = 0) Then Exit Sub 'hash failed
+            'Initialize the key decoder and validate the key.
+            oKey.Initialize sKey
+            If Not oKey.IsValid Then
+                frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
+                frmChat.DoDisconnect
+                Exit Sub
+            End If
             
-            .InsertDWord Len(sKey)
-            .InsertDWord lKeyProd
-            .InsertDWord lKeyPub
+            'Calculate the hash
+            If Not oKey.CalculateHash(ds.clientToken, ds.serverToken) Then Exit Sub
+            
+            .InsertDWord oKey.KeyLength
+            .InsertDWord oKey.Product
+            .InsertDWord oKey.PublicValue
             .InsertDWord 0
-            .InsertNonNTString sKeyHash
+            .InsertNonNTString oKey.Hash
         Next i
         
         .InsertNTString ds.CRevResult
@@ -1461,6 +1438,7 @@ On Error GoTo ERROR_HANDLER:
     End With
 
     Set pBuff = Nothing
+    Set oKey = Nothing
     
     Exit Sub
 ERROR_HANDLER:
