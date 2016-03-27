@@ -4396,22 +4396,32 @@ End Sub
 
 Sub lblAddCurrentKey_Click()
     Dim keys As Collection
-    Dim item As Variant
-    Dim s As String
+    Dim Item As Variant
+    Dim key1 As String
+    Dim key2 As String
     
-    s = UCase$(CDKeyReplacements(txtCdKey.Text))
-    
-    ' Load the list and if it's already there, do nothing.
+    ' Load the list
     Set keys = ListFileLoad(GetFilePath("Keys.txt"))
-    For Each item In keys
-        If StrComp(CStr(item), s, vbTextCompare) = 0 Then Exit Sub
-    Next
     
-    ' Add the key
-    keys.Add s
+    key1 = UCase$(CDKeyReplacements(txtCdKey.Text))
+    key2 = UCase$(CDKeyReplacements(txtExpKey.Text))
+    
+    ' if it's already there, do nothing.
+    For Each Item In keys
+        If StrComp(CStr(Item), key1, vbTextCompare) = 0 Then key1 = vbNullString
+        If StrComp(CStr(Item), key2, vbTextCompare) = 0 Then key2 = vbNullString
+    Next Item
+    
+    ' Add the keys
+    If LenB(key1) > 0 Then keys.Add key1
+    If LenB(key2) > 0 Then keys.Add key2
     
     ' Save the list
-    ListFileSave GetFilePath("Keys.txt"), keys
+    If LenB(key1) > 0 Or LenB(key2) > 0 Then
+        ListFileSave GetFilePath("Keys.txt"), keys
+    End If
+    
+    Set keys = Nothing
 End Sub
 
 Private Sub lblManageKeys_Click()

@@ -298,7 +298,7 @@ Private Function GetKeyProduct(ByVal Key As String) As Long
     If Not oKey.IsValid Then
         GetKeyProduct = -1
     Else
-        GetKeyProduct = oKey.Product
+        GetKeyProduct = oKey.ProductValue
     End If
     Set oKey = Nothing
 End Function

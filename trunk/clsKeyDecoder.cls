@@ -66,6 +66,8 @@ Private m_HashSize As Long  ' The size of the returned hash.
 
 ' Performs initial key analysis
 Public Function Initialize(ByVal strCdKey As String) As Boolean
+    strCdKey = UCase$(CDKeyReplacements(strCdKey))
+
     If m_Result = -1 Then
         m_Result = kd_init()
     End If
@@ -100,8 +102,8 @@ Public Property Get KeyLength() As Integer
 End Property
 
 ' Returns the key's product value
-Public Property Get Product() As Long
-    Product = kd_product(m_Handle)
+Public Property Get ProductValue() As Long
+    ProductValue = kd_product(m_Handle)
 End Property
 
 ' Returns the key's public value
@@ -131,20 +133,47 @@ Public Function CalculateHash(ByVal clientToken As Long, ByVal serverToken As Lo
     CalculateHash = CBool(m_HashSize > 0)
 End Function
 
+' Returns the product to use with this key (if known).
+Public Function GetProduct() As String
+    Dim prodData() As Variant
+    
+    GetProduct = vbNullString
+    
+    If ProductValue < 1 Or Not m_ProductLookup.Exists(ProductValue) Then
+        Exit Function
+    End If
+    
+    prodData = m_ProductLookup.Item(ProductValue)
+    GetProduct = CStr(prodData(0))
+End Function
+
 ' Returns a human-friendly version of the key's product value.
 Public Function GetProductName() As String
-    If Product < 1 Then
+    Dim prodData() As Variant
+    
+    If ProductValue < 1 Then
         GetProductName = "Invalid"
         Exit Function
     End If
-    If Not m_ProductLookup.Exists(Product) Then
+    
+    If Not m_ProductLookup.Exists(ProductValue) Then
         GetProductName = "Unrecognized product"
         Exit Function
     End If
     
-    GetProductName = m_ProductLookup.Item(Product)
+    prodData = m_ProductLookup.Item(ProductValue)
+    GetProductName = CStr(prodData(1))
 End Function
 
+' Returns the key for display (with "-"'s)
+Public Function GetKeyForDisplay() As String
+    Select Case KeyLength
+        Case 13: GetKeyForDisplay = Mid$(Key, 1, 4) & "-" & Mid$(Key, 5, 5) & "-" & Mid$(Key, 10, 4)
+        Case 16: GetKeyForDisplay = Mid$(Key, 1, 4) & "-" & Mid$(Key, 5, 4) & "-" & Mid$(Key, 9, 4) & "-" & Mid$(Key, 13, 4)
+        Case 26: GetKeyForDisplay = Mid$(Key, 1, 6) & "-" & Mid$(Key, 7, 4) & "-" & Mid$(Key, 11, 6) & "-" & Mid$(Key, 17, 4) & "-" & Mid$(Key, 21, 6)
+        Case Else: GetKeyForDisplay = Key
+    End Select
+End Function
 
 Private Sub Class_Initialize()
     'Default values
@@ -155,26 +184,31 @@ Private Sub Class_Initialize()
     
     'Create product name lookup dictionary
     Set m_ProductLookup = New Dictionary
-    m_ProductLookup.Add &H1, "StarCraft"
-    m_ProductLookup.Add &H2, "StarCraft"
-    m_ProductLookup.Add &H4, "WarCraft II"
-    m_ProductLookup.Add &H5, "Diablo II Beta"
-    m_ProductLookup.Add &H6, "Diablo II"
-    m_ProductLookup.Add &H7, "Diablo II"
-    m_ProductLookup.Add &H9, "Diablo II Stress Test"
-    m_ProductLookup.Add &HA, "Diablo II: Lord of Destruction"
-    m_ProductLookup.Add &HC, "Diablo II: Lord of Destruction"
-    m_ProductLookup.Add &HD, "WarCraft III: Reign of Chaos Beta"
-    m_ProductLookup.Add &HE, "WarCraft III: Reign of Chaos"
-    m_ProductLookup.Add &HF, "WarCraft III: Reign of Chaos"
-    m_ProductLookup.Add &H11, "WarCraft III: The Frozen Throne Beta"
-    m_ProductLookup.Add &H12, "WarCraft III: The Frozen Throne"
-    m_ProductLookup.Add &H13, "WarCraft III: The Frozen Throne Retail"
-    m_ProductLookup.Add &H17, "StarCraft Anthology"
-    m_ProductLookup.Add &H18, "Diablo II Digital Download"
-    m_ProductLookup.Add &H19, "Diablo II: Lord of Destruction Digital Download"
+    m_ProductLookup.Add &H1, Array("STAR", "StarCraft") '13
+    m_ProductLookup.Add &H2, Array("STAR", "StarCraft") '13
+    m_ProductLookup.Add &H4, Array("W2BN", "WarCraft II") '16
+    m_ProductLookup.Add &H5, Array("D2DV", "Diablo II Beta") '16
+    m_ProductLookup.Add &H6, Array("D2DV", "Diablo II") '16
+    m_ProductLookup.Add &H7, Array("D2DV", "Diablo II") '16
+    m_ProductLookup.Add &H9, Array("D2DV", "Diablo II Stress Test") '16
+    m_ProductLookup.Add &HA, Array("D2XP", "Diablo II: Lord of Destruction") '16
+    m_ProductLookup.Add &HC, Array("D2XP", "Diablo II: Lord of Destruction") '16
+    m_ProductLookup.Add &HD, Array("WAR3", "WarCraft III: Reign of Chaos Beta") '26
+    m_ProductLookup.Add &HE, Array("WAR3", "WarCraft III: Reign of Chaos") '26
+    m_ProductLookup.Add &HF, Array("WAR3", "WarCraft III: Reign of Chaos") '26
+    m_ProductLookup.Add &H11, Array("W3XP", "WarCraft III: The Frozen Throne Beta") '26
+    m_ProductLookup.Add &H12, Array("W3XP", "WarCraft III: The Frozen Throne") '26
+    m_ProductLookup.Add &H13, Array("W3XP", "WarCraft III: The Frozen Throne Retail") '26
+    m_ProductLookup.Add &H17, Array("STAR", "StarCraft Anthology") '26
+    m_ProductLookup.Add &H18, Array("D2DV", "Diablo II Digital Download") '26
+    m_ProductLookup.Add &H19, Array("D2XP", "Diablo II: Lord of Destruction Digital Download") '26
 End Sub
 
+Private Function CDKeyReplacements(ByVal inString As String) As String
+    inString = Replace(inString, "-", "")
+    inString = Replace(inString, " ", "")
+    CDKeyReplacements = Trim$(inString)
+End Function
 
 Private Sub Class_Terminate()
     Call kd_free(m_Handle)

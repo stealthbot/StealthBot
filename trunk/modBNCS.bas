@@ -855,7 +855,7 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord IIf(ReadCfg$("Override", "SpawnKey") = "Y", 1, 0)
         .InsertDWord oKey.KeyLength
         
-        .InsertDWord oKey.Product
+        .InsertDWord oKey.ProductValue
         .InsertDWord oKey.PublicValue
         .InsertDWord ds.serverToken
         .InsertDWord ds.clientToken
@@ -1421,7 +1421,7 @@ On Error GoTo ERROR_HANDLER:
             If Not oKey.CalculateHash(ds.clientToken, ds.serverToken) Then Exit Sub
             
             .InsertDWord oKey.KeyLength
-            .InsertDWord oKey.Product
+            .InsertDWord oKey.ProductValue
             .InsertDWord oKey.PublicValue
             .InsertDWord 0
             .InsertNonNTString oKey.Hash
