@@ -165,6 +165,7 @@ Private Const FILE_KEY_STORAGE As String = "Keys.txt"
 
 Private KeyProducts As Dictionary
 
+Private m_editing As String
 
 Private Sub Form_Load()
     Me.Icon = frmChat.Icon
@@ -197,21 +198,26 @@ Private Sub Form_Load()
     KeyProducts.Add &H19, 6 ' D2XP (online upgrade)
     
     Call Local_LoadCDKeys
+    
+    If lvKeys.ListItems.Count > 0 Then
+        Set lvKeys.SelectedItem = lvKeys.ListItems(1)
+        lvKeys_Click
+    End If
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
-    'On Error Resume Next
+    On Error Resume Next
     frmChat.SettingsForm.Show
     frmChat.SettingsForm.SetFocus
 End Sub
 
-
 Private Sub cmdAdd_Click()
-    Dim s As String
     ProcessKey txtActiveKey.Text
     
+    m_editing = vbNullString
+    
     txtActiveKey.Text = vbNullString
-    txtActiveKey.SetFocus
+    lvKeys.SetFocus
 End Sub
 
 Private Sub cmdDelete_Click()
@@ -221,6 +227,11 @@ Private Sub cmdDelete_Click()
 End Sub
 
 Private Sub cmdDone_Click()
+    If LenB(m_editing) > 0 Then
+        ProcessKey m_editing
+        m_editing = vbNullString
+    End If
+    
     Call Local_WriteCDKeys
     
     Unload Me
@@ -229,9 +240,9 @@ End Sub
 Private Sub cmdSetKey_Click()
     If ((Not (frmChat.SettingsForm Is Nothing)) And (Not (lvKeys.SelectedItem Is Nothing))) Then
         If ((lvKeys.SelectedItem.SmallIcon = 6) Or (lvKeys.SelectedItem.SmallIcon = 8)) Then
-            frmChat.SettingsForm.txtExpKey.Text = lvKeys.SelectedItem.Text
+            frmChat.SettingsForm.txtExpKey.Text = lvKeys.SelectedItem.Tag
         Else
-            frmChat.SettingsForm.txtCdKey.Text = lvKeys.SelectedItem.Text
+            frmChat.SettingsForm.txtCdKey.Text = lvKeys.SelectedItem.Tag
         End If
         
         Call cmdDone_Click
@@ -240,8 +251,14 @@ End Sub
 
 Private Sub cmdEdit_Click()
     If Not (lvKeys.SelectedItem Is Nothing) Then
-        txtActiveKey.Text = lvKeys.SelectedItem.Text
+        m_editing = lvKeys.SelectedItem.Tag
         lvKeys.ListItems.Remove lvKeys.SelectedItem.Index
+        With txtActiveKey
+            .Text = m_editing
+            .SetFocus
+            .selStart = 0
+            .selLength = Len(.Text)
+        End With
     End If
 End Sub
 
@@ -258,6 +275,14 @@ Private Sub lvKeys_DblClick()
     Call cmdSetKey_Click
 End Sub
 
+Private Sub lvKeys_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn Then
+        Call cmdSetKey_Click
+    ElseIf KeyAscii = vbKeyEscape Then
+        Call cmdDone_Click
+    End If
+End Sub
+
 Private Sub txtActiveKey_GotFocus()
     cmdEdit.Enabled = False
     cmdDelete.Enabled = False
@@ -265,50 +290,68 @@ Private Sub txtActiveKey_GotFocus()
 End Sub
 
 Private Sub txtActiveKey_Change()
-    cmdAdd.Enabled = (Len(txtActiveKey.text) > 0)
+    cmdAdd.Enabled = (Len(txtActiveKey.Text) > 0)
+End Sub
+
+Private Sub txtActiveKey_KeyPress(KeyAscii As Integer)
+    If KeyAscii = vbKeyReturn And cmdAdd.Enabled Then
+        Call cmdAdd_Click
+    ElseIf KeyAscii = vbKeyEscape Then
+        If LenB(m_editing) > 0 Then
+            ProcessKey m_editing
+    
+            m_editing = vbNullString
+            
+            txtActiveKey.Text = vbNullString
+            lvKeys.SetFocus
+        ElseIf LenB(txtActiveKey.Text) > 0 Then
+            txtActiveKey.Text = vbNullString
+        Else
+            Call cmdDone_Click
+        End If
+    End If
 End Sub
 
 Private Sub ProcessKey(ByVal sKey As String)
-    sKey = UCase$(Trim$(sKey))
-    sKey = Replace(sKey, " ", "")
-    sKey = Replace(sKey, "-", "")
+    Dim oKey As New clsKeyDecoder
+    Dim KeyProduct As Long
     
-    AddUnique sKey, GetImageIndex(GetKeyProduct(sKey))
+    oKey.Initialize sKey
+    If Not oKey.IsValid Then
+        KeyProduct = -1
+    Else
+        KeyProduct = oKey.ProductValue
+    End If
+    
+    AddUnique oKey.GetKeyForDisplay(), GetImageIndex(KeyProduct), oKey.Key
+    
+    Set oKey = Nothing
 End Sub
 
 ' Adds the specified text and image while checking for duplicates
-Private Sub AddUnique(ByVal strNewValue As String, ByVal image As Integer)
-    Dim item As ListItem
-    For Each item In lvKeys.ListItems
-        If StrComp(item.Text, strNewValue, vbTextCompare) = 0 Then Exit Sub
-    Next
+Private Sub AddUnique(ByVal strNewValue As String, ByVal image As Integer, ByVal Tag As String)
+    Dim Item As ListItem
     
-    AddItem strNewValue, image
+    For Each Item In lvKeys.ListItems
+        If StrComp(Item.Tag, Tag, vbTextCompare) = 0 Then Exit Sub
+    Next Item
+    
+    AddItem strNewValue, image, Tag
 End Sub
 
 ' Adds the specified text and image regardless of duplicates
-Private Sub AddItem(ByVal Text As String, ByVal image As Integer)
-    lvKeys.ListItems.Add , , Text, , image
+Private Sub AddItem(ByVal Text As String, ByVal image As Integer, ByVal Tag As String)
+    With lvKeys.ListItems.Add(, , Text, , image)
+        .Tag = Tag
+    End With
 End Sub
-
-' Extracts the product code from a CD key (using BNCSutil)
-Private Function GetKeyProduct(ByVal Key As String) As Long
-    Dim oKey As New clsKeyDecoder
-    oKey.Initialize Key
-    If Not oKey.IsValid Then
-        GetKeyProduct = -1
-    Else
-        GetKeyProduct = oKey.ProductValue
-    End If
-    Set oKey = Nothing
-End Function
 
 ' Returns the image used to identify the key.
 Private Function GetImageIndex(ByVal productCode As Long) As Integer
     If productCode = -1 Then GetImageIndex = 1: Exit Function    ' invalid
     
     If KeyProducts.Exists(productCode) Then
-        GetImageIndex = KeyProducts.item(productCode)
+        GetImageIndex = KeyProducts.Item(productCode)
     Else
         GetImageIndex = 2   ' unrecognized
     End If
@@ -323,18 +366,20 @@ Private Sub Local_LoadCDKeys()
     For Each sKey In keys
         sKey = CStr(Trim(sKey))
         If Len(sKey) > 0 Then ProcessKey sKey
-    Next
+    Next sKey
 End Sub
 
 Private Sub Local_WriteCDKeys()
     Dim keys As Collection
-    Dim item As ListItem
+    Dim Item As ListItem
     
     Set keys = New Collection
     
-    For Each item In lvKeys.ListItems
-        keys.Add item.Text
-    Next
+    For Each Item In lvKeys.ListItems
+        keys.Add Item.Tag
+    Next Item
     
     ListFileSave GetFilePath(FILE_KEY_STORAGE), keys
+    
+    Set keys = Nothing
 End Sub
