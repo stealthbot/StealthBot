@@ -65,7 +65,7 @@ Private m_Key As String     ' The key supplied during initialization
 Private m_HashSize As Long  ' The size of the returned hash.
 
 ' Performs initial key analysis
-Public Sub Initialize(ByVal strCdKey As String)
+Public Function Initialize(ByVal strCdKey As String) As Boolean
     If m_Result = -1 Then
         m_Result = kd_init()
     End If
@@ -75,13 +75,14 @@ Public Sub Initialize(ByVal strCdKey As String)
             Call kd_free(m_Handle)
         End If
         m_Handle = kd_create(strCdKey, Len(strCdKey))
+        Initialize = True
     Else
-        Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unable to initialize CD key decoder.")
+        Initialize = False
     End If
 
     m_HashSize = 0
     m_Key = strCdKey
-End Sub
+End Function
 
 ' Returns true if the key was successfully validated
 Public Property Get IsValid() As Boolean

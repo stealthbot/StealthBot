@@ -1143,6 +1143,18 @@ Public Function VerifyServerSignature(ByVal IPAddress As String, ByVal ServerSig
     Set NLS = Nothing
 End Function
 
+'// CREATEKEYDECODER
+'// Creates a KeyDecoder object for decoding and hashing CD keys.
+Public Function CreateKeyDecoder(ByVal CdKey As String) As clsKeyDecoder
+    Dim KD As New clsKeyDecoder
+    
+    If KD.Initialize(CdKey) Then
+        Set CreateKeyDecoder = KD
+    End If
+    
+    Set KD = Nothing
+End Function
+
 '// GETSCRIPTMODULE
 '// Returns the currently executing script module object
 '// PARAMETERS
