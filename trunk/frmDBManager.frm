@@ -129,7 +129,6 @@ Begin VB.Form frmDBManager
       BackColor       =   10040064
       ForeColor       =   16777215
       HotTracking     =   0   'False
-      Style           =   5
       OLEDropMode     =   1
       OLEDragMode     =   1
       DragAutoExpand  =   -1
@@ -654,7 +653,7 @@ Private Sub btnCreateUser_Click()
     
     Call frmDBNameEntry.Show(vbModal, frmDBManager)
     
-    If (m_entryname <> vbNullString) Then
+    If (LenB(m_entryname) > 0) Then
     
         Username = m_entryname
     
@@ -701,7 +700,7 @@ Private Sub btnCreateGroup_Click()
     
     Call frmDBNameEntry.Show(vbModal, frmDBManager)
     
-    If (m_entryname <> vbNullString) Then
+    If (LenB(m_entryname) > 0) Then
     
         GroupName = m_entryname
     
@@ -747,7 +746,7 @@ Sub btnCreateClan_Click()
     
     Call frmDBNameEntry.Show(vbModal, frmDBManager)
     
-    If (m_entryname <> vbNullString) Then
+    If (LenB(m_entryname) > 0) Then
     
         ClanName = m_entryname
     
@@ -790,7 +789,8 @@ Sub btnCreateGame_Click()
     
     Call frmDBGameSelection.Show(vbModal, frmDBManager)
     
-    If (m_entryname <> vbNullString) Then
+    If (LenB(m_entryname) > 0) Then
+    
         GameEntry = m_entryname
         
         If (GetAccess(GameEntry, "GAME").Username = vbNullString) Then
@@ -908,19 +908,21 @@ Private Sub btnSaveUser_Click()
                     ' generate new groups string
                     NewGroups = vbNullString
                     
-                    For j = 1 To lvGroups.ListItems.Count
-                        With lvGroups.ListItems(j)
-                            If .Checked And Not .Ghosted Then
-                                If .ForeColor = vbYellow Then
-                                    ' place first
-                                    NewGroups = .Text & "," & NewGroups
-                                Else
-                                    ' append
-                                    NewGroups = NewGroups & .Text & ","
+                    If lvGroups.Checkboxes Then
+                        For j = 1 To lvGroups.ListItems.Count
+                            With lvGroups.ListItems(j)
+                                If .Checked And Not .Ghosted Then
+                                    If .ForeColor = vbYellow Then
+                                        ' place first
+                                        NewGroups = .Text & "," & NewGroups
+                                    Else
+                                        ' append
+                                        NewGroups = NewGroups & .Text & ","
+                                    End If
                                 End If
-                            End If
-                        End With
-                    Next j
+                            End With
+                        Next j
+                    End If
                     
                     ' if ends with ",", trim it
                     If (Len(NewGroups) > 1) Then
@@ -1193,6 +1195,7 @@ Private Sub QueryRenameEvent(Target As cTreeViewNode)
             Call frmDBNameEntry.Show(vbModal, frmDBManager)
             
             If HandleRenameEvent(Target, m_entryname) Then
+            
                 If LenB(m_entryname) > 0 Then
                     Target.Text = m_entryname
                     trvUsers.Refresh
@@ -1205,6 +1208,7 @@ Private Sub QueryRenameEvent(Target As cTreeViewNode)
                         Call HandleSaved
                     End If
                 End If
+            
             Else
                 ' alert user that entry already exists
                 MsgBox "There is already an entry of this type matching " & _
@@ -1260,7 +1264,7 @@ Private Function HandleRenameEvent(Target As cTreeViewNode, NewString As String)
     
     If (StrComp(m_DB(i).Type, "GROUP", vbTextCompare) = 0) Then
         For i = LBound(m_DB) To UBound(m_DB)
-            If ((Len(m_DB(i).Groups) > 0) And (Not m_DB(i).Groups = "%")) Then
+            If (Len(m_DB(i).Groups) > 0) Then
                 Dim Splt() As String
                 Dim j      As Integer
             
@@ -1273,7 +1277,7 @@ Private Function HandleRenameEvent(Target As cTreeViewNode, NewString As String)
                 End If
                 
                 For j = LBound(Splt) To UBound(Splt)
-                    If (StrComp(Splt(j), Target.Text, vbTextCompare) = 0) Then
+                    If (StrComp(Splt(j), "%", vbBinaryCompare) <> 0) And (StrComp(Splt(j), Target.Text, vbTextCompare) = 0) Then
                         Splt(j) = NewString
                     End If
                 Next j
@@ -1312,7 +1316,7 @@ Private Sub LoadView()
         ' we're handling groups first; is this entry a group?
         If (StrComp(m_DB(i).Type, "GROUP", vbBinaryCompare) = 0) Then
             ' is this group a member of other groups?
-            If (Len(m_DB(i).Groups) And (m_DB(i).Groups <> "%")) Then
+            If (Len(m_DB(i).Groups) > 0) And (StrComp(m_DB(i).Groups, "%", vbBinaryCompare) <> 0) Then
                 ' get the "primary" group (the first group) to put the node under
                 grp = GetPrimaryGroup(m_DB(i).Groups)
             
@@ -1348,7 +1352,7 @@ Private Sub LoadView()
                         If (StrComp(m_DB(j).Type, "GROUP", vbBinaryCompare) = 0) Then
                             ' we only need to check for groups that are members of
                             ' other groups
-                            If (Len(m_DB(j).Groups) And (m_DB(j).Groups <> "%")) Then
+                            If (Len(m_DB(j).Groups) > 0) And (StrComp(m_DB(j).Groups, "%", vbBinaryCompare) <> 0) Then
                                 ' is entry member of multiple groups?
                                 If (InStr(1, m_DB(j).Groups, ",", vbBinaryCompare) <> 0) Then
                                     ' split up multiple groupings
@@ -1408,7 +1412,7 @@ Private Sub LoadView()
             End If
             
             ' is the user a member of any groups?
-            If (Len(m_DB(i).Groups) And (m_DB(i).Groups <> "%")) Then
+            If (Len(m_DB(i).Groups) > 0) And (StrComp(m_DB(i).Groups, "%", vbBinaryCompare) <> 0) Then
                 ' get the "primary" group (the first group) to put the node under
                 grp = GetPrimaryGroup(m_DB(i).Groups)
             
@@ -1492,7 +1496,7 @@ Private Sub LockGUI()
     Call ClearGroupListChecks
     
     ' disable group lists
-    lvGroups.Enabled = False
+    'lvGroups.Enabled = False
     
     ' disable & clear ban message
     txtBanMessage.Enabled = False
@@ -1531,7 +1535,7 @@ Private Sub UnlockGUI()
     btnDelete.Enabled = True
     
     ' enable group lists
-    lvGroups.Enabled = True
+    'lvGroups.Enabled = True
     
     ' make sure save button and caption is up to date
     HandleSaved
@@ -1772,7 +1776,7 @@ Static skipupdate As Boolean
     End If
     
     ' is entry a member of a group?
-    If (Len(tmp.Groups) And (tmp.Groups <> "%")) Then
+    If (Len(tmp.Groups) > 0) And (StrComp(tmp.Groups, "%", vbBinaryCompare) <> 0) Then
         ' is entry a member of multiple groups?
         If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
             ' store working copy of group memberships, splitting up
@@ -1790,35 +1794,41 @@ Static skipupdate As Boolean
     Call UpdateInheritCaption(tmp.Groups)
     
     ' loop through our listview, checking for matches
-    For j = 1 To lvGroups.ListItems.Count
-        With lvGroups.ListItems(j)
-            ' loop through entry's group memberships
-            If (Len(tmp.Groups) And (tmp.Groups <> "%")) Then
-                For i = LBound(Splt) To UBound(Splt)
-                    If (StrComp(Splt(i), .Text, vbTextCompare) = 0) Then
-                        ' select group if entry is a member
-                        .Checked = True
-                        
-                        ' highlight group if "primary" (first group)
-                        If (i = LBound(Splt)) Then
-                            .ForeColor = vbYellow
-                        Else
-                            .ForeColor = vbWhite
+    If lvGroups.Checkboxes Then
+        For j = 1 To lvGroups.ListItems.Count
+            With lvGroups.ListItems(j)
+                ' loop through entry's group memberships
+                .Checked = False
+                .Ghosted = False
+                .ForeColor = vbWhite
+                
+                If (Len(tmp.Groups) > 0) And (StrComp(tmp.Groups, "%", vbBinaryCompare) <> 0) Then
+                    For i = LBound(Splt) To UBound(Splt)
+                        If (StrComp(Splt(i), "%", vbBinaryCompare) <> 0) And (StrComp(Splt(i), .Text, vbTextCompare) = 0) Then
+                            ' select group if entry is a member
+                            .Checked = True
+                            
+                            ' highlight group if "primary" (first group)
+                            If (i = LBound(Splt)) Then
+                                .ForeColor = vbYellow
+                            End If
+                            
+                            Exit For
                         End If
-                    End If
-                Next i
-            End If
-            
-            If (StrComp(tmp.Type, "GROUP", vbTextCompare) = 0) Then
-                ' don't allow groups to contain themself
-                If (StrComp(tmp.Username, .Text, vbTextCompare) = 0) Then
-                    .Checked = False
-                    .Ghosted = True
-                    .ForeColor = &H888888
+                    Next i
                 End If
-            End If
-        End With
-    Next j
+                
+                If (StrComp(tmp.Type, "GROUP", vbTextCompare) = 0) Then
+                    ' don't allow groups to contain themself
+                    If (StrComp(tmp.Username, .Text, vbTextCompare) = 0) Then
+                        .Checked = False
+                        .Ghosted = True
+                        .ForeColor = &H888888
+                    End If
+                End If
+            End With
+        Next j
+    End If
     
     If ((tmp.BanMessage <> vbNullString) And (tmp.BanMessage <> "%")) Then
         txtBanMessage.Text = tmp.BanMessage
@@ -1937,7 +1947,7 @@ Private Function IsInGroup(Groups As String, ByVal GroupName As String) As Boole
     
     IsInGroup = False
     
-    If ((Len(Groups) > 0) And (Not Groups = "%")) Then
+    If (Len(Groups) > 0) Then
         If (Not InStr(1, Groups, ",", vbBinaryCompare) = 0) Then
             Splt() = Split(Groups, ",")
         Else
@@ -1946,7 +1956,7 @@ Private Function IsInGroup(Groups As String, ByVal GroupName As String) As Boole
         End If
         
         For j = LBound(Splt) To UBound(Splt)
-            If (StrComp(GroupName, Splt(j), vbTextCompare) = 0) Then
+            If (StrComp(Splt(j), "%", vbBinaryCompare) <> 0) And (StrComp(GroupName, Splt(j), vbTextCompare) = 0) Then
                 IsInGroup = True
                 
                 Exit Function
@@ -2007,14 +2017,15 @@ Private Sub ClearGroupListChecks()
     For i = 1 To lvGroups.ListItems.Count
         With lvGroups.ListItems(i)
             .Checked = False
-            .Ghosted = False
-            .ForeColor = vbWhite
+            .Ghosted = True
+            .ForeColor = &H888888
         End With
     Next i
 End Sub
 
 Private Function GetPrimaryGroup(ByVal Groups As String) As String
-    Dim grp As String
+    Dim grp    As String
+    Dim Splt() As String
     
     ' is it not in a group?
     If (LenB(Groups) = 0 Or StrComp(Groups, "%", vbBinaryCompare) = 0) Then
@@ -2022,7 +2033,8 @@ Private Function GetPrimaryGroup(ByVal Groups As String) As String
     ' is entry member of multiple groups?
     ElseIf (InStr(1, Groups, ",", vbBinaryCompare) <> 0) Then
         ' split up multiple groupings
-        grp = Split(Groups, ",", 2)(0)
+        Splt() = Split(Groups, ",")
+        grp = Splt(0)
     Else
         ' no need for special handling...
         grp = Groups
@@ -2197,12 +2209,14 @@ Private Function GetAccessGroupWalk(Groups As String) As udtGetAccessResponse
     Dim i As Integer
     Dim j As Integer
     
-    If LenB(Groups) > 0 And StrComp(Groups, "%", vbTextCompare) <> 0 Then
+    If LenB(Groups) > 0 Then
         Splt() = Split(Groups, ",")
         For j = LBound(Splt) To UBound(Splt)
-            On Error GoTo ERROR_HANDLER
-            Call AllGroups.Add(Splt(j), Splt(j))
-            On Error GoTo 0
+            If (StrComp(Splt(j), "%", vbBinaryCompare) <> 0) Then
+                On Error GoTo ERROR_HANDLER
+                Call AllGroups.Add(Splt(j), Splt(j))
+                On Error GoTo 0
+            End If
         Next j
     End If
     
@@ -2215,9 +2229,11 @@ Private Function GetAccessGroupWalk(Groups As String) As udtGetAccessResponse
         If LenB(tmp.Groups) > 0 And StrComp(tmp.Groups, "%", vbTextCompare) <> 0 Then
             Splt() = Split(tmp.Groups, ",")
             For j = LBound(Splt) To UBound(Splt)
-                On Error GoTo ERROR_HANDLER
-                Call AllGroups.Add(Splt(j), Splt(j))
-                On Error GoTo 0
+                If (StrComp(Splt(j), "%", vbBinaryCompare) <> 0) Then
+                    On Error GoTo ERROR_HANDLER
+                    Call AllGroups.Add(Splt(j), Splt(j))
+                    On Error GoTo 0
+                End If
             Next j
         End If
         i = i + 1
@@ -2323,7 +2339,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                     ' loop through database checking for users that
                     ' were members of the group that we just removed
                     For i = LBound(m_DB) To UBound(m_DB)
-                        If (Len(m_DB(i).Groups) And m_DB(i).Groups <> "%") Then
+                        If (Len(m_DB(i).Groups) > 0) Then
                             If (InStr(1, m_DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
                                 Dim Splt()     As String
                                 Dim innerfound As Boolean
@@ -2331,7 +2347,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                                 Splt() = Split(m_DB(i).Groups, ",")
                                 
                                 For j = LBound(Splt) To UBound(Splt)
-                                    If (StrComp(bak.Username, Splt(j), vbTextCompare) = 0) Then
+                                    If (StrComp(Splt(j), "%", vbBinaryCompare) <> 0) And (StrComp(bak.Username, Splt(j), vbTextCompare) = 0) Then
                                         innerfound = True
                                     
                                         Exit For

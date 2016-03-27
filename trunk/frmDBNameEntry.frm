@@ -102,13 +102,13 @@ Private Sub Form_Load()
             .MaxLength = 30
         End If
          
-        cmdOK.Enabled = (LenB(.Text) > 0 And Len(.Text) <= .MaxLength And StrComp(.Text, "%", vbBinaryCompare) <> 0)
+        cmdOK.Enabled = CanSave()
     End With
 End Sub
 
 Private Sub txtEntry_Change()
     With txtEntry
-        cmdOK.Enabled = (LenB(.Text) > 0 And Len(.Text) <= .MaxLength And StrComp(.Text, "%", vbBinaryCompare) <> 0)
+        cmdOK.Enabled = CanSave()
     End With
 End Sub
 
@@ -119,4 +119,16 @@ Private Sub txtName_KeyPress(KeyAscii As Integer)
         Call cmdCancel_Click
     End If
 End Sub
+
+Private Function CanSave() As Boolean
+    With txtEntry
+        CanSave = True
+        CanSave = CanSave And (LenB(.Text) > 0)
+        CanSave = CanSave And (Len(.Text) <= .MaxLength)
+        CanSave = CanSave And (StrComp(.Text, "%", vbBinaryCompare) <> 0)
+        CanSave = CanSave And (InStr(1, .Text, " ", vbBinaryCompare) = 0)
+        CanSave = CanSave And (InStr(1, .Text, ",", vbBinaryCompare) = 0)
+        CanSave = CanSave And (InStr(1, .Text, Chr$(34), vbBinaryCompare) = 0)
+    End With
+End Function
 
