@@ -115,6 +115,7 @@ Class=clsCommandDocObjStatic; clsCommandDocObjStatic.cls
 Class=clsCommandGeneratorObj; clsCommandGeneratorObj.cls
 Module=modBNCS; modBNCS.bas
 Module=modBNLS; modBNLS.bas
+Class=clsKeyDecoder; clsKeyDecoder.cls
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""
