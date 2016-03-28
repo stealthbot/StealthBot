@@ -5,7 +5,7 @@ Option Explicit
 '  BNCSutil
 '  Battle.Net Utility Library
 '
-'  Copyright © 2004-2005 Eric Naeseth
+'  Copyright Â© 2004-2005 Eric Naeseth
 '------------------------------------------------------------------------------
 '  Visual Basic Declarations
 '  November 20, 2004
@@ -29,6 +29,11 @@ Option Explicit
 '  DLL Imports
 '---------------------------
 
+' Library Information
+Private Declare Function BNCSutil_getVersion Lib "BNCSutil.dll" () As Long
+Private Declare Function BNCSutil_getVersionString_Raw Lib "BNCSutil.dll" _
+    Alias "BNCSutil_getVersionString" (ByVal outbuf As String) As Long
+ 
 ' CheckRevision
 Private Declare Function extractMPQNumber Lib "BNCSutil.dll" _
     (ByVal MPQName As String) As Long
