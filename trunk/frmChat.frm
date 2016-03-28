@@ -2225,28 +2225,23 @@ Sub Event_BNLSDataError(Message As Byte)
 End Sub
 
 Private Sub Event_BNLSError(ErrorNumber As Integer, description As String)
-    If Not CheckFindAltBNLS("[BNLS] Error " & ErrorNumber & ": " & description) Then
+    If Not HandleBnlsError("[BNLS] Error " & ErrorNumber & ": " & description) Then
         ' if we aren't using the finder display the error
         DisplayError ErrorNumber, 0, BNLS
     End If
 End Sub
 
+
 ' this function will return whether we are going to use the finder
-' it will ask the user, once during connection if UseAltBNLS=""
-' otherwise, it will start the finder if UseAltBNLS="Y"
-' otherwise, it won't do anything if UseAltBNLS="N"
-Public Function CheckFindAltBNLS(ByVal ErrorMessage As String) As Boolean
-    Dim s As String
-    Static askedBnls As Boolean
-    
-    CheckFindAltBNLS = False
+Public Function HandleBnlsError(ByVal ErrorMessage As String) As Boolean
+    HandleBnlsError = False
     
     sckBNet.Close
     
     ' Is the BNLS server finder enabled?
     If Config.UseBnlsFinder Then
         LocatingAltBNLS = True
-        Call FindAltBNLS
+        Call RotateBnlsServer
     Else
         AddChat RTBColors.ErrorMessageText, ErrorMessage
         UserCancelledConnect = False
@@ -2255,14 +2250,42 @@ Public Function CheckFindAltBNLS(ByVal ErrorMessage As String) As Boolean
     End If
     
     ' return the BotVars
-    CheckFindAltBNLS = BotVars.UseAltBnls
+    HandleBnlsError = Config.UseBnlsFinder
 End Function
 
+' Moves the connection to the next available BNLS server
+Public Sub RotateBnlsServer()
+    'Close the current BNLS connection
+    sckBNLS.Close
+    
+    'Notify user the current BNLS server failed
+    AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BnlsServer & " failed."
+    
+    'Notify user other BNLS servers are being located
+    AddChat RTBColors.InformationText, "[BNLS] Locating other BNLS servers..."
+    
+    Call DoDisconnect
+    
+    BotVars.BnlsServer = FindBnlsServer()
+    If Len(BotVars.BnlsServer) = 0 Then
+        Call DoDisconnect
+        Exit Sub
+    End If
+    
+    'Reconnect BNLS using the newly located BNLS server
+    With sckBNLS
+        .RemoteHost = BotVars.BnlsServer
+        .Connect
+    End With
+    
+    AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BnlsServer & "..."
+End Sub
 
 'Locates alternative BNLS servers for the bot to use if the current one fails
 'Added by FrOzeN on 2/sep/09
 'Last updated by FrOzeN on 4/sep/09
-Public Sub FindAltBNLS()
+'Broken apart and moved around by Pyro, 2016-03-27
+Public Function FindBnlsServer()
     'Error handler
     On Error GoTo BNLS_Alt_Finder_Error
     
@@ -2271,19 +2294,10 @@ Public Sub FindAltBNLS()
     Static firstServer As String
     
     Const FIND_ALT_BNLS_ERROR As Integer = 12345
+    
+    FindBnlsServer = vbNullString
         
     intCounter = intCounter + 1
-    
-    'Close the current BNLS connection
-    sckBNLS.Close
-    
-    'Notify user the current BNLS server failed
-    'If (intCounter > 1) Then
-    AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BnlsServer & " failed."
-    'End If
-    
-    'Notify user other BNLS servers are being located
-    AddChat RTBColors.InformationText, "[BNLS] Locating other BNLS servers..."
     
     'Check if the BNLS list has been downloaded
     If (GotBNLSList = False) Then
@@ -2308,8 +2322,6 @@ Public Sub FindAltBNLS()
                     AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured while trying to locate an alternative BNLS server."
                     AddChat RTBColors.ErrorMessageText, "[BNLS]   You may not be connected to the internet or may be having DNS resolution issues."
                     AddChat RTBColors.ErrorMessageText, "[BNLS]   Visit http://www.stealthbot.net/ and check the Technical Support forum for more information."
-                    
-                    Call DoDisconnect
             
                     ' ensure that we update our listing on following connection(s)
                     GotBNLSList = False
@@ -2317,7 +2329,7 @@ Public Sub FindAltBNLS()
                     ' ensure checker starts at 0 again on following connection(s)
                     intCounter = 0
             
-                    Exit Sub
+                    Exit Function
                 Else
                     ' Split the page up into an array of servers.
                     strBNLS() = Split(strReturn, vbLf)
@@ -2354,17 +2366,9 @@ Public Sub FindAltBNLS()
         End If
     Loop
     
-    BotVars.BnlsServer = strBNLS(intCounter)
-    
-    'Reconnect BNLS using the newly located BNLS server
-    With sckBNLS
-        .RemoteHost = BotVars.BnlsServer
-        .Connect
-    End With
-    
-    AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BnlsServer & "..."
+    FindBnlsServer = strBNLS(intCounter)
 
-    Exit Sub
+    Exit Function
     
 BNLS_Alt_Finder_Error:
 
@@ -2383,12 +2387,9 @@ BNLS_Alt_Finder_Error:
         Resume Next
     
     End If
-    
-    'Disconnect the bot
-    Call DoDisconnect
 
-    Exit Sub
-End Sub
+    Exit Function
+End Function
 
 ' Updated 8/8/07 to support new prefix/suffix box feature
 Sub Form_Resize()
@@ -5912,7 +5913,6 @@ Sub Connect()
     
     If sckBNet.State = 0 And sckBNLS.State = 0 Then
     
-        Const f As String = "Main" ', p As String = "config.ini"
         'Vars
         NotEnoughInfo = False
         MissingInfo = "Information required to connect: "
@@ -6010,6 +6010,19 @@ Sub Connect()
         
         
         If BotVars.BNLS Then
+            If Len(BotVars.BnlsServer) = 0 Then
+                If BotVars.UseAltBnls Then
+                    BotVars.BnlsServer = FindBnlsServer()
+                End If
+            End If
+            
+            ' Don't try and connect if we don't have a server to connect to.
+            If Len(BotVars.BnlsServer) = 0 Then
+                AddChat RTBColors.ErrorMessageText, "[BNLS] You have not set a BNLS server, or a server could not be found. Unable to connect."
+                Call DoDisconnect
+                Exit Sub
+            End If
+            
             Call Event_BNLSConnecting
             
             With sckBNLS
@@ -6597,6 +6610,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     '    BotVars.Trigger = "."
     'End If
     
+    BotVars.BnlsServer = Config.BnlsServer
+    
     ' Load database and commands
     Call LoadDatabase
     Call oCommandGenerator.GenerateCommands
@@ -6673,7 +6688,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     BotVars.AutoFilterMS = 0
     
     AutoModSafelistValue = Config.AutoModSafelistLevel
-    BotVars.BnlsServer = Config.BnlsServer
     BotVars.ShowOfflineFriends = Config.ShowOfflineFriends
     
     If Config.HideClanDisplay Then

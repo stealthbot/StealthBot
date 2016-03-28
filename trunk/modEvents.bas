@@ -1813,7 +1813,7 @@ On Error GoTo ERROR_HANDLER:
                 IIf(LenB(ExtraInfo) = 0, vbNullString, " Extra Information: " & ExtraInfo)
 
             If (BotVars.BNLS) Then
-                If (frmChat.CheckFindAltBNLS("[BNCS] BNLS has not been updated yet, " & _
+                If (frmChat.HandleBnlsError("[BNCS] BNLS has not been updated yet, " & _
                         "or you experienced an error. Try connecting again.")) Then
                     ' if we are using the finder, then don't close all connections
                     Message = 0
