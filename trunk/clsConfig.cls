@@ -215,8 +215,8 @@ Public Property Get DisableNews() As Boolean
     DisableNews = m_DisableNews
 End Property
 
-Public Property Let DisableNews(ByVal value As Boolean)
-    m_DisableNews = value
+Public Property Let DisableNews(ByVal sValue As Boolean)
+    m_DisableNews = sValue
 End Property
 
 
@@ -228,144 +228,144 @@ Public Property Get Username() As String
     Username = m_Username
 End Property
 
-Public Property Let Username(ByVal value As String)
-    m_Username = value
+Public Property Let Username(ByVal sValue As String)
+    m_Username = sValue
 End Property
 
 Public Property Get Password() As String
     Password = m_Password
 End Property
 
-Public Property Let Password(ByVal value As String)
-    m_Password = value
+Public Property Let Password(ByVal sValue As String)
+    m_Password = sValue
 End Property
 
 Public Property Get CDKey() As String
     CDKey = m_CDKey
 End Property
 
-Public Property Let CDKey(ByVal value As String)
-    m_CDKey = value
+Public Property Let CDKey(ByVal sValue As String)
+    m_CDKey = sValue
 End Property
 
-Public Property Get EXPKey() As String
-    EXPKey = m_EXPKey
+Public Property Get ExpKey() As String
+    ExpKey = m_EXPKey
 End Property
 
-Public Property Let EXPKey(ByVal value As String)
-    m_EXPKey = value
+Public Property Let ExpKey(ByVal sValue As String)
+    m_EXPKey = sValue
 End Property
 
 Public Property Get UseSpawn() As Boolean
     UseSpawn = m_UseSpawn
 End Property
 
-Public Property Let UseSpawn(ByVal value As Boolean)
-    m_UseSpawn = value
+Public Property Let UseSpawn(ByVal sValue As Boolean)
+    m_UseSpawn = sValue
 End Property
 
 Public Property Get Game() As String
     Game = m_Game
 End Property
 
-Public Property Let Game(ByVal value As String)
-    m_Game = value
+Public Property Let Game(ByVal sValue As String)
+    m_Game = sValue
 End Property
 
 Public Property Get Server() As String
     Server = m_Server
 End Property
 
-Public Property Let Server(ByVal value As String)
-    m_Server = value
+Public Property Let Server(ByVal sValue As String)
+    m_Server = sValue
 End Property
 
 Public Property Get HomeChannel() As String
     HomeChannel = m_HomeChannel
 End Property
 
-Public Property Let HomeChannel(ByVal value As String)
-    m_HomeChannel = value
+Public Property Let HomeChannel(ByVal sValue As String)
+    m_HomeChannel = sValue
 End Property
 
 Public Property Get AutoConnect() As Boolean
     AutoConnect = m_AutoConnect
 End Property
 
-Public Property Let AutoConnect(ByVal value As Boolean)
-    m_AutoConnect = value
+Public Property Let AutoConnect(ByVal sValue As Boolean)
+    m_AutoConnect = sValue
 End Property
 
 Public Property Get UseD2Realms() As Boolean
     UseD2Realms = m_UseD2Realms
 End Property
 
-Public Property Let UseD2Realms(ByVal value As Boolean)
-    m_UseD2Realms = value
+Public Property Let UseD2Realms(ByVal sValue As Boolean)
+    m_UseD2Realms = sValue
 End Property
 
 Public Property Get UseBNLS() As Boolean
     UseBNLS = m_UseBNLS
 End Property
 
-Public Property Let UseBNLS(ByVal value As Boolean)
-    m_UseBNLS = value
+Public Property Let UseBNLS(ByVal sValue As Boolean)
+    m_UseBNLS = sValue
 End Property
 
 Public Property Get BNLSServer() As String
     BNLSServer = m_BNLSServer
 End Property
 
-Public Property Let BNLSServer(ByVal value As String)
-    m_BNLSServer = value
+Public Property Let BNLSServer(ByVal sValue As String)
+    m_BNLSServer = sValue
 End Property
 
 Public Property Get BNLSFinder() As Boolean
     BNLSFinder = m_UseBNLSFinder
 End Property
 
-Public Property Let BNLSFinder(ByVal value As Boolean)
-    m_UseBNLSFinder = value
+Public Property Let BNLSFinder(ByVal sValue As Boolean)
+    m_UseBNLSFinder = sValue
 End Property
 
 Public Property Get BNLSFinderSource() As String
     BNLSFinderSource = m_BNLSFinderSource
 End Property
 
-Public Property Let BNLSFinderSource(ByVal value As String)
-    m_BNLSFinderSource = value
+Public Property Let BNLSFinderSource(ByVal sValue As String)
+    m_BNLSFinderSource = sValue
 End Property
 
 Public Property Get UseProxy() As Boolean
     UseProxy = m_UseProxy
 End Property
 
-Public Property Let UseProxy(ByVal value As Boolean)
-    m_UseProxy = value
+Public Property Let UseProxy(ByVal sValue As Boolean)
+    m_UseProxy = sValue
 End Property
 
 Public Property Get ProxyIP() As String
     ProxyIP = m_ProxyIP
 End Property
 
-Public Property Let ProxyIP(ByVal value As String)
-    m_ProxyIP = value
+Public Property Let ProxyIP(ByVal sValue As String)
+    m_ProxyIP = sValue
 End Property
 
 Public Property Get ProxyPort() As Integer
     ProxyPort = m_ProxyPort
 End Property
 
-Public Property Let ProxyPort(ByVal value As Integer)
-    m_ProxyPort = value
+Public Property Let ProxyPort(ByVal sValue As Integer)
+    m_ProxyPort = sValue
 End Property
 
 Public Property Get ProxyType() As String
     ProxyType = m_ProxyType
 End Property
 
-Public Property Let ProxyType(ByVal value As String)
-    m_ProxyType = value
+Public Property Let ProxyType(ByVal sValue As String)
+    m_ProxyType = sValue
 End Property
 
 
@@ -377,200 +377,200 @@ Public Property Get UseBackupChannel() As Boolean
     UseBackupChannel = m_UseBackupChannel
 End Property
 
-Public Property Let UseBackupChannel(ByVal value As Boolean)
-    m_UseBackupChannel = value
+Public Property Let UseBackupChannel(ByVal sValue As Boolean)
+    m_UseBackupChannel = sValue
 End Property
 
 Public Property Get BackupChannel() As String
     BackupChannel = m_BackupChannel
 End Property
 
-Public Property Let BackupChannel(ByVal value As String)
-    m_BackupChannel = value
+Public Property Let BackupChannel(ByVal sValue As String)
+    m_BackupChannel = sValue
 End Property
 
 Public Property Get ReconnectDelay() As Long
     ReconnectDelay = m_ReconnectDelay
 End Property
 
-Public Property Let ReconnectDelay(ByVal value As Long)
-    m_ReconnectDelay = value
+Public Property Let ReconnectDelay(ByVal sValue As Long)
+    m_ReconnectDelay = sValue
 End Property
 
 Public Property Get BotMail() As Boolean
     BotMail = m_BotMail
 End Property
 
-Public Property Let BotMail(ByVal value As Boolean)
-    m_BotMail = value
+Public Property Let BotMail(ByVal sValue As Boolean)
+    m_BotMail = sValue
 End Property
 
 Public Property Get ProfileAmp() As Boolean
     ProfileAmp = m_ProfileAmp
 End Property
 
-Public Property Let ProfileAmp(ByVal value As Boolean)
-    m_ProfileAmp = value
+Public Property Let ProfileAmp(ByVal sValue As Boolean)
+    m_ProfileAmp = sValue
 End Property
 
 Public Property Get VoidView() As Boolean
     VoidView = m_VoidView
 End Property
 
-Public Property Let VoidView(ByVal value As Boolean)
-    m_VoidView = value
+Public Property Let VoidView(ByVal sValue As Boolean)
+    m_VoidView = sValue
 End Property
 
 Public Property Get GreetMessage() As Boolean
     GreetMessage = m_GreetMessage
 End Property
 
-Public Property Let GreetMessage(ByVal value As Boolean)
-    m_GreetMessage = value
+Public Property Let GreetMessage(ByVal sValue As Boolean)
+    m_GreetMessage = sValue
 End Property
 
 Public Property Get GreetMessageText() As String
     GreetMessageText = m_GreetMessageText
 End Property
 
-Public Property Let GreetMessageText(ByVal value As String)
-    m_GreetMessageText = value
+Public Property Let GreetMessageText(ByVal sValue As String)
+    m_GreetMessageText = sValue
 End Property
 
 Public Property Get WhisperGreet() As Boolean
     WhisperGreet = m_WhisperGreet
 End Property
 
-Public Property Let WhisperGreet(ByVal value As Boolean)
-    m_WhisperGreet = value
+Public Property Let WhisperGreet(ByVal sValue As Boolean)
+    m_WhisperGreet = sValue
 End Property
 
 Public Property Get IdleMessage() As Boolean
     IdleMessage = m_IdleMessage
 End Property
 
-Public Property Let IdleMessage(ByVal value As Boolean)
-    m_IdleMessage = value
+Public Property Let IdleMessage(ByVal sValue As Boolean)
+    m_IdleMessage = sValue
 End Property
 
 Public Property Get IdleMessageText() As String
     IdleMessageText = m_IdleMessageText
 End Property
 
-Public Property Let IdleMessageText(ByVal value As String)
-    m_IdleMessageText = value
+Public Property Let IdleMessageText(ByVal sValue As String)
+    m_IdleMessageText = sValue
 End Property
 
 Public Property Get IdleMessageDelay() As Integer
     IdleMessageDelay = m_IdleMessageDelay
 End Property
 
-Public Property Let IdleMessageDelay(ByVal value As Integer)
-    m_IdleMessageDelay = value
+Public Property Let IdleMessageDelay(ByVal sValue As Integer)
+    m_IdleMessageDelay = sValue
 End Property
 
 Public Property Get IdleMessageType() As String
     IdleMessageType = m_IdleMessageType
 End Property
 
-Public Property Let IdleMessageType(ByVal value As String)
-    m_IdleMessageType = value
+Public Property Let IdleMessageType(ByVal sValue As String)
+    m_IdleMessageType = sValue
 End Property
 
 Public Property Get Trigger() As String
     Trigger = GetProtectedString(m_Trigger)
 End Property
 
-Public Property Let Trigger(ByVal value As String)
-    m_Trigger = "{" & value & "}"
+Public Property Let Trigger(ByVal sValue As String)
+    m_Trigger = "{" & Value & "}"
 End Property
 
 Public Property Get BotOwner() As String
     BotOwner = m_BotOwner
 End Property
 
-Public Property Let BotOwner(ByVal value As String)
-    m_BotOwner = value
+Public Property Let BotOwner(ByVal sValue As String)
+    m_BotOwner = sValue
 End Property
 
 Public Property Get ChatFilters() As Boolean
     ChatFilters = m_ChatFilters
 End Property
 
-Public Property Let ChatFilters(ByVal value As Boolean)
-    m_ChatFilters = value
+Public Property Let ChatFilters(ByVal sValue As Boolean)
+    m_ChatFilters = sValue
 End Property
 
 Public Property Get WhisperWindows() As Boolean
     WhisperWindows = m_WhisperWindows
 End Property
 
-Public Property Let WhisperWindows(ByVal value As Boolean)
-    m_WhisperWindows = value
+Public Property Let WhisperWindows(ByVal sValue As Boolean)
+    m_WhisperWindows = sValue
 End Property
 
 Public Property Get WhisperCommands() As Boolean
     WhisperCommands = m_WhisperCommands
 End Property
 
-Public Property Let WhisperCommands(ByVal value As Boolean)
-    m_WhisperCommands = value
+Public Property Let WhisperCommands(ByVal sValue As Boolean)
+    m_WhisperCommands = sValue
 End Property
 
 Public Property Get ChatDelay() As Long
     ChatDelay = m_ChatDelay
 End Property
 
-Public Property Let ChatDelay(ByVal value As Long)
-    m_ChatDelay = value
+Public Property Let ChatDelay(ByVal sValue As Long)
+    m_ChatDelay = sValue
 End Property
 
 Public Property Get MediaPlayer() As String
     MediaPlayer = m_MediaPlayer
 End Property
 
-Public Property Let MediaPlayer(ByVal value As String)
-    m_MediaPlayer = value
+Public Property Let MediaPlayer(ByVal sValue As String)
+    m_MediaPlayer = sValue
 End Property
 
 Public Property Get MediaPlayerPath() As String
     MediaPlayerPath = m_MediaPlayerPath
 End Property
 
-Public Property Let MediaPlayerPath(ByVal value As String)
-    m_MediaPlayerPath = value
+Public Property Let MediaPlayerPath(ByVal sValue As String)
+    m_MediaPlayerPath = sValue
 End Property
 
 Public Property Get Mp3Commands() As Boolean
     Mp3Commands = m_Mp3Commands
 End Property
 
-Public Property Let Mp3Commands(ByVal value As Boolean)
-    m_Mp3Commands = value
+Public Property Let Mp3Commands(ByVal sValue As Boolean)
+    m_Mp3Commands = sValue
 End Property
 
-Public Property Get AutocompletePostfix() As String
-    AutocompletePostfix = GetProtectedString(m_AutocompletePostfix)
+Public Property Get AutoCompletePostfix() As String
+    AutoCompletePostfix = GetProtectedString(m_AutocompletePostfix)
 End Property
 
-Public Property Let AutocompletePostfix(ByVal value As String)
-    m_AutocompletePostfix = "{" & value & "}"
+Public Property Let AutoCompletePostfix(ByVal sValue As String)
+    m_AutocompletePostfix = "{" & Value & "}"
 End Property
 
 Public Property Get CaseSensitiveDBFlags() As Boolean
     CaseSensitiveDBFlags = m_CaseSensitiveDBFlags
 End Property
 
-Public Property Let CaseSensitiveDBFlags(ByVal value As Boolean)
-    m_CaseSensitiveDBFlags = value
+Public Property Let CaseSensitiveDBFlags(ByVal sValue As Boolean)
+    m_CaseSensitiveDBFlags = sValue
 End Property
 
 Public Property Get MultiLinePostfix() As String
     MultiLinePostfix = GetProtectedString(m_MultiLinePostfix)
 End Property
 
-Public Property Let MultiLinePostfix(ByVal value As String)
-    m_MultiLinePostfix = "{" & value & "}"
+Public Property Let MultiLinePostfix(ByVal sValue As String)
+    m_MultiLinePostfix = "{" & Value & "}"
 End Property
 
 
@@ -582,168 +582,168 @@ Public Property Get BanEvasion() As Boolean
     BanEvasion = m_BanEvasion
 End Property
 
-Public Property Let BanEvasion(ByVal value As Boolean)
-    m_BanEvasion = value
+Public Property Let BanEvasion(ByVal sValue As Boolean)
+    m_BanEvasion = sValue
 End Property
 
-Public Property Get Phrasebans() As Boolean
-    Phrasebans = m_Phrasebans
+Public Property Get PhraseBans() As Boolean
+    PhraseBans = m_Phrasebans
 End Property
 
-Public Property Let Phrasebans(ByVal value As Boolean)
-    m_Phrasebans = value
+Public Property Let PhraseBans(ByVal sValue As Boolean)
+    m_Phrasebans = sValue
 End Property
 
 Public Property Get LevelBanW3() As Integer
     LevelBanW3 = m_LevelBanW3
 End Property
 
-Public Property Let LevelBanW3(ByVal value As Integer)
-    m_LevelBanW3 = value
+Public Property Let LevelBanW3(ByVal sValue As Integer)
+    m_LevelBanW3 = sValue
 End Property
 
 Public Property Get LevelBanD2() As Integer
     LevelBanD2 = m_LevelBanD2
 End Property
 
-Public Property Let LevelBanD2(ByVal value As Integer)
-    m_LevelBanD2 = value
+Public Property Let LevelBanD2(ByVal sValue As Integer)
+    m_LevelBanD2 = sValue
 End Property
 
 Public Property Get LevelBanMessage() As String
     LevelBanMessage = m_LevelBanMessage
 End Property
 
-Public Property Let LevelBanMessage(ByVal value As String)
-    m_LevelBanMessage = value
+Public Property Let LevelBanMessage(ByVal sValue As String)
+    m_LevelBanMessage = sValue
 End Property
 
 Public Property Get PeonBan() As Boolean
     PeonBan = m_PeonBan
 End Property
 
-Public Property Let PeonBan(ByVal value As Boolean)
-    m_PeonBan = value
+Public Property Let PeonBan(ByVal sValue As Boolean)
+    m_PeonBan = sValue
 End Property
 
 Public Property Get KickOnYell() As Boolean
     KickOnYell = m_KickOnYell
 End Property
 
-Public Property Let KickOnYell(ByVal value As Boolean)
-    m_KickOnYell = value
+Public Property Let KickOnYell(ByVal sValue As Boolean)
+    m_KickOnYell = sValue
 End Property
 
 Public Property Get ShitlistGroup() As String
     ShitlistGroup = m_ShitlistGroup
 End Property
 
-Public Property Let ShitlistGroup(ByVal value As String)
-    m_ShitlistGroup = value
+Public Property Let ShitlistGroup(ByVal sValue As String)
+    m_ShitlistGroup = sValue
 End Property
 
 Public Property Get TagbanGroup() As String
     TagbanGroup = m_TagbanGroup
 End Property
 
-Public Property Let TagbanGroup(ByVal value As String)
-    m_TagbanGroup = value
+Public Property Let TagbanGroup(ByVal sValue As String)
+    m_TagbanGroup = sValue
 End Property
 
 Public Property Get SafelistGroup() As String
     SafelistGroup = m_SafelistGroup
 End Property
 
-Public Property Let SafelistGroup(ByVal value As String)
-    m_SafelistGroup = value
+Public Property Let SafelistGroup(ByVal sValue As String)
+    m_SafelistGroup = sValue
 End Property
 
 Public Property Get RetainOldBans() As Boolean
     RetainOldBans = m_RetainOldBans
 End Property
 
-Public Property Let RetainOldBans(ByVal value As Boolean)
-    m_RetainOldBans = value
+Public Property Let RetainOldBans(ByVal sValue As Boolean)
+    m_RetainOldBans = sValue
 End Property
 
 Public Property Get StoreAllBans() As Boolean
     StoreAllBans = m_StoreAllBans
 End Property
 
-Public Property Let StoreAllBans(ByVal value As Boolean)
-    m_StoreAllBans = value
+Public Property Let StoreAllBans(ByVal sValue As Boolean)
+    m_StoreAllBans = sValue
 End Property
 
 Public Property Get ChannelProtectionMessage() As String
     ChannelProtectionMessage = m_ChannelProtectionMessage
 End Property
 
-Public Property Let ChannelProtectionMessage(ByVal value As String)
-    m_ChannelProtectionMessage = value
+Public Property Let ChannelProtectionMessage(ByVal sValue As String)
+    m_ChannelProtectionMessage = sValue
 End Property
 
 Public Property Get IdleBan() As Boolean
     IdleBan = m_IdleBan
 End Property
 
-Public Property Let IdleBan(ByVal value As Boolean)
-    m_IdleBan = value
+Public Property Let IdleBan(ByVal sValue As Boolean)
+    m_IdleBan = sValue
 End Property
 
 Public Property Get IdleBanDelay() As Integer
     IdleBanDelay = m_IdleBanDelay
 End Property
 
-Public Property Let IdleBanDelay(ByVal value As Integer)
-    m_IdleBanDelay = value
+Public Property Let IdleBanDelay(ByVal sValue As Integer)
+    m_IdleBanDelay = sValue
 End Property
 
 Public Property Get IdleBanKick() As Boolean
     IdleBanKick = m_IdleBanKick
 End Property
 
-Public Property Let IdleBanKick(ByVal value As Boolean)
-    m_IdleBanKick = value
+Public Property Let IdleBanKick(ByVal sValue As Boolean)
+    m_IdleBanKick = sValue
 End Property
 
 Public Property Get IPBans() As Boolean
     IPBans = m_IPBans
 End Property
 
-Public Property Let IPBans(ByVal value As Boolean)
-    m_IPBans = value
+Public Property Let IPBans(ByVal sValue As Boolean)
+    m_IPBans = sValue
 End Property
 
 Public Property Get UDPBan() As Boolean
     UDPBan = m_UDPBan
 End Property
 
-Public Property Let UDPBan(ByVal value As Boolean)
-    m_UDPBan = value
+Public Property Let UDPBan(ByVal sValue As Boolean)
+    m_UDPBan = sValue
 End Property
 
 Public Property Get AutoSafelistLevel() As Integer
     AutoSafelistLevel = m_AutoSafelistLevel
 End Property
 
-Public Property Let AutoSafelistLevel(ByVal value As Integer)
-    m_AutoSafelistLevel = value
+Public Property Let AutoSafelistLevel(ByVal sValue As Integer)
+    m_AutoSafelistLevel = sValue
 End Property
 
 Public Property Get ChannelProtection() As Boolean
     ChannelProtection = m_ChannelProtection
 End Property
 
-Public Property Let ChannelProtection(ByVal value As Boolean)
-    m_ChannelProtection = value
+Public Property Let ChannelProtection(ByVal sValue As Boolean)
+    m_ChannelProtection = sValue
 End Property
 
 Public Property Get QuietTime() As Boolean
     QuietTime = m_QuietTime
 End Property
 
-Public Property Let QuietTime(ByVal value As Boolean)
-    m_QuietTime = value
+Public Property Let QuietTime(ByVal sValue As Boolean)
+    m_QuietTime = sValue
 End Property
 
 
@@ -755,256 +755,256 @@ Public Property Get ShowSplashScreen() As Boolean
     ShowSplashScreen = m_ShowSplashScreen
 End Property
 
-Public Property Let ShowSplashScreen(ByVal value As Boolean)
-    m_ShowSplashScreen = value
+Public Property Let ShowSplashScreen(ByVal sValue As Boolean)
+    m_ShowSplashScreen = sValue
 End Property
 
 Public Property Get ShowWhisperBox() As Boolean
     ShowWhisperBox = m_ShowWhisperBox
 End Property
 
-Public Property Let ShowWhisperBox(ByVal value As Boolean)
-    m_ShowWhisperBox = value
+Public Property Let ShowWhisperBox(ByVal sValue As Boolean)
+    m_ShowWhisperBox = sValue
 End Property
 
 Public Property Get MinimizeOnStartup() As Boolean
     MinimizeOnStartup = m_MinimizeOnStartup
 End Property
 
-Public Property Let MinimizeOnStartup(ByVal value As Boolean)
-    m_MinimizeOnStartup = value
+Public Property Let MinimizeOnStartup(ByVal sValue As Boolean)
+    m_MinimizeOnStartup = sValue
 End Property
 
 Public Property Get UseUTF8() As Boolean
     UseUTF8 = m_UseUTF8
 End Property
 
-Public Property Let UseUTF8(ByVal value As Boolean)
-    m_UseUTF8 = value
+Public Property Let UseUTF8(ByVal sValue As Boolean)
+    m_UseUTF8 = sValue
 End Property
 
 Public Property Get UrlDetection() As Boolean
     UrlDetection = m_UrlDetection
 End Property
 
-Public Property Let UrlDetection(ByVal value As Boolean)
-    m_UrlDetection = value
+Public Property Let UrlDetection(ByVal sValue As Boolean)
+    m_UrlDetection = sValue
 End Property
 
 Public Property Get ShowOutgoingWhispers() As Boolean
     ShowOutgoingWhispers = m_ShowOutgoingWhispers
 End Property
 
-Public Property Let ShowOutgoingWhispers(ByVal value As Boolean)
-    m_ShowOutgoingWhispers = value
+Public Property Let ShowOutgoingWhispers(ByVal sValue As Boolean)
+    m_ShowOutgoingWhispers = sValue
 End Property
 
 Public Property Get HideWhispersInMain() As Boolean
     HideWhispersInMain = m_HideWhispersInMain
 End Property
 
-Public Property Let HideWhispersInMain(ByVal value As Boolean)
-    m_HideWhispersInMain = value
+Public Property Let HideWhispersInMain(ByVal sValue As Boolean)
+    m_HideWhispersInMain = sValue
 End Property
 
 Public Property Get TimestampMode() As Byte
     TimestampMode = m_TimestampMode
 End Property
 
-Public Property Let TimestampMode(ByVal value As Byte)
-    m_TimestampMode = value
+Public Property Let TimestampMode(ByVal sValue As Byte)
+    m_TimestampMode = sValue
 End Property
 
 Public Property Get ChatFont() As String
     ChatFont = m_ChatFont
 End Property
 
-Public Property Let ChatFont(ByVal value As String)
-    m_ChatFont = value
+Public Property Let ChatFont(ByVal sValue As String)
+    m_ChatFont = sValue
 End Property
 
 Public Property Get ChatFontSize() As Integer
     ChatFontSize = m_ChatFontSize
 End Property
 
-Public Property Let ChatFontSize(ByVal value As Integer)
-    m_ChatFontSize = value
+Public Property Let ChatFontSize(ByVal sValue As Integer)
+    m_ChatFontSize = sValue
 End Property
 
 Public Property Get ChannelListFont() As String
     ChannelListFont = m_ChannelListFont
 End Property
 
-Public Property Let ChannelListFont(ByVal value As String)
-    m_ChannelListFont = value
+Public Property Let ChannelListFont(ByVal sValue As String)
+    m_ChannelListFont = sValue
 End Property
 
 Public Property Get ChannelListFontSize() As Integer
     ChannelListFontSize = m_ChannelListFontSize
 End Property
 
-Public Property Let ChannelListFontSize(ByVal value As Integer)
-    m_ChannelListFontSize = value
+Public Property Let ChannelListFontSize(ByVal sValue As Integer)
+    m_ChannelListFontSize = sValue
 End Property
 
 Public Property Get HideClanDisplay() As Boolean
     HideClanDisplay = m_HideClanDisplay
 End Property
 
-Public Property Let HideClanDisplay(ByVal value As Boolean)
-    m_HideClanDisplay = value
+Public Property Let HideClanDisplay(ByVal sValue As Boolean)
+    m_HideClanDisplay = sValue
 End Property
 
 Public Property Get HidePingDisplay() As Boolean
     HidePingDisplay = m_HidePingDisplay
 End Property
 
-Public Property Let HidePingDisplay(ByVal value As Boolean)
-    m_HidePingDisplay = value
+Public Property Let HidePingDisplay(ByVal sValue As Boolean)
+    m_HidePingDisplay = sValue
 End Property
 
 Public Property Get NamespaceConvention() As Byte
     NamespaceConvention = m_NamespaceConvention
 End Property
 
-Public Property Let NamespaceConvention(ByVal value As Byte)
-    m_NamespaceConvention = value
+Public Property Let NamespaceConvention(ByVal sValue As Byte)
+    m_NamespaceConvention = sValue
 End Property
 
 Public Property Get UseD2Naming() As Boolean
     UseD2Naming = m_UseD2Naming
 End Property
 
-Public Property Let UseD2Naming(ByVal value As Boolean)
-    m_UseD2Naming = value
+Public Property Let UseD2Naming(ByVal sValue As Boolean)
+    m_UseD2Naming = sValue
 End Property
 
 Public Property Get ShowStatsIcons() As Boolean
     ShowStatsIcons = m_ShowStatsIcons
 End Property
 
-Public Property Let ShowStatsIcons(ByVal value As Boolean)
-    m_ShowStatsIcons = value
+Public Property Let ShowStatsIcons(ByVal sValue As Boolean)
+    m_ShowStatsIcons = sValue
 End Property
 
 Public Property Get ShowFlagIcons() As Boolean
     ShowFlagIcons = m_ShowFlagIcons
 End Property
 
-Public Property Let ShowFlagIcons(ByVal value As Boolean)
-    m_ShowFlagIcons = value
+Public Property Let ShowFlagIcons(ByVal sValue As Boolean)
+    m_ShowFlagIcons = sValue
 End Property
 
 Public Property Get ShowJoinLeaves() As Boolean
     ShowJoinLeaves = m_ShowJoinLeaves
 End Property
 
-Public Property Let ShowJoinLeaves(ByVal value As Boolean)
-    m_ShowJoinLeaves = value
+Public Property Let ShowJoinLeaves(ByVal sValue As Boolean)
+    m_ShowJoinLeaves = sValue
 End Property
 
 Public Property Get FlashOnEvents() As Boolean
     FlashOnEvents = m_FlashOnEvents
 End Property
 
-Public Property Let FlashOnEvents(ByVal value As Boolean)
-    m_FlashOnEvents = value
+Public Property Let FlashOnEvents(ByVal sValue As Boolean)
+    m_FlashOnEvents = sValue
 End Property
 
 Public Property Get FlashOnCatchPhrases() As Boolean
     FlashOnCatchPhrases = m_FlashOnCatchPhrases
 End Property
 
-Public Property Let FlashOnCatchPhrases(ByVal value As Boolean)
-    m_FlashOnCatchPhrases = value
+Public Property Let FlashOnCatchPhrases(ByVal sValue As Boolean)
+    m_FlashOnCatchPhrases = sValue
 End Property
 
 Public Property Get MinimizeToTray() As Boolean
     MinimizeToTray = m_MinimizeToTray
 End Property
 
-Public Property Let MinimizeToTray(ByVal value As Boolean)
-    m_MinimizeToTray = value
+Public Property Let MinimizeToTray(ByVal sValue As Boolean)
+    m_MinimizeToTray = sValue
 End Property
 
 Public Property Get NameColoring() As Boolean
     NameColoring = m_NameColoring
 End Property
 
-Public Property Let NameColoring(ByVal value As Boolean)
-    m_NameColoring = value
+Public Property Let NameColoring(ByVal sValue As Boolean)
+    m_NameColoring = sValue
 End Property
 
 Public Property Get ShowOfflineFriends() As Boolean
     ShowOfflineFriends = m_ShowOfflineFriends
 End Property
 
-Public Property Let ShowOfflineFriends(ByVal value As Boolean)
-    m_ShowOfflineFriends = value
+Public Property Let ShowOfflineFriends(ByVal sValue As Boolean)
+    m_ShowOfflineFriends = sValue
 End Property
 
 Public Property Get DisablePrefixBox() As Boolean
     DisablePrefixBox = m_DisablePrefixBox
 End Property
 
-Public Property Let DisablePrefixBox(ByVal value As Boolean)
-    m_DisablePrefixBox = value
+Public Property Let DisablePrefixBox(ByVal sValue As Boolean)
+    m_DisablePrefixBox = sValue
 End Property
 
 Public Property Get DisableSuffixBox() As Boolean
     DisableSuffixBox = m_DisableSuffixBox
 End Property
 
-Public Property Let DisableSuffixBox(ByVal value As Boolean)
-    m_DisableSuffixBox = value
+Public Property Let DisableSuffixBox(ByVal sValue As Boolean)
+    m_DisableSuffixBox = sValue
 End Property
 
 Public Property Get MathAllowUI() As Boolean
     MathAllowUI = m_MathAllowUI
 End Property
 
-Public Property Let MathAllowUI(ByVal value As Boolean)
-    m_MathAllowUI = value
+Public Property Let MathAllowUI(ByVal sValue As Boolean)
+    m_MathAllowUI = sValue
 End Property
 
 Public Property Get D2NamingFormat() As String
     D2NamingFormat = m_D2NamingFormat
 End Property
 
-Public Property Let D2NamingFormat(ByVal value As String)
-    m_D2NamingFormat = value
+Public Property Let D2NamingFormat(ByVal sValue As String)
+    m_D2NamingFormat = sValue
 End Property
 
 Public Property Get SecondsToIdle() As Long
     SecondsToIdle = m_SecondsToIdle
 End Property
 
-Public Property Let SecondsToIdle(ByVal value As Long)
-    m_SecondsToIdle = value
+Public Property Let SecondsToIdle(ByVal sValue As Long)
+    m_SecondsToIdle = sValue
 End Property
 
 Public Property Get DisableRTBAutoCopy() As Boolean
     DisableRTBAutoCopy = m_DisableRTBAutoCopy
 End Property
 
-Public Property Let DisableRTBAutoCopy(ByVal value As Boolean)
-    m_DisableRTBAutoCopy = value
+Public Property Let DisableRTBAutoCopy(ByVal sValue As Boolean)
+    m_DisableRTBAutoCopy = sValue
 End Property
 
 Public Property Get HideBanMessages() As Boolean
     HideBanMessages = m_HideBanMessages
 End Property
 
-Public Property Let HideBanMessages(ByVal value As Boolean)
-    m_HideBanMessages = value
+Public Property Let HideBanMessages(ByVal sValue As Boolean)
+    m_HideBanMessages = sValue
 End Property
 
 Public Property Get NameAutoComplete() As Boolean
     NameAutoComplete = m_NameAutoComplete
 End Property
 
-Public Property Let NameAutoComplete(ByVal value As Boolean)
-    m_NameAutoComplete = value
+Public Property Let NameAutoComplete(ByVal sValue As Boolean)
+    m_NameAutoComplete = sValue
 End Property
 
 
@@ -1016,48 +1016,48 @@ Public Property Get PositionLeft() As Long
     PositionLeft = m_PositionLeft
 End Property
 
-Public Property Let PositionLeft(ByVal value As Long)
-    m_PositionLeft = value
+Public Property Let PositionLeft(ByVal sValue As Long)
+    m_PositionLeft = sValue
 End Property
 
 Public Property Get PositionTop() As Long
     PositionTop = m_PositionTop
 End Property
 
-Public Property Let PositionTop(ByVal value As Long)
-    m_PositionTop = value
+Public Property Let PositionTop(ByVal sValue As Long)
+    m_PositionTop = sValue
 End Property
 
 Public Property Get PositionHeight() As Long
     PositionHeight = m_PositionHeight
 End Property
 
-Public Property Let PositionHeight(ByVal value As Long)
-    m_PositionHeight = value
+Public Property Let PositionHeight(ByVal sValue As Long)
+    m_PositionHeight = sValue
 End Property
 
 Public Property Get PositionWidth() As Long
     PositionWidth = m_PositionWidth
 End Property
 
-Public Property Let PositionWidth(ByVal value As Long)
-    m_PositionWidth = value
+Public Property Let PositionWidth(ByVal sValue As Long)
+    m_PositionWidth = sValue
 End Property
 
 Public Property Get IsMaximized() As Boolean
     IsMaximized = m_IsMaximized
 End Property
 
-Public Property Let IsMaximized(ByVal value As Boolean)
-    m_IsMaximized = value
+Public Property Let IsMaximized(ByVal sValue As Boolean)
+    m_IsMaximized = sValue
 End Property
 
 Public Property Get LastSettingsPanel() As Byte
     LastSettingsPanel = m_LastSettingsPanel
 End Property
 
-Public Property Let LastSettingsPanel(ByVal value As Byte)
-    m_LastSettingsPanel = value
+Public Property Let LastSettingsPanel(ByVal sValue As Byte)
+    m_LastSettingsPanel = sValue
 End Property
 
 
@@ -1069,40 +1069,40 @@ Public Property Get LogDBActions() As Boolean
     LogDBActions = m_LogDBActions
 End Property
 
-Public Property Let LogDBActions(ByVal value As Boolean)
-    m_LogDBActions = value
+Public Property Let LogDBActions(ByVal sValue As Boolean)
+    m_LogDBActions = sValue
 End Property
 
 Public Property Get LogCommands() As Boolean
     LogCommands = m_LogCommands
 End Property
 
-Public Property Let LogCommands(ByVal value As Boolean)
-    m_LogCommands = value
+Public Property Let LogCommands(ByVal sValue As Boolean)
+    m_LogCommands = sValue
 End Property
 
 Public Property Get MaxBacklogSize() As Long
     MaxBacklogSize = m_MaxBacklogSize
 End Property
 
-Public Property Let MaxBacklogSize(ByVal value As Long)
-    m_MaxBacklogSize = value
+Public Property Let MaxBacklogSize(ByVal sValue As Long)
+    m_MaxBacklogSize = sValue
 End Property
 
 Public Property Get MaxLogFileSize() As Long
     MaxLogFileSize = m_MaxLogFileSize
 End Property
 
-Public Property Let MaxLogFileSize(ByVal value As Long)
-    m_MaxLogFileSize = value
+Public Property Let MaxLogFileSize(ByVal sValue As Long)
+    m_MaxLogFileSize = sValue
 End Property
 
 Public Property Get LoggingMode() As Byte
     LoggingMode = m_LoggingMode
 End Property
 
-Public Property Let LoggingMode(ByVal value As Byte)
-    m_LoggingMode = value
+Public Property Let LoggingMode(ByVal sValue As Byte)
+    m_LoggingMode = sValue
 End Property
 
 
@@ -1114,56 +1114,56 @@ Public Property Get QueueMaxCredits() As Long
     QueueMaxCredits = m_QueueMaxCredits
 End Property
 
-Public Property Let QueueMaxCredits(ByVal value As Long)
-    m_QueueMaxCredits = value
+Public Property Let QueueMaxCredits(ByVal sValue As Long)
+    m_QueueMaxCredits = sValue
 End Property
 
 Public Property Get QueueCostPerPacket() As Long
     QueueCostPerPacket = m_QueueCostPerPacket
 End Property
 
-Public Property Let QueueCostPerPacket(ByVal value As Long)
-    m_QueueCostPerPacket = value
+Public Property Let QueueCostPerPacket(ByVal sValue As Long)
+    m_QueueCostPerPacket = sValue
 End Property
 
 Public Property Get QueueCostPerByte() As Long
     QueueCostPerByte = m_QueueCostPerByte
 End Property
 
-Public Property Let QueueCostPerByte(ByVal value As Long)
-    m_QueueCostPerByte = value
+Public Property Let QueueCostPerByte(ByVal sValue As Long)
+    m_QueueCostPerByte = sValue
 End Property
 
 Public Property Get QueueCostPerByteOver() As Long
     QueueCostPerByteOver = m_QueueCostPerByteOver
 End Property
 
-Public Property Let QueueCostPerByteOver(ByVal value As Long)
-    m_QueueCostPerByteOver = value
+Public Property Let QueueCostPerByteOver(ByVal sValue As Long)
+    m_QueueCostPerByteOver = sValue
 End Property
 
 Public Property Get QueueStartingCredits() As Long
     QueueStartingCredits = m_QueueStartingCredits
 End Property
 
-Public Property Let QueueStartingCredits(ByVal value As Long)
-    m_QueueStartingCredits = value
+Public Property Let QueueStartingCredits(ByVal sValue As Long)
+    m_QueueStartingCredits = sValue
 End Property
 
 Public Property Get QueueThresholdBytes() As Long
     QueueThresholdBytes = m_QueueThresholdBytes
 End Property
 
-Public Property Let QueueThresholdBytes(ByVal value As Long)
-    m_QueueThresholdBytes = value
+Public Property Let QueueThresholdBytes(ByVal sValue As Long)
+    m_QueueThresholdBytes = sValue
 End Property
 
 Public Property Get QueueCreditRate() As Long
     QueueCreditRate = m_QueueCreditRate
 End Property
 
-Public Property Let QueueCreditRate(ByVal value As Long)
-    m_QueueCreditRate = value
+Public Property Let QueueCreditRate(ByVal sValue As Long)
+    m_QueueCreditRate = sValue
 End Property
 
 
@@ -1175,24 +1175,24 @@ Public Property Get DisableScripting() As Boolean
     DisableScripting = m_DisableScripting
 End Property
 
-Public Property Let DisableScripting(ByVal value As Boolean)
-    m_DisableScripting = value
+Public Property Let DisableScripting(ByVal sValue As Boolean)
+    m_DisableScripting = sValue
 End Property
 
 Public Property Get ScriptingAllowUI() As Boolean
     ScriptingAllowUI = m_ScriptingAllowUI
 End Property
 
-Public Property Let ScriptingAllowUI(ByVal value As Boolean)
-    m_ScriptingAllowUI = value
+Public Property Let ScriptingAllowUI(ByVal sValue As Boolean)
+    m_ScriptingAllowUI = sValue
 End Property
 
 Public Property Get ScriptViewer() As String
     ScriptViewer = m_ScriptViewer
 End Property
 
-Public Property Let ScriptViewer(ByVal value As String)
-    m_ScriptViewer = value
+Public Property Let ScriptViewer(ByVal sValue As String)
+    m_ScriptViewer = sValue
 End Property
 
 
@@ -1204,136 +1204,136 @@ Public Property Get IgnoreClanInvites() As Boolean
     IgnoreClanInvites = m_IgnoreClanInvites
 End Property
 
-Public Property Let IgnoreClanInvites(ByVal value As Boolean)
-    m_IgnoreClanInvites = value
+Public Property Let IgnoreClanInvites(ByVal sValue As Boolean)
+    m_IgnoreClanInvites = sValue
 End Property
 
 Public Property Get IgnoreCDKeyLength() As Boolean
     IgnoreCDKeyLength = m_IgnoreCDKeyLength
 End Property
 
-Public Property Let IgnoreCDKeyLength(ByVal value As Boolean)
-    m_IgnoreCDKeyLength = value
+Public Property Let IgnoreCDKeyLength(ByVal sValue As Boolean)
+    m_IgnoreCDKeyLength = sValue
 End Property
 
 Public Property Get DoNotUseDirectFriendList() As Boolean
     DoNotUseDirectFriendList = m_DoNotUseDirectFriendList
 End Property
 
-Public Property Let DoNotUseDirectFriendList(ByVal value As Boolean)
-    m_DoNotUseDirectFriendList = value
+Public Property Let DoNotUseDirectFriendList(ByVal sValue As Boolean)
+    m_DoNotUseDirectFriendList = sValue
 End Property
 
 Public Property Get PingSpoofing() As Byte
     PingSpoofing = m_PingSpoofing
 End Property
 
-Public Property Let PingSpoofing(ByVal value As Byte)
-    m_PingSpoofing = value
+Public Property Let PingSpoofing(ByVal sValue As Byte)
+    m_PingSpoofing = sValue
 End Property
 
 Public Property Get UseUDP() As Boolean
     UseUDP = m_UseUDP
 End Property
 
-Public Property Let UseUDP(ByVal value As Boolean)
-    m_UseUDP = value
+Public Property Let UseUDP(ByVal sValue As Boolean)
+    m_UseUDP = sValue
 End Property
 
 Public Property Get CustomStatstring() As String
     CustomStatstring = m_CustomStatstring
 End Property
 
-Public Property Let CustomStatstring(ByVal value As String)
-    m_CustomStatstring = value
+Public Property Let CustomStatstring(ByVal sValue As String)
+    m_CustomStatstring = sValue
 End Property
 
 Public Property Get ForceDefaultLocaleID() As Boolean
     ForceDefaultLocaleID = m_ForceDefaultLocaleID
 End Property
 
-Public Property Let ForceDefaultLocaleID(ByVal value As Boolean)
-    m_ForceDefaultLocaleID = value
+Public Property Let ForceDefaultLocaleID(ByVal sValue As Boolean)
+    m_ForceDefaultLocaleID = sValue
 End Property
 
 Public Property Get CustomUDPString() As String
     CustomUDPString = m_CustomUDPString
 End Property
 
-Public Property Let CustomUDPString(ByVal value As String)
-    m_CustomUDPString = value
+Public Property Let CustomUDPString(ByVal sValue As String)
+    m_CustomUDPString = sValue
 End Property
 
 Public Property Get CDKeyOwnerName() As String
     CDKeyOwnerName = m_CDKeyOwnerName
 End Property
 
-Public Property Let CDKeyOwnerName(ByVal value As String)
-    m_CDKeyOwnerName = value
+Public Property Let CDKeyOwnerName(ByVal sValue As String)
+    m_CDKeyOwnerName = sValue
 End Property
 
 Public Property Get UseLowerCasePassword() As Boolean
     UseLowerCasePassword = m_UseLowerCasePassword
 End Property
 
-Public Property Let UseLowerCasePassword(ByVal value As Boolean)
-    m_UseLowerCasePassword = value
+Public Property Let UseLowerCasePassword(ByVal sValue As Boolean)
+    m_UseLowerCasePassword = sValue
 End Property
 
 Public Property Get IgnoreVersionCheck() As Boolean
     IgnoreVersionCheck = m_IgnoreVersionCheck
 End Property
 
-Public Property Let IgnoreVersionCheck(ByVal value As Boolean)
-    m_IgnoreVersionCheck = value
+Public Property Let IgnoreVersionCheck(ByVal sValue As Boolean)
+    m_IgnoreVersionCheck = sValue
 End Property
 
 Public Property Get PredefinedGateway() As String
     PredefinedGateway = m_PredefinedGateway
 End Property
 
-Public Property Let PredefinedGateway(ByVal value As String)
-    m_PredefinedGateway = value
+Public Property Let PredefinedGateway(ByVal sValue As String)
+    m_PredefinedGateway = sValue
 End Property
 
 Public Property Get DefaultChannelJoin() As Boolean
     DefaultChannelJoin = m_DefaultChannelJoin
 End Property
 
-Public Property Let DefaultChannelJoin(ByVal value As Boolean)
-    m_DefaultChannelJoin = value
+Public Property Let DefaultChannelJoin(ByVal sValue As Boolean)
+    m_DefaultChannelJoin = sValue
 End Property
 
 Public Property Get MaxMessageLength() As Integer
     MaxMessageLength = m_MaxMessageLength
 End Property
 
-Public Property Let MaxMessageLength(ByVal value As Integer)
-    m_MaxMessageLength = value
+Public Property Let MaxMessageLength(ByVal sValue As Integer)
+    m_MaxMessageLength = sValue
 End Property
 
 Public Property Get AutoCreateChannels() As String
     AutoCreateChannels = m_AutoCreateChannels
 End Property
 
-Public Property Let AutoCreateChannels(ByVal value As String)
-    m_AutoCreateChannels = value
+Public Property Let AutoCreateChannels(ByVal sValue As String)
+    m_AutoCreateChannels = sValue
 End Property
 
 Public Property Get RegisterEmailAction() As String
     RegisterEmailAction = m_RegisterEmailAction
 End Property
 
-Public Property Let RegisterEmailAction(ByVal value As String)
-    m_RegisterEmailAction = value
+Public Property Let RegisterEmailAction(ByVal sValue As String)
+    m_RegisterEmailAction = sValue
 End Property
 
 Public Property Get RegisterEmailDefault() As String
     RegisterEmailDefault = m_RegisterEmailDefault
 End Property
 
-Public Property Let RegisterEmailDefault(ByVal value As String)
-    m_RegisterEmailDefault = value
+Public Property Let RegisterEmailDefault(ByVal sValue As String)
+    m_RegisterEmailDefault = sValue
 End Property
 
 
@@ -1345,8 +1345,8 @@ Public Property Get DebugWarden() As Boolean
     DebugWarden = m_DebugWarden
 End Property
 
-Public Property Let DebugWarden(ByVal value As Boolean)
-    m_DebugWarden = value
+Public Property Let DebugWarden(ByVal sValue As Boolean)
+    m_DebugWarden = sValue
 End Property
 
 
@@ -1370,13 +1370,13 @@ Public Property Get DebugConfig() As Boolean
     DebugConfig = m_DebugConfig
 End Property
 
-Public Property Let DebugConfig(ByVal value As Boolean)
-    m_DebugConfig = value
+Public Property Let DebugConfig(ByVal sValue As Boolean)
+    m_DebugConfig = sValue
 End Property
 
 ' Returns the path to the specified file if it is overriden by this configuration.
-Public Function GetFilePath(ByVal fileName As String) As String
-    GetFilePath = ReadSetting(SECTION_FILEPATH, fileName)
+Public Function GetFilePath(ByVal sFileName As String) As String
+    GetFilePath = ReadSetting(SECTION_FILEPATH, sFileName)
 End Function
 
 Public Function GetVersionByte(ByVal sProductCode As String) As Long
@@ -2143,69 +2143,69 @@ Private Function GetProtectedString(ByVal sValue As String) As String
 End Function
 
 
-Private Function ReadSetting(ByVal section As String, ByVal key As String, Optional ByVal defaultValue As String = vbNullString) As String
-    Dim buffer As String
+Private Function ReadSetting(ByVal section As String, ByVal Key As String, Optional ByVal DefaultValue As String = vbNullString) As String
+    Dim Buffer As String
     Dim length As Long
     
     ' If the config file doesn't exist, return the default.
     If Not FileExists() Then
-        ReadSetting = defaultValue
+        ReadSetting = DefaultValue
         Exit Function
     End If
     
     ' Create a buffer to read the value into.
-    buffer = String(255, vbNull)
+    Buffer = String(255, vbNull)
     
     ' Read the value into the buffer.
-    length = GetPrivateProfileString(section, key, defaultValue, buffer, 255, m_ConfigPath)
-    ReadSetting = Left$(buffer, length)
+    length = GetPrivateProfileString(section, Key, DefaultValue, Buffer, 255, m_ConfigPath)
+    ReadSetting = Left$(Buffer, length)
     
     'MsgBox section & "->" & key & ": [" & CStr(length) & "] " & ReadSetting
 End Function
 
 ' Reads a setting as a boolean
-Private Function ReadSettingB(ByVal section As String, ByVal key As String, Optional ByVal defaultValue As Boolean = False) As Boolean
+Private Function ReadSettingB(ByVal section As String, ByVal Key As String, Optional ByVal DefaultValue As Boolean = False) As Boolean
     Dim sVal As String
     
-    sVal = ReadSetting(section, key, CStr(defaultValue))
+    sVal = ReadSetting(section, Key, CStr(DefaultValue))
     If sVal = "Y" Or sVal = "True" Or sVal = "1" Then
         ReadSettingB = True
     ElseIf sVal = "N" Or sVal = "False" Or sVal = "0" Then
         ReadSettingB = False
     Else
-        ReadSettingB = defaultValue
+        ReadSettingB = DefaultValue
     End If
 End Function
 
 ' Reads a setting as a number
-Private Function ReadSettingL(ByVal section As String, ByVal key As String, Optional ByVal defaultValue As Long = -1) As Long
+Private Function ReadSettingL(ByVal section As String, ByVal Key As String, Optional ByVal DefaultValue As Long = -1) As Long
     Dim sVal As String
     
-    sVal = ReadSetting(section, key, CStr(defaultValue))
+    sVal = ReadSetting(section, Key, CStr(DefaultValue))
     If StrictIsNumeric(sVal) Then
         ReadSettingL = Val(sVal)
     Else
-        ReadSettingL = defaultValue
+        ReadSettingL = DefaultValue
     End If
 End Function
 
 ' Sets a setting if needed.
-Private Sub WriteSetting(ByVal section As String, ByVal key As String, ByVal value As String)
+Private Sub WriteSetting(ByVal section As String, ByVal Key As String, ByVal Value As String)
     Dim currentVal As String
-    currentVal = ReadSetting(section, key)
+    currentVal = ReadSetting(section, Key)
     
     ' Only write if the value has changed or we are forcing a save.
-    If (m_ForceSave Or (StrComp(currentVal, value, vbBinaryCompare) <> 0)) Then
-        WritePrivateProfileString section, key, value, m_ConfigPath
+    If (m_ForceSave Or (StrComp(currentVal, Value, vbBinaryCompare) <> 0)) Then
+        WritePrivateProfileString section, Key, Value, m_ConfigPath
         
-        If m_DebugConfig Then frmChat.AddChat RTBColors.InformationText, StringFormat("[CONFIG] Set setting: {0}.{1} -> {2}", section, key, value)
+        If m_DebugConfig Then frmChat.AddChat RTBColors.InformationText, StringFormat("[CONFIG] Set setting: {0}.{1} -> {2}", section, Key, Value)
     End If
 End Sub
 
-Private Function GetProductIndex(ByVal code As String) As Integer
+Private Function GetProductIndex(ByVal Code As String) As Integer
     Dim i As Integer
     For i = LBound(m_ProductKeys) To UBound(m_ProductKeys)
-        If UCase$(code) = m_ProductKeys(i) Then
+        If UCase$(Code) = m_ProductKeys(i) Then
             GetProductIndex = i
             Exit Function
         End If

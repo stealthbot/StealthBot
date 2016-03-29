@@ -2974,7 +2974,7 @@ Public Function GetLogFilePath() As String
 End Function
 
 Sub Form_Unload(Cancel As Integer)
-    Dim key As String, L As Long
+    Dim Key As String, L As Long
     
     'Me.WindowState = vbNormal
     'Me.Show
@@ -4144,8 +4144,8 @@ Private Sub mnuDisableVoidView_Click()
 End Sub
 
 Private Sub mnuDisconnect2_Click()
-    Dim key As String, L As Long
-    key = GetProductKey()
+    Dim Key As String, L As Long
+    Key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
 '        AttemptedNewVerbyte = False
@@ -4856,8 +4856,8 @@ Sub mnuLock_Click()
 End Sub
 
 Sub mnuDisconnect_Click()
-    Dim key As String, L As Long
-    key = GetProductKey()
+    Dim Key As String, L As Long
+    Key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
 '        AttemptedNewVerbyte = False
@@ -4968,13 +4968,13 @@ Private Sub sckScript_Close(index As Integer)
     RunInSingle obj.SCModule, obj.ObjName & "_Close"
 End Sub
 
-Private Sub sckScript_Error(index As Integer, ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckScript_Error(index As Integer, ByVal Number As Integer, description As String, ByVal sCode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     On Error Resume Next
 
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Winsock", index)
-    RunInSingle obj.SCModule, obj.ObjName & "_Error", Number, description, Scode, source, HelpFile, HelpContext, CancelDisplay
+    RunInSingle obj.SCModule, obj.ObjName & "_Error", Number, description, sCode, source, HelpFile, HelpContext, CancelDisplay
 End Sub
 
 Private Sub itcScript_StateChanged(index As Integer, ByVal State As Integer)
@@ -5642,7 +5642,7 @@ Sub InitBNetConnection()
     End If
 End Sub
 
-Private Sub sckBNet_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckBNet_Error(ByVal Number As Integer, description As String, ByVal sCode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     Call Event_BNetError(Number, description)
 End Sub
 
@@ -5684,7 +5684,7 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-Private Sub sckMCP_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckMCP_Error(ByVal Number As Integer, description As String, ByVal sCode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     If Not g_Online Then
         ' This message is ignored if we've been online for awhile.
         AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & Number & ": " & description
@@ -5963,7 +5963,7 @@ Sub Connect()
                         MissingInfo = MissingInfo & "CDKey, "
                         NotEnoughInfo = True
                     End If
-                    If BotVars.EXPKey = vbNullString Then
+                    If BotVars.ExpKey = vbNullString Then
                         MissingInfo = MissingInfo & "expansion CDKey, "
                         NotEnoughInfo = True
                     End If
@@ -6275,7 +6275,7 @@ Private Function ReplaceEnvironmentVars(ByVal str As String) As String
 
     Dim i     As Integer
     Dim Name  As String
-    Dim value As String
+    Dim Value As String
     Dim tmp   As String
     
     tmp = str
@@ -6285,9 +6285,9 @@ Private Function ReplaceEnvironmentVars(ByVal str As String) As String
     While (Environ$(i) <> "")
         Name = Mid$(Environ$(i), 1, InStr(1, Environ$(i), "=") - 1)
 
-        value = Mid$(Environ$(i), InStr(1, Environ$(i), "=") + 1)
+        Value = Mid$(Environ$(i), InStr(1, Environ$(i), "=") + 1)
 
-        tmp = Replace(tmp, "%" & Name & "%", value)
+        tmp = Replace(tmp, "%" & Name & "%", Value)
     
         i = i + 1
     Wend
@@ -6601,8 +6601,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     BotVars.Username = Config.Username
     BotVars.Password = Config.Password
     BotVars.CDKey = Config.CDKey
-    BotVars.EXPKey = Config.EXPKey
-    BotVars.Product = StrReverse(Config.Game)
+    BotVars.ExpKey = Config.ExpKey
+    BotVars.Product = StrReverse$(GetProductInfo(Config.Game).Code)
     BotVars.Server = Config.Server
     BotVars.HomeChannel = Config.HomeChannel
     BotVars.BotOwner = Config.BotOwner
@@ -6753,9 +6753,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     mnuToggleWWUse.Checked = Config.WhisperWindows
     BotVars.WhisperCmds = Config.WhisperCommands
-    Phrasebans = Config.Phrasebans
+    PhraseBans = Config.PhraseBans
     BotVars.CaseSensitiveFlags = Config.CaseSensitiveDBFlags
-    BotVars.AutocompletePostfix = Config.AutocompletePostfix
+    BotVars.AutoCompletePostfix = Config.AutoCompletePostfix
     BotVars.BNLS = Config.UseBNLS
     BotVars.LogDBActions = Config.LogDBActions
     BotVars.LogCommands = Config.LogCommands
@@ -7215,7 +7215,7 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-Private Sub sckBNLS_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckBNLS_Error(ByVal Number As Integer, description As String, ByVal sCode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     Call Event_BNLSError(Number, description)
 End Sub
 
@@ -7346,7 +7346,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                         
                         If (c >= (Len(toMatch) + 1)) Then
                             MatchClosest = _
-                                    .Item(i).Text & BotVars.AutocompletePostfix
+                                    .Item(i).Text & BotVars.AutoCompletePostfix
                             
                             MatchIndex = i
                             
@@ -7428,7 +7428,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                         Dim j As Integer
                     
                         MatchClosest = Left$(toMatch, atChar) & Gateways(CurrentGateway, i) & _
-                                BotVars.AutocompletePostfix
+                                BotVars.AutoCompletePostfix
                         
                         MatchIndex = (i + 1)
                         
@@ -7443,7 +7443,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
         Else
             If (tmp = vbNullString) Then
                 MatchClosest = Left$(toMatch, atChar) & OtherGateway & _
-                        BotVars.AutocompletePostfix
+                        BotVars.AutoCompletePostfix
                     
                 MatchIndex = (index + 1)
                     

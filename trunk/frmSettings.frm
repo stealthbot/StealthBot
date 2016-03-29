@@ -4405,13 +4405,13 @@ Private Function AddBNLSServer(ByVal sServerHost As String) As Integer
     AddBNLSServer = i
 End Function
 
-Private Sub SetHashPath(ByVal path As String)
-    lblHashPath.Caption = path
-    lblHashPath.ToolTipText = path
+Private Sub SetHashPath(ByVal Path As String)
+    lblHashPath.Caption = Path
+    lblHashPath.ToolTipText = Path
     
     ' Try to adjust font size for long paths
-    If ((Len(path) > 80) And (Not InStr(path, Space(1)) > 0)) Then
-        If Len(path) > 100 Then
+    If ((Len(Path) > 80) And (Not InStr(Path, Space(1)) > 0)) Then
+        If Len(Path) > 100 Then
             lblHashPath.FontSize = 6
         Else
             lblHashPath.FontSize = 7
@@ -4452,7 +4452,7 @@ Sub ShowPanel(ByVal index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
         If index <> 8 Then
             For i = 1 To tvw.NodeCount
                 Set nod = tvw.nodes.Item(i)
-                If Not nod.Selected And KeyToIndex(nod.key) = index Then
+                If Not nod.Selected And KeyToIndex(nod.Key) = index Then
                     nod.Selected = True
                     Exit For
                 End If
@@ -4570,7 +4570,7 @@ End Sub
 
 Private Sub tvw_SelectedNodeChanged()
     If FirstRun = 0 Then
-        ShowPanel KeyToIndex(tvw.SelectedItem.key)
+        ShowPanel KeyToIndex(tvw.SelectedItem.Key)
     Else
         FirstRun = 0
     End If
@@ -4613,22 +4613,22 @@ Private Function SaveSettings() As Boolean
     
     ' First, CDKey Length check and corresponding stuff that needs to run first:
     Select Case True
-        Case optSTAR.value:
-            If (chkSHR.value) Then
+        Case optSTAR.Value:
+            If (chkSHR.Value) Then
                 s = PRODUCT_SSHR
-            ElseIf (chkJPN.value) Then
+            ElseIf (chkJPN.Value) Then
                 s = PRODUCT_JSTR
             Else
                 s = PRODUCT_STAR
             End If
-        Case optSEXP.value: s = PRODUCT_SEXP
-        Case optD2DV.value: s = PRODUCT_D2DV
-        Case optD2XP.value: s = PRODUCT_D2XP
-        Case optWAR3.value: s = PRODUCT_WAR3
-        Case optW3XP.value: s = PRODUCT_W3XP
-        Case optW2BN.value: s = PRODUCT_W2BN
-        Case optDRTL.value:
-            If (chkSHR.value) Then
+        Case optSEXP.Value: s = PRODUCT_SEXP
+        Case optD2DV.Value: s = PRODUCT_D2DV
+        Case optD2XP.Value: s = PRODUCT_D2XP
+        Case optWAR3.Value: s = PRODUCT_WAR3
+        Case optW3XP.Value: s = PRODUCT_W3XP
+        Case optW2BN.Value: s = PRODUCT_W2BN
+        Case optDRTL.Value:
+            If (chkSHR.Value) Then
                 s = PRODUCT_DSHR
             Else
                 s = PRODUCT_DRTL
@@ -4660,11 +4660,11 @@ Private Function SaveSettings() As Boolean
     Config.Username = txtUsername.Text
     Config.Password = txtPassword.Text
     Config.CDKey = CDKeyReplacements(cboCDKey.Text)
-    Config.EXPKey = CDKeyReplacements(txtExpKey.Text)
+    Config.ExpKey = CDKeyReplacements(txtExpKey.Text)
     Config.HomeChannel = txtHomeChan.Text
     Config.Server = cboServer.Text
-    Config.UseSpawn = CBool(chkSpawn.value)
-    Config.UseD2Realms = CBool(chkUseRealm.value)
+    Config.UseSpawn = CBool(chkSpawn.Value)
+    Config.UseD2Realms = CBool(chkUseRealm.Value)
     
     ' Advanced connection settings
     Config.UseBNLS = CBool(cboConnMethod.ListIndex = 0)
@@ -4698,53 +4698,53 @@ Private Function SaveSettings() As Boolean
         End If
     End With
     
-    Config.AutoConnect = CBool(chkConnectOnStartup.value)
+    Config.AutoConnect = CBool(chkConnectOnStartup.Value)
     Config.RegisterEmailDefault = Trim$(txtEmail.Text)
     Config.PingSpoofing = cboSpoof.ListIndex
-    Config.UseProxy = CBool(chkUseProxies.value)
+    Config.UseProxy = CBool(chkUseProxies.Value)
     Config.ProxyPort = CLng(Trim$(txtProxyPort.Text))
     Config.ProxyIP = Trim$(txtProxyIP.Text)
-    Config.ProxyType = IIf(CBool(optSocks5.value), "SOCKS5", "SOCKS4")
-    Config.UseUDP = CBool(chkUDP.value)
+    Config.ProxyType = IIf(CBool(optSocks5.Value), "SOCKS5", "SOCKS4")
+    Config.UseUDP = CBool(chkUDP.Value)
 
     Config.ReconnectDelay = CLng(txtReconDelay.Text)
     
     ' General Interface settings
-    Config.ShowSplashScreen = CBool(chkSplash.value)
-    Config.MinimizeToTray = Not CBool(chkNoTray.value)
-    Config.FlashOnEvents = CBool(chkFlash.value)
-    Config.MinimizeOnStartup = CBool(chkMinimizeOnStartup.value)
+    Config.ShowSplashScreen = CBool(chkSplash.Value)
+    Config.MinimizeToTray = Not CBool(chkNoTray.Value)
+    Config.FlashOnEvents = CBool(chkFlash.Value)
+    Config.MinimizeOnStartup = CBool(chkMinimizeOnStartup.Value)
     
-    Config.UseUTF8 = CBool(chkUTF8.value)
-    Config.ShowJoinLeaves = CBool(chkJoinLeaves.value)
-    Config.ChatFilters = CBool(chkFilter.value)
-    Config.UrlDetection = CBool(chkURLDetect.value)
-    Config.NameAutoComplete = Not CBool(chkNoAutocomplete.value)
+    Config.UseUTF8 = CBool(chkUTF8.Value)
+    Config.ShowJoinLeaves = CBool(chkJoinLeaves.Value)
+    Config.ChatFilters = CBool(chkFilter.Value)
+    Config.UrlDetection = CBool(chkURLDetect.Value)
+    Config.NameAutoComplete = Not CBool(chkNoAutocomplete.Value)
     
-    Config.NameColoring = Not CBool(chkNoColoring.value)
-    Config.ShowStatsIcons = CBool(chkShowUserGameStatsIcons.value)
-    Config.ShowFlagIcons = CBool(chkShowUserFlagsIcons.value)
+    Config.NameColoring = Not CBool(chkNoColoring.Value)
+    Config.ShowStatsIcons = CBool(chkShowUserGameStatsIcons.Value)
+    Config.ShowFlagIcons = CBool(chkShowUserFlagsIcons.Value)
     
-    Config.DisablePrefixBox = CBool(chkDisablePrefix.value)
-    Config.DisableSuffixBox = CBool(chkDisableSuffix.value)
+    Config.DisablePrefixBox = CBool(chkDisablePrefix.Value)
+    Config.DisableSuffixBox = CBool(chkDisableSuffix.Value)
     Config.TimestampMode = cboTimestamp.ListIndex
     
     ' Font and color
     SaveFontSettings
     
     ' Moderation settings
-    Config.Phrasebans = CBool(chkPhrasebans.value)
-    Config.IPBans = CBool(chkIPBans.value)
-    Config.QuietTime = CBool(chkQuiet.value)
-    Config.KickOnYell = CBool(chkKOY.value)
-    Config.UDPBan = CBool(chkPlugban.value)
-    Config.ChannelProtection = CBool(chkProtect.value)
-    Config.BanEvasion = CBool(chkBanEvasion.value)
+    Config.PhraseBans = CBool(chkPhrasebans.Value)
+    Config.IPBans = CBool(chkIPBans.Value)
+    Config.QuietTime = CBool(chkQuiet.Value)
+    Config.KickOnYell = CBool(chkKOY.Value)
+    Config.UDPBan = CBool(chkPlugban.Value)
+    Config.ChannelProtection = CBool(chkProtect.Value)
+    Config.BanEvasion = CBool(chkBanEvasion.Value)
     
-    Config.IdleBan = CBool(chkIdlebans.value)
-    Config.IdleBanKick = CBool(chkIdleKick.value)
+    Config.IdleBan = CBool(chkIdlebans.Value)
+    Config.IdleBanKick = CBool(chkIdleKick.Value)
     Config.IdleBanDelay = CLng(txtIdleBanDelay.Text)
-    Config.PeonBan = CBool(chkPeonbans.value)
+    Config.PeonBan = CBool(chkPeonbans.Value)
     
     Call SaveClientBans
     
@@ -4763,51 +4763,51 @@ Private Function SaveSettings() As Boolean
         Config.LoggingMode = 0
     End If
     
-    Config.LogDBActions = CBool(chkLogDBActions.value)
-    Config.LogCommands = CBool(chkLogAllCommands.value)
+    Config.LogDBActions = CBool(chkLogDBActions.Value)
+    Config.LogCommands = CBool(chkLogAllCommands.Value)
     
     Config.MaxBacklogSize = CLng(txtMaxBackLogSize.Text)
     Config.MaxLogFileSize = CLng(txtMaxLogSize.Text)
     
     ' Greet Message Settings
     Config.GreetMessageText = txtGreetMsg.Text
-    Config.WhisperGreet = CBool(chkWhisperGreet.value)
-    Config.GreetMessage = CBool(chkGreetMsg.value)
+    Config.WhisperGreet = CBool(chkWhisperGreet.Value)
+    Config.GreetMessage = CBool(chkGreetMsg.Value)
     
     ' Idle message settings
-    Config.IdleMessage = CBool(chkIdles.value)
+    Config.IdleMessage = CBool(chkIdles.Value)
     Config.IdleMessageDelay = (Val(txtIdleWait.Text) * 2)
     
     Select Case True
-        Case optMsg.value:       Config.IdleMessageType = "msg"
-        Case optUptime.value:    Config.IdleMessageType = "uptime"
-        Case optMP3.value:       Config.IdleMessageType = "mp3"
-        Case optQuote.value:     Config.IdleMessageType = "quote"
+        Case optMsg.Value:       Config.IdleMessageType = "msg"
+        Case optUptime.Value:    Config.IdleMessageType = "uptime"
+        Case optMP3.Value:       Config.IdleMessageType = "mp3"
+        Case optQuote.Value:     Config.IdleMessageType = "quote"
         Case Else: Config.IdleMessageType = "msg"
     End Select
     Config.IdleMessageText = txtIdleMsg.Text
     
     
     '// Misc General Settings
-    Config.Mp3Commands = CBool(chkAllowMP3.value)
-    Config.ProfileAmp = CBool(chkPAmp.value)
-    Config.BotMail = CBool(chkMail.value)
+    Config.Mp3Commands = CBool(chkAllowMP3.Value)
+    Config.ProfileAmp = CBool(chkPAmp.Value)
+    Config.BotMail = CBool(chkMail.Value)
     
     Config.BotOwner = txtOwner.Text
     Config.Trigger = txtTrigger.Text
 
-    Config.WhisperCommands = CBool(chkWhisperCmds.value)
-    Config.ShowOfflineFriends = CBool(chkShowOffline.value)
-    Config.UseBackupChannel = CBool(chkBackup.value)
+    Config.WhisperCommands = CBool(chkWhisperCmds.Value)
+    Config.ShowOfflineFriends = CBool(chkShowOffline.Value)
+    Config.UseBackupChannel = CBool(chkBackup.Value)
     Config.BackupChannel = txtBackupChan.Text
     
     For i = 0 To 3
-        If optNaming(i).value Then Exit For ' i = index of opt checked
+        If optNaming(i).Value Then Exit For ' i = index of opt checked
     Next i
     If i = 4 Then i = 0 ' if none were checked, then set to default
     Config.NamespaceConvention = i
     
-    Config.UseD2Naming = CBool(chkD2Naming.value)
+    Config.UseD2Naming = CBool(chkD2Naming.Value)
     
     '// Save the config instance to disk
     Call Config.Save
@@ -4835,9 +4835,9 @@ Public Function InvalidConfigValues() As Boolean
 
     Dim s As String
     
-    If optW3XP.value Or optD2XP.value Then
+    If optW3XP.Value Or optD2XP.Value Then
         If LenB(txtExpKey.Text) = 0 Then
-            If optW3XP.value Then
+            If optW3XP.Value Then
                 s = "Warcraft III and a Frozen Throne"
             Else
                 s = "Diablo II and a Lord of Destruction"
@@ -4869,10 +4869,10 @@ End Sub
 
 Private Sub cmdExport_Click()
     With cDLG
-        .fileName = vbNullString
+        .FileName = vbNullString
         .ShowSave
-        If .fileName <> vbNullString Then
-            SaveColors .fileName
+        If .FileName <> vbNullString Then
+            SaveColors .FileName
             MsgBox "ColorList exported.", vbOKOnly
         End If
     End With
@@ -4880,10 +4880,10 @@ End Sub
 
 Private Sub cmdImport_Click()
     With cDLG
-        .fileName = vbNullString
+        .FileName = vbNullString
         .ShowOpen
-        If .fileName <> vbNullString Then
-            GetColorLists (.fileName)
+        If .FileName <> vbNullString Then
+            GetColorLists (.FileName)
             cboColorList.Clear
             Call Form_Load
         End If
@@ -4986,28 +4986,28 @@ End Sub
 '##########################################
 
 Private Sub chkUseProxies_Click()
-    txtProxyIP.Enabled = chkUseProxies.value
-    txtProxyPort.Enabled = chkUseProxies.value
-    optSocks4.Enabled = chkUseProxies.value
-    optSocks5.Enabled = chkUseProxies.value
+    txtProxyIP.Enabled = chkUseProxies.Value
+    txtProxyPort.Enabled = chkUseProxies.Value
+    optSocks4.Enabled = chkUseProxies.Value
+    optSocks5.Enabled = chkUseProxies.Value
 End Sub
 
 Private Sub chkBackup_Click()
-    txtBackupChan.Enabled = chkBackup.value
+    txtBackupChan.Enabled = chkBackup.Value
 End Sub
 
 Private Sub chkIdlebans_click()
-    chkIdleKick.Enabled = chkIdlebans.value
-    txtIdleBanDelay.Enabled = chkIdlebans.value
+    chkIdleKick.Enabled = chkIdlebans.Value
+    txtIdleBanDelay.Enabled = chkIdlebans.Value
 End Sub
 
 Private Sub chkIdles_Click()
-    optMsg.Enabled = chkIdles.value
-    optUptime.Enabled = chkIdles.value
-    optMP3.Enabled = chkIdles.value
-    optQuote.Enabled = chkIdles.value
-    txtIdleWait.Enabled = chkIdles.value
-    txtIdleMsg.Enabled = (optMsg.Enabled And optMsg.value)
+    optMsg.Enabled = chkIdles.Value
+    optUptime.Enabled = chkIdles.Value
+    optMP3.Enabled = chkIdles.Value
+    optQuote.Enabled = chkIdles.Value
+    txtIdleWait.Enabled = chkIdles.Value
+    txtIdleMsg.Enabled = (optMsg.Enabled And optMsg.Value)
 End Sub
 
 Private Sub optMsg_Click()
@@ -5033,11 +5033,11 @@ Sub optSTAR_Click()
     cboCDKey.Enabled = True
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
-    If (chkSHR.value) Then
+    If (chkSHR.Value) Then
         SetHashPath GetGamePath("RHSS")
         chkSpawn.Enabled = False
         cboCDKey.Enabled = False
-    ElseIf (chkJPN.value) Then
+    ElseIf (chkJPN.Value) Then
         SetHashPath GetGamePath("RTSJ")
     Else
         SetHashPath GetGamePath("RATS")
@@ -5118,7 +5118,7 @@ Sub optDRTL_Click()
     cboCDKey.Enabled = False
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
-    If (chkSHR.value) Then
+    If (chkSHR.Value) Then
         SetHashPath GetGamePath("RHSD")
     Else
         SetHashPath GetGamePath("LTRD")
@@ -5128,9 +5128,9 @@ End Sub
 
 Private Sub chkJPN_Click()
     Dim Checked As Boolean
-    Checked = CBool(chkJPN.value)
-    If (Checked) Then chkSHR.value = vbUnchecked
-    If (optSTAR.value) Then
+    Checked = CBool(chkJPN.Value)
+    If (Checked) Then chkSHR.Value = vbUnchecked
+    If (optSTAR.Value) Then
         If (Checked) Then
             SetHashPath GetGamePath("RTSJ")
         Else
@@ -5141,9 +5141,9 @@ End Sub
 
 Private Sub chkSHR_Click()
     Dim Checked As Boolean
-    Checked = CBool(chkSHR.value)
-    If (Checked) Then chkJPN.value = vbUnchecked
-    If (optSTAR.value) Then
+    Checked = CBool(chkSHR.Value)
+    If (Checked) Then chkJPN.Value = vbUnchecked
+    If (optSTAR.Value) Then
         chkSpawn.Enabled = Not Checked
         cboCDKey.Enabled = Not Checked
         If (Checked) Then
@@ -5151,7 +5151,7 @@ Private Sub chkSHR_Click()
         Else
             SetHashPath GetGamePath("RATS")
         End If
-    ElseIf (optDRTL.value) Then
+    ElseIf (optDRTL.Value) Then
         If (Checked) Then
             SetHashPath GetGamePath("RHSD")
         Else
@@ -5161,12 +5161,12 @@ Private Sub chkSHR_Click()
 End Sub
 
 Private Sub chkGreetMsg_Click()
-    chkWhisperGreet.Enabled = chkGreetMsg.value
-    txtGreetMsg.Enabled = chkGreetMsg.value
+    chkWhisperGreet.Enabled = chkGreetMsg.Value
+    txtGreetMsg.Enabled = chkGreetMsg.Value
 End Sub
 
 Private Sub chkProtect_Click()
-    txtProtectMsg.Enabled = chkProtect.value
+    txtProtectMsg.Enabled = chkProtect.Value
 End Sub
 
 '##########################################
@@ -5201,7 +5201,7 @@ Private Sub InitBasicConfig()
     txtUsername.Text = Config.Username
     txtPassword.Text = Config.Password
     cboCDKey.Text = Config.CDKey
-    txtExpKey.Text = Config.EXPKey
+    txtExpKey.Text = Config.ExpKey
     
     txtHomeChan.Text = Config.HomeChannel
 
@@ -5250,22 +5250,22 @@ Private Sub InitBasicConfig()
     End With
     
     Select Case GetProductInfo(Config.Game).Code
-        Case PRODUCT_STAR:    Call optSTAR_Click: optSTAR.value = True: chkSHR.value = vbUnchecked: chkJPN.value = vbUnchecked
-        Case PRODUCT_SEXP:    Call optSEXP_Click: optSEXP.value = True
-        Case PRODUCT_D2DV:    Call optD2DV_Click: optD2DV.value = True
-        Case PRODUCT_D2XP:    Call optD2XP_Click: optD2XP.value = True
-        Case PRODUCT_W2BN:    Call optW2BN_Click: optW2BN.value = True
-        Case PRODUCT_WAR3:    Call optWAR3_Click: optWAR3.value = True
-        Case PRODUCT_W3XP:    Call optW3XP_Click: optW3XP.value = True
-        Case PRODUCT_DRTL:    Call optDRTL_Click: optDRTL.value = True: chkSHR.value = vbUnchecked
-        Case PRODUCT_DSHR:    Call optDRTL_Click: optDRTL.value = True: chkSHR.value = vbChecked
-        Case PRODUCT_SSHR:    Call optSTAR_Click: optSTAR.value = True: chkSHR.value = vbChecked ' unchecks jpn
-        Case PRODUCT_JSTR:    Call optSTAR_Click: optSTAR.value = True: chkJPN.value = vbChecked ' unchecks shr
-        Case Else:      Call optSTAR_Click: optSTAR.value = True: chkSHR.value = vbUnchecked: chkJPN.value = vbUnchecked
+        Case PRODUCT_STAR:    Call optSTAR_Click: optSTAR.Value = True: chkSHR.Value = vbUnchecked: chkJPN.Value = vbUnchecked
+        Case PRODUCT_SEXP:    Call optSEXP_Click: optSEXP.Value = True
+        Case PRODUCT_D2DV:    Call optD2DV_Click: optD2DV.Value = True
+        Case PRODUCT_D2XP:    Call optD2XP_Click: optD2XP.Value = True
+        Case PRODUCT_W2BN:    Call optW2BN_Click: optW2BN.Value = True
+        Case PRODUCT_WAR3:    Call optWAR3_Click: optWAR3.Value = True
+        Case PRODUCT_W3XP:    Call optW3XP_Click: optW3XP.Value = True
+        Case PRODUCT_DRTL:    Call optDRTL_Click: optDRTL.Value = True: chkSHR.Value = vbUnchecked
+        Case PRODUCT_DSHR:    Call optDRTL_Click: optDRTL.Value = True: chkSHR.Value = vbChecked
+        Case PRODUCT_SSHR:    Call optSTAR_Click: optSTAR.Value = True: chkSHR.Value = vbChecked ' unchecks jpn
+        Case PRODUCT_JSTR:    Call optSTAR_Click: optSTAR.Value = True: chkJPN.Value = vbChecked ' unchecks shr
+        Case Else:      Call optSTAR_Click: optSTAR.Value = True: chkSHR.Value = vbUnchecked: chkJPN.Value = vbUnchecked
     End Select
     
-    chkSpawn.value = Abs(Config.UseSpawn)
-    chkUseRealm.value = Abs(Config.UseD2Realms)
+    chkSpawn.Value = Abs(Config.UseSpawn)
+    chkUseRealm.Value = Abs(Config.UseD2Realms)
     
     Call LoadCDKeys(cboCDKey)
     
@@ -5285,13 +5285,13 @@ Private Sub InitConnAdvanced()
     txtEmail.Text = Config.RegisterEmailDefault
     
     cboSpoof.ListIndex = Config.PingSpoofing
-    chkUDP.value = Abs(Config.UseUDP)
+    chkUDP.Value = Abs(Config.UseUDP)
     
-    chkConnectOnStartup.value = Abs(Config.AutoConnect)
+    chkConnectOnStartup.Value = Abs(Config.AutoConnect)
     txtReconDelay.Text = Config.ReconnectDelay
     If LenB(txtReconDelay.Text) = 0 Then txtReconDelay.Text = 1000
     
-    chkUseProxies.value = Abs(Config.UseProxy)
+    chkUseProxies.Value = Abs(Config.UseProxy)
     Call chkUseProxies_Click
     
     txtProxyPort.Text = Config.ProxyPort
@@ -5299,11 +5299,11 @@ Private Sub InitConnAdvanced()
     
     Select Case UCase$(Config.ProxyType)
         Case "SOCKS5":
-            optSocks5.value = True
-            optSocks4.value = False
+            optSocks5.Value = True
+            optSocks4.Value = False
         Case "SOCKS4":
-            optSocks5.value = False
-            optSocks4.value = True
+            optSocks5.Value = False
+            optSocks4.Value = True
     End Select
     
     ' Adjust "BNLS server" label 2 pixels down
@@ -5311,23 +5311,23 @@ Private Sub InitConnAdvanced()
 End Sub
 
 Private Sub InitGenInterface()
-    chkSplash.value = Abs(Config.ShowSplashScreen)
-    chkNoTray.value = Abs(Not Config.MinimizeToTray)
-    chkFlash.value = Abs(Config.FlashOnEvents)
-    chkMinimizeOnStartup.value = Abs(Config.MinimizeOnStartup)
+    chkSplash.Value = Abs(Config.ShowSplashScreen)
+    chkNoTray.Value = Abs(Not Config.MinimizeToTray)
+    chkFlash.Value = Abs(Config.FlashOnEvents)
+    chkMinimizeOnStartup.Value = Abs(Config.MinimizeOnStartup)
     
-    chkUTF8.value = Abs(Config.UseUTF8)
-    chkJoinLeaves.value = Abs(Config.ShowJoinLeaves)
-    chkFilter.value = Abs(Config.ChatFilters)
-    chkURLDetect.value = Abs(Config.UrlDetection)
-    chkNoAutocomplete.value = Abs(Not Config.NameAutoComplete)
+    chkUTF8.Value = Abs(Config.UseUTF8)
+    chkJoinLeaves.Value = Abs(Config.ShowJoinLeaves)
+    chkFilter.Value = Abs(Config.ChatFilters)
+    chkURLDetect.Value = Abs(Config.UrlDetection)
+    chkNoAutocomplete.Value = Abs(Not Config.NameAutoComplete)
     
-    chkNoColoring.value = Abs(Not Config.NameColoring)
-    chkShowUserGameStatsIcons.value = Abs(Config.ShowStatsIcons)
-    chkShowUserFlagsIcons.value = Abs(Config.ShowFlagIcons)
+    chkNoColoring.Value = Abs(Not Config.NameColoring)
+    chkShowUserGameStatsIcons.Value = Abs(Config.ShowStatsIcons)
+    chkShowUserFlagsIcons.Value = Abs(Config.ShowFlagIcons)
     
-    chkDisablePrefix.value = Abs(Config.DisablePrefixBox)
-    chkDisableSuffix.value = Abs(Config.DisableSuffixBox)
+    chkDisablePrefix.Value = Abs(Config.DisablePrefixBox)
+    chkDisableSuffix.Value = Abs(Config.DisableSuffixBox)
     cboTimestamp.ListIndex = Config.TimestampMode
 End Sub
 
@@ -5348,34 +5348,34 @@ Private Sub InitFontsColors()
 End Sub
 
 Private Sub InitGenMod()
-    chkPhrasebans.value = Abs(Config.Phrasebans)
-    chkIPBans.value = Abs(Config.IPBans)
-    chkQuiet.value = Abs(Config.QuietTime)
-    chkKOY.value = Abs(Config.KickOnYell)
-    chkPlugban.value = Abs(Config.UDPBan)
-    chkPeonbans.value = Abs(Config.PeonBan)
+    chkPhrasebans.Value = Abs(Config.PhraseBans)
+    chkIPBans.Value = Abs(Config.IPBans)
+    chkQuiet.Value = Abs(Config.QuietTime)
+    chkKOY.Value = Abs(Config.KickOnYell)
+    chkPlugban.Value = Abs(Config.UDPBan)
+    chkPeonbans.Value = Abs(Config.PeonBan)
 
-    chkBanEvasion.value = Abs(Config.BanEvasion)
+    chkBanEvasion.Value = Abs(Config.BanEvasion)
     
-    chkProtect.value = Abs(Config.ChannelProtection)
+    chkProtect.Value = Abs(Config.ChannelProtection)
     Call chkProtect_Click
     
     txtProtectMsg.Text = Config.ChannelProtectionMessage
     
-    chkIdlebans.value = Abs(Config.IdleBan)
-    chkIdleKick.value = Abs(Config.IdleBanKick)
+    chkIdlebans.Value = Abs(Config.IdleBan)
+    chkIdleKick.Value = Abs(Config.IdleBanKick)
     Call chkIdlebans_click
     
     txtIdleBanDelay.Text = Config.IdleBanDelay
     
     ' grab client ban settings from database
-    chkCBan(SC).value = Abs(IsClientBanned(PRODUCT_STAR))
-    chkCBan(BW).value = Abs(IsClientBanned(PRODUCT_SEXP))
-    chkCBan(D2).value = Abs(IsClientBanned(PRODUCT_D2DV))
-    chkCBan(D2X).value = Abs(IsClientBanned(PRODUCT_D2XP))
-    chkCBan(W2).value = Abs(IsClientBanned(PRODUCT_W2BN))
-    chkCBan(W3).value = Abs(IsClientBanned(PRODUCT_WAR3))
-    chkCBan(W3X).value = Abs(IsClientBanned(PRODUCT_W3XP))
+    chkCBan(SC).Value = Abs(IsClientBanned(PRODUCT_STAR))
+    chkCBan(BW).Value = Abs(IsClientBanned(PRODUCT_SEXP))
+    chkCBan(D2).Value = Abs(IsClientBanned(PRODUCT_D2DV))
+    chkCBan(D2X).Value = Abs(IsClientBanned(PRODUCT_D2XP))
+    chkCBan(W2).Value = Abs(IsClientBanned(PRODUCT_W2BN))
+    chkCBan(W3).Value = Abs(IsClientBanned(PRODUCT_WAR3))
+    chkCBan(W3X).Value = Abs(IsClientBanned(PRODUCT_W3XP))
 
     txtLevelBanMsg.Text = Config.LevelBanMessage
     If LenB(txtLevelBanMsg.Text) = 0 Then txtLevelBanMsg.Text = "You are below the required level for entry."
@@ -5394,8 +5394,8 @@ Private Sub InitLogging()
             cboLogging.ListIndex = 0
     End Select
     
-    chkLogDBActions.value = Abs(Config.LogDBActions)
-    chkLogAllCommands.value = Abs(Config.LogCommands)
+    chkLogDBActions.Value = Abs(Config.LogDBActions)
+    chkLogAllCommands.Value = Abs(Config.LogCommands)
 
     txtMaxBackLogSize.Text = Config.MaxBacklogSize
     txtMaxLogSize.Text = Config.MaxLogFileSize
@@ -5403,10 +5403,10 @@ End Sub
 
 Private Sub InitGenGreets()
     txtGreetMsg.Text = Config.GreetMessageText
-    chkGreetMsg.value = Abs(Config.GreetMessage)
+    chkGreetMsg.Value = Abs(Config.GreetMessage)
     Call chkGreetMsg_Click
     
-    chkWhisperGreet.value = Abs(Config.WhisperGreet)
+    chkWhisperGreet.Value = Abs(Config.WhisperGreet)
 End Sub
 
 Private Sub InitGenIdles()
@@ -5414,47 +5414,47 @@ Private Sub InitGenIdles()
     
     Select Case Config.IdleMessageType
         Case "msg", vbNullString
-            optMsg.value = True
+            optMsg.Value = True
             Call optMsg_Click
         Case "quote"
-            optQuote.value = True
+            optQuote.Value = True
             Call optQuote_Click
         Case "uptime"
-            optUptime.value = True
+            optUptime.Value = True
             Call optUptime_Click
         Case "mp3"
-            optMP3.value = True
+            optMP3.Value = True
             Call optMP3_Click
         Case Else
-            optMsg.value = True
+            optMsg.Value = True
             Call optMsg_Click
     End Select
     
     txtIdleMsg.Text = Config.IdleMessageText
     If LenB(txtIdleMsg.Text) = 0 Then txtIdleMsg.Text = "/me is a %v by Stealth - http://www.stealthbot.net"
     
-    chkIdles.value = Abs(Config.IdleMessage)
+    chkIdles.Value = Abs(Config.IdleMessage)
     Call chkIdles_Click
     
 End Sub
 
 Private Sub InitGenMisc()
-    chkAllowMP3.value = Abs(Config.Mp3Commands)
-    chkPAmp.value = Abs(Config.ProfileAmp)
-    chkMail.value = Abs(Config.BotMail)
+    chkAllowMP3.Value = Abs(Config.Mp3Commands)
+    chkPAmp.Value = Abs(Config.ProfileAmp)
+    chkMail.Value = Abs(Config.BotMail)
 
-    chkWhisperCmds.value = Abs(Config.WhisperCommands)
-    chkShowOffline.value = Abs(Config.ShowOfflineFriends)
+    chkWhisperCmds.Value = Abs(Config.WhisperCommands)
+    chkShowOffline.Value = Abs(Config.ShowOfflineFriends)
     
     txtOwner.Text = Config.BotOwner
     txtTrigger.Text = Config.Trigger
     
-    chkBackup.value = Abs(Config.UseBackupChannel)
+    chkBackup.Value = Abs(Config.UseBackupChannel)
     Call chkBackup_Click
     txtBackupChan.Text = Config.BackupChannel
     
-    optNaming(Config.NamespaceConvention).value = True
-    chkD2Naming.value = Abs(Config.UseD2Naming)
+    optNaming(Config.NamespaceConvention).Value = True
+    chkD2Naming.Value = Abs(Config.UseD2Naming)
 End Sub
 
 ' END INIT SUBS
@@ -5485,7 +5485,7 @@ Private Sub SaveClientBans()
     Clients(W2) = PRODUCT_W2BN
 
     For i = 0 To 6
-        If (chkCBan(i).value = 1) Then
+        If (chkCBan(i).Value = 1) Then
             If (GetAccess(Clients(i), "GAME").Username = _
                 vbNullString) Then
                 
