@@ -6147,7 +6147,7 @@ Sub Connect()
     Dim NotEnoughInfo As Boolean
     Dim MissingInfo As String
     
-    g_username = BotVars.Username
+    'g_username = BotVars.Username
     
     If sckBNet.State = 0 And sckBNLS.State = 0 Then
     

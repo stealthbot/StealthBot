@@ -664,7 +664,7 @@ Public Property Get ToString() As String
 End Property
 
 Public Property Get IconCode() As Integer
-    Dim intWins As Integer
+    Dim intWins As Long
     
     If (BotVars.ShowStatsIcons) Then
         Select Case (StrReverse$(Icon))
@@ -698,13 +698,13 @@ Public Property Get IconCode() As Integer
             
             Case "STAR", "SEXP"
                 intWins = Wins
-                If (intWins > 10) Then intWins = 10
-                IconCode = (ICON_START_SC + intWins)
+                If (intWins > 10&) Then intWins = 10&
+                IconCode = CInt(ICON_START_SC + intWins)
             
             Case "W2BN"
                 intWins = Wins
-                If (intWins > 10) Then intWins = 10
-                IconCode = (ICON_START_W2 + intWins)
+                If (intWins > 10&) Then intWins = 10&
+                IconCode = CInt(ICON_START_W2 + intWins)
             
             Case "WAR3", "W3XP"
                 IconCode = _
