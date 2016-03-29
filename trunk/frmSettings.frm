@@ -4172,6 +4172,7 @@ Const W3    As Byte = 4
 Const W3X   As Byte = 5
 Const W2    As Byte = 6
 
+Private Const BNLS_NOT_SET As String = "No server set"
 
 Private Sub Form_Load()
     Me.Icon = frmChat.Icon
@@ -4473,6 +4474,11 @@ Sub ShowPanel(ByVal index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
     End If
 End Sub
 
+Private Sub cboConnMethod_Click()
+    'Disables the server selection box when hashing is selected
+    cboBNLSServer.Enabled = CBool(cboConnMethod.ListIndex = 0)
+End Sub
+
 Private Sub cmdCancel_Click()
     Unload Me
 End Sub
@@ -4672,6 +4678,11 @@ Private Function SaveSettings() As Boolean
     
     If cboBNLSServer.ListIndex > 0 Then
         Config.BNLSServer = cboBNLSServer.Text
+    ElseIf cboBNLSServer.ListIndex = -1 Then
+        If StrComp(cboBNLSServer.Text, BNLS_NOT_SET, vbBinaryCompare) <> 0 Then
+            Config.BNLSServer = cboBNLSServer.Text
+            AddBNLSServer Config.BNLSServer
+        End If
     End If
     
     ' Save the BNLS server list
@@ -5274,10 +5285,13 @@ End Sub
 Private Sub InitConnAdvanced()
     ' Connection method
     cboConnMethod.ListIndex = CInt(Abs(Not Config.UseBNLS))
+    cboBNLSServer.Enabled = Abs(Config.UseBNLS)
     
     ' Set selected BNLS server
-    If Config.BNLSFinder Or Len(Config.BNLSServer) = 0 Then
+    If Config.BNLSFinder Then
         cboBNLSServer.ListIndex = 0
+    ElseIf Len(Config.BNLSServer) = 0 Then
+        cboBNLSServer.Text = BNLS_NOT_SET
     ElseIf Len(Config.BNLSServer) > 0 Then
         cboBNLSServer.ListIndex = GetBnlsIndex(Config.BNLSServer)
     End If
