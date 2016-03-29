@@ -886,8 +886,10 @@ End Function
 Private Function Diablo_ToString() As String
     Dim buf As String
     
-    If ((Statstring = vbNullString) Or (IsValid = False)) Then
+    If (Statstring = vbNullString) Then
         buf = " (No stats available)"
+    ElseIf (IsValid = False) Then
+        buf = " (Custom: " & Statstring & ")"
     Else
         buf = _
             " (Level " & Level() & " " & CharacterClass() & " with " & Dots() & " dots, " & Strength() & _
@@ -904,16 +906,12 @@ End Function
 Private Function DiabloII_ToString() As String
     Dim buf As String
     If ((Statstring = vbNullString) Or (IsValid = False)) Then
-        buf = " (Open Character)"
+        buf = " (Open character)"
     Else
         buf = " ("
 
-        If (Len(CharacterTitle()) > 0) Then
-            buf = buf & CharacterTitle() & " "
-        End If
-
         buf = _
-            buf & CharacterName() & ", a " & IIf(IsCharacterDead(), "dead ", vbNullString) & _
+            buf & CharacterTitleAndName() & ", a " & IIf(IsCharacterDead(), "dead ", vbNullString) & _
                 IIf(IsHardcoreCharacter(), "hardcore ", vbNullString) & "level " & Level() & " " & _
                     IIf(IsLadderCharacter(), "ladder ", vbNullString) & CharacterClass()
         
@@ -942,7 +940,7 @@ Private Function WarCraftIII_ToString() As String
         End If
         
         If (Clan() <> vbNullString) Then
-            buf = buf & ", in clan " & Clan()
+            buf = buf & ", in Clan " & Clan()
         End If
         
         buf = buf & ")"
