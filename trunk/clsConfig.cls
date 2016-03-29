@@ -1651,7 +1651,7 @@ Private Sub LoadDefaults()
     m_WhisperGreet = False
     m_IdleMessage = False
     m_IdleMessageText = vbNullString
-    m_IdleMessageDelay = 6
+    m_IdleMessageDelay = 12
     m_IdleMessageType = "msg"
     m_Trigger = "{.}"
     m_BotOwner = vbNullString
@@ -1682,7 +1682,7 @@ Private Sub LoadDefaults()
     m_StoreAllBans = True
     m_ChannelProtectionMessage = vbNullString
     m_IdleBan = False
-    m_IdleBanDelay = 500
+    m_IdleBanDelay = 300
     m_IdleBanKick = False
     m_IPBans = True
     m_UDPBan = False
