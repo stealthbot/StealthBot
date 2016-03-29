@@ -1102,19 +1102,11 @@ Begin VB.Form frmChat
       Begin VB.Menu mnuSepTabcd 
          Caption         =   "-"
       End
-      Begin VB.Menu mnuMonitor 
-         Caption         =   "User &Monitor"
-         Visible         =   0   'False
-      End
-      Begin VB.Menu mnuSepXY 
-         Caption         =   "-"
-         Visible         =   0   'False
-      End
       Begin VB.Menu mnuGetNews 
          Caption         =   "Get &News and Check for Updates"
       End
       Begin VB.Menu mnuUpdateVerbytes 
-         Caption         =   "Update &Version Bytes from StealthBot.net"
+         Caption         =   "Update &Version Bytes"
       End
       Begin VB.Menu mnuSepZ 
          Caption         =   "-"
@@ -1210,6 +1202,18 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuUTF8 
          Caption         =   "Use &UTF-8 in Chat"
+      End
+      Begin VB.Menu mnuLogging 
+         Caption         =   "&Logging Settings"
+         Begin VB.Menu mnuLog0 
+            Caption         =   "Full Text Logging"
+         End
+         Begin VB.Menu mnuLog1 
+            Caption         =   "Temporary Logging"
+         End
+         Begin VB.Menu mnuLog2 
+            Caption         =   "No Logging"
+         End
       End
       Begin VB.Menu mnuSep4 
          Caption         =   "-"
@@ -1309,21 +1313,6 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuHideWhispersInrtbChat 
          Caption         =   "&Hide Whispers in Main Window"
-      End
-      Begin VB.Menu mnuSP5 
-         Caption         =   "-"
-      End
-      Begin VB.Menu mnuLogging 
-         Caption         =   "&Logging Settings"
-         Begin VB.Menu mnuLog0 
-            Caption         =   "Full Text Logging"
-         End
-         Begin VB.Menu mnuLog1 
-            Caption         =   "Partial Text Logging"
-         End
-         Begin VB.Menu mnuLog2 
-            Caption         =   "No Logging"
-         End
       End
       Begin VB.Menu mnuSepC 
          Caption         =   "-"
@@ -4612,17 +4601,17 @@ ERROR_HANDLER:
     
 End Sub
 
-'Private Sub mnuSetTop_Click()
-'    mnuLog0.Checked = False
-'    mnuLog1.Checked = False
-'    mnuLog2.Checked = False
-'
-'    Select Case BotVars.Logging
-'        Case 0: mnuLog0.Checked = True
-'        Case 1: mnuLog1.Checked = True
-'        Case 2: mnuLog2.Checked = True
-'    End Select
-'End Sub
+Private Sub mnuSetTop_Click()
+    mnuLog0.Checked = False
+    mnuLog1.Checked = False
+    mnuLog2.Checked = False
+
+    Select Case BotVars.Logging
+        Case 2: mnuLog0.Checked = True
+        Case 1: mnuLog1.Checked = True
+        Case 0: mnuLog2.Checked = True
+    End Select
+End Sub
 
 Private Sub mnuTerms_Click()
     ShellOpenURL "http://eula.stealthbot.net", "the StealthBot EULA"
@@ -4694,20 +4683,6 @@ Private Sub mnuUTF8_Click()
     
     Config.UseUTF8 = CBool(mnuUTF8.Checked)
     Call Config.Save
-End Sub
-
-Private Sub mnuWindow_Click()
-    mnuLog0.Checked = False
-    mnuLog1.Checked = False
-    mnuLog2.Checked = False
-    'mnuLog3.Checked = False
-    
-    Select Case BotVars.Logging
-        Case 2: mnuLog0.Checked = True
-        Case 1: mnuLog1.Checked = True
-        Case 0: mnuLog2.Checked = True
-        'Case 3: mnuLog3.Checked = True
-    End Select
 End Sub
 
 Private Sub rtbChat_KeyDown(KeyCode As Integer, Shift As Integer)
