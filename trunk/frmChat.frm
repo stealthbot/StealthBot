@@ -1741,6 +1741,8 @@ Private Sub Form_Load()
     ReDim gOutFilters(0)
     ReDim gFilters(0)
     
+    Call BuildProductInfo
+    
     Set Config = New clsConfig
     Config.Load GetConfigFilePath()
     
@@ -3096,29 +3098,29 @@ Public Sub AddFriend(ByVal Username As String, ByVal Product As String, IsOnline
     
     'Everybody Else
     Select Case Product
-        Case Is = "STAR"
+        Case Is = PRODUCT_STAR
             i = ICSTAR
-        Case Is = "SEXP"
+        Case Is = PRODUCT_SEXP
             i = ICSEXP
-        Case Is = "D2DV"
+        Case Is = PRODUCT_D2DV
             i = ICD2DV
-        Case Is = "D2XP"
+        Case Is = PRODUCT_D2XP
             i = ICD2XP
-        Case Is = "W2BN"
+        Case Is = PRODUCT_W2BN
             i = ICW2BN
-        Case Is = "WAR3"
+        Case Is = PRODUCT_WAR3
             i = ICWAR3
-        Case Is = "W3XP"
+        Case Is = PRODUCT_W3XP
             i = ICWAR3X
-        Case Is = "CHAT"
+        Case Is = PRODUCT_CHAT
             i = ICCHAT
-        Case Is = "DRTL"
+        Case Is = PRODUCT_DRTL
             i = ICDIABLO
-        Case Is = "DSHR"
+        Case Is = PRODUCT_DSHR
             i = ICDIABLOSW
-        Case Is = "JSTR"
+        Case Is = PRODUCT_JSTR
             i = ICJSTR
-        Case Is = "SSHR"
+        Case Is = PRODUCT_SSHR
             i = ICSCSW
         Case Else
             i = ICUNKNOWN
@@ -3199,18 +3201,18 @@ Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLInd
                     x.ListSubItems.Item(1).ReportIcon = ICONLINE
                     
                     Select Case .Game
-                        Case Is = "STAR": i = ICSTAR
-                        Case Is = "SEXP": i = ICSEXP
-                        Case Is = "D2DV": i = ICD2DV
-                        Case Is = "D2XP": i = ICD2XP
-                        Case Is = "W2BN": i = ICW2BN
-                        Case Is = "WAR3": i = ICWAR3
-                        Case Is = "W3XP": i = ICWAR3X
-                        Case Is = "CHAT": i = ICCHAT
-                        Case Is = "DRTL": i = ICDIABLO
-                        Case Is = "DSHR": i = ICDIABLOSW
-                        Case Is = "JSTR": i = ICJSTR
-                        Case Is = "SSHR": i = ICSCSW
+                        Case Is = PRODUCT_STAR: i = ICSTAR
+                        Case Is = PRODUCT_SEXP: i = ICSEXP
+                        Case Is = PRODUCT_D2DV: i = ICD2DV
+                        Case Is = PRODUCT_D2XP: i = ICD2XP
+                        Case Is = PRODUCT_W2BN: i = ICW2BN
+                        Case Is = PRODUCT_WAR3: i = ICWAR3
+                        Case Is = PRODUCT_W3XP: i = ICWAR3X
+                        Case Is = PRODUCT_CHAT: i = ICCHAT
+                        Case Is = PRODUCT_DRTL: i = ICDIABLO
+                        Case Is = PRODUCT_DSHR: i = ICDIABLOSW
+                        Case Is = PRODUCT_JSTR: i = ICJSTR
+                        Case Is = PRODUCT_SSHR: i = ICSCSW
                         Case Else: i = ICUNKNOWN
                     End Select
                     
@@ -3410,7 +3412,7 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, 
             If aInx > 0 Then
                 sProd = g_Channel.Users(aInx).Game
 
-                mnuPopWebProfile.Enabled = (sProd = "W3XP" Or sProd = "WAR3")
+                mnuPopWebProfile.Enabled = (sProd = PRODUCT_W3XP Or sProd = PRODUCT_WAR3)
                 mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And g_Clan.Self.Rank >= 3)
                 mnuPopKick.Enabled = (MyFlags = 2 Or MyFlags = 18)
                 mnuPopDes.Enabled = (MyFlags = 2 Or MyFlags = 18)
@@ -3443,7 +3445,7 @@ Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, x As Singl
                 sProd = g_Friends(aInx).Game
                 bIsOn = g_Friends(aInx).IsOnline
 
-                mnuPopFLWebProfile.Enabled = (sProd = "W3XP" Or sProd = "WAR3")
+                mnuPopFLWebProfile.Enabled = (sProd = PRODUCT_W3XP Or sProd = PRODUCT_WAR3)
                 mnuPopFLWhisper.Enabled = bIsOn
             End If
         Else
@@ -3786,7 +3788,7 @@ Private Sub mnuPopClanStatsWAR3_Click()
     
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    sProd = "WAR3"
+    sProd = PRODUCT_WAR3
     
     If (StrComp(sProd, StrReverse$(BotVars.Product), vbBinaryCompare) = 0) Then
         sProd = vbNullString
@@ -3802,7 +3804,7 @@ Private Sub mnuPopClanStatsW3XP_Click()
     
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    sProd = "W3XP"
+    sProd = PRODUCT_W3XP
     
     If (StrComp(sProd, StrReverse$(BotVars.Product), vbBinaryCompare) = 0) Then
         sProd = vbNullString
@@ -3942,12 +3944,12 @@ Private Sub mnuPopFLStats_Click()
     aInx = lvFriendList.SelectedItem.index
     sProd = g_Friends(aInx).Game
     Select Case sProd
-        Case "STAR", "SEXP", "W2BN", "WAR3", "W3XP", "JSTR", "SSHR"
+        Case PRODUCT_STAR, PRODUCT_SEXP, PRODUCT_W2BN, PRODUCT_WAR3, PRODUCT_W3XP, PRODUCT_JSTR, PRODUCT_SSHR
             ' get stats for user on their current product
         Case Else
             ' their current product does not have stats, or they are offline
-            Select Case BotVars.Product
-                Case "RATS", "PXES", "NB2W", "3RAW", "PX3W", "RTSJ", "RHSS"
+            Select Case StrReverse$(BotVars.Product)
+                Case PRODUCT_STAR, PRODUCT_SEXP, PRODUCT_W2BN, PRODUCT_WAR3, PRODUCT_W3XP, PRODUCT_JSTR, PRODUCT_SSHR
                     ' get stats for user on the bot's product
                     sProd = StrReverse$(BotVars.Product)
                 Case Else
@@ -4032,12 +4034,12 @@ Private Sub mnuPopStats_Click()
     aInx = g_Channel.GetUserIndex(GetSelectedUser)
     sProd = g_Channel.Users(aInx).Game
     Select Case sProd
-        Case "STAR", "SEXP", "W2BN", "WAR3", "W3XP", "JSTR", "SSHR"
+        Case PRODUCT_STAR, PRODUCT_SEXP, PRODUCT_W2BN, PRODUCT_WAR3, PRODUCT_W3XP, PRODUCT_JSTR, PRODUCT_SSHR
             ' get stats for user on their current product
         Case Else
             ' their current product does not have stats
-            Select Case BotVars.Product
-                Case "RATS", "PXES", "NB2W", "3RAW", "PX3W", "RTSJ", "RHSS"
+            Select Case StrReverse$(BotVars.Product)
+                Case PRODUCT_STAR, PRODUCT_SEXP, PRODUCT_W2BN, PRODUCT_WAR3, PRODUCT_W3XP, PRODUCT_JSTR, PRODUCT_SSHR
                     ' get stats for user on the bot's product
                     sProd = StrReverse$(BotVars.Product)
                 Case Else
@@ -4496,15 +4498,13 @@ Private Sub mnuRepairDataFiles_Click()
 End Sub
 
 Private Sub mnuRepairVerbytes_Click()
-    Config.SetVersionByte "W2", GetVerByte("NB2W", 1)
-    Config.SetVersionByte "W3", GetVerByte("3RAW", 1)
-    Config.SetVersionByte "SC", GetVerByte("RATS", 1)
-    Config.SetVersionByte "D2", GetVerByte("VD2D", 1)
-    Config.SetVersionByte "D2X", GetVerByte("PX2D", 1)
-    Config.SetVersionByte "D1", GetVerByte("LTRD", 1)
-    Config.SetVersionByte "DS", GetVerByte("RHSD", 1)
-    Config.SetVersionByte "SS", GetVerByte("RHSS", 1)
-    Config.SetVersionByte "JS", GetVerByte("RTSJ", 1)
+    Dim index As Integer
+    
+    For index = 0 To UBound(ProductList)
+        If ProductList(index).BNLS_ID > 0 Then
+            Config.SetVersionByte ProductList(index).ShortCode, GetVerByte(ProductList(index).Code, 1)
+        End If
+    Next
     
     Call Config.Save
     
@@ -5946,14 +5946,14 @@ Sub Connect()
             MissingInfo = MissingInfo & "your choice of Client, "
             NotEnoughInfo = True
         Else
-            Select Case StrReverse$(UCase$(BotVars.Product))
-                Case "SSHR", "DRTL", "DSHR"
-                Case "STAR", "SEXP", "JSTR", "D2DV", "W2BN", "WAR3"
+            Select Case GetProductInfo(BotVars.Product).KeyCount
+                Case 0
+                Case 1
                     If BotVars.CDKey = vbNullString Then
                         MissingInfo = MissingInfo & "CDKey, "
                         NotEnoughInfo = True
                     End If
-                Case "D2XP", "W3XP"
+                Case 2
                     If BotVars.CDKey = vbNullString Then
                         MissingInfo = MissingInfo & "CDKey, "
                         NotEnoughInfo = True
@@ -5962,9 +5962,6 @@ Sub Connect()
                         MissingInfo = MissingInfo & "expansion CDKey, "
                         NotEnoughInfo = True
                     End If
-                Case Else
-                    MissingInfo = MissingInfo & "your choice of Client, "
-                    NotEnoughInfo = True
             End Select
         End If
         
@@ -6422,8 +6419,8 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                                 Case Else
                                     Splt() = Split(strTmp, Space$(1), 4)
                                 
-                                    If ((StrReverse$(BotVars.Product) = "WAR3") Or _
-                                        (StrReverse$(BotVars.Product) = "W3XP")) Then
+                                    If ((StrReverse$(BotVars.Product) = PRODUCT_WAR3) Or _
+                                        (StrReverse$(BotVars.Product) = PRODUCT_W3XP)) Then
                                         
                                         Command = StringFormat("{0} {1}", Command, ReverseConvertUsernameGateway(Splt(2)))
                                     Else
@@ -6600,7 +6597,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     BotVars.Password = Config.Password
     BotVars.CDKey = Config.CDKey
     BotVars.EXPKey = Config.EXPKey
-    BotVars.Product = Config.Game
+    BotVars.Product = StrReverse(Config.Game)
     BotVars.Server = Config.Server
     BotVars.HomeChannel = Config.HomeChannel
     BotVars.BotOwner = Config.BotOwner

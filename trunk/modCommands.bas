@@ -498,18 +498,18 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                                 
                                 ' check for invalid game entry
                                 Select Case (User)
-                                    Case "CHAT" ' Chat Client
-                                    Case "DRTL" ' Diablo I: Retail
-                                    Case "DSHR" ' Diablo I: Shareware
-                                    Case "W2BN" ' WarCraft II: Battle.net Edition
-                                    Case "STAR" ' StarCraft
-                                    Case "SSHR" ' StarCraft: Shareware
-                                    Case "JSTR" ' StarCraft: Japanese
-                                    Case "SEXP" ' StarCraft: Brood War
-                                    Case "D2DV" ' Diablo II
-                                    Case "D2XP" ' Diablo II: Lord of Destruction
-                                    Case "WAR3" ' WarCraft III: Reign of Chaos
-                                    Case "W3XP" ' WarCraft III: The Frozen Throne
+                                    Case PRODUCT_CHAT ' Chat Client
+                                    Case PRODUCT_DRTL ' Diablo I: Retail
+                                    Case PRODUCT_DSHR ' Diablo I: Shareware
+                                    Case PRODUCT_W2BN ' WarCraft II: Battle.net Edition
+                                    Case PRODUCT_STAR  ' StarCraft
+                                    Case PRODUCT_SSHR ' StarCraft: Shareware
+                                    Case PRODUCT_JSTR ' StarCraft: Japanese
+                                    Case PRODUCT_SEXP ' StarCraft: Brood War
+                                    Case PRODUCT_D2DV ' Diablo II
+                                    Case PRODUCT_D2XP ' Diablo II: Lord of Destruction
+                                    Case PRODUCT_WAR3 ' WarCraft III: Reign of Chaos
+                                    Case PRODUCT_W3XP ' WarCraft III: The Frozen Throne
                                     Case Else
                                         ' return message
                                         cmdRet(0) = "Error: The game specified is invalid."
@@ -1504,8 +1504,8 @@ Public Function ConvertUsernameGateway(ByVal Username As String) As String
     
     ' store whether we are on WC3
     blnIsW3 = _
-        ((StrReverse$(BotVars.Product) = "WAR3") Or _
-         (StrReverse$(BotVars.Product) = "W3XP"))
+        ((StrReverse$(BotVars.Product) = PRODUCT_WAR3) Or _
+         (StrReverse$(BotVars.Product) = PRODUCT_W3XP))
     
     ' store how we will be converting namespaces
     intConvert = BotVars.GatewayConventions
@@ -1619,7 +1619,7 @@ Public Function ConvertUsernameD2(ByVal Username As String, Optional ByVal RealU
             ConvertUsernameD2 = StringFormat(strFormat, Title, Char, Name)
         ElseIf (Index = 0) Then
             ' user has no star in name
-            If ((StrReverse$(BotVars.Product) = "D2DV") Or (StrReverse$(BotVars.Product) = "D2XP")) Then
+            If ((StrReverse$(BotVars.Product) = PRODUCT_D2DV) Or (StrReverse$(BotVars.Product) = PRODUCT_D2XP)) Then
                 ' if on D2, add star and return
                 ConvertUsernameD2 = "*" & Username
             Else
@@ -1674,7 +1674,7 @@ Public Function ReverseConvertUsernameGateway(ByVal Username As String) As Strin
     End If
 
     ' add * to D2 if not using D2 naming
-    If ((StrReverse$(BotVars.Product) = "D2DV") Or (StrReverse$(BotVars.Product) = "D2XP")) Then
+    If ((StrReverse$(BotVars.Product) = PRODUCT_D2DV) Or (StrReverse$(BotVars.Product) = PRODUCT_D2XP)) Then
         If (BotVars.UseD2Naming = False) Then
             ' With reverseUsername() now being called from AddQ(), usernames
             ' in procedures called prior to AddQ() will no longer require
@@ -1702,8 +1702,8 @@ Public Function ReverseConvertUsernameGateway(ByVal Username As String) As Strin
     
     ' store whether we are on WC3
     blnIsW3 = _
-        ((StrReverse$(BotVars.Product) = "WAR3") Or _
-         (StrReverse$(BotVars.Product) = "W3XP"))
+        ((StrReverse$(BotVars.Product) = PRODUCT_WAR3) Or _
+         (StrReverse$(BotVars.Product) = PRODUCT_W3XP))
     
     ' store how we will be converting namespaces
     intConvert = BotVars.GatewayConventions

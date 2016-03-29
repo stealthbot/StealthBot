@@ -22,6 +22,7 @@ Public LogPacketTraffic As Boolean
 Public cfgVersion As Long
 
 Public VoteInitiator As udtGetAccessResponse
+Public ProductList(12) As udtProductInfo
 
 Public g_Queue As New clsQueue
 Public g_OSVersion As New clsOSVersion

@@ -28,6 +28,21 @@ Public Const FILE_WARDEN_INI = "Warden.ini"
 Public Const FILE_BNLS_LIST = "AdditionalBNLSservers.txt"
 Public Const FILE_SERVER_LIST = "Servers.txt"
 
+' Product codes
+Public Const PRODUCT_STAR = "STAR"
+Public Const PRODUCT_SEXP = "SEXP"
+Public Const PRODUCT_W2BN = "W2BN"
+Public Const PRODUCT_D2DV = "D2DV"
+Public Const PRODUCT_D2XP = "D2XP"
+Public Const PRODUCT_WAR3 = "WAR3"
+Public Const PRODUCT_W3XP = "W3XP"
+Public Const PRODUCT_SSHR = "SSHR"
+Public Const PRODUCT_JSTR = "JSTR"
+Public Const PRODUCT_DSHR = "DSHR"
+Public Const PRODUCT_DRTL = "DRTL"
+Public Const PRODUCT_CHAT = "CHAT"
+
+
 Public Const BNET_MSG_LENGTH = 233
 
 ' Colors

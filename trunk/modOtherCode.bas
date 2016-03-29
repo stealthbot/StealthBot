@@ -212,19 +212,7 @@ Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Inte
     If ((Config.GetVersionByte(key) = -1) Or _
         (UseHardcode = 1)) Then
         
-        Select Case StrReverse(Product)
-            Case "W2BN": GetVerByte = &H4F
-            Case "STAR": GetVerByte = &HD3
-            Case "SEXP": GetVerByte = &HD3
-            Case "D2DV": GetVerByte = &HE
-            Case "D2XP": GetVerByte = &HE
-            Case "W3XP": GetVerByte = &H1B
-            Case "WAR3": GetVerByte = &H1B
-            Case "DRTL": GetVerByte = &H2A
-            Case "DSHR": GetVerByte = &H2A
-            Case "JSTR": GetVerByte = &HA9
-            Case "SSHR": GetVerByte = &HA5
-        End Select
+        GetVerByte = GetProductInfo(Product).VersionByte
     Else
         GetVerByte = Config.GetVersionByte(key)
     End If
@@ -1196,18 +1184,18 @@ Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long, Icon
         i = IconCode
     'Else
     '    Select Case (UCase$(sProduct))
-    '        Case Is = "STAR": I = ICSTAR
-    '        Case Is = "SEXP": I = ICSEXP
-    '        Case Is = "D2DV": I = ICD2DV
-    '        Case Is = "D2XP": I = ICD2XP
-    '        Case Is = "W2BN": I = ICW2BN
-    '        Case Is = "CHAT": I = ICCHAT
-    '        Case Is = "DRTL": I = ICDIABLO
-    '        Case Is = "DSHR": I = ICDIABLOSW
-    '        Case Is = "JSTR": I = ICJSTR
-    '        Case Is = "SSHR": I = ICSCSW
-    '        Case Is = "WAR3": I = ICWAR3
-    '        Case Is = "W3XP": I = ICWAR3X
+    '        Case Is =  PRODUCT_STAR: I = ICSTAR
+    '        Case Is = PRODUCT_SEXP: I = ICSEXP
+    '        Case Is = PRODUCT_D2DV: I = ICD2DV
+    '        Case Is = PRODUCT_D2XP: I = ICD2XP
+    '        Case Is = PRODUCT_W2BN: I = ICW2BN
+    '        Case Is = PRODUCT_CHAT: I = ICCHAT
+    '        Case Is = PRODUCT_DRTL: I = ICDIABLO
+    '        Case Is = PRODUCT_DSHR: I = ICDIABLOSW
+    '        Case Is = PRODUCT_JSTR: I = ICJSTR
+    '        Case Is = PRODUCT_SSHR: I = ICSCSW
+    '        Case Is = PRODUCT_WAR3: I = ICWAR3
+    '        Case Is = PRODUCT_W3XP: I = ICWAR3X
     '
     '        '*** Special icons for WCG added 6/24/07 ***
     '        Case Is = "WCRF": I = IC_WCRF
@@ -1521,22 +1509,7 @@ Public Sub EnableSO_KEEPALIVE(ByVal lSocketHandle As Long)
 End Sub
 
 Public Function ProductCodeToFullName(ByVal pCode As String) As String
-    Select Case (pCode)
-        Case "SEXP": ProductCodeToFullName = "Starcraft: Brood War"
-        Case "STAR": ProductCodeToFullName = "Starcraft Original"
-        Case "WAR3": ProductCodeToFullName = "Warcraft III"
-        Case "W2BN": ProductCodeToFullName = "Warcraft II BNE"
-        Case "D2DV": ProductCodeToFullName = "Diablo II"
-        Case "D2XP": ProductCodeToFullName = "Diablo II: Lord of Destruction"
-        Case "SSHR": ProductCodeToFullName = "Starcraft Shareware"
-        Case "JSTR": ProductCodeToFullName = "Starcraft Japanese"
-        Case "DRTL": ProductCodeToFullName = "Diablo Retail"
-        Case "W3XP": ProductCodeToFullName = "Warcraft III: The Frozen Throne"
-        Case "CHAT": ProductCodeToFullName = "a telnet connection"
-        Case "DSHR": ProductCodeToFullName = "Diablo Shareware"
-        Case "SSHR": ProductCodeToFullName = "Starcraft Shareware"
-        Case Else:   ProductCodeToFullName = "an unknown or non-standard product"
-    End Select
+    ProductCodeToFullName = GetProductInfo(pCode).FullName
 End Function
 
 ' Assumes that sIn has Length >=1
@@ -1607,7 +1580,7 @@ Public Sub GetW3LadderProfile(ByVal sPlayer As String, ByVal eType As enuWebProf
     Dim W3WebProfileType As String
     
     If (LenB(sPlayer) > 0) Then
-        W3WebProfileType = IIf(eType = W3XP, "w3xp", "war3")
+        W3WebProfileType = IIf(eType = W3XP, PRODUCT_W3XP, PRODUCT_WAR3)
         W3LadderURL = StringFormat(W3LadderURLFormat, W3WebProfileType, GetW3Realm(sPlayer), NameWithoutRealm(sPlayer, 1))
         
         ShellOpenURL W3LadderURL, sPlayer & "'s " & UCase$(W3WebProfileType) & " ladder profile"
@@ -1808,8 +1781,8 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
         
     g_Queue.RemoveLines tmp & "*"
 
-    If ((StrReverse$(BotVars.Product) = "WAR3") Or _
-        (StrReverse$(BotVars.Product) = "W3XP")) Then
+    If ((StrReverse$(BotVars.Product) = PRODUCT_WAR3) Or _
+        (StrReverse$(BotVars.Product) = PRODUCT_W3XP)) Then
         
         Dim strGateway As String
         
@@ -2707,20 +2680,7 @@ Function GetProductKey(Optional ByVal Product As String) As String
         Product = StrReverse$(BotVars.Product)
     End If
     
-    Select Case Product
-        Case "W2BN", "NB2W": GetProductKey = "W2"
-        Case "STAR", "RATS": GetProductKey = "SC"
-        Case "SEXP", "PXES": GetProductKey = "SC"
-        Case "D2DV", "VD2D": GetProductKey = "D2"
-        Case "D2XP", "PX2D": GetProductKey = "D2X"
-        Case "WAR3", "3RAW": GetProductKey = "W3"
-        Case "W3XP", "PX3W": GetProductKey = "W3"
-        Case "DRTL", "LTRD": GetProductKey = "D1"
-        Case "DSHR", "RHSD": GetProductKey = "DS"
-        Case "JSTR", "RTSJ": GetProductKey = "JS"
-        Case "SSHR", "RHSS": GetProductKey = "SS"
-        Case Else:           GetProductKey = Product
-    End Select
+    GetProductKey = GetProductInfo(Product).ShortCode
     
     If (LenB(ReadCfg$("Override", StringFormat("{0}ProdKey", Product))) > 0) Then
         GetProductKey = ReadCfg$("Override", StringFormat("{0}ProdKey", Product))
@@ -3263,3 +3223,52 @@ Public Sub CloseAllConnections(Optional ShowMessage As Boolean = True)
     
     RunInAll "Event_ServerError", "All connections closed."
 End Sub
+
+Public Sub BuildProductInfo()
+    ' 4-digit code, short code, short name, long name, number of keys, BNLS ID, logon system
+    ProductList(0) = CreateProductInfo("UNKW", vbNullString, "Unknown Product", 0, &H0, &H0, &H0)
+    ProductList(1) = CreateProductInfo(PRODUCT_STAR, "SC", "StarCraft", 1, &H1, BNCS_NLS, &HD3)
+    ProductList(2) = CreateProductInfo(PRODUCT_SEXP, "SC", "StarCraft Broodwar", 1, &H2, BNCS_NLS, &HD3)
+    ProductList(3) = CreateProductInfo(PRODUCT_W2BN, "W2", "WarCraft II: Battle.net Edition", 1, &H3, BNCS_OLS, &H4F)
+    ProductList(4) = CreateProductInfo(PRODUCT_D2DV, "D2", "Diablo II", 1, &H4, BNCS_NLS, &HE)
+    ProductList(5) = CreateProductInfo(PRODUCT_D2XP, "D2X", "Diablo II: Lord of Destruction", 2, &H5, BNCS_NLS, &HE)
+    ProductList(6) = CreateProductInfo(PRODUCT_WAR3, "W3", "WarCraft III: Reign of Chaos", 1, &H7, BNCS_NLS, &H1B)
+    ProductList(7) = CreateProductInfo(PRODUCT_W3XP, "W3", "WarCraft III: The Frozen Throne", 2, &H8, BNCS_NLS, &H1B)
+    ProductList(8) = CreateProductInfo(PRODUCT_DSHR, "DS", "Diablo Shareware", 0, &HA, BNCS_OLS, &H2A)
+    ProductList(9) = CreateProductInfo(PRODUCT_DRTL, "D1", "Diablo", 0, &H9, BNCS_OLS, &H2A)
+    ProductList(10) = CreateProductInfo(PRODUCT_SSHR, "SS", "StarCraft Shareware", 0, &HB, BNCS_LLS, &HA9)
+    ProductList(11) = CreateProductInfo(PRODUCT_JSTR, "JS", "Japanese StarCraft", 1, &H6, BNCS_LLS, &HA9)
+    ProductList(12) = CreateProductInfo(PRODUCT_CHAT, "CHAT", "Telnet Chat", 0, &H0, &H0, &H0)
+End Sub
+
+Private Function CreateProductInfo(ByVal sCode As String, ByVal sShort As String, ByVal sLongName As String, ByVal iKeys As Integer, ByVal iBnlsId As Long, ByVal iLogonSystem As Long, ByVal iVerByte As Long) As udtProductInfo
+    Dim pi As udtProductInfo
+    pi.Code = UCase$(sCode)
+    pi.ShortCode = UCase$(sShort)
+    pi.FullName = sLongName
+    pi.KeyCount = iKeys
+    pi.BNLS_ID = iBnlsId
+    pi.LogonSystem = iLogonSystem
+    pi.VersionByte = iVerByte
+    
+    CreateProductInfo = pi
+End Function
+
+Public Function GetProductInfo(ByVal sProductCode As String) As udtProductInfo
+    Dim pi As udtProductInfo
+    Dim index As Integer
+    sProductCode = UCase$(sProductCode)
+
+    For index = 0 To UBound(ProductList)
+        pi = ProductList(index)
+        
+        If StrComp(pi.Code, sProductCode, vbBinaryCompare) = 0 Or _
+            StrComp(pi.Code, StrReverse(sProductCode), vbBinaryCompare) = 0 Or _
+            StrComp(pi.ShortCode, sProductCode, vbBinaryCompare) = 0 Then
+            
+            GetProductInfo = pi
+            Exit Function
+        End If
+    Next
+    GetProductInfo = ProductList(0)
+End Function

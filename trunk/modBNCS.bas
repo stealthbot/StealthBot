@@ -481,7 +481,7 @@ On Error GoTo ERROR_HANDLER:
         Set cUserStats = Nothing
     End If
                 
-    If sProduct = "WAR3" Or sProduct = "W3XP" Then
+    If sProduct = PRODUCT_WAR3 Or sProduct = PRODUCT_W3XP Then
         If Len(sText) > 4 Then sW3Icon = StrReverse(Mid$(sText, 6, 4))
     End If
                 
@@ -1797,20 +1797,7 @@ On Error GoTo ERROR_HANDLER:
 
     If (LenB(sProduct) = 0) Then sProduct = BotVars.Product
     
-    Select Case UCase$(sProduct)
-        Case "RATS", "STAR": lRet = 1
-        Case "PXES", "SEXP": lRet = 1
-        Case "NB2W", "W2BN": lRet = 1
-        Case "VD2D", "D2DV": lRet = 1
-        Case "PX2D", "D2XP": lRet = 2
-        Case "RTSJ", "JSTR": lRet = 1
-        Case "3RAW", "WAR3": lRet = 1
-        Case "PX3W", "W3XP": lRet = 2
-        Case "LTRD", "DRTL": lRet = 0
-        Case "RHSD", "DSHR": lRet = 0
-        Case "RHSS", "SSHR": lRet = 0
-        Case Else:           lRet = &H0
-    End Select
+    lRet = GetProductInfo(sProduct).KeyCount
     
     sOverride = ReadCfg$("Override", StringFormat("{0}KeyCount", GetProductKey))
     
@@ -1821,68 +1808,6 @@ On Error GoTo ERROR_HANDLER:
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.GetCDKeyCount()", Err.Number, Err.description, OBJECT_NAME))
-End Function
-
-Private Function GetHashFiles() As String()
-On Error GoTo ERROR_HANDLER:
-    Dim sFiles() As String
-    Dim sPath As String
-    
-    ReDim sFiles(0 To 3)
-    
-    sPath = GetGamePath(BotVars.Product)
-    
-    sFiles(1) = StringFormat("{0}Storm.dll", sPath)
-    sFiles(2) = StringFormat("{0}Battle.snp", sPath)
-        
-
-    Select Case (UCase$(BotVars.Product))
-        Case "STAR", "RATS", "SEXP", "PXES":
-            sFiles(0) = StringFormat("{0}Starcraft.exe", sPath)
-            sFiles(3) = StringFormat("{0}STAR.bin", sPath)
-            
-        Case "W2BN", "NB2W":
-            sFiles(0) = StringFormat("{0}Warcraft II BNE.exe", sPath)
-            sFiles(3) = StringFormat("{0}W2BN.bin", sPath)
-            
-        Case "D2DV", "VD2D":
-            sFiles(0) = StringFormat("{0}game.exe", sPath)
-            sFiles(1) = StringFormat("{0}Bnclient.dll", sPath)
-            sFiles(2) = StringFormat("{0}D2Client.dll", sPath)
-            sFiles(3) = StringFormat("{0}D2DV.bin", sPath)
-            
-        Case "D2XP", "PX2D":
-            sFiles(0) = StringFormat("{0}game.exe", sPath)
-            sFiles(1) = StringFormat("{0}Bnclient.dll", sPath)
-            sFiles(2) = StringFormat("{0}D2Client.dll", sPath)
-            sFiles(3) = StringFormat("{0}D2XP.bin", sPath)
-            
-        Case "JSTR", "RTSJ":
-            sFiles(0) = StringFormat("{0}StarcraftJ.exe", sPath)
-            sFiles(3) = StringFormat("{0}JSTR.bin", sPath)
-            
-        Case "WAR3", "3RAW", "W3XP", "PX3W":
-            sFiles(0) = StringFormat("{0}war3.exe", sPath)
-            sFiles(2) = StringFormat("{0}Game.dll", sPath)
-            sFiles(3) = StringFormat("{0}WAR3.bin", sPath)
-            
-        Case "DRTL", "LTRD":
-            sFiles(0) = StringFormat("{0}Diablo.exe", sPath)
-            sFiles(3) = StringFormat("{0}DRTL.bin", sPath)
-            
-        Case "DSHR", "RHSD":
-            sFiles(0) = StringFormat("{0}Diablo_s.exe", sPath)
-            sFiles(3) = StringFormat("{0}DSHR.bin", sPath)
-            
-        Case "SSHR", "RHSS":
-            sFiles(0) = StringFormat("{0}Starcraft_s.exe", sPath)
-            sFiles(3) = StringFormat("{0}SSHR.bin", sPath)
-    End Select
-    GetHashFiles = sFiles
-    Exit Function
-ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetHashFiles()", Err.Number, Err.description, OBJECT_NAME))
 End Function
 
 Public Function GetLogonSystem(Optional sProduct As String = vbNullString) As Long
@@ -1900,21 +1825,7 @@ On Error GoTo ERROR_HANDLER:
     
     If (LenB(sProduct) = 0) Then sProduct = BotVars.Product
     
-    ' Many of these login sequences are not supported
-    Select Case UCase$(sProduct)
-        Case "RATS", "STAR": lRet = BNCS_NLS
-        Case "PXES", "SEXP": lRet = BNCS_NLS
-        Case "NB2W", "W2BN": lRet = BNCS_OLS
-        Case "VD2D", "D2DV": lRet = BNCS_NLS
-        Case "PX2D", "D2XP": lRet = BNCS_NLS
-        Case "RTSJ", "JSTR": lRet = BNCS_LLS
-        Case "3RAW", "WAR3": lRet = BNCS_NLS
-        Case "PX3W", "W3XP": lRet = BNCS_NLS
-        Case "LTRD", "DRTL": lRet = BNCS_OLS
-        Case "RHSD", "DSHR": lRet = BNCS_OLS
-        Case "RHSS", "SSHR": lRet = BNCS_LLS
-        Case Else:           lRet = &H0
-    End Select
+    lRet = GetProductInfo(sProduct).LogonSystem
     
     tLng = Config.GetLogonSystem(GetProductKey(sProduct))
     If tLng > -1 Then
@@ -1933,7 +1844,7 @@ ERROR_HANDLER:
 End Function
 
 'This will return a Long, that is Overrideable by the config, based on product ID, with a default.
-'GetProdLongOverride("ProtId", 0, "DRTL") would return 0, unless the user had D1ProtID= something in there config
+'GetProdLongOverride("ProtId", 0, PRODUCT_DRTL) would return 0, unless the user had D1ProtID= something in there config
 Private Function GetLongOverride(sKey As String, lDefault As Long) As Long
 On Error GoTo ERROR_HANDLER:
 

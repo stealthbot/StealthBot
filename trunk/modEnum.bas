@@ -29,6 +29,16 @@ Public Type udtAutoRespond
     Reply As String
 End Type
 
+Public Type udtProductInfo
+    Code As String
+    ShortCode As String
+    KeyCount As Integer
+    FullName As String
+    BNLS_ID As Long
+    LogonSystem As Long
+    VersionByte As Long
+End Type
+
 Public Type udtCustomCommandData
     reqAccess   As Integer
     Query       As String * 20

@@ -98,11 +98,11 @@ Public Property Let PendingBan(ByVal bln As Boolean)
 End Property
 
 Public Property Get IsUsingDII() As Boolean
-    IsUsingDII = ((Game = "D2DV") Or (Game = "D2XP"))
+    IsUsingDII = ((Game = PRODUCT_D2DV) Or (Game = PRODUCT_D2XP))
 End Property
 
 Public Property Get IsUsingWarIII() As Boolean
-    IsUsingWarIII = ((Game = "WAR3") Or (Game = "W3XP"))
+    IsUsingWarIII = ((Game = PRODUCT_WAR3) Or (Game = PRODUCT_W3XP))
 End Property
 
 Public Property Get Statstring() As String

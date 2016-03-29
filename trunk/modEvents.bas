@@ -560,7 +560,7 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     ' if D2 and on a char, we need to tell the whole world this so that Self is known later on
-    If (StrComp(Stats.Game, "D2DV", vbBinaryCompare)) = 0 Or (StrComp(Stats.Game, "D2XP", vbBinaryCompare)) = 0 Then
+    If (StrComp(Stats.Game, PRODUCT_D2DV, vbBinaryCompare)) = 0 Or (StrComp(Stats.Game, PRODUCT_D2XP, vbBinaryCompare)) = 0 Then
         If (LenB(Stats.CharacterName) > 0) Then
             CurrentUsername = Stats.CharacterName & "*" & CurrentUsername
         End If
@@ -1197,7 +1197,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 Set found = frmChat.lvChannel.ListItems(pos)
                 
                 ' if the update occured to a D2 user ...
-                If ((StrComp(UserObj.Game, "D2DV") = 0) Or (StrComp(UserObj.Game, "D2XP") = 0)) Then
+                If ((StrComp(UserObj.Game, PRODUCT_D2DV) = 0) Or (StrComp(UserObj.Game, PRODUCT_D2XP) = 0)) Then
                     ' the username could have changed!
                     If (StrComp(UserObj.DisplayName, found.Text, vbBinaryCompare) <> 0) Then
                         ' it did, so update user name text in channel list

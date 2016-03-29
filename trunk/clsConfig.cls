@@ -1447,6 +1447,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     ' Update our version number.
     m_ConfigVersion = CONFIG_VERSION
     
+    WriteSetting SECTION_MAIN, "ConfigVersion", m_ConfigVersion
     WriteSetting SECTION_MAIN, "DisableNews", m_DisableNews
 
     WriteSetting SECTION_CLIENT, "Username", m_Username
@@ -1624,7 +1625,7 @@ Private Sub LoadDefaults()
     m_CDKey = vbNullString
     m_EXPKey = vbNullString
     m_UseSpawn = False
-    m_Game = "STAR"
+    m_Game = PRODUCT_STAR
     m_Server = "useast.battle.net"
     m_HomeChannel = vbNullString
     m_AutoConnect = False

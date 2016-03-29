@@ -4583,22 +4583,22 @@ Private Function DoCDKeyLengthCheck(ByVal sKey As String, ByVal sProd As String)
     If Config.IgnoreCDKeyLength Then Exit Function
     
     Select Case sProd
-        Case "STAR", "SEXP"
+        Case PRODUCT_STAR, PRODUCT_SEXP
             If ((Len(sKey) <> 13) And (Len(sKey) <> 26)) Then DoCDKeyLengthCheck = False
             
-        Case "D2DV", "D2XP"
+        Case PRODUCT_D2DV, PRODUCT_D2XP
             If ((Len(sKey) <> 16) And (Len(sKey) <> 26)) Then DoCDKeyLengthCheck = False
             
-        Case "W2BN"
+        Case PRODUCT_W2BN
             If (Len(sKey) <> 16) Then DoCDKeyLengthCheck = False
             
-        Case "WAR3", "W3XP"
+        Case PRODUCT_WAR3, PRODUCT_W3XP
             If (Len(sKey) <> 26) Then DoCDKeyLengthCheck = False
         
-        Case "SSHR", "DSHR", "DRTL"
+        Case PRODUCT_SSHR, PRODUCT_DSHR, PRODUCT_DRTL
             DoCDKeyLengthCheck = True
         
-        Case "JSTR"
+        Case PRODUCT_JSTR
             If (Len(sKey) <> 13) Then DoCDKeyLengthCheck = False
         
         Case Else
@@ -4615,25 +4615,25 @@ Private Function SaveSettings() As Boolean
     Select Case True
         Case optSTAR.value:
             If (chkSHR.value) Then
-                s = "SSHR"
+                s = PRODUCT_SSHR
             ElseIf (chkJPN.value) Then
-                s = "JSTR"
+                s = PRODUCT_JSTR
             Else
-                s = "STAR"
+                s = PRODUCT_STAR
             End If
-        Case optSEXP.value: s = "SEXP"
-        Case optD2DV.value: s = "D2DV"
-        Case optD2XP.value: s = "D2XP"
-        Case optWAR3.value: s = "WAR3"
-        Case optW3XP.value: s = "W3XP"
-        Case optW2BN.value: s = "W2BN"
+        Case optSEXP.value: s = PRODUCT_SEXP
+        Case optD2DV.value: s = PRODUCT_D2DV
+        Case optD2XP.value: s = PRODUCT_D2XP
+        Case optWAR3.value: s = PRODUCT_WAR3
+        Case optW3XP.value: s = PRODUCT_W3XP
+        Case optW2BN.value: s = PRODUCT_W2BN
         Case optDRTL.value:
             If (chkSHR.value) Then
-                s = "DSHR"
+                s = PRODUCT_DSHR
             Else
-                s = "DRTL"
+                s = PRODUCT_DRTL
             End If
-        'Case optCHAT.Value: s = "CHAT"
+        'Case optCHAT.Value: s = PRODUCT_CHAT
     End Select
     
     If Not DoCDKeyLengthCheck(cboCDKey.Text, s) Then
@@ -4654,7 +4654,7 @@ Private Function SaveSettings() As Boolean
         End If
     End If
     
-    Config.Game = StrReverse(s)
+    Config.Game = s
     
     ' The rest of the basic config now
     Config.Username = txtUsername.Text
@@ -5249,19 +5249,18 @@ Private Sub InitBasicConfig()
         End If
     End With
     
-    s = Config.Game
-    Select Case StrReverse(UCase(s))
-        Case "STAR":    Call optSTAR_Click: optSTAR.value = True: chkSHR.value = vbUnchecked: chkJPN.value = vbUnchecked
-        Case "SEXP":    Call optSEXP_Click: optSEXP.value = True
-        Case "D2DV":    Call optD2DV_Click: optD2DV.value = True
-        Case "D2XP":    Call optD2XP_Click: optD2XP.value = True
-        Case "W2BN":    Call optW2BN_Click: optW2BN.value = True
-        Case "WAR3":    Call optWAR3_Click: optWAR3.value = True
-        Case "W3XP":    Call optW3XP_Click: optW3XP.value = True
-        Case "DRTL":    Call optDRTL_Click: optDRTL.value = True: chkSHR.value = vbUnchecked
-        Case "DSHR":    Call optDRTL_Click: optDRTL.value = True: chkSHR.value = vbChecked
-        Case "SSHR":    Call optSTAR_Click: optSTAR.value = True: chkSHR.value = vbChecked ' unchecks jpn
-        Case "JSTR":    Call optSTAR_Click: optSTAR.value = True: chkJPN.value = vbChecked ' unchecks shr
+    Select Case UCase(Config.Game)
+        Case PRODUCT_STAR:    Call optSTAR_Click: optSTAR.value = True: chkSHR.value = vbUnchecked: chkJPN.value = vbUnchecked
+        Case PRODUCT_SEXP:    Call optSEXP_Click: optSEXP.value = True
+        Case PRODUCT_D2DV:    Call optD2DV_Click: optD2DV.value = True
+        Case PRODUCT_D2XP:    Call optD2XP_Click: optD2XP.value = True
+        Case PRODUCT_W2BN:    Call optW2BN_Click: optW2BN.value = True
+        Case PRODUCT_WAR3:    Call optWAR3_Click: optWAR3.value = True
+        Case PRODUCT_W3XP:    Call optW3XP_Click: optW3XP.value = True
+        Case PRODUCT_DRTL:    Call optDRTL_Click: optDRTL.value = True: chkSHR.value = vbUnchecked
+        Case PRODUCT_DSHR:    Call optDRTL_Click: optDRTL.value = True: chkSHR.value = vbChecked
+        Case PRODUCT_SSHR:    Call optSTAR_Click: optSTAR.value = True: chkSHR.value = vbChecked ' unchecks jpn
+        Case PRODUCT_JSTR:    Call optSTAR_Click: optSTAR.value = True: chkJPN.value = vbChecked ' unchecks shr
         Case Else:      Call optSTAR_Click: optSTAR.value = True: chkSHR.value = vbUnchecked: chkJPN.value = vbUnchecked
     End Select
     
@@ -5370,13 +5369,13 @@ Private Sub InitGenMod()
     txtIdleBanDelay.Text = Config.IdleBanDelay
     
     ' grab client ban settings from database
-    chkCBan(SC).value = Abs(IsClientBanned("STAR"))
-    chkCBan(BW).value = Abs(IsClientBanned("SEXP"))
-    chkCBan(D2).value = Abs(IsClientBanned("D2DV"))
-    chkCBan(D2X).value = Abs(IsClientBanned("D2XP"))
-    chkCBan(W2).value = Abs(IsClientBanned("W2BN"))
-    chkCBan(W3).value = Abs(IsClientBanned("WAR3"))
-    chkCBan(W3X).value = Abs(IsClientBanned("W3XP"))
+    chkCBan(SC).value = Abs(IsClientBanned(PRODUCT_STAR))
+    chkCBan(BW).value = Abs(IsClientBanned(PRODUCT_SEXP))
+    chkCBan(D2).value = Abs(IsClientBanned(PRODUCT_D2DV))
+    chkCBan(D2X).value = Abs(IsClientBanned(PRODUCT_D2XP))
+    chkCBan(W2).value = Abs(IsClientBanned(PRODUCT_W2BN))
+    chkCBan(W3).value = Abs(IsClientBanned(PRODUCT_WAR3))
+    chkCBan(W3X).value = Abs(IsClientBanned(PRODUCT_W3XP))
 
     txtLevelBanMsg.Text = Config.LevelBanMessage
     If LenB(txtLevelBanMsg.Text) = 0 Then txtLevelBanMsg.Text = "You are below the required level for entry."
@@ -5477,13 +5476,13 @@ Private Sub SaveClientBans()
     Dim Clients(6) As String
     Dim i As Integer, j As Integer
     
-    Clients(SC) = "STAR"
-    Clients(BW) = "SEXP"
-    Clients(D2) = "D2DV"
-    Clients(D2X) = "D2XP"
-    Clients(W3) = "WAR3"
-    Clients(W3X) = "W3XP"
-    Clients(W2) = "W2BN"
+    Clients(SC) = PRODUCT_STAR
+    Clients(BW) = PRODUCT_SEXP
+    Clients(D2) = PRODUCT_D2DV
+    Clients(D2X) = PRODUCT_D2XP
+    Clients(W3) = PRODUCT_WAR3
+    Clients(W3X) = PRODUCT_W3XP
+    Clients(W2) = PRODUCT_W2BN
 
     For i = 0 To 6
         If (chkCBan(i).value = 1) Then
