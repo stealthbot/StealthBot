@@ -53,7 +53,7 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
     
     DestroyObjs
 
-    If Config.ScriptAllowUI Then
+    If Config.ScriptingAllowUI Then
         SC.AllowUI = True
     End If
 

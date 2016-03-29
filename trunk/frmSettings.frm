@@ -4276,15 +4276,15 @@ Private Sub Form_Load()
         .AddItem "Automatic (Server Finder)"
         
         ' If the user has a server set, add it.
-        If Len(Config.BnlsServer) > 0 Then
-            AddBNLSServer Config.BnlsServer
+        If Len(Config.BNLSServer) > 0 Then
+            AddBNLSServer Config.BNLSServer
         End If
         
         ' Figure out the default selection
-        If Config.UseBnlsFinder Or Len(Config.BnlsServer) = 0 Then
+        If Config.BNLSFinder Or Len(Config.BNLSServer) = 0 Then
             .ListIndex = 0
-        ElseIf Len(Config.BnlsServer) > 0 Then
-            .ListIndex = GetBnlsIndex(Config.BnlsServer)
+        ElseIf Len(Config.BNLSServer) > 0 Then
+            .ListIndex = GetBnlsIndex(Config.BNLSServer)
         Else
             .ListIndex = 0
         End If
@@ -4432,6 +4432,7 @@ Function KeyToIndex(ByVal sKey As String) As Byte
         Case "int_fonts":       KeyToIndex = 3
     
         Case "op_moderation":   KeyToIndex = 4
+        Case "op_logging":      KeyToIndex = 9
         Case "op_greets":       KeyToIndex = 5
         Case "op_idles":        KeyToIndex = 6
         Case "op_misc":         KeyToIndex = 7
@@ -4579,7 +4580,7 @@ Private Function DoCDKeyLengthCheck(ByVal sKey As String, ByVal sProd As String)
     sKey = CDKeyReplacements(sKey)
     
     DoCDKeyLengthCheck = True
-    If Config.SetKeyIgnoreLength Then Exit Function
+    If Config.IgnoreCDKeyLength Then Exit Function
     
     Select Case sProd
         Case "STAR", "SEXP"
@@ -4653,24 +4654,24 @@ Private Function SaveSettings() As Boolean
         End If
     End If
     
-    Config.Product = StrReverse(s)
+    Config.Game = StrReverse(s)
     
     ' The rest of the basic config now
     Config.Username = txtUsername.Text
     Config.Password = txtPassword.Text
-    Config.CdKey = CDKeyReplacements(cboCDKey.Text)
-    Config.ExpKey = CDKeyReplacements(txtExpKey.Text)
+    Config.CDKey = CDKeyReplacements(cboCDKey.Text)
+    Config.EXPKey = CDKeyReplacements(txtExpKey.Text)
     Config.HomeChannel = txtHomeChan.Text
     Config.Server = cboServer.Text
-    Config.UseSpawnKey = CBool(chkSpawn.value)
-    Config.UseRealm = CBool(chkUseRealm.value)
+    Config.UseSpawn = CBool(chkSpawn.value)
+    Config.UseD2Realms = CBool(chkUseRealm.value)
     
     ' Advanced connection settings
-    Config.UseBnls = CBool(cboConnMethod.ListIndex = 0)
-    Config.UseBnlsFinder = CBool(cboBNLSServer.ListIndex = 0)
+    Config.UseBNLS = CBool(cboConnMethod.ListIndex = 0)
+    Config.BNLSFinder = CBool(cboBNLSServer.ListIndex = 0)
     
     If cboBNLSServer.ListIndex > 0 Then
-        Config.BnlsServer = cboBNLSServer.Text
+        Config.BNLSServer = cboBNLSServer.Text
     End If
     
     ' Save the BNLS server list
@@ -4697,13 +4698,13 @@ Private Function SaveSettings() As Boolean
         End If
     End With
     
-    Config.ConnectOnStartup = CBool(chkConnectOnStartup.value)
+    Config.AutoConnect = CBool(chkConnectOnStartup.value)
     Config.RegisterEmailDefault = Trim$(txtEmail.Text)
     Config.PingSpoofing = cboSpoof.ListIndex
     Config.UseProxy = CBool(chkUseProxies.value)
     Config.ProxyPort = CLng(Trim$(txtProxyPort.Text))
     Config.ProxyIP = Trim$(txtProxyIP.Text)
-    Config.ProxyIsSocks5 = CBool(optSocks5.value)
+    Config.ProxyType = IIf(CBool(optSocks5.value), "SOCKS5", "SOCKS4")
     Config.UseUDP = CBool(chkUDP.value)
 
     Config.ReconnectDelay = CLng(txtReconDelay.Text)
@@ -4714,88 +4715,88 @@ Private Function SaveSettings() As Boolean
     Config.FlashOnEvents = CBool(chkFlash.value)
     Config.MinimizeOnStartup = CBool(chkMinimizeOnStartup.value)
     
-    Config.UTF8 = CBool(chkUTF8.value)
+    Config.UseUTF8 = CBool(chkUTF8.value)
     Config.ShowJoinLeaves = CBool(chkJoinLeaves.value)
-    Config.UseChatFilters = CBool(chkFilter.value)
-    Config.DetectUrls = CBool(chkURLDetect.value)
-    Config.DisableAutoComplete = CBool(chkNoAutocomplete.value)
+    Config.ChatFilters = CBool(chkFilter.value)
+    Config.UrlDetection = CBool(chkURLDetect.value)
+    Config.NameAutoComplete = Not CBool(chkNoAutocomplete.value)
     
-    Config.DisableNameColoring = CBool(chkNoColoring.value)
+    Config.NameColoring = Not CBool(chkNoColoring.value)
     Config.ShowStatsIcons = CBool(chkShowUserGameStatsIcons.value)
     Config.ShowFlagIcons = CBool(chkShowUserFlagsIcons.value)
     
     Config.DisablePrefixBox = CBool(chkDisablePrefix.value)
     Config.DisableSuffixBox = CBool(chkDisableSuffix.value)
-    Config.Timestamp = cboTimestamp.ListIndex
+    Config.TimestampMode = cboTimestamp.ListIndex
     
     ' Font and color
     SaveFontSettings
     
     ' Moderation settings
-    Config.EnablePhrasebans = CBool(chkPhrasebans.value)
-    Config.IpBans = CBool(chkIPBans.value)
+    Config.Phrasebans = CBool(chkPhrasebans.value)
+    Config.IPBans = CBool(chkIPBans.value)
     Config.QuietTime = CBool(chkQuiet.value)
     Config.KickOnYell = CBool(chkKOY.value)
-    Config.BanUdpPlugs = CBool(chkPlugban.value)
+    Config.UDPBan = CBool(chkPlugban.value)
     Config.ChannelProtection = CBool(chkProtect.value)
-    Config.EnforceBanEvasion = CBool(chkBanEvasion.value)
+    Config.BanEvasion = CBool(chkBanEvasion.value)
     
-    Config.EnforceIdleBans = CBool(chkIdlebans.value)
-    Config.KickIdleUsers = CBool(chkIdleKick.value)
+    Config.IdleBan = CBool(chkIdlebans.value)
+    Config.IdleBanKick = CBool(chkIdleKick.value)
     Config.IdleBanDelay = CLng(txtIdleBanDelay.Text)
-    Config.BanWc3Peons = CBool(chkPeonbans.value)
+    Config.PeonBan = CBool(chkPeonbans.value)
     
     Call SaveClientBans
     
-    Config.BanUnderLevel = CLng(txtBanW3.Text)
-    Config.BanD2UnderLevel = CLng(txtBanD2.Text)
+    Config.LevelBanW3 = CLng(txtBanW3.Text)
+    Config.LevelBanD2 = CLng(txtBanD2.Text)
     
     Config.ChannelProtectionMessage = txtProtectMsg.Text
     Config.LevelBanMessage = txtLevelBanMsg.Text
     
     '// Logging options
     If (cboLogging.ListIndex = 0) Then
-        Config.LoggingLevel = 2
+        Config.LoggingMode = 2
     ElseIf (cboLogging.ListIndex = 1) Then
-        Config.LoggingLevel = 1
+        Config.LoggingMode = 1
     ElseIf (cboLogging.ListIndex = 2) Then
-        Config.LoggingLevel = 0
+        Config.LoggingMode = 0
     End If
     
-    Config.LogDbAction = CBool(chkLogDBActions.value)
+    Config.LogDBActions = CBool(chkLogDBActions.value)
     Config.LogCommands = CBool(chkLogAllCommands.value)
     
     Config.MaxBacklogSize = CLng(txtMaxBackLogSize.Text)
     Config.MaxLogFileSize = CLng(txtMaxLogSize.Text)
     
     ' Greet Message Settings
-    Config.GreetMessage = txtGreetMsg.Text
+    Config.GreetMessageText = txtGreetMsg.Text
     Config.WhisperGreet = CBool(chkWhisperGreet.value)
-    Config.UseGreetMessage = CBool(chkGreetMsg.value)
+    Config.GreetMessage = CBool(chkGreetMsg.value)
     
     ' Idle message settings
-    Config.IdlesEnabled = CBool(chkIdles.value)
-    Config.IdleDelay = (Val(txtIdleWait.Text) * 2)
+    Config.IdleMessage = CBool(chkIdles.value)
+    Config.IdleMessageDelay = (Val(txtIdleWait.Text) * 2)
     
     Select Case True
-        Case optMsg.value:       Config.IdleType = "msg"
-        Case optUptime.value:    Config.IdleType = "uptime"
-        Case optMP3.value:       Config.IdleType = "mp3"
-        Case optQuote.value:     Config.IdleType = "quote"
-        Case Else: Config.IdleType = "msg"
+        Case optMsg.value:       Config.IdleMessageType = "msg"
+        Case optUptime.value:    Config.IdleMessageType = "uptime"
+        Case optMP3.value:       Config.IdleMessageType = "mp3"
+        Case optQuote.value:     Config.IdleMessageType = "quote"
+        Case Else: Config.IdleMessageType = "msg"
     End Select
-    Config.IdleMessage = txtIdleMsg.Text
+    Config.IdleMessageText = txtIdleMsg.Text
     
     
     '// Misc General Settings
-    Config.AllowMp3Commands = CBool(chkAllowMP3.value)
-    Config.UseProfileAmp = CBool(chkPAmp.value)
-    Config.EnableMail = CBool(chkMail.value)
+    Config.Mp3Commands = CBool(chkAllowMP3.value)
+    Config.ProfileAmp = CBool(chkPAmp.value)
+    Config.BotMail = CBool(chkMail.value)
     
     Config.BotOwner = txtOwner.Text
     Config.Trigger = txtTrigger.Text
 
-    Config.WhisperResponses = CBool(chkWhisperCmds.value)
+    Config.WhisperCommands = CBool(chkWhisperCmds.value)
     Config.ShowOfflineFriends = CBool(chkShowOffline.value)
     Config.UseBackupChannel = CBool(chkBackup.value)
     Config.BackupChannel = txtBackupChan.Text
@@ -5199,8 +5200,8 @@ Private Sub InitBasicConfig()
     
     txtUsername.Text = Config.Username
     txtPassword.Text = Config.Password
-    cboCDKey.Text = Config.CdKey
-    txtExpKey.Text = Config.ExpKey
+    cboCDKey.Text = Config.CDKey
+    txtExpKey.Text = Config.EXPKey
     
     txtHomeChan.Text = Config.HomeChannel
 
@@ -5248,7 +5249,7 @@ Private Sub InitBasicConfig()
         End If
     End With
     
-    s = Config.Product
+    s = Config.Game
     Select Case StrReverse(UCase(s))
         Case "STAR":    Call optSTAR_Click: optSTAR.value = True: chkSHR.value = vbUnchecked: chkJPN.value = vbUnchecked
         Case "SEXP":    Call optSEXP_Click: optSEXP.value = True
@@ -5264,8 +5265,8 @@ Private Sub InitBasicConfig()
         Case Else:      Call optSTAR_Click: optSTAR.value = True: chkSHR.value = vbUnchecked: chkJPN.value = vbUnchecked
     End Select
     
-    chkSpawn.value = Abs(Config.UseSpawnKey)
-    chkUseRealm.value = Abs(Config.UseRealm)
+    chkSpawn.value = Abs(Config.UseSpawn)
+    chkUseRealm.value = Abs(Config.UseD2Realms)
     
     Call LoadCDKeys(cboCDKey)
     
@@ -5273,13 +5274,13 @@ End Sub
 
 Private Sub InitConnAdvanced()
     ' Connection method
-    cboConnMethod.ListIndex = CInt(Abs(Not Config.UseBnls))
+    cboConnMethod.ListIndex = CInt(Abs(Not Config.UseBNLS))
     
     ' Set selected BNLS server
-    If Config.UseBnlsFinder Or Len(Config.BnlsServer) = 0 Then
+    If Config.BNLSFinder Or Len(Config.BNLSServer) = 0 Then
         cboBNLSServer.ListIndex = 0
-    ElseIf Len(Config.BnlsServer) > 0 Then
-        cboBNLSServer.ListIndex = GetBnlsIndex(Config.BnlsServer)
+    ElseIf Len(Config.BNLSServer) > 0 Then
+        cboBNLSServer.ListIndex = GetBnlsIndex(Config.BNLSServer)
     End If
     
     txtEmail.Text = Config.RegisterEmailDefault
@@ -5287,7 +5288,7 @@ Private Sub InitConnAdvanced()
     cboSpoof.ListIndex = Config.PingSpoofing
     chkUDP.value = Abs(Config.UseUDP)
     
-    chkConnectOnStartup.value = Abs(Config.ConnectOnStartup)
+    chkConnectOnStartup.value = Abs(Config.AutoConnect)
     txtReconDelay.Text = Config.ReconnectDelay
     If LenB(txtReconDelay.Text) = 0 Then txtReconDelay.Text = 1000
     
@@ -5297,13 +5298,14 @@ Private Sub InitConnAdvanced()
     txtProxyPort.Text = Config.ProxyPort
     txtProxyIP.Text = Config.ProxyIP
     
-    If Config.ProxyIsSocks5 Then
-        optSocks5.value = True
-        optSocks4.value = False
-    Else
-        optSocks5.value = False
-        optSocks4.value = True
-    End If
+    Select Case UCase$(Config.ProxyType)
+        Case "SOCKS5":
+            optSocks5.value = True
+            optSocks4.value = False
+        Case "SOCKS4":
+            optSocks5.value = False
+            optSocks4.value = True
+    End Select
     
     ' Adjust "BNLS server" label 2 pixels down
     lbl5(12).Top = lbl5(12).Top + (2 * Screen.TwipsPerPixelY)
@@ -5315,19 +5317,19 @@ Private Sub InitGenInterface()
     chkFlash.value = Abs(Config.FlashOnEvents)
     chkMinimizeOnStartup.value = Abs(Config.MinimizeOnStartup)
     
-    chkUTF8.value = Abs(Config.UTF8)
+    chkUTF8.value = Abs(Config.UseUTF8)
     chkJoinLeaves.value = Abs(Config.ShowJoinLeaves)
-    chkFilter.value = Abs(Config.UseChatFilters)
-    chkURLDetect.value = Abs(Config.DetectUrls)
-    chkNoAutocomplete.value = Abs(Config.DisableAutoComplete)
+    chkFilter.value = Abs(Config.ChatFilters)
+    chkURLDetect.value = Abs(Config.UrlDetection)
+    chkNoAutocomplete.value = Abs(Not Config.NameAutoComplete)
     
-    chkNoColoring.value = Abs(Config.DisableNameColoring)
+    chkNoColoring.value = Abs(Not Config.NameColoring)
     chkShowUserGameStatsIcons.value = Abs(Config.ShowStatsIcons)
     chkShowUserFlagsIcons.value = Abs(Config.ShowFlagIcons)
     
     chkDisablePrefix.value = Abs(Config.DisablePrefixBox)
     chkDisableSuffix.value = Abs(Config.DisableSuffixBox)
-    cboTimestamp.ListIndex = Config.Timestamp
+    cboTimestamp.ListIndex = Config.TimestampMode
 End Sub
 
 Private Sub InitFontsColors()
@@ -5347,22 +5349,22 @@ Private Sub InitFontsColors()
 End Sub
 
 Private Sub InitGenMod()
-    chkPhrasebans.value = Abs(Config.EnablePhrasebans)
-    chkIPBans.value = Abs(Config.IpBans)
+    chkPhrasebans.value = Abs(Config.Phrasebans)
+    chkIPBans.value = Abs(Config.IPBans)
     chkQuiet.value = Abs(Config.QuietTime)
     chkKOY.value = Abs(Config.KickOnYell)
-    chkPlugban.value = Abs(Config.BanUdpPlugs)
-    chkPeonbans.value = Abs(Config.BanWc3Peons)
+    chkPlugban.value = Abs(Config.UDPBan)
+    chkPeonbans.value = Abs(Config.PeonBan)
 
-    chkBanEvasion.value = Abs(Config.EnforceBanEvasion)
+    chkBanEvasion.value = Abs(Config.BanEvasion)
     
     chkProtect.value = Abs(Config.ChannelProtection)
     Call chkProtect_Click
     
     txtProtectMsg.Text = Config.ChannelProtectionMessage
     
-    chkIdlebans.value = Abs(Config.EnforceIdleBans)
-    chkIdleKick.value = Abs(Config.KickIdleUsers)
+    chkIdlebans.value = Abs(Config.IdleBan)
+    chkIdleKick.value = Abs(Config.IdleBanKick)
     Call chkIdlebans_click
     
     txtIdleBanDelay.Text = Config.IdleBanDelay
@@ -5379,12 +5381,12 @@ Private Sub InitGenMod()
     txtLevelBanMsg.Text = Config.LevelBanMessage
     If LenB(txtLevelBanMsg.Text) = 0 Then txtLevelBanMsg.Text = "You are below the required level for entry."
     
-    txtBanD2.Text = Config.BanD2UnderLevel
-    txtBanW3.Text = Config.BanUnderLevel
+    txtBanD2.Text = Config.LevelBanD2
+    txtBanW3.Text = Config.LevelBanW3
 End Sub
 
 Private Sub InitLogging()
-    Select Case Config.LoggingLevel
+    Select Case Config.LoggingMode
         Case 0:
             cboLogging.ListIndex = 2
         Case 1:
@@ -5393,7 +5395,7 @@ Private Sub InitLogging()
             cboLogging.ListIndex = 0
     End Select
     
-    chkLogDBActions.value = Abs(Config.LogDbAction)
+    chkLogDBActions.value = Abs(Config.LogDBActions)
     chkLogAllCommands.value = Abs(Config.LogCommands)
 
     txtMaxBackLogSize.Text = Config.MaxBacklogSize
@@ -5401,17 +5403,17 @@ Private Sub InitLogging()
 End Sub
 
 Private Sub InitGenGreets()
-    txtGreetMsg.Text = Config.GreetMessage
-    chkGreetMsg.value = Abs(Config.UseGreetMessage)
+    txtGreetMsg.Text = Config.GreetMessageText
+    chkGreetMsg.value = Abs(Config.GreetMessage)
     Call chkGreetMsg_Click
     
     chkWhisperGreet.value = Abs(Config.WhisperGreet)
 End Sub
 
 Private Sub InitGenIdles()
-    txtIdleWait.Text = Config.IdleDelay / 2
+    txtIdleWait.Text = Config.IdleMessageDelay / 2
     
-    Select Case Config.IdleType
+    Select Case Config.IdleMessageType
         Case "msg", vbNullString
             optMsg.value = True
             Call optMsg_Click
@@ -5429,20 +5431,20 @@ Private Sub InitGenIdles()
             Call optMsg_Click
     End Select
     
-    txtIdleMsg.Text = Config.IdleMessage
+    txtIdleMsg.Text = Config.IdleMessageText
     If LenB(txtIdleMsg.Text) = 0 Then txtIdleMsg.Text = "/me is a %v by Stealth - http://www.stealthbot.net"
     
-    chkIdles.value = Abs(Config.IdlesEnabled)
+    chkIdles.value = Abs(Config.IdleMessage)
     Call chkIdles_Click
     
 End Sub
 
 Private Sub InitGenMisc()
-    chkAllowMP3.value = Abs(Config.AllowMp3Commands)
-    chkPAmp.value = Abs(Config.UseProfileAmp)
-    chkMail.value = Abs(Config.EnableMail)
+    chkAllowMP3.value = Abs(Config.Mp3Commands)
+    chkPAmp.value = Abs(Config.ProfileAmp)
+    chkMail.value = Abs(Config.BotMail)
 
-    chkWhisperCmds.value = Abs(Config.WhisperResponses)
+    chkWhisperCmds.value = Abs(Config.WhisperCommands)
     chkShowOffline.value = Abs(Config.ShowOfflineFriends)
     
     txtOwner.Text = Config.BotOwner
@@ -5602,32 +5604,32 @@ Sub SaveFontSettings()
     End If
     
     If Not InitChatSize = CInt(txtChatSize.Text) Then
-        Config.ChatSize = Val(txtChatSize.Text)
-        frmChat.rtbChat.Font.Size = Config.ChatSize
-        frmChat.cboSend.Font.Size = Config.ChatSize
-        frmChat.txtPre.Font.Size = Config.ChatSize
-        frmChat.txtPost.Font.Size = Config.ChatSize
-        frmChat.rtbWhispers.Font.Size = Config.ChatSize
+        Config.ChatFontSize = Val(txtChatSize.Text)
+        frmChat.rtbChat.Font.Size = Config.ChatFontSize
+        frmChat.cboSend.Font.Size = Config.ChatFontSize
+        frmChat.txtPre.Font.Size = Config.ChatFontSize
+        frmChat.txtPost.Font.Size = Config.ChatFontSize
+        frmChat.rtbWhispers.Font.Size = Config.ChatFontSize
         ResizeChatElements = True
     End If
     
     If (StrComp(InitChanFont, txtChanFont.Text, vbTextCompare)) Then
-        Config.ChannelFont = txtChanFont.Text
-        frmChat.lvChannel.Font.Name = Config.ChannelFont
-        frmChat.lvClanList.Font.Name = Config.ChannelFont
-        frmChat.lvFriendList.Font.Name = Config.ChannelFont
-        frmChat.ListviewTabs.Font.Name = Config.ChannelFont
-        frmChat.lblCurrentChannel.Font.Name = Config.ChannelFont
+        Config.ChannelListFont = txtChanFont.Text
+        frmChat.lvChannel.Font.Name = Config.ChannelListFont
+        frmChat.lvClanList.Font.Name = Config.ChannelListFont
+        frmChat.lvFriendList.Font.Name = Config.ChannelListFont
+        frmChat.ListviewTabs.Font.Name = Config.ChannelListFont
+        frmChat.lblCurrentChannel.Font.Name = Config.ChannelListFont
         ResizeChannelElements = True
     End If
     
     If Not InitChanSize = CInt(txtChanSize.Text) Then
-        Config.ChannelSize = Val(txtChanSize.Text)
-        frmChat.lvChannel.Font.Size = Config.ChannelSize
-        frmChat.lvClanList.Font.Size = Config.ChannelSize
-        frmChat.lvFriendList.Font.Size = Config.ChannelSize
-        frmChat.ListviewTabs.Font.Size = Config.ChannelSize
-        frmChat.lblCurrentChannel.Font.Size = Config.ChannelSize
+        Config.ChannelListFontSize = Val(txtChanSize.Text)
+        frmChat.lvChannel.Font.Size = Config.ChannelListFontSize
+        frmChat.lvClanList.Font.Size = Config.ChannelListFontSize
+        frmChat.lvFriendList.Font.Size = Config.ChannelListFontSize
+        frmChat.ListviewTabs.Font.Size = Config.ChannelListFontSize
+        frmChat.lblCurrentChannel.Font.Size = Config.ChannelListFontSize
         ResizeChannelElements = True
     End If
     

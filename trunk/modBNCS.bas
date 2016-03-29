@@ -365,7 +365,7 @@ Private Sub SEND_SID_ENTERCHAT()
 On Error GoTo ERROR_HANDLER:
     Dim pBuff As New clsDataBuffer
     pBuff.InsertNTString BotVars.Username
-    pBuff.InsertNTString Config.SetBotStatstring
+    pBuff.InsertNTString Config.CustomStatstring
     pBuff.SendPacket SID_ENTERCHAT
     Set pBuff = Nothing
 
@@ -562,7 +562,7 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord ft.dwHighDateTime                                'LocalTime
         
         .InsertDWord GetTimeZoneBias                                  'Time Zone Bias
-        If Config.ForceDefaultLocaleId Then
+        If Config.ForceDefaultLocaleID Then
             .InsertDWord 1033                                         'SystemDefaultLCID
             .InsertDWord 1033                                         'UserDefaultLCID
             .InsertDWord 1033                                         'UserDefaultLangID
@@ -597,8 +597,8 @@ On Error GoTo ERROR_HANDLER:
 
     Dim pBuff As New clsDataBuffer
 
-    If Len(Config.UdpString) = 4 Then
-        pBuff.InsertNonNTString Config.UdpString
+    If Len(Config.CustomUDPString) = 4 Then
+        pBuff.InsertNonNTString Config.CustomUDPString
     Else
         pBuff.InsertDWord &H626E6574 'bnet
     End If
@@ -804,7 +804,7 @@ On Error GoTo ERROR_HANDLER:
         frmChat.AddChat RTBColors.ErrorMessageText, "BNCSUtil: kd_init() failed! Please use BNLS to connect."
         frmChat.DoDisconnect
     Else
-        lResult = kd_create(BotVars.CdKey, Len(BotVars.CdKey))
+        lResult = kd_create(BotVars.CDKey, Len(BotVars.CDKey))
         If (kd_isValid(lResult) = 0) Then
             frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
             frmChat.DoDisconnect
@@ -813,11 +813,11 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     With pBuff
-        .InsertDWord CInt(Config.UseSpawnKey)
-        .InsertNTString BotVars.CdKey
+        .InsertDWord CInt(Config.UseSpawn)
+        .InsertNTString BotVars.CDKey
         
-        If (LenB(Config.KeyOwnerName) > 0) Then
-            .InsertNTString Config.KeyOwnerName
+        If (LenB(Config.CDKeyOwnerName) > 0) Then
+            .InsertNTString Config.CDKeyOwnerName
         Else
             .InsertNTString BotVars.Username
         End If
@@ -895,7 +895,7 @@ On Error GoTo ERROR_HANDLER:
         frmChat.AddChat RTBColors.ErrorMessageText, "BNCSUtil: kd_init() failed! Please use BNLS to connect."
         frmChat.DoDisconnect
     Else
-        lResult = kd_create(BotVars.CdKey, Len(BotVars.CdKey))
+        lResult = kd_create(BotVars.CDKey, Len(BotVars.CDKey))
         If (kd_isValid(lResult) = 0) Then
             frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
             frmChat.DoDisconnect
@@ -919,8 +919,8 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     With pBuff
-        .InsertDWord CInt(Config.UseSpawnKey)
-        .InsertDWord Len(BotVars.CdKey)
+        .InsertDWord CInt(Config.UseSpawn)
+        .InsertDWord Len(BotVars.CDKey)
         
         .InsertDWord lProduct
         .InsertDWord lPublic
@@ -928,8 +928,8 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord ds.ClientToken
         .InsertNonNTString sHash
         
-        If (LenB(Config.KeyOwnerName) > 0) Then
-            .InsertNTString Config.KeyOwnerName
+        If (LenB(Config.CDKeyOwnerName) > 0) Then
+            .InsertNTString Config.CDKeyOwnerName
         Else
             .InsertNTString BotVars.Username
         End If
@@ -1010,7 +1010,7 @@ On Error GoTo ERROR_HANDLER:
     Dim sHash As String
     Dim pBuff As New clsDataBuffer
     
-    If Not Config.LowerCasePassword Then
+    If Not Config.UseLowerCasePassword Then
         sHash = doubleHashPassword(BotVars.Password, ds.ClientToken, ds.ServerToken)
     Else
         sHash = doubleHashPassword(LCase(BotVars.Password), ds.ClientToken, ds.ServerToken)
@@ -1079,7 +1079,7 @@ Private Sub SEND_SID_CREATEACCOUNT2()
 On Error GoTo ERROR_HANDLER:
     
     Dim sHash As String
-    If Not Config.LowerCasePassword Then
+    If Not Config.UseLowerCasePassword Then
         sHash = hashPassword(BotVars.Password)
     Else
         sHash = hashPassword(LCase(BotVars.Password))
@@ -1340,7 +1340,7 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord GetLongOverride("ProdLang", 0)                           'Product Language
         .InsertDWord LocalIP                                                  'Local IP
         .InsertDWord GetTimeZoneBias                                          'Time Zone Bias
-        If Config.ForceDefaultLocaleId Then
+        If Config.ForceDefaultLocaleID Then
             .InsertDWord 1033                                                 'LocalID
             .InsertDWord 1033                                                 'LangID
         Else
@@ -1395,7 +1395,7 @@ On Error GoTo ERROR_HANDLER:
         Case &H212: Call Event_VersionCheck(9, sInfo) 'Exp CDKey is Banned
         Case &H213: Call Event_VersionCheck(10, sInfo) 'Exp CDKey is for the wrong product
         Case Else:
-            If Config.IgnoreVersionCheckResult Then bSuccess = True
+            If Config.IgnoreVersionCheck Then bSuccess = True
             Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(lResult, 8))
     End Select
 
@@ -1465,13 +1465,13 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord ds.CRevVersion  'CRev Version
         .InsertDWord ds.CRevChecksum 'CRev Checksum
         .InsertDWord keys            'CDKey Count
-        .InsertDWord CInt(Config.UseSpawnKey)
+        .InsertDWord CInt(Config.UseSpawn)
         
         For i = 1 To keys
             If (i = 1) Then
-                sKey = BotVars.CdKey
+                sKey = BotVars.CDKey
             ElseIf (i = 2) Then
-                sKey = BotVars.ExpKey
+                sKey = BotVars.EXPKey
             Else
                 sKey = ReadCfg$("Main", StringFormat("CDKey{0}", i))
             End If
@@ -1487,8 +1487,8 @@ On Error GoTo ERROR_HANDLER:
         Next i
         
         .InsertNTString ds.CRevResult
-        If (LenB(Config.KeyOwnerName) > 0) Then
-            .InsertNTString Config.KeyOwnerName
+        If (LenB(Config.CDKeyOwnerName) > 0) Then
+            .InsertNTString Config.CDKeyOwnerName
         Else
             .InsertNTString BotVars.Username
         End If
@@ -2029,7 +2029,7 @@ On Error GoTo ERROR_HANDLER:
 
     SkipUICEvents = True
     
-    If (LenB(BotVars.HomeChannel) = 0) Or Config.DoDefaultChannelJoin Then
+    If (LenB(BotVars.HomeChannel) = 0) Or Config.DefaultChannelJoin Then
         ' empty homechannel or
         ' config override to force joinhome
         If BotVars.Product = "PX2D" Or BotVars.Product = "VD2D" Then

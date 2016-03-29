@@ -176,11 +176,11 @@ End Sub
 
 Public Sub OnSetBnlsServer(Command As clsCommandObj)
     If (Command.IsValid) Then
-        Config.BnlsServer = Command.Argument("Server")
+        Config.BNLSServer = Command.Argument("Server")
         Call Config.Save
         
-        BotVars.BnlsServer = Config.BnlsServer
-        Command.Respond StringFormat("New BNLS server set to {0}{1}{0}.", Chr$(34), BotVars.BnlsServer)
+        BotVars.BNLSServer = Config.BNLSServer
+        Command.Respond StringFormat("New BNLS server set to {0}{1}{0}.", Chr$(34), BotVars.BNLSServer)
     Else
         Command.Respond "You must specify a server."
     End If
@@ -205,16 +205,16 @@ Public Sub OnSetExpKey(Command As clsCommandObj)
         strKey = Replace$(Command.Argument("Key"), "-", vbNullString)
         strKey = Replace$(strKey, Space$(1), vbNullString)
         
-        If Config.SetKeyIgnoreLength Then
+        If Config.IgnoreCDKeyLength Then
             If ((Not Len(strKey) = 13) And (Not Len(strKey) = 16) And (Not Len(strKey) = 26)) Then
                 strKey = vbNullString
             End If
         End If
         If (LenB(strKey) > 0) Then
-            Config.ExpKey = strKey
+            Config.EXPKey = strKey
             Call Config.Save
             
-            BotVars.ExpKey = Config.ExpKey
+            BotVars.EXPKey = Config.EXPKey
             Command.Respond "New expansion cdkey set."
         Else
             Command.Respond "The cdkey you specified was invalid."
@@ -248,16 +248,16 @@ Public Sub OnSetKey(Command As clsCommandObj)
         strKey = Replace$(Command.Argument("Key"), "-", vbNullString)
         strKey = Replace$(strKey, Space$(1), vbNullString)
         
-        If Config.SetKeyIgnoreLength Then
+        If Config.IgnoreCDKeyLength Then
             If ((Not Len(strKey) = 13) And (Not Len(strKey) = 16) And (Not Len(strKey) = 26)) Then
                 strKey = vbNullString
             End If
         End If
         If (LenB(strKey) > 0) Then
-            Config.CdKey = strKey
+            Config.CDKey = strKey
             Call Config.Save
             
-            BotVars.CdKey = Config.CdKey
+            BotVars.CDKey = Config.CDKey
             Command.Respond "New cdkey set."
         Else
             Command.Respond "The cdkey you specified was invalid."
@@ -333,15 +333,11 @@ Public Sub OnWhisperCmds(Command As clsCommandObj)
     Select Case LCase$(Command.Argument("SubCommand"))
         Case "on":
             BotVars.WhisperCmds = True
-            Config.WhisperResponses = True
-            Call Config.Save
             
             Command.Respond "Command responses will now be whispered back."
         
         Case "off":
             BotVars.WhisperCmds = False
-            Config.WhisperResponses = False
-            Call Config.Save
 
             Command.Respond "Command responses will now be displayed publicly."
         
@@ -349,4 +345,9 @@ Public Sub OnWhisperCmds(Command As clsCommandObj)
             Command.Respond StringFormat("Command responses are currently {0}.", _
                 IIf(BotVars.WhisperCmds, "whispered back", "displayed publicly"))
     End Select
+    
+    If Config.WhisperCommands <> BotVars.WhisperCmds Then
+        Config.WhisperCommands = BotVars.WhisperCmds
+        Call Config.Save
+    End If
 End Sub

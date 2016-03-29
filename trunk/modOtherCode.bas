@@ -2751,7 +2751,7 @@ Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Lon
     Dim s         As String  ' stores temp string for settings
     
     ' check for custom line postfix
-    s = Config.AddQLinePostfix
+    s = Config.MultiLinePostfix
     If LenB(s) > 0 Then
         If Left$(s, 1) = "{" And Right$(s, 1) = "}" Then
             LinePostfix = Mid$(s, 2, Len(s) - 2)

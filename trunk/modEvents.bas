@@ -688,7 +688,7 @@ On Error GoTo ERROR_HANDLER:
         ' continue gateway discovery
         SEND_SID_CHATCOMMAND "/whoami"
     Else
-        ChannelCreateOption = Config.CreateEmptyChannels
+        ChannelCreateOption = Config.AutoCreateChannels
     
         Select Case ChannelCreateOption
             Case "ALERT"
@@ -1751,7 +1751,7 @@ On Error GoTo ERROR_HANDLER:
     Dim BanningUser As Boolean
     Dim i           As Integer
     
-    If (PhraseBans) Then
+    If (Phrasebans) Then
         For i = LBound(Phrases) To UBound(Phrases)
             If ((Phrases(i) <> vbNullString) And (Phrases(i) <> Space$(1))) Then
                 If ((InStr(1, Message, Phrases(i), vbTextCompare)) <> 0) Then
@@ -1801,8 +1801,8 @@ On Error GoTo ERROR_HANDLER:
             ' if using server finder
             If ((BotVars.BNLS) And (BotVars.UseAltBnls)) Then
                 ' save BNLS server so future instances of the bot won't need to get the list, connection succeeded
-                If Config.BnlsServer <> BotVars.BnlsServer Then
-                    Config.BnlsServer = BotVars.BnlsServer
+                If Config.BNLSServer <> BotVars.BNLSServer Then
+                    Config.BNLSServer = BotVars.BNLSServer
                     Call Config.Save
                 End If
             End If

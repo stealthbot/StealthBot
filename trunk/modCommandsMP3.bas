@@ -13,8 +13,8 @@ Public Sub OnAllowMp3(Command As clsCommandObj)
         BotVars.DisableMP3Commands = True
     End If
     
-    If Config.AllowMp3Commands <> (Not BotVars.DisableMP3Commands) Then
-        Config.AllowMp3Commands = Not BotVars.DisableMP3Commands
+    If Config.Mp3Commands <> (Not BotVars.DisableMP3Commands) Then
+        Config.Mp3Commands = Not BotVars.DisableMP3Commands
         Call Config.Save
     End If
 End Sub
@@ -37,7 +37,7 @@ Public Sub OnLoadWinamp(Command As clsCommandObj)
     
     If (BotVars.DisableMP3Commands) Then Exit Sub
     
-    If (winamp.Start(Config.WinampPath)) Then
+    If (winamp.Start(Config.MediaPlayerPath)) Then
         Command.Respond "Winamp loaded."
     Else
         Command.Respond "There was an error loading Winamp."

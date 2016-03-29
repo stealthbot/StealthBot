@@ -217,7 +217,7 @@ Public Function WardenInitilize(ByVal SocketHandle As Long) As Long
   
     warden_set_data_file Instance, INIPath, Len(INIPath)
     
-    DebugString = Config.WardenDebug
+    DebugString = Config.DebugWarden
     If StrictIsNumeric(DebugString) Then Call warden_config(Instance, CLng(DebugString), 2)
     
     WardenInitilize = Instance

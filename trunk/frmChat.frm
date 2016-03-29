@@ -1750,14 +1750,14 @@ Private Sub Form_Load()
         FrmSplashInUse = True
     End If
     
-    If Config.ShowWhisperWindow Then
+    If Config.ShowWhisperBox Then
         If Not rtbWhispersVisible Then Call cmdShowHide_Click
     Else
         If rtbWhispersVisible Then Call cmdShowHide_Click
     End If
     
-    If Config.Height > 0 Then
-        L = (IIf(CLng(Config.Height) < 200, 200, CLng(Config.Height)) * Screen.TwipsPerPixelY)
+    If Config.PositionHeight > 0 Then
+        L = (IIf(CLng(Config.PositionHeight) < 200, 200, CLng(Config.PositionHeight)) * Screen.TwipsPerPixelY)
         
         If (rtbWhispersVisible) Then
             L = L - (rtbWhispers.Height / Screen.TwipsPerPixelY)
@@ -1766,20 +1766,20 @@ Private Sub Form_Load()
         Me.Height = L
     End If
     
-    If Config.Width > 0 Then
-        Me.Width = (IIf(CLng(Config.Width) < 300, 300, CLng(Config.Width)) * Screen.TwipsPerPixelX)
+    If Config.PositionWidth > 0 Then
+        Me.Width = (IIf(CLng(Config.PositionWidth) < 300, 300, CLng(Config.PositionWidth)) * Screen.TwipsPerPixelX)
     End If
 
-    If Config.Left > 0 Then
-        Me.Left = CLng(Config.Left) * Screen.TwipsPerPixelX
+    If Config.PositionLeft > 0 Then
+        Me.Left = CLng(Config.PositionLeft) * Screen.TwipsPerPixelX
     End If
         
-    If Config.Top > 0 Then
-        Me.Top = CLng(Config.Top) * Screen.TwipsPerPixelY
+    If Config.PositionTop > 0 Then
+        Me.Top = CLng(Config.PositionTop) * Screen.TwipsPerPixelY
     End If
     
     'Support for recording maxmized position. - FrOzeN
-    If Config.Maximized Then
+    If Config.IsMaximized Then
         Me.WindowState = vbMaximized
     End If
 
@@ -1875,7 +1875,7 @@ Private Sub Form_Load()
     End If
     
     '#If BETA = 0 Then
-        If Config.ConnectOnStartup Then
+        If Config.AutoConnect Then
             Call DoConnect
         End If
     '#End If
@@ -2208,7 +2208,7 @@ Sub Event_BNLSConnected()
 End Sub
 
 Sub Event_BNLSConnecting()
-    AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BnlsServer & "..."
+    AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
 End Sub
 
 Sub Event_BNLSDataError(Message As Byte)
@@ -2239,7 +2239,7 @@ Public Function HandleBnlsError(ByVal ErrorMessage As String) As Boolean
     sckBNet.Close
     
     ' Is the BNLS server finder enabled?
-    If Config.UseBnlsFinder Then
+    If Config.BNLSFinder Then
         LocatingAltBNLS = True
         Call RotateBnlsServer
     Else
@@ -2250,7 +2250,7 @@ Public Function HandleBnlsError(ByVal ErrorMessage As String) As Boolean
     End If
     
     ' return the BotVars
-    HandleBnlsError = Config.UseBnlsFinder
+    HandleBnlsError = Config.BNLSFinder
 End Function
 
 ' Moves the connection to the next available BNLS server
@@ -2259,26 +2259,26 @@ Public Sub RotateBnlsServer()
     sckBNLS.Close
     
     'Notify user the current BNLS server failed
-    AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BnlsServer & " failed."
+    AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BNLSServer & " failed."
     
     'Notify user other BNLS servers are being located
     AddChat RTBColors.InformationText, "[BNLS] Locating other BNLS servers..."
     
     Call DoDisconnect
     
-    BotVars.BnlsServer = FindBnlsServer()
-    If Len(BotVars.BnlsServer) = 0 Then
+    BotVars.BNLSServer = FindBnlsServer()
+    If Len(BotVars.BNLSServer) = 0 Then
         Call DoDisconnect
         Exit Sub
     End If
     
     'Reconnect BNLS using the newly located BNLS server
     With sckBNLS
-        .RemoteHost = BotVars.BnlsServer
+        .RemoteHost = BotVars.BNLSServer
         .Connect
     End With
     
-    AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BnlsServer & "..."
+    AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
 End Sub
 
 'Locates alternative BNLS servers for the bot to use if the current one fails
@@ -2308,12 +2308,12 @@ Public Function FindBnlsServer()
                 
         If (INet.StillExecuting = False) Then
             ' store first bnls server used so that we can avoid connecting to it again
-            firstServer = BotVars.BnlsServer
+            firstServer = BotVars.BNLSServer
         
             'Get the servers as a list from http://stealthbot.net/p/bnls.php
             strReturn = vbNullString
-            If (LenB(Config.BnlsSource) > 0) Then
-                strReturn = INet.OpenURL(Config.BnlsSource)
+            If (LenB(Config.BNLSFinderSource) > 0) Then
+                strReturn = INet.OpenURL(Config.BNLSFinderSource)
             End If
             
             If ((strReturn = vbNullString) Or (Right(strReturn, 2) <> vbCrLf)) Then
@@ -4096,7 +4096,7 @@ Private Sub mnuPublicChannels_Click(index As Integer)
     'End If
     
     If Not PublicChannels Is Nothing Then
-        Select Case Config.CreateEmptyChannels
+        Select Case Config.AutoCreateChannels
             Case "ALERT", "NEVER"
                 Call FullJoin(PublicChannels.Item(index + 1), 0)
             Case Else ' "ALWAYS"
@@ -4111,7 +4111,7 @@ Private Sub mnuCustomChannels_Click(index As Integer)
         Exit Sub
     End If
 
-    Select Case Config.CreateEmptyChannels
+    Select Case Config.AutoCreateChannels
         Case "ALERT", "NEVER"
             Call FullJoin(QC(index + 1), 0)
         Case Else ' "ALWAYS"
@@ -4132,7 +4132,7 @@ End Sub
 
 Private Sub mnuDisableVoidView_Click()
     mnuDisableVoidView.Checked = Not (mnuDisableVoidView.Checked)
-    Config.DisableVoidView = CBool(mnuDisableVoidView.Checked)
+    Config.VoidView = Not CBool(mnuDisableVoidView.Checked)
     Call Config.Save
 End Sub
 
@@ -4214,13 +4214,13 @@ Private Sub mnuIgnoreInvites_Click()
         mnuIgnoreInvites.Checked = True
     End If
     
-    Config.IgnoreClanInvitations = CBool(mnuIgnoreInvites.Checked)
+    Config.IgnoreClanInvites = CBool(mnuIgnoreInvites.Checked)
     Call Config.Save
 End Sub
 
 Private Sub mnuLog0_Click()
     BotVars.Logging = 2
-    Config.LoggingLevel = BotVars.Logging
+    Config.LoggingMode = BotVars.Logging
     Call Config.Save
     
     AddChat RTBColors.InformationText, "Full text logging enabled."
@@ -4234,7 +4234,7 @@ End Sub
 
 Private Sub mnuLog1_Click()
     BotVars.Logging = 1
-    Config.LoggingLevel = BotVars.Logging
+    Config.LoggingMode = BotVars.Logging
     Call Config.Save
     
     AddChat RTBColors.InformationText, "Partial text logging enabled."
@@ -4248,7 +4248,7 @@ End Sub
 
 Private Sub mnuLog2_Click()
     BotVars.Logging = 0
-    Config.LoggingLevel = BotVars.Logging
+    Config.LoggingMode = BotVars.Logging
     Call Config.Save
     
     AddChat RTBColors.InformationText, "Logging disabled."
@@ -4524,7 +4524,7 @@ End Sub
 Private Sub mnuToggleWWUse_Click()
     mnuToggleWWUse.Checked = (Not mnuToggleWWUse.Checked)
     
-    Config.UseWhisperWindows = CBool(mnuToggleWWUse.Checked)
+    Config.WhisperWindows = CBool(mnuToggleWWUse.Checked)
     Call Config.Save
     
     If Not mnuToggleWWUse.Checked Then
@@ -4687,7 +4687,7 @@ Private Sub mnuUTF8_Click()
         AddChat RTBColors.ConsoleText, "Messages will now be UTF-8-decoded."
     End If
     
-    Config.UTF8 = CBool(mnuUTF8.Checked)
+    Config.UseUTF8 = CBool(mnuUTF8.Checked)
     Call Config.Save
 End Sub
 
@@ -4790,7 +4790,7 @@ Private Sub mnuToggleFilters_Click()
         AddChat RTBColors.InformationText, "Chat filtering enabled."
     End If
     
-    Config.UseChatFilters = Filters
+    Config.ChatFilters = Filters
     Call Config.Save
 End Sub
 
@@ -5707,7 +5707,7 @@ Private Sub Timer_Timer()
      
     If iCounter >= 32760 Then iCounter = 0
 
-    If Config.UseProfileAmp And g_Online Then Call UpdateProfile
+    If Config.ProfileAmp And g_Online Then Call UpdateProfile
     
     BotVars.JoinWatch = 0
     
@@ -5719,11 +5719,11 @@ Private Sub Timer_Timer()
         End If
     End If
     
-    If Not Config.IdlesEnabled Then Exit Sub
+    If Not Config.IdleMessage Then Exit Sub
     
-    IdleMsg = Config.IdleMessage
-    IdleWait = Config.IdleDelay
-    IdleType = Config.IdleType
+    IdleMsg = Config.IdleMessageText
+    IdleWait = Config.IdleMessageDelay
+    IdleType = Config.IdleMessageType
     
     If IdleWait < 2 Then Exit Sub
     
@@ -5949,16 +5949,16 @@ Sub Connect()
             Select Case StrReverse$(UCase$(BotVars.Product))
                 Case "SSHR", "DRTL", "DSHR"
                 Case "STAR", "SEXP", "JSTR", "D2DV", "W2BN", "WAR3"
-                    If BotVars.CdKey = vbNullString Then
+                    If BotVars.CDKey = vbNullString Then
                         MissingInfo = MissingInfo & "CDKey, "
                         NotEnoughInfo = True
                     End If
                 Case "D2XP", "W3XP"
-                    If BotVars.CdKey = vbNullString Then
+                    If BotVars.CDKey = vbNullString Then
                         MissingInfo = MissingInfo & "CDKey, "
                         NotEnoughInfo = True
                     End If
-                    If BotVars.ExpKey = vbNullString Then
+                    If BotVars.EXPKey = vbNullString Then
                         MissingInfo = MissingInfo & "expansion CDKey, "
                         NotEnoughInfo = True
                     End If
@@ -6010,14 +6010,14 @@ Sub Connect()
         
         
         If BotVars.BNLS Then
-            If Len(BotVars.BnlsServer) = 0 Then
+            If Len(BotVars.BNLSServer) = 0 Then
                 If BotVars.UseAltBnls Then
-                    BotVars.BnlsServer = FindBnlsServer()
+                    BotVars.BNLSServer = FindBnlsServer()
                 End If
             End If
             
             ' Don't try and connect if we don't have a server to connect to.
-            If Len(BotVars.BnlsServer) = 0 Then
+            If Len(BotVars.BNLSServer) = 0 Then
                 AddChat RTBColors.ErrorMessageText, "[BNLS] You have not set a BNLS server, or a server could not be found. Unable to connect."
                 Call DoDisconnect
                 Exit Sub
@@ -6028,7 +6028,7 @@ Sub Connect()
             With sckBNLS
                 If .State <> 0 Then .Close
                 
-                .RemoteHost = BotVars.BnlsServer
+                .RemoteHost = BotVars.BNLSServer
                 .RemotePort = 9367
                 .Connect
             End With
@@ -6476,7 +6476,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             End Select
         End If
         
-        MaxLength = Config.AddQMaxLength
+        MaxLength = Config.MaxMessageLength
         
         Call SplitByLen(strTmp, (MaxLength - Len(Command)), Splt(), vbNullString, , OversizeDelimiter)
 
@@ -6590,7 +6590,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         Config.Load GetConfigFilePath()
     End If
     
-    BotVars.TSSetting = Config.Timestamp
+    BotVars.TSSetting = Config.TimestampMode
 
     ' Client settings
     If LenB(BotVars.Username) > 0 And StrComp(BotVars.Username, Config.Username, vbTextCompare) <> 0 Then
@@ -6598,9 +6598,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     End If
     BotVars.Username = Config.Username
     BotVars.Password = Config.Password
-    BotVars.CdKey = Config.CdKey
-    BotVars.ExpKey = Config.ExpKey
-    BotVars.Product = Config.Product
+    BotVars.CDKey = Config.CDKey
+    BotVars.EXPKey = Config.EXPKey
+    BotVars.Product = Config.Game
     BotVars.Server = Config.Server
     BotVars.HomeChannel = Config.HomeChannel
     BotVars.BotOwner = Config.BotOwner
@@ -6610,7 +6610,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     '    BotVars.Trigger = "."
     'End If
     
-    BotVars.BnlsServer = Config.BnlsServer
+    BotVars.BNLSServer = Config.BNLSServer
     
     ' Load database and commands
     Call LoadDatabase
@@ -6631,7 +6631,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             ResizeChatElements = True
         End If
         
-        s = Config.ChannelFont
+        s = Config.ChannelListFont
         If s <> vbNullString And s <> lvChannel.Font.Name Then
             lvChannel.Font.Name = s
             lvClanList.Font.Name = s
@@ -6641,7 +6641,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             ResizeChatElements = True
         End If
         
-        s = Config.ChatSize
+        s = Config.ChatFontSize
         If StrictIsNumeric(s) Then
             If CInt(s) <> rtbChat.Font.Size Then
                 rtbChat.Font.Size = s
@@ -6653,7 +6653,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             End If
         End If
         
-        s = Config.ChannelSize
+        s = Config.ChannelListFontSize
         If StrictIsNumeric(s) Then
             If CInt(s) <> lvChannel.Font.Size Then
                 lvChannel.Font.Size = s
@@ -6679,15 +6679,15 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    Filters = Config.UseChatFilters
+    Filters = Config.ChatFilters
     mnuToggleFilters.Checked = Filters
     If (Not Filters) Then
         BotVars.JoinWatch = 0
     End If
     
-    BotVars.AutoFilterMS = 0
+    BotVars.AutofilterMS = 0
     
-    AutoModSafelistValue = Config.AutoModSafelistLevel
+    AutoModSafelistValue = Config.AutoSafelistLevel
     BotVars.ShowOfflineFriends = Config.ShowOfflineFriends
     
     If Config.HideClanDisplay Then
@@ -6744,33 +6744,33 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     JoinMessagesOff = Not Config.ShowJoinLeaves
     mnuToggle.Checked = JoinMessagesOff
 
-    mail = Config.EnableMail
+    mail = Config.BotMail
     
-    BotVars.BanEvasion = Config.EnforceBanEvasion
-    BotVars.Logging = Config.LoggingLevel
+    BotVars.BanEvasion = Config.BanEvasion
+    BotVars.Logging = Config.LoggingMode
     
-    mnuToggleWWUse.Checked = Config.UseWhisperWindows
-    BotVars.WhisperCmds = Config.WhisperResponses
-    PhraseBans = Config.EnablePhrasebans
-    BotVars.CaseSensitiveFlags = Config.CaseSensitiveFlags
-    BotVars.AutoCompletePostfix = Config.AutoCompletePostfix
-    BotVars.BNLS = Config.UseBnls
-    BotVars.LogDBActions = Config.LogDbAction
+    mnuToggleWWUse.Checked = Config.WhisperWindows
+    BotVars.WhisperCmds = Config.WhisperCommands
+    Phrasebans = Config.Phrasebans
+    BotVars.CaseSensitiveFlags = Config.CaseSensitiveDBFlags
+    BotVars.AutocompletePostfix = Config.AutocompletePostfix
+    BotVars.BNLS = Config.UseBNLS
+    BotVars.LogDBActions = Config.LogDBActions
     BotVars.LogCommands = Config.LogCommands
 
     '/* time to idle: defaults to 600 seconds / 10 minutes idle */
     BotVars.SecondsToIdle = Config.SecondsToIdle
     
-    BotVars.BanUnderLevel = Config.BanUnderLevel
+    BotVars.BanUnderLevel = Config.LevelBanW3
     BotVars.BanUnderLevelMsg = Config.LevelBanMessage
-    BotVars.BanPeons = Config.BanWc3Peons
+    BotVars.BanPeons = Config.PeonBan
     
     BotVars.KickOnYell = Config.KickOnYell
     
     ' Capped at 32767, topic=29986 -Andy
     BotVars.IB_Wait = Config.IdleBanDelay
 
-    BotVars.DefaultShitlistGroup = Config.DefaultShitlistGroup
+    BotVars.DefaultShitlistGroup = Config.ShitlistGroup
     If (BotVars.DefaultShitlistGroup <> vbNullString) Then
         default_group_access = _
                 GetAccess(BotVars.DefaultShitlistGroup, "GROUP")
@@ -6781,7 +6781,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    BotVars.DefaultTagbansGroup = Config.DefaultTagbanGroup
+    BotVars.DefaultTagbansGroup = Config.TagbanGroup
     If (BotVars.DefaultTagbansGroup <> vbNullString) Then
         default_group_access = _
                 GetAccess(BotVars.DefaultTagbansGroup, "GROUP")
@@ -6792,7 +6792,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    BotVars.DefaultSafelistGroup = Config.DefaultSafelistGroup
+    BotVars.DefaultSafelistGroup = Config.SafelistGroup
     If (BotVars.DefaultSafelistGroup <> vbNullString) Then
         default_group_access = _
                 GetAccess(BotVars.DefaultSafelistGroup, "GROUP")
@@ -6803,14 +6803,14 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    BotVars.DisableMP3Commands = Not Config.AllowMp3Commands
+    BotVars.DisableMP3Commands = Not Config.Mp3Commands
     
     BotVars.MaxBacklogSize = Config.MaxBacklogSize
     BotVars.MaxLogFileSize = Config.MaxLogFileSize
     
-    BotVars.UsingDirectFList = Config.DoNotUseDirectFList
+    BotVars.UsingDirectFList = Config.DoNotUseDirectFriendList
     
-    If Config.DetectUrls Then
+    If Config.UrlDetection Then
         EnableURLDetect rtbChat.hWnd
     Else
         DisableURLDetect rtbChat.hWnd
@@ -6822,11 +6822,11 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     BotVars.UseBackupChan = Config.UseBackupChannel
     BotVars.BackupChan = Config.BackupChannel
 
-    mnuUTF8.Checked = Config.UTF8
+    mnuUTF8.Checked = Config.UseUTF8
     
     mnuToggleShowOutgoing.Checked = Config.ShowOutgoingWhispers
     mnuHideWhispersInrtbChat.Checked = Config.HideWhispersInMain
-    mnuIgnoreInvites.Checked = Config.IgnoreClanInvitations
+    mnuIgnoreInvites.Checked = Config.IgnoreClanInvites
     
     'LoadSafelist
     LoadArray LOAD_PHRASES, Phrases()
@@ -6836,16 +6836,16 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
 
     Call LoadOutFilters
     
-    BotVars.IB_On = Config.EnforceIdleBans
-    BotVars.IB_Kick = Config.KickIdleUsers
+    BotVars.IB_On = Config.IdleBan
+    BotVars.IB_Kick = Config.IdleBanKick
     BotVars.IB_Wait = Config.IdleBanDelay
 
     BotVars.Spoof = Config.PingSpoofing
     
     Protect = Config.ChannelProtection
     BotVars.UseUDP = Config.UseUDP
-    BotVars.IpBans = Config.IpBans
-    BotVars.UseAltBnls = Config.UseBnlsFinder
+    BotVars.IPBans = Config.IPBans
+    BotVars.UseAltBnls = Config.BNLSFinder
     BotVars.QuietTime = Config.QuietTime
     
     mnuFlash.Checked = Config.FlashOnEvents
@@ -6853,12 +6853,12 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     BotVars.UseProxy = Config.UseProxy
     If BotVars.UseProxy And sckBNet.State = sckConnected Then BotVars.ProxyStatus = psOnline
     BotVars.ProxyPort = Config.ProxyPort
-    BotVars.ProxyIsSocks5 = Config.ProxyIsSocks5
+    BotVars.ProxyIsSocks5 = Config.ProxyType
     BotVars.NoTray = Not Config.MinimizeToTray
-    BotVars.NoAutocompletion = Config.DisableAutoComplete
-    BotVars.NoColoring = Config.DisableNameColoring
+    BotVars.NoAutocompletion = Not Config.NameAutoComplete
+    BotVars.NoColoring = Not Config.NameColoring
     
-    mnuDisableVoidView.Checked = Config.DisableVoidView
+    mnuDisableVoidView.Checked = Not Config.VoidView
     
     BotVars.MediaPlayer = Config.MediaPlayer
     
@@ -6869,10 +6869,10 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     BotVars.QueueCostPerByte = Config.QueueCostPerByte
     BotVars.QueueCostPerByteOverThreshhold = Config.QueueCostPerByteOver
     BotVars.QueueStartingCredits = Config.QueueStartingCredits
-    BotVars.QueueThreshholdBytes = Config.QueueThreshholdBytes
+    BotVars.QueueThreshholdBytes = Config.QueueThresholdBytes
     BotVars.QueueCreditRate = Config.QueueCreditRate
 
-    BotVars.UseRealm = Config.UseRealm
+    BotVars.UseRealm = Config.UseD2Realms
 
     txtPre.Text = ""
     txtPost.Text = ""
@@ -6884,9 +6884,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     '[Other] MathAllowUI - Will allow People to use MessageBox/InputBox or other UI related commands in the .eval/.math commands ~Hdx 09-25-07
     SCRestricted.AllowUI = Config.MathAllowUI
-    BotVars.NoRTBAutomaticCopy = Config.DisableRtbAutoCopy
+    BotVars.NoRTBAutomaticCopy = Config.DisableRTBAutoCopy
     BotVars.GreetMsg = Config.GreetMessage
-    BotVars.UseGreet = Config.UseGreetMessage
+    BotVars.UseGreet = Config.GreetMessage
     BotVars.WhisperGreet = Config.WhisperGreet
     
     BotVars.ProxyIP = Config.ProxyIP
@@ -6916,7 +6916,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     End If
     
     ' disable the script system if override is set
-    modScripting.SetScriptSystemDisabled Config.DisableScripts
+    modScripting.SetScriptSystemDisabled Config.DisableScripting
     
     Set oCommandGenerator = Nothing
     
@@ -7174,7 +7174,7 @@ Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
                     If InStr(1, strTemp, Chr(0)) > 0 Then
                         UpdateProxyStatus psLoggingIn, PROXY_LOGGING_IN
                         
-                        LogonToProxy sckBNLS, BotVars.BnlsServer, 9367, False
+                        LogonToProxy sckBNLS, BotVars.BNLSServer, 9367, False
                     Else
                         UpdateProxyStatus psNotConnected, PROXY_IS_NOT_PUBLIC
                         sckBNLS.Close
@@ -7344,7 +7344,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                         
                         If (c >= (Len(toMatch) + 1)) Then
                             MatchClosest = _
-                                    .Item(i).Text & BotVars.AutoCompletePostfix
+                                    .Item(i).Text & BotVars.AutocompletePostfix
                             
                             MatchIndex = i
                             
@@ -7426,7 +7426,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                         Dim j As Integer
                     
                         MatchClosest = Left$(toMatch, atChar) & Gateways(CurrentGateway, i) & _
-                                BotVars.AutoCompletePostfix
+                                BotVars.AutocompletePostfix
                         
                         MatchIndex = (i + 1)
                         
@@ -7441,7 +7441,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
         Else
             If (tmp = vbNullString) Then
                 MatchClosest = Left$(toMatch, atChar) & OtherGateway & _
-                        BotVars.AutoCompletePostfix
+                        BotVars.AutocompletePostfix
                     
                 MatchIndex = (index + 1)
                     
@@ -7492,7 +7492,7 @@ End Sub
 Public Sub cmdShowHide_Click()
     rtbWhispersVisible = (StrComp(cmdShowHide.Caption, CAP_HIDE))
     rtbWhispers.Visible = rtbWhispersVisible
-    Config.ShowWhisperWindow = CBool(rtbWhispers.Visible)
+    Config.WhisperWindows = CBool(rtbWhispers.Visible)
     Call Config.Save
     
     If Me.WindowState <> vbMaximized And Me.WindowState <> vbMinimized Then
@@ -7843,13 +7843,13 @@ End Sub
 Public Sub RecordWindowPosition(Optional Maximized As Boolean = False)
     'Don't record other position information if maximized, otherwise when they unmaximize it will be fullscreen width and height. - FrOzeN
     If Not Maximized Then
-        Config.Left = Int(Me.Left / Screen.TwipsPerPixelX)
-        Config.Top = Int(Me.Top / Screen.TwipsPerPixelY)
-        Config.Height = Int(Me.Height / Screen.TwipsPerPixelY)
-        Config.Width = Int(Me.Width / Screen.TwipsPerPixelX)
+        Config.PositionLeft = Int(Me.Left / Screen.TwipsPerPixelX)
+        Config.PositionTop = Int(Me.Top / Screen.TwipsPerPixelY)
+        Config.PositionHeight = Int(Me.Height / Screen.TwipsPerPixelY)
+        Config.PositionWidth = Int(Me.Width / Screen.TwipsPerPixelX)
     End If
     
-    Config.Maximized = Maximized
+    Config.IsMaximized = Maximized
     Call Config.Save
 End Sub
 
