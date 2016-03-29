@@ -1876,6 +1876,11 @@ Private Sub Form_Load()
         mnuRecordWindowPos.Visible = False
     End If
     
+    'Update the config if it's an old version
+    If Config.Version < CONFIG_VERSION Then
+        Call Config.Save
+    End If
+    
     '#If BETA = 0 Then
         If Config.AutoConnect Then
             Call DoConnect

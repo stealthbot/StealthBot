@@ -5249,7 +5249,7 @@ Private Sub InitBasicConfig()
         End If
     End With
     
-    Select Case UCase(Config.Game)
+    Select Case GetProductInfo(Config.Game).Code
         Case PRODUCT_STAR:    Call optSTAR_Click: optSTAR.value = True: chkSHR.value = vbUnchecked: chkJPN.value = vbUnchecked
         Case PRODUCT_SEXP:    Call optSEXP_Click: optSEXP.value = True
         Case PRODUCT_D2DV:    Call optD2DV_Click: optD2DV.value = True

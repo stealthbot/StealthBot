@@ -1436,6 +1436,8 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
         Set fso = CreateObject("Scripting.FileSystemObject")
         If (fso.FileExists(m_ConfigPath) And (Not fso.FileExists(backupPath))) Then
             fso.MoveFile m_ConfigPath, backupPath
+            
+            Call frmChat.AddChat(RTBColors.InformationText, "Your config file is being updated. A backup of your old file will be placed in your profile directory.")
         End If
         Set fso = Nothing
         
@@ -1616,7 +1618,6 @@ End Sub
 ' Sets default values
 Private Sub LoadDefaults()
     '[Main]
-    m_ConfigVersion = 6
     m_DisableNews = False
 
     '[Client]
@@ -2105,6 +2106,8 @@ Private Sub ConformValues()
     m_EXPKey = UCase$(m_EXPKey)
     m_AutoCreateChannels = UCase$(m_AutoCreateChannels)
     m_RegisterEmailAction = UCase$(m_RegisterEmailAction)
+    
+    m_Game = GetProductInfo(m_Game).Code
     
     If m_AutoSafelistLevel < 1 Or m_AutoSafelistLevel > 200 Then m_AutoSafelistLevel = 20
     If m_NamespaceConvention < 0 Or m_NamespaceConvention > 3 Then m_NamespaceConvention = 0
