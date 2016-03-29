@@ -4,12 +4,18 @@ Option Explicit
 Public Const REVISION As String = ""
 Public Const VERCODE As String = "2697"
 Public Const BNCSUTIL_VERSION As String = "1.3.1"
-Public Const CONFIG_VERSION As String = "5"
+Public Const CONFIG_VERSION As String = "6"
 
 ' URLs
 Public Const BETA_AUTH_URL As String = _
     "http://www.stealthbot.net/board/sbauth.php?username="
 Public Const BETA_AUTH_URL_CRC32 As Long = 716038006
+
+Public Const BNLS_DEFAULT_SOURCE As String = _
+    "http://stealthbot.net/sb/bnls.php"
+    
+Public Const VERBYTE_SOURCE As String = _
+    "http://www.stealthbot.net/sb/verbytes/versionbytes.txt"
 
 ' Files
 Public Const FILE_COMMANDS = "Commands.xml"

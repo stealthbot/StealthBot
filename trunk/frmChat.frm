@@ -2324,7 +2324,7 @@ Public Function FindBnlsServer()
             End If
             
             If ((strReturn = vbNullString) Or (Right(strReturn, 2) <> vbCrLf)) Then
-                strReturn = INet.OpenURL("http://stealthbot.net/sb/bnls.php")
+                strReturn = INet.OpenURL(BNLS_DEFAULT_SOURCE)
                 If ((strReturn = vbNullString) Or (Left(strReturn, 1) <> vbLf)) Then
                     AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured while trying to locate an alternative BNLS server."
                     AddChat RTBColors.ErrorMessageText, "[BNLS]   You may not be connected to the internet or may be having DNS resolution issues."
@@ -4549,7 +4549,7 @@ Private Sub mnuUpdateVerbytes_Click()
     keys(3) = "W3"
     
     If Not INet.StillExecuting Then
-        s = INet.OpenURL("http://www.stealthbot.net/sb/verbytes/versionbytes.txt")
+        s = INet.OpenURL(VERBYTE_SOURCE)
         
         If Len(s) = 11 Then
             'W2 SC D2 W3
