@@ -50,7 +50,7 @@ Private Declare Function getExeInfo_Raw Lib "BNCSutil.dll" Alias "getExeInfo" _
 ' [!] You should use doubleHashPassword and hashPassword instead of their
 '     _Raw counterparts.  (See below for those functions.)
 Private Declare Sub doubleHashPassword_Raw Lib "BNCSutil.dll" Alias "doubleHashPassword" _
-    (ByVal Password As String, ByVal clientToken As Long, ByVal serverToken As Long, _
+    (ByVal Password As String, ByVal ClientToken As Long, ByVal ServerToken As Long, _
     ByVal outBuffer As String)
 Private Declare Sub hashPassword_Raw Lib "BNCSutil.dll" Alias "hashPassword" _
     (ByVal Password As String, ByVal outBuffer As String)
@@ -174,3 +174,4 @@ Public Function hashPassword(Password As String) As String
     hashPassword_Raw Password, Hash
     hashPassword = Hash
 End Function
+
