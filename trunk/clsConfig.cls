@@ -482,7 +482,7 @@ Public Property Get Trigger() As String
 End Property
 
 Public Property Let Trigger(ByVal sValue As String)
-    m_Trigger = "{" & Value & "}"
+    m_Trigger = "{" & sValue & "}"
 End Property
 
 Public Property Get BotOwner() As String
@@ -554,7 +554,7 @@ Public Property Get AutoCompletePostfix() As String
 End Property
 
 Public Property Let AutoCompletePostfix(ByVal sValue As String)
-    m_AutocompletePostfix = "{" & Value & "}"
+    m_AutocompletePostfix = "{" & sValue & "}"
 End Property
 
 Public Property Get CaseSensitiveDBFlags() As Boolean
@@ -570,7 +570,7 @@ Public Property Get MultiLinePostfix() As String
 End Property
 
 Public Property Let MultiLinePostfix(ByVal sValue As String)
-    m_MultiLinePostfix = "{" & Value & "}"
+    m_MultiLinePostfix = "{" & sValue & "}"
 End Property
 
 
