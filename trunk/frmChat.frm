@@ -5995,7 +5995,8 @@ Sub Connect()
             
             ' Don't try and connect if we don't have a server to connect to.
             If Len(BotVars.BNLSServer) = 0 Then
-                AddChat RTBColors.ErrorMessageText, "[BNLS] You have not set a BNLS server, or a server could not be found. Unable to connect."
+                AddChat RTBColors.ErrorMessageText, "[BNLS] A working BNLS server could not be found."
+                AddChat RTBColors.ErrorMessageText, "[BNLS]   Go to Settings -> Bot Settings -> Connection Settings -> Advanced and either set a server or use the automatic server finder."
                 Call DoDisconnect
                 Exit Sub
             End If
