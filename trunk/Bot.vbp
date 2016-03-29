@@ -46,7 +46,6 @@ Module=modMail; modMail.bas
 Class=clsErrorHandler; clsErrorHandler.cls
 Module=modBNCSutil; modBNCSutil.bas
 Module=modEvents; modEvents.bas
-Module=modOutboundPackets; modOutboundPackets.bas
 Module=modColors; modColors.bas
 Module=modCommandCode; modCommands.bas
 Module=modOtherCode; modOtherCode.bas
