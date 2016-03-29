@@ -849,7 +849,7 @@ On Error GoTo ERROR_HANDLER:
         Exit Sub
     End If
 
-    If Not oKey.CalculateHash(ds.clientToken, ds.serverToken) Then Exit Sub
+    If Not oKey.CalculateHash(ds.ClientToken, ds.ServerToken) Then Exit Sub
     
     With pBuff
         .InsertDWord IIf(ReadCfg$("Override", "SpawnKey") = "Y", 1, 0)
@@ -857,8 +857,8 @@ On Error GoTo ERROR_HANDLER:
         
         .InsertDWord oKey.ProductValue
         .InsertDWord oKey.PublicValue
-        .InsertDWord ds.serverToken
-        .InsertDWord ds.clientToken
+        .InsertDWord ds.ServerToken
+        .InsertDWord ds.ClientToken
         .InsertNonNTString oKey.Hash
         
         If (LenB(ReadCfg("Override", "OwnerName")) > 0) Then
@@ -894,14 +894,13 @@ On Error GoTo ERROR_HANDLER:
     sInfo = pBuff.GetString
     
     Select Case lResult
-        Case &H0:  'Login Successful
+        Case &H0:  'Logon Successful
             Call Event_LogonEvent(2, sInfo)
             
             If (Not ds.WaitingForEmail) Then
                 If (Dii And BotVars.UseRealm) Then
-                    Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Asking Battle.net for a list of Realm servers...")
-                    frmRealm.Show
-                    SEND_SID_QUERYREALMS2
+                    'Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Asking Battle.net for a list of Realm servers...")
+                    Call DoQueryRealms
                 Else
                     SendEnterChatSequence
                 End If
@@ -1049,10 +1048,11 @@ Private Sub RECV_SID_LOGONREALMEX(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
     Dim lError   As Long
     Dim sMCPData As String
+    Dim sTitle   As String
     Dim sIP      As String
-    Dim lPort    As Integer
+    Dim lPort    As Long
+    Dim sUniq    As String
     Dim x        As Integer
-    
 
     If (Len(pBuff.GetRaw(, True)) > 8) Then
         sMCPData = pBuff.GetRaw(16)
@@ -1061,12 +1061,19 @@ On Error GoTo ERROR_HANDLER:
             sIP = StringFormat("{0}{1}{2}", sIP, pBuff.GetByte, IIf(x = 4, vbNullString, "."))
         Next x
         lPort = ntohs(pBuff.GetDWORD)
-        ds.MCPData = StringFormat("{0}{1}", sMCPData, pBuff.GetRaw(48))
-        ds.UniqueName = pBuff.GetString
+        
+        sMCPData = StringFormat("{0}{1}", sMCPData, pBuff.GetRaw(48))
+        sUniq = pBuff.GetString
         
         If (Not frmChat.sckMCP.State = 0) Then frmChat.sckMCP.Close
-        frmChat.AddChat RTBColors.SuccessText, StringFormat("[REALM] Connecting to Realm server at {0}:{1}", sIP, lPort)
-        frmChat.sckMCP.Connect sIP, lPort
+        
+        If Not ds.MCPHandler Is Nothing Then
+            Call ds.MCPHandler.SetStartupData(sMCPData, sUniq, sIP, lPort)
+            sTitle = ds.MCPHandler.RealmServerTitle(ds.MCPHandler.RealmServerConnected)
+            
+            frmChat.AddChat RTBColors.InformationText, StringFormat("[REALM] Connecting to the Diablo II Realm {0} at {1}:{2}...", sTitle, sIP, lPort)
+            frmChat.sckMCP.Connect sIP, lPort
+        End If
     Else
         pBuff.GetDWORD
         lError = pBuff.GetDWORD
@@ -1077,7 +1084,11 @@ On Error GoTo ERROR_HANDLER:
             Case Else:       frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[REALM] Login to the Diablo II Realm has failed for an unknown reason (0x{0}). Please try again later.", ZeroOffset(lError, 8))
         End Select
         
-        Unload frmRealm
+        If Not ds.MCPHandler Is Nothing Then
+            If ds.MCPHandler.FormActive Then
+                frmRealm.UnloadRealmError
+            End If
+        End If
     End If
     
     Exit Sub
@@ -1093,19 +1104,19 @@ End Sub
 ' (DWORD) [5] Hashed realm password
 ' (STRING) Realm title
 '*******************************
-Private Sub SEND_SID_LOGONREALMEX(sRealmTitle As String)
+Public Sub SEND_SID_LOGONREALMEX(sRealmTitle As String, sRealmServerPassword As String)
 On Error GoTo ERROR_HANDLER:
     
     If (LenB(sRealmTitle) = 0) Then Exit Sub
     
     Dim pBuff As New clsDataBuffer
     pBuff.InsertDWord ds.ClientToken
-    pBuff.InsertNonNTString doubleHashPassword("password", ds.ClientToken, ds.ServerToken)
+    pBuff.InsertNonNTString doubleHashPassword(sRealmServerPassword, ds.ClientToken, ds.ServerToken)
     pBuff.InsertNTString sRealmTitle
     pBuff.SendPacket SID_LOGONREALMEX
     Set pBuff = Nothing
     
-    Call frmChat.AddChat(RTBColors.InformationText, StringFormat("[BNCS] Logging in to the Diablo II Realm {0}...", sRealmTitle))
+    'Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Logging on to the Diablo II Realm...")
     
     Exit Sub
 ERROR_HANDLER:
@@ -1126,32 +1137,59 @@ End Sub
 Private Sub RECV_SID_QUERYREALMS2(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
     
-        Dim lCount As Long
-        Dim sTitle As String
-        Dim sDesc  As String
-        Dim i      As Integer
+    Dim lCount      As Long
+    Dim sTitle      As String
+    Dim sUserChoice As String
+    Dim i           As Integer
+    Dim List()      As Variant
+    Dim Server(0 To 1) As String
+    
+    pBuff.GetDWORD 'Unknown
+    lCount = pBuff.GetDWORD
+    
+    If (MDebug("debug") And (MDebug("all") Or MDebug("info"))) Then
+        frmChat.AddChat RTBColors.InformationText, "Received Realm List:"
+    End If
+    
+    If lCount > 0 Then
+        ReDim List(lCount - 1)
         
-        pBuff.GetDWORD 'Unknown
-        lCount = pBuff.GetDWORD
-        
-        If (MDebug("debug") And (MDebug("all") Or MDebug("info"))) Then
-            frmChat.AddChat RTBColors.InformationText, "Received Realm List:"
-        End If
-        For i = 1 To lCount
+        For i = 0 To lCount - 1
             pBuff.GetDWORD 'Unknown
-            sTitle = pBuff.GetString
-            sDesc = pBuff.GetString
+            
+            Server(0) = pBuff.GetString
+            Server(1) = pBuff.GetString
+            List(i) = Server()
+            
             If (MDebug("debug") And (MDebug("all") Or MDebug("info"))) Then
-                frmChat.AddChat RTBColors.InformationText, StringFormat("  {0}: {1}", sTitle, sDesc)
+                frmChat.AddChat RTBColors.InformationText, StringFormat("  {0}: {1}", Server(0), Server(1))
             End If
         Next i
         
-        Call frmChat.AddChat(RTBColors.SuccessText, "[BNCS] Received Realm list")
-        If (LenB(sTitle) > 0) Then
-            SEND_SID_LOGONREALMEX sTitle
-        Else
-            Call frmChat.AddChat(RTBColors.SuccessText, "[BNCS] All Diablo II realms are currently offline")
+        If Not ds.MCPHandler Is Nothing Then
+            Call ds.MCPHandler.SetRealmServerInfo(List)
         End If
+    End If
+    
+    'Call frmChat.AddChat(RTBColors.SuccessText, "[BNCS] Received Realm list.")
+    
+    If Not ds.MCPHandler Is Nothing Then
+        If ds.MCPHandler.ChooseRealm(sTitle, sUserChoice) Then
+            If LenB(sTitle) > 0 Then
+                Call ds.MCPHandler.RealmServerLogon(sTitle)
+            Else
+                ' shouldn't happen
+                Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Realm logon error: not found.")
+                Call SendEnterChatSequence
+            End If
+        ElseIf LenB(sUserChoice) > 0 Then
+            Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] The realm {0}{1}{0} s offline or doesn't exist.", Chr$(34), sUserChoice))
+            Call SendEnterChatSequence
+        Else
+            Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] All Diablo II realms are currently offline.")
+            Call SendEnterChatSequence
+        End If
+    End If
     
     Exit Sub
 ERROR_HANDLER:
@@ -1418,7 +1456,7 @@ On Error GoTo ERROR_HANDLER:
             End If
             
             'Calculate the hash
-            If Not oKey.CalculateHash(ds.clientToken, ds.serverToken) Then Exit Sub
+            If Not oKey.CalculateHash(ds.ClientToken, ds.ServerToken) Then Exit Sub
             
             .InsertDWord oKey.KeyLength
             .InsertDWord oKey.ProductValue
@@ -1600,7 +1638,7 @@ On Error GoTo ERROR_HANDLER:
                 frmChat.AddChat RTBColors.InformationText, "[BNCS] Warning, The server sent an invalid password proof, it may be a fake server."
             End If
             SendEnterChatSequence
-                   
+            
         Case &H2: 'Invalid password
             Call Event_LogonEvent(1)
             Call frmChat.DoDisconnect
@@ -1609,12 +1647,11 @@ On Error GoTo ERROR_HANDLER:
         Case &HF: 'Custom message
             Call Event_LogonEvent(5, sInfo)
             Call frmChat.DoDisconnect
-                    
-                        
+            
         Case Else
             Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] Unknown response to SID_AUTH_ACCOUNTLOGONPROOF: 0x{0}", ZeroOffset(lResult, 8)))
             Call frmChat.DoDisconnect
-                        
+            
     End Select
     
     Exit Sub
@@ -1931,8 +1968,6 @@ End Function
 
 Public Sub SendEnterChatSequence()
 On Error GoTo ERROR_HANDLER:
-    Dim Num As Integer
-    
     If ((Not BotVars.Product = "VD2D") And (Not BotVars.Product = "PX2D") And _
         (Not BotVars.Product = "PX3W") And (Not BotVars.Product = "3RAW")) Then
         
@@ -1986,6 +2021,19 @@ On Error GoTo ERROR_HANDLER:
         Call FullJoin(BotVars.HomeChannel, 2)
     End If
     
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.DoChannelJoinHome()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
+Public Sub DoQueryRealms()
+On Error GoTo ERROR_HANDLER:
+
+    Set ds.MCPHandler = New clsMCPHandler
+    
+    SEND_SID_QUERYREALMS2
+
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _

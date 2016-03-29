@@ -4,16 +4,46 @@ Begin VB.Form frmRealm
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Diablo II Realm Login"
-   ClientHeight    =   4350
+   ClientHeight    =   4755
    ClientLeft      =   525
    ClientTop       =   840
    ClientWidth     =   10920
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   4350
+   ScaleHeight     =   4755
    ScaleWidth      =   10920
    StartUpPosition =   1  'CenterOwner
+   Begin VB.ComboBox cboOtherRealms 
+      BackColor       =   &H00993300&
+      Enabled         =   0   'False
+      ForeColor       =   &H00FFFFFF&
+      Height          =   315
+      Left            =   9480
+      TabIndex        =   7
+      Text            =   "Combo1"
+      Top             =   1560
+      Visible         =   0   'False
+      Width           =   1335
+   End
+   Begin VB.CommandButton btnDisconnect 
+      Cancel          =   -1  'True
+      Caption         =   "&Disconnect"
+      Height          =   300
+      Left            =   8040
+      TabIndex        =   2
+      Top             =   4320
+      Width           =   1455
+   End
+   Begin VB.CommandButton btnChoose 
+      Caption         =   "&Choose This"
+      Default         =   -1  'True
+      Height          =   300
+      Left            =   9480
+      TabIndex        =   1
+      Top             =   4320
+      Width           =   1335
+   End
    Begin VB.Timer tmrLoginTimeout 
       Enabled         =   0   'False
       Interval        =   1000
@@ -37,8 +67,8 @@ Begin VB.Form frmRealm
       Height          =   495
       Left            =   9480
       Style           =   1  'Graphical
-      TabIndex        =   1
-      Top             =   960
+      TabIndex        =   6
+      Top             =   720
       Width           =   1335
    End
    Begin VB.OptionButton optViewExisting 
@@ -57,8 +87,9 @@ Begin VB.Form frmRealm
       Height          =   495
       Left            =   9480
       Style           =   1  'Graphical
-      TabIndex        =   0
-      Top             =   360
+      TabIndex        =   5
+      Top             =   120
+      Value           =   -1  'True
       Width           =   1335
    End
    Begin MSComctlLib.ImageList imlChars 
@@ -107,41 +138,12 @@ Begin VB.Form frmRealm
          EndProperty
       EndProperty
    End
-   Begin MSComctlLib.ListView lvwChars 
-      Height          =   4095
-      Left            =   120
-      TabIndex        =   2
-      Top             =   120
-      Width           =   9255
-      _ExtentX        =   16325
-      _ExtentY        =   7223
-      Arrange         =   1
-      LabelWrap       =   -1  'True
-      HideSelection   =   -1  'True
-      HideColumnHeaders=   -1  'True
-      _Version        =   393217
-      Icons           =   "imlChars"
-      ForeColor       =   16777215
-      BackColor       =   0
-      BorderStyle     =   1
-      Appearance      =   1
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      NumItems        =   0
-   End
    Begin VB.Frame fraCreateNew 
       BackColor       =   &H00000000&
       ForeColor       =   &H00FFFFFF&
       Height          =   4095
       Left            =   120
-      TabIndex        =   6
+      TabIndex        =   8
       Top             =   120
       Width           =   9255
       Begin VB.TextBox txtCharName 
@@ -159,7 +161,7 @@ Begin VB.Form frmRealm
          Height          =   285
          Left            =   6360
          MaxLength       =   15
-         TabIndex        =   18
+         TabIndex        =   19
          Top             =   1920
          Width           =   2295
       End
@@ -179,7 +181,7 @@ Begin VB.Form frmRealm
          Height          =   375
          Left            =   4560
          Style           =   1  'Graphical
-         TabIndex        =   17
+         TabIndex        =   18
          Top             =   2280
          Width           =   1335
       End
@@ -199,7 +201,7 @@ Begin VB.Form frmRealm
          Height          =   375
          Left            =   4560
          Style           =   1  'Graphical
-         TabIndex        =   16
+         TabIndex        =   17
          Top             =   1800
          Width           =   1335
       End
@@ -219,7 +221,7 @@ Begin VB.Form frmRealm
          Height          =   375
          Left            =   4560
          Style           =   1  'Graphical
-         TabIndex        =   15
+         TabIndex        =   16
          Top             =   1320
          Width           =   1335
       End
@@ -236,7 +238,7 @@ Begin VB.Form frmRealm
          EndProperty
          Height          =   375
          Left            =   7200
-         TabIndex        =   14
+         TabIndex        =   20
          Top             =   2400
          Width           =   1455
       End
@@ -257,7 +259,7 @@ Begin VB.Form frmRealm
          Index           =   7
          Left            =   840
          Style           =   1  'Graphical
-         TabIndex        =   13
+         TabIndex        =   15
          Top             =   2880
          Width           =   1575
       End
@@ -278,7 +280,7 @@ Begin VB.Form frmRealm
          Index           =   6
          Left            =   840
          Style           =   1  'Graphical
-         TabIndex        =   12
+         TabIndex        =   14
          Top             =   2520
          Width           =   1575
       End
@@ -299,7 +301,7 @@ Begin VB.Form frmRealm
          Index           =   5
          Left            =   840
          Style           =   1  'Graphical
-         TabIndex        =   11
+         TabIndex        =   13
          Top             =   2160
          Width           =   1575
       End
@@ -320,7 +322,7 @@ Begin VB.Form frmRealm
          Index           =   4
          Left            =   840
          Style           =   1  'Graphical
-         TabIndex        =   10
+         TabIndex        =   12
          Top             =   1800
          Width           =   1575
       End
@@ -341,7 +343,7 @@ Begin VB.Form frmRealm
          Index           =   3
          Left            =   840
          Style           =   1  'Graphical
-         TabIndex        =   9
+         TabIndex        =   11
          Top             =   1440
          Width           =   1575
       End
@@ -362,7 +364,7 @@ Begin VB.Form frmRealm
          Index           =   2
          Left            =   840
          Style           =   1  'Graphical
-         TabIndex        =   8
+         TabIndex        =   10
          Top             =   1080
          Width           =   1575
       End
@@ -383,11 +385,11 @@ Begin VB.Form frmRealm
          Index           =   1
          Left            =   840
          Style           =   1  'Graphical
-         TabIndex        =   7
+         TabIndex        =   9
          Top             =   720
          Width           =   1575
       End
-      Begin VB.Label Label2 
+      Begin VB.Label lblCopy 
          Alignment       =   2  'Center
          BackColor       =   &H00000000&
          Caption         =   "Images (c) Blizzard Entertainment"
@@ -403,11 +405,11 @@ Begin VB.Form frmRealm
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   2280
-         TabIndex        =   21
+         TabIndex        =   26
          Top             =   3600
          Width           =   2535
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblCharName 
          BackColor       =   &H00000000&
          Caption         =   "Desired character name:"
          BeginProperty Font 
@@ -422,7 +424,7 @@ Begin VB.Form frmRealm
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   6360
-         TabIndex        =   19
+         TabIndex        =   24
          Top             =   1560
          Width           =   2175
       End
@@ -434,9 +436,56 @@ Begin VB.Form frmRealm
          Width           =   1545
       End
    End
-   Begin VB.Label lblExpiration 
-      Alignment       =   2  'Center
+   Begin MSComctlLib.ListView lvwChars 
+      Height          =   4095
+      Left            =   120
+      TabIndex        =   0
+      Top             =   120
+      Width           =   9255
+      _ExtentX        =   16325
+      _ExtentY        =   7223
+      Arrange         =   1
+      LabelWrap       =   -1  'True
+      HideSelection   =   0   'False
+      HideColumnHeaders=   -1  'True
+      _Version        =   393217
+      Icons           =   "imlChars"
+      ForeColor       =   16777215
+      BackColor       =   0
+      BorderStyle     =   1
+      Appearance      =   1
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      NumItems        =   0
+   End
+   Begin VB.CommandButton btnUpgrade 
+      Caption         =   "&Upgrade This"
+      Height          =   300
+      Left            =   9480
+      TabIndex        =   4
+      Top             =   2400
+      Visible         =   0   'False
+      Width           =   1335
+   End
+   Begin VB.CommandButton btnDelete 
+      Caption         =   "&Delete This"
+      Height          =   300
+      Left            =   9480
+      TabIndex        =   3
+      Top             =   2760
+      Visible         =   0   'False
+      Width           =   1335
+   End
+   Begin VB.Label lblRealm 
       BackColor       =   &H00000000&
+      Caption         =   "Other Realms:"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -447,13 +496,56 @@ Begin VB.Form frmRealm
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   615
+      Height          =   255
+      Index           =   5
       Left            =   9480
-      TabIndex        =   20
-      Top             =   3600
+      TabIndex        =   28
+      Top             =   1320
+      Visible         =   0   'False
       Width           =   1335
    End
-   Begin VB.Label lblSecondsCap 
+   Begin VB.Label lblRealm 
+      Alignment       =   2  'Center
+      BackColor       =   &H00000000&
+      Caption         =   "Expires:"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H0000FFFF&
+      Height          =   855
+      Index           =   1
+      Left            =   9480
+      TabIndex        =   27
+      Top             =   3360
+      Width           =   1335
+   End
+   Begin VB.Label lblRealm 
+      BackColor       =   &H00000000&
+      Caption         =   "{0}{1} is a {2} {3} on Realm {4}"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   255
+      Index           =   0
+      Left            =   120
+      TabIndex        =   25
+      Top             =   4380
+      Width           =   7695
+   End
+   Begin VB.Label lblRealm 
       Alignment       =   2  'Center
       BackColor       =   &H00000000&
       Caption         =   "seconds."
@@ -468,14 +560,16 @@ Begin VB.Form frmRealm
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   4
       Left            =   9480
-      TabIndex        =   5
-      Top             =   3240
+      TabIndex        =   23
+      Top             =   3000
       Width           =   1335
    End
-   Begin VB.Label lblSeconds 
+   Begin VB.Label lblRealm 
       Alignment       =   2  'Center
       BackColor       =   &H00000000&
+      Caption         =   "#"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -487,14 +581,16 @@ Begin VB.Form frmRealm
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   3
       Left            =   9480
-      TabIndex        =   4
-      Top             =   3000
+      TabIndex        =   22
+      Top             =   2640
       Width           =   1335
    End
-   Begin VB.Label lblWarning 
+   Begin VB.Label lblRealm 
       Alignment       =   2  'Center
       BackColor       =   &H00000000&
+      Caption         =   "Auto-choose X in"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -505,20 +601,24 @@ Begin VB.Form frmRealm
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   855
+      Height          =   735
+      Index           =   2
       Left            =   9480
-      TabIndex        =   3
-      Top             =   2160
+      TabIndex        =   21
+      Top             =   1920
       Width           =   1335
    End
    Begin VB.Menu mnuPop 
       Caption         =   "mnuPop"
       Visible         =   0   'False
-      Begin VB.Menu mnuSep1 
-         Caption         =   "-"
-      End
       Begin VB.Menu mnuPopDelete 
-         Caption         =   "&Delete This Character"
+         Caption         =   "&Delete"
+         Shortcut        =   {DEL}
+      End
+      Begin VB.Menu mnuPopUpgrade 
+         Caption         =   "&Upgrade to Expansion"
+         Shortcut        =   ^U
+         Visible         =   0   'False
       End
    End
 End
@@ -529,17 +629,19 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Public WithEvents MCPHandler As clsMCPHandler
-Attribute MCPHandler.VB_VarHelpID = -1
+Private m_Unload_SuccessfulLogin As Boolean
+' ticks until auto choose
+Private m_Ticks As Long
+' current auto choose target
+Private m_Choice As Integer
+' are we on expansion?
+Private m_IsExpansion As Boolean
+' save selected item for refreshes and menu clicking
+Private m_Selection As Integer
+' save new character name so m_Selection gets set to the new character we just created
+Private m_NewCharacterName As String
 
-Private Unload_SuccessfulLogin As Boolean
-Private CharListReceived As Boolean
-Private mTicks As Long
-Private CharIsExpansion As Collection
-Private CharExpiration As Collection
-Private IndexToDelete As Integer
-Private CreatedExpRealmChar As Integer
-Private CharacterCount As Integer
+'Private Const WM_NCDESTROY = &H82
 
 '    Unknown& = &H0
 '    Amazon& = &H1
@@ -551,43 +653,136 @@ Private CharacterCount As Integer
 '    Assassin& = &H7
 
 Private Sub Form_Load()
-    Dim B As Boolean
-    
+    Dim i As Integer
+
     Me.Icon = frmChat.Icon
     
-    Set MCPHandler = New clsMCPHandler
-    Set CharIsExpansion = New Collection
-    Set CharExpiration = New Collection
-    
-    Call optNewCharType_Click(1)
-    Call optViewExisting_Click
-    
-    lblExpiration.Visible = True
-    Unload_SuccessfulLogin = False
-    
-    B = (BotVars.Product = "PX2D")
-    
-    chkExpansion.Enabled = B
-    optNewCharType(6).Enabled = B
-    optNewCharType(7).Enabled = B
-    
-    'lvwChars.ListItems.Add , "temp", "Please wait..."
-    lblExpiration.Caption = "Please wait..."
-    
-    IndexToDelete = -1
-End Sub
-
-Private Sub Form_KeyPress(KeyAscii As Integer)
-    If KeyAscii = 27 Then
+    ' must have a MCPHandler
+    If ds.MCPHandler Is Nothing Then
+        Set ds.MCPHandler = New clsMCPHandler
+        ds.MCPHandler.IsRealmError = True
         Unload Me
     End If
+    
+    ' must be on D2
+    If (BotVars.Product <> "PX2D" And BotVars.Product <> "VD2D") Then
+        ds.MCPHandler.IsRealmError = True
+        Unload Me
+    End If
+    
+    ' store if expansion
+    m_IsExpansion = (BotVars.Product = "PX2D")
+    
+    ' this is for deciding whether to enter chat after a form close
+    m_Unload_SuccessfulLogin = False
+    
+    With lblRealm(0) ' detail
+        .Caption = "Please wait..."
+        .ForeColor = &H888888
+    End With
+    
+    ' subclass for listview...
+    #If COMPILE_DEBUG = 0 Then
+        HookWindowProc hWnd
+        'm_OldWndProc = SetWindowLong(hWnd, GWL_WNDPROC, AddressOf SkipDragLVItem)
+    #End If
+    
+    ' read auto choose settings from handler
+    m_Ticks = ds.MCPHandler.AutoChooseWait
+    m_Choice = ds.MCPHandler.AutoChooseTarget
+    m_Selection = m_Choice
+    
+    ' UI setup
+    Call RealmStartupResponse
+    
+    ' set up char creation defaults
+    chkExpansion.Enabled = m_IsExpansion
+    chkExpansion.Value = IIf(m_IsExpansion, 1, 0)
+    chkLadder.Value = 1
+    optNewCharType(6).Enabled = m_IsExpansion
+    optNewCharType(7).Enabled = m_IsExpansion
+    optNewCharType(1).Value = True
+    Call optNewCharType_Click(1)
+    
+    ' view existing
+    optViewExisting.Value = True
+    Call CharListResponse
+    
+    ' setup timer
+    If m_Ticks >= 0 Then
+        tmrLoginTimeout.Enabled = True
+        tmrLoginTimeout_Timer
+        
+        ' hide delete button here as it's been made visible (over seconds remaining in timer)
+        ' will be made visible by stopping timer (if character is selected)
+        btnUpgrade.Visible = False
+        btnDelete.Visible = False
+    End If
+    
+    ' MCP handler state
+    ds.MCPHandler.FormActive = True
+End Sub
+
+Private Sub Form_Click()
+    Call StopLoginTimer
+End Sub
+
+' Display message names.
+'Public Function SkipDragLVItem(ByVal hWnd As Long, ByVal Msg As Long, _
+'        ByVal wParam As Long, ByVal lParam As Long) As Long
+'
+'    Dim nm_hdr As NMHDR
+'
+'    ' If we're being destroyed,
+'    ' restore the original WindowProc.
+'    If Msg = WM_NCDESTROY Then
+'        SetWindowLong hWnd, GWL_WNDPROC, OldWindowProc
+'    ElseIf Msg = WM_NOTIFY Then
+'        ' Copy info into the NMHDR structure.
+'        CopyMemory nm_hdr, ByVal lParam, Len(nm_hdr)
+'
+'    End If
+'
+'    NewWindowProc = CallWindowProc( _
+'        OldWindowProc, hWnd, Msg, wParam, _
+'        lParam)
+'End Function
+
+Private Sub AddCharacterItem(CharacterName As String, CharacterStats As clsUserStats, CharacterExpires As Date, ByVal Index As Integer)
+
+    Dim Expired As Boolean
+    Dim NewItem As ListItem
+    
+    With lvwChars
+        If (LenB(CharacterName) > 0) Then
+            If (FindCharacter(CharacterName) < 0) Then
+                Set NewItem = .ListItems.Add(, _
+                        CharacterName, CharacterStats.CharacterTitleAndName, _
+                        CharacterStats.CharacterClassID + 1)
+                
+                NewItem.Tag = Index
+                
+                If CharacterStats.IsExpansionCharacter Then
+                    NewItem.ForeColor = vbGreen
+                End If
+                
+                If IsDateExpired(CharacterExpires) Then
+                    NewItem.ForeColor = vbRed
+                End If
+                
+            End If
+        End If
+    End With
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     lvwChars.ListItems.Clear
     
-    If ((Not (Unload_SuccessfulLogin)) Or (RealmError)) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Login cancelled, proceeding with non-realm login."
+    tmrLoginTimeout.Enabled = False
+    m_Ticks = -1
+    
+    If ((Not (m_Unload_SuccessfulLogin)) Or (ds.MCPHandler.IsRealmError)) Then
+        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Logon cancelled."
         
         If frmChat.sckMCP.State <> 0 Then
             frmChat.sckMCP.Close
@@ -596,56 +791,114 @@ Private Sub Form_Unload(Cancel As Integer)
         SendEnterChatSequence
     End If
     
-    RealmError = False
-    mTicks = 0
-    
-    Set MCPHandler = Nothing
-    Set CharIsExpansion = Nothing
-    Set CharExpiration = Nothing
+    ds.MCPHandler.FormActive = False
+    ds.MCPHandler.IsRealmError = False
 End Sub
 
-Private Sub lvwChars_Click()
-    StopLoginTimer
+Private Sub cboOtherRealms_Click()
+    Dim CurrRealmIndex As Integer
+    Dim CurrRealmTitle As String
+    Dim NewRealmTitle  As String
+    Dim RealmPassword  As String
+
+    Call StopLoginTimer
+    
+    CurrRealmIndex = ds.MCPHandler.RealmServerSelectedIndex
+    CurrRealmTitle = ds.MCPHandler.RealmServerTitle(CurrRealmIndex)
+    
+    If (StrComp(cboOtherRealms.Text, CurrRealmTitle, vbTextCompare) <> 0) Then
+        NewRealmTitle = cboOtherRealms.Text
+        
+        DisableGUI
+        
+        ' close connection and switch realms
+        If frmChat.sckMCP.State <> 0 Then
+            frmChat.sckMCP.Close
+        End If
+        
+        Call ds.MCPHandler.RealmServerLogon(NewRealmTitle)
+        
+        CharListResponse
+    End If
+End Sub
+
+Private Sub cboOtherRealms_KeyPress(KeyAscii As Integer)
+    Call StopLoginTimer
+    
+    KeyAscii = 0
+End Sub
+
+Private Sub DisableGUI()
+    btnChoose.Enabled = False
+    btnDisconnect.Enabled = False
+    btnDelete.Visible = False
+    btnUpgrade.Visible = False
+    cboOtherRealms.Enabled = False
+    optCreateNew.Enabled = False
+    cmdCreate.Enabled = False
+    lvwChars.ListItems.Clear
+End Sub
+
+' labels are all in a control array so clicking on any one of them calls this:
+Private Sub label_Click(Index As Integer)
+    Call StopLoginTimer
 End Sub
 
 Private Sub lvwChars_DblClick()
-    'On Error Resume Next
-
-    With lvwChars
-        If Not (.SelectedItem Is Nothing) And CharListReceived Then
-            If CharIsExpansion.Item(.SelectedItem.Key) And _
-                Not (StrComp(BotVars.Product, "PX2D") = 0) And _
-                CreatedExpRealmChar <> .SelectedItem.Index Then
-                
-                frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] That is an expansion character. Please log on using Diablo II: Lord of Destruction."
-                frmChat.SetFocus
-            Else
-                MCPHandler.LogonToCharacter .SelectedItem.Key
-                Unload_SuccessfulLogin = True
-                RealmError = False
-            End If
-            'Debug.Print "-- " & CharIsExpansion.Item(.SelectedItem.Key)
-        End If
-    End With
+    btnChoose_Click
 End Sub
 
-Private Sub lvwChars_ItemClick(ByVal Item As MSComctlLib.ListItem)
+Private Sub lvwChars_ItemClick(ByVal Item As ListItem)
+    Dim ExpireText As String
+    Dim DetailText As String
+    
     If Not (lvwChars.SelectedItem Is Nothing) Then
-        lblExpiration.Caption = CharExpiration.Item(lvwChars.SelectedItem.Key)
+        m_Selection = lvwChars.SelectedItem.Tag
+        
+        ExpireText = GetCharacterExpireText(lvwChars.SelectedItem.Tag)
+        DetailText = GetCharacterDetailText(lvwChars.SelectedItem.Tag)
+        
+        With lblRealm(0) ' detail
+            .Caption = DetailText
+            .ForeColor = vbWhite
+        End With
+        
+        With lblRealm(1) ' expires
+            .Caption = ExpireText
+            If IsDateExpired(ds.MCPHandler.CharacterExpires(lvwChars.SelectedItem.Tag)) Then
+                .ForeColor = vbRed
+            Else
+                .ForeColor = vbYellow
+            End If
+        End With
+        
+        btnChoose.Enabled = CanChooseCharacter(lvwChars.SelectedItem.Tag)
+        btnDelete.Visible = True
+        btnUpgrade.Visible = CanUpgradeCharacter(lvwChars.SelectedItem.Tag)
+    Else
+        ' clear detail
+        lblRealm(0).Caption = vbNullString
+        ' clear expires
+        lblRealm(1).Caption = vbNullString
+        btnChoose.Enabled = False
+        btnDelete.Visible = False
+        btnUpgrade.Visible = False
     End If
 End Sub
 
 Private Sub lvwChars_KeyDown(KeyCode As Integer, Shift As Integer)
-    StopLoginTimer
+    Call StopLoginTimer
 End Sub
 
-Private Sub lvwChars_KeyPress(KeyAscii As Integer)
-    If (KeyAscii = vbKeyReturn) Then
-        Call lvwChars_DblClick
-    ElseIf KeyAscii = vbKeyEscape Then
-        Unload Me
-    Else
-        StopLoginTimer
+Private Sub lvwChars_KeyUp(KeyCode As Integer, Shift As Integer)
+    If (KeyCode = vbKeyReturn) Then
+        Call btnChoose_Click
+    ElseIf KeyCode = vbKeyEscape Then
+        Call UnloadNormal
+    ElseIf KeyCode = vbKeyDelete Then
+        Call HandleCharacterDelete(lvwChars.SelectedItem)
+    ElseIf KeyCode = vbKeyU And Shift = vbCtrlMask Then
+        Call HandleCharacterUpgrade(lvwChars.SelectedItem)
     End If
 End Sub
 
@@ -653,24 +906,21 @@ Private Sub cmdCreate_Click()
     Dim i As Integer
     Dim Flags As Long
     
-    CreatedExpRealmChar = 0
-    
     If lvwChars.ListItems.Count > 7 Then
         frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Your account is full! Delete a character before trying to create another."
     Else
         If Len(txtCharName.Text) > 2 Then
+            Flags = 0
             If chkLadder.Value = 1 Then Flags = Flags Or &H40
-            
-            If chkExpansion.Value = 1 Then
-                Flags = Flags Or &H20
-                CreatedExpRealmChar = lvwChars.ListItems.Count
-            End If
-            
+            If chkExpansion.Value = 1 Then Flags = Flags Or &H20
             If chkHardcore.Value = 1 Then Flags = Flags Or &H4
             
             For i = 1 To 7
                 If optNewCharType(i).Value = True Then
-                    MCPHandler.CreateMCPCharacter i - 1, Flags, txtCharName.Text
+                    m_NewCharacterName = txtCharName.Text
+                    
+                    ds.MCPHandler.SEND_MCP_CHARCREATE (i - 1), Flags, txtCharName.Text
+                    
                     Exit For
                 End If
             Next i
@@ -678,145 +928,320 @@ Private Sub cmdCreate_Click()
     End If
 End Sub
 
+Private Sub lvwChars_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+    Call StopLoginTimer
+End Sub
+
 Private Sub lvwChars_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+    Dim Item As ListItem
+    
+    m_Selection = -1
+    
     If Button = vbRightButton Then
-        If Not (lvwChars.SelectedItem Is Nothing) Then
+        Set Item = lvwChars.HitTest(x, y)
+        
+        If Not (Item Is Nothing) Then
+            m_Selection = Item.Tag
+            
+            mnuPopUpgrade.Visible = CanUpgradeCharacter(m_Selection)
+            
             PopupMenu mnuPop
         End If
     End If
 End Sub
 
-Private Sub MCPHandler_CharDeleteResponse(ByVal Success As Boolean)
-    If Success Then
-        frmChat.AddChat RTBColors.SuccessText, "[REALM] Character successfully deleted."
+Public Sub RealmStartupResponse()
+    Dim i          As Integer
+    Dim RealmIndex As Integer
+    Dim RealmTitle As String
+    Dim RealmDescr As String
+    Dim RealmIP    As String
+    Dim RealmPort  As Integer
+    
+    RealmIndex = ds.MCPHandler.RealmServerSelectedIndex
+    RealmTitle = ds.MCPHandler.RealmServerTitle(RealmIndex)
+    RealmDescr = ds.MCPHandler.RealmServerDescription(RealmIndex)
+    RealmIP = ds.MCPHandler.RealmSelectedServerIP
+    RealmPort = ds.MCPHandler.RealmSelectedServerPort
+    
+    Me.Caption = "Realm " & RealmTitle & " - " & RealmDescr & " (" & RealmIP & ":" & CStr(RealmPort) & ")"
+    
+    ' build "other realm" list
+    If ds.MCPHandler.RealmServerCount > 1 Then
+        cboOtherRealms.Clear
         
-        If IndexToDelete > 0 Then
-            lvwChars.ListItems.Remove IndexToDelete
-            CharIsExpansion.Remove IndexToDelete
-            IndexToDelete = -1
-        End If
-    Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] There was a problem deleting your character."
-        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Please log in using the actual Diablo II game to delete it."
-    End If
-End Sub
-
-Private Sub MCPHandler_CharListResponse(ByVal NumCharacters As Integer)
-    lvwChars.ListItems.Clear
-
-    ClearExpansionCollection
-    ClearExpirationCollection
-    ClearExpirationLabel
-    
-    CharListReceived = True
-    
-    CharacterCount = NumCharacters
-    
-    If CharacterCount = 0 Then
-        optCreateNew.Enabled = True
-    End If
-    
-    'tmrLoginTimeout.Enabled = True
-End Sub
-
-Private Sub MCPHandler_CharCreateResponse(ByVal Status As Byte, ByVal Message As String)
-    If Status = 0 Then
-        frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
-        lvwChars.ListItems.Clear
-        
-        CharListReceived = False
-        
-        MCPHandler.RequestCharacterList
-        Call optViewExisting_Click
-    Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
-        txtCharName.Text = vbNullString
-    End If
-    
-    ClearExpirationLabel
-End Sub
-
-Private Sub MCPHandler_CharListEntry(ByVal CharName As String, ByVal Statstring As String, ByVal ExpirationDate As Date)
-    Dim sOut As String
-    Dim Hardcore As Boolean, Ladder As Boolean, Dead As Boolean, Expired As Boolean ', Expansion As Boolean
-    Dim IsExpansion As Boolean
-    Dim Level As Byte, ClassByte As Byte
-    Dim Class As String
-    
-    Expired = (Sgn(DateDiff("s", Now, ExpirationDate)) = -1)
-    
-    MCPHandler.GetD2CharStats Statstring, Class, ClassByte, Level, Hardcore, Dead, Ladder, IsExpansion
-
-    sOut = CharName & vbCr & "(a" & IIf(Expired, "n expired ", " ") & IIf(Dead, IIf(Hardcore, "dead ", ""), "") & _
-                                    IIf(Hardcore, "hardcore ", "") _
-                                    & "level " & Level & Space(1) & _
-                                    IIf(IsExpansion, "expansion ", "") & Class & ")"
-    
-    With lvwChars
-        'If .ListItems.Count > 0 Then
-        '    .ListItems.Clear
-        'End If
+        For i = 0 To ds.MCPHandler.RealmServerCount - 1
+            cboOtherRealms.AddItem ds.MCPHandler.RealmServerTitle(i)
             
-        CharIsExpansion.Add IsExpansion, CharName
-    
-        If LenB(CharName) > 0 Then
-            
-            If Not FindKey(CharName) Then
-            
-                .ListItems.Add , CharName, sOut, ClassByte + 1
-                
-                'frmChat.AddChat vbRed, CharName & " (" & .ListItems(1).Key & ")"
-                
-                If Expired Then
-                    .ListItems.Item(.ListItems.Count).ForeColor = vbRed
-                End If
-                
-                CharExpiration.Add IIf(Expired, "Expired ", "Expires ") & vbCrLf & ExpirationDate, CharName
-                
-                .SetFocus
-                
-                If (.ListItems.Count = CharacterCount) Then
-                    optCreateNew.Enabled = True
-                    tmrLoginTimeout.Enabled = True
-                End If
+            If (StrComp(RealmTitle, ds.MCPHandler.RealmServerTitle(i), vbTextCompare) = 0) Then
+                cboOtherRealms.ListIndex = i
             End If
-        End If
-    End With
+        Next i
+        
+        cboOtherRealms.Text = RealmTitle
+        
+        ' other realms label
+        lblRealm(5).Visible = True
+        cboOtherRealms.Visible = True
+    Else
+        ' other realms label
+        lblRealm(5).Visible = False
+        cboOtherRealms.Visible = False
+    End If
 End Sub
 
-Private Sub MCPHandler_CharLogonResponse(ByVal Status As Byte, ByVal Message As String)
-    If Status = 0 Then
-        frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
-        
-        SendEnterChatSequence
+' form callback for character list
+' also if this form needs to check existing character list
+' updates UI after checking character list
+Public Sub CharListResponse()
+    Dim i As Integer
+    Dim NewSelection As Integer
+    
+    lvwChars.ListItems.Clear
+    
+    optCreateNew.Value = False
+    
+    Call StopLoginTimer
+    
+    fraCreateNew.Visible = False
+    lvwChars.Visible = True
+    ' clear expires
+    lblRealm(1).Caption = vbNullString
+    btnDelete.Visible = False
+    btnUpgrade.Visible = False
+    
+    cboOtherRealms.Enabled = True
+    btnDisconnect.Enabled = True
+    cmdCreate.Enabled = True
+    btnChoose.Enabled = False
+    
+    If ds.MCPHandler.RetrievingCharacterList Then
+        With lblRealm(0) ' detail
+            .Caption = "Retrieving characters..."
+            .ForeColor = &H888888
+        End With
+    ElseIf Not ds.MCPHandler.RealmServerConnected Then
+        With lblRealm(0) ' detail
+            .Caption = "Switching realm..."
+            .ForeColor = &H888888
+        End With
     Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
-        RealmError = True
+        For i = 0 To ds.MCPHandler.CharacterCount - 1
+        
+            Call AddCharacterItem(ds.MCPHandler.CharacterName(i), ds.MCPHandler.CharacterStats(i), ds.MCPHandler.CharacterExpires(i), i)
+        
+        Next i
+        
+        optCreateNew.Enabled = (ds.MCPHandler.CharacterCount < 8)
+        
+        If LenB(m_NewCharacterName) > 0 Then
+            NewSelection = FindCharacter(m_NewCharacterName)
+            
+            If NewSelection >= 0 Then m_Selection = NewSelection
+            
+            m_NewCharacterName = vbNullString
+        End If
+        
+        If m_Selection < 0 Then m_Selection = 0
+        
+        With lvwChars.ListItems
+            If .Count > m_Selection Then
+                .Item(m_Selection + 1).Selected = True
+                Call lvwChars_ItemClick(.Item(m_Selection + 1))
+                .Item(m_Selection + 1).EnsureVisible
+            End If
+        End With
+        
+        If ds.MCPHandler.CharacterCount = 0 Then
+            With lblRealm(0)
+                .Caption = "No characters found."
+                .ForeColor = vbRed
+            End With
+        End If
     End If
+End Sub
+
+' form callback for character create
+Public Sub CharCreateResponse(ByVal Success As Boolean, ByVal Message As String)
+    If Success Then
+        ' go back to character list and refresh
+        HandleRefresh
+        
+        ' clear field for returning to this panel
+        txtCharName.Text = vbNullString
+    Else
+        ' clear saved name so we don't try to look for it later
+        m_NewCharacterName = vbNullString
+        
+        ' focus on the textbox since the character create failed
+        With txtCharName
+            .selStart = 0
+            .selLength = Len(.Text)
+            On Error Resume Next
+            .SetFocus
+        End With
+    End If
+End Sub
+
+' form callback for character delete
+Public Sub CharDeleteResponse(ByVal Success As Boolean, ByVal Message As String)
+    If Success Then
+        'If m_Selection >= 0 Then
+        '    lvwChars.ListItems.Remove m_Selection + 1
+        'Else
+        ' always re-request (or MCPHandler.CharacterList will be different)
+        HandleRefresh
+        'End If
+    End If
+End Sub
+
+' form callback for character upgrade
+Public Sub CharUpgradeResponse(ByVal Success As Boolean, ByVal Message As String)
+    If Success Then
+        'If m_Selection >= 0 Then
+        '    lvwChars.ListItems.Item(m_Selection + 1).ForeColor = vbGreen
+        '    Call lvwChars_ItemClick(lvwChars.ListItems.Item(m_Selection + 1))
+        'Else
+        ' always re-request (or MCPHandler.CharacterList will be different)
+        HandleRefresh
+        'End If
+    End If
+End Sub
+
+' form callback for character logon
+Public Sub CharLogonResponse(ByVal Success As Boolean, ByVal Message As String)
+    If Success Then
+        UnloadNormal
+    End If
+End Sub
+
+' form callback for BNCS close/DoDisconnect
+Public Sub UnloadAfterBNCSClose()
+    m_Unload_SuccessfulLogin = True
+    ds.MCPHandler.IsRealmError = False
+    
+    #If COMPILE_DEBUG = 0 Then
+        UnhookWindowProc hWnd
+    #End If
     
     Unload Me
 End Sub
 
-Private Sub MCPHandler_RealmStartup(ByVal Status As Byte, ByVal Message As String)
-    If Status = 0 Then
-        frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
-        MCPHandler.RequestCharacterList
-    Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
-        RealmError = True
-        Unload frmRealm
+Public Sub UnloadRealmError()
+    If ds.MCPHandler Is Nothing Then
+        Set ds.MCPHandler = New clsMCPHandler
     End If
+    
+    ds.MCPHandler.IsRealmError = True
+    
+    #If COMPILE_DEBUG = 0 Then
+        UnhookWindowProc hWnd
+    #End If
+    
+    Unload Me
+End Sub
+
+Private Sub UnloadNormal()
+    #If COMPILE_DEBUG = 0 Then
+        UnhookWindowProc hWnd
+    #End If
+    
+    Unload Me
 End Sub
 
 Private Sub mnuPopDelete_Click()
-    Dim s As String
-    
-    If Not (lvwChars.SelectedItem Is Nothing) Then
-        s = Split(lvwChars.SelectedItem.Text, vbCr)(0)
-        IndexToDelete = lvwChars.SelectedItem.Index
-        
-        MCPHandler.DeleteCharacter s
+    If (m_Selection >= 0 And optViewExisting.Value) Then
+        If lvwChars.ListItems.Count > m_Selection Then
+            Call HandleCharacterDelete(lvwChars.ListItems(m_Selection + 1))
+        End If
     End If
+End Sub
+
+Private Sub mnuPopUpgrade_Click()
+    If (m_Selection >= 0) And CanUpgradeCharacter(m_Selection And optViewExisting.Value) Then
+        If lvwChars.ListItems.Count > m_Selection Then
+            Call HandleCharacterUpgrade(lvwChars.ListItems(m_Selection + 1))
+        End If
+    End If
+End Sub
+
+Private Sub btnDelete_Click()
+    Call StopLoginTimer
+    
+    If (Not lvwChars.SelectedItem Is Nothing And optViewExisting.Value) Then
+        Call HandleCharacterDelete(lvwChars.SelectedItem)
+    End If
+End Sub
+
+Private Sub btnUpgrade_Click()
+    Call StopLoginTimer
+    
+    If (Not lvwChars.SelectedItem Is Nothing And optViewExisting.Value) Then
+        If CanUpgradeCharacter(lvwChars.SelectedItem.Tag) Then
+            Call HandleCharacterUpgrade(lvwChars.SelectedItem)
+        End If
+    End If
+End Sub
+
+Private Sub HandleRefresh()
+    lvwChars.ListItems.Clear
+    
+    ds.MCPHandler.ClearInternalCharacters
+    
+    optViewExisting.Value = True
+    Call CharListResponse
+    
+    ds.MCPHandler.DoRequestCharacters
+End Sub
+
+Private Sub HandleCharacterDelete(ByVal CharacterItem As ListItem)
+    Dim Result As VbMsgBoxResult
+    
+    If Not CharacterItem Is Nothing And optViewExisting.Value Then
+        Result = MsgBox(CharacterItem.Text & " will be deleted. This action is irreversable! " & vbNewLine & _
+                "Are you sure you want to do that?", vbYesNo Or vbExclamation, "Realm Confirm Delete")
+        
+        If Result = vbYes Then
+            ds.MCPHandler.SEND_MCP_CHARDELETE CharacterItem.Key
+        End If
+    End If
+End Sub
+
+Private Sub HandleCharacterUpgrade(ByVal CharacterItem As ListItem)
+    Dim Result As VbMsgBoxResult
+    
+    If Not CharacterItem Is Nothing And optViewExisting.Value Then
+        If CanUpgradeCharacter(CharacterItem.Tag) Then
+            Result = MsgBox(CharacterItem.Text & " will be upgraded to a Lord of Destruction character. This action is irreversable! " & vbNewLine & _
+                    "Are you sure you want to do that?", vbYesNo Or vbQuestion, "Realm Confirm Upgrade")
+            
+            If Result = vbYes Then
+                ds.MCPHandler.SEND_MCP_CHARUPGRADE CharacterItem.Key
+            End If
+        End If
+    End If
+End Sub
+
+Private Sub btnDisconnect_Click()
+    Call StopLoginTimer
+    
+    UnloadNormal
+End Sub
+
+Private Sub btnChoose_Click()
+    Call StopLoginTimer
+    
+    With lvwChars
+        If Not (.SelectedItem Is Nothing) Then
+            If Not CanChooseCharacter(.SelectedItem.Tag) Then
+                frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] That is an expansion character. Please log on using Diablo II: Lord of Destruction."
+            Else
+                Call ds.MCPHandler.SEND_MCP_CHARLOGON(.SelectedItem.Key)
+                m_Unload_SuccessfulLogin = True
+                ds.MCPHandler.IsRealmError = False
+            End If
+        End If
+    End With
 End Sub
 
 Private Sub optNewCharType_Click(Index As Integer)
@@ -829,107 +1254,215 @@ Private Sub optNewCharType_Click(Index As Integer)
     Next i
 End Sub
 
+Private Sub chkExpansion_Click()
+    Dim Enable As Boolean
+    
+    If Not m_IsExpansion Then
+        chkExpansion.Value = 0
+        Exit Sub
+    End If
+    
+    Enable = (chkExpansion.Value <> 0)
+    optNewCharType(6).Enabled = Enable
+    optNewCharType(7).Enabled = Enable
+    If Not Enable Then
+        If optNewCharType(6).Value Or optNewCharType(7).Value Then
+            optNewCharType(1).Value = True
+            Call optNewCharType_Click(1)
+        End If
+    End If
+End Sub
+
 Private Sub optViewExisting_Click()
-    optCreateNew.Value = False
-    
-    StopLoginTimer
-    
-    fraCreateNew.Visible = False
-    lvwChars.Visible = True
-    lblExpiration.Visible = True
+    Call CharListResponse
 End Sub
 
 Private Sub optCreateNew_Click()
     optViewExisting.Value = False
     
-    StopLoginTimer
+    Call StopLoginTimer
     
     fraCreateNew.Visible = True
     lvwChars.Visible = False
-    lblExpiration.Visible = False
+    With lblRealm(0) ' detail
+        .Caption = "Character creation."
+        .ForeColor = vbYellow
+    End With
+    ' expires
+    lblRealm(1).Caption = vbNullString
+    btnChoose.Enabled = False
+    btnDelete.Visible = False
+    btnUpgrade.Visible = False
 End Sub
 
 Sub StopLoginTimer()
     tmrLoginTimeout.Enabled = False
-    lblWarning.Caption = ""
-    lblSeconds.Caption = ""
-    lblSecondsCap.Caption = ""
+    ' clear 3 parts of timer labels
+    lblRealm(2).Caption = vbNullString
+    lblRealm(3).Caption = vbNullString
+    lblRealm(4).Caption = vbNullString
 End Sub
 
 Private Sub tmrLoginTimeout_Timer()
     Static indexValid As Integer
     
-    If (indexValid = 0) Then
+    indexValid = m_Choice
+    
+    ' if selecting nothing, find first unexpired account (no choose setting)
+    If (indexValid = -1) Then
         Dim i As Integer
-        Dim j As Integer
         
-        For i = 1 To lvwChars.ListItems.Count
-            If (Len(CharExpiration(i)) >= Len("Expired ")) Then
-                If (Left$(CharExpiration(i), Len("Expired ")) <> "Expired ") Then
-                    indexValid = i
-                    
-                    Exit For
-                End If
+        For i = 0 To ds.MCPHandler.CharacterCount - 1
+            If Not IsDateExpired(ds.MCPHandler.CharacterExpires(i)) Then
+                indexValid = i
+                Exit For
             End If
         Next i
+    ' if choose setting, then select only if not expired
+    Else
+        If IsDateExpired(ds.MCPHandler.CharacterExpires(indexValid)) Then
+            indexValid = -1
+        End If
     End If
 
-    mTicks = mTicks + 1
-
-    If (indexValid > 0) Then
-        lblWarning.Caption = lvwChars.ListItems(indexValid).Key & vbCrLf & " will be chosen automatically in"
+    If (indexValid >= 0) Then
+        ' warning label (part 1 of timer labels)
+        lblRealm(2).Caption = lvwChars.ListItems(indexValid + 1).Text & vbCrLf & " will be chosen automatically in"
         
-        If mTicks >= 30 Then
-            MCPHandler.LogonToCharacter lvwChars.ListItems(indexValid).Key
-            Unload_SuccessfulLogin = True
+        'If m_Selection < 0 Then
+        '    lvwChars.ListItems.Item(indexValid + 1).Selected = True
+        '    Call lvwChars_ItemClick(lvwChars.ListItems.Item(indexValid + 1))
+        'End If
+        
+        If m_Ticks <= 1 Then
             tmrLoginTimeout.Enabled = False
+            Call ds.MCPHandler.SEND_MCP_CHARLOGON(ds.MCPHandler.CharacterName(indexValid))
+            m_Unload_SuccessfulLogin = True
+            ds.MCPHandler.IsRealmError = False
         End If
     Else
-        lblWarning.Caption = "You have no characters! Realm login will be cancelled in"
+        ' warning label
+        lblRealm(2).Caption = "No unexpired characters found! Realm login will be cancelled in"
         
-        If mTicks >= 30 Then
-            frmChat.sckMCP.Close
-            SendEnterChatSequence
-            Unload Me
+        If m_Ticks <= 1 Then
+            tmrLoginTimeout.Enabled = False
+            UnloadNormal
         End If
     End If
+
+    m_Ticks = m_Ticks - 1
     
-    lblSeconds.Caption = (30 - mTicks)
+    ' seconds label (part 2 of timer labels)
+    lblRealm(3).Caption = CStr(m_Ticks)
+    ' seconds cap label (part 2 of timer labels)
+    lblRealm(4).Caption = "seconds."
 End Sub
 
-Private Function FindKey(ByVal sKey As String) As Boolean
-    Dim i As Long
+Private Function FindCharacter(ByVal sKey As String) As Integer
+
+    Dim i As Integer
     
     With lvwChars.ListItems
         If .Count > 0 Then
             For i = 1 To .Count
                 If .Item(i).Key = sKey Then
-                    FindKey = True
+                    FindCharacter = i - 1
                     Exit Function
                 End If
             Next i
         End If
     End With
     
+    FindCharacter = -1
+    
 End Function
 
-Sub ClearExpansionCollection()
-    'While CharIsExpansion.Count > 0
-    '    CharIsExpansion.Remove 1
-    'Wend
-    
-    Set CharIsExpansion = New Collection
-End Sub
+Private Function IsDateExpired(ByVal Expires As Date) As Boolean
+    IsDateExpired = (Sgn(DateDiff("s", UtcNow, Expires)) = -1)
+End Function
 
-Sub ClearExpirationCollection()
-    'While CharExpiration.Count > 0
-    '    CharExpiration.Remove 1
-    'Wend
+Private Function CanUpgradeCharacter(ByVal CharIndex As Integer) As Boolean
+    Dim Stats As clsUserStats
     
-    Set CharExpiration = New Collection
-End Sub
+    Set Stats = ds.MCPHandler.CharacterStats(CharIndex)
+    
+    CanUpgradeCharacter = (Not Stats.IsExpansionCharacter And m_IsExpansion)
+End Function
 
-Sub ClearExpirationLabel()
-    lblExpiration.Caption = ""
-End Sub
+Private Function CanChooseCharacter(ByVal CharIndex As Integer) As Boolean
+    Dim Stats As clsUserStats
+    
+    Set Stats = ds.MCPHandler.CharacterStats(CharIndex)
+    
+    CanChooseCharacter = (Stats.IsExpansionCharacter Imp m_IsExpansion)
+End Function
+
+Private Function GetCharacterExpireText(ByVal CharIndex As Integer) As String
+    Dim Expires    As Date
+    Dim ExpireType As String
+    Dim ExpireDiff As Long
+    Dim ExpireVal  As String
+    Dim ExpireUnit As String
+    
+    Expires = ds.MCPHandler.CharacterExpires(CharIndex)
+    
+    ExpireDiff = Abs(DateDiff("h", UtcNow, Expires))
+    ExpireUnit = "hour"
+    If ExpireDiff <> 1 Then ExpireUnit = ExpireUnit & "s"
+    
+    If ExpireDiff > 24 Then
+        ExpireDiff = Round(ExpireDiff / 24)
+        ExpireUnit = "day"
+        If ExpireDiff <> 1 Then ExpireUnit = ExpireUnit & "s"
+    End If
+    
+    If IsDateExpired(Expires) Then
+        ExpireType = "Expired"
+        ExpireVal = CStr(ExpireDiff) & " " & ExpireUnit & " ago"
+    Else
+        ExpireType = "Expires"
+        ExpireVal = "in " & CStr(ExpireDiff) & " " & ExpireUnit
+    End If
+    
+    If ExpireDiff = 0 Then
+        If IsDateExpired(Expires) Then
+            ExpireVal = "minutes ago"
+        Else
+            ExpireType = "Expires"
+            ExpireVal = "in minutes"
+        End If
+    End If
+    
+    GetCharacterExpireText = StringFormat("{0} on{1}{2}{1}({3})", ExpireType, vbCrLf, _
+            CStr(UtcToLocal(Expires)), ExpireVal)
+End Function
+
+Private Function GetCharacterDetailText(ByVal CharIndex As Integer) As String
+    Dim Stats        As clsUserStats
+    Dim NonExpansion As String
+    Dim NonLadder    As String
+    Dim IsDead       As String
+    Dim NonHardcore  As String
+    
+    Set Stats = ds.MCPHandler.CharacterStats(CharIndex)
+    
+    If Not Stats.IsLadderCharacter Then
+        NonLadder = "non-"
+    End If
+    
+    If Not Stats.IsHardcoreCharacter Then
+        NonHardcore = "non-"
+    ElseIf Stats.IsCharacterDead Then
+        IsDead = "dead "
+    End If
+    
+    If Not Stats.IsExpansionCharacter Then
+        NonExpansion = "non-"
+    End If
+    
+    GetCharacterDetailText = StringFormat("{0}{1}{2} is a {3}ladder, {4}hardcore, {5}expansion {6} in {7}.", _
+            Stats.CharacterTitleAndName, NonLadder, NonHardcore, NonExpansion, Stats.CharacterClass, Stats.CurrentActAndDifficulty)
+End Function
+
+
 

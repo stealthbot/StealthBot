@@ -540,6 +540,8 @@ End Sub
 
 Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountName As String)
 On Error GoTo ERROR_HANDLER:
+    Dim D2CharName As String
+
     LastWhisper = vbNullString
 
     'If InStr(1, Username, "*", vbBinaryCompare) <> 0 Then
@@ -553,6 +555,7 @@ On Error GoTo ERROR_HANDLER:
     AttemptedFirstReconnect = False
     
     Dim Stats As New clsUserStats
+    
     Stats.Statstring = Statstring
     
     CurrentUsername = KillNull(Username)
@@ -570,6 +573,7 @@ On Error GoTo ERROR_HANDLER:
     ' if D2 and on a char, we need to tell the whole world this so that Self is known later on
     If (StrComp(Stats.Game, "D2DV", vbBinaryCompare)) = 0 Or (StrComp(Stats.Game, "D2XP", vbBinaryCompare)) = 0 Then
         If (LenB(Stats.CharacterName) > 0) Then
+            D2CharName = " (with the character " & Stats.CharacterTitleAndName & ")"
             CurrentUsername = Stats.CharacterName & "*" & CurrentUsername
         End If
     End If
@@ -582,7 +586,7 @@ On Error GoTo ERROR_HANDLER:
         .InitListviewTabs
     
         .AddChat RTBColors.InformationText, "[BNCS] Logged on as ", RTBColors.SuccessText, Username, _
-            RTBColors.InformationText, "."
+            RTBColors.InformationText, StringFormat("{0}.", D2CharName)
             
         .tmrAccountLock.Enabled = False
         
@@ -615,7 +619,7 @@ On Error GoTo ERROR_HANDLER:
     
     RequestSystemKeys
     If (LenB(BotVars.Gateway) > 0) Then
-        ' PvPGN: we already have our gateway, we're logged in
+        ' PvPGN: we already have our gateway, we're logged on
         'SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
         
         Call InsertDummyQueueEntry
@@ -650,7 +654,7 @@ On Error GoTo ERROR_HANDLER:
         Case 2:
             lColor = RTBColors.SuccessText
             
-            sMessage = "Login successful."
+            sMessage = "Logon successful."
             
             frmChat.tmrAccountLock.Enabled = False
             

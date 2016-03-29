@@ -18,7 +18,7 @@ End Type
 
 Private Type ENLINK
     hdr    As NMHDR
-    msg    As Long
+    Msg    As Long
     wParam As Long
     lParam As Long
     chrg   As CHARRANGE
@@ -38,20 +38,29 @@ End Type
 Public ID_TASKBARICON       As Integer
 Public TASKBARCREATED_MSGID As Long
 
+' windows messages
 Private Const WM_NOTIFY = &H4E
-Private Const EM_SETEVENTMASK = &H445
-Private Const EM_GETEVENTMASK = &H43B
-Private Const EM_GETTEXTRANGE = &H44B
-Private Const EM_AUTOURLDETECT = &H45B
-Private Const EN_LINK = &H70B
-Private Const CFE_LINK = &H20
-Private Const ENM_LINK = &H4000000
-Private Const SW_SHOW = 5
 Private Const WM_COMMAND = &H111
 Private Const WM_USER = &H400
 Private Const WM_NCDESTROY = &H82
 Private Const WM_COPYDATA = &H4A
 Public Const WM_ICONNOTIFY = WM_USER + 100
+' RTB rich edit control messages
+Private Const EM_SETEVENTMASK = &H445
+Private Const EM_GETEVENTMASK = &H43B
+Private Const EM_GETTEXTRANGE = &H44B
+Private Const EM_AUTOURLDETECT = &H45B
+' RTB rich edit notifications
+Private Const EN_LINK = &H70B
+' EN_LINK effects
+Private Const CFE_LINK = &H20
+' EN_LINK message flag
+Private Const ENM_LINK = &H4000000
+' show window function
+Private Const SW_SHOW = 5
+' list view notifications
+Private Const LVN_FIRST = -100&
+Private Const LVN_BEGINDRAG = (LVN_FIRST - 9)
 
 Private hWndSet As New Dictionary
 Private hWndRTB As New Dictionary
@@ -87,7 +96,7 @@ Public Sub DisableURLDetect(ByVal hWndTextbox As Long)
 
 End Sub
 
-Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 
     Dim Rezult As Long
     Dim uHead  As NMHDR
@@ -99,7 +108,7 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wPara
     Dim buf(0 To 255) As Byte
     Dim Data As String
     
-    If msg = TASKBARCREATED_MSGID Then
+    If Msg = TASKBARCREATED_MSGID Then
         Shell_NotifyIcon NIM_ADD, nid
     End If
     
@@ -115,14 +124,14 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wPara
         End Select
     End If
     
-    If msg = WM_NOTIFY Then
+    If Msg = WM_NOTIFY Then
         CopyMemory uHead, ByVal lParam, LenB(uHead)
        
         If (uHead.code = EN_LINK) Then
             CopyMemory eLink, ByVal lParam, LenB(eLink)
        
             With eLink
-                If .msg = WM_LBUTTONDBLCLK Then
+                If .Msg = WM_LBUTTONDBLCLK Then
                     eText.chrg.cpMin = .chrg.cpMin
                     eText.chrg.cpMax = .chrg.cpMax
                     eText.lpstrText = Space$(1024)
@@ -133,6 +142,14 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wPara
                     ShellOpenURL sText, , False
                 End If
             End With
+            
+        ' See if this is the start of a drag.
+        ElseIf uHead.code = LVN_BEGINDRAG Then
+            ' A drag is beginning. Ignore this event.
+            ' Indicate we have handled this.
+            NewWindowProc = 1
+            ' Do nothing else.
+            Exit Function
         End If
     ElseIf Msg = WM_COMMAND Then
         If lParam = 0 Then
@@ -150,6 +167,6 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wPara
         End If
     End If
     
-    NewWindowProc = CallWindowProc(hWndSet(hWnd), hWnd, msg, wParam, lParam)
+    NewWindowProc = CallWindowProc(hWndSet(hWnd), hWnd, Msg, wParam, lParam)
     
 End Function

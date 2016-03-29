@@ -145,7 +145,7 @@ Public Sub ParseProxyPacket(ByVal Data As String)
                     Case 0 '00' succeeded
                         If ReceivedMethodReply Then
                             ReceivedMethodReply = False
-                            s0ut = s0ut & "SOCKS5 login succeeded."
+                            s0ut = s0ut & "SOCKS5 logon succeeded."
                             lColor = RTBColors.SuccessText
                             
                             UpdateProxyStatus psOnline
@@ -220,7 +220,7 @@ Sub UpdateProxyStatus(ByVal NewStatus As enuProxyStatus, Optional ByVal AddtlInf
             
         Case PROXY_LOGIN_SUCCESS
             lColor = RTBColors.SuccessText
-            sOut = "[PROXY] Login successful."
+            sOut = "[PROXY] Logon successful."
         
         Case PROXY_ATTEMPTING_LOGIN
             lColor = RTBColors.InformationText

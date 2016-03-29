@@ -27,7 +27,7 @@ Private m_CRevResult    As String
 Private m_ServerSig     As String
 Private m_EmailRegDelay As Boolean
 Private m_NLS           As clsNLS
-Private m_MCPData       As String
+Private m_MCPHandler    As clsMCPHandler
 Private m_UniqName      As String
 
 Public Sub List()
@@ -43,7 +43,7 @@ Public Sub List()
         .AddChat RTBColors.ErrorMessageText, StringFormat("  Version:  0x{0}", ZeroOffset(CRevVersion, 8))
         .AddChat RTBColors.ErrorMessageText, StringFormat("  Checksum: 0x{0}", ZeroOffset(CRevChecksum, 8))
         .AddChat RTBColors.ErrorMessageText, StringFormat("  Result:   {0}", IIf(InStr(1, CRevSeed, "A=", vbTextCompare) = 0, StrToHex(CRevResult), CRevResult))
-        .AddChat RTBColors.ErrorMessageText, StringFormat("MCP Data:{0}{1}", vbNewLine, DebugOutput(m_MCPData))
+        '.AddChat RTBColors.ErrorMessageText, StringFormat("MCP Data:{0}{1}", vbNewLine, DebugOutput(m_MCPData))
     End With
 End Sub
 
@@ -60,7 +60,7 @@ Public Sub Reset()
     m_CRevResult = vbNullString
     m_ServerSig = vbNullString
     m_EmailRegDelay = False
-    m_MCPData = vbNullString
+    Set m_MCPHandler = Nothing
     Set m_NLS = Nothing
 End Sub
 
@@ -169,11 +169,11 @@ Public Property Get NLS() As clsNLS
     Set NLS = m_NLS
 End Property
 
-Public Property Let MCPData(sData As String)
-    m_MCPData = sData
+Public Property Set MCPHandler(oData As clsMCPHandler)
+    Set m_MCPHandler = oData
 End Property
-Public Property Get MCPData() As String
-    MCPData = m_MCPData
+Public Property Get MCPHandler() As clsMCPHandler
+    Set MCPHandler = m_MCPHandler
 End Property
 
 Public Property Let UniqueName(sData As String)

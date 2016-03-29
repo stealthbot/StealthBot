@@ -187,7 +187,7 @@ End Sub
 Private Sub ContinueLogonSequence()
     If g_Connected And Not g_Online Then
         If Dii And BotVars.UseRealm Then
-            frmRealm.Show
+            Call DoQueryRealms
         Else
             Call SendEnterChatSequence
         End If

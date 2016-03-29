@@ -5846,7 +5846,10 @@ End Sub
 
 Private Sub sckMCP_Close()
     AddChat RTBColors.ErrorMessageText, "[REALM] Connection closed."
-    RealmError = True
+    
+    If Not ds.MCPHandler Is Nothing Then
+        ds.MCPHandler.IsRealmError = True
+    End If
     Call DoDisconnect
 End Sub
 
@@ -5857,24 +5860,34 @@ Private Sub sckMCP_Connect()
         AddChat COLOR_BLUE, "MCP CONNECT"
     End If
     
-    AddChat RTBColors.SuccessText, "[REALM] Connection established!"
+    AddChat RTBColors.SuccessText, "[REALM] Connected!"
     
     'sckMCP.SendData ChrW(1)
     Call Send(sckMCP.SocketHandle, ChrW(1), 1, 0)
     
-    frmRealm.MCPHandler.SendStartup
+    If Not ds.MCPHandler Is Nothing Then
+        ds.MCPHandler.SEND_MCP_STARTUP
+    End If
 End Sub
 
 Private Sub sckMCP_DataArrival(ByVal bytesTotal As Long)
     On Error GoTo ERROR_HANDLER
-
-    Dim Data As String
     
-    sckMCP.GetData Data, vbString
-    frmRealm.MCPHandler.ParseMCPPacket Data
+    Dim strTemp As String
+    
+    sckMCP.GetData strTemp, vbString
+    MCPBuffer.AddData strTemp
+
+    While MCPBuffer.FullPacket
+        strTemp = MCPBuffer.GetPacket
+        
+        If Not ds.MCPHandler Is Nothing Then
+            Call ds.MCPHandler.ParsePacket(strTemp)
+        End If
+    Wend
     
     Exit Sub
-    
+
 ERROR_HANDLER:
     AddChat RTBColors.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.description & " in sckMCP_DataArrival()."
@@ -5884,10 +5897,14 @@ End Sub
 
 Private Sub sckMCP_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     If Not g_Online Then
-        ' This message is ignored if we've been online for awhile.
+        ' This message is ignored if we've entered chat
         AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & Number & ": " & description
-        RealmError = True
-        Unload frmRealm
+        
+        If Not ds.MCPHandler Is Nothing Then
+            If ds.MCPHandler.FormActive Then
+                frmRealm.UnloadRealmError
+            End If
+        End If
     End If
 End Sub
 
@@ -6523,7 +6540,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
     ' maximum size of battle.net messages
     Const BNET_MSG_LENGTH = 223
     
-    Dim Splt()         As String
+    Dim splt()         As String
     Dim strTmp         As String
     Dim i              As Long
     Dim currChar       As Long
@@ -6551,7 +6568,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
     End If
     
     If (strTmp <> vbNullString) Then
-        ReDim Splt(0)
+        ReDim splt(0)
     
         ' check for tabs and replace with spaces (2005-09-23)
         If (InStr(1, strTmp, Chr$(9), vbBinaryCompare) <> 0) Then
@@ -6610,52 +6627,52 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                     (Command = "kick") Or _
                     (Command = "designate")) Then
         
-                    Splt() = Split(strTmp, Space$(1), 3)
+                    splt() = Split(strTmp, Space$(1), 3)
                     
-                    If (UBound(Splt) > 0) Then
-                        Command = StringFormat("{0} {1}", Splt(0), ReverseConvertUsernameGateway(Splt(1)))
+                    If (UBound(splt) > 0) Then
+                        Command = StringFormat("{0} {1}", splt(0), ReverseConvertUsernameGateway(splt(1)))
 
                         If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
-                            If ((LCase$(Splt(0)) = "/unignore") Or (LCase$(Splt(0)) = "/unsquelch")) Then
-                                If (StrComp(Splt(1), GetCurrentUsername, vbTextCompare) = 0) Then
+                            If ((LCase$(splt(0)) = "/unignore") Or (LCase$(splt(0)) = "/unsquelch")) Then
+                                If (StrComp(splt(1), GetCurrentUsername, vbTextCompare) = 0) Then
                                     lvChannel.ListItems.Clear
                                 End If
                             End If
                         End If
                         
-                        If (UBound(Splt) > 1) Then
-                            ReDim Preserve Splt(0 To UBound(Splt) - 1)
+                        If (UBound(splt) > 1) Then
+                            ReDim Preserve splt(0 To UBound(splt) - 1)
                         End If
                     End If
                     
                 ElseIf ((Command = "f") Or _
                         (Command = "friends")) Then
                     
-                    Splt() = Split(strTmp, Space$(1), 3)
+                    splt() = Split(strTmp, Space$(1), 3)
                     
-                    Command = Splt(0)
+                    Command = splt(0)
                     
-                    If (UBound(Splt) >= 1) Then
-                        Command = StringFormat("{0} {1}", Command, Splt(1))
+                    If (UBound(splt) >= 1) Then
+                        Command = StringFormat("{0} {1}", Command, splt(1))
                         
-                        If (UBound(Splt) >= 2) Then
-                            Select Case (LCase$(Splt(1)))
+                        If (UBound(splt) >= 2) Then
+                            Select Case (LCase$(splt(1)))
                                 Case "m", "msg"
-                                    ReDim Preserve Splt(0 To UBound(Splt) - 1)
+                                    ReDim Preserve splt(0 To UBound(splt) - 1)
 
                                 Case Else
-                                    Splt() = Split(strTmp, Space$(1), 4)
+                                    splt() = Split(strTmp, Space$(1), 4)
                                 
                                     If ((StrReverse$(BotVars.Product) = "WAR3") Or _
                                         (StrReverse$(BotVars.Product) = "W3XP")) Then
                                         
-                                        Command = StringFormat("{0} {1}", Command, ReverseConvertUsernameGateway(Splt(2)))
+                                        Command = StringFormat("{0} {1}", Command, ReverseConvertUsernameGateway(splt(2)))
                                     Else
-                                        Command = StringFormat("{0} {1}", Command, Splt(2))
+                                        Command = StringFormat("{0} {1}", Command, splt(2))
                                     End If
                                     
-                                    If (UBound(Splt) >= 3) Then
-                                        Command = StringFormat("{0} {1}", Command, Splt(3))
+                                    If (UBound(splt) >= 3) Then
+                                        Command = StringFormat("{0} {1}", Command, splt(3))
                                     End If
                             End Select
                         End If
@@ -6669,9 +6686,9 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                     Exit Function
                 End If
 
-                If (UBound(Splt) > 0) Then
+                If (UBound(splt) > 0) Then
                     strTmp = Mid$(strTmp, _
-                        (Len(Join(Splt(), Space$(1))) + (Len(Space$(1))) + 1))
+                        (Len(Join(splt(), Space$(1))) + (Len(Space$(1))) + 1))
                 End If
             End If
         End If
@@ -6708,24 +6725,24 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             MaxLength = BNET_MSG_LENGTH
         End If
         
-        Call SplitByLen(strTmp, (MaxLength - Len(Command)), Splt(), vbNullString, , OversizeDelimiter)
+        Call SplitByLen(strTmp, (MaxLength - Len(Command)), splt(), vbNullString, , OversizeDelimiter)
 
-        ReDim Preserve Splt(0 To UBound(Splt))
+        ReDim Preserve splt(0 To UBound(splt))
 
         ' add to the queue!
-        For i = LBound(Splt) To UBound(Splt)
+        For i = LBound(splt) To UBound(splt)
             ' store current tick
             GTC = GetTickCount()
             
             ' store working copy
-            Send = Splt(i)
+            Send = splt(i)
             If (LenB(Command) > 0) Then
                 If (LenB(Send) > 0) Then
                     Send = StringFormat("{0} {1}", Command, Send)
                 Else
                     Send = Command
                 End If
-            ElseIf (Left(Send, 1) = "/" And i > LBound(Splt)) Then
+            ElseIf (Left(Send, 1) = "/" And i > LBound(splt)) Then
                 Send = StringFormat(" {0}", Send)
             End If
             
@@ -6769,7 +6786,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             End If
         Next i
         
-        AddQ = UBound(Splt) + 1
+        AddQ = UBound(splt) + 1
         
         ' store our tick for future reference
         LastGTC = GTC
@@ -8371,6 +8388,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         
         BNLSBuffer.ClearBuffer
         BNCSBuffer.ClearBuffer
+        MCPBuffer.ClearBuffer
         
         g_Connected = False
         g_Online = False
@@ -8407,8 +8425,15 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
             Call cboSend.SetFocus
             On Error GoTo ERROR_HANDLER
         End If
-                
-        Unload frmRealm
+        
+        ' clean up realms
+        If Not ds.MCPHandler Is Nothing Then
+            If ds.MCPHandler.FormActive Then
+                frmRealm.UnloadAfterBNCSClose
+            End If
+            
+            Set ds.MCPHandler = Nothing
+        End If
         
         PassedClanMotdCheck = False
         

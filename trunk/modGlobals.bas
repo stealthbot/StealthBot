@@ -88,7 +88,6 @@ Public rtbWhispersVisible As Boolean
 Public cboSendHadFocus As Boolean
 Public cboSendSelStart As Long
 Public cboSendSelLength As Long
-Public RealmError As Boolean
 Public PacketLogFilePath As String
 Public LogPacketTraffic As Boolean
 Public ScriptMenu_ParentID As Long
@@ -101,6 +100,7 @@ Public g_OSVersion As New clsOSVersion
 Public SharedScriptSupport As New clsScriptSupportClass
 Public BNCSBuffer As New clsBNCSRecvBuffer
 Public BNLSBuffer As New clsBNLSRecvBuffer
+Public MCPBuffer As New clsBNLSRecvBuffer
 Public GErrorHandler As clsErrorHandler
 
 Public AttemptedFirstReconnect As Boolean

@@ -459,12 +459,37 @@ Public Property Get CurrentAct() As Integer
     End If
 End Property
 
+
+Public Property Get CurrentActName() As String
+    Select Case CurrentAct()
+        Case 1: CurrentActName = "Act I"
+        Case 2: CurrentActName = "Act II"
+        Case 3: CurrentActName = "Act III"
+        Case 4:
+            If IsExpansionCharacter() Then
+                CurrentActName = "Act IV/V" ' either IV or V
+            Else
+                CurrentActName = "Act IV"
+            End If
+        Case 5: CurrentActName = "Act V" ' this is never seen, but would be proper value for Act V
+    End Select
+End Property
+
+Public Property Get CurrentActAndDifficulty() As String
+    If CurrentDifficultyID() >= 3 Then
+        CurrentActAndDifficulty = CurrentDifficulty()
+    Else
+        CurrentActAndDifficulty = CurrentActName() & " of " & CurrentDifficulty()
+    End If
+End Property
+
 Public Property Get CurrentDifficulty() As String
     If ((Game = "D2DV") Or (Game = "D2XP")) Then
         Select Case (CurrentDifficultyID)
             Case 0: CurrentDifficulty = "Normal"
             Case 1: CurrentDifficulty = "Nightmare"
             Case 2: CurrentDifficulty = "Hell"
+            Case 3: CurrentDifficulty = "All Acts"
         End Select
     End If
 End Property
@@ -544,6 +569,12 @@ ERROR_HANDLER:
     CharacterTitle = vbNullString
     
     Exit Property
+End Property
+
+Public Property Get CharacterTitleAndName() As String
+    CharacterTitleAndName = CharacterTitle()
+    If (LenB(CharacterTitleAndName) > 0) Then CharacterTitleAndName = CharacterTitleAndName & " "
+    CharacterTitleAndName = CharacterTitleAndName & CharacterName()
 End Property
 
 Public Property Get Dots() As Long
