@@ -11,17 +11,12 @@ You'll need Microsoft Visual Basic 6.0.
 
 1. Go into the project properties and set the compilation argument `COMPILE_DEBUG = 1`. If you don't do this, closing the program or encountering an error while debugging will cause the entire IDE to crash.
 
-2. While still in the project properties, set the command line to `-ppath "C:\Path\To\Profile\"` with the quotes and an ending slash. This sets your profile to SOME PATH OF YOUR CHOOSING, for example the path to a profile just for development (such as the path to  `%APPDATA%\StealthBot\DevProfile\`, obviously using the full path to your AppData StealthBot profiles location). If you don't do this, the development bot will expect files like commands.xml to be in your VB98 folder (the install directory for VB 6.0) instead of somewhere sane. Too bad we can't do this for the required .DLL files...
+2. While still in the project properties, set the command line to `-ppath "C:\Path\To\Profile\" -addpath "C:\Path\To\Install\"` with the quotes and ending slashes. This sets your profile and install location to some paths of your choosing.
 
-3. Locate your visual studio installation folder.
-  * `C:\Program Files (x86)\Microsot Visual Studio\VB98`, or
-  * Start the debugger and when the main window appears, go to Settings -> View Files -> Open Bot Folder.
+ * Set the `-ppath` to a profile just for development (such as the path to  `%APPDATA%\StealthBot\DevProfile\`, using the full path to your AppData StealthBot profiles location). If you don't do this, the development bot will expect files like commands.xml to be in your VB98 folder (the install directory for VB 6.0) instead of somewhere sane.
 
-4. Copy the following files from the repo into this folder:
-  * BNCSUtil.dll
-  * Warden.dll
-  * zlib1.dll
- 
+ * Set the `-addpath` to your install directory (such as `C:\Program Files (x86)\StealthBot v2.7\`). If you don't do this, the development bot will expect `BNCSutil.dll`, `Warden.dll`, and `zlib1.dll` in your VB98 folder also.
+
 ##### Visual Basic 6 Scroll Wheel Fix
 The Visual Basic 6 IDE does not have built-in support for scrolling by using the mouse wheel.
 To fix this, you need to download and follow instructions from [this KB article](https://support.microsoft.com/en-us/kb/837910).
