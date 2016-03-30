@@ -129,7 +129,7 @@ On Error GoTo trap:
     stResult = String$(crev_max_result, Chr$(0))
     
     lRet = check_revision(sArchiveFileTime, sArchiveName, sSeed, _
-        GetFilePath("CheckRevision.ini"), sHeader, _
+        GetFilePath(FILE_CREV_INI), sHeader, _
         ltVersion, ltChecksum, stResult)
     
     i = InStr(1, stResult, Chr$(0))
@@ -213,11 +213,11 @@ Public Function WardenInitilize(ByVal SocketHandle As Long) As Long
   
   If (Instance > 0) Then
   
-    INIPath = GetFilePath("Warden.ini")
+    INIPath = GetFilePath(FILE_WARDEN_INI)
   
     warden_set_data_file Instance, INIPath, Len(INIPath)
     
-    DebugString = ReadCfg("Override", "WardenDebug")
+    DebugString = Config.DebugWarden
     If StrictIsNumeric(DebugString) Then Call warden_config(Instance, CLng(DebugString), 2)
     
     WardenInitilize = Instance

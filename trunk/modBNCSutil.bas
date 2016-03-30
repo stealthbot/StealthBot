@@ -93,6 +93,16 @@ Public Const BNCSutil_PLATFORM_MAC& = &H2
 
 Public Const BNCSutil_PLATFORM_OSX& = &H3
 
+'BNCSUTIL NLS buffer size constants
+Public Const NLS_ACCOUNTCREATE_     As Long = 65
+Public Const NLS_ACCOUNTLOGON_      As Long = 33
+Public Const NLS_GET_S_             As Long = 32
+Public Const NLS_GET_V_             As Long = 32
+Public Const NLS_GET_A_             As Long = 32
+Public Const NLS_GET_K_             As Long = 40
+Public Const NLS_GET_M1_            As Long = 20
+
+
 '  VB-Specifc Functions
 '---------------------------
 

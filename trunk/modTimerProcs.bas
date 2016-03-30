@@ -108,17 +108,6 @@ Public Sub QueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal idEvent 
             ' just pop and move on
             Call g_Queue.Pop
         Else
-            If ((StrComp(Left$(Message, 11), "/unsquelch ", vbTextCompare) = 0) Or _
-                (StrComp(Left$(Message, 10), "/unignore ", vbTextCompare) = 0)) Then
-                
-                ' Prep the rest of the bot because we're about to get a bunch of
-                '  channel updates
-                Unsquelching = True
-                ' Set our 2second timer to remove the flag
-                UnsquelchTimerID = SetTimer(0&, 0&, 1500, _
-                    AddressOf UnsquelchTimerProc)
-            End If
-              
             Call bnetSend(Message, Tag, ID)
             Call g_Queue.Pop
             
@@ -146,12 +135,3 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-' Timer procedure to remove the Unsquelch boolean
-Public Sub UnsquelchTimerProc()
-    If Unsquelching Then
-        Unsquelching = False
-    End If
-    
-    Call KillTimer(0&, UnsquelchTimerID)
-    UnsquelchTimerID = 0
-End Sub

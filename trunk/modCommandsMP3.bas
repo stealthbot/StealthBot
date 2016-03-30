@@ -12,6 +12,11 @@ Public Sub OnAllowMp3(Command As clsCommandObj)
         Command.Respond "MP3 commands are now disabled."
         BotVars.DisableMP3Commands = True
     End If
+    
+    If Config.Mp3Commands <> (Not BotVars.DisableMP3Commands) Then
+        Config.Mp3Commands = Not BotVars.DisableMP3Commands
+        Call Config.Save
+    End If
 End Sub
 
 Public Sub OnFOS(Command As clsCommandObj)
@@ -32,7 +37,7 @@ Public Sub OnLoadWinamp(Command As clsCommandObj)
     
     If (BotVars.DisableMP3Commands) Then Exit Sub
     
-    If (winamp.Start(ReadCfg("Other", "WinampPath"))) Then
+    If (winamp.Start(Config.MediaPlayerPath)) Then
         Command.Respond "Winamp loaded."
     Else
         Command.Respond "There was an error loading Winamp."
@@ -42,11 +47,11 @@ End Sub
 Public Sub OnMP3(Command As clsCommandObj)
 
     Dim tmpbuf       As String  ' temporary output buffer
-    Dim TrackName    As String  
-    Dim ListPosition As Long    
-    Dim ListCount    As Long    
-    Dim TrackTime    As Long    
-    Dim TrackLength  As Long    
+    Dim TrackName    As String
+    Dim ListPosition As Long
+    Dim ListCount    As Long
+    Dim TrackTime    As Long
+    Dim TrackLength  As Long
     
     If (BotVars.DisableMP3Commands) Then Exit Sub
     
@@ -196,7 +201,10 @@ Public Sub OnUseiTunes(Command As clsCommandObj)
     BotVars.MediaPlayer = "iTunes"
     Command.Respond "iTunes is ready."
     
-    Call WriteINI("Other", "MediaPlayer", "iTunes")
+    If Config.MediaPlayer <> BotVars.MediaPlayer Then
+        Config.MediaPlayer = BotVars.MediaPlayer
+        Call Config.Save
+    End If
 End Sub
 
 Public Sub OnUseWinamp(Command As clsCommandObj)
@@ -205,7 +213,10 @@ Public Sub OnUseWinamp(Command As clsCommandObj)
     BotVars.MediaPlayer = "Winamp"
     Command.Respond "Winamp is ready."
     
-    Call WriteINI("Other", "MediaPlayer", "Winamp")
+    If Config.MediaPlayer <> BotVars.MediaPlayer Then
+        Config.MediaPlayer = BotVars.MediaPlayer
+        Call Config.Save
+    End If
 End Sub
 
 Private Function SecondsToString(ByVal seconds As Long) As String

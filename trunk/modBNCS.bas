@@ -6,7 +6,7 @@ Private Declare Sub GetSystemTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
 Private Declare Sub GetLocalTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
 Private Declare Function SystemTimeToFileTime Lib "kernel32" (lpSystemTime As SYSTEMTIME, lpFileTime As FILETIME) As Long
 
-
+' Packet IDs
 Public Const SID_NULL                   As Byte = &H0
 Public Const SID_CLIENTID               As Byte = &H5
 Public Const SID_STARTVERSIONING        As Byte = &H6
@@ -36,6 +36,42 @@ Public Const SID_AUTH_ACCOUNTCREATE     As Byte = &H52
 Public Const SID_AUTH_ACCOUNTLOGON      As Byte = &H53
 Public Const SID_AUTH_ACCOUNTLOGONPROOF As Byte = &H54
 Public Const SID_SETEMAIL               As Byte = &H59
+
+' SID_CHATEVENT EVENT IDs
+Public Const ID_USER = &H1
+Public Const ID_JOIN = &H2
+Public Const ID_LEAVE = &H3
+Public Const ID_WHISPER = &H4
+Public Const ID_TALK = &H5
+Public Const ID_BROADCAST = &H6
+Public Const ID_CHANNEL = &H7
+Public Const ID_USERFLAGS = &H9
+Public Const ID_WHISPERSENT = &HA
+Public Const ID_CHANNELFULL = &HD
+Public Const ID_CHANNELDOESNOTEXIST = &HE
+Public Const ID_CHANNELRESTRICTED = &HF
+Public Const ID_INFO = &H12
+Public Const ID_ERROR = &H13
+Public Const ID_EMOTE = &H17
+' Additional event constants for logging
+Public Const ID_CONNECTED = &H18
+Public Const ID_DISCONNECTED = &H19
+
+
+Public Const USER_BLIZZREP& = &H1
+Public Const USER_CHANNELOP& = &H2
+Public Const USER_SPEAKER& = &H4
+Public Const USER_SYSOP& = &H8
+Public Const USER_NOUDP& = &H10
+Public Const USER_BEEPENABLED& = &H100
+Public Const USER_KBKOFFICIAL& = &H1000
+Public Const USER_JAILED& = &H100000
+Public Const USER_SQUELCHED& = &H20
+Public Const USER_PGLPLAYER& = &H200
+Public Const USER_GFPLAYER& = &H200000
+Public Const USER_GUEST& = &H40
+Public Const USER_PGLOFFICIAL& = &H400
+Public Const USER_KBKPLAYER& = &H800
 
 Public Const BNCS_NLS As Long = 1 'New:    SID_AUTH_*
 Public Const BNCS_OLS As Long = 2 'Old:    SID_CLIENTID2
@@ -329,7 +365,7 @@ Private Sub SEND_SID_ENTERCHAT()
 On Error GoTo ERROR_HANDLER:
     Dim pBuff As New clsDataBuffer
     pBuff.InsertNTString BotVars.Username
-    pBuff.InsertNTString ReadCfg("Override", "SetBotStatstring")
+    pBuff.InsertNTString Config.CustomStatstring
     pBuff.SendPacket SID_ENTERCHAT
     Set pBuff = Nothing
 
@@ -445,7 +481,7 @@ On Error GoTo ERROR_HANDLER:
         Set cUserStats = Nothing
     End If
                 
-    If sProduct = "WAR3" Or sProduct = "W3XP" Then
+    If sProduct = PRODUCT_WAR3 Or sProduct = PRODUCT_W3XP Then
         If Len(sText) > 4 Then sW3Icon = StrReverse(Mid$(sText, 6, 4))
     End If
                 
@@ -453,7 +489,7 @@ On Error GoTo ERROR_HANDLER:
         Case ID_JOIN:        Call Event_UserJoins(sUsername, lFlags, sParsed, lPing, sProduct, sClanTag, sText, sW3Icon)
         Case ID_LEAVE:       Call Event_UserLeaves(sUsername, lFlags)
         Case ID_USER:        Call Event_UserInChannel(sUsername, lFlags, sParsed, lPing, sProduct, sClanTag, sText, sW3Icon)
-        Case ID_WHISPER:     If (Not bFlood) Then Call Event_WhisperFromUser(sUsername, lFlags, sText, lPing)
+        Case ID_WHISPER:     Call Event_WhisperFromUser(sUsername, lFlags, sText, lPing)
         Case ID_TALK:        Call Event_UserTalk(sUsername, lFlags, sText, lPing)
         Case ID_BROADCAST:   Call Event_ServerInfo(sUsername, StringFormat("BROADCAST from {0}:{1}", sUsername, sText))
         Case ID_CHANNEL:     Call Event_JoinedChannel(sText, lFlags)
@@ -526,7 +562,7 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord ft.dwHighDateTime                                'LocalTime
         
         .InsertDWord GetTimeZoneBias                                  'Time Zone Bias
-        If (ReadCfg("Override", "ForceDefaultLocaleID") = "Y") Then
+        If Config.ForceDefaultLocaleID Then
             .InsertDWord 1033                                         'SystemDefaultLCID
             .InsertDWord 1033                                         'UserDefaultLCID
             .InsertDWord 1033                                         'UserDefaultLangID
@@ -561,8 +597,8 @@ On Error GoTo ERROR_HANDLER:
 
     Dim pBuff As New clsDataBuffer
 
-    If Len(ReadCfg("Override", "UDPString")) = 4 Then
-        pBuff.InsertNonNTString ReadCfg("Override", "UDPString")
+    If Len(Config.CustomUDPString) = 4 Then
+        pBuff.InsertNonNTString Config.CustomUDPString
     Else
         pBuff.InsertDWord &H626E6574 'bnet
     End If
@@ -769,11 +805,11 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     With pBuff
-        .InsertDWord IIf(ReadCfg$("Override", "SpawnKey") = "Y", 1, 0)
+        .InsertDWord Abs(CLng(Config.UseSpawn)))
         .InsertNTString BotVars.CDKey
         
-        If (LenB(ReadCfg("Override", "OwnerName")) > 0) Then
-            .InsertNTString ReadCfg("Override", "OwnerName")
+        If (LenB(Config.CDKeyOwnerName) > 0) Then
+            .InsertNTString Config.CDKeyOwnerName
         Else
             .InsertNTString BotVars.Username
         End If
@@ -852,17 +888,16 @@ On Error GoTo ERROR_HANDLER:
     If Not oKey.CalculateHash(ds.ClientToken, ds.ServerToken) Then Exit Sub
     
     With pBuff
-        .InsertDWord IIf(ReadCfg$("Override", "SpawnKey") = "Y", 1, 0)
+        .InsertDWord Abs(CLng(Config.UseSpawn))
         .InsertDWord oKey.KeyLength
-        
         .InsertDWord oKey.ProductValue
         .InsertDWord oKey.PublicValue
         .InsertDWord ds.ServerToken
         .InsertDWord ds.ClientToken
         .InsertNonNTString oKey.Hash
         
-        If (LenB(ReadCfg("Override", "OwnerName")) > 0) Then
-            .InsertNTString ReadCfg("Override", "OwnerName")
+        If (LenB(Config.CDKeyOwnerName) > 0) Then
+            .InsertNTString Config.CDKeyOwnerName
         Else
             .InsertNTString BotVars.Username
         End If
@@ -944,7 +979,7 @@ On Error GoTo ERROR_HANDLER:
     Dim sHash As String
     Dim pBuff As New clsDataBuffer
     
-    If (ReadCfg("Override", "LowerCasePassword") = "N") Then
+    If Not Config.UseLowerCasePassword Then
         sHash = doubleHashPassword(BotVars.Password, ds.ClientToken, ds.ServerToken)
     Else
         sHash = doubleHashPassword(LCase(BotVars.Password), ds.ClientToken, ds.ServerToken)
@@ -1013,7 +1048,7 @@ Private Sub SEND_SID_CREATEACCOUNT2()
 On Error GoTo ERROR_HANDLER:
     
     Dim sHash As String
-    If (ReadCfg("Override", "LowerCasePassword") = "N") Then
+    If Not Config.UseLowerCasePassword Then
         sHash = hashPassword(BotVars.Password)
     Else
         sHash = hashPassword(LCase(BotVars.Password))
@@ -1313,7 +1348,7 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord GetLongOverride("ProdLang", 0)                           'Product Language
         .InsertDWord LocalIP                                                  'Local IP
         .InsertDWord GetTimeZoneBias                                          'Time Zone Bias
-        If (ReadCfg("Override", "ForceDefaultLocaleID") = "Y") Then
+        If Config.ForceDefaultLocaleID Then
             .InsertDWord 1033                                                 'LocalID
             .InsertDWord 1033                                                 'LangID
         Else
@@ -1368,7 +1403,7 @@ On Error GoTo ERROR_HANDLER:
         Case &H212: Call Event_VersionCheck(9, sInfo) 'Exp CDKey is Banned
         Case &H213: Call Event_VersionCheck(10, sInfo) 'Exp CDKey is for the wrong product
         Case Else:
-            If (ReadCfg("Override", "Ignore0x51Reply") = "Y") Then bSuccess = True
+            If Config.IgnoreVersionCheck Then bSuccess = True
             Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(lResult, 8))
     End Select
 
@@ -1436,13 +1471,13 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord ds.CRevVersion  'CRev Version
         .InsertDWord ds.CRevChecksum 'CRev Checksum
         .InsertDWord keys            'CDKey Count
-        .InsertDWord IIf(ReadCfg$("Override", "SpawnKey") = "Y", 1, 0)
+        .InsertDWord Abs(CLng(Config.UseSpawn))
         
         For i = 1 To keys
             If (i = 1) Then
                 sKey = BotVars.CDKey
             ElseIf (i = 2) Then
-                sKey = BotVars.ExpKey
+                sKey = BotVars.EXPKey
             Else
                 sKey = ReadCfg$("Main", StringFormat("CDKey{0}", i))
             End If
@@ -1466,8 +1501,8 @@ On Error GoTo ERROR_HANDLER:
         Next i
         
         .InsertNTString ds.CRevResult
-        If (LenB(ReadCfg("Override", "OwnerName")) > 0) Then
-            .InsertNTString ReadCfg("Override", "OwnerName")
+        If (LenB(Config.CDKeyOwnerName) > 0) Then
+            .InsertNTString Config.CDKeyOwnerName
         Else
             .InsertNTString BotVars.Username
         End If
@@ -1729,8 +1764,8 @@ On Error GoTo ERROR_HANDLER:
     Dim EMailValue As String
     Dim EMailAction As String
     
-    EMailAction = UCase$(ReadCfg$("Override", "RegisterEmailAction"))
-    EMailValue = ReadCfg$("Override", "RegisterEmailDefault")
+    EMailAction = Config.RegisterEmailAction
+    EMailValue = Config.RegisterEmailDefault
     
     Call frmEMailReg.DoRegisterEmail(EMailAction, EMailValue)
     
@@ -1776,20 +1811,7 @@ On Error GoTo ERROR_HANDLER:
 
     If (LenB(sProduct) = 0) Then sProduct = BotVars.Product
     
-    Select Case UCase$(sProduct)
-        Case "RATS", "STAR": lRet = 1
-        Case "PXES", "SEXP": lRet = 1
-        Case "NB2W", "W2BN": lRet = 1
-        Case "VD2D", "D2DV": lRet = 1
-        Case "PX2D", "D2XP": lRet = 2
-        Case "RTSJ", "JSTR": lRet = 1
-        Case "3RAW", "WAR3": lRet = 1
-        Case "PX3W", "W3XP": lRet = 2
-        Case "LTRD", "DRTL": lRet = 0
-        Case "RHSD", "DSHR": lRet = 0
-        Case "RHSS", "SSHR": lRet = 0
-        Case Else:           lRet = &H0
-    End Select
+    lRet = GetProductInfo(sProduct).KeyCount
     
     sOverride = ReadCfg$("Override", StringFormat("{0}KeyCount", GetProductKey))
     
@@ -1802,72 +1824,11 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.GetCDKeyCount()", Err.Number, Err.description, OBJECT_NAME))
 End Function
 
-Private Function GetHashFiles() As String()
-On Error GoTo ERROR_HANDLER:
-    Dim sFiles() As String
-    Dim sPath As String
-    
-    ReDim sFiles(0 To 3)
-    
-    sPath = GetGamePath(BotVars.Product)
-    
-    sFiles(1) = StringFormat("{0}Storm.dll", sPath)
-    sFiles(2) = StringFormat("{0}Battle.snp", sPath)
-        
-
-    Select Case (UCase$(BotVars.Product))
-        Case "STAR", "RATS", "SEXP", "PXES":
-            sFiles(0) = StringFormat("{0}Starcraft.exe", sPath)
-            sFiles(3) = StringFormat("{0}STAR.bin", sPath)
-            
-        Case "W2BN", "NB2W":
-            sFiles(0) = StringFormat("{0}Warcraft II BNE.exe", sPath)
-            sFiles(3) = StringFormat("{0}W2BN.bin", sPath)
-            
-        Case "D2DV", "VD2D":
-            sFiles(0) = StringFormat("{0}game.exe", sPath)
-            sFiles(1) = StringFormat("{0}Bnclient.dll", sPath)
-            sFiles(2) = StringFormat("{0}D2Client.dll", sPath)
-            sFiles(3) = StringFormat("{0}D2DV.bin", sPath)
-            
-        Case "D2XP", "PX2D":
-            sFiles(0) = StringFormat("{0}game.exe", sPath)
-            sFiles(1) = StringFormat("{0}Bnclient.dll", sPath)
-            sFiles(2) = StringFormat("{0}D2Client.dll", sPath)
-            sFiles(3) = StringFormat("{0}D2XP.bin", sPath)
-            
-        Case "JSTR", "RTSJ":
-            sFiles(0) = StringFormat("{0}StarcraftJ.exe", sPath)
-            sFiles(3) = StringFormat("{0}JSTR.bin", sPath)
-            
-        Case "WAR3", "3RAW", "W3XP", "PX3W":
-            sFiles(0) = StringFormat("{0}war3.exe", sPath)
-            sFiles(2) = StringFormat("{0}Game.dll", sPath)
-            sFiles(3) = StringFormat("{0}WAR3.bin", sPath)
-            
-        Case "DRTL", "LTRD":
-            sFiles(0) = StringFormat("{0}Diablo.exe", sPath)
-            sFiles(3) = StringFormat("{0}DRTL.bin", sPath)
-            
-        Case "DSHR", "RHSD":
-            sFiles(0) = StringFormat("{0}Diablo_s.exe", sPath)
-            sFiles(3) = StringFormat("{0}DSHR.bin", sPath)
-            
-        Case "SSHR", "RHSS":
-            sFiles(0) = StringFormat("{0}Starcraft_s.exe", sPath)
-            sFiles(3) = StringFormat("{0}SSHR.bin", sPath)
-    End Select
-    GetHashFiles = sFiles
-    Exit Function
-ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetHashFiles()", Err.Number, Err.description, OBJECT_NAME))
-End Function
-
 Public Function GetLogonSystem(Optional sProduct As String = vbNullString) As Long
 On Error GoTo ERROR_HANDLER:
 
     Dim sOverride As String
+    Dim tLng      As Long
     Dim lRet      As Long
     
     ' Temporary short-circuit:
@@ -1878,26 +1839,11 @@ On Error GoTo ERROR_HANDLER:
     
     If (LenB(sProduct) = 0) Then sProduct = BotVars.Product
     
-    ' Many of these login sequences are not supported
-    Select Case UCase$(sProduct)
-        Case "RATS", "STAR": lRet = BNCS_NLS
-        Case "PXES", "SEXP": lRet = BNCS_NLS
-        Case "NB2W", "W2BN": lRet = BNCS_OLS
-        Case "VD2D", "D2DV": lRet = BNCS_NLS
-        Case "PX2D", "D2XP": lRet = BNCS_NLS
-        Case "RTSJ", "JSTR": lRet = BNCS_LLS
-        Case "3RAW", "WAR3": lRet = BNCS_NLS
-        Case "PX3W", "W3XP": lRet = BNCS_NLS
-        Case "LTRD", "DRTL": lRet = BNCS_OLS
-        Case "RHSD", "DSHR": lRet = BNCS_OLS
-        Case "RHSS", "SSHR": lRet = BNCS_LLS
-        Case Else:           lRet = &H0
-    End Select
+    lRet = GetProductInfo(sProduct).LogonSystem
     
-    sOverride = ReadCfg$("Override", StringFormat("{0}LogonSystem", GetProductKey))
-    
-    If (LenB(sOverride) > 0 And StrictIsNumeric(sOverride)) Then
-        Select Case CLng(sOverride)
+    tLng = Config.GetLogonSystem(GetProductKey(sProduct))
+    If tLng > -1 Then
+        Select Case tLng
             Case BNCS_NLS: lRet = BNCS_NLS
             Case BNCS_LLS: lRet = BNCS_LLS
             Case BNCS_OLS: lRet = BNCS_OLS
@@ -1912,7 +1858,7 @@ ERROR_HANDLER:
 End Function
 
 'This will return a Long, that is Overrideable by the config, based on product ID, with a default.
-'GetProdLongOverride("ProtId", 0, "DRTL") would return 0, unless the user had D1ProtID= something in there config
+'GetProdLongOverride("ProtId", 0, PRODUCT_DRTL) would return 0, unless the user had D1ProtID= something in there config
 Private Function GetLongOverride(sKey As String, lDefault As Long) As Long
 On Error GoTo ERROR_HANDLER:
 
@@ -1980,7 +1926,7 @@ On Error GoTo ERROR_HANDLER:
     SEND_SID_ENTERCHAT
     SEND_SID_GETCHANNELLIST
     
-    BotVars.Gateway = ReadCfg("Override", "PredefinedGateway")
+    BotVars.Gateway = Config.PredefinedGateway
     If (LenB(BotVars.Gateway) = 0) Then
         If ((Not BotVars.Product = "VD2D") And (Not BotVars.Product = "PX2D") And _
             (Not BotVars.Product = "PX3W") And (Not BotVars.Product = "3RAW")) Then
@@ -2006,7 +1952,7 @@ On Error GoTo ERROR_HANDLER:
 
     SkipUICEvents = True
     
-    If (LenB(BotVars.HomeChannel) = 0) Or (ReadCfg("Override", "DoDefaultChannelJoin") = "Y") Then
+    If (LenB(BotVars.HomeChannel) = 0) Or Config.DefaultChannelJoin Then
         ' empty homechannel or
         ' config override to force joinhome
         If BotVars.Product = "PX2D" Or BotVars.Product = "VD2D" Then

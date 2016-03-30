@@ -22,11 +22,11 @@ Public Sub LoadQuickChannels()
     End If
     
     ' read QC.txt
-    If LenB(Dir$(GetFilePath("QuickChannels.txt"))) > 0 Then
+    If LenB(Dir$(GetFilePath(FILE_QUICK_CHANNELS))) > 0 Then
     
         UseDefaultQC = False
         
-        Set QCCollection = ListFileLoad(GetFilePath("QuickChannels.txt"), 9)
+        Set QCCollection = ListFileLoad(GetFilePath(FILE_QUICK_CHANNELS), 9)
         
         For i = 1 To QCCollection.Count
             
@@ -104,7 +104,7 @@ Public Sub SaveQuickChannels()
         QCCollection.Add QC(i)
     Next i
     
-    Call ListFileSave(GetFilePath("QuickChannels.txt"), QCCollection)
+    Call ListFileSave(GetFilePath(FILE_QUICK_CHANNELS), QCCollection)
     
     Set QCCollection = Nothing
 End Sub

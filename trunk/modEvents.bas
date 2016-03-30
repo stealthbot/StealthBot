@@ -253,12 +253,6 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     'BotVars.JoinWatch = 0
     
     'frmChat.tmrSilentChannel(0).Enabled = False
-
-    
-    'With gChannel
-    '    .Current = ChannelName
-    '    .Flags = Flags
-    'End With
     
     'If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
     '    PassedClanMotdCheck = False
@@ -306,7 +300,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     ' lets update our configuration file with the
     ' current channel name so that we join the channel
     ' again automatically if we disconnect or close the bot.
-    Call WriteINI("Other", "LastChannel", ChannelName)
+    'Call WriteINI("Other", "LastChannel", ChannelName)
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' check for mail
@@ -551,8 +545,6 @@ On Error GoTo ERROR_HANDLER:
     Call g_Queue.Clear
     
     g_Online = True
-        
-    AttemptedFirstReconnect = False
     
     Dim Stats As New clsUserStats
     
@@ -571,7 +563,7 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     ' if D2 and on a char, we need to tell the whole world this so that Self is known later on
-    If (StrComp(Stats.Game, "D2DV", vbBinaryCompare)) = 0 Or (StrComp(Stats.Game, "D2XP", vbBinaryCompare)) = 0 Then
+    If (StrComp(Stats.Game, PRODUCT_D2DV, vbBinaryCompare)) = 0 Or (StrComp(Stats.Game, PRODUCT_D2XP, vbBinaryCompare)) = 0 Then
         If (LenB(Stats.CharacterName) > 0) Then
             D2CharName = " (with the character " & Stats.CharacterTitleAndName & ")"
             CurrentUsername = Stats.CharacterName & "*" & CurrentUsername
@@ -595,12 +587,6 @@ On Error GoTo ERROR_HANDLER:
         .Timer.Interval = 30000
     
         .tmrClanUpdate.Enabled = True
-    
-        'If (Not (DisableMonitor)) Then
-        '    .AddChat RTBColors.SuccessText, "User monitor initialized."
-        '
-        '    InitMonitor
-        'End If
     End With
     
     If (frmChat.sckBNLS.State <> 0) Then
@@ -706,7 +692,7 @@ On Error GoTo ERROR_HANDLER:
         ' continue gateway discovery
         SEND_SID_CHATCOMMAND "/whoami"
     Else
-        ChannelCreateOption = UCase$(ReadCfg$("Override", "ChannelCreate"))
+        ChannelCreateOption = Config.AutoCreateChannels
     
         Select Case ChannelCreateOption
             Case "ALERT"
@@ -949,8 +935,6 @@ On Error GoTo ERROR_HANDLER:
             End If
             
             If (InStr(1, Message, " has been unsquelched", vbTextCompare) > 0) Then
-                'unsquelching = True
-                
                 If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
                     frmChat.lvChannel.ListItems.Clear
                 End If
@@ -1213,7 +1197,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 Set found = frmChat.lvChannel.ListItems(pos)
                 
                 ' if the update occured to a D2 user ...
-                If ((StrComp(UserObj.Game, "D2DV") = 0) Or (StrComp(UserObj.Game, "D2XP") = 0)) Then
+                If ((StrComp(UserObj.Game, PRODUCT_D2DV) = 0) Or (StrComp(UserObj.Game, PRODUCT_D2XP) = 0)) Then
                     ' the username could have changed!
                     If (StrComp(UserObj.DisplayName, found.Text, vbBinaryCompare) <> 0) Then
                         ' it did, so update user name text in channel list
@@ -1767,7 +1751,7 @@ On Error GoTo ERROR_HANDLER:
     Dim BanningUser As Boolean
     Dim i           As Integer
     
-    If (PhraseBans) Then
+    If (Phrasebans) Then
         For i = LBound(Phrases) To UBound(Phrases)
             If ((Phrases(i) <> vbNullString) And (Phrases(i) <> Space$(1))) Then
                 If ((InStr(1, Message, Phrases(i), vbTextCompare)) <> 0) Then
@@ -1817,7 +1801,10 @@ On Error GoTo ERROR_HANDLER:
             ' if using server finder
             If ((BotVars.BNLS) And (BotVars.UseAltBnls)) Then
                 ' save BNLS server so future instances of the bot won't need to get the list, connection succeeded
-                WriteINI "Main", "BNLSServer", BotVars.BNLSServer
+                If Config.BNLSServer <> BotVars.BNLSServer Then
+                    Config.BNLSServer = BotVars.BNLSServer
+                    Call Config.Save
+                End If
             End If
         
         Case 1:
@@ -1826,7 +1813,7 @@ On Error GoTo ERROR_HANDLER:
                 IIf(LenB(ExtraInfo) = 0, vbNullString, " Extra Information: " & ExtraInfo)
 
             If (BotVars.BNLS) Then
-                If (frmChat.CheckFindAltBNLS("[BNCS] BNLS has not been updated yet, " & _
+                If (frmChat.HandleBnlsError("[BNCS] BNLS has not been updated yet, " & _
                         "or you experienced an error. Try connecting again.")) Then
                     ' if we are using the finder, then don't close all connections
                     Message = 0
@@ -1924,11 +1911,6 @@ On Error GoTo ERROR_HANDLER:
             Exit Sub
         End If
     End If
-    
-    'If ((GetTickCount() - LastWhisperTime) > _
-    '    BotVars.AutofilterMS) Then
-
-    'If (0 = 0) Then ?
     
     If (Catch(0) <> vbNullString) Then
         Call CheckPhrase(Username, Message, CPWHISPER)
@@ -2035,8 +2017,6 @@ On Error GoTo ERROR_HANDLER:
     
     RunInAll "Event_WhisperFromUser", Username, Flags, Message, Ping
     'End If
-    
-    LastWhisperTime = GetTickCount
 
     Exit Sub
 ERROR_HANDLER:

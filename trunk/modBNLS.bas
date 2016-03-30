@@ -150,7 +150,8 @@ On Error GoTo ERROR_HANDLER:
     
     If (Not pBuff.GetDWORD = 0) Then
         lVerByte = pBuff.GetDWORD
-        Call WriteINI("Override", GetProductKey() & "VerByte", Hex(lVerByte)) 'Save BNLS's Version Byte
+        Config.SetVersionByte GetProductKey(), lVerByte 'Save BNLS's Version Byte
+        Call Config.Save
         
         Select Case modBNCS.GetLogonSystem()
             Case modBNCS.BNCS_NLS: Call modBNCS.SEND_SID_AUTH_INFO(lVerByte)
@@ -272,19 +273,5 @@ End Sub
 Public Function GetBNLSProductID(Optional ByVal sProdID As String = vbNullString) As Long
     If (LenB(sProdID) = 0) Then sProdID = BotVars.Product
 
-    Select Case (UCase$(sProdID))
-        Case "RATS", "STAR": GetBNLSProductID = &H1
-        Case "PXES", "SEXP": GetBNLSProductID = &H2
-        Case "NB2W", "W2BN": GetBNLSProductID = &H3
-        Case "VD2D", "D2DV": GetBNLSProductID = &H4
-        Case "PX2D", "D2XP": GetBNLSProductID = &H5
-        Case "RTSJ", "JSTR": GetBNLSProductID = &H6
-        Case "3RAW", "WAR3": GetBNLSProductID = &H7
-        Case "PX3W", "W3XP": GetBNLSProductID = &H8
-        Case "LTRD", "DRTL": GetBNLSProductID = &H9
-        Case "RHSD", "DSHR": GetBNLSProductID = &HA
-        Case "RHSS", "SSHR": GetBNLSProductID = &HB
-        Case Else:           GetBNLSProductID = &H0
-    End Select
-    
+    GetBNLSProductID = GetProductInfo(sProdID).BNLS_ID
 End Function

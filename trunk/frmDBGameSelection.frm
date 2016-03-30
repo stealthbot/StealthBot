@@ -158,18 +158,18 @@ Private Sub cmdOK_Click()
     Dim Game As String
     
     Select Case (lvGames.SelectedItem.Index)
-        Case 1:  Game = "W2BN"
-        Case 2:  Game = "STAR"
-        Case 3:  Game = "SEXP"
-        Case 4:  Game = "D2DV"
-        Case 5:  Game = "D2XP"
-        Case 6:  Game = "WAR3"
-        Case 7:  Game = "W3XP"
-        Case 8:  Game = "SSHR"
-        Case 9:  Game = "JSTR"
-        Case 10: Game = "DRTL"
-        Case 11: Game = "DSHR"
-        Case 12: Game = "CHAT"
+        Case 1:  Game = PRODUCT_CHAT
+        Case 2:  Game = PRODUCT_STAR
+        Case 3:  Game = PRODUCT_SSHR
+        Case 4:  Game = PRODUCT_JSTR
+        Case 5:  Game = PRODUCT_SEXP
+        Case 6:  Game = PRODUCT_DRTL
+        Case 7:  Game = PRODUCT_DSHR
+        Case 8:  Game = PRODUCT_D2DV
+        Case 9:  Game = PRODUCT_D2XP
+        Case 10: Game = PRODUCT_W2BN
+        Case 11: Game = PRODUCT_WAR3
+        Case 12: Game = PRODUCT_W3XP
     End Select
 
     frmDBManager.m_entryname = Game
@@ -178,18 +178,18 @@ Private Sub cmdOK_Click()
 End Sub
 
 Private Sub Form_Load()
-    Call lvGames.ListItems.Add(, , "WarCraft II: Battle.net Edition", , 5)
-    Call lvGames.ListItems.Add(, , "StarCraft", , 1)
-    Call lvGames.ListItems.Add(, , "StarCraft: Brood War", , 2)
-    Call lvGames.ListItems.Add(, , "Diablo II", , 3)
-    Call lvGames.ListItems.Add(, , "Diablo II: Lord of Destruction", , 4)
-    Call lvGames.ListItems.Add(, , "WarCraft III: Reign of Chaos", , 6)
-    Call lvGames.ListItems.Add(, , "WarCraft III: The Frozen Throne", , 11)
-    Call lvGames.ListItems.Add(, , "StarCraft: Shareware", , 12)
-    Call lvGames.ListItems.Add(, , "StarCraft: Japanese", , 10)
-    Call lvGames.ListItems.Add(, , "Diablo I: Retail", , 8)
-    Call lvGames.ListItems.Add(, , "Diablo I: Shareware", , 9)
-    Call lvGames.ListItems.Add(, , "Chat", , 7)
+    Call lvGames.ListItems.Add(, , GetProductInfo(PRODUCT_CHAT).FullName, , 7)
+    Call lvGames.ListItems.Add(, , GetProductInfo(PRODUCT_STAR).FullName, , 1)
+    Call lvGames.ListItems.Add(, , GetProductInfo(PRODUCT_SSHR).FullName, , 12)
+    Call lvGames.ListItems.Add(, , GetProductInfo(PRODUCT_JSTR).FullName, , 10)
+    Call lvGames.ListItems.Add(, , GetProductInfo(PRODUCT_SEXP).FullName, , 2)
+    Call lvGames.ListItems.Add(, , GetProductInfo(PRODUCT_DRTL).FullName, , 8)
+    Call lvGames.ListItems.Add(, , GetProductInfo(PRODUCT_DSHR).FullName, , 9)
+    Call lvGames.ListItems.Add(, , GetProductInfo(PRODUCT_D2DV).FullName, , 3)
+    Call lvGames.ListItems.Add(, , GetProductInfo(PRODUCT_D2XP).FullName, , 4)
+    Call lvGames.ListItems.Add(, , GetProductInfo(PRODUCT_W2BN).FullName, , 5)
+    Call lvGames.ListItems.Add(, , GetProductInfo(PRODUCT_WAR3).FullName, , 6)
+    Call lvGames.ListItems.Add(, , GetProductInfo(PRODUCT_W3XP).FullName, , 11)
 End Sub
 
 Private Sub lvGames_DblClick()

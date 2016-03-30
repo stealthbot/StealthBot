@@ -184,7 +184,10 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub chkFlashOnCaughtPhrase_Click()
-    WriteINI "Other", "FlashOnCatchPhrases", IIf(chkFlashOnCaughtPhrase.Value = vbChecked, "Y", vbNullString)
+    If Config.FlashOnCatchPhrases <> CBool(chkFlashOnCaughtPhrase.value) Then
+        Config.FlashOnCatchPhrases = CBool(chkFlashOnCaughtPhrase.value)
+        Call Config.Save
+    End If
 End Sub
 
 Private Sub cmdDone_Click()
@@ -196,7 +199,7 @@ Private Sub cmdDone_Click()
     End If
     
     f = FreeFile
-    Open GetFilePath("CatchPhrases.txt") For Output As #f
+    Open GetFilePath(FILE_CATCH_PHRASES) For Output As #f
     
     For i = 0 To lbCatch.ListCount
         Catch(i) = lbCatch.List(i)
@@ -230,8 +233,8 @@ End Sub
 
 Private Sub Form_Load()
     Me.Icon = frmChat.Icon
-    If Len(ReadCfg("Other", "FlashOnCatchPhrases")) > 0 Then
-        chkFlashOnCaughtPhrase.Value = vbChecked
+    If Config.FlashOnCatchPhrases Then
+        chkFlashOnCaughtPhrase.value = vbChecked
     End If
     
     Dim i As Integer

@@ -176,8 +176,10 @@ End Sub
 
 Public Sub OnSetBnlsServer(Command As clsCommandObj)
     If (Command.IsValid) Then
-        Call WriteINI("Main", "BNLSServer", Command.Argument("Server"))
-        BotVars.BNLSServer = Command.Argument("Server")
+        Config.BNLSServer = Command.Argument("Server")
+        Call Config.Save
+        
+        BotVars.BNLSServer = Config.BNLSServer
         Command.Respond StringFormat("New BNLS server set to {0}{1}{0}.", Chr$(34), BotVars.BNLSServer)
     Else
         Command.Respond "You must specify a server."
@@ -203,14 +205,16 @@ Public Sub OnSetExpKey(Command As clsCommandObj)
         strKey = Replace$(Command.Argument("Key"), "-", vbNullString)
         strKey = Replace$(strKey, Space$(1), vbNullString)
         
-        If (Not StrComp(ReadCfg("Override", "SetKeyIgnoreLength"), "Y", vbTextCompare) = 0) Then
+        If Config.IgnoreCDKeyLength Then
             If ((Not Len(strKey) = 13) And (Not Len(strKey) = 16) And (Not Len(strKey) = 26)) Then
                 strKey = vbNullString
             End If
         End If
         If (LenB(strKey) > 0) Then
-            Call WriteINI("Main", "ExpKey", strKey)
-            BotVars.ExpKey = strKey
+            Config.EXPKey = strKey
+            Call Config.Save
+            
+            BotVars.EXPKey = Config.EXPKey
             Command.Respond "New expansion cdkey set."
         Else
             Command.Respond "The cdkey you specified was invalid."
@@ -224,8 +228,10 @@ Public Sub OnSetHome(Command As clsCommandObj)
     Dim Channel As String
     If (Command.IsValid) Then
         Channel = Command.Argument("Channel")
-        Call WriteINI("Main", "HomeChan", Channel)
-        BotVars.HomeChannel = Channel
+        Config.HomeChannel = Channel
+        Call Config.Save
+        
+        BotVars.HomeChannel = Config.HomeChannel
         If LenB(Channel) = 0 Then
             Command.Respond StringFormat("Reset home channel to server default.", Chr$(34), BotVars.HomeChannel)
         Else
@@ -242,14 +248,16 @@ Public Sub OnSetKey(Command As clsCommandObj)
         strKey = Replace$(Command.Argument("Key"), "-", vbNullString)
         strKey = Replace$(strKey, Space$(1), vbNullString)
         
-        If (Not StrComp(ReadCfg("Override", "SetKeyIgnoreLength"), "Y", vbTextCompare) = 0) Then
+        If Config.IgnoreCDKeyLength Then
             If ((Not Len(strKey) = 13) And (Not Len(strKey) = 16) And (Not Len(strKey) = 26)) Then
                 strKey = vbNullString
             End If
         End If
         If (LenB(strKey) > 0) Then
-            Call WriteINI("Main", "CDKey", strKey)
-            BotVars.CDKey = strKey
+            Config.CDKey = strKey
+            Call Config.Save
+            
+            BotVars.CDKey = Config.CDKey
             Command.Respond "New cdkey set."
         Else
             Command.Respond "The cdkey you specified was invalid."
@@ -261,8 +269,10 @@ End Sub
 
 Public Sub OnSetName(Command As clsCommandObj)
     If (Command.IsValid) Then
-        Call WriteINI("Main", "Username", Command.Argument("Username"))
-        BotVars.Username = Command.Argument("Username")
+        Config.Username = Command.Argument("Username")
+        Call Config.Save
+        
+        BotVars.Username = Config.Username
         Command.Respond StringFormat("New username set to {0}{1}{0}.", Chr$(34), BotVars.Username)
     Else
         Command.Respond "You must specify a username."
@@ -271,8 +281,10 @@ End Sub
 
 Public Sub OnSetPass(Command As clsCommandObj)
     If (Command.IsValid) Then
-        Call WriteINI("Main", "Password", Command.Argument("Password"))
-        BotVars.Password = Command.Argument("Password")
+        Config.Password = Command.Argument("Password")
+        Call Config.Save
+        
+        BotVars.Password = Config.Password
         Command.Respond "New password set."
     Else
         Command.Respond "You must specify a password."
@@ -282,7 +294,10 @@ End Sub
 Public Sub OnSetPMsg(Command As clsCommandObj)
     If (Command.IsValid) Then
         ProtectMsg = Command.Argument("Message")
-        Call WriteINI("Other", "ProtectMsg", Command.Argument("Message"))
+        
+        Config.ChannelProtectionMessage = ProtectMsg
+        Call Config.Save
+        
         Command.Respond "Channel protection message set."
     Else
         Command.Respond "You must specify a message."
@@ -291,8 +306,10 @@ End Sub
 
 Public Sub OnSetServer(Command As clsCommandObj)
     If (Command.IsValid) Then
-        Call WriteINI("Main", "Server", Command.Argument("Server"))
-        BotVars.Server = Command.Argument("Server")
+        Config.Server = Command.Argument("Server")
+        Call Config.Save
+        
+        BotVars.Server = Config.Server
         Command.Respond StringFormat("New server set to {0}{1}{0}.", Chr$(34), BotVars.Server)
     Else
         Command.Respond "You must specify a server."
@@ -301,8 +318,11 @@ End Sub
 
 Public Sub OnSetTrigger(Command As clsCommandObj)
     If (Command.IsValid) Then
-        Call WriteINI("Main", "Trigger", StringFormat("{{0}}", Command.Argument("Trigger")))
-        BotVars.Trigger = Command.Argument("Trigger")
+        
+        Config.Trigger = Command.Argument("Trigger")
+        Call Config.Save
+        
+        BotVars.Trigger = Config.Trigger
         Command.Respond StringFormat("The new trigger is {0}{1}{0}.", Chr$(34), BotVars.Trigger)
     Else
         Command.Respond "You must specify a trigger."
@@ -313,16 +333,21 @@ Public Sub OnWhisperCmds(Command As clsCommandObj)
     Select Case LCase$(Command.Argument("SubCommand"))
         Case "on":
             BotVars.WhisperCmds = True
-            Call WriteINI("Main", "WhisperBack", "Y")
+            
             Command.Respond "Command responses will now be whispered back."
         
         Case "off":
             BotVars.WhisperCmds = False
-            Call WriteINI("Main", "WhisperBack", "N")
+
             Command.Respond "Command responses will now be displayed publicly."
         
         Case Else:
             Command.Respond StringFormat("Command responses are currently {0}.", _
                 IIf(BotVars.WhisperCmds, "whispered back", "displayed publicly"))
     End Select
+    
+    If Config.WhisperCommands <> BotVars.WhisperCmds Then
+        Config.WhisperCommands = BotVars.WhisperCmds
+        Call Config.Save
+    End If
 End Sub

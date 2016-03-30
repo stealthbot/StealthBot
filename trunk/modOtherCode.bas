@@ -205,29 +205,16 @@ Public Function ConvertTime(ByVal dblMS As Double, Optional seconds As Byte) As 
 End Function
 
 Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Integer) As Long
-    Dim Key As String
+    Dim key As String
     
-    Key = GetProductKey(Product)
+    key = GetProductKey(Product)
     
-    If ((ReadCfg("Override", Key & "VerByte") = vbNullString) Or _
+    If ((Config.GetVersionByte(key) = -1) Or _
         (UseHardcode = 1)) Then
         
-        Select Case StrReverse(Product)
-            Case "W2BN": GetVerByte = &H4F
-            Case "STAR": GetVerByte = &HD3
-            Case "SEXP": GetVerByte = &HD3
-            Case "D2DV": GetVerByte = &HE
-            Case "D2XP": GetVerByte = &HE
-            Case "W3XP": GetVerByte = &H1B
-            Case "WAR3": GetVerByte = &H1B
-            Case "DRTL": GetVerByte = &H2A
-            Case "DSHR": GetVerByte = &H2A
-            Case "JSTR": GetVerByte = &HA9
-            Case "SSHR": GetVerByte = &HA5
-        End Select
+        GetVerByte = GetProductInfo(Product).VersionByte
     Else
-        GetVerByte = _
-            CLng(Val("&H" & ReadCfg("Override", Key & "VerByte")))
+        GetVerByte = Config.GetVersionByte(key)
     End If
     
 End Function
@@ -236,17 +223,17 @@ Public Function GetGamePath(ByVal Client As String) As String
     ' [override] XXHashes= functionality replaced by checkrevision.ini -> [CRev_XX] Path=
     ' removed ~Ribose/2010-08-12
     Dim CRevINIPath As String
-    Dim Key As String
+    Dim key As String
     Dim Path As String
     Dim sep1 As String
     Dim sep2 As String
     
     ' Moved CheckRevision.ini to profile directory instead of install directory. -Pyro, 2016-03-21
-    'CRevINIPath = GetFilePath("CheckRevision.ini", StringFormat("{0}\", App.Path))
-    CRevINIPath = GetFilePath("CheckRevision.ini")
+    'CRevINIPath = GetFilePath(FILE_CREV_INI, StringFormat("{0}\", App.Path))
+    CRevINIPath = GetFilePath(FILE_CREV_INI)
     
-    Key = GetProductKey(Client)
-    Path = ReadINI$(StringFormat("CRev_{0}", Key), "Path", CRevINIPath)
+    key = GetProductKey(Client)
+    Path = ReadINI$(StringFormat("CRev_{0}", key), "Path", CRevINIPath)
     sep1 = vbNullString
     sep2 = vbNullString
     
@@ -259,18 +246,18 @@ Public Function GetGamePath(ByVal Client As String) As String
     GetGamePath = Path
 End Function
 
-Function MKL(Value As Long) As String
+Function MKL(value As Long) As String
     Dim Result As String * 4
     
-    Call CopyMemory(ByVal Result, Value, 4)
+    Call CopyMemory(ByVal Result, value, 4)
     
     MKL = Result
 End Function
 
-Function MKI(Value As Integer) As String
+Function MKI(value As Integer) As String
     Dim Result As String * 2
     
-    Call CopyMemory(ByVal Result, Value, 2)
+    Call CopyMemory(ByVal Result, value, 2)
     
     MKI = Result
 End Function
@@ -513,11 +500,9 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
         End If
     End If
 
-    If (bFlood = False) Then
-        On Error Resume Next
+    On Error Resume Next
         
-        RunInAll "Event_MessageSent", ID, Message, Tag
-    End If
+    RunInAll "Event_MessageSent", ID, Message, Tag
     
     Exit Sub
 
@@ -1189,18 +1174,18 @@ Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long, Icon
         i = IconCode
     'Else
     '    Select Case (UCase$(sProduct))
-    '        Case Is = "STAR": I = ICSTAR
-    '        Case Is = "SEXP": I = ICSEXP
-    '        Case Is = "D2DV": I = ICD2DV
-    '        Case Is = "D2XP": I = ICD2XP
-    '        Case Is = "W2BN": I = ICW2BN
-    '        Case Is = "CHAT": I = ICCHAT
-    '        Case Is = "DRTL": I = ICDIABLO
-    '        Case Is = "DSHR": I = ICDIABLOSW
-    '        Case Is = "JSTR": I = ICJSTR
-    '        Case Is = "SSHR": I = ICSCSW
-    '        Case Is = "WAR3": I = ICWAR3
-    '        Case Is = "W3XP": I = ICWAR3X
+    '        Case Is =  PRODUCT_STAR: I = ICSTAR
+    '        Case Is = PRODUCT_SEXP: I = ICSEXP
+    '        Case Is = PRODUCT_D2DV: I = ICD2DV
+    '        Case Is = PRODUCT_D2XP: I = ICD2XP
+    '        Case Is = PRODUCT_W2BN: I = ICW2BN
+    '        Case Is = PRODUCT_CHAT: I = ICCHAT
+    '        Case Is = PRODUCT_DRTL: I = ICDIABLO
+    '        Case Is = PRODUCT_DSHR: I = ICDIABLOSW
+    '        Case Is = PRODUCT_JSTR: I = ICJSTR
+    '        Case Is = PRODUCT_SSHR: I = ICSCSW
+    '        Case Is = PRODUCT_WAR3: I = ICWAR3
+    '        Case Is = PRODUCT_W3XP: I = ICWAR3X
     '
     '        '*** Special icons for WCG added 6/24/07 ***
     '        Case Is = "WCRF": I = IC_WCRF
@@ -1325,8 +1310,6 @@ Public Sub AddName(ByVal Username As String, ByVal AccountName As String, ByVal 
         .Refresh
     End With
     
-    g_ThisIconCode = -1
-    
     frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
 End Sub
 
@@ -1335,8 +1318,8 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
     Dim s As String
     Dim i As Integer
     
-    If (LenB(Dir$(GetFilePath("Filters.ini"))) > 0) Then
-        s = ReadINI("BlockList", "Total", GetFilePath("Filters.ini"))
+    If (LenB(Dir$(GetFilePath(FILE_FILTERS))) > 0) Then
+        s = ReadINI("BlockList", "Total", GetFilePath(FILE_FILTERS))
         
         If (StrictIsNumeric(s)) Then
             i = s
@@ -1347,7 +1330,7 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
         Username = PrepareCheck(Username)
         
         For i = 0 To i
-            s = ReadINI("BlockList", "Filter" & i, GetFilePath("Filters.ini"))
+            s = ReadINI("BlockList", "Filter" & i, GetFilePath(FILE_FILTERS))
             
             If (Username Like PrepareCheck(s)) Then
                 CheckBlock = True
@@ -1482,22 +1465,7 @@ Public Sub EnableSO_KEEPALIVE(ByVal lSocketHandle As Long)
 End Sub
 
 Public Function ProductCodeToFullName(ByVal pCode As String) As String
-    Select Case (pCode)
-        Case "SEXP": ProductCodeToFullName = "Starcraft: Brood War"
-        Case "STAR": ProductCodeToFullName = "Starcraft Original"
-        Case "WAR3": ProductCodeToFullName = "Warcraft III"
-        Case "W2BN": ProductCodeToFullName = "Warcraft II BNE"
-        Case "D2DV": ProductCodeToFullName = "Diablo II"
-        Case "D2XP": ProductCodeToFullName = "Diablo II: Lord of Destruction"
-        Case "SSHR": ProductCodeToFullName = "Starcraft Shareware"
-        Case "JSTR": ProductCodeToFullName = "Starcraft Japanese"
-        Case "DRTL": ProductCodeToFullName = "Diablo Retail"
-        Case "W3XP": ProductCodeToFullName = "Warcraft III: The Frozen Throne"
-        Case "CHAT": ProductCodeToFullName = "a telnet connection"
-        Case "DSHR": ProductCodeToFullName = "Diablo Shareware"
-        Case "SSHR": ProductCodeToFullName = "Starcraft Shareware"
-        Case Else:   ProductCodeToFullName = "an unknown or non-standard product"
-    End Select
+    ProductCodeToFullName = GetProductInfo(pCode).FullName
 End Function
 
 ' Assumes that sIn has Length >=1
@@ -1568,7 +1536,7 @@ Public Sub GetW3LadderProfile(ByVal sPlayer As String, ByVal eType As enuWebProf
     Dim W3WebProfileType As String
     
     If (LenB(sPlayer) > 0) Then
-        W3WebProfileType = IIf(eType = W3XP, "w3xp", "war3")
+        W3WebProfileType = IIf(eType = W3XP, PRODUCT_W3XP, PRODUCT_WAR3)
         W3LadderURL = StringFormat(W3LadderURLFormat, W3WebProfileType, GetW3Realm(sPlayer), NameWithoutRealm(sPlayer, 1))
         
         ShellOpenURL W3LadderURL, sPlayer & "'s " & UCase$(W3WebProfileType) & " ladder profile"
@@ -1636,34 +1604,34 @@ Public Function GetW3Realm(Optional ByVal Username As String) As String
 End Function
 
 Public Function GetConfigFilePath() As String
-    Static filePath As String
+    Static FilePath As String
     
-    If (LenB(filePath) = 0) Then
+    If (LenB(FilePath) = 0) Then
         If ((LenB(ConfigOverride) > 0)) Then
-            filePath = ConfigOverride
+            FilePath = ConfigOverride
         Else
-            filePath = StringFormat("{0}Config.ini", GetProfilePath())
+            FilePath = StringFormat("{0}Config.ini", GetProfilePath())
         End If
     End If
     
-    If (InStr(1, filePath, "\", vbBinaryCompare) = 0) Then
-        filePath = StringFormat("{0}\{1}", CurDir$(), filePath)
+    If (InStr(1, FilePath, "\", vbBinaryCompare) = 0) Then
+        FilePath = StringFormat("{0}\{1}", CurDir$(), FilePath)
     End If
     
-    GetConfigFilePath = filePath
+    GetConfigFilePath = FilePath
 End Function
 
-Public Function GetFilePath(ByVal FileName As String, Optional DefaultPath As String = vbNullString) As String
+Public Function GetFilePath(ByVal fileName As String, Optional DefaultPath As String = vbNullString) As String
     Dim s As String
     
-    If (InStr(FileName, "\") = 0) Then
+    If (InStr(fileName, "\") = 0) Then
         If (LenB(DefaultPath) = 0) Then
-            GetFilePath = StringFormat("{0}{1}", GetProfilePath(), FileName)
+            GetFilePath = StringFormat("{0}{1}", GetProfilePath(), fileName)
         Else
-            GetFilePath = StringFormat("{0}{1}", DefaultPath, FileName)
+            GetFilePath = StringFormat("{0}{1}", DefaultPath, fileName)
         End If
         
-        s = ReadCfg("FilePaths", FileName)
+        s = ReadCfg("FilePaths", fileName)
         
         If (LenB(s) > 0) Then
             If (LenB(Dir$(s))) Then
@@ -1671,7 +1639,7 @@ Public Function GetFilePath(ByVal FileName As String, Optional DefaultPath As St
             End If
         End If
     Else
-        GetFilePath = FileName
+        GetFilePath = fileName
     End If
 End Function
 
@@ -1769,8 +1737,8 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
         
     g_Queue.RemoveLines tmp & "*"
 
-    If ((StrReverse$(BotVars.Product) = "WAR3") Or _
-        (StrReverse$(BotVars.Product) = "W3XP")) Then
+    If ((StrReverse$(BotVars.Product) = PRODUCT_WAR3) Or _
+        (StrReverse$(BotVars.Product) = PRODUCT_W3XP)) Then
         
         Dim strGateway As String
         
@@ -1794,22 +1762,6 @@ Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boo
     
     ' default to true
     AllowedToTalk = True
-    
-    'For each condition where the user is NOT allowed to talk, set to false
-    
-    'i = UsernameToIndex(sUser)
-    '
-    'If i > 0 Then
-    '    Dim CurrentGTC As Long
-    '
-    '    CurrentGTC = GetTickCount()
-    '
-    '    With colUsersInChannel.Item(i)
-    '        If ((CurrentGTC - .JoinTime) < BotVars.AutofilterMS) Then
-    '            AllowedToTalk = False
-    '        End If
-    '    End With
-    'End If
     
     If (Filters) Then
         If ((CheckBlock(sUser)) Or (CheckMsg(Msg, sUser, -5))) Then
@@ -2338,7 +2290,7 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phr
     
     i = FreeFile
     
-    If (LenB(ReadCfg("Other", "FlashOnCatchPhrases")) > 0) Then
+    If Config.FlashOnCatchPhrases Then
         Call FlashWindow
     End If
     
@@ -2348,19 +2300,19 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phr
         Case CPWHISPER: s = "WHISPER"
     End Select
     
-    If (Dir$(GetFilePath("CaughtPhrases.htm")) = vbNullString) Then
-        Open GetFilePath("CaughtPhrases.htm") For Output As #i
+    If (Dir$(GetFilePath(FILE_CAUGHT_PHRASES)) = vbNullString) Then
+        Open GetFilePath(FILE_CAUGHT_PHRASES) For Output As #i
             Print #i, "<html>"
         Close #i
     End If
     
-    Open GetFilePath("CaughtPhrases.htm") For Append As #i
+    Open GetFilePath(FILE_CAUGHT_PHRASES) For Append As #i
         If (LOF(i) > 10000000) Then
             Close #i
             
-            Call Kill(GetFilePath("CaughtPhrases.htm"))
+            Call Kill(GetFilePath(FILE_CAUGHT_PHRASES))
             
-            Open GetFilePath("CaughtPhrases.htm") For Output As #i
+            Open GetFilePath(FILE_CAUGHT_PHRASES) For Output As #i
         End If
         
         Msg = Replace(Msg, "<", "&lt;", 1)
@@ -2502,7 +2454,7 @@ Public Sub Pause(ByVal fSeconds As Single, Optional ByVal AllowEvents As Boolean
     End If
 End Sub
 
-Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String, ByVal Target As String, _
+Public Sub LogDbAction(ByVal ActionType As enuDBActions, ByVal Caller As String, ByVal Target As String, _
     ByVal TargetType As String, Optional ByVal Rank As Integer, Optional ByVal Flags As String, _
         Optional ByVal Group As String)
     
@@ -2679,44 +2631,12 @@ Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
     GetStringChunk = Trim(GetStringChunk)
 End Function
 
-'Public Sub SpamCheck(ByVal User As String, ByVal Msg As String)
-'    Static Top As Integer
-'    Dim i As Integer
-'
-'    If Len(Msg) > 8 Then
-'        i = InStr(User, "#")
-'
-'        If i > 0 Then
-'            user = left$(
-'
-'        Last4Messages(Top) = LCase(Msg)
-'        Last4Speakers(Top) = LCase(User)
-'        Top = Top + 1
-'
-'        If Top > 3 Then Top = 0
-'    End If
-'
-'End Sub
-
 Function GetProductKey(Optional ByVal Product As String) As String
     If (LenB(Product) = 0) Then
         Product = StrReverse$(BotVars.Product)
     End If
     
-    Select Case Product
-        Case "W2BN", "NB2W": GetProductKey = "W2"
-        Case "STAR", "RATS": GetProductKey = "SC"
-        Case "SEXP", "PXES": GetProductKey = "SC"
-        Case "D2DV", "VD2D": GetProductKey = "D2"
-        Case "D2XP", "PX2D": GetProductKey = "D2X"
-        Case "WAR3", "3RAW": GetProductKey = "W3"
-        Case "W3XP", "PX3W": GetProductKey = "W3"
-        Case "DRTL", "LTRD": GetProductKey = "D1"
-        Case "DSHR", "RHSD": GetProductKey = "DS"
-        Case "JSTR", "RTSJ": GetProductKey = "JS"
-        Case "SSHR", "RHSS": GetProductKey = "SS"
-        Case Else:           GetProductKey = Product
-    End Select
+    GetProductKey = GetProductInfo(Product).ShortCode
     
     If (LenB(ReadCfg$("Override", StringFormat("{0}ProdKey", Product))) > 0) Then
         GetProductKey = ReadCfg$("Override", StringFormat("{0}ProdKey", Product))
@@ -2747,7 +2667,7 @@ Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Lon
     Dim s         As String  ' stores temp string for settings
     
     ' check for custom line postfix
-    s = ReadCfg("Override", "AddQLinePostfix")
+    s = Config.MultiLinePostfix
     If LenB(s) > 0 Then
         If Left$(s, 1) = "{" And Right$(s, 1) = "}" Then
             LinePostfix = Mid$(s, 2, Len(s) - 2)
@@ -3248,3 +3168,52 @@ Public Sub CloseAllConnections(Optional ShowMessage As Boolean = True)
     
     RunInAll "Event_ServerError", "All connections closed."
 End Sub
+
+Public Sub BuildProductInfo()
+    ' 4-digit code, short code, short name, long name, number of keys, BNLS ID, logon system
+    ProductList(0) = CreateProductInfo("UNKW", vbNullString, "Unknown Product", 0, &H0, &H0, &H0)
+    ProductList(1) = CreateProductInfo(PRODUCT_STAR, "SC", "StarCraft", 1, &H1, BNCS_NLS, &HD3)
+    ProductList(2) = CreateProductInfo(PRODUCT_SEXP, "SC", "StarCraft Broodwar", 1, &H2, BNCS_NLS, &HD3)
+    ProductList(3) = CreateProductInfo(PRODUCT_W2BN, "W2", "WarCraft II: Battle.net Edition", 1, &H3, BNCS_OLS, &H4F)
+    ProductList(4) = CreateProductInfo(PRODUCT_D2DV, "D2", "Diablo II", 1, &H4, BNCS_NLS, &HE)
+    ProductList(5) = CreateProductInfo(PRODUCT_D2XP, "D2X", "Diablo II: Lord of Destruction", 2, &H5, BNCS_NLS, &HE)
+    ProductList(6) = CreateProductInfo(PRODUCT_WAR3, "W3", "WarCraft III: Reign of Chaos", 1, &H7, BNCS_NLS, &H1B)
+    ProductList(7) = CreateProductInfo(PRODUCT_W3XP, "W3", "WarCraft III: The Frozen Throne", 2, &H8, BNCS_NLS, &H1B)
+    ProductList(8) = CreateProductInfo(PRODUCT_DSHR, "DS", "Diablo Shareware", 0, &HA, BNCS_OLS, &H2A)
+    ProductList(9) = CreateProductInfo(PRODUCT_DRTL, "D1", "Diablo", 0, &H9, BNCS_OLS, &H2A)
+    ProductList(10) = CreateProductInfo(PRODUCT_SSHR, "SS", "StarCraft Shareware", 0, &HB, BNCS_LLS, &HA9)
+    ProductList(11) = CreateProductInfo(PRODUCT_JSTR, "JS", "Japanese StarCraft", 1, &H6, BNCS_LLS, &HA9)
+    ProductList(12) = CreateProductInfo(PRODUCT_CHAT, "CHAT", "Telnet Chat", 0, &H0, &H0, &H0)
+End Sub
+
+Private Function CreateProductInfo(ByVal sCode As String, ByVal sShort As String, ByVal sLongName As String, ByVal iKeys As Integer, ByVal iBnlsId As Long, ByVal iLogonSystem As Long, ByVal iVerByte As Long) As udtProductInfo
+    Dim pi As udtProductInfo
+    pi.Code = UCase$(sCode)
+    pi.ShortCode = UCase$(sShort)
+    pi.FullName = sLongName
+    pi.KeyCount = iKeys
+    pi.BNLS_ID = iBnlsId
+    pi.LogonSystem = iLogonSystem
+    pi.VersionByte = iVerByte
+    
+    CreateProductInfo = pi
+End Function
+
+Public Function GetProductInfo(ByVal sProductCode As String) As udtProductInfo
+    Dim pi As udtProductInfo
+    Dim index As Integer
+    sProductCode = UCase$(sProductCode)
+
+    For index = 0 To UBound(ProductList)
+        pi = ProductList(index)
+        
+        If StrComp(pi.Code, sProductCode, vbBinaryCompare) = 0 Or _
+            StrComp(pi.Code, StrReverse(sProductCode), vbBinaryCompare) = 0 Or _
+            StrComp(pi.ShortCode, sProductCode, vbBinaryCompare) = 0 Then
+            
+            GetProductInfo = pi
+            Exit Function
+        End If
+    Next
+    GetProductInfo = ProductList(0)
+End Function

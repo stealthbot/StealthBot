@@ -1022,6 +1022,10 @@ Public Function MediaPlayer() As Object
     Set MediaPlayer = modMediaPlayer.MediaPlayer()
 End Function
 
+Public Function Config() As Object
+    Set Config = modGlobals.Config
+End Function
+
 '// CHANNEL
 '// Returns the channel object
 Public Function Channel() As Object
@@ -1366,7 +1370,7 @@ Public Function GetSettingsEntry(ByVal sEntryName As String, ByVal scriptName As
     
     If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
 
-    Path = GetFilePath("Scripts.ini", GetFolderPath("Scripts"))
+    Path = GetFilePath(FILE_SCRIPT_INI, GetFolderPath("Scripts"))
     
     If (LenB(Dir(Path)) = 0) Then
         Open Path For Output As #1
@@ -1399,7 +1403,7 @@ Public Sub WriteSettingsEntry(ByVal sEntryName As String, ByVal sValue As String
     
     If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
-    Path = GetFilePath("Scripts.ini", GetFolderPath("Scripts"))
+    Path = GetFilePath(FILE_SCRIPT_INI, GetFolderPath("Scripts"))
 
     If (LenB(Dir(Path)) = 0) Then
         Open Path For Output As #1

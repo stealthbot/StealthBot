@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
 Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.1#0"; "vbalTreeView6.ocx"
 Begin VB.Form frmDBManager 
    AutoRedraw      =   -1  'True
@@ -1001,7 +1001,7 @@ Private Sub btnSaveForm_Click()
     DB() = m_DB()
     
     ' save database
-    Call WriteDatabase(GetFilePath("Users.txt"))
+    Call WriteDatabase(GetFilePath(FILE_USERDB))
     
     ' check channel to find potential banned users
     Call g_Channel.CheckUsers
@@ -2379,7 +2379,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
         End If
         
         ' commit modifications
-        'Call WriteDatabase(GetFilePath("Users.txt"))
+        'Call WriteDatabase(GetFilePath(FILE_USERDB))
         
         DB_remove = True
         
