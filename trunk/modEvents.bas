@@ -1768,7 +1768,7 @@ On Error GoTo ERROR_HANDLER:
     
     If (BanningUser = False) Then
         If (BotVars.QuietTime) Then
-            Ban Username & " Quiet-time is enabled.", (AutoModSafelistValue - 1)
+            Ban Username & " Quiet-time", (AutoModSafelistValue - 1), Abs(CLng(Config.QuietTimeKick))
         Else
             If (BotVars.KickOnYell = 1) Then
                 If (Len(Message) > 5) Then

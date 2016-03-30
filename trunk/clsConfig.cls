@@ -118,6 +118,7 @@ Private m_UDPBan                    As Boolean
 Private m_AutoSafelistLevel         As Integer
 Private m_ChannelProtection         As Boolean
 Private m_QuietTime                 As Boolean
+Private m_QuietTimeKick             As Boolean
 Private m_PingBan                   As Boolean
 Private m_PingBanLevel              As Long
 
@@ -755,6 +756,14 @@ End Property
 
 Public Property Let QuietTime(ByVal sValue As Boolean)
     m_QuietTime = sValue
+End Property
+
+Public Property Get QuietTimeKick() As Boolean
+    QuietTimeKick = m_QuietTimeKick
+End Property
+
+Public Property Let QuietTimeKick(ByVal sValue As Boolean)
+    m_QuietTimeKick = sValue
 End Property
 
 Public Property Get PingBan() As Boolean
@@ -1547,6 +1556,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_MODERATION, "AutoSafelistLevel", m_AutoSafelistLevel
     WriteSetting SECTION_MODERATION, "ChannelProtect", m_ChannelProtection
     WriteSetting SECTION_MODERATION, "QuietTime", m_QuietTime
+    WriteSetting SECTION_MODERATION, "QuietTimeKick", m_QuietTimeKick
     WriteSetting SECTION_MODERATION, "PingBan", m_PingBan
     WriteSetting SECTION_MODERATION, "PingBanLevel", m_PingBanLevel
     
@@ -1721,6 +1731,7 @@ Private Sub LoadDefaults()
     m_AutoSafelistLevel = 20
     m_ChannelProtection = False
     m_QuietTime = False
+    m_QuietTimeKick = False
     m_PingBan = False
     m_PingBanLevel = 5000
 
@@ -2041,6 +2052,7 @@ Private Sub LoadVersion6Config()
     m_AutoSafelistLevel = ReadSettingL(SECTION_MODERATION, "AutoSafelistLevel", m_AutoSafelistLevel)
     m_ChannelProtection = ReadSettingB(SECTION_MODERATION, "ChannelProtect", m_ChannelProtection)
     m_QuietTime = ReadSettingB(SECTION_MODERATION, "QuietTime", m_QuietTime)
+    m_QuietTime = ReadSettingB(SECTION_MODERATION, "QuietTimeKick", m_QuietTime)
     m_PingBan = ReadSettingB(SECTION_MODERATION, "PingBan", m_PingBan)
     m_PingBanLevel = ReadSettingL(SECTION_MODERATION, "PingBanLevel", m_PingBanLevel)
     
