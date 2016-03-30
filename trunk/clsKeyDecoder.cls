@@ -112,8 +112,15 @@ Public Property Get PublicValue() As Long
 End Property
 
 ' Returns the key's private value
-Public Property Get PrivateValue() As Long
-    PrivateValue = kd_val2(m_Handle)
+Public Property Get PrivateValue() As String
+    Dim sBuffer As String
+    sBuffer = String$(kd_val2Length(m_Handle), vbNullChar)
+    
+    If (kd_longVal2(m_Handle, sBuffer) <= 0) Then
+        Call CopyMemory(ByVal sBuffer, kd_val2(m_Handle), 4)
+    End If
+    
+    PrivateValue = sBuffer
 End Property
 
 ' Returns the calculated hash of the key's product, public, and private values.
