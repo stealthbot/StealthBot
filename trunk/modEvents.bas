@@ -1751,12 +1751,12 @@ On Error GoTo ERROR_HANDLER:
     Dim BanningUser As Boolean
     Dim i           As Integer
     
-    If (Phrasebans) Then
+    If (PhraseBans) Then
         For i = LBound(Phrases) To UBound(Phrases)
             If ((Phrases(i) <> vbNullString) And (Phrases(i) <> Space$(1))) Then
                 If ((InStr(1, Message, Phrases(i), vbTextCompare)) <> 0) Then
                     Ban Username & " Banned phrase: " & Phrases(i), _
-                            (AutoModSafelistValue - 1)
+                            (AutoModSafelistValue - 1), Abs(CLng(Config.PhraseKick))
                     
                     BanningUser = True
                     

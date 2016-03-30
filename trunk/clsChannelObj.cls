@@ -424,11 +424,14 @@ Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsU
         
         DBEntry = GetCumulativeAccess(CurrentUser.DisplayName, "USER")
         
-        If (DBEntry.Rank < 20) Then
+        If (DBEntry.Rank < AutoModSafelistValue) Then
+            ' Not high enough rank to be safe from auto-mod
             
             If (InStr(1, DBEntry.Flags, "S", vbBinaryCompare) = 0) Then
+                ' Not on the safelist
                 
                 If (InStr(1, DBEntry.Flags, "B", vbBinaryCompare) <> 0) Then
+                    ' On the shitlist
                     
                     Message = GetShitlist(CurrentUser.DisplayName)
                     
@@ -437,6 +440,7 @@ Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsU
                     doCheck = False
                 Else
                     
+                    ' Is channel protection enabled?
                     If (Protect) Then
                         Ban CurrentUser.DisplayName & Space$(1) & ProtectMsg, (AutoModSafelistValue - 1)
                         
@@ -444,6 +448,7 @@ Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsU
                     Else
                         Dim j As Integer
                         
+                        ' Have they previously been banned?
                         If ((doCheck) And (BotVars.BanEvasion)) Then
                             If (IsOnBanList(CurrentUser.Name)) Then
                                 Ban CurrentUser.DisplayName & " Ban Evasion", (AutoModSafelistValue - 1)
@@ -452,14 +457,33 @@ Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsU
                             End If
                         End If
                         
+                        ' Are they IP banned?
                         If ((doCheck) And (BotVars.IPBans)) Then
                             If (CurrentUser.IsSquelched) Then
-                                Ban CurrentUser.DisplayName & " IPBanned.", (AutoModSafelistValue - 1)
+                                Ban CurrentUser.DisplayName & " IP Banned", (AutoModSafelistValue - 1)
                                 
                                 doCheck = False
                             End If
                         End If
                         
+                        ' Is the user's ping acceptable?
+                        If ((doCheck) And (Config.PingBan)) Then
+                            If (Config.PingBanLevel < 1) Then
+                                If (CurrentUser.Ping = Config.PingBanLevel) Then
+                                    Ban CurrentUser.DisplayName & " Ping Ban", (AutoModSafelistValue - 1)
+                                    
+                                    doCheck = False
+                                End If
+                            Else
+                                If (CurrentUser.Ping > Config.PingBanLevel) Then
+                                    Ban CurrentUser.DisplayName & " Ping Ban", (AutoModSafelistValue - 1)
+                                    
+                                    doCheck = False
+                                End If
+                            End If
+                        End If
+                        
+                        ' Do they have a UDP plug?
                         If ((doCheck) And (BotVars.PlugBan)) Then
                             If ((CurrentUser.Flags And USER_NOUDP) = USER_NOUDP) Then
                                 Ban CurrentUser.DisplayName & " PlugBan", (AutoModSafelistValue - 1)
@@ -468,6 +492,7 @@ Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsU
                             End If
                         End If
                         
+                        ' Level bans
                         If (doCheck) Then
                             If (CurrentUser.IsUsingDII) Then
                                 If (BotVars.BanD2UnderLevel) Then

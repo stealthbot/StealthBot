@@ -98,6 +98,7 @@ Private m_MultiLinePostfix          As String
 '[MODERATION]
 Private m_BanEvasion                As Boolean
 Private m_Phrasebans                As Boolean
+Private m_Phrasekick                As Boolean
 Private m_LevelBanW3                As Integer
 Private m_LevelBanD2                As Integer
 Private m_LevelBanMessage           As String
@@ -117,6 +118,8 @@ Private m_UDPBan                    As Boolean
 Private m_AutoSafelistLevel         As Integer
 Private m_ChannelProtection         As Boolean
 Private m_QuietTime                 As Boolean
+Private m_PingBan                   As Boolean
+Private m_PingBanLevel              As Long
 
 '[UI]
 Private m_ShowSplashScreen          As Boolean
@@ -594,6 +597,14 @@ Public Property Let PhraseBans(ByVal sValue As Boolean)
     m_Phrasebans = sValue
 End Property
 
+Public Property Get PhraseKick() As Boolean
+    PhraseKick = m_Phrasekick
+End Property
+
+Public Property Let PhraseKick(ByVal sValue As Boolean)
+    m_Phrasekick = sValue
+End Property
+
 Public Property Get LevelBanW3() As Integer
     LevelBanW3 = m_LevelBanW3
 End Property
@@ -744,6 +755,22 @@ End Property
 
 Public Property Let QuietTime(ByVal sValue As Boolean)
     m_QuietTime = sValue
+End Property
+
+Public Property Get PingBan() As Boolean
+    PingBan = m_PingBan
+End Property
+
+Public Property Let PingBan(ByVal sValue As Boolean)
+    m_PingBan = sValue
+End Property
+
+Public Property Get PingBanLevel() As Long
+    PingBanLevel = m_PingBanLevel
+End Property
+
+Public Property Let PingBanLevel(ByVal sValue As Long)
+    m_PingBanLevel = sValue
 End Property
 
 
@@ -1500,6 +1527,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     
     WriteSetting SECTION_MODERATION, "BanEvasion", m_BanEvasion
     WriteSetting SECTION_MODERATION, "PhraseBans", m_Phrasebans
+    WriteSetting SECTION_MODERATION, "PhraseKick", m_Phrasekick
     WriteSetting SECTION_MODERATION, "LevelBanW3", m_LevelBanW3
     WriteSetting SECTION_MODERATION, "LevelBanD2", m_LevelBanD2
     WriteSetting SECTION_MODERATION, "LevelBanMessage", m_LevelBanMessage
@@ -1519,6 +1547,8 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_MODERATION, "AutoSafelistLevel", m_AutoSafelistLevel
     WriteSetting SECTION_MODERATION, "ChannelProtect", m_ChannelProtection
     WriteSetting SECTION_MODERATION, "QuietTime", m_QuietTime
+    WriteSetting SECTION_MODERATION, "PingBan", m_PingBan
+    WriteSetting SECTION_MODERATION, "PingBanLevel", m_PingBanLevel
     
     WriteSetting SECTION_UI, "ShowSplashScreen", m_ShowSplashScreen
     WriteSetting SECTION_UI, "ShowWhisperWindow", m_ShowWhisperBox
@@ -1671,6 +1701,7 @@ Private Sub LoadDefaults()
     '[Moderation]
     m_BanEvasion = True
     m_Phrasebans = False
+    m_Phrasekick = False
     m_LevelBanW3 = 0
     m_LevelBanD2 = 0
     m_LevelBanMessage = vbNullString
@@ -1690,6 +1721,8 @@ Private Sub LoadDefaults()
     m_AutoSafelistLevel = 20
     m_ChannelProtection = False
     m_QuietTime = False
+    m_PingBan = False
+    m_PingBanLevel = 5000
 
     '[UI]
     m_ShowSplashScreen = True
@@ -1988,6 +2021,7 @@ Private Sub LoadVersion6Config()
 
     m_BanEvasion = ReadSettingB(SECTION_MODERATION, "BanEvasion", m_BanEvasion)
     m_Phrasebans = ReadSettingB(SECTION_MODERATION, "PhraseBans", m_Phrasebans)
+    m_Phrasekick = ReadSettingB(SECTION_MODERATION, "PhraseKick", m_Phrasekick)
     m_LevelBanW3 = ReadSettingL(SECTION_MODERATION, "LevelBanW3", m_LevelBanW3)
     m_LevelBanD2 = ReadSettingL(SECTION_MODERATION, "LevelBanD2", m_LevelBanD2)
     m_LevelBanMessage = ReadSetting(SECTION_MODERATION, "LevelBanMessage", m_LevelBanMessage)
@@ -2007,7 +2041,9 @@ Private Sub LoadVersion6Config()
     m_AutoSafelistLevel = ReadSettingL(SECTION_MODERATION, "AutoSafelistLevel", m_AutoSafelistLevel)
     m_ChannelProtection = ReadSettingB(SECTION_MODERATION, "ChannelProtect", m_ChannelProtection)
     m_QuietTime = ReadSettingB(SECTION_MODERATION, "QuietTime", m_QuietTime)
-
+    m_PingBan = ReadSettingB(SECTION_MODERATION, "PingBan", m_PingBan)
+    m_PingBanLevel = ReadSettingL(SECTION_MODERATION, "PingBanLevel", m_PingBanLevel)
+    
     m_ShowSplashScreen = ReadSettingB(SECTION_UI, "ShowSplashScreen", m_ShowSplashScreen)
     m_ShowWhisperBox = ReadSettingB(SECTION_UI, "ShowWhisperWindow", m_ShowWhisperBox)
     m_MinimizeOnStartup = ReadSettingB(SECTION_UI, "MinimizeOnStartup", m_MinimizeOnStartup)
