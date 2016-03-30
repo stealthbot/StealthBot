@@ -2218,7 +2218,7 @@ Private Function ReadSettingL(ByVal section As String, ByVal Key As String, Opti
     Dim sVal As String
     
     sVal = ReadSetting(section, Key, CStr(DefaultValue))
-    If StrictIsNumeric(sVal) Then
+    If IsNumeric(sVal) Then
         ReadSettingL = Val(sVal)
     Else
         ReadSettingL = DefaultValue
