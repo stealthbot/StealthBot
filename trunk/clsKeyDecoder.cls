@@ -88,7 +88,7 @@ End Function
 
 ' Returns true if the key was successfully validated
 Public Property Get IsValid() As Boolean
-    IsValid = Not CBool(kd_isValid(m_Handle) = 0)
+    IsValid = CBool(kd_isValid(m_Handle) = 1)
 End Property
 
 ' Returns the key provided in Initialize()
