@@ -805,7 +805,7 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     With pBuff
-        .InsertDWord Abs(CLng(Config.UseSpawn))
+        .InsertBool Config.UseSpawn
         .InsertNTString BotVars.CDKey
         
         If (LenB(Config.CDKeyOwnerName) > 0) Then
@@ -888,7 +888,7 @@ On Error GoTo ERROR_HANDLER:
     If Not oKey.CalculateHash(ds.ClientToken, ds.ServerToken) Then Exit Sub
     
     With pBuff
-        .InsertDWord Abs(CLng(Config.UseSpawn))
+        .InsertBool Config.UseSpawn
         .InsertDWord oKey.KeyLength
         .InsertDWord oKey.ProductValue
         .InsertDWord oKey.PublicValue
@@ -1471,7 +1471,7 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord ds.CRevVersion  'CRev Version
         .InsertDWord ds.CRevChecksum 'CRev Checksum
         .InsertDWord keys            'CDKey Count
-        .InsertDWord Abs(CLng(Config.UseSpawn))
+        .InsertBool Config.UseSpawn
         
         For i = 1 To keys
             If (i = 1) Then

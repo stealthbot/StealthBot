@@ -147,6 +147,14 @@ Public Function GetDWORD(Optional Peek As Boolean = False) As Long
     If (Not Peek) Then m_bufpos = (m_bufpos + 4)
 End Function
 
+Public Function InsertBool(ByVal Data As Boolean)
+    InsertDWord Abs(CLng(Data))
+End Function
+
+Public Function GetBool(Optional Peek As Boolean = False) As Boolean
+    GetBool = Not CBool(GetDWORD(Peek) = 0)
+End Function
+
 Public Function GetFileTime(Optional Peek As Boolean = False) As Date
     Dim ft As FILETIME 
 
