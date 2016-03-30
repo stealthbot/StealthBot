@@ -386,25 +386,26 @@ Public Sub OnOwner(Command As clsCommandObj)
 End Sub
 
 Public Sub OnPhrases(Command As clsCommandObj)
-    Dim sBuffer   As String
-    Dim aBuffer() As String
-    Dim i         As Integer
-    Dim found     As Integer
+    Dim sSubCommand As String
+    Dim iCount As Integer
     
-    For i = LBound(Phrases) To UBound(Phrases)
-        If (LenB(Trim$(Phrases(i))) > 0) Then
-            sBuffer = StringFormat("{0}{1}, ", sBuffer, Phrases(i))
-            found = found + 1
+    If (Command.IsValid) Then
+        sSubCommand = Command.Argument("subcommand")
+        
+        If (LenB(sSubCommand) = 0) Or (LCase$(sSubCommand) = "list") Then
+            If ListRespond(Command, Phrases, "Banned phrases{%p}: ", IIf(LenB(sSubCommand) = 0, 2, -1)) Then
+                Exit Sub
+            End If
         End If
-    Next i
-    
-    If (found > 0) Then
-        SplitByLen Left$(sBuffer, Len(sBuffer) - Len(", ")), 180, aBuffer, "Phrasebans: ", , ", "
-        For i = LBound(aBuffer) To UBound(aBuffer)
-            Command.Respond aBuffer(i)
-        Next i
+        
+        iCount = GetListCount(Phrases)
+        If iCount = 0 Then
+            Command.Respond "There are no banned phrases."
+        Else
+            Command.Respond StringFormat("There are {0} banned phrases. Use the '{1} list' command to show them.", iCount, Command.Name)
+        End If
     Else
-        Command.Respond "There are no phrasebans."
+        Command.Respond StringFormat("Invalid command. Correct usage: {0} [list/count]", Command.Name)
     End If
 End Sub
 
@@ -906,3 +907,55 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
 ERROR_HANDLER:
     frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modCommandCode.SearchDatabase()."
 End Sub
+
+' Gets the number of non-null items in a list. Optionally passes the list formatted as a string.
+Public Function GetListCount(ByRef aList() As String, Optional ByRef sList As String) As Integer
+    Dim i       As Integer
+    Dim iCount  As Integer
+    sList = vbNullString
+    
+    iCount = 0
+    For i = LBound(aList) To UBound(aList)
+        If (LenB(Trim$(aList(i))) > 0) Then
+            sList = StringFormat("{0}{1}, ", sList, aList(i))
+            iCount = iCount + 1
+        End If
+    Next i
+    sList = Left$(sList, Len(sList) - 2)
+    GetListCount = iCount
+End Function
+
+' Outputs the specified list in response to the given command.
+'   If more than iFailOnSize messages will be output (and the value is > -1), or there are no items, the function will fail.
+'   If the prefix contains {%p} that will be replaced with the formatted position of the output
+'     (x/y, where x is the number of the current message and y is the total number of messages)
+Public Function ListRespond(ByRef oCommand As clsCommandObj, ByRef aList() As String, _
+                            Optional ByVal sPrefix As String = vbNullString, Optional ByVal iFailOnSize As Integer = -1) As Boolean
+    Dim sBuffer     As String
+    Dim aBuffer()   As String
+    Dim iCount      As Integer
+    Dim i           As Integer
+    
+    ListRespond = False
+    
+    iCount = GetListCount(aList, sBuffer)
+    If (iCount > 0) Then
+        If (oCommand.IsLocal) Then
+            oCommand.Respond StringFormat("{0}{1}", Replace(sPrefix, "{%p}", vbNullString), sBuffer)
+            ListRespond = True
+        Else
+            Call SplitByLen(sBuffer, 200, aBuffer, sPrefix)
+            If iFailOnSize = -1 Or (UBound(aBuffer) + 1) < iFailOnSize Then
+                For i = LBound(aBuffer) To UBound(aBuffer)
+                    If UBound(aBuffer) > 0 Then
+                        oCommand.Respond Replace(aBuffer(i), "{%p}", StringFormat(" ({0}/{1})", (i + 1), UBound(aBuffer) + 1))
+                    Else
+                        oCommand.Respond Replace(aBuffer(i), "{%p}", vbNullString)
+                    End If
+                Next i
+                ListRespond = True
+            End If
+        End If
+    End If
+End Function
+

@@ -2082,6 +2082,16 @@
         States the currently active phrasebans.
       </description>
     </documentation>
+    
+    <arguments>
+        <argument name="subcommand" type="string" optional="1">
+            <documentation>
+                <description>
+                    The sub-command to use. Values are 'list' and 'count'.
+                </description>
+            </documentation>
+        </argument>
+    </arguments>
 
     <access>
       <rank>50</rank>
