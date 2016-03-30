@@ -184,7 +184,7 @@ Public Sub FullJoin(Channel As String, Optional ByVal i As Long = -1)
         PBuffer.InsertDWord &H2
     End If
     PBuffer.InsertNTString Channel
-    PBuffer.SendPacket &HC
+    PBuffer.SendPacket SID_JOINCHANNEL
 End Sub
 
 Public Function HexToStr(ByVal Hex1 As String) As String
@@ -202,7 +202,7 @@ Public Sub RejoinChannel(Channel As String)
     PBuffer.SendPacket &H10
     PBuffer.InsertDWord &H2
     PBuffer.InsertNTString Channel
-    PBuffer.SendPacket &HC
+    PBuffer.SendPacket SID_JOINCHANNEL
 End Sub
 
 Public Sub RequestProfile(strUser As String)

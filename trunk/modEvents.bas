@@ -193,15 +193,18 @@ End Sub
 Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     On Error GoTo ERROR_HANDLER
 
-    Dim mailCount         As Integer
-    Dim ToANSI            As String
-    Dim LeftAnotherChannel As Boolean
+    Dim mailCount   As Integer
+    Dim ToANSI      As String
+    Dim LastChannel As String
+    Dim sChannel    As String
     
     ' if our channel is for some reason null, we don't
     ' want to continue, possibly causing further errors
     If (LenB(ChannelName) = 0) Then
         Exit Sub
     End If
+    
+    LastChannel = g_Channel.Name
     
     Call frmChat.ClearChannel
     
@@ -210,41 +213,6 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         
         If (Len(ToANSI) > 0) Then
             ChannelName = ToANSI
-        End If
-    End If
-    
-    With g_Channel
-        LeftAnotherChannel = (LenB(.Name) > 0)
-    
-        .Name = ChannelName
-        .Flags = Flags
-        .JoinTime = UtcNow
-    End With
-    
-    SharedScriptSupport.MyChannel = ChannelName
-    
-    ' if UserInChannel events are off, -Ribose/2010-09-17
-    If SkipUICEvents Then
-        If LenB(BotVars.HomeChannel) = 0 Then
-            ' no home channel is set, any join is fine, turn on UserInChannel events
-            SkipUICEvents = False
-        ElseIf (StrComp(ChannelName, BotVars.HomeChannel, vbTextCompare) = 0) Then
-            ' this is home, turn on UserInChannel events
-            SkipUICEvents = False
-        ElseIf (g_Channel.IsSilent()) Then
-            ' this isn't home yet, but we are in a silent channel,
-            ' then home was not joinable, turn on UserInChannel events. ~Ribose
-            SkipUICEvents = False
-        Else
-            ' this isn't home yet, join home.
-            'FullJoin BotVars.HomeChannel
-            Exit Sub
-        End If
-    End If
-    
-    If (Len(g_Clan.Name) > 0) Then
-        If (StrComp(g_Channel.Name, "Clan " & g_Clan.Name, vbTextCompare) = 0) Then
-            RequestClanMOTD 1
         End If
     End If
     
@@ -260,12 +228,43 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
 
     ' if we've just left another channel, call event script
     ' function indicating that we've done so.
-    If (LeftAnotherChannel) Then
+    If (LenB(LastChannel) > 0) Then
+        ' show home channel in menu
+        sChannel = LastChannel
+        If (StrComp(LastChannel, BotVars.HomeChannel, vbTextCompare) <> 0) Then
+            sChannel = Replace(sChannel, "&", "&&", , , vbBinaryCompare)
+            If StrComp(sChannel, "-", vbBinaryCompare) = 0 Then
+                sChannel = "&-"
+            End If
+            frmChat.mnuLastChannel.Caption = sChannel & " (&Previous Channel)"
+        Else
+            frmChat.mnuLastChannel.Caption = vbNullString
+        End If
+        
+        BotVars.LastChannel = LastChannel
+        
         On Error Resume Next
         
         RunInAll "Event_ChannelLeave"
         
         On Error GoTo ERROR_HANDLER
+    Else
+        BotVars.LastChannel = vbNullString
+        frmChat.mnuLastChannel.Caption = vbNullString
+    End If
+    
+    With g_Channel
+        .Name = ChannelName
+        .Flags = Flags
+        .JoinTime = UtcNow
+    End With
+    
+    SharedScriptSupport.MyChannel = ChannelName
+    
+    If (Len(g_Clan.Name) > 0) Then
+        If (StrComp(g_Channel.Name, "Clan " & g_Clan.Name, vbTextCompare) = 0) Then
+            RequestClanMOTD 1
+        End If
     End If
 
     frmChat.AddChat RTBColors.JoinedChannelText, "-- Joined channel: ", _
@@ -296,11 +295,6 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     Else
         frmChat.tmrSilentChannel(1).Enabled = False
     End If
-
-    ' lets update our configuration file with the
-    ' current channel name so that we join the channel
-    ' again automatically if we disconnect or close the bot.
-    'Call WriteINI("Other", "LastChannel", ChannelName)
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' check for mail
@@ -532,9 +526,37 @@ Repeat4:
     End If
 End Sub
 
+Public Sub Event_LeftChatEnvironment()
+    On Error GoTo ERROR_HANDLER:
+    
+    BotVars.LastChannel = g_Channel.Name
+    
+    frmChat.ClearChannel
+    
+    SetTitle GetCurrentUsername & ", online on " & BotVars.Gateway
+    
+    frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
+    
+    frmChat.AddChat RTBColors.JoinedChannelText, "-- Left channel --"
+    
+    On Error Resume Next
+    
+    RunInAll "Event_ChannelLeave"
+    
+    On Error GoTo ERROR_HANDLER
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_LeftChatEnvironment()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
 Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountName As String)
 On Error GoTo ERROR_HANDLER:
     Dim D2CharName As String
+    Dim sChannel   As String
+    Dim ShowW3     As Boolean
+    Dim ShowD2     As Boolean
 
     LastWhisper = vbNullString
 
@@ -545,6 +567,9 @@ On Error GoTo ERROR_HANDLER:
     Call g_Queue.Clear
     
     g_Online = True
+    
+    ' in case this wasn't set before
+    ds.EnteredChatFirstTime = True
     
     Dim Stats As New clsUserStats
     
@@ -562,13 +587,28 @@ On Error GoTo ERROR_HANDLER:
         CurrentUsername = Mid(CurrentUsername, 3)
     End If
     
+    ' show home channel in menu
+    sChannel = Config.HomeChannel
+    sChannel = Replace(sChannel, "&", "&&", , , vbBinaryCompare)
+    If StrComp(sChannel, "-", vbBinaryCompare) = 0 Then
+        sChannel = "&-"
+    End If
+    frmChat.mnuHomeChannel.Caption = sChannel & " (Home)"
+    
     ' if D2 and on a char, we need to tell the whole world this so that Self is known later on
-    If (StrComp(Stats.Game, PRODUCT_D2DV, vbBinaryCompare)) = 0 Or (StrComp(Stats.Game, PRODUCT_D2XP, vbBinaryCompare)) = 0 Then
+    If (StrComp(Stats.Game, PRODUCT_D2DV, vbBinaryCompare) = 0) Or (StrComp(Stats.Game, PRODUCT_D2XP, vbBinaryCompare) = 0) Then
         If (LenB(Stats.CharacterName) > 0) Then
             D2CharName = " (with the character " & Stats.CharacterTitleAndName & ")"
             CurrentUsername = Stats.CharacterName & "*" & CurrentUsername
         End If
     End If
+    
+    ' setup Bot menu game-specific features
+    ShowW3 = (StrComp(Stats.Game, PRODUCT_WAR3, vbBinaryCompare) = 0) Or (StrComp(Stats.Game, PRODUCT_W3XP, vbBinaryCompare) = 0)
+    ShowD2 = (StrComp(Stats.Game, PRODUCT_D2DV, vbBinaryCompare) = 0) Or (StrComp(Stats.Game, PRODUCT_D2XP, vbBinaryCompare) = 0)
+    frmChat.mnuSepZ.Visible = (ShowW3 Or ShowD2)
+    frmChat.mnuIgnoreInvites.Visible = ShowW3
+    frmChat.mnuRealmSwitch.Visible = ShowD2
     
     Set Stats = Nothing
 
@@ -606,7 +646,7 @@ On Error GoTo ERROR_HANDLER:
     RequestSystemKeys
     If (LenB(BotVars.Gateway) > 0) Then
         ' PvPGN: we already have our gateway, we're logged on
-        'SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
+        SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
         
         Call InsertDummyQueueEntry
         
@@ -805,7 +845,7 @@ On Error GoTo ERROR_HANDLER:
                 
                 BotVars.Gateway = Mid$(Message, i + 1)
                 
-                'SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
+                SetTitle GetCurrentUsername & ", online on " & BotVars.Gateway
                 
                 Call DoChannelJoinHome
                 
@@ -2096,6 +2136,7 @@ On Error GoTo ERROR_HANDLER:
         frmChat.AddChat RTBColors.InformationText, "Received Channel List: "
     End If
     
+    ' save public channels
     Set PublicChannels = New Collection
     
     For x = 0 To UBound(sChannels)

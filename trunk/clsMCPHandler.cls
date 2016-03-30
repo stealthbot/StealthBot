@@ -131,6 +131,45 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.ChooseRealm()", Err.Number, Err.description, OBJECT_NAME))
 End Function
 
+' call this to handle the completed querying of realm servers
+Public Sub HandleQueryRealmServersResponse()
+On Error GoTo ERROR_HANDLER
+    Dim sTitle As String
+    Dim sUserChoice As String
+    
+    If ds.EnteredChatFirstTime Then
+        SEND_SID_LEAVECHAT
+    End If
+
+    frmChat.mnuRealmSwitch.Enabled = False
+    
+    If Not ds.MCPHandler Is Nothing Then
+        If ds.MCPHandler.ChooseRealm(sTitle, sUserChoice) Then
+            If LenB(sTitle) > 0 Then
+                Call ds.MCPHandler.RealmServerLogon(sTitle)
+            Else
+                ' shouldn't happen
+                Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Realm logon error: not found.")
+                Call SendEnterChatSequence
+                frmChat.mnuRealmSwitch.Enabled = True
+            End If
+        ElseIf LenB(sUserChoice) > 0 Then
+            Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] The realm {0}{1}{0} s offline or doesn't exist.", Chr$(34), sUserChoice))
+            Call SendEnterChatSequence
+            frmChat.mnuRealmSwitch.Enabled = True
+        Else
+            Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] All Diablo II realms are currently offline.")
+            Call SendEnterChatSequence
+            frmChat.mnuRealmSwitch.Enabled = True
+        End If
+    End If
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.HandleQueryRealmServersResponse()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
 ' call this to begin realm connection (logon via BNCS SID_LOGONREALMEX)
 ' the given realm must be known by name (stored with SetRealmServerInfo)
 Public Sub RealmServerLogon(ByVal sTitle As String)
@@ -673,6 +712,7 @@ Private Sub Event_RealmStartup(ByVal Success As Boolean, ByVal Message As String
         End If
         
         SendEnterChatSequence
+        frmChat.mnuRealmSwitch.Enabled = True
     End If
 End Sub
 
@@ -707,6 +747,7 @@ Private Sub Event_CharLogonResponse(ByVal Success As Boolean, ByVal Message As S
         SEND_MCP_MOTD
         
         SendEnterChatSequence
+        frmChat.mnuRealmSwitch.Enabled = True
     Else
         frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
         
@@ -787,6 +828,11 @@ Private Sub Event_CharListResponse()
             ' no entry, choose first character after X seconds
             RealmCharIndex = 0
         End If
+    End If
+    
+    If ds.EnteredChatFirstTime Then
+        ' always disable timer if they chose to switch character
+        RealmAutoChooseWait = -1
     End If
     
     m_RealmServerConnected = True

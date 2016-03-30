@@ -332,10 +332,15 @@ Public Function SendPacket(Optional PacketID As Byte)
     
     If (getCripple) Then
         Select Case (PacketID)
-            Case &HE, &HC:
+            Case SID_CHATCOMMAND, SID_JOINCHANNEL:
                 Clear
                 Exit Function
         End Select
+    End If
+    
+    If PacketID = SID_LEAVECHAT Then
+        ' there's no response to this one!
+        Call Event_LeftChatEnvironment
     End If
     
     ' resize temporary data buffer

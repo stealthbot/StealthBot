@@ -20,6 +20,7 @@ Begin VB.Form frmRealm
       ForeColor       =   &H00FFFFFF&
       Height          =   315
       Left            =   9480
+      Locked          =   -1  'True
       TabIndex        =   7
       Text            =   "Combo1"
       Top             =   1560
@@ -789,6 +790,7 @@ Private Sub Form_Unload(Cancel As Integer)
         End If
         
         SendEnterChatSequence
+        frmChat.mnuRealmSwitch.Enabled = True
     End If
     
     ds.MCPHandler.FormActive = False
@@ -824,8 +826,6 @@ End Sub
 
 Private Sub cboOtherRealms_KeyPress(KeyAscii As Integer)
     Call StopLoginTimer
-    
-    KeyAscii = 0
 End Sub
 
 Private Sub DisableGUI()
@@ -1460,7 +1460,7 @@ Private Function GetCharacterDetailText(ByVal CharIndex As Integer) As String
         NonExpansion = "non-"
     End If
     
-    GetCharacterDetailText = StringFormat("{0}{1}{2} is a {3}ladder, {4}hardcore, {5}expansion {6} in {7}.", _
+    GetCharacterDetailText = StringFormat("{0} is a {1}ladder, {2}hardcore, {3}expansion {4} in {5}.", _
             Stats.CharacterTitleAndName, NonLadder, NonHardcore, NonExpansion, Stats.CharacterClass, Stats.CurrentActAndDifficulty)
 End Function
 

@@ -205,16 +205,16 @@ Public Function ConvertTime(ByVal dblMS As Double, Optional seconds As Byte) As 
 End Function
 
 Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Integer) As Long
-    Dim key As String
+    Dim Key As String
     
-    key = GetProductKey(Product)
+    Key = GetProductKey(Product)
     
-    If ((Config.GetVersionByte(key) = -1) Or _
+    If ((Config.GetVersionByte(Key) = -1) Or _
         (UseHardcode = 1)) Then
         
         GetVerByte = GetProductInfo(Product).VersionByte
     Else
-        GetVerByte = Config.GetVersionByte(key)
+        GetVerByte = Config.GetVersionByte(Key)
     End If
     
 End Function
@@ -223,7 +223,7 @@ Public Function GetGamePath(ByVal Client As String) As String
     ' [override] XXHashes= functionality replaced by checkrevision.ini -> [CRev_XX] Path=
     ' removed ~Ribose/2010-08-12
     Dim CRevINIPath As String
-    Dim key As String
+    Dim Key As String
     Dim Path As String
     Dim sep1 As String
     Dim sep2 As String
@@ -232,8 +232,8 @@ Public Function GetGamePath(ByVal Client As String) As String
     'CRevINIPath = GetFilePath(FILE_CREV_INI, StringFormat("{0}\", App.Path))
     CRevINIPath = GetFilePath(FILE_CREV_INI)
     
-    key = GetProductKey(Client)
-    Path = ReadINI$(StringFormat("CRev_{0}", key), "Path", CRevINIPath)
+    Key = GetProductKey(Client)
+    Path = ReadINI$(StringFormat("CRev_{0}", Key), "Path", CRevINIPath)
     sep1 = vbNullString
     sep2 = vbNullString
     
@@ -246,18 +246,18 @@ Public Function GetGamePath(ByVal Client As String) As String
     GetGamePath = Path
 End Function
 
-Function MKL(value As Long) As String
+Function MKL(Value As Long) As String
     Dim Result As String * 4
     
-    Call CopyMemory(ByVal Result, value, 4)
+    Call CopyMemory(ByVal Result, Value, 4)
     
     MKL = Result
 End Function
 
-Function MKI(value As Integer) As String
+Function MKI(Value As Integer) As String
     Dim Result As String * 2
     
-    Call CopyMemory(ByVal Result, value, 2)
+    Call CopyMemory(ByVal Result, Value, 2)
     
     MKI = Result
 End Function
@@ -1625,14 +1625,14 @@ Public Function GetConfigFilePath() As String
     GetConfigFilePath = FilePath
 End Function
 
-Public Function GetFilePath(ByVal fileName As String, Optional DefaultPath As String = vbNullString) As String
+Public Function GetFilePath(ByVal FileName As String, Optional DefaultPath As String = vbNullString) As String
     Dim s As String
     
-    If (InStr(fileName, "\") = 0) Then
+    If (InStr(FileName, "\") = 0) Then
         If (LenB(DefaultPath) = 0) Then
-            GetFilePath = StringFormat("{0}{1}", GetProfilePath(), fileName)
+            GetFilePath = StringFormat("{0}{1}", GetProfilePath(), FileName)
         Else
-            GetFilePath = StringFormat("{0}{1}", DefaultPath, fileName)
+            GetFilePath = StringFormat("{0}{1}", DefaultPath, FileName)
         End If
         
         s = Config.GetFilePath(FileName)
@@ -1643,7 +1643,7 @@ Public Function GetFilePath(ByVal fileName As String, Optional DefaultPath As St
             End If
         End If
     Else
-        GetFilePath = fileName
+        GetFilePath = FileName
     End If
 End Function
 
@@ -3205,11 +3205,11 @@ End Function
 
 Public Function GetProductInfo(ByVal sProductCode As String) As udtProductInfo
     Dim pi As udtProductInfo
-    Dim index As Integer
+    Dim Index As Integer
     sProductCode = UCase$(sProductCode)
 
-    For index = 0 To UBound(ProductList)
-        pi = ProductList(index)
+    For Index = 0 To UBound(ProductList)
+        pi = ProductList(Index)
         
         If StrComp(pi.Code, sProductCode, vbBinaryCompare) = 0 Or _
             StrComp(pi.Code, StrReverse(sProductCode), vbBinaryCompare) = 0 Or _

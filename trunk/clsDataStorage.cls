@@ -28,7 +28,7 @@ Private m_ServerSig     As String
 Private m_EmailRegDelay As Boolean
 Private m_NLS           As clsNLS
 Private m_MCPHandler    As clsMCPHandler
-Private m_UniqName      As String
+Private m_FirstTimeChat As Boolean
 
 Public Sub List()
     With frmChat
@@ -62,6 +62,7 @@ Public Sub Reset()
     m_EmailRegDelay = False
     Set m_MCPHandler = Nothing
     Set m_NLS = Nothing
+    m_FirstTimeChat = False
 End Sub
 
 Public Property Get LogonType() As Long
@@ -176,11 +177,11 @@ Public Property Get MCPHandler() As clsMCPHandler
     Set MCPHandler = m_MCPHandler
 End Property
 
-Public Property Let UniqueName(sData As String)
-    m_UniqName = sData
+Public Property Let EnteredChatFirstTime(bData As Boolean)
+    m_FirstTimeChat = bData
 End Property
-Public Property Get UniqueName() As String
-    UniqueName = m_UniqName
+Public Property Get EnteredChatFirstTime() As Boolean
+    EnteredChatFirstTime = m_FirstTimeChat
 End Property
 
 Private Sub Class_Terminate()

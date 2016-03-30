@@ -13,8 +13,10 @@ Public Const SID_STARTVERSIONING        As Byte = &H6
 Public Const SID_REPORTVERSION          As Byte = &H7
 Public Const SID_ENTERCHAT              As Byte = &HA
 Public Const SID_GETCHANNELLIST         As Byte = &HB
+Public Const SID_JOINCHANNEL            As Byte = &HC
 Public Const SID_CHATCOMMAND            As Byte = &HE
 Public Const SID_CHATEVENT              As Byte = &HF
+Public Const SID_LEAVECHAT              As Byte = &H10
 Public Const SID_LOCALEINFO             As Byte = &H12
 Public Const SID_UDPPINGRESPONSE        As Byte = &H14
 Public Const SID_MESSAGEBOX             As Byte = &H19
@@ -367,6 +369,23 @@ On Error GoTo ERROR_HANDLER:
     pBuff.InsertNTString BotVars.Username
     pBuff.InsertNTString Config.CustomStatstring
     pBuff.SendPacket SID_ENTERCHAT
+    Set pBuff = Nothing
+
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_ENTERCHAT()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
+'*******************************
+'SID_LEAVECHAT (0x10) C->S
+'*******************************
+' [blank]
+'*******************************
+Public Sub SEND_SID_LEAVECHAT()
+On Error GoTo ERROR_HANDLER:
+    Dim pBuff As New clsDataBuffer
+    pBuff.SendPacket SID_LEAVECHAT
     Set pBuff = Nothing
 
     Exit Sub
@@ -1173,8 +1192,6 @@ Private Sub RECV_SID_QUERYREALMS2(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
     
     Dim lCount      As Long
-    Dim sTitle      As String
-    Dim sUserChoice As String
     Dim i           As Integer
     Dim List()      As Variant
     Dim Server(0 To 1) As String
@@ -1208,23 +1225,7 @@ On Error GoTo ERROR_HANDLER:
     
     'Call frmChat.AddChat(RTBColors.SuccessText, "[BNCS] Received Realm list.")
     
-    If Not ds.MCPHandler Is Nothing Then
-        If ds.MCPHandler.ChooseRealm(sTitle, sUserChoice) Then
-            If LenB(sTitle) > 0 Then
-                Call ds.MCPHandler.RealmServerLogon(sTitle)
-            Else
-                ' shouldn't happen
-                Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Realm logon error: not found.")
-                Call SendEnterChatSequence
-            End If
-        ElseIf LenB(sUserChoice) > 0 Then
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] The realm {0}{1}{0} s offline or doesn't exist.", Chr$(34), sUserChoice))
-            Call SendEnterChatSequence
-        Else
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] All Diablo II realms are currently offline.")
-            Call SendEnterChatSequence
-        End If
-    End If
+    Call ds.MCPHandler.HandleQueryRealmServersResponse
     
     Exit Sub
 ERROR_HANDLER:
@@ -1237,7 +1238,7 @@ End Sub
 '*******************************
 ' [Blank]
 '*******************************
-Private Sub SEND_SID_QUERYREALMS2()
+Public Sub SEND_SID_QUERYREALMS2()
 On Error GoTo ERROR_HANDLER:
 
     Dim pBuff As New clsDataBuffer
@@ -1914,31 +1915,37 @@ End Function
 
 Public Sub SendEnterChatSequence()
 On Error GoTo ERROR_HANDLER:
-    If ((Not BotVars.Product = "VD2D") And (Not BotVars.Product = "PX2D") And _
-        (Not BotVars.Product = "PX3W") And (Not BotVars.Product = "3RAW")) Then
+    If ds.EnteredChatFirstTime Then
+        Call DoChannelJoinHome(False)
+    Else
+        ds.EnteredChatFirstTime = True
         
-        If (Not BotVars.UseUDP) Then
-            SEND_SID_UDPPINGRESPONSE
-            'We dont use ICONDATA .SendPacket &H2D
-        End If
-    End If
-    
-    SEND_SID_ENTERCHAT
-    SEND_SID_GETCHANNELLIST
-    
-    BotVars.Gateway = Config.PredefinedGateway
-    If (LenB(BotVars.Gateway) = 0) Then
         If ((Not BotVars.Product = "VD2D") And (Not BotVars.Product = "PX2D") And _
             (Not BotVars.Product = "PX3W") And (Not BotVars.Product = "3RAW")) Then
-            ' join nowhere to force non-W3-non-D2 to enter chat environment
-            ' so they can use /whoami (see Event_ChannelJoinError for where this completes)
-            Call FullJoin(BotVars.Product & BotVars.Username & BotVars.HomeChannel, 0)
-        Else
-            SEND_SID_CHATCOMMAND "/whoami"
+            
+            If (Not BotVars.UseUDP) Then
+                SEND_SID_UDPPINGRESPONSE
+                'We dont use ICONDATA .SendPacket &H2D
+            End If
         End If
-    Else
-        'PvPGN: Straight home
-        Call DoChannelJoinHome
+        
+        SEND_SID_ENTERCHAT
+        SEND_SID_GETCHANNELLIST
+        
+        BotVars.Gateway = Config.PredefinedGateway
+        If (LenB(BotVars.Gateway) = 0) Then
+            If ((Not BotVars.Product = "VD2D") And (Not BotVars.Product = "PX2D") And _
+                (Not BotVars.Product = "PX3W") And (Not BotVars.Product = "3RAW")) Then
+                ' join nowhere to force non-W3-non-D2 to enter chat environment
+                ' so they can use /whoami (see Event_ChannelJoinError for where this completes)
+                Call FullJoin(BotVars.Product & BotVars.Username & BotVars.HomeChannel, 0)
+            Else
+                SEND_SID_CHATCOMMAND "/whoami"
+            End If
+        Else
+            'PvPGN: Straight home
+            Call DoChannelJoinHome
+        End If
     End If
     
     Exit Sub
@@ -1947,30 +1954,49 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.SendEnterChatSequence()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
-Public Sub DoChannelJoinHome()
+' do channel join home (first time?)
+Public Sub DoChannelJoinHome(Optional FirstTime As Boolean = True)
 On Error GoTo ERROR_HANDLER:
 
-    SkipUICEvents = True
+    'SkipUICEvents = True
     
-    If (LenB(BotVars.HomeChannel) = 0) Or Config.DefaultChannelJoin Then
-        ' empty homechannel or
-        ' config override to force joinhome
-        If BotVars.Product = "PX2D" Or BotVars.Product = "VD2D" Then
-            Call FullJoin(BotVars.Product, 5)
-        Else
-            Call FullJoin(BotVars.Product, 1)
-        End If
+    If (FirstTime And Config.DefaultChannelJoin) Then
+        Call DoChannelJoinProductHome
     End If
     
-    If (LenB(BotVars.HomeChannel) <> 0) Then
+    If (LenB(BotVars.LastChannel) > 0) Then
+        ' go to "last channel" (for /reconnect and re-entering chat)
+        Call FullJoin(BotVars.LastChannel, 0)
+    ElseIf (LenB(BotVars.HomeChannel) = 0) Then
+        ' do product home join instead
+        Call DoChannelJoinProductHome
+    Else
         ' go home
-        Call FullJoin(BotVars.HomeChannel, 2)
+        Call FullJoin(BotVars.HomeChannel, 0)
     End If
     
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.DoChannelJoinHome()", Err.Number, Err.description, OBJECT_NAME))
+End Sub
+
+
+Public Sub DoChannelJoinProductHome()
+    On Error GoTo ERROR_HANDLER:
+    
+    ' empty homechannel or
+    ' config override to force joinhome
+    If BotVars.Product = "PX2D" Or BotVars.Product = "VD2D" Then
+        Call FullJoin(BotVars.Product, 5)
+    Else
+        Call FullJoin(BotVars.Product, 1)
+    End If
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.DoChannelJoinProductHome()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 Public Sub DoQueryRealms()

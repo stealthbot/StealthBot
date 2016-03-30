@@ -64,6 +64,7 @@ Private m_bPlugBan                      As Boolean
 Private m_bClientBans                   As Boolean
 Private m_byTSSetting                   As Byte
 Private m_sHomeChannel                  As String
+Private m_sLastChannel                  As String
 Private m_bQuietTime                    As Boolean
 Private m_bUseBackupChan                As Boolean
 Private m_sBackupChan                   As String
@@ -476,6 +477,14 @@ End Property
 
 Public Property Let HomeChannel(ByVal sHomeChannel As String)
     m_sHomeChannel = sHomeChannel
+End Property
+
+Public Property Get LastChannel() As String
+    LastChannel = m_sLastChannel
+End Property
+
+Public Property Let LastChannel(ByVal sLastChannel As String)
+    m_sLastChannel = sLastChannel
 End Property
 
 Public Property Get QuietTime() As Boolean

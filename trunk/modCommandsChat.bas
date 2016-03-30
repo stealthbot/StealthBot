@@ -152,18 +152,13 @@ Public Sub OnFRem(Command As clsCommandObj)
 End Sub
 
 Public Sub OnHome(Command As clsCommandObj)
-    If LenB(BotVars.HomeChannel) = 0 Then
-        ' empty homechannel
-        If BotVars.Product = "PX2D" Or BotVars.Product = "VD2D" Then
-            Call FullJoin(BotVars.Product, 5)
-        Else
-            Call FullJoin(BotVars.Product, 1)
-        End If
+    If (LenB(BotVars.HomeChannel) = 0) Then
+        ' do product home join instead
+        Call DoChannelJoinProductHome
     Else
         ' go home
-        Call FullJoin(BotVars.HomeChannel, 2)
+        Call FullJoin(BotVars.HomeChannel, 0)
     End If
-    'Call frmChat.AddQ("/join " & BotVars.HomeChannel, PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
 End Sub
 
 Public Sub OnIgnore(Command As clsCommandObj)
@@ -292,24 +287,28 @@ End Sub
 
 Public Sub OnReconnect(Command As clsCommandObj)
     If (g_Online) Then
-        Dim temp As String
-        temp = BotVars.HomeChannel
-    
-        BotVars.HomeChannel = g_Channel.Name
+        Dim LastChannel As String
+        
+        If LenB(g_Channel.Name) = 0 And LenB(BotVars.LastChannel) > 0 Then
+            ' already outside chat environment
+            LastChannel = BotVars.LastChannel
+        Else
+            ' in chat room
+            LastChannel = g_Channel.Name
+        End If
         
         Call frmChat.DoDisconnect
         
-        frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Reconnecting by command, please wait..."
+        'frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Reconnecting by command, please wait..."
         
         Pause 1
         
-        frmChat.AddChat RTBColors.SuccessText, "Connection initialized."
+        'frmChat.AddChat RTBColors.SuccessText, "Connection initialized."
         
         Call frmChat.DoConnect
         
-        Pause 3, True
-        
-        BotVars.HomeChannel = temp
+        ' reinstate last channel
+        BotVars.LastChannel = LastChannel
     Else
         frmChat.AddChat RTBColors.SuccessText, "Connection initialized."
         

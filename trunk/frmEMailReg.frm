@@ -236,7 +236,7 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
-    If Not ClosedProperly Then
+    If Not ClosedProperly And g_Online Then
         Call DoRegisterEmail("ASKLATER")
     End If
 End Sub
