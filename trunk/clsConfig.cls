@@ -1516,7 +1516,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_FEATURES, "GreetMessage", m_GreetMessage
     WriteSetting SECTION_FEATURES, "GreetMessageText", m_GreetMessageText
     WriteSetting SECTION_FEATURES, "WhisperGreet", m_WhisperGreet
-    WriteSetting SECTION_FEATURES, "IdleMessage", m_IdleMessageText
+    WriteSetting SECTION_FEATURES, "IdleMessage", m_IdleMessage
     WriteSetting SECTION_FEATURES, "IdleText", m_IdleMessageText
     WriteSetting SECTION_FEATURES, "IdleDelay", m_IdleMessageDelay
     WriteSetting SECTION_FEATURES, "IdleType", m_IdleMessageType
