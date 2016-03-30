@@ -455,11 +455,15 @@ Public Function StripRealm(ByVal Username As String) As String
         Username = Replace(Username, "@USEast", vbNullString, 1)
         Username = Replace(Username, "@Asia", vbNullString, 1)
         Username = Replace(Username, "@Euruope", vbNullString, 1)
+        Username = Replace(Username, "@Beta", vbNullString, 1)
         
         Username = Replace(Username, "@Lordaeron", vbNullString, 1)
         Username = Replace(Username, "@Azeroth", vbNullString, 1)
         Username = Replace(Username, "@Kalimdor", vbNullString, 1)
         Username = Replace(Username, "@Northrend", vbNullString, 1)
+        Username = Replace(Username, "@Westfall", vbNullString, 1)
+        
+        Username = Replace(Username, "@Blizzard", vbNullString, 1)
     End If
     
     StripRealm = Username
