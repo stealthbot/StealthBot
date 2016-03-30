@@ -4437,17 +4437,17 @@ Function KeyToIndex(ByVal sKey As String) As Byte
     
 End Function
 
-Sub ShowPanel(ByVal index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
+Sub ShowPanel(ByVal Index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
 
     Static ActivePanel As Integer
     
     If PanelsInitialized Then
         Dim nod As cTreeViewNode
         Dim i As Integer
-        If index <> 8 Then
+        If Index <> 8 Then
             For i = 1 To tvw.NodeCount
                 Set nod = tvw.nodes.Item(i)
-                If Not nod.Selected And KeyToIndex(nod.Key) = index Then
+                If Not nod.Selected And KeyToIndex(nod.Key) = Index Then
                     nod.Selected = True
                     Exit For
                 End If
@@ -4459,8 +4459,8 @@ Sub ShowPanel(ByVal index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
             ActivePanel = KeyToIndex("splash")
         Else
             'fraPanel(ActivePanel).ZOrder vbSendToBack
-            fraPanel(index).ZOrder vbBringToFront
-            ActivePanel = index
+            fraPanel(Index).ZOrder vbBringToFront
+            ActivePanel = Index
             Config.LastSettingsPanel = ActivePanel
             
             'Debug.Print "Writing: " & ActivePanel
@@ -4513,27 +4513,27 @@ End Sub
 Sub lblAddCurrentKey_Click()
     Dim keys As Collection
     Dim Item As Variant
-    Dim key1 As String
-    Dim key2 As String
+    Dim Key1 As String
+    Dim Key2 As String
     
     ' Load the list
     Set keys = ListFileLoad(GetFilePath("Keys.txt"))
     
-    key1 = UCase$(CDKeyReplacements(txtCdKey.Text))
-    key2 = UCase$(CDKeyReplacements(txtExpKey.Text))
+    Key1 = UCase$(CDKeyReplacements(txtCDKey.Text))
+    Key2 = UCase$(CDKeyReplacements(txtExpKey.Text))
     
     ' if it's already there, do nothing.
     For Each Item In keys
-        If StrComp(CStr(Item), key1, vbTextCompare) = 0 Then key1 = vbNullString
-        If StrComp(CStr(Item), key2, vbTextCompare) = 0 Then key2 = vbNullString
+        If StrComp(CStr(Item), Key1, vbTextCompare) = 0 Then Key1 = vbNullString
+        If StrComp(CStr(Item), Key2, vbTextCompare) = 0 Then Key2 = vbNullString
     Next Item
     
     ' Add the keys
-    If LenB(key1) > 0 Then keys.Add key1
-    If LenB(key2) > 0 Then keys.Add key2
+    If LenB(Key1) > 0 Then keys.Add Key1
+    If LenB(Key2) > 0 Then keys.Add Key2
     
     ' Save the list
-    If LenB(key1) > 0 Or LenB(key2) > 0 Then
+    If LenB(Key1) > 0 Or LenB(Key2) > 0 Then
         ListFileSave GetFilePath("Keys.txt"), keys
     End If
     
@@ -4541,7 +4541,7 @@ Sub lblAddCurrentKey_Click()
 End Sub
 
 Private Sub lblManageKeys_Click()
-    If LenB(txtCdKey.Text) > 0 Then
+    If LenB(txtCDKey.Text) > 0 Then
         Call lblAddCurrentKey_Click
     End If
     
@@ -4563,7 +4563,7 @@ Sub Form_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single
     lblManageKeys.ForeColor = vbWhite
 End Sub
 
-Sub fraPanel_MouseMove(index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
+Sub fraPanel_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
     lblAddCurrentKey.ForeColor = vbWhite
     lblManageKeys.ForeColor = vbWhite
 End Sub
@@ -4648,10 +4648,10 @@ Private Function SaveSettings() As Boolean
         'Case optCHAT.Value: s = PRODUCT_CHAT
     End Select
     
-    If Not DoCDKeyLengthCheck(txtCdKey.Text, s) Then
+    If Not DoCDKeyLengthCheck(txtCDKey.Text, s) Then
         If MsgBox("Your CD key is of an invalid Length for the product you have chosen. Do you want to save anyway?", vbExclamation + vbYesNo, "StealthBot Settings") = vbNo Then
             ShowPanel spConnectionConfig
-            txtCdKey.SetFocus
+            txtCDKey.SetFocus
             SaveSettings = False
             Exit Function
         End If
@@ -4690,7 +4690,6 @@ Private Function SaveSettings() As Boolean
             AddBNLSServer Config.BNLSServer
         End If
     End If
->>>>>>> reorg
     
     ' Save the BNLS server list
     With cboBNLSServer
@@ -5045,7 +5044,7 @@ Sub optSTAR_Click()
     chkSHR.Visible = True
     chkSpawn.Enabled = True
     chkJPN.Visible = True
-    txtCdKey.Enabled = True
+    txtCDKey.Enabled = True
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     If (chkSHR.Value) Then
@@ -5064,7 +5063,7 @@ Sub optWAR3_Click()
     chkSHR.Visible = False
     chkSpawn.Enabled = False
     chkJPN.Visible = False
-    txtCdKey.Enabled = True
+    txtCDKey.Enabled = True
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     SetHashPath GetGamePath("3RAW")
@@ -5075,7 +5074,7 @@ Sub optD2DV_Click()
     chkSHR.Visible = False
     chkSpawn.Enabled = False
     chkJPN.Visible = False
-    txtCdKey.Enabled = True
+    txtCDKey.Enabled = True
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = True
     SetHashPath GetGamePath("VD2D")
@@ -5086,7 +5085,7 @@ Sub optW2BN_Click()
     chkSHR.Visible = False
     chkSpawn.Enabled = True
     chkJPN.Visible = False
-    txtCdKey.Enabled = True
+    txtCDKey.Enabled = True
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     SetHashPath GetGamePath("NB2W")
@@ -5097,7 +5096,7 @@ Sub optSEXP_Click()
     chkSHR.Visible = False
     chkSpawn.Enabled = False
     chkJPN.Visible = False
-    txtCdKey.Enabled = True
+    txtCDKey.Enabled = True
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     SetHashPath GetGamePath("RATS")
@@ -5108,7 +5107,7 @@ Sub optD2XP_Click()
     chkSHR.Visible = False
     chkSpawn.Enabled = False
     chkJPN.Visible = False
-    txtCdKey.Enabled = True
+    txtCDKey.Enabled = True
     txtExpKey.Enabled = True
     chkUseRealm.Enabled = True
     SetHashPath GetGamePath("PX2D")
@@ -5119,7 +5118,7 @@ Sub optW3XP_Click()
     chkSHR.Visible = False
     chkSpawn.Enabled = False
     chkJPN.Visible = False
-    txtCdKey.Enabled = True
+    txtCDKey.Enabled = True
     txtExpKey.Enabled = True
     chkUseRealm.Enabled = False
     SetHashPath GetGamePath("PX3W")
@@ -5130,7 +5129,7 @@ Sub optDRTL_Click()
     chkSHR.Visible = True
     chkSpawn.Enabled = False
     chkJPN.Visible = False
-    txtCdKey.Enabled = False
+    txtCDKey.Enabled = False
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     If (chkSHR.Value) Then

@@ -805,7 +805,7 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     With pBuff
-        .InsertDWord Abs(CLng(Config.UseSpawn)))
+        .InsertDWord Abs(CLng(Config.UseSpawn))
         .InsertNTString BotVars.CDKey
         
         If (LenB(Config.CDKeyOwnerName) > 0) Then
@@ -1477,7 +1477,7 @@ On Error GoTo ERROR_HANDLER:
             If (i = 1) Then
                 sKey = BotVars.CDKey
             ElseIf (i = 2) Then
-                sKey = BotVars.EXPKey
+                sKey = BotVars.ExpKey
             Else
                 sKey = ReadCfg$("Main", StringFormat("CDKey{0}", i))
             End If
