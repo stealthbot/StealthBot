@@ -2339,7 +2339,7 @@
       <argument name="subcommand" type="word" optional="1">
         <documentation>
           <description>
-            The sub-command to use. 'On', 'Off', or 'Status'
+            The sub-command to use. 'on', 'off', or 'status'
           </description>
         </documentation>
       </argument>
@@ -2679,10 +2679,10 @@
     </documentation>
 
     <arguments>
-      <argument name="SubCommand" type="word">
+      <argument name="SubCommand" type="word" optional="1">
         <documentation>
           <description>
-            The subcommand to use, must be: 'on', 'off', or 'whisper'
+            The subcommand to use, must be: 'on', 'off', 'whisper', 'status', or 'set'
           </description>
         </documentation>
       </argument>
@@ -2690,7 +2690,7 @@
       <argument name="Value" type="string" optional="1">
         <documentation>
           <description>
-            The whisper subcommand to use, must be: 'on', or 'off'
+            The whisper subcommand to use: 'on' or 'off'
           </description>
         </documentation>
       </argument>
@@ -2764,7 +2764,7 @@
       <argument name="subcommand" type="word" optional="1">
         <documentation>
           <description>
-            The subcommand to use, Status, On, or Off
+            The subcommand to use: 'status', 'on', or 'off'
           </description>
         </documentation>
       </argument>
@@ -2791,7 +2791,7 @@
       <argument name="filter" type="string">
         <documentation>
           <description>
-            The phrase to filter, may contains wildcards.
+            The phrase to filter.
           </description>
         </documentation>
       </argument>
@@ -2818,7 +2818,7 @@
       <argument name="filter" type="string">
         <documentation>
           <description>
-            The phrase to unfilter, may contains wildcards.
+            The phrase to unfilter.
           </description>
         </documentation>
       </argument>
@@ -2845,7 +2845,7 @@
       <argument name="username" type="word">
         <documentation>
           <description>
-            The username to block, may contains wildcards.
+            The username to block.
           </description>
         </documentation>
       </argument>
@@ -2872,7 +2872,7 @@
       <argument name="username" type="word">
         <documentation>
           <description>
-            The username to block, may contains wildcards.
+            The username to block.
           </description>
         </documentation>
       </argument>
@@ -3041,7 +3041,7 @@
       <argument name="subcommand" type="word" optional="1">
         <documentation>
           <description>
-            The sub-command to use. 'On', 'Off', or 'Status'
+            The sub-command to use: 'on', 'off', or 'status'
           </description>
         </documentation>
       </argument>
@@ -3068,8 +3068,16 @@
       <argument name="subcommand" type="word" optional="1">
         <documentation>
           <description>
-            The sub-command to use. 'On', 'Off', or 'Status'
+            The sub-command to use. 'on', 'off', 'kick', or 'status'
           </description>
+        </documentation>
+      </argument>
+      
+      <argument name="Value" type="word" optional="1">
+        <documentation>
+            <description>
+                The value to use with the sub-command.
+            </description>
         </documentation>
       </argument>
     </arguments>
@@ -3198,7 +3206,7 @@
       <argument name="type" type="word">
         <documentation>
           <description>
-            The type to set the idle to, [Message, Quote, Uptime, MP3]
+            The type of idle message to use: message, quote, uptime, or mp3
           </description>
 
           <specialnotes>
@@ -3465,10 +3473,10 @@
     </documentation>
 
     <arguments>
-      <argument name="Enable" type="word">
+      <argument name="Enable" type="word" optional="1">
         <documentation>
           <description>
-            'On' or 'Off', to enable or disable the idle.
+            'on', 'off', or 'toggle' to enable or disable the idle.
           </description>
         </documentation>
       </argument>
@@ -3718,7 +3726,7 @@
       <argument name="subcommand" type="word">
         <documentation>
           <description>
-            The Sub Command to use, On, Off, Kick, Delay, Status
+            The sub-command to use: on, off, kick, delay, or status
           </description>
 
           <specialnotes>
@@ -3734,7 +3742,7 @@
       <argument name="value" type="word" optional="1">
         <documentation>
           <description>
-            Subcommand specific value, On, Off, or number of seconds.
+            Subcommand specific value: on, off, or number of seconds.
           </description>
         </documentation>
       </argument>
@@ -3917,7 +3925,7 @@
       <argument name="subcommand" type="word">
         <documentation>
           <description>
-            The subcommand to use, Private, Public, Mail, MOTD
+            The subcommand to use: private, public, mail, or MOTD
           </description>
 
           <specialnotes>
@@ -3959,7 +3967,7 @@
       <argument name="subcommand" type="word">
         <documentation>
           <description>
-            The subcommand to use, On, Off, Delay, Status.
+            The subcommand to use: on, off, delay, or status.
           </description>
 
           <specialnotes>
@@ -4369,8 +4377,16 @@
       <argument name="subcommand" type="word" optional="1">
         <documentation>
           <description>
-            The sub commands to use, On, Off, or Status, To turn on, turn off, or display the status of quiet time respectivly.
+            The sub commands to use: on, off, kick, or status.
           </description>
+        </documentation>
+      </argument>
+      
+      <argument name="Value" type="word" optional="1">
+        <documentation>
+            <description>
+                The sub-command value. Only used with the 'kick' command. On or off.
+            </description>
         </documentation>
       </argument>
     </arguments>

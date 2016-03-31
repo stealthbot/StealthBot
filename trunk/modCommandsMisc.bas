@@ -95,14 +95,19 @@ Public Sub OnGreet(Command As clsCommandObj)
                 Select Case (LCase$(Command.Argument("Value")))
                     Case "on":
                         BotVars.WhisperGreet = True
-                        Command.Respond "Greet messages will now be whispered."
-                        
                     Case "off":
                         BotVars.WhisperGreet = False
-                        Command.Respond "Gree messages will no longer be whispered."
+                    Case "toggle", vbNullString:
+                        BotVars.WhisperGreet = Not BotVars.WhisperGreet
                 End Select
                 
-            Case "status":
+                If BotVars.WhisperGreet Then
+                    Command.Respond "Greet messages will be whispered."
+                Else
+                    Command.Respond "Gree messages will not be whispered."
+                End If
+                
+            Case "status", vbNullString:
                 If (BotVars.UseGreet) Then
                     If (BotVars.WhisperGreet) Then
                         Command.Respond "Greet messages are currently enabled, and whispered."
@@ -122,7 +127,7 @@ Public Sub OnGreet(Command As clsCommandObj)
                 End If
         End Select
         
-        If LCase$(Command.Argument("SubCommand")) <> "status" Then
+        If ((LenB(Command.Argument("SubCommand")) > 0) And (LCase$(Command.Argument("SubCommand")) <> "status")) Then
             Config.GreetMessage = BotVars.UseGreet
             Config.WhisperGreet = BotVars.WhisperGreet
             Config.GreetMessageText = BotVars.GreetMsg
@@ -133,30 +138,40 @@ End Sub
 
 Public Sub OnIdle(Command As clsCommandObj)
     If (Command.IsValid) Then
-        Select Case LCase$(Command.Argument("Enable"))
-            Case "on", "true":
-                Config.IdleMessage = True
-                Command.Respond "Idles activated."
-            
-            Case "off", "false":
-                Config.IdleMessage = False
-                Command.Respond "Idles deactivated."
-        End Select
+        If (LenB(Command.Argument("Enable")) > 0) Then
+            Select Case LCase$(Command.Argument("Enable"))
+                Case "on", "true":
+                    Config.IdleMessage = True
+                Case "off", "false":
+                    Config.IdleMessage = False
+                Case "toggle":
+                    Config.IdleMessage = Not Config.IdleMessage
+            End Select
         
-        Call Config.Save
+            If Config.IdleMessage Then
+                Command.Respond "Idle messages enabled."
+            Else
+                Command.Respond "Idle messages disabled."
+            End If
+        
+            Call Config.Save
+        Else
+            Command.Respond "Idle messages are currently " & IIf(Config.IdleMessage, "enabled", "disabled") & "."
+        End If
     End If
 End Sub
 
 Public Sub OnIdleTime(Command As clsCommandObj)
     Dim delay As Integer
     If (Command.IsValid) Then
-        delay = Val(Command.Argument("Delay"))
-        Config.IdleMessageDelay = (delay * 2)
-        Call Config.Save
+        If (LenB(Command.Argument("Delay")) > 0) Then
+            delay = Val(Command.Argument("Delay"))
+            Config.IdleMessageDelay = (delay * 2)
+            Call Config.Save
+        End If
         
-        Command.Respond StringFormat("Idle wait time set to {0} minute{1}.", delay, IIf(delay > 1, "s", vbNullString))
-    Else
-        Command.Respond "You must supply a delay when setting the idle time."
+        Command.Respond StringFormat("The idle message wait time {0} {1} minute{2}.", _
+            IIf(LenB(Command.Argument("Delay")) > 0, "has been set to", "is"), delay, IIf(delay > 1, "s", vbNullString))
     End If
 End Sub
 
@@ -165,27 +180,27 @@ Public Sub OnIdleType(Command As clsCommandObj)
         Select Case (LCase$(Command.Argument("Type")))
             Case "msg", "message":
                 Config.IdleMessageType = "msg"
-                Command.Respond "Idle type set to [ msg ]"
+                Command.Respond "Idle message type set to: message"
                 
             Case "quote", "quotes":
                 Config.IdleMessageType = "quote"
-                Command.Respond "Idle type set to [ quote ]"
+                Command.Respond "Idle message type set to: quote"
                 
             Case "uptime":
                 Config.IdleMessageType = "uptime"
-                Command.Respond "Idle type set to [ uptime ]"
+                Command.Respond "Idle message type set to: uptime"
                 
             Case "mp3":
                 Config.IdleMessageType = "mp3"
-                Command.Respond "Idle type set to [ MP3 ]"
+                Command.Respond "Idle message type set to: MP3"
             
+            Case vbNullString:
+                Command.Respond "The idle message type is currently: " & Config.IdleMessageType
             Case Else:
-                Command.Respond "Unknown Idle type, Type must be: Msg, Quote, Uptime, or MP3"
+                Command.Respond "Unknown idle message type. Type must be: msg, quote, uptime, or mp3"
         End Select
         
         Call Config.Save
-    Else
-        Command.Respond "You must specify an idle type."
     End If
 End Sub
 

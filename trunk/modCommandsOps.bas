@@ -97,7 +97,7 @@ Public Sub OnChPw(Command As clsCommandObj)
     Dim delay As Integer
     If (Command.IsValid) Then
         Select Case (LCase$(Command.Argument("SubCommand")))
-            Case "on":
+            Case "on", "true", "enable", "enabled":
                 If (LenB(Command.Argument("Value")) > 0) Then
                 
                     BotVars.ChannelPassword = Command.Argument("Value")
@@ -108,7 +108,7 @@ Public Sub OnChPw(Command As clsCommandObj)
                     Command.Respond "Error: You must supply a password."
                 End If
             
-            Case "off":
+            Case "off", "false", "disable", "disabled":
                 BotVars.ChannelPassword = vbNullString
                 BotVars.ChannelPasswordDelay = 0
                 Command.Respond "Channel password protection disabled."
@@ -303,21 +303,21 @@ End Sub
 Public Sub OnIdleBans(Command As clsCommandObj)
     If (Command.IsValid) Then
         Select Case (LCase$(Command.Argument("SubCommand")))
-            Case "on":
+            Case "on", "true", "enable", "enabled":
                 BotVars.IB_On = BTRUE
                 
                 If (StrictIsNumeric(Command.Argument("Value"))) Then
                     BotVars.IB_Wait = Val(Command.Argument("Value"))
-                    Command.Respond StringFormat("IdleBans activated, with a delay of {0}.", BotVars.IB_Wait)
+                    Command.Respond StringFormat("IdleBans activated with a delay of {0}.", BotVars.IB_Wait)
                 Else
                     BotVars.IB_Wait = 400
-                    Command.Respond "IdleBans activated, using the default delay of 400."
+                    Command.Respond "IdleBans activated using the default delay of 400."
                 End If
                 
                 Config.IdleBan = True
                 Config.IdleBanDelay = BotVars.IB_Wait
                 
-            Case "off":
+            Case "off", "false", "disable", "disabled":
                 BotVars.IB_On = BFALSE
                 Config.IdleBan = False
                 Command.Respond "IdleBans deactivated."
@@ -325,17 +325,27 @@ Public Sub OnIdleBans(Command As clsCommandObj)
             Case "kick":
                 If (LenB(Command.Argument("Value")) > 0) Then
                     Select Case LCase$(Command.Argument("Value"))
-                        Case "on":
+                        Case "on", "true", "enable", "enabled":
                             BotVars.IB_Kick = True
-                            Config.IdleBanKick = True
                             Command.Respond "Idle users will now be kicked instead of banned."
                         
-                        Case "off":
+                        Case "off", "false", "disable", "disabled":
                             BotVars.IB_Kick = False
-                            Config.IdleBanKick = False
                             Command.Respond "Idle users will now be banned instead of kicked."
-                    
+                        Case "toggle":
+                            BotVars.IB_Kick = Not BotVars.IB_Kick
+                        Case Else:
+                            Command.Respond StringFormat("IdleBan action is set to {0}.", IIf(Config.IdleBanKick, "kick", "ban"))
+                            Exit Sub
                     End Select
+                    
+                    If Config.IdleBanKick <> BotVars.IB_Kick Then
+                        Config.IdleBanKick = BotVars.IB_Kick
+                        Call Config.Save
+                        
+                        Command.Respond StringFormat("Idle users will be {0}.", IIf(Config.IdleBanKick, "kicked", "banned"))
+                        Exit Sub
+                    End If
                 End If
                 
             Case "delay":
@@ -352,8 +362,9 @@ Public Sub OnIdleBans(Command As clsCommandObj)
                     Command.Respond StringFormat("Idle {0} is currently enabled with a delay of {1} seconds.", _
                         IIf(BotVars.IB_Kick, "kicking", "banning"), BotVars.IB_Wait)
                 Else
-                    Command.Respond "Idlebanning is currently disabled."
+                    Command.Respond "IdleBan is currently disabled."
                 End If
+                Exit Sub
         End Select
         
         Call Config.Save
@@ -427,13 +438,13 @@ End Sub
 
 Public Sub OnIPBans(Command As clsCommandObj)
     Select Case LCase$(Command.Argument("SubCommand"))
-        Case "on":
+        Case "on", "true", "enable", "enabled":
             BotVars.IPBans = True
             Command.Respond "IP banning activated."
             
             g_Channel.CheckUsers
             
-        Case "off":
+        Case "off", "false", "disable", "disabled":
             BotVars.IPBans = False
             Command.Respond "IP banning deactivated."
         
@@ -450,11 +461,11 @@ End Sub
 
 Public Sub OnKickOnYell(Command As clsCommandObj)
     Select Case LCase$(Command.Argument("SubCommand"))
-        Case "on":
+        Case "on", "true", "enable", "enabled":
             BotVars.KickOnYell = 1
             Command.Respond "Kick-on-yell enabled."
             
-        Case "off":
+        Case "off", "false", "disable", "disabled":
             BotVars.KickOnYell = 0
             Command.Respond "Kick-on-yell disabled."
         
@@ -505,11 +516,11 @@ Public Sub OnPeonBan(Command As clsCommandObj)
     ' ranking WarCraft III user classification, in which, users have less than twenty-five
     ' wins on record for any given race.
     Select Case LCase$(Command.Argument("SubCommand"))
-        Case "on":
+        Case "on", "true", "enable", "enabled":
             BotVars.BanPeons = True
             Command.Respond "Peon banning activated."
             
-        Case "off":
+        Case "off", "false", "disable", "disabled":
             BotVars.BanPeons = False
             Command.Respond "Peon banning deactivated."
         
@@ -526,21 +537,39 @@ End Sub
 
 Public Sub OnPhraseBans(Command As clsCommandObj)
     Select Case LCase$(Command.Argument("SubCommand"))
-        Case "on":
-            Phrasebans = True
-            Command.Respond "Phrasebans activated."
+        Case "on", "true", "enable", "enabled":
+            PhraseBans = True
+            Command.Respond "Phrasebans have been enabled."
             
-        Case "off":
-            Phrasebans = False
-            Command.Respond "Phrasebans deactivated."
+        Case "off", "false", "disable", "disabled":
+            PhraseBans = False
+            Command.Respond "Phrasebans have been disabled."
         
+        Case "kick":
+            Select Case LCase$(Command.Argument("Value"))
+                Case "on":
+                    Config.PhraseKick = True
+                Case "off":
+                    Config.PhraseKick = False
+                Case "toggle":
+                    Config.PhraseKick = Not Config.PhraseKick
+                Case Else:
+                    Command.Respond StringFormat("Phraseban punishment is set to {0}.", IIf(Config.PhraseKick, "kick", "ban"))
+                    Exit Sub
+            End Select
+            
+            Command.Respond StringFormat("The punishment for saying a banned phrase is set to: {0}", _
+                IIf(Config.PhraseKick, "kick", "ban"))
+            
+            Call Config.Save
+            Exit Sub
         Case Else:
             Command.Respond StringFormat("Phrasebans are currently {0}.", _
-                IIf(Phrasebans, "enabled", "disabled"))
+                IIf(PhraseBans, "enabled", "disabled"))
     End Select
     
-    If Config.Phrasebans <> Phrasebans Then
-        Config.Phrasebans = Phrasebans
+    If (Config.PhraseBans <> PhraseBans) Then
+        Config.PhraseBans = PhraseBans
         Call Config.Save
     End If
 End Sub
@@ -592,8 +621,8 @@ Public Sub OnPlugBan(Command As clsCommandObj)
     ' represent that a user was using a bot.  This feature allows for the
     ' banning of both, potential bots, and users unlikely to be capable of
     ' creating and/or joining games based on the UDP protocol.
-        Select Case LCase$(Command.Argument("SubCommand"))
-        Case "on":
+    Select Case LCase$(Command.Argument("SubCommand"))
+        Case "on", "true", "enable", "enabled":
             If (BotVars.PlugBan) Then
                 Command.Respond "PlugBan is already activated."
             Else
@@ -602,7 +631,7 @@ Public Sub OnPlugBan(Command As clsCommandObj)
                 Call g_Channel.CheckUsers
             End If
             
-        Case "off":
+        Case "off", "false", "disable", "disabled":
             If (Not BotVars.PlugBan) Then
                 Command.Respond "PlugBan is already deactivated."
             Else
@@ -619,21 +648,25 @@ Public Sub OnPlugBan(Command As clsCommandObj)
         Config.UDPBan = BotVars.PlugBan
         Call Config.Save
     End If
+    
+    If Config.UDPBan Then
+        Call g_Channel.CheckUsers
+    End If
 End Sub
 
 Public Sub OnPOff(Command As clsCommandObj)
-    Phrasebans = False
-    If Config.Phrasebans Then
-        Config.Phrasebans = False
+    PhraseBans = False
+    If Config.PhraseBans Then
+        Config.PhraseBans = False
         Call Config.Save
     End If
     Command.Respond "Phrasebans deactivated."
 End Sub
 
 Public Sub OnPOn(Command As clsCommandObj)
-    Phrasebans = True
-    If Not Config.Phrasebans Then
-        Config.Phrasebans = True
+    PhraseBans = True
+    If Not Config.PhraseBans Then
+        Config.PhraseBans = True
         Call Config.Save
     End If
     Command.Respond "Phrasebans activated."
@@ -641,7 +674,7 @@ End Sub
 
 Public Sub OnProtect(Command As clsCommandObj)
     Select Case (LCase$(Command.Argument("SubCommand")))
-        Case "on":
+        Case "on", "true", "enable", "enabled":
             If (g_Channel.Self.IsOperator) Then
                 Protect = True
                 
@@ -656,7 +689,7 @@ Public Sub OnProtect(Command As clsCommandObj)
                 Command.Respond ERROR_NOT_OPS
             End If
         
-        Case "off":
+        Case "off", "false", "disable", "disabled":
             If (Protect) Then
                 Protect = False
                 
@@ -677,7 +710,7 @@ End Sub
 
 Public Sub OnPStatus(Command As clsCommandObj)
     Command.Respond StringFormat("Phrasebans are currently {0}.", _
-        IIf(Phrasebans, "enabled", "disabled"))
+        IIf(PhraseBans, "enabled", "disabled"))
 End Sub
 
 Public Sub OnQuietTime(Command As clsCommandObj)
@@ -687,16 +720,30 @@ Public Sub OnQuietTime(Command As clsCommandObj)
     ' when a channel wishes to have a discussion while allowing public
     ' attendance, but disallowing public participation.
     Select Case LCase$(Command.Argument("SubCommand"))
-        Case "on":
+        Case "on", "true", "enable", "enabled":
             BotVars.QuietTime = True
             Command.Respond "Quiet-time enabled."
             
-        Case "off":
+        Case "off", "false", "disable", "disabled":
             BotVars.QuietTime = False
             Command.Respond "Quiet-time disabled."
         
+        Case "kick":
+            Select Case LCase$(Command.Argument("Value"))
+                Case "on", "true", "enable", "enabled":
+                    Config.QuietTimeKick = True
+                Case "off", "false", "disable", "disabled":
+                    Config.QuietTimeKick = False
+                Case "toggle"
+                    Config.QuietTimeKick = Not Config.QuietTimeKick
+                Case Else
+                    Command.Respond StringFormat("The QuietTime action is set to {0}", IIf(Config.QuietTimeKick, "kick", "ban"))
+                    Exit Sub
+            End Select
+            
+            Call Config.Save
         Case Else:
-            Command.Respond StringFormat("Quiet-time is currently {0}.", _
+            Command.Respond StringFormat("QuietTime is currently {0}.", _
                 IIf(BotVars.QuietTime, "enabled", "disabled"))
     End Select
     
