@@ -4802,7 +4802,8 @@ Private Function SaveSettings() As Boolean
     Config.ExpKey = CDKeyReplacements(txtExpKey.Text)
     Config.HomeChannel = txtHomeChan.Text
     Config.Server = cboServer.Text
-    Config.UseSpawn = CBool(chkSpawn.Value)
+    
+    Config.UseSpawn = CBool(CanSpawn(Config.Game, Len(Config.CDKey)) And Config.UseSpawn)
     Config.UseD2Realms = CBool(chkUseRealm.Value)
     
     ' Advanced connection settings
@@ -5210,6 +5211,7 @@ End Sub
 Sub optD2DV_Click()
     chkSHR.Visible = False
     chkSpawn.Enabled = False
+    chkSpawn.Value = vbUnchecked
     chkJPN.Visible = False
     txtCDKey.Enabled = True
     txtExpKey.Enabled = False
@@ -5232,6 +5234,7 @@ End Sub
 Sub optSEXP_Click()
     chkSHR.Visible = False
     chkSpawn.Enabled = False
+    chkSpawn.Value = vbUnchecked
     chkJPN.Visible = False
     txtCDKey.Enabled = True
     txtExpKey.Enabled = False
@@ -5243,6 +5246,7 @@ End Sub
 Sub optD2XP_Click()
     chkSHR.Visible = False
     chkSpawn.Enabled = False
+    chkSpawn.Value = vbUnchecked
     chkJPN.Visible = False
     txtCDKey.Enabled = True
     txtExpKey.Enabled = True
@@ -5254,6 +5258,7 @@ End Sub
 Sub optW3XP_Click()
     chkSHR.Visible = False
     chkSpawn.Enabled = False
+    chkSpawn.Value = vbUnchecked
     chkJPN.Visible = False
     txtCDKey.Enabled = True
     txtExpKey.Enabled = True
@@ -5265,6 +5270,7 @@ End Sub
 Sub optDRTL_Click()
     chkSHR.Visible = True
     chkSpawn.Enabled = False
+    chkSpawn.Value = vbUnchecked
     chkJPN.Visible = False
     txtCDKey.Enabled = False
     txtExpKey.Enabled = False
