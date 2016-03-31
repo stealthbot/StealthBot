@@ -848,12 +848,23 @@ Public Sub OnTagDel(Command As clsCommandObj)
 End Sub
 
 Public Sub OnUnBan(Command As clsCommandObj)
+    Dim sTargetUser As String
+    
     If (Command.IsValid) Then
         If (g_Channel.Self.IsOperator) Then
-            If (InStr(1, Command.Argument("Username"), "*", vbBinaryCompare) <> 0) Then
-                Call WildCardBan(Command.Argument("Username"), vbNullString, 2)
+            sTargetUser = Command.Argument("Username")
+            
+            ' If no user was specified, unban the last banned user.
+            If (LenB(sTargetUser) = 0) Then
+                If (g_Channel.Banlist.Count > 0) Then
+                    sTargetUser = g_Channel.Banlist(g_Channel.Banlist.Count).Name
+                End If
+            End If
+            
+            If (InStr(1, sTargetUser, "*", vbBinaryCompare) <> 0) Then
+                Call WildCardBan(sTargetUser, vbNullString, 2)
             Else
-                Call frmChat.AddQ("/unban " & Command.Argument("Username"), PRIORITY.CHANNEL_MODERATION_MESSAGE, Command.Username)
+                Call frmChat.AddQ("/unban " & sTargetUser, PRIORITY.CHANNEL_MODERATION_MESSAGE, Command.Username)
             End If
         Else
             Command.Respond ERROR_NOT_OPS

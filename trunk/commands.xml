@@ -2027,14 +2027,14 @@
     </documentation>
 
     <arguments>
-      <argument name="username" type="word">
+      <argument name="username" type="word" optional="1">
         <documentation>
           <description>
             The name of the user to be unbanned.
           </description>
 
           <specialnotes>
-            The username may include wildcards.
+            The username may include wildcards. If no user is specified, the most recently banned user will be assumed.
           </specialnotes>
         </documentation>
       </argument>
