@@ -3682,8 +3682,22 @@ End Sub
 Private Sub mnuOpenScriptFolder_Click()
     Dim sPath As String
     sPath = GetFolderPath("Scripts")
+    
+    ' Does the script folder exist?
     If (LenB(Dir$(sPath, vbDirectory)) > 0) Then
         Shell StringFormat("explorer.exe {0}", sPath), vbNormalFocus
+    Else
+        ' Try and create it
+        MkDir sPath
+        
+        ' Did it work?
+        If (LenB(Dir$(sPath, vbDirectory)) > 0) Then
+            Shell StringFormat("explorer.exe {0}", sPath), vbNormalFocus
+        Else
+            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Your script folder does not exist, and could not be created.")
+            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Script folder path: " & sPath)
+            Exit Sub
+        End If
     End If
 End Sub
 
