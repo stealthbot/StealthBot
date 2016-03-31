@@ -5491,8 +5491,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                                 End If
                                         End Select
                                         
-                                        If (Len(s) > (Len(m) + 1)) Then
-                                            m = m & Space(1) & OutFilterMsg(Mid(s, Len(m) + 2))
+                                        If ((Len(m) > 0) And (Len(s) > (Len(m) + 1))) Then
+                                            m = m & OutFilterMsg(Mid(s, Len(m) + 1))
                                         End If
                                     End If
                                     
