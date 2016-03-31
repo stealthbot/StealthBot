@@ -323,29 +323,24 @@ Public Sub OnIdleBans(Command As clsCommandObj)
                 Command.Respond "IdleBans deactivated."
             
             Case "kick":
-                If (LenB(Command.Argument("Value")) > 0) Then
-                    Select Case LCase$(Command.Argument("Value"))
-                        Case "on", "true", "enable", "enabled":
-                            BotVars.IB_Kick = True
-                            Command.Respond "Idle users will now be kicked instead of banned."
-                        
-                        Case "off", "false", "disable", "disabled":
-                            BotVars.IB_Kick = False
-                            Command.Respond "Idle users will now be banned instead of kicked."
-                        Case "toggle":
-                            BotVars.IB_Kick = Not BotVars.IB_Kick
-                        Case Else:
-                            Command.Respond StringFormat("IdleBan action is set to {0}.", IIf(Config.IdleBanKick, "kick", "ban"))
-                            Exit Sub
-                    End Select
-                    
-                    If Config.IdleBanKick <> BotVars.IB_Kick Then
-                        Config.IdleBanKick = BotVars.IB_Kick
-                        Call Config.Save
-                        
-                        Command.Respond StringFormat("Idle users will be {0}.", IIf(Config.IdleBanKick, "kicked", "banned"))
+                Select Case LCase$(Command.Argument("Value"))
+                    Case "on", "true", "enable", "enabled":
+                        BotVars.IB_Kick = True
+                    Case "off", "false", "disable", "disabled":
+                        BotVars.IB_Kick = False
+                    Case "toggle":
+                        BotVars.IB_Kick = Not BotVars.IB_Kick
+                    Case Else:
+                        Command.Respond StringFormat("IdleBan action is set to {0}.", IIf(Config.IdleBanKick, "kick", "ban"))
                         Exit Sub
-                    End If
+                End Select
+                    
+                If Config.IdleBanKick <> BotVars.IB_Kick Then
+                    Config.IdleBanKick = BotVars.IB_Kick
+                    Call Config.Save
+                        
+                    Command.Respond StringFormat("Idle users will now be {0}.", IIf(Config.IdleBanKick, "kicked", "banned"))
+                    Exit Sub
                 End If
                 
             Case "delay":
@@ -741,6 +736,7 @@ Public Sub OnQuietTime(Command As clsCommandObj)
                     Exit Sub
             End Select
             
+            Command.Respond StringFormat("QuietTime action set to {0}.", IIf(Config.QuietTimeKick, "kick", "ban"))
             Call Config.Save
         Case Else:
             Command.Respond StringFormat("QuietTime is currently {0}.", _

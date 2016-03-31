@@ -10,6 +10,11 @@ Public Sub OnAdd(Command As clsCommandObj)
     Dim i          As Integer
     ReDim Preserve response(0)
     
+    If ((Not Command.IsValid) Or LenB(Trim$(Command.Argument("username"))) = 0) Then
+        Command.Respond "You must specify a user to add."
+        Exit Sub
+    End If
+    
     ' special case: d2 naming conventions
     If (BotVars.UseD2Naming) Then
         Dim Username
@@ -161,6 +166,11 @@ Public Sub OnRem(Command As clsCommandObj)
     Dim i          As Integer
     ReDim Preserve response(0)
     
+    If (Not Command.IsValid) Then
+        Command.Respond "You must specify a user to remove."
+        Exit Sub
+    End If
+    
     dbAccess = GetCumulativeAccess(Command.Username)
     If (Command.IsLocal) Then
         dbAccess.Rank = 201
@@ -226,19 +236,16 @@ End Sub
 
 Public Sub OnSetHome(Command As clsCommandObj)
     Dim Channel As String
-    If (Command.IsValid) Then
-        Channel = Command.Argument("Channel")
-        Config.HomeChannel = Channel
-        Call Config.Save
+    
+    Channel = Command.Argument("Channel")
+    Config.HomeChannel = Channel
+    Call Config.Save
         
-        BotVars.HomeChannel = Config.HomeChannel
-        If LenB(Channel) = 0 Then
-            Command.Respond StringFormat("Reset home channel to server default.", Chr$(34), BotVars.HomeChannel)
-        Else
-            Command.Respond StringFormat("New home channel set to {0}{1}{0}.", Chr$(34), BotVars.HomeChannel)
-        End If
+    BotVars.HomeChannel = Config.HomeChannel
+    If LenB(Channel) = 0 Then
+        Command.Respond "Home channel set to server default."
     Else
-        Command.Respond "Homechannel command invalid."
+        Command.Respond StringFormat("New home channel set to {0}{1}{0}.", Chr$(34), BotVars.HomeChannel)
     End If
 End Sub
 
@@ -258,12 +265,12 @@ Public Sub OnSetKey(Command As clsCommandObj)
             Call Config.Save
             
             BotVars.CDKey = Config.CDKey
-            Command.Respond "New cdkey set."
+            Command.Respond "New CD key set."
         Else
-            Command.Respond "The cdkey you specified was invalid."
+            Command.Respond "The CD key you specified was invalid."
         End If
     Else
-        Command.Respond "You must specify a cdkey."
+        Command.Respond "You must specify a CD key."
     End If
 End Sub
 

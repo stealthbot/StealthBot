@@ -3714,6 +3714,7 @@
   <command name="idlebans">
     <aliases>
       <alias>ib</alias>
+      <alias>idleban</alias>
     </aliases>
 
     <documentation>
@@ -3723,7 +3724,7 @@
     </documentation>
 
     <arguments>
-      <argument name="subcommand" type="word">
+      <argument name="subcommand" type="word" optional="1">
         <documentation>
           <description>
             The sub-command to use: on, off, kick, delay, or status
