@@ -5471,26 +5471,32 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     GoTo theEnd
                                 
                                 ElseIf (LCase(Left$(s, 1)) = "/") Then
-                                    Dim Splt() As String
-                                    Splt = Split(s, " ", 3)
+                                    Dim aSplt() As String
+                                    
+                                    aSplt = Split(s, Space(1), 3)
+                                    m = vbNullString
                                     
                                     ' Don't do replacements for a command unless it involves text that will be seen by someone else
                                     '  and don't replace text in the command itself or the target username
-                                    Select Case LCase$(Splt(0))
-                                        Case "/w", "/m", "/whisper", "/msg", "/ban", "/kick"
-                                            m = StringFormat("{0} {1} {2}", Splt(0), Splt(1), OutFilterMsg(Splt(2)))
-                                        Case "/away", "/dnd"
-                                            m = StringFormat("{0} {1}", Splt(0), OutFilterMsg(Splt(1) & Space(1) & Splt(2)))
-                                        Case "/f"
-                                            ' friend list messaging
-                                            If ((LCase$(Splt(1)) = "m") Or (LCase$(Splt(1)) = "msg")) Then
-                                                m = StringFormat("{0} {1} {2}", Splt(0), Splt(1), OutFilterMsg(Splt(2)))
-                                            Else
-                                                m = s
-                                            End If
-                                        Case Else
-                                            m = s
-                                    End Select
+                                    
+                                    If (UBound(aSplt) > 0) Then
+                                        Select Case LCase$(aSplt(0))
+                                            Case "/w", "/m", "/whisper", "/msg", "/ban", "/kick"
+                                                m = StringFormat("{0} {1}", aSplt(0), aSplt(1))
+                                            Case "/away", "/dnd"
+                                                m = aSplt(0)
+                                            Case "/f"
+                                                If ((LCase$(aSplt(1)) = "m") Or (LCase$(aSplt(1)) = "msg")) Then
+                                                    m = StringFormat("{0} {1}", aSplt(0), aSplt(1))
+                                                End If
+                                        End Select
+                                        
+                                        If (Len(s) > (Len(m) + 1)) Then
+                                            m = m & Space(1) & OutFilterMsg(Mid(s, Len(m) + 2))
+                                        End If
+                                    End If
+                                    
+                                    If (LenB(m) = 0) Then m = s
                                     ProcessCommand GetCurrentUsername, m, True, False
                                 Else
                                     Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
