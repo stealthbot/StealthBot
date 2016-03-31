@@ -5394,7 +5394,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
 
                                 If (spaceIndex(0) > 0) Then
                                     tmp = Left$(strbuf, spaceIndex(0))
+                                ElseIf (spaceIndex(0) = 0) Then
+                                    ' only includes the postfix for the first word
+                                    res = res & BotVars.AutoCompletePostfix
                                 End If
+                                
+                                res = res & Space(1)
                                 
                                 tmp = tmp & res
                                 
@@ -7362,8 +7367,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                         Next c
                         
                         If (c >= (Len(toMatch) + 1)) Then
-                            MatchClosest = _
-                                    .Item(i).Text & BotVars.AutoCompletePostfix
+                            MatchClosest = .Item(i).Text
                             
                             MatchIndex = i
                             
@@ -7444,8 +7448,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                         
                         Dim j As Integer
                     
-                        MatchClosest = Left$(toMatch, atChar) & Gateways(CurrentGateway, i) & _
-                                BotVars.AutoCompletePostfix
+                        MatchClosest = Left$(toMatch, atChar) & Gateways(CurrentGateway, i)
                         
                         MatchIndex = (i + 1)
                         
@@ -7459,8 +7462,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
             Wend
         Else
             If (tmp = vbNullString) Then
-                MatchClosest = Left$(toMatch, atChar) & OtherGateway & _
-                        BotVars.AutoCompletePostfix
+                MatchClosest = Left$(toMatch, atChar) & OtherGateway
                     
                 MatchIndex = (index + 1)
                     
