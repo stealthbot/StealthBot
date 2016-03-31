@@ -545,6 +545,44 @@ Public Sub OnPhraseBans(Command As clsCommandObj)
     End If
 End Sub
 
+Public Sub OnPingBan(Command As clsCommandObj)
+    Dim sValue As String
+    sValue = Command.Argument("value")
+    
+    If Command.IsValid Then
+        Select Case LCase$(sValue)
+            Case "on", "true", "enable", "enabled":
+                Config.PingBan = True
+            Case "off", "false", "disable", "disabled":
+                Config.PingBan = False
+            Case "toggle":
+                Config.PingBan = Not Config.PingBan
+            Case Else:
+                If IsNumeric(sValue) Then
+                    Config.PingBanLevel = CLng(sValue)
+                    Call Config.Save
+                    
+                    Command.Respond "PingBan level set to: " & Config.PingBanLevel
+                    If Config.PingBan Then Call g_Channel.CheckUsers
+                    Exit Sub
+                Else
+                    If Config.PingBan Then
+                        Command.Respond StringFormat("PingBan is enabled. Users with a ping {0} {1} will be banned.", _
+                            IIf(Config.PingBanLevel <= 0, "equal to", "greater than"), Config.PingBanLevel)
+                    Else
+                        Command.Respond "PingBan is currently disabled."
+                    End If
+                    Exit Sub
+                End If
+        End Select
+        Call Config.Save
+        
+        Command.Respond StringFormat("PingBan has been {0}.", IIf(Config.PingBan, "enabled", "disabled"))
+        
+        If Config.PingBan Then Call g_Channel.CheckUsers
+    End If
+End Sub
+
 Public Sub OnPlugBan(Command As clsCommandObj)
     ' This command will enable, disable, or check the status of, UDP plug bans.
     ' UDP plugs were traditionally used, in place of lag bars, to signifiy

@@ -3081,6 +3081,35 @@
       </flags>
     </access>
   </command>
+  
+  <command name="pingban">
+    <aliases>
+        <alias>pb</alias>
+    </aliases>
+    
+    <documentation>
+        <description>
+            Bans users with a ping greater than a set value.
+        </description>
+    </documentation>
+    
+    <arguments>
+        <argument name="value" type="word" optional="1">
+            <documentation>
+                <description>
+                    The ping value or sub-command to set.
+                </description>
+            </documentation>
+        </argument>
+    </arguments>
+    
+    <access>
+        <rank>80</rank>
+        <flags>
+            <flag>O</flag>
+        </flags>
+    </access>
+  </command>
 
   <command name="useitunes">
     <aliases />
