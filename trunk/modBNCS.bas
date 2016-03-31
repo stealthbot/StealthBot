@@ -805,7 +805,7 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     With pBuff
-        .InsertBool Config.UseSpawn
+        .InsertBool (CanSpawn(BotVars.Product, oKey.KeyLength) And Config.UseSpawn)
         .InsertNTString BotVars.CDKey
         
         If (LenB(Config.CDKeyOwnerName) > 0) Then
@@ -888,7 +888,7 @@ On Error GoTo ERROR_HANDLER:
     If Not oKey.CalculateHash(ds.ClientToken, ds.ServerToken) Then Exit Sub
     
     With pBuff
-        .InsertBool Config.UseSpawn
+        .InsertBool (CanSpawn(BotVars.Product, oKey.KeyLength) And Config.UseSpawn)
         .InsertDWord oKey.KeyLength
         .InsertDWord oKey.ProductValue
         .InsertDWord oKey.PublicValue
@@ -1471,7 +1471,7 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord ds.CRevVersion  'CRev Version
         .InsertDWord ds.CRevChecksum 'CRev Checksum
         .InsertDWord keys            'CDKey Count
-        .InsertBool Config.UseSpawn
+        .InsertBool (CanSpawn(BotVars.Product, oKey.KeyLength) And Config.UseSpawn)
         
         For i = 1 To keys
             If (i = 1) Then
@@ -1985,3 +1985,14 @@ ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.DoChannelJoinHome()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
+
+Public Function CanSpawn(ByVal sProduct As String, ByVal iKeyLength As Integer) As Boolean
+    sProduct = GetProductInfo(sProduct).Code
+    
+    Select Case sProduct
+        Case PRODUCT_STAR, PRODUCT_JSTR, PRODUCT_W2BN:
+            CanSpawn = CBool(iKeyLength <> 26)
+            Exit Function
+    End Select
+    CanSpawn = False
+End Function
