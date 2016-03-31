@@ -1704,7 +1704,7 @@ Private Sub LoadDefaults()
     m_MediaPlayerPath = vbNullString
     m_Mp3Commands = True
     m_NameAutoComplete = True
-    m_AutocompletePostfix = "{, }"
+    m_AutocompletePostfix = "{,}"
     m_CaseSensitiveDBFlags = True
     m_MultiLinePostfix = "{ [more]}"
 
