@@ -2975,6 +2975,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                     If selLength < 0 Then selLength = 0
                 End If
                 .SelFontName = rtb.Font.Name
+                .SelFontSize = rtb.Font.Size
                 .SelText = ""
             End With
             
@@ -2992,6 +2993,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             .selStart = Len(.Text)
             .selLength = 0
             .SelFontName = rtb.Font.Name
+            .SelFontSize = rtb.Font.Size
             .SelBold = False
             .SelItalic = False
             .SelUnderline = False

@@ -4184,7 +4184,7 @@ Begin VB.Form frmSettings
       Begin VB.Label Label1 
          BackColor       =   &H00000000&
          BackStyle       =   0  'Transparent
-         Caption         =   "Logging Options"
+         Caption         =   "Logging settings"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   12
@@ -4352,7 +4352,7 @@ Private Sub Form_Load()
                     
                     Set nOptLevel = nCurrent.Children
                         nOptLevel.Add , etvwChild, "op_moderation", "Moderation"
-                        nOptLevel.Add , etvwChild, "op_logging", "Logging Options"
+                        nOptLevel.Add , etvwChild, "op_logging", "Logging"
                         nOptLevel.Add , etvwChild, "op_greets", "Greet Message"
                         nOptLevel.Add , etvwChild, "op_idles", "Idle Message"
                         nOptLevel.Add , etvwChild, "op_misc", "Miscellaneous"
@@ -4402,6 +4402,8 @@ Private Sub Form_Load()
     End With
     
     With cboBNLSServer
+        Dim BNLSServers As Collection
+        
         .AddItem "Automatic (Server Finder)"
         
         ' If the user has a server set, add it.
@@ -4420,11 +4422,14 @@ Private Sub Form_Load()
         
         ' Add servers from the user's local list.
         Set colBNLS = ListFileLoad(GetFilePath(FILE_BNLS_LIST))
+        
         If colBNLS.Count > 0 Then
             For i = 1 To colBNLS.Count
                 AddBNLSServer colBNLS.Item(i)
             Next i
         End If
+        
+        Set BNLSServers = Nothing
     End With
     
     With cboLogging
@@ -5760,28 +5765,31 @@ Sub SaveFontSettings()
     Dim ResizeChatElements As Boolean
     Dim ResizeChannelElements As Boolean
     
-    If (StrComp(InitChatFont, txtChatFont.Text, vbTextCompare)) Then
+    If (StrComp(InitChatFont, txtChatFont.Text, vbTextCompare) <> 0) Then
         Config.ChatFont = txtChatFont.Text
-        frmChat.rtbChat.Font.Name = Config.ChatFont
+        
+        'frmChat.rtbChat.Font.Name = Config.ChatFont
         frmChat.cboSend.Font.Name = Config.ChatFont
         frmChat.txtPre.Font.Name = Config.ChatFont
         frmChat.txtPost.Font.Name = Config.ChatFont
-        frmChat.rtbWhispers.Font.Name = Config.ChatFont
+        'frmChat.rtbWhispers.Font.Name = Config.ChatFont
         ResizeChatElements = True
     End If
     
     If Not InitChatSize = CInt(txtChatSize.Text) Then
         Config.ChatFontSize = Val(txtChatSize.Text)
-        frmChat.rtbChat.Font.Size = Config.ChatFontSize
+        
+        'frmChat.rtbChat.Font.Size = Config.ChatFontSize
         frmChat.cboSend.Font.Size = Config.ChatFontSize
         frmChat.txtPre.Font.Size = Config.ChatFontSize
         frmChat.txtPost.Font.Size = Config.ChatFontSize
-        frmChat.rtbWhispers.Font.Size = Config.ChatFontSize
+        'frmChat.rtbWhispers.Font.Size = Config.ChatFontSize
         ResizeChatElements = True
     End If
     
-    If (StrComp(InitChanFont, txtChanFont.Text, vbTextCompare)) Then
+    If (StrComp(InitChanFont, txtChanFont.Text, vbTextCompare) <> 0) Then
         Config.ChannelListFont = txtChanFont.Text
+        
         frmChat.lvChannel.Font.Name = Config.ChannelListFont
         frmChat.lvClanList.Font.Name = Config.ChannelListFont
         frmChat.lvFriendList.Font.Name = Config.ChannelListFont
@@ -5792,6 +5800,7 @@ Sub SaveFontSettings()
     
     If Not InitChanSize = CInt(txtChanSize.Text) Then
         Config.ChannelListFontSize = Val(txtChanSize.Text)
+        
         frmChat.lvChannel.Font.Size = Config.ChannelListFontSize
         frmChat.lvClanList.Font.Size = Config.ChannelListFontSize
         frmChat.lvFriendList.Font.Size = Config.ChannelListFontSize
@@ -5802,15 +5811,37 @@ Sub SaveFontSettings()
     
     If ResizeChannelElements Then
         Dim lblHeight As Single
+        
         frmChat.lblCurrentChannel.AutoSize = True
         lblHeight = frmChat.lblCurrentChannel.Height + 40
         frmChat.lblCurrentChannel.AutoSize = False
         frmChat.lblCurrentChannel.Height = lblHeight
         ResizeChatElements = True
     End If
+    
     If ResizeChatElements Then
+        Call ChangeRTBFont(frmChat.rtbChat, Config.ChatFont, Config.ChannelListFontSize)
+        Call ChangeRTBFont(frmChat.rtbWhispers, Config.ChatFont, Config.ChannelListFontSize)
+        
         frmChat.Form_Resize
     End If
+End Sub
+
+Private Sub ChangeRTBFont(rtb As RichTextBox, ByVal NewFont As String, ByVal NewSize As Integer)
+    Dim tmpBuffer As String
+    
+    With rtb
+        .selStart = 0
+        .selLength = Len(.Text)
+        .SelFontSize = NewSize
+        .SelFontName = NewFont
+        tmpBuffer = .TextRTF
+        .Text = vbNullString
+        .Font.Name = NewFont
+        .Font.Size = NewSize
+        .TextRTF = tmpBuffer
+        .selStart = Len(.Text)
+    End With
 End Sub
 
 Sub LoadColors()

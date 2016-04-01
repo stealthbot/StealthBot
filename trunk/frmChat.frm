@@ -6673,7 +6673,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
 
     ' Client settings
     If LenB(BotVars.Username) > 0 And StrComp(BotVars.Username, Config.Username, vbTextCompare) <> 0 Then
-        AddChat RTBColors.ServerInfoText, "Username set to " & BotVars.Username & "."
+        AddChat RTBColors.ConsoleText, "Username set to " & Config.Username & "."
     End If
     BotVars.Username = Config.Username
     BotVars.Password = Config.Password
@@ -6702,11 +6702,12 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         
         s = Config.ChatFont
         If s <> vbNullString And s <> rtbChat.Font.Name Then
-            rtbChat.Font.Name = s
+            'rtbChat.Font.Name = s
             cboSend.Font.Name = s
-            rtbWhispers.Font.Name = s
+            'rtbWhispers.Font.Name = s
             txtPre.Font.Name = s
             txtPost.Font.Name = s
+            
             ResizeChatElements = True
         End If
         
@@ -6717,17 +6718,19 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             lvFriendList.Font.Name = s
             lblCurrentChannel.Font.Name = s
             ListviewTabs.Font.Name = s
+            
             ResizeChatElements = True
         End If
         
         s = Config.ChatFontSize
         If StrictIsNumeric(s) Then
             If CInt(s) <> rtbChat.Font.Size Then
-                rtbChat.Font.Size = s
+                'rtbChat.Font.Size = s
                 cboSend.Font.Size = s
-                rtbWhispers.Font.Size = s
+                'rtbWhispers.Font.Size = s
                 txtPre.Font.Size = s
                 txtPost.Font.Size = s
+                
                 ResizeChannelElements = True
             End If
         End If
@@ -6740,20 +6743,26 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                 lvFriendList.Font.Size = s
                 lblCurrentChannel.Font.Size = s
                 ListviewTabs.Font.Size = s
+                
                 ResizeChannelElements = True
             End If
         End If
     
         If ResizeChannelElements Then
             Dim lblHeight As Single
+            
             lblCurrentChannel.AutoSize = True
             lblHeight = lblCurrentChannel.Height + 40
             lblCurrentChannel.AutoSize = False
             lblCurrentChannel.Height = lblHeight
+            
             ResizeChatElements = True
         End If
         
         If ResizeChatElements Then
+            Call ChangeRTBFont(rtbChat, Config.ChatFont, Config.ChannelListFontSize)
+            Call ChangeRTBFont(rtbWhispers, Config.ChatFont, Config.ChannelListFontSize)
+            
             Form_Resize
         End If
     End If
@@ -7007,6 +7016,23 @@ ERROR_HANDLER:
     End If
     
     Resume Next
+End Sub
+
+Private Sub ChangeRTBFont(rtb As RichTextBox, ByVal NewFont As String, ByVal NewSize As Integer)
+    Dim tmpBuffer As String
+    
+    With rtb
+        .selStart = 0
+        .selLength = Len(.Text)
+        .SelFontSize = NewSize
+        .SelFontName = NewFont
+        tmpBuffer = .TextRTF
+        .Text = vbNullString
+        .Font.Name = NewFont
+        .Font.Size = NewSize
+        .TextRTF = tmpBuffer
+        .selStart = Len(.Text)
+    End With
 End Sub
 
 'returns OK to Proceed
