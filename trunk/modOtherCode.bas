@@ -1635,7 +1635,7 @@ Public Function GetFilePath(ByVal fileName As String, Optional DefaultPath As St
             GetFilePath = StringFormat("{0}{1}", DefaultPath, fileName)
         End If
         
-        s = ReadCfg("FilePaths", fileName)
+        s = Config.GetFilePath(FileName)
         
         If (LenB(s) > 0) Then
             If (LenB(Dir$(s))) Then
