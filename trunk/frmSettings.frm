@@ -4312,6 +4312,7 @@ Private Sub Form_Load()
     Dim s As String
     Dim serverList() As String
     Dim i As Long, j As Long, K As Long
+    Dim colBNLS As Collection
     
     '##########################################
     ' TREEVIEW INITIALIZATION CODE
@@ -4418,18 +4419,11 @@ Private Sub Form_Load()
         End If
         
         ' Add servers from the user's local list.
-        If LenB(Dir$(GetFilePath(FILE_BNLS_LIST))) > 0 Then
-            With cboBNLSServer
-                i = FreeFile
-                
-                Open GetFilePath(FILE_BNLS_LIST) For Input As #i
-                    While Not EOF(i)
-                        Line Input #i, s
-                        
-                        If Len(s) > 0 Then AddBNLSServer s
-                    Wend
-                Close #i
-            End With
+        Set colBNLS = ListFileLoad(GetFilePath(FILE_BNLS_LIST))
+        If colBNLS.Count > 0 Then
+            For i = 1 To colBNLS.Count
+                AddBNLSServer colBNLS.Item(i)
+            Next i
         End If
     End With
     
@@ -4749,6 +4743,7 @@ Private Function SaveSettings() As Boolean
     Dim s As String
     Dim Clients(6) As String
     Dim i As Long, j As Long
+    Dim colBNLS As New Collection
     
     ' First, CDKey Length check and corresponding stuff that needs to run first:
     Select Case True
@@ -4832,14 +4827,11 @@ Private Function SaveSettings() As Boolean
         Next j
         
         If j >= 0 Or .ListCount > 0 Then
-            i = FreeFile
+            For j = 1 To .ListCount
+                If Not (Len(.List(j)) = 0) Then colBNLS.Add .List(j)
+            Next
             
-            ' Save the list of servers to a file
-            Open GetFilePath(FILE_BNLS_LIST) For Output As #i
-                For j = 1 To .ListCount
-                    If Not (Len(.List(j)) = 0) Then Print #i, .List(j)
-                Next j
-            Close #i
+            ListFileSave GetFilePath(FILE_BNLS_LIST), colBNLS
         End If
     End With
     
