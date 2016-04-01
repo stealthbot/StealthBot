@@ -222,3 +222,5 @@ Private Sub Class_Terminate()
 
     Set m_ProductLookup = Nothing
 End Sub
+
+
