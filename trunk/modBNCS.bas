@@ -1938,7 +1938,7 @@ On Error GoTo ERROR_HANDLER:
                 (Not BotVars.Product = "PX3W") And (Not BotVars.Product = "3RAW")) Then
                 ' join nowhere to force non-W3-non-D2 to enter chat environment
                 ' so they can use /whoami (see Event_ChannelJoinError for where this completes)
-                Call FullJoin(BotVars.Product & BotVars.Username & BotVars.HomeChannel, 0)
+                Call FullJoin(BotVars.Product & BotVars.Username & Config.HomeChannel, 0)
             Else
                 SEND_SID_CHATCOMMAND "/whoami"
             End If
@@ -1966,13 +1966,13 @@ On Error GoTo ERROR_HANDLER:
     
     If (LenB(BotVars.LastChannel) > 0) Then
         ' go to "last channel" (for /reconnect and re-entering chat)
-        Call FullJoin(BotVars.LastChannel, 0)
-    ElseIf (LenB(BotVars.HomeChannel) = 0) Then
+        Call FullJoin(BotVars.LastChannel, 2)
+    ElseIf (LenB(Config.HomeChannel) = 0) Then
         ' do product home join instead
         Call DoChannelJoinProductHome
     Else
         ' go home
-        Call FullJoin(BotVars.HomeChannel, 0)
+        Call FullJoin(Config.HomeChannel, 2)
     End If
     
     Exit Sub

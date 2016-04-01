@@ -231,7 +231,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     If (LenB(LastChannel) > 0) Then
         ' show home channel in menu
         sChannel = LastChannel
-        If (StrComp(LastChannel, BotVars.HomeChannel, vbTextCompare) <> 0) Then
+        If (StrComp(LastChannel, Config.HomeChannel, vbTextCompare) <> 0) Then
             sChannel = Replace(sChannel, "&", "&&", , , vbBinaryCompare)
             If StrComp(sChannel, "-", vbBinaryCompare) = 0 Then
                 sChannel = "&-"
@@ -594,7 +594,7 @@ On Error GoTo ERROR_HANDLER:
     If StrComp(sChannel, "-", vbBinaryCompare) = 0 Then
         sChannel = "&-"
     End If
-    frmChat.mnuHomeChannel.Caption = sChannel & " (Home)"
+    frmChat.mnuHomeChannel.Caption = sChannel & " (&Home)"
     
     ' if D2 and on a char, we need to tell the whole world this so that Self is known later on
     If (StrComp(Stats.Game, PRODUCT_D2DV, vbBinaryCompare) = 0) Or (StrComp(Stats.Game, PRODUCT_D2XP, vbBinaryCompare) = 0) Then

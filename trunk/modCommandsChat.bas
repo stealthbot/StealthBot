@@ -152,12 +152,12 @@ Public Sub OnFRem(Command As clsCommandObj)
 End Sub
 
 Public Sub OnHome(Command As clsCommandObj)
-    If (LenB(BotVars.HomeChannel) = 0) Then
+    If (LenB(Config.HomeChannel) = 0) Then
         ' do product home join instead
         Call DoChannelJoinProductHome
     Else
         ' go home
-        Call FullJoin(BotVars.HomeChannel, 0)
+        Call FullJoin(Config.HomeChannel, 2)
     End If
 End Sub
 

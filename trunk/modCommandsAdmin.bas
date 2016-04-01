@@ -221,10 +221,10 @@ Public Sub OnSetExpKey(Command As clsCommandObj)
             End If
         End If
         If (LenB(strKey) > 0) Then
-            Config.EXPKey = strKey
+            Config.ExpKey = strKey
             Call Config.Save
             
-            BotVars.EXPKey = Config.EXPKey
+            BotVars.ExpKey = Config.ExpKey
             Command.Respond "New expansion cdkey set."
         Else
             Command.Respond "The cdkey you specified was invalid."
@@ -240,12 +240,12 @@ Public Sub OnSetHome(Command As clsCommandObj)
     Channel = Command.Argument("Channel")
     Config.HomeChannel = Channel
     Call Config.Save
-        
+    
     BotVars.HomeChannel = Config.HomeChannel
     If LenB(Channel) = 0 Then
         Command.Respond "Home channel set to server default."
     Else
-        Command.Respond StringFormat("New home channel set to {0}{1}{0}.", Chr$(34), BotVars.HomeChannel)
+        Command.Respond StringFormat("New home channel set to {0}{1}{0}.", Chr$(34), Config.HomeChannel)
     End If
 End Sub
 

@@ -1729,9 +1729,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim Catch(0)
@@ -3261,7 +3261,7 @@ Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, x As 
     Dim i As Integer
     
     ' show home channel
-    mnuHomeChannel.Visible = (mnuHomeChannel.Caption <> vbNullString And StrComp(BotVars.HomeChannel, g_Channel.Name, vbTextCompare) <> 0)
+    mnuHomeChannel.Visible = (mnuHomeChannel.Caption <> vbNullString And StrComp(Config.HomeChannel, g_Channel.Name, vbTextCompare) <> 0)
     mnuLastChannel.Visible = (mnuLastChannel.Caption <> vbNullString And StrComp(BotVars.LastChannel, g_Channel.Name, vbTextCompare) <> 0)
     mnuQCDash.Visible = (mnuHomeChannel.Visible Or mnuLastChannel.Visible)
     
@@ -3679,7 +3679,7 @@ Private Sub mnuBot_Click()
     Dim i As Integer
     
     ' show home channel
-    mnuHomeChannel.Visible = (mnuHomeChannel.Caption <> vbNullString And StrComp(BotVars.HomeChannel, g_Channel.Name, vbTextCompare) <> 0)
+    mnuHomeChannel.Visible = (mnuHomeChannel.Caption <> vbNullString And StrComp(Config.HomeChannel, g_Channel.Name, vbTextCompare) <> 0)
     mnuLastChannel.Visible = (mnuLastChannel.Caption <> vbNullString And StrComp(BotVars.LastChannel, g_Channel.Name, vbTextCompare) <> 0)
     mnuQCDash.Visible = (mnuHomeChannel.Visible Or mnuLastChannel.Visible)
     
@@ -4127,12 +4127,12 @@ Private Sub mnuPopUserlistWhois_Click()
 End Sub
 
 Private Sub mnuHomeChannel_Click()
-    If (LenB(BotVars.HomeChannel) = 0) Then
+    If (LenB(Config.HomeChannel) = 0) Then
         ' do product home join instead
         Call DoChannelJoinProductHome
     Else
         ' go home
-        Call FullJoin(BotVars.HomeChannel, 0)
+        Call FullJoin(Config.HomeChannel, 2)
     End If
 End Sub
 
@@ -4141,8 +4141,8 @@ Private Sub mnuLastChannel_Click()
         ' do product home join instead
         Call DoChannelJoinProductHome
     Else
-        ' go home
-        Call FullJoin(BotVars.LastChannel, 0)
+        ' go to last
+        Call FullJoin(BotVars.LastChannel, 2)
     End If
 End Sub
 
