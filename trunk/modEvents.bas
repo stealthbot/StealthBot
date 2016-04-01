@@ -273,8 +273,9 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
     
     frmChat.UpdateTrayTooltip
-        
-    frmChat.ListviewTabs_Click 0
+    
+    frmChat.ListviewTabs.Tab = LVW_BUTTON_CHANNEL
+    Call frmChat.ListviewTabs_Click(LVW_BUTTON_CHANNEL)
     
     DoQuickChannelMenu
     
@@ -624,9 +625,10 @@ On Error GoTo ERROR_HANDLER:
         
         .UpTimer.Interval = 1000
         
-        .Timer.Interval = 30000
+        '.Timer.Interval = 30000
+        .tmrIdleTimer.Interval = 1000
     
-        .tmrClanUpdate.Enabled = True
+        '.tmrClanUpdate.Enabled = True
     End With
     
     If (frmChat.sckBNLS.State <> 0) Then
@@ -639,7 +641,7 @@ On Error GoTo ERROR_HANDLER:
         ExReconnectTimerID = 0
     End If
     
-    If (BotVars.UsingDirectFList) Then
+    If Config.FriendsListTab Then
         Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
     End If
     
@@ -870,7 +872,9 @@ On Error GoTo ERROR_HANDLER:
             
             frmChat.lvFriendList.ListItems.Clear
             
-            Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
+            If Config.FriendsListTab Then
+                Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
+            End If
         End If
         
         'Ban Evasion and banned-user tracking

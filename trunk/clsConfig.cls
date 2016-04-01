@@ -94,6 +94,7 @@ Private m_Mp3Commands               As Boolean
 Private m_AutocompletePostfix       As String
 Private m_CaseSensitiveDBFlags      As Boolean
 Private m_MultiLinePostfix          As String
+Private m_FriendsListTab            As Boolean
 
 '[MODERATION]
 Private m_BanEvasion                As Boolean
@@ -190,7 +191,6 @@ Private m_ScriptViewer              As String
 '[EMULATION]
 Private m_IgnoreClanInvites         As Boolean
 Private m_IgnoreCDKeyLength         As Boolean
-Private m_DoNotUseDirectFriendList  As Boolean
 Private m_PingSpoofing              As Byte
 Private m_UseUDP                    As Boolean
 Private m_CustomStatstring          As String
@@ -1270,12 +1270,12 @@ Public Property Let IgnoreCDKeyLength(ByVal sValue As Boolean)
     m_IgnoreCDKeyLength = sValue
 End Property
 
-Public Property Get DoNotUseDirectFriendList() As Boolean
-    DoNotUseDirectFriendList = m_DoNotUseDirectFriendList
+Public Property Get FriendsListTab() As Boolean
+    FriendsListTab = m_FriendsListTab
 End Property
 
-Public Property Let DoNotUseDirectFriendList(ByVal sValue As Boolean)
-    m_DoNotUseDirectFriendList = sValue
+Public Property Let FriendsListTab(ByVal sValue As Boolean)
+    m_FriendsListTab = sValue
 End Property
 
 Public Property Get PingSpoofing() As Byte
@@ -1551,6 +1551,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_FEATURES, "AutoCompletePostfix", m_AutocompletePostfix
     WriteSetting SECTION_FEATURES, "CaseSensitiveFlags", m_CaseSensitiveDBFlags
     WriteSetting SECTION_FEATURES, "MultiLinePostfix", m_MultiLinePostfix
+    WriteSetting SECTION_FEATURES, "FriendsListTab", m_FriendsListTab
     
     WriteSetting SECTION_MODERATION, "BanEvasion", m_BanEvasion
     WriteSetting SECTION_MODERATION, "PhraseBans", m_Phrasebans
@@ -1639,7 +1640,6 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
  
     WriteSetting SECTION_EMULATION, "IgnoreClanInvites", m_IgnoreClanInvites
     WriteSetting SECTION_EMULATION, "IgnoreKeyLength", m_IgnoreCDKeyLength
-    WriteSetting SECTION_EMULATION, "DoNotUseDirectFList", m_DoNotUseDirectFriendList
     WriteSetting SECTION_EMULATION, "PingSpoof", m_PingSpoofing
     WriteSetting SECTION_EMULATION, "UseUDP", m_UseUDP
     WriteSetting SECTION_EMULATION, "CustomStatstring", m_CustomStatstring
@@ -1822,7 +1822,7 @@ Private Sub LoadDefaults()
     '[Emulation]
     m_IgnoreClanInvites = False
     m_IgnoreCDKeyLength = False
-    m_DoNotUseDirectFriendList = False
+    m_FriendsListTab = True
     m_PingSpoofing = 0
     m_UseUDP = False
     m_CustomStatstring = vbNullString
@@ -1873,7 +1873,6 @@ Private Sub LoadVersion5Config()
     m_LogCommands = ReadSettingB(SECTION_MAIN, "LogCommands", m_LogCommands)
     m_MaxBacklogSize = ReadSettingL(SECTION_MAIN, "MaxBacklogSize", m_MaxBacklogSize)
     m_MaxLogFileSize = ReadSettingL(SECTION_MAIN, "MaxLogFileSize", m_MaxLogFileSize)
-    m_DoNotUseDirectFriendList = ReadSettingB(SECTION_MAIN, "DoNotUseDirectFList", m_DoNotUseDirectFriendList)
     m_UrlDetection = ReadSettingB(SECTION_MAIN, "URLDetect", m_UrlDetection)
     m_ReconnectDelay = ReadSettingL(SECTION_MAIN, "ReconnectDelay", m_ReconnectDelay)
     m_UseBackupChannel = ReadSettingB(SECTION_MAIN, "UseBackupChan", m_UseBackupChannel)
@@ -1892,6 +1891,7 @@ Private Sub LoadVersion5Config()
     m_UseD2Realms = ReadSettingB(SECTION_MAIN, "UseRealm", m_UseD2Realms)
     m_ProxyIP = ReadSetting(SECTION_MAIN, "ProxyIP", m_ProxyIP)
     m_HideBanMessages = ReadSettingB(SECTION_MAIN, "HideBanMessages", m_HideBanMessages)
+    m_FriendsListTab = Not ReadSettingB(SECTION_MAIN, "DoNotUseDirectFList", m_FriendsListTab)
 
     m_PositionLeft = ReadSettingL(SECTION_POSITION, "Left", m_PositionLeft)
     m_PositionTop = ReadSettingL(SECTION_POSITION, "Top", m_PositionTop)
@@ -2051,6 +2051,7 @@ Private Sub LoadVersion6Config()
     m_AutocompletePostfix = ReadSetting(SECTION_FEATURES, "AutoCompletePostfix", m_AutocompletePostfix)
     m_CaseSensitiveDBFlags = ReadSettingB(SECTION_FEATURES, "CaseSensitiveFlags", m_CaseSensitiveDBFlags)
     m_MultiLinePostfix = ReadSetting(SECTION_FEATURES, "MultiLinePostfix", m_MultiLinePostfix)
+    m_FriendsListTab = ReadSettingL(SECTION_FEATURES, "FriendsListTab", m_FriendsListTab)
 
     m_BanEvasion = ReadSettingB(SECTION_MODERATION, "BanEvasion", m_BanEvasion)
     m_Phrasebans = ReadSettingB(SECTION_MODERATION, "PhraseBans", m_Phrasebans)
@@ -2139,7 +2140,6 @@ Private Sub LoadVersion6Config()
 
     m_IgnoreClanInvites = ReadSettingB(SECTION_EMULATION, "IgnoreClanInvites", m_IgnoreClanInvites)
     m_IgnoreCDKeyLength = ReadSettingB(SECTION_EMULATION, "IgnoreKeyLength", m_IgnoreCDKeyLength)
-    m_DoNotUseDirectFriendList = ReadSettingB(SECTION_EMULATION, "DoNotUseDirectFList", m_DoNotUseDirectFriendList)
     m_PingSpoofing = ReadSettingL(SECTION_EMULATION, "PingSpoof", m_PingSpoofing)
     m_UseUDP = ReadSettingB(SECTION_EMULATION, "UseUDP", m_UseUDP)
     m_CustomStatstring = ReadSetting(SECTION_EMULATION, "CustomStatstring", m_CustomStatstring)

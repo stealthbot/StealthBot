@@ -746,12 +746,6 @@ Begin VB.Form frmChat
       Left            =   720
       Top             =   600
    End
-   Begin VB.Timer tmrClanUpdate 
-      Enabled         =   0   'False
-      Interval        =   30000
-      Left            =   5760
-      Top             =   4080
-   End
    Begin VB.Timer tmrSilentChannel 
       Enabled         =   0   'False
       Index           =   1
@@ -855,8 +849,8 @@ Begin VB.Form frmChat
       Tab(2).ControlEnabled=   0   'False
       Tab(2).ControlCount=   0
    End
-   Begin VB.Timer tmrFriendlistUpdate 
-      Interval        =   10000
+   Begin VB.Timer tmrIdleTimer 
+      Interval        =   1000
       Left            =   7200
       Top             =   4560
    End
@@ -916,10 +910,6 @@ Begin VB.Form frmChat
    End
    Begin VB.Timer UpTimer 
       Left            =   6720
-      Top             =   4080
-   End
-   Begin VB.Timer Timer 
-      Left            =   7200
       Top             =   4080
    End
    Begin MSComctlLib.ListView lvClanList 
@@ -2128,7 +2118,7 @@ Sub Event_BNetConnecting()
 End Sub
 
 Sub Event_BNetDisconnected()
-    Timer.Interval = 0
+    tmrIdleTimer.Interval = 0
     UpTimer.Interval = 0
     BotVars.JoinWatch = 0
     
@@ -2678,10 +2668,10 @@ Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
         
             Clan.isUsed = False
         
-            ListviewTabs.TabEnabled(2) = False
+            ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
             lvClanList.ListItems.Clear
-            ListviewTabs.Tab = 0
-            Call ListviewTabs_Click(2)
+            ListviewTabs.Tab = LVW_BUTTON_CHANNEL
+            Call ListviewTabs_Click(LVW_BUTTON_CHANNEL)
         
             AddChat RTBColors.ErrorMessageText, "[CLAN] You have been removed from the clan, or it has been disbanded."
         
@@ -2935,11 +2925,11 @@ Private Sub ClanHandler_RemoveUserReply(ByVal Result As Byte)
                 AwaitingSelfRemoval = 0
                 Clan.isUsed = False
                 
-                ListviewTabs.TabEnabled(2) = False
+                ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
                 lvClanList.ListItems.Clear
                 
-                ListviewTabs.Tab = 0
-                Call ListviewTabs_Click(2)
+                ListviewTabs.Tab = LVW_BUTTON_CHANNEL
+                Call ListviewTabs_Click(LVW_BUTTON_CHANNEL)
                 
                 Set g_Clan = New clsClanObj
                 
@@ -5364,7 +5354,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     c = ListviewTabs.Tab
                     If (c <> LVW_BUTTON_CHANNEL) Then
                         ListviewTabs.Tab = LVW_BUTTON_CHANNEL
-                        Call ListviewTabs_Click(c)
+                        Call ListviewTabs_Click(LVW_BUTTON_CHANNEL)
                     Else
                         cboSend.selStart = 0
                         cboSend.selLength = Len(cboSend.Text)
@@ -5376,7 +5366,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     c = ListviewTabs.Tab
                     If (c <> LVW_BUTTON_FRIENDS) And (ListviewTabs.TabEnabled(LVW_BUTTON_FRIENDS)) Then
                         ListviewTabs.Tab = LVW_BUTTON_FRIENDS
-                        Call ListviewTabs_Click(c)
+                        Call ListviewTabs_Click(LVW_BUTTON_FRIENDS)
                     End If
                 End If
                 
@@ -5385,7 +5375,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     c = ListviewTabs.Tab
                     If (c <> LVW_BUTTON_CLAN) And (ListviewTabs.TabEnabled(LVW_BUTTON_CLAN)) Then
                         ListviewTabs.Tab = LVW_BUTTON_CLAN
-                        Call ListviewTabs_Click(c)
+                        Call ListviewTabs_Click(LVW_BUTTON_CLAN)
                     End If
                 End If
                 
@@ -5791,28 +5781,89 @@ Private Sub scTimer_Timer()
     RunInAll "scTimer_Timer"
 End Sub
 
+' centralized "idle" events:
+' IDLE MESSAGE (.5*IDLEMESSAGEDELAY minutes - user setting)
+' PROFILE AMP (1 minute - useful minimum song length)
+' BNCS.SID_NULL (2 minutes - keep alive)
+' BNCS.SID_CLANMOTD (10 minutes - may change)
+' BNCS.SID_FRIENDSLIST (10 minutes - for D1,W2,D2 [no update], SC,W3 [bug in SID_FRIENDSUPDATE])
+Private Sub tmrIdleTimer_Timer()
+    On Error GoTo ERROR_HANDLER
 
-Private Sub Timer_Timer()
+' long-counter
+Static lCounter As Long
+    
+    lCounter = lCounter + 1
+    
+    'If lCounter >
+    
+    If g_Online Then
+        ' bot idle (30 second interval (x config value), offset 0 seconds)
+        If Config.IdleMessage Then
+            Dim IdleWait As Long
+            
+            IdleWait = Config.IdleMessageDelay * 30
+            
+            If (lCounter Mod IdleWait) = 0 Then
+                'AddQ "IDLE"
+                Call tmrIdleTimer_Timer_IdleMsg
+            End If
+        End If
+        
+        ' bot ProfileAmp (1 minute interval, offset 5 seconds)
+        If g_Online And Config.ProfileAmp Then
+            If (lCounter Mod 60) = 5 Then
+                'AddQ "PROFILE AMP"
+                Call UpdateProfile
+            End If
+        End If
+        
+        ' BNCS keepalive... (2 minute interval; offset -15 seconds)
+        If (lCounter Mod 120&) = 105& Then
+            ' if W3 & in clan, then (10 minute interval; offset -15 seconds from 2nd minute)
+            If IsW3 And Clan.isUsed And (lCounter Mod 600&) = 105& Then
+                ' request clan MOTD instead of NULL
+                'AddQ "CLAN MOTD"
+                RequestClanMOTD
+            ' if friend list updates enabled, then (10 minute interval; offset -15 seconds from 4th minute)
+            ElseIf Config.FriendsListTab And (lCounter Mod 600&) = 225& Then
+                ' request friendlist instead of FL
+                'AddQ "FRIENDS"
+                If (lvFriendList.ListItems.Count > 0) And (Not _
+                        (BotVars.Product = "PX3W" Or BotVars.Product = "3RAW" Or _
+                        BotVars.Product = "PXES" Or BotVars.Product = "RATS")) Then
+                    ' do not request friends list if list confirmed empty (SC,W3 will be updated on /f a)
+                    Call FriendListHandler.RequestFriendsList(PBuffer)
+                Else
+                    PBuffer.SendPacket SID_NULL
+                End If
+            ' else standard null
+            Else
+                'AddQ "NULL"
+                PBuffer.SendPacket SID_NULL
+            End If
+        End If
+    End If
+    
+    Exit Sub
+
+ERROR_HANDLER:
+
+    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in tmrIdleTimer_Timer()."
+    
+    Exit Sub
+    
+End Sub
+
+Private Sub tmrIdleTimer_Timer_IdleMsg()
     On Error GoTo ERROR_HANDLER
 
     Dim U As String, IdleMsg As String, s() As String
     Dim IdleWaitS As String, IdleType As String
-    Dim f As Integer, IdleWait As Integer
-    Static iCounter As Integer, UDP As Byte
-     
-    If iCounter >= 32760 Then iCounter = 0
+    Dim IdleWait As Integer, UDP As Byte
+    Dim IsError As Boolean
 
-    If Config.ProfileAmp And g_Online Then Call UpdateProfile
-    
     BotVars.JoinWatch = 0
-    
-    iCounter = iCounter + 1
-    
-    If sckBNet.State = 7 And Not IsW3 Then
-        If iCounter Mod 4 = 0 Then
-            PBuffer.SendPacket &H0
-        End If
-    End If
     
     If Not Config.IdleMessage Then Exit Sub
     
@@ -5822,107 +5873,91 @@ Private Sub Timer_Timer()
     
     If IdleWait < 2 Then Exit Sub
     
-    If iCounter >= IdleWait Then
-        iCounter = 0
-        'on error resume next
-        If IdleType = "msg" Or IdleType = vbNullString Then
-        
-            If StrComp(IdleMsg, "null", vbTextCompare) = 0 Or IdleMsg = vbNullString Then
-                Exit Sub
-            End If
-            
-            IdleMsg = Replace(IdleMsg, "%cpuup", ConvertTime(GetUptimeMS))
-            IdleMsg = Replace(IdleMsg, "%chan", g_Channel.Name)
-            IdleMsg = Replace(IdleMsg, "%c", g_Channel.Name)
-            IdleMsg = Replace(IdleMsg, "%me", GetCurrentUsername)
-            IdleMsg = Replace(IdleMsg, "%v", CVERSION)
-            IdleMsg = Replace(IdleMsg, "%ver", CVERSION)
-            IdleMsg = Replace(IdleMsg, "%bc", BanCount)
-            IdleMsg = Replace(IdleMsg, "%botup", ConvertTime(uTicks))
-            IdleMsg = Replace(IdleMsg, "%mp3", Replace(MediaPlayer.TrackName, "&", "+"))
-            IdleMsg = Replace(IdleMsg, "%quote", g_Quotes.GetRandomQuote)
-            IdleMsg = Replace(IdleMsg, "%rnd", GetRandomPerson)
-            IdleMsg = Replace(IdleMsg, "%t", Time$)
-            
-            If (IdleMsg = vbNullString) Then
-                GoTo Error
-            End If
-            
-        ElseIf IdleType = "uptime" Then
-            IdleMsg = "/me -: System Uptime: " & ConvertTime(GetUptimeMS()) & " :: Connection Uptime: " & ConvertTime(uTicks) & " :: " & CVERSION & " :-"
-            
-        ElseIf IdleType = "mp3" Then
-            Dim WindowTitle As String
-            
-            WindowTitle = MediaPlayer.TrackName
-            
-            If WindowTitle = vbNullString Then
-                IdleMsg = "/me .: " & CVERSION & " :: anti-idle :."
-                GoTo Send
-            End If
-            
-            If (MediaPlayer.IsPaused) Then
-                IdleMsg = "/me -: Now Playing: " & WindowTitle & " (paused) :: " & CVERSION & " :-"
-            Else
-                IdleMsg = "/me -: Now Playing: " & WindowTitle & " :: " & CVERSION & " :-"
-            End If
- 
-        ElseIf IdleType = "quote" Then
-            U = g_Quotes.GetRandomQuote
-            If Len(U) > 217 Then GoTo Error
-            IdleMsg = "/me : " & U
-            
-        End If
-        GoTo Send
-Error:
-        IdleMsg = "/me -- " & CVERSION
-Send:
-        If sckBNet.State = 7 Then
-            If InStr(1, IdleMsg, "& ", vbTextCompare) And IdleType = "msg" Then
-                s = Split(IdleMsg, "& ")
-                
-                For IdleWait = LBound(s) To UBound(s)
-                    If Len(s(IdleWait)) > 215 Then
-                        s(IdleWait) = Left$(s(IdleWait), 215)
-                    End If
-                    AddQ s(IdleWait)
-                Next
-            Else
-                If Len(IdleMsg) > 215 Then
-                    IdleMsg = Left$(IdleMsg, 215)
-                End If
-                
-                frmChat.AddQ IdleMsg
-            End If
+    'If iCounter >= IdleWait Then
+    'iCounter = 0
+    'on error resume next
+    If IdleType = "msg" Or IdleType = vbNullString Then
+    
+        If StrComp(IdleMsg, "null", vbTextCompare) = 0 Or IdleMsg = vbNullString Then
+            Exit Sub
         End If
         
-        Close #f
+        IdleMsg = Replace(IdleMsg, "%cpuup", ConvertTime(GetUptimeMS))
+        IdleMsg = Replace(IdleMsg, "%chan", g_Channel.Name)
+        IdleMsg = Replace(IdleMsg, "%c", g_Channel.Name)
+        IdleMsg = Replace(IdleMsg, "%me", GetCurrentUsername)
+        IdleMsg = Replace(IdleMsg, "%v", CVERSION)
+        IdleMsg = Replace(IdleMsg, "%ver", CVERSION)
+        IdleMsg = Replace(IdleMsg, "%bc", BanCount)
+        IdleMsg = Replace(IdleMsg, "%botup", ConvertTime(uTicks))
+        IdleMsg = Replace(IdleMsg, "%mp3", Replace(MediaPlayer.TrackName, "&", "+"))
+        IdleMsg = Replace(IdleMsg, "%quote", g_Quotes.GetRandomQuote)
+        IdleMsg = Replace(IdleMsg, "%rnd", GetRandomPerson)
+        IdleMsg = Replace(IdleMsg, "%t", Time$)
+        
+        If (IdleMsg = vbNullString) Then
+            IsError = True
+        End If
+        
+    ElseIf IdleType = "uptime" Then
+        IdleMsg = "/me -: System Uptime: " & ConvertTime(GetUptimeMS()) & " :: Connection Uptime: " & ConvertTime(uTicks) & " :: " & CVERSION & " :-"
+        
+    ElseIf IdleType = "mp3" Then
+        Dim WindowTitle As String
+        
+        WindowTitle = MediaPlayer.TrackName
+        
+        If WindowTitle = vbNullString Then
+            IsError = True
+        ElseIf (MediaPlayer.IsPaused) Then
+            IdleMsg = "/me -: Now Playing: " & WindowTitle & " (paused) :: " & CVERSION & " :-"
+        Else
+            IdleMsg = "/me -: Now Playing: " & WindowTitle & " :: " & CVERSION & " :-"
+        End If
+
+    ElseIf IdleType = "quote" Then
+        U = g_Quotes.GetRandomQuote
+        
+        IdleMsg = "/me : " & U
+        
+        If Len(U) > 217 Then
+            IsError = True
+        End If
+        
     End If
+            
+    If (IsError) Then
+        IdleMsg = "/me -- " & CVERSION
+    End If
+    
+    If sckBNet.State = 7 Then
+        If InStr(1, IdleMsg, "& ", vbTextCompare) And IdleType = "msg" Then
+            s = Split(IdleMsg, "& ")
+            
+            For IdleWait = LBound(s) To UBound(s)
+                If Len(s(IdleWait)) > 215 Then
+                    s(IdleWait) = Left$(s(IdleWait), 215)
+                End If
+                AddQ s(IdleWait)
+            Next
+        Else
+            If Len(IdleMsg) > 215 Then
+                IdleMsg = Left$(IdleMsg, 215)
+            End If
+            
+            frmChat.AddQ IdleMsg
+        End If
+    End If
+    'End If
     
     Exit Sub
 
 ERROR_HANDLER:
 
-    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in Timer_Timer()."
+    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in tmrIdleTimer_Timer_IdleMsg()."
     
     Exit Sub
     
-End Sub
-
-Private Sub tmrClanUpdate_Timer()
-    If (g_Channel.Self.Clan <> vbNullString) Then
-        RequestClanMOTD
-    End If
-End Sub
-
-Private Sub tmrFriendlistUpdate_Timer()
-    If (g_Online) Then
-        If (BotVars.UsingDirectFList) Then
-            If (lvFriendList.ListItems.Count > 0) Then
-                Call FriendListHandler.RequestFriendsList(PBuffer)
-            End If
-        End If
-    End If
 End Sub
 
 Private Sub tmrSilentChannel_Timer(Index As Integer)
@@ -6896,8 +6931,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     BotVars.MaxBacklogSize = Config.MaxBacklogSize
     BotVars.MaxLogFileSize = Config.MaxLogFileSize
     
-    BotVars.UsingDirectFList = Config.DoNotUseDirectFriendList
-    
     If Config.UrlDetection Then
         EnableURLDetect rtbChat.hWnd
     Else
@@ -7562,9 +7595,14 @@ Function GetChannelString() As String
         GetChannelString = vbNullString
     Else
         Select Case ListviewTabs.Tab
-            Case 0: GetChannelString = g_Channel.Name & " (" & lvChannel.ListItems.Count & ")"
-            Case 1: GetChannelString = lvFriendList.ListItems.Count & " friends listed"
-            Case 2: GetChannelString = "Clan " & g_Clan.Name & ": " & lvClanList.ListItems.Count & " members."
+            Case 0:
+                If LenB(g_Channel.Name) = 0 Then
+                    GetChannelString = BotVars.Gateway
+                Else
+                    GetChannelString = g_Channel.Name & " (" & lvChannel.ListItems.Count & ")"
+                End If
+            Case 1: GetChannelString = "Friends (" & lvFriendList.ListItems.Count & ")"
+            Case 2: GetChannelString = "Clan " & g_Clan.Name & " (" & lvClanList.ListItems.Count & " members)"
         End Select
     End If
 End Function
@@ -7623,14 +7661,7 @@ Sub InitListviewTabs()
     End If
     
     ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = toSet
-    
-    If BotVars.UsingDirectFList Then
-        toSet = True
-    Else
-        toSet = False
-    End If
-    
-    ListviewTabs.TabEnabled(LVW_BUTTON_FRIENDS) = toSet
+    ListviewTabs.TabEnabled(LVW_BUTTON_FRIENDS) = Config.FriendsListTab
 End Sub
 
 '// to be called at disconnect time

@@ -52,7 +52,6 @@ Private m_bUseRealm                     As Boolean
 Private m_bNoTray                       As Boolean
 Private m_bShowOfflineFriends           As Boolean
 Private m_lReconnectDelay               As Long
-Private m_bUsingDirectFList             As Boolean
 Private m_lAutofilterMS                 As Long
 Private m_bNoAutocompletion             As Boolean
 Private m_bNoColoring                   As Boolean
@@ -374,11 +373,11 @@ Public Property Let ReconnectDelay(ByVal lReconnectDelay As Long)
 End Property
 
 Public Property Get UsingDirectFList() As Boolean
-    UsingDirectFList = m_bUsingDirectFList
+    UsingDirectFList = Config.FriendsListTab
 End Property
 
 Public Property Let UsingDirectFList(ByVal bUsingDirectFList As Boolean)
-    m_bUsingDirectFList = bUsingDirectFList
+    Config.FriendsListTab = bUsingDirectFList
 End Property
 
 Public Property Get AutofilterMS() As Long
