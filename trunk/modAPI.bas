@@ -8,7 +8,8 @@ Option Explicit
 Public Declare Sub ExitProcess Lib "kernel32" (ByVal uExitCode As Long)
 
 Public Declare Function GetForegroundWindow Lib "user32" () As Long
-   
+Public Declare Function EnumDisplayMonitors Lib "user32" (ByVal hDC As Long, lprcClip As Any, ByVal lpfnEnum As Long, dwData As Long) As Long
+
 Public Declare Function SetSockOpt Lib "ws2_32.dll" Alias "setsockopt" (ByVal lSocketHandle As Long, ByVal lSocketLevel As Long, ByVal lOptName As Long, vOptVal As Any, ByVal lOptLen As Long) As Long
 Public Declare Function ntohl Lib "ws2_32.dll" (ByVal netlong As Long) As Long
 Public Declare Function ntohs Lib "ws2_32.dll" (ByVal netshort As Long) As Integer

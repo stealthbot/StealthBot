@@ -1768,6 +1768,21 @@ Private Sub Form_Load()
     If Config.PositionTop > 0 Then
         Me.Top = CLng(Config.PositionTop) * Screen.TwipsPerPixelY
     End If
+
+    'Make sure the window is on the screen
+    If Config.EnforceScreenBounds Then
+        If Config.MonitorCount <> GetMonitorCount Then
+            If (Me.Left > (Screen.Width - Me.Width)) Then
+                Me.Left = (Screen.Width - Me.Width)
+            End If
+    
+            If (Me.Top > (Screen.Height - Me.Height)) Then
+                Me.Top = (Screen.Height - Me.Height)
+            End If
+            
+            Config.MonitorCount = GetMonitorCount
+        End If
+    End If
     
     'Support for recording maxmized position. - FrOzeN
     If Config.IsMaximized Then
@@ -2979,7 +2994,7 @@ Sub Form_Unload(Cancel As Integer)
     
     AddChat RTBColors.ErrorMessageText, "Shutting down..."
     
-    If LenB(Dir$(GetConfigFilePath())) > 0 Then
+    If Config.FileExists Then
         If Me.WindowState <> vbMinimized Then
             Call RecordWindowPosition(CBool(Me.WindowState = vbMaximized))
         End If

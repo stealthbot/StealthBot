@@ -156,13 +156,15 @@ Private m_DisableRTBAutoCopy        As Boolean
 Private m_HideBanMessages           As Boolean
 Private m_NameAutoComplete          As Boolean
 
-'[UI_POS]
+'[UI-POSITION]
 Private m_PositionLeft              As Long
 Private m_PositionTop               As Long
 Private m_PositionHeight            As Long
 Private m_PositionWidth             As Long
 Private m_IsMaximized               As Boolean
 Private m_LastSettingsPanel         As Byte
+Private m_EnforceBounds             As Boolean
+Private m_MonitorCount              As Long
 
 '[LOGGING]
 Private m_LogDBActions              As Boolean
@@ -1045,7 +1047,7 @@ End Property
 
 
 '-------------------------
-'   SECTION: UI
+'   SECTION: UI-POSITION
 '-------------------------
 
 Public Property Get PositionLeft() As Long
@@ -1094,6 +1096,22 @@ End Property
 
 Public Property Let LastSettingsPanel(ByVal sValue As Byte)
     m_LastSettingsPanel = sValue
+End Property
+
+Public Property Get EnforceScreenBounds() As Boolean
+    EnforceScreenBounds = m_EnforceBounds
+End Property
+
+Public Property Let EnforceScreenBounds(ByVal bValue As Boolean)
+    m_EnforceBounds = bValue
+End Property
+
+Public Property Get MonitorCount() As Long
+    MonitorCount = m_MonitorCount
+End Property
+
+Public Property Let MonitorCount(ByVal lValue As Long)
+    m_MonitorCount = lValue
 End Property
 
 
@@ -1442,7 +1460,7 @@ Public Sub Load(ByVal sFilePath As String)
         Exit Sub
     End If
     
-    m_ConfigVersion = ReadSettingL(SECTION_MAIN, "ConfigVersion", 5)
+    m_ConfigVersion = ReadSetting(SECTION_MAIN, "ConfigVersion", 0)
     
     Select Case m_ConfigVersion
         Case 5: Call LoadVersion5Config
@@ -1598,6 +1616,8 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_UI_POS, "Width", m_PositionWidth
     WriteSetting SECTION_UI_POS, "Maximized", m_IsMaximized
     WriteSetting SECTION_UI_POS, "LastSettingsPanel", m_LastSettingsPanel
+    WriteSetting SECTION_UI_POS, "EnforceBounds", m_EnforceBounds
+    WriteSetting SECTION_UI_POS, "MonitorCount", m_MonitorCount
     
     WriteSetting SECTION_LOGGING, "LogDBActions", m_LogDBActions
     WriteSetting SECTION_LOGGING, "LogCommands", m_LogCommands
@@ -1775,6 +1795,8 @@ Private Sub LoadDefaults()
     m_PositionWidth = 800
     m_IsMaximized = False
     m_LastSettingsPanel = 0
+    m_EnforceBounds = True
+    m_MonitorCount = 1
 
     '[Logging]
     m_LogDBActions = True
@@ -2094,6 +2116,8 @@ Private Sub LoadVersion6Config()
     m_PositionWidth = ReadSettingL(SECTION_UI_POS, "Width", m_PositionWidth)
     m_IsMaximized = ReadSettingB(SECTION_UI_POS, "Maximized", m_IsMaximized)
     m_LastSettingsPanel = ReadSettingL(SECTION_UI_POS, "LastSettingsPanel", m_LastSettingsPanel)
+    m_EnforceBounds = ReadSettingB(SECTION_UI_POS, "EnforceBounds", m_EnforceBounds)
+    m_MonitorCount = ReadSettingL(SECTION_UI_POS, "MonitorCount", m_MonitorCount)
 
     m_LogDBActions = ReadSettingB(SECTION_LOGGING, "LogDBActions", m_LogDBActions)
     m_LogCommands = ReadSettingB(SECTION_LOGGING, "LogCommands", m_LogCommands)

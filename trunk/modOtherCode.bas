@@ -3221,3 +3221,13 @@ Public Function GetProductInfo(ByVal sProductCode As String) As udtProductInfo
     Next
     GetProductInfo = ProductList(0)
 End Function
+
+'Returns the number of monitors active on the computer.
+Public Function GetMonitorCount() As Long
+    EnumDisplayMonitors 0, ByVal 0&, AddressOf MonitorEnumProc, GetMonitorCount
+End Function
+
+Private Function MonitorEnumProc(ByVal hMonitor As Long, ByVal hDCMonitor As Long, ByVal lprcMonitor As Long, dwData As Long) As Long
+    dwData = dwData + 1
+    MonitorEnumProc = 1
+End Function
