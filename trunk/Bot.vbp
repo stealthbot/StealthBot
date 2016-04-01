@@ -117,6 +117,7 @@ Module=modBNLS; modBNLS.bas
 Class=clsKeyDecoder; clsKeyDecoder.cls
 Module=modConstants; modConstants.bas
 Class=clsConfig; clsConfig.cls
+ResFile32="rc\StealthBot.res"
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""
