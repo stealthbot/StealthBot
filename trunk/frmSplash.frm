@@ -16,6 +16,11 @@ Begin VB.Form frmSplash
    ScaleWidth      =   6960
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin VB.Timer tmrUnload 
+      Interval        =   1000
+      Left            =   6240
+      Top             =   4800
+   End
    Begin VB.Label Label1 
       Alignment       =   2  'Center
       BackColor       =   &H00000000&
@@ -58,6 +63,12 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Private lStartTick As Long      ' The tick count when the form was loaded.
+Private bHasShown As Boolean    ' Set to true after 1 second
+
+' Number of milliseconds before the form automatically unloads
+Private Const AUTO_UNLOAD_DELAY = 15000
+
 Private Sub Bday_Click()
     frmChat.Show
     Unload Me
@@ -72,6 +83,8 @@ Private Sub Image_click()
     frmChat.Show
     Unload Me
 End Sub
+
+
 
 Private Sub IsBirthday(sName As String, iBorn As Integer)
     On Error Resume Next 'this isn't important so screw the errors
@@ -113,9 +126,33 @@ Private Sub Form_Load()
       Case "11/26": IsBirthday "Hdx", 1989
       Case Else: Label1.Caption = "[ " & CVERSION & " ]"
     End Select
+    
+    lStartTick = GetTickCount
+End Sub
+
+Private Sub Form_LostFocus()
+    If (bHasShown) Then
+        tmrUnload.Enabled = False
+        Unload Me
+    End If
 End Sub
 
 Private Sub Logo_Click()
     frmChat.Show
     Unload Me
+End Sub
+
+Private Sub tmrUnload_Timer()
+    On Error GoTo KILL_FORM
+    
+    If ((GetTickCount - lStartTick) >= AUTO_UNLOAD_DELAY) Then
+        GoTo KILL_FORM
+    End If
+    bHasShown = True
+    Exit Sub
+
+KILL_FORM:
+    tmrUnload.Enabled = False
+    Unload Me
+    Exit Sub
 End Sub
