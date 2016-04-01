@@ -5954,20 +5954,6 @@ Sub Connect()
             MissingInfo = MissingInfo & "Server, "
             NotEnoughInfo = True
         End If
-        ' I can't find any reason that this is required. -Ribose
-        'If BotVars.HomeChannel = vbNullString Then
-        '    MissingInfo = MissingInfo & "Home Channel, "
-        '    NotEnoughInfo = True
-        'End If
-        ' I can't find any reason that this is required. -Pyro
-        'If BotVars.BotOwner = vbNullString Then
-        '    MissingInfo = MissingInfo & "Bot Owner, "
-        '    NotEnoughInfo = True
-        'End If
-        If BotVars.Trigger = vbNullString Then
-            MissingInfo = MissingInfo & "Trigger, "
-            NotEnoughInfo = True
-        End If
         If BotVars.Product = vbNullString Then
             MissingInfo = MissingInfo & "your choice of Client, "
             NotEnoughInfo = True

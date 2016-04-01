@@ -2183,7 +2183,7 @@ Private Sub ConformValues()
 End Sub
 
 Private Function GetProtectedString(ByVal sValue As String) As String
-    If Len(sValue) > 2 Then
+    If Len(sValue) > 1 Then
         GetProtectedString = Mid(sValue, 2, Len(sValue) - 2)
     Else
         GetProtectedString = sValue
