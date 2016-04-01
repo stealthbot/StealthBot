@@ -95,6 +95,9 @@ Private m_AutocompletePostfix       As String
 Private m_CaseSensitiveDBFlags      As Boolean
 Private m_MultiLinePostfix          As String
 Private m_FriendsListTab            As Boolean
+Private m_RealmAutoChooseServer     As String
+Private m_RealmAutoChooseCharacter  As String
+Private m_RealmAutoChooseDelay      As Long
 
 '[MODERATION]
 Private m_BanEvasion                As Boolean
@@ -156,6 +159,7 @@ Private m_SecondsToIdle             As Long
 Private m_DisableRTBAutoCopy        As Boolean
 Private m_HideBanMessages           As Boolean
 Private m_NameAutoComplete          As Boolean
+Private m_RealmHideMotd             As Boolean
 
 '[UI-POSITION]
 Private m_PositionLeft              As Long
@@ -205,6 +209,7 @@ Private m_MaxMessageLength          As Integer
 Private m_AutoCreateChannels        As String
 Private m_RegisterEmailAction       As String
 Private m_RegisterEmailDefault      As String
+Private m_RealmServerPassword       As String
 Private m_VersionBytes(8)           As Long     'XXVerByte
 Private m_LogonSystems(8)           As Long     'XXLogonSystem
 
@@ -579,6 +584,37 @@ Public Property Let MultiLinePostfix(ByVal sValue As String)
     m_MultiLinePostfix = "{" & sValue & "}"
 End Property
 
+Public Property Get FriendsListTab() As Boolean
+    FriendsListTab = m_FriendsListTab
+End Property
+
+Public Property Let FriendsListTab(ByVal sValue As Boolean)
+    m_FriendsListTab = sValue
+End Property
+
+Public Property Get RealmAutoChooseServer() As String
+    RealmAutoChooseServer = m_RealmAutoChooseServer
+End Property
+
+Public Property Let RealmAutoChooseServer(ByVal sValue As String)
+    m_RealmAutoChooseServer = sValue
+End Property
+
+Public Property Get RealmAutoChooseCharacter() As String
+    RealmAutoChooseCharacter = m_RealmAutoChooseCharacter
+End Property
+
+Public Property Let RealmAutoChooseCharacter(ByVal sValue As String)
+    m_RealmAutoChooseCharacter = sValue
+End Property
+
+Public Property Get RealmAutoChooseDelay() As Long
+    RealmAutoChooseDelay = m_RealmAutoChooseDelay
+End Property
+
+Public Property Let RealmAutoChooseDelay(ByVal sValue As Long)
+    m_RealmAutoChooseDelay = sValue
+End Property
 
 '-------------------------
 '   SECTION: MODERATION
@@ -1045,6 +1081,14 @@ Public Property Let NameAutoComplete(ByVal sValue As Boolean)
     m_NameAutoComplete = sValue
 End Property
 
+Public Property Get RealmHideMotd() As Boolean
+    RealmHideMotd = m_RealmHideMotd
+End Property
+
+Public Property Let RealmHideMotd(ByVal sValue As Boolean)
+    m_RealmHideMotd = sValue
+End Property
+
 
 '-------------------------
 '   SECTION: UI-POSITION
@@ -1270,14 +1314,6 @@ Public Property Let IgnoreCDKeyLength(ByVal sValue As Boolean)
     m_IgnoreCDKeyLength = sValue
 End Property
 
-Public Property Get FriendsListTab() As Boolean
-    FriendsListTab = m_FriendsListTab
-End Property
-
-Public Property Let FriendsListTab(ByVal sValue As Boolean)
-    m_FriendsListTab = sValue
-End Property
-
 Public Property Get PingSpoofing() As Byte
     PingSpoofing = m_PingSpoofing
 End Property
@@ -1388,6 +1424,14 @@ End Property
 
 Public Property Let RegisterEmailDefault(ByVal sValue As String)
     m_RegisterEmailDefault = sValue
+End Property
+
+Public Property Get RealmServerPassword() As String
+    RealmServerPassword = m_RealmServerPassword
+End Property
+
+Public Property Let RealmServerPassword(ByVal sValue As String)
+    m_RealmServerPassword = sValue
 End Property
 
 
@@ -1552,6 +1596,9 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_FEATURES, "CaseSensitiveFlags", m_CaseSensitiveDBFlags
     WriteSetting SECTION_FEATURES, "MultiLinePostfix", m_MultiLinePostfix
     WriteSetting SECTION_FEATURES, "FriendsListTab", m_FriendsListTab
+    WriteSetting SECTION_FEATURES, "RealmAutoChooseServer", m_RealmAutoChooseServer
+    WriteSetting SECTION_FEATURES, "RealmAutoChooseCharacter", m_RealmAutoChooseCharacter
+    WriteSetting SECTION_FEATURES, "RealmAutoChooseDelay", m_RealmAutoChooseDelay
     
     WriteSetting SECTION_MODERATION, "BanEvasion", m_BanEvasion
     WriteSetting SECTION_MODERATION, "PhraseBans", m_Phrasebans
@@ -1610,6 +1657,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_UI, "SecondsToIdle", m_SecondsToIdle
     WriteSetting SECTION_UI, "NoRTBAutomaticCopy", m_DisableRTBAutoCopy
     WriteSetting SECTION_UI, "HideBanMessages", m_HideBanMessages
+    WriteSetting SECTION_UI, "RealmHideMotd", m_RealmHideMotd
     
     WriteSetting SECTION_UI_POS, "Left", m_PositionLeft
     WriteSetting SECTION_UI_POS, "Top", m_PositionTop
@@ -1654,6 +1702,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_EMULATION, "AutoCreateChannels", m_AutoCreateChannels
     WriteSetting SECTION_EMULATION, "RegisterEmailAction", m_RegisterEmailAction
     WriteSetting SECTION_EMULATION, "RegisterEmailDefault", m_RegisterEmailDefault
+    WriteSetting SECTION_EMULATION, "RealmServerPassword", m_RealmServerPassword
     
     WriteSetting SECTION_DEBUG, "Warden", m_DebugWarden
     
@@ -1727,6 +1776,10 @@ Private Sub LoadDefaults()
     m_AutocompletePostfix = "{,}"
     m_CaseSensitiveDBFlags = True
     m_MultiLinePostfix = "{ [more]}"
+    m_FriendsListTab = True
+    m_RealmAutoChooseServer = vbNullString
+    m_RealmAutoChooseCharacter = vbNullString
+    m_RealmAutoChooseDelay = 30
 
     '[Moderation]
     m_BanEvasion = True
@@ -1787,6 +1840,7 @@ Private Sub LoadDefaults()
     m_SecondsToIdle = 600
     m_DisableRTBAutoCopy = False
     m_HideBanMessages = False
+    m_RealmHideMotd = False
 
     '[UI-Position]
     m_PositionLeft = -1
@@ -1822,7 +1876,6 @@ Private Sub LoadDefaults()
     '[Emulation]
     m_IgnoreClanInvites = False
     m_IgnoreCDKeyLength = False
-    m_FriendsListTab = True
     m_PingSpoofing = 0
     m_UseUDP = False
     m_CustomStatstring = vbNullString
@@ -1837,6 +1890,7 @@ Private Sub LoadDefaults()
     m_AutoCreateChannels = "ALWAYS"
     m_RegisterEmailAction = "PROMPT"
     m_RegisterEmailDefault = vbNullString
+    m_RealmServerPassword = "password"
 
     '[Debug]
     m_DebugWarden = False
@@ -2052,6 +2106,9 @@ Private Sub LoadVersion6Config()
     m_CaseSensitiveDBFlags = ReadSettingB(SECTION_FEATURES, "CaseSensitiveFlags", m_CaseSensitiveDBFlags)
     m_MultiLinePostfix = ReadSetting(SECTION_FEATURES, "MultiLinePostfix", m_MultiLinePostfix)
     m_FriendsListTab = ReadSettingL(SECTION_FEATURES, "FriendsListTab", m_FriendsListTab)
+    m_RealmAutoChooseServer = ReadSetting(SECTION_FEATURES, "RealmAutoChooseServer", m_RealmAutoChooseServer)
+    m_RealmAutoChooseCharacter = ReadSetting(SECTION_FEATURES, "RealmAutoChooseCharacter", m_RealmAutoChooseCharacter)
+    m_RealmAutoChooseDelay = ReadSettingL(SECTION_FEATURES, "RealmAutoChooseDelay", m_RealmAutoChooseDelay)
 
     m_BanEvasion = ReadSettingB(SECTION_MODERATION, "BanEvasion", m_BanEvasion)
     m_Phrasebans = ReadSettingB(SECTION_MODERATION, "PhraseBans", m_Phrasebans)
@@ -2110,6 +2167,7 @@ Private Sub LoadVersion6Config()
     m_SecondsToIdle = ReadSettingL(SECTION_UI, "SecondsToIdle", m_SecondsToIdle)
     m_DisableRTBAutoCopy = ReadSettingB(SECTION_UI, "NoRTBAutomaticCopy", m_DisableRTBAutoCopy)
     m_HideBanMessages = ReadSettingB(SECTION_UI, "HideBanMessages", m_HideBanMessages)
+    m_RealmHideMotd = ReadSettingB(SECTION_UI, "RealmHideMotd", m_RealmHideMotd)
 
     m_PositionLeft = ReadSettingL(SECTION_UI_POS, "Left", m_PositionLeft)
     m_PositionTop = ReadSettingL(SECTION_UI_POS, "Top", m_PositionTop)
@@ -2154,6 +2212,7 @@ Private Sub LoadVersion6Config()
     m_AutoCreateChannels = ReadSetting(SECTION_EMULATION, "AutoCreateChannels", m_AutoCreateChannels)
     m_RegisterEmailAction = ReadSetting(SECTION_EMULATION, "RegisterEmailAction", m_RegisterEmailAction)
     m_RegisterEmailDefault = ReadSetting(SECTION_EMULATION, "RegisterEmailDefault", m_RegisterEmailDefault)
+    m_RealmServerPassword = ReadSetting(SECTION_EMULATION, "RealmServerPassword", m_RealmServerPassword)
 
     m_DebugWarden = ReadSettingB(SECTION_DEBUG, "Warden", m_DebugWarden)
 

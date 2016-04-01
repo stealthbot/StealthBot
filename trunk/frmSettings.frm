@@ -4393,6 +4393,7 @@ Private Sub Form_Load()
         .AddItem "Disabled"
         .AddItem "0ms (send first)"
         .AddItem "-1ms (ignore)"
+        .ListIndex = 0
     End With
     
     With cboConnMethod
@@ -5357,8 +5358,6 @@ Private Sub InitAllPanels()
 End Sub
 
 Private Sub InitBasicConfig()
-    Dim s As String
-    Dim f As Integer
     Dim i As Integer
     Dim AddCurrent As Boolean
     Dim Item As String
@@ -5372,8 +5371,6 @@ Private Sub InitBasicConfig()
     txtHomeChan.Text = Config.HomeChannel
 
     With cboServer
-        .Text = Config.Server
-        
         ' add the 4 default servers
         .AddItem "useast.battle.net"
         .AddItem "uswest.battle.net"
@@ -5388,34 +5385,30 @@ Private Sub InitBasicConfig()
             .AddItem ""
             
             For i = 1 To AdditionalServerList.Count
-            
                 .AddItem AdditionalServerList.Item(i)
-            
             Next i
         End If
         
         ' check if "currently selected" is in list
         AddCurrent = True
         
-        For i = 0 To .ListCount
+        For i = 0 To .ListCount - 1
             Item = .List(i)
             
-            If StrComp(Item, s, vbBinaryCompare) = 0 Then
-            
+            If StrComp(Item, Config.Server, vbBinaryCompare) = 0 Then
                 AddCurrent = False
-                
+                .ListIndex = i
             End If
         Next i
         
         ' if not, add it (first)
         If AddCurrent Then
-        
             .AddItem s, 0
-            
+            .ListIndex = 0
         End If
     End With
     
-    Select Case GetProductInfo(Config.Game).code
+    Select Case GetProductInfo(Config.Game).Code
         Case PRODUCT_STAR:    Call optSTAR_Click: optSTAR.Value = True: chkSHR.Value = vbUnchecked: chkJPN.Value = vbUnchecked
         Case PRODUCT_SEXP:    Call optSEXP_Click: optSEXP.Value = True
         Case PRODUCT_D2DV:    Call optD2DV_Click: optD2DV.Value = True

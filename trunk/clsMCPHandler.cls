@@ -90,7 +90,7 @@ On Error GoTo ERROR_HANDLER
     Dim Title   As String
     Dim Descr   As String
     
-    ChoiceValue = ReadCfg$("Override", "RealmServer")
+    ChoiceValue = Config.RealmAutoChooseServer
     
     ' loop through realms
     For i = 1 To m_RealmServerList.Count
@@ -213,7 +213,7 @@ End Sub
 Private Function GetRealmPassword() As String
     Dim RealmPassword As String
     
-    RealmPassword = ReadCfg$("Override", "RealmServerPassword")
+    RealmPassword = Config.RealmServerPassword
     
     If (LenB(RealmPassword) = 0) Then RealmPassword = REALM_PASSWORD
     
@@ -762,7 +762,7 @@ End Sub
 Private Sub Event_RealmMOTD(ByVal Message As String)
     Dim RealmHideMotd As Boolean
     
-    RealmHideMotd = (StrComp(ReadCfg$("Override", "RealmHideMotd"), "Y", vbTextCompare) = 0)
+    RealmHideMotd = Config.RealmHideMotd
     
     If Not RealmHideMotd Then
         frmChat.AddChat RTBColors.ServerInfoText, "[REALM] " & Message
@@ -784,21 +784,14 @@ End Sub
 Private Sub Event_CharListResponse()
     Dim RealmCharacter       As String
     Dim RealmCharIndex       As Integer
-    Dim sRealmAutoChooseWait As String
     Dim RealmAutoChooseWait  As Long
     Dim i                    As Integer
     Dim Character()          As Variant
     
     m_RetrievingCharacterList = False
     
-    RealmCharacter = ReadCfg$("Override", "RealmCharacter")
-    sRealmAutoChooseWait = ReadCfg$("Override", "RealmAutoChooseWait")
-    If IsNumeric(sRealmAutoChooseWait) Then
-        RealmAutoChooseWait = CLng(sRealmAutoChooseWait)
-    Else
-        ' default to 30 second wait
-        RealmAutoChooseWait = 30
-    End If
+    RealmCharacter = Config.RealmAutoChooseCharacter
+    RealmAutoChooseWait = Config.RealmAutoChooseDelay
     
     If m_CharacterList.Count = 0 Then
         ' nothing can be chosen
