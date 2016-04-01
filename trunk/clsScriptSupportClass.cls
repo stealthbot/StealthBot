@@ -1149,14 +1149,58 @@ End Function
 
 '// CREATEKEYDECODER
 '// Creates a KeyDecoder object for decoding and hashing CD keys.
-Public Function CreateKeyDecoder(ByVal CdKey As String) As clsKeyDecoder
+Public Function CreateKeyDecoder(ByVal CDKey As String) As clsKeyDecoder
     Dim KD As New clsKeyDecoder
     
-    If KD.Initialize(CdKey) Then
+    If KD.Initialize(CDKey) Then
         Set CreateKeyDecoder = KD
     End If
     
     Set KD = Nothing
+End Function
+
+'// GETALLFONTS
+'// Gets an array of all currently installed fonts on this system.
+Public Function GetAllFonts() As String()
+    Dim Fonts() As String
+    Dim i As Integer
+    
+    ReDim Fonts(Screen.FontCount - 1)
+    For i = 0 To Screen.FontCount - 1
+        Fonts(i) = Screen.Fonts(i)
+    Next i
+    
+    GetAllFonts = Fonts
+End Function
+
+'// CLIPBOARD
+'// Access to the system clipboard.
+Public Function Clipboard() As VB.Clipboard
+    Set Clipboard = VB.Clipboard
+End Function
+
+'// TWIPSPERPIXELX
+'// Get the horizontal ratio of twips/pixel.
+Public Function TwipsPerPixelX() As Single
+    TwipsPerPixelX = Screen.TwipsPerPixelX
+End Function
+
+'// TWIPSPERPIXELY
+'// Get the vertical ratio of twips/pixel.
+Public Function TwipsPerPixelY() As Single
+    TwipsPerPixelY = Screen.TwipsPerPixelY
+End Function
+
+'// SCREENWIDTH
+'// Get the width of the current display in twips.
+Public Function ScreenWidth() As Single
+    ScreenWidth = Screen.Width
+End Function
+
+'// SCREENHEIGHT
+'// Get the height of the current display in twips.
+Public Function ScreenHeight() As Single
+    ScreenHeight = Screen.Height
 End Function
 
 '// GETSCRIPTMODULE
