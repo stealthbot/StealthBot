@@ -1,0 +1,24 @@
+Sub frm_Initialize()
+
+   frm.CreateObj "TextBox", "text"
+   frm.CreateObj "RichTextBox", "rtb"
+
+End Sub
+
+Sub frm_Load()
+
+   AddChat vbBlue, "frm_Load()"
+
+End Sub
+
+Sub frm_text_Change()
+
+   AddChat vbBlue, "frm_text_Change()"
+
+End Sub
+
+Sub frm_Unload(Cancel)
+
+   frm.ClearObjs
+
+End Sub

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="argument">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="documentation" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+              <xsd:element name="specialnotes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="match" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:attribute name="message" type="xsd:string" use="required"/>
+            <xsd:attribute name="case-sensitive" type="xsd:string"/>
+          </xsd:complexType>
+        </xsd:element>       
+        <xsd:element name="error" minOccurs="0" maxOccurs="1" />
+        <xsd:element name="restrictions" minOccurs="0" maxOccurs="1">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="restriction" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="documentation" minOccurs="0" maxOccurs="1">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                          <xsd:element name="specialnotes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                         </xsd:sequence>
+                       </xsd:complexType>
+                     </xsd:element>
+                     <xsd:element name="match" minOccurs="0" maxOccurs="1">
+                       <xsd:complexType>
+                         <xsd:attribute name="message" type="xsd:string" use="required"/>
+                         <xsd:attribute name="case-sensitive" type="xsd:string"/>
+                       </xsd:complexType>
+                     </xsd:element>       
+                     <xsd:element name="error" minOccurs="0" maxOccurs="1" />
+                     <xsd:element name="access" minOccurs="1" maxOccurs="1">
+                       <xsd:complexType>
+                         <xsd:sequence>
+                           <xsd:element name="rank" type="xsd:string" minOccurs="0" maxOccurs="1" />
+                           <xsd:element name="flags" minOccurs="0" maxOccurs="1">
+                             <xsd:complexType>
+                               <xsd:sequence>
+                                 <xsd:element name="flag" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+                               </xsd:sequence>
+                             </xsd:complexType>
+                           </xsd:element>                                            
+                         </xsd:sequence>
+                       </xsd:complexType>
+                    </xsd:element>                                
+                  </xsd:sequence>
+                  <xsd:attribute name="name" type="xsd:string" use="required" />
+                  <xsd:attribute name="nonfatal" type="xsd:string" />
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="name" type="xsd:string" use="required" />
+      <xsd:attribute name="type" type="xsd:string" />
+      <xsd:attribute name="optional" type="xsd:string" />
+    </xsd:complexType>
+  </xsd:element>
+  
+
+  <xsd:element name="commands">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="command" maxOccurs="unbounded">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="aliases" minOccurs="1" maxOccurs="1">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="alias" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>  
+              <xsd:element name="documentation" minOccurs="1" maxOccurs="1">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="description" type="xsd:string" minOccurs="0" />
+                    <xsd:element name="specialnotes" type="xsd:string" minOccurs="0" />
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="arguments" minOccurs="0" maxOccurs="1">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element ref="argument" minOccurs="0" maxOccurs="unbounded" />
+                    <xsd:element name="optional" minOccurs="0" maxOccurs="1">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="number" minOccurs="0" maxOccurs="1">
+                            <xsd:complexType>
+                              <xsd:sequence>
+                                <xsd:element ref="argument" minOccurs="0" maxOccurs="1" />
+                              </xsd:sequence>
+                            </xsd:complexType>
+                          </xsd:element>
+                          <xsd:element name="string" minOccurs="0" maxOccurs="1">
+                            <xsd:complexType>
+                              <xsd:sequence>
+                                <xsd:element ref="argument" minOccurs="0" maxOccurs="1" />
+                              </xsd:sequence>
+                            </xsd:complexType>
+                          </xsd:element>
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="access" minOccurs="1" maxOccurs="1">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="rank" type="xsd:string" minOccurs="0" maxOccurs="1" />
+                    <xsd:element name="flags" minOccurs="0" maxOccurs="1">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="flag" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+            <xsd:attribute name="name" type="xsd:string" use="required" />
+            <xsd:attribute name="owner" type="xsd:string" />
+            <xsd:attribute name="token" type="xsd:string" />
+            <xsd:attribute name="enabled" type="xsd:string" />
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    <xsd:attribute name="version" type="xsd:decimal" />
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

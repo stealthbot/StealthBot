@@ -1,0 +1,51 @@
+StealthBot End-User License Agreement
+Updated 06-October-2009
+
+IMPORTANT: THIS SOFTWARE END USER LICENSE AGREEMENT ("EULA") IS A LEGAL AGREEMENT BETWEEN YOU AND THE STEALTHBOT DEVELOPMENT TEAM ("DEVELOPERS"). READ IT CAREFULLY BEFORE USING THE SOFTWARE. IT PROVIDES A LICENSE TO USE AND DISTRIBUTE THE SOFTWARE AND CONTAINS LIABILITY DISCLAIMERS. BY DOWNLOADING, INSTALLING, USING OR REDISTRIBUTING THE SOFTWARE, YOU ARE CONFIRMING YOUR ACCEPTANCE OF THE SOFTWARE AND AGREEING TO BECOME BOUND BY THE TERMS OF THIS AGREEMENT. IF YOU DO NOT AGREE TO BE BOUND BY THESE TERMS, THEN DELETE THE SOFTWARE FROM YOUR COMPUTER.
+
+1. Definitions
+
+    [a] "Software" refers to the StealthBot program, Profile Launcher sub-program, and all files deployed by the program's installer.
+    [b] "Blizzard" refers to the Activision Blizzard, Inc. and any associated employees or representatives.
+    [c] "Developers" or "the Developers" refers to the people listed by pseudonym in the List of developers.
+    [d] "Author" refers to Andy T., who operates under the pseudonym Stealth and operates StealthBot's web presence. 
+
+2. License Grants
+
+    [a] You are granted unlimited use of this software on unlimited computers, provided you follow the License Restrictions listed below.
+    [b] You are granted permission to distribute this software provided you adhere to the License Restrictions below. 
+
+3. License Restrictions
+
+    [a] You may not alter, merge, modify, adapt or translate the Software.
+    [b] You may not decompile, reverse engineer, hex edit, disassemble, or otherwise reduce the Software to a human-perceivable form.
+    [c] You may not sell, rent, lease, sublicense or otherwise profit financially the Software without the express written consent of the Author.
+    [d] You may not modify the Software or create derivative works based upon the Software, except by using the Scripting System built into the Software.
+    [e] You may not export the Software into any country prohibited by the United States Export Administration Act and the regulations thereunder.
+    [f] You may not utilize the software for malicious purposes such as "trojanning" (deploying a backdoor virus) or "scamming" (utilizing a third party website or program in conjunction with the software to garner user information of any type).
+    [g] In the event that you fail to comply with this EULA, the Author may terminate the license and you must destroy all copies of the Software (with all other rights of both parties and all other provisions of this EULA surviving any such termination). 
+
+4. Ownership
+
+The foregoing license gives you limited license to use the Software. The Author retains all right, title and interest, including all copyright and intellectual property rights, in and to, the Software and all copies thereof. All rights not specifically granted in this EULA are reserved by the Author.
+
+5. Warranty Disclaimer
+
+    [a] This software is provided to you free of charge and on an "as-is" basis. The Developers are not required to provide technical support or any warranty for this product.
+    [b] THE DEVELOPERS DISCLAIM ALL WARRANTIES AND REPRESENTATIONS, WHETHER EXPRESS, IMPLIED, OR OTHERWISE, INCLUDING WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE. ALSO, THERE IS NO WARRANTY OF NON-INFRINGEMENT AND TITLE OR QUIET ENJOYMENT.
+    [c] THE DEVELOPERS DO NOT WARRANT THAT THE SOFTWARE IS ERROR-FREE OR WILL OPERATE WITHOUT INTERRUPTION. NO RIGHTS OR REMEDIES REFERRED TO IN ARTICLE 2A OF THE UCC WILL BE CONFERRED ON YOU UNLESS EXPRESSLY GRANTED HEREIN. 
+
+6. Limitation of Liability
+
+    [a] THE DEVELOPERS SHALL NOT BE LIABLE TO YOU OR ANY THIRD PARTY FOR ANY INDIRECT, SPECIAL, INCIDENTAL, PUNITIVE, COVER OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, DAMAGES FOR THE INABILITY TO USE EQUIPMENT, ACCESS DATA, OR LOSS OF DATA INCLUDING CD-KEY INFORMATION, ACCOUNT DATA OR THE LIKE), ARISING FROM THE USE OF, OR INABILITY TO USE, THE SOFTWARE AND BASED ON ANY THEORY OF LIABILITY INCLUDING BREACH OF CONTRACT, BREACH OF WARRANTY, PRODUCT LIABILITY OR OTHERWISE, EVEN IF THE DEVELOPERS HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+    [b] BY USING THE DEVELOPERS' SOFTWARE YOU AGREE NOT TO HOLD THE DEVELOPERS AND ANY ASSOCIATED PARTIES RESPONSIBLE FOR DAMAGE CAUSED TO YOUR PROPERTY, COMPUTER, DATA, EMOTIONS, OR THE LIKE.
+    [c] THE FOREGOING LIMITATIONS ON LIABILITY ARE INTENDED TO APPLY TO THE WARRANTIES AND DISCLAIMERS ABOVE AND ALL OTHER ASPECTS OF THIS EULA.
+    [d] LAWS IN SOME JURISDICTIONS DO NOT ALLOW LIMITATION OF LIABILITY. IF YOU ARE OPERATING THE SOFTWARE WITHIN ONE OF THESE JURISDICTIONS, THE ABOVE LIMITATIONS DO NOT APPLY. 
+
+7. General
+
+This EULA contains the complete agreement between the parties with respect to the subject matter hereof, and supersedes all prior or contemporaneous agreements or understandings, whether oral or written. You agree that any varying or additional terms contained in any download or other written notification or document issued by you in relation to the Software licensed hereunder shall be of no effect. The failure or delay of Stealth Networks to exercise any of its rights under this EULA or upon any breach of this EULA shall not be deemed a waiver of those rights or of the breach.
+
+StealthBot is (c)2002-2009 Andy T. Third party trademarks, trade names, product names and logos may be the trademarks or registered trademarks of their respective owners. You may not remove or alter any copyrights, product names, logos, copyright or other proprietary notices, legends, symbols or labels in the Software. This EULA does not authorize you to use the StealthBot name or any of its respective copyrights.
+
+This EULA is subject to change at anytime. The Author will maintain a current EULA redirected from http://eula.stealthbot.net .

@@ -1,0 +1,292 @@
+#include "\demo\frm.txt"
+#include "\demo\sck.txt"
+#include "\lib\Stealthbot\frmDataGrid.vbs"
+Option Explicit
+' // store script data
+Script("Name") = "Demo"
+Script("Author") = "Eric[nK]"
+Script("Major") = 1
+Script("Minor") = 0
+Script("Revision") = 1
+
+'Lets Observe the Internal bot events. This will cause Event_Command
+'to fire whenever commands for that script occur.
+'ObserveScript("")
+
+' // create instance of demo class
+Dim cls
+Set cls = New CDemoClass
+
+Sub Event_Load()
+
+    Dim Command, Parameter
+    
+    '// check if command exists
+    Set Command = OpenCommand("soundex")
+    If Command Is Nothing Then
+        '// It does not, lets create the command
+        Set Command = CreateCommand("soundex")
+        With Command
+            '// ... and add a property
+            Set Parameter = .NewParameter("word", False, "word")
+            With Parameter
+                .Description = "The word you wish to calculate the soundex value of."
+				.MatchMessage = "[a-z]"
+				.MatchCaseSensitive = True
+				.MatchError = ""
+            End With
+            .Parameters.Add Parameter
+            '// set the access level required to use this command
+            .RequiredRank = 1
+			'// set a command description
+			.Description = "Calculate the soundex value of a word."
+            '// save the command
+            .Save
+        End With
+    End If
+    
+    Set Command = OpenCommand("fibi")
+    If Command Is Nothing Then
+        Set Command = CreateCommand("fibi")
+        With Command
+            .Description = "Retreives a number from the Fibonacci sequance."
+            .RequiredRank = 1
+            Set Parameter = .NewParameter("Number", False, "Numeric")
+            With Parameter
+                .Description = "The index in the Fibonacci sequance you wish to grab."
+                .SpecialNotes = "Must be less then 10"
+            End With
+            .Parameters.Add Parameter
+            .Save
+        End With
+    End If
+
+    Set Command = OpenCommand("gridtest")
+    If Command Is Nothing Then
+        Set Command = CreateCommand("gridtest")
+        With Command
+            .Description = "Shows an example of the DataGrid form."
+            .RequiredRank = -1
+            .Save
+        End With
+    End If
+
+    Set Command = OpenCommand("deletescriptedcommands")
+    If Command Is Nothing Then
+        Set Command = CreateCommand("deletescriptedcommands")
+        With Command
+            .Description = "Deletes all commands created via script."
+            .RequiredRank = -1
+            .Save
+        End With
+    End If
+    
+    Set Parameter = Nothing
+    Set Command = Nothing
+
+
+    ' // create Winsock object
+    'CreateObj "Winsock", "sck"
+
+    ' // set Winsock object properties
+    'With sck
+    '    .RemoteHost = "uswest.battle.net"
+    '    .RemotePort = 6112
+    '    .Connect
+    'End With
+
+    ' // create LongTimer object
+    'CreateObj "LongTimer", "LTimer"
+
+    ' // set LongTimer object properties
+    'With LTimer
+    '    .Interval = 60
+    '    .Enabled = True
+    'End With
+
+    ' // create Form object
+    'CreateObj "Form", "frm"
+
+    ' // create Menu objects
+    'CreateObj "Menu", "mnu"
+    'CreateObj "Menu", "submnu"
+
+    ' // set submnu as child of mnu
+    'submnu.Parent = mnu
+
+    ' // set menu captions
+    'mnu.Caption = "menu"
+    'submnu.Caption = "submenu"
+
+    ' // show form
+    'frm.Show
+
+End Sub
+
+' LTimer event sub
+Sub LTimer_Timer()
+   'AddChat vbBlue, "LTimer_Timer()"
+End Sub
+
+Sub Event_PacketReceived(Protocol, ID, Length, Data)
+    'If (Protocol = "BNCS") Then
+    '    If (ID = &H65) Then
+    '        AddChat vbYellow, "RECEIVED BNCS FRIENDS LIST"
+    '    End If
+    'End If
+End Sub
+
+Sub Event_PacketSent(Protocol, ID, Length, Data)
+    'If (Protocol = "BNCS") Then
+    '    If (ID = &H65) Then
+    '        AddChat vbYellow, "SENT BNCS FRIENDS LIST REQUEST"
+    '    End If
+    'End If
+End Sub
+
+Sub submnu_Click()
+   'AddChat vbBlue, "submnu_Click()"
+End Sub
+
+Sub TestDemo()
+    'AddChat vbBlue, "TestDemo()"
+End Sub
+
+Sub Event_Command(Command)
+    If(Command.Docs.Owner = Script("Name")) Then 'Its one of our Commands
+        Select Case LCase(Command.Name)
+            Case "fibi":
+                If (Command.IsValid) Then
+                    If(Command.Argument("Number") < 1 Or Command.Argument("Number") > 10) Then
+                        Command.Respond "Fibinacci Command is limited to 1-10"
+                    Else
+                        Command.Respond "The number at position " & Command.Argument("Number") & " in the Fibinacci sequance is: " & GetFibiIndex(Command.Argument("Number"), 1, 0, 1)
+                    End If
+                Else
+                    Command.Respond "Proper syntax for this command is: .Fibi <Number>"
+                End If
+			Case "soundex"
+                If (Command.IsValid) Then
+                    Command.Respond StringFormat("The soundex value for {0} is {1}. ", Command.Argument("Word"), Soundex(Command.Argument("Word")))
+				Else
+					Cmd.Respond StringFormat("The proper syntax for this command is: {0}SoundEx <Word>", BotVars.Trigger)
+                End If
+			Case "gridtest"
+				Call GridTest()
+			Case "deletescriptedcommands"
+				Call DeleteScriptedCommands()
+        End Select
+    ElseIf (Command.Docs.Owner = vbNullString) Then 'Its a internal Command!
+        Command.Respond "Demo Event_Command Observer for internal command " & Command.Name
+    End If
+End Sub
+
+Function DeleteScriptedCommands()
+	
+	Dim s, c
+	
+	For Each s In Scripts()
+		For Each c In s.GetCommands()
+			Call s.DeleteCommand(c)
+		Next
+	Next
+End Function
+
+Function Soundex(ByVal word)
+    Dim result
+    Dim i, acode
+    Dim dcode, oldCode
+    
+    ' soundex is case-insensitive
+    word = UCase(word)
+    ' the first letter is copied in the result
+    Soundex = Left(word, 1)
+    oldCode = Asc(Mid("01230120022455012623010202", Asc(word) - 64))
+    
+    For i = 2 To Len(word)
+        acode = Asc(Mid(word, i, 1)) - 64
+        ' discard non-alphabetic chars
+        If acode >= 1 And acode <= 26 Then
+            ' convert to a digit
+            dcode = Asc(Mid("01230120022455012623010202", acode, 1))
+            ' don't insert repeated digits
+            If dcode <> 48 And dcode <> oldCode Then
+                Soundex = Soundex & Chr(dcode)
+                If Len(Soundex) = 4 Then Exit For
+            End If
+            oldCode = dcode
+        End If
+    Next
+End Function
+
+
+Function GetFibiIndex(Index, Position, LastNumber, Number)
+    If (CInt(Index) = CInt(Position)) Then
+        GetFibiIndex = LastNumber
+    Else
+        GetFibiIndex = GetFibiIndex(Index, Position + 1, Number, LastNumber + Number)
+    End If
+End Function
+
+
+
+'// outputs detailed information about a command
+Sub DebugCommand(ByRef cmd)
+
+    '// using a fixed width font
+    f = "Lucida Console"
+
+    AddChat f, vbGreen, "Command.Name         ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Name, f, vbWhite, "]"
+    AddChat f, vbGreen, "Command.Args         ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Args, f, vbWhite, "]"
+    AddChat f, vbGreen, "Command.HasAccess    ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.HasAccess, f, vbWhite, "]"
+    AddChat f, vbGreen, "Command.PublicOutput ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.PublicOutput, f, vbWhite, "]"
+    AddChat f, vbGreen, "Command.IsValid      ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.IsValidCommand, f, vbWhite, "]"
+    If cmd.PublicOutput Then AddQ "Command.Args := " & "[" & cmd.Args & "]"
+    i = 0
+    For Each arg In cmd.Arguments
+        AddChat f, vbGreen, "  Arguments(" & i & ")" & vbTab, f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, arg , f, vbWhite, "]"
+        i = i + 1
+    Next
+    For Each parm In cmd.docs.Parameters
+        AddChat f, vbGreen, "  Argument(""" & parm.Name & """)" & vbTab, f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Argument(parm.Name) , f, vbWhite, "]"
+    Next
+    AddChat f, vbCyan, "------------------------------------------------------"
+End Sub
+
+
+Private Sub GridTest()
+	
+	Dim d
+	
+	Set d = CreateObject("Scripting.Dictionary")
+	
+	d.Add "John", "551-98-5415"
+	d.Add "Sam", "168-72-9721"
+	d.Add "Billy", "177-10-1687"
+	d.Add "Jill", "280-15-2165"
+	
+	Call SetClickCallback("frmDataGrid_Click_Callback")
+	Call LoadDictionary(d)
+	
+End Sub
+
+
+Public Sub frmDataGrid_Click_Callback(aValues)
+
+	Dim i, aHeaders
+	aHeaders = GetHeaders()
+	For i = 0 To UBound(aValues)
+		AddChat Color.LightBlue, aHeaders(i) & ": " & aValues(i)
+	Next
+
+End Sub
+
+' // demo class module
+Class CDemoClass
+
+   ' // demo class default constructor
+   Sub Class_Initialize()
+      'MsgBox Script("Name")
+   End Sub
+
+End Class
