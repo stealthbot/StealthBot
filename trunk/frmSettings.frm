@@ -5403,7 +5403,7 @@ Private Sub InitBasicConfig()
         
         ' if not, add it (first)
         If AddCurrent Then
-            .AddItem s, 0
+            .AddItem Config.Server, 0
             .ListIndex = 0
         End If
     End With
