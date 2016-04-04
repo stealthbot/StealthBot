@@ -904,7 +904,7 @@ On Error GoTo ERROR_HANDLER:
         Exit Sub
     End If
 
-    If Not oKey.CalculateHash(ds.ClientToken, ds.ServerToken) Then Exit Sub
+    If Not oKey.CalculateHash(ds.ClientToken, ds.ServerToken, BNCS_OLS) Then Exit Sub
     
     With pBuff
         .InsertBool (CanSpawn(BotVars.Product, oKey.KeyLength) And Config.UseSpawn)
@@ -1492,7 +1492,7 @@ On Error GoTo ERROR_HANDLER:
             End If
             
             'Calculate the hash
-            If Not oKey.CalculateHash(ds.ClientToken, ds.ServerToken) Then Exit Sub
+            If Not oKey.CalculateHash(ds.ClientToken, ds.ServerToken, BNCS_NLS) Then Exit Sub
             
             .InsertDWord oKey.KeyLength
             .InsertDWord oKey.ProductValue

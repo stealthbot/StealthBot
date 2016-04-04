@@ -20,7 +20,7 @@ Option Explicit
 
 ' BNCSutil.dll functions
 Private Declare Function kd_quick Lib "BNCSutil.dll" _
-    (ByVal CDKey As String, ByVal clientToken As Long, ByVal serverToken As Long, _
+    (ByVal CDKey As String, ByVal ClientToken As Long, ByVal ServerToken As Long, _
     PublicValue As Long, Product As Long, ByVal HashBuffer As String, ByVal BufferLen As Long) As Long
 
 Private Declare Function kd_init Lib "BNCSutil.dll" () As Long
@@ -47,7 +47,7 @@ Private Declare Function kd_longVal2 Lib "BNCSutil.dll" _
     (ByVal decoder As Long, ByVal Out As String) As Long
     
 Private Declare Function kd_calculateHash Lib "BNCSutil.dll" _
-    (ByVal decoder As Long, ByVal clientToken As Long, ByVal serverToken As Long) As Long
+    (ByVal decoder As Long, ByVal ClientToken As Long, ByVal ServerToken As Long) As Long
     
 Private Declare Function kd_getHash Lib "BNCSutil.dll" _
     (ByVal decoder As Long, ByVal Out As String) As Long
@@ -55,7 +55,9 @@ Private Declare Function kd_getHash Lib "BNCSutil.dll" _
 Private Declare Function kd_isValid Lib "BNCSutil.dll" _
     (ByVal decoder As Long) As Long
     
-    
+Private Declare Sub calcHashBuf Lib "BNCSutil.dll" _
+    (ByVal Data As String, ByVal length As Long, ByVal Hash As String)
+
     
 Private m_ProductLookup As Dictionary
 
@@ -63,6 +65,7 @@ Private m_Result As Long    ' The result of the decoder initialization
 Private m_Handle As Long    ' A handle to this decoder
 Private m_Key As String     ' The key supplied during initialization
 Private m_HashSize As Long  ' The size of the returned hash.
+Private m_Hash As String    ' The celculated keyhash
 
 ' Performs initial key analysis
 Public Function Initialize(ByVal strCdKey As String) As Boolean
@@ -130,14 +133,49 @@ Public Property Get Hash() As String
         Exit Property
     End If
     
-    Hash = String$(m_HashSize, vbNullChar)
-    Call kd_getHash(m_Handle, Hash)
+    Hash = m_Hash
 End Property
 
 ' Calculates the key's hash
-Public Function CalculateHash(ByVal clientToken As Long, ByVal serverToken As Long) As Boolean
-    m_HashSize = kd_calculateHash(m_Handle, clientToken, serverToken)
-    CalculateHash = CBool(m_HashSize > 0)
+Public Function CalculateHash(ByVal ClientToken As Long, ByVal ServerToken As Long, Optional ByVal LogonSystem As Long = BNCS_NLS) As Boolean
+    Dim HashContents As New clsDataBuffer
+    
+    ' if private value is 0
+    If Not IsValid Then
+        CalculateHash = False
+    End If
+    
+    With HashContents
+        .InsertDWord ClientToken
+        .InsertDWord ServerToken
+        .InsertDWord ProductValue
+        .InsertDWord PublicValue
+        If LogonSystem = BNCS_NLS Then
+            .InsertDWord 0&
+        End If
+        .InsertNonNTString PrivateValue
+        m_Hash = String$(20, vbNullChar)
+        If KeyLength = 26 Then
+            ' fuck, this shit doesn't even give correct sha1s:
+            'm_Hash = SHA1b(.Data)
+            ' just use standard bncsutil kd_calculatehash
+            m_HashSize = kd_calculateHash(m_Handle, ClientToken, ServerToken)
+            If m_HashSize <= 0 Then
+                CalculateHash = False
+            Else
+                m_Hash = String$(m_HashSize, vbNullChar)
+                Call kd_getHash(m_Handle, m_Hash)
+            End If
+        Else
+            Call calcHashBuf(.Data, Len(.Data), m_Hash)
+        End If
+    End With
+    
+    Set HashContents = Nothing
+    
+    'm_HashSize = kd_calculateHash(m_Handle, ClientToken, ServerToken)
+    m_HashSize = Len(m_Hash)
+    CalculateHash = CBool(Len(m_Hash) = 20)
 End Function
 
 ' Returns the product to use with this key (if known).
