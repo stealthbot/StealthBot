@@ -1143,6 +1143,9 @@ On Error GoTo ERROR_HANDLER:
                 frmRealm.UnloadRealmError
             End If
         End If
+        
+        SendEnterChatSequence
+        frmChat.mnuRealmSwitch.Enabled = True
     End If
     
     Exit Sub
