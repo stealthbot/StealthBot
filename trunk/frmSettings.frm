@@ -3048,6 +3048,7 @@ Begin VB.Form frmSettings
          Left            =   3480
          MaxLength       =   31
          TabIndex        =   110
+         ToolTipText     =   "The channel to go to when kicked. Leave blank to stay in the void."
          Top             =   3000
          Width           =   2535
       End
