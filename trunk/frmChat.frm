@@ -2550,13 +2550,13 @@ Sub Form_Resize()
         
         With lvClanList
             .ColumnHeaders(1).Width = (.Width \ 4) * 3 - 150
-            .ColumnHeaders(2).Width = .Width \ 4 + 200
+            .ColumnHeaders(2).Width = imlClan.ImageWidth '.Width \ 4 + 200
             .ColumnHeaders(3).Width = 0
         End With
         
         With lvFriendList
             .ColumnHeaders(1).Width = (.Width \ 4) * 3
-            .ColumnHeaders(2).Width = .Width \ 4 + 200
+            .ColumnHeaders(2).Width = imlIcons.ImageWidth '.Width \ 4 + 200
         End With
     End If
     
