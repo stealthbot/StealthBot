@@ -970,7 +970,7 @@ On Error GoTo ERROR_HANDLER:
             '// backup channel
             If (InStr(1, Message, "kicked you out", vbTextCompare) > 0) Then
                 If (BotVars.UseBackupChan) Then
-                    If (Len(BotVars.BackupChan) > 1) Then
+                    If (Len(BotVars.BackupChan) > 0) Then
                         frmChat.AddQ "/join " & BotVars.BackupChan
                     End If
                 Else
