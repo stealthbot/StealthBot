@@ -56,19 +56,44 @@ Begin VB.Form frmDBManager
       ImageWidth      =   16
       ImageHeight     =   16
       MaskColor       =   12632256
+      UseMaskColor    =   0   'False
       _Version        =   393216
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
-         NumListImages   =   3
+         NumListImages   =   9
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmDBManager.frx":0889
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":08E7
+            Picture         =   "frmDBManager.frx":08DF
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":0945
+            Picture         =   "frmDBManager.frx":094E
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmDBManager.frx":09C9
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmDBManager.frx":0A44
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmDBManager.frx":0CB9
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmDBManager.frx":10B2
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmDBManager.frx":14BC
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmDBManager.frx":176C
             Key             =   ""
          EndProperty
       EndProperty
@@ -195,13 +220,13 @@ Begin VB.Form frmDBManager
          Width           =   2535
          _ExtentX        =   4471
          _ExtentY        =   2328
-         View            =   3
+         View            =   1
          LabelEdit       =   1
          LabelWrap       =   -1  'True
          HideSelection   =   -1  'True
          HideColumnHeaders=   -1  'True
-         Checkboxes      =   -1  'True
          _Version        =   393217
+         SmallIcons      =   "icons"
          ForeColor       =   16777215
          BackColor       =   10040064
          Appearance      =   1
@@ -448,6 +473,20 @@ Option Explicit
 Public m_entrytype     As String
 Public m_entryname     As String
 
+' icons for groups list
+Private Const IC_EMPTY     As Integer = 0
+Private Const IC_UNCHECKED As Integer = 2
+Private Const IC_CHECKED   As Integer = 3
+Private Const IC_PRIMARY   As Integer = 4
+
+' icons for database tree (for some reason it's 0-based!)
+Private Const IC_UNKNOWN   As Integer = 0
+Private Const IC_DATABASE  As Integer = 4
+Private Const IC_USER      As Integer = 5
+Private Const IC_GROUP     As Integer = 6
+Private Const IC_CLAN      As Integer = 7
+Private Const IC_GAME      As Integer = 8
+
 ' temporary DB working copy (TODO: USE Collection OF clsDBEntryObj!!)
 Private m_DB()         As udtDatabase
 ' current entry index
@@ -462,6 +501,10 @@ Private m_new_entry    As Boolean
 Private m_root         As cTreeViewNode
 ' target for user node right-click menu
 Private m_menutarget   As cTreeViewNode
+' count of groups
+Private m_glistcount   As Integer
+' selected list item
+Private m_glistsel     As ListItem
 ' target for group list right-click menu
 Private m_gmenutarget  As ListItem
 
@@ -671,7 +714,7 @@ Private Sub btnCreateUser_Click()
                 .ModifiedOn = Now
             End With
             
-            Set newNode = PlaceNewNode(Username, "USER", 2)
+            Set newNode = PlaceNewNode(Username, "USER", IC_USER)
             
             If (Not (newNode Is Nothing)) Then
                 ' change misc. settings
@@ -716,7 +759,7 @@ Private Sub btnCreateGroup_Click()
                 .ModifiedOn = Now
             End With
             
-            Set newNode = PlaceNewNode(GroupName, "GROUP", 0)
+            Set newNode = PlaceNewNode(GroupName, "GROUP", IC_GROUP)
             
             Call UpdateGroupList
             
@@ -762,7 +805,7 @@ Sub btnCreateClan_Click()
                 .ModifiedOn = Now
             End With
             
-            Set newNode = PlaceNewNode(ClanName, "CLAN", 1)
+            Set newNode = PlaceNewNode(ClanName, "CLAN", IC_CLAN)
             
             If (Not (newNode Is Nothing)) Then
                 ' change misc. settings
@@ -805,7 +848,7 @@ Sub btnCreateGame_Click()
                 .ModifiedOn = Now
             End With
         
-            Set newNode = PlaceNewNode(GameEntry, "GAME", 1)
+            Set newNode = PlaceNewNode(GameEntry, "GAME", IC_GAME)
             
             If (Not (newNode Is Nothing)) Then
                 ' change misc. settings
@@ -908,7 +951,7 @@ Private Sub btnSaveUser_Click()
                     ' generate new groups string
                     NewGroups = vbNullString
                     
-                    If lvGroups.Checkboxes Then
+                    If m_glistcount > 0 Then
                         For j = 1 To lvGroups.ListItems.Count
                             With lvGroups.ListItems(j)
                                 If .Checked And Not .Ghosted Then
@@ -973,8 +1016,8 @@ Private Sub HandleSaved()
         frmDatabase.Caption = "Database"
         frmDBManager.Caption = "Database"
     Else
-        frmDatabase.Caption = m_DB(m_currententry).Username & " (" & m_DB(m_currententry).Type & ")"
-        frmDBManager.Caption = "Database - " & m_DB(m_currententry).Username & " (" & m_DB(m_currententry).Type & ")"
+        frmDatabase.Caption = m_DB(m_currententry).Username & " (" & LCase$(m_DB(m_currententry).Type) & ")"
+        frmDBManager.Caption = "Database - " & m_DB(m_currententry).Username & " (" & LCase$(m_DB(m_currententry).Type) & ")"
     End If
 End Sub
 
@@ -1010,6 +1053,15 @@ Private Sub btnSaveForm_Click()
     Call Unload(frmDBManager)
 End Sub
 
+Private Sub lvGroups_Click()
+    Set m_glistsel = lvGroups.SelectedItem
+    
+    If Not m_glistsel Is Nothing Then
+        m_glistsel.Checked = Not m_glistsel.Checked
+        Call lvGroups_ItemCheck(m_glistsel)
+    End If
+End Sub
+
 Private Sub lvGroups_DblClick()
     Dim i As Integer
     Dim Item As ListItem
@@ -1032,11 +1084,12 @@ End Sub
 Private Sub lvGroups_ItemCheck(ByVal Item As ListItem)
     Dim i As Integer
     Dim NewGroups As String
-    
+
     Item.Selected = True
 
     If Item.Ghosted Then
         Item.Checked = False
+        Item.SmallIcon = IIf(m_glistcount = 0, IC_EMPTY, IC_UNCHECKED)
         Exit Sub
     End If
     
@@ -1046,6 +1099,9 @@ Private Sub lvGroups_ItemCheck(ByVal Item As ListItem)
         If GetLVPrimaryGroup() Is Nothing Then
             ' set this
             Item.ForeColor = vbYellow
+            Item.SmallIcon = IC_PRIMARY
+        Else
+            Item.SmallIcon = IC_CHECKED
         End If
     Else
         ' if not checked
@@ -1056,12 +1112,16 @@ Private Sub lvGroups_ItemCheck(ByVal Item As ListItem)
             For i = 1 To lvGroups.ListItems.Count
                 If lvGroups.ListItems.Item(i).Checked Then
                     ' set if found
-                    lvGroups.ListItems.Item(i).ForeColor = vbYellow
+                    With lvGroups.ListItems.Item(i)
+                        .ForeColor = vbYellow
+                        .SmallIcon = IC_PRIMARY
+                    End With
                     
                     Exit For
                 End If
             Next i
         End If
+        Item.SmallIcon = IC_UNCHECKED
     End If
     
     ' generate new groups string
@@ -1093,12 +1153,20 @@ Private Sub lvGroups_ItemCheck(ByVal Item As ListItem)
     Call HandleUnsaved
 End Sub
 
-Private Sub mnuOpenDatabase_Click()
-    ' open file dialog
-    Call CommonDialog.ShowOpen
+Private Sub lvGroups_KeyPress(KeyAscii As Integer)
+    If m_glistsel <> lvGroups.SelectedItem Then
+        Set m_glistsel = lvGroups.SelectedItem
+    End If
+    
+    If KeyAscii = vbKeySpace Then
+        If Not m_glistsel Is Nothing Then
+            m_glistsel.Checked = Not m_glistsel.Checked
+            Call lvGroups_ItemCheck(m_glistsel)
+        End If
+    End If
 End Sub
 
-Private Sub lvGroups_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lvGroups_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     mnuSetPrimary.Visible = True
     mnuRename.Visible = False
     mnuDelete.Visible = False
@@ -1108,7 +1176,7 @@ Private Sub lvGroups_MouseUp(Button As Integer, Shift As Integer, X As Single, Y
     Set m_gmenutarget = Nothing
     
     If (Button = vbRightButton) Then
-        Set m_gmenutarget = lvGroups.HitTest(X, Y)
+        Set m_gmenutarget = lvGroups.HitTest(x, y)
         
         If (Not m_gmenutarget Is Nothing) Then
             If (Not m_gmenutarget.Ghosted) Then
@@ -1145,6 +1213,11 @@ End Sub
 Private Sub btnRename_Click()
     Call QueryRenameEvent(trvUsers.SelectedItem)
 End Sub
+
+'Private Sub mnuOpenDatabase_Click()
+'    ' open file dialog
+'    Call CommonDialog.ShowOpen
+'End Sub
 
 Private Sub HandleDeleteEvent(Target As cTreeViewNode)
     If (Target Is Nothing) Then
@@ -1307,7 +1380,7 @@ Private Sub LoadView()
     Call trvUsers.nodes.Clear
     
     ' create root node
-    Set m_root = trvUsers.nodes.Add(, , "Database", "Database", 0, 0)
+    Set m_root = trvUsers.nodes.Add(, , "Database", "Database", IC_DATABASE, IC_DATABASE)
     ' type DATABASE
     m_root.Tag = "DATABASE"
 
@@ -1333,7 +1406,7 @@ Private Sub LoadView()
                     Set NewParent = m_root
                 End If
                 
-                Set newNode = trvUsers.nodes.Add(NewParent, etvwChild, "GROUP: " & m_DB(i).Username, m_DB(i).Username, 0, 0)
+                Set newNode = trvUsers.nodes.Add(NewParent, etvwChild, "GROUP: " & m_DB(i).Username, m_DB(i).Username, IC_GROUP, IC_GROUP)
             Else
                 Dim K   As Integer
                 Dim bln As Boolean
@@ -1341,7 +1414,7 @@ Private Sub LoadView()
                 ' create node
                 Set NewParent = m_root
                 
-                Set newNode = trvUsers.nodes.Add(NewParent, etvwChild, "GROUP: " & m_DB(i).Username, m_DB(i).Username, 0, 0)
+                Set newNode = trvUsers.nodes.Add(NewParent, etvwChild, "GROUP: " & m_DB(i).Username, m_DB(i).Username, IC_GROUP, IC_GROUP)
             
                 ' Okay, is the group a lone ranger?  Or does he have children
                 ' that are already in the list?
@@ -1401,14 +1474,18 @@ Private Sub LoadView()
         ' is the entry a user?
         If (StrComp(m_DB(i).Type, "GROUP", vbTextCompare) <> 0) Then
             ' find the type name, used for the treeview
-            TypeName = "USER"
-            TypeImage = 2
-            If (StrComp(m_DB(i).Type, "CLAN", vbTextCompare) = 0) Then
+            If (StrComp(m_DB(i).Type, "USER", vbTextCompare) = 0) Then
+                TypeName = "USER"
+                TypeImage = IC_USER
+            ElseIf (StrComp(m_DB(i).Type, "CLAN", vbTextCompare) = 0) Then
                 TypeName = "CLAN"
-                TypeImage = 1
+                TypeImage = IC_CLAN
             ElseIf (StrComp(m_DB(i).Type, "GAME", vbTextCompare) = 0) Then
                 TypeName = "GAME"
-                TypeImage = 2
+                TypeImage = IC_GAME
+            Else
+                TypeName = "USER"
+                TypeImage = IC_UNKNOWN
             End If
             
             ' is the user a member of any groups?
@@ -1794,11 +1871,12 @@ Static skipupdate As Boolean
     Call UpdateInheritCaption(tmp.Groups)
     
     ' loop through our listview, checking for matches
-    If lvGroups.Checkboxes Then
+    If m_glistcount > 0 Then
         For j = 1 To lvGroups.ListItems.Count
             With lvGroups.ListItems(j)
                 ' loop through entry's group memberships
                 .Checked = False
+                .SmallIcon = IC_UNCHECKED
                 .Ghosted = False
                 .ForeColor = vbWhite
                 
@@ -1807,10 +1885,12 @@ Static skipupdate As Boolean
                         If (StrComp(Splt(i), "%", vbBinaryCompare) <> 0) And (StrComp(Splt(i), .Text, vbTextCompare) = 0) Then
                             ' select group if entry is a member
                             .Checked = True
+                            .SmallIcon = IC_CHECKED
                             
                             ' highlight group if "primary" (first group)
                             If (i = LBound(Splt)) Then
                                 .ForeColor = vbYellow
+                                .SmallIcon = IC_PRIMARY
                             End If
                             
                             Exit For
@@ -1822,6 +1902,7 @@ Static skipupdate As Boolean
                     ' don't allow groups to contain themself
                     If (StrComp(tmp.Username, .Text, vbTextCompare) = 0) Then
                         .Checked = False
+                        .SmallIcon = IC_UNCHECKED
                         .Ghosted = True
                         .ForeColor = &H888888
                     End If
@@ -1971,24 +2052,22 @@ Private Sub UpdateGroupList()
 
     ' clear group selection listing
     Call lvGroups.ListItems.Clear
+    
+    m_glistcount = 0
 
     ' go through group listing
-    Count = 0
-    lvGroups.Checkboxes = True
     For i = LBound(m_DB) To UBound(m_DB)
         If (StrComp(m_DB(i).Type, "GROUP", vbTextCompare) = 0) Then
+            m_glistcount = m_glistcount + 1
             ' add group to group selection listbox
-            With lvGroups.ListItems.Add(, , m_DB(i).Username)
+            With lvGroups.ListItems.Add(, , m_DB(i).Username, , IC_UNCHECKED)
                 .ForeColor = vbWhite
             End With
-            
-            Count = Count + 1
         End If
     Next i
     
-    If Count = 0 Then
-        lvGroups.Checkboxes = False
-        With lvGroups.ListItems.Add(, , "[none]")
+    If m_glistcount = 0 Then
+        With lvGroups.ListItems.Add(, , "[none]", , IC_EMPTY)
             .Ghosted = True
             .ForeColor = &H888888
         End With
@@ -2017,6 +2096,7 @@ Private Sub ClearGroupListChecks()
     For i = 1 To lvGroups.ListItems.Count
         With lvGroups.ListItems(i)
             .Checked = False
+            .SmallIcon = IIf(m_glistcount = 0, IC_EMPTY, IC_UNCHECKED)
             .Ghosted = True
             .ForeColor = &H888888
         End With
@@ -2067,8 +2147,10 @@ Private Sub SetLVPrimaryGroup(ListItem As ListItem)
                 If (StrComp(.Text, ListItem.Text, vbTextCompare) = 0) Then
                     .ForeColor = vbYellow
                     .Checked = True
+                    .SmallIcon = IC_PRIMARY
                 ElseIf (Not .Ghosted) Then
                     .ForeColor = vbWhite
+                    .SmallIcon = IIf(.Checked, IC_CHECKED, IC_UNCHECKED)
                 End If
             End With
         Next i
