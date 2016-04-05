@@ -5145,51 +5145,6 @@ End Sub
 
 Private Sub cboSend_KeyUp(KeyCode As Integer, Shift As Integer)
     RecordcboSendSelInfo
-    
-    Select Case (KeyCode)
-        Case KEY_SPACE
-            With cboSend
-                If (LenB(LastWhisper) > 0) Then
-                    If (Len(.Text) >= 3) Then
-                        If StrComp(Left$(.Text, 3), "/r ", vbTextCompare) = 0 Then
-                            .selStart = 0
-                            .selLength = Len(.Text)
-                            .SelText = _
-                                "/w " & CleanUsername(LastWhisper, True) & " "
-                            .selStart = Len(.Text)
-                        End If
-                    End If
-                    
-                    If (Len(.Text) >= 7) Then
-                        If StrComp(Left$(.Text, 7), "/reply ", vbTextCompare) = 0 Then
-                            .selStart = 0
-                            .selLength = Len(.Text)
-                            .SelText = _
-                                "/w " & CleanUsername(LastWhisper, True) & " "
-                            .selStart = Len(.Text)
-                        End If
-                    End If
-                End If
-                
-                If (LenB(LastWhisperTo) > 0) Then
-                    If (Len(.Text) >= 4) Then
-                        If StrComp(Left$(.Text, 4), "/rw ", vbTextCompare) = 0 Then
-                            .selStart = 0
-                            .selLength = Len(.Text)
-                            
-                            If StrComp(LastWhisperTo, "%f%") = 0 Then
-                                .SelText = "/f m "
-                            Else
-                                .SelText = _
-                                    "/w " & CleanUsername(LastWhisperTo, True) & " "
-                            End If
-                            
-                            .selStart = Len(.Text)
-                        End If
-                    End If
-                End If
-            End With
-    End Select
 End Sub
 
 Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -5236,6 +5191,49 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
         'MsgBox KeyCode
 
         Select Case (KeyCode)
+            Case KEY_SPACE
+                With cboSend
+                    If (LenB(LastWhisper) > 0) Then
+                        If (Len(.Text) >= 3) Then
+                            If StrComp(Left$(.Text, 3), "/r ", vbTextCompare) = 0 Then
+                                .selStart = 0
+                                .selLength = Len(.Text)
+                                .SelText = _
+                                    "/w " & CleanUsername(LastWhisper, True) & " "
+                                .selStart = Len(.Text)
+                            End If
+                        End If
+                        
+                        If (Len(.Text) >= 7) Then
+                            If StrComp(Left$(.Text, 7), "/reply ", vbTextCompare) = 0 Then
+                                .selStart = 0
+                                .selLength = Len(.Text)
+                                .SelText = _
+                                    "/w " & CleanUsername(LastWhisper, True) & " "
+                                .selStart = Len(.Text)
+                            End If
+                        End If
+                    End If
+                    
+                    If (LenB(LastWhisperTo) > 0) Then
+                        If (Len(.Text) >= 4) Then
+                            If StrComp(Left$(.Text, 4), "/rw ", vbTextCompare) = 0 Then
+                                .selStart = 0
+                                .selLength = Len(.Text)
+                                
+                                If StrComp(LastWhisperTo, "%f%") = 0 Then
+                                    .SelText = "/f m "
+                                Else
+                                    .SelText = _
+                                        "/w " & CleanUsername(LastWhisperTo, True) & " "
+                                End If
+                                
+                                .selStart = Len(.Text)
+                            End If
+                        End If
+                    End If
+                End With
+
             Case KEY_PGDN 'ALT + PAGEDOWN
                 If Shift = S_ALT Then
                     If i < .ListItems.Count Then
