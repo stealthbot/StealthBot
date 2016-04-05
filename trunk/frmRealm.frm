@@ -791,6 +791,8 @@ Private Sub Form_Unload(Cancel As Integer)
         
         SendEnterChatSequence
         frmChat.mnuRealmSwitch.Enabled = True
+        m_Unload_SuccessfulLogin = True
+        ds.MCPHandler.IsRealmError = False
     End If
     
     ds.MCPHandler.FormActive = False
@@ -1076,7 +1078,7 @@ Public Sub CharCreateResponse(ByVal Success As Boolean, ByVal Message As String)
         ' focus on the textbox since the character create failed
         With txtCharName
             .selStart = 0
-            .selLength = Len(.Text)
+            .SelLength = Len(.Text)
             On Error Resume Next
             .SetFocus
         End With
@@ -1234,7 +1236,7 @@ Private Sub btnChoose_Click()
     With lvwChars
         If Not (.SelectedItem Is Nothing) Then
             If Not CanChooseCharacter(.SelectedItem.Tag) Then
-                frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] That is an expansion character. Please log on using Diablo II: Lord of Destruction."
+                frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] You must use Diablo II: Lord of Destruction to choose that character."
             Else
                 Call ds.MCPHandler.SEND_MCP_CHARLOGON(.SelectedItem.Key)
                 m_Unload_SuccessfulLogin = True
@@ -1313,14 +1315,14 @@ Private Sub tmrLoginTimeout_Timer()
         Dim i As Integer
         
         For i = 0 To ds.MCPHandler.CharacterCount - 1
-            If Not IsDateExpired(ds.MCPHandler.CharacterExpires(i)) Then
+            If Not IsDateExpired(ds.MCPHandler.CharacterExpires(i)) Or Not CanChooseCharacter(indexValid) Then
                 indexValid = i
                 Exit For
             End If
         Next i
     ' if choose setting, then select only if not expired
     Else
-        If IsDateExpired(ds.MCPHandler.CharacterExpires(indexValid)) Then
+        If IsDateExpired(ds.MCPHandler.CharacterExpires(indexValid)) Or Not CanChooseCharacter(indexValid) Then
             indexValid = -1
         End If
     End If
@@ -1336,9 +1338,13 @@ Private Sub tmrLoginTimeout_Timer()
         
         If m_Ticks <= 1 Then
             tmrLoginTimeout.Enabled = False
-            Call ds.MCPHandler.SEND_MCP_CHARLOGON(ds.MCPHandler.CharacterName(indexValid))
-            m_Unload_SuccessfulLogin = True
-            ds.MCPHandler.IsRealmError = False
+            If Not CanChooseCharacter(indexValid) Then
+                frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] You must use Diablo II: Lord of Destruction to choose that character."
+            Else
+                Call ds.MCPHandler.SEND_MCP_CHARLOGON(ds.MCPHandler.CharacterName(indexValid))
+                m_Unload_SuccessfulLogin = True
+                ds.MCPHandler.IsRealmError = False
+            End If
         End If
     Else
         ' warning label
@@ -1394,6 +1400,7 @@ Private Function CanChooseCharacter(ByVal CharIndex As Integer) As Boolean
     
     Set Stats = ds.MCPHandler.CharacterStats(CharIndex)
     
+    ' must be PX2D if isExpansion, otherwise doesn't matter
     CanChooseCharacter = (Stats.IsExpansionCharacter Imp m_IsExpansion)
 End Function
 

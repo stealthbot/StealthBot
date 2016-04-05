@@ -149,12 +149,12 @@ On Error GoTo ERROR_HANDLER
                 Call ds.MCPHandler.RealmServerLogon(sTitle)
             Else
                 ' shouldn't happen
-                Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Realm logon error: not found.")
+                Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Realm logon error: That character was not found.")
                 Call SendEnterChatSequence
                 frmChat.mnuRealmSwitch.Enabled = True
             End If
         ElseIf LenB(sUserChoice) > 0 Then
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] The realm {0}{1}{0} s offline or doesn't exist.", Chr$(34), sUserChoice))
+            Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] The realm {0}{1}{0} is offline or doesn't exist.", Chr$(34), sUserChoice))
             Call SendEnterChatSequence
             frmChat.mnuRealmSwitch.Enabled = True
         Else
@@ -359,7 +359,7 @@ Private Sub RECV_MCP_CHARDELETE(pBuff As clsDataBuffer)
     
     Select Case Result
         Case &H0: Call Event_CharDeleteResponse(True, "Character deleted.")
-        Case &H49: Call Event_CharDeleteResponse(False, "Character not found.")
+        Case &H49: Call Event_CharDeleteResponse(False, "That character was not found.")
         Case Else: Call Event_CharDeleteResponse(False, "Unknown response to RECV_MCP_CHARDELETE: 0x" & Right$("00000000" & Hex(Result), 4))
     End Select
 End Sub
@@ -394,10 +394,10 @@ Private Sub RECV_MCP_CHARUPDGRADE(pBuff As clsDataBuffer)
     
     Select Case Result
         Case &H0: Call Event_CharUpgradeResponse(True, "Character upgrade successful.")
-        Case &H46: Call Event_CharUpgradeResponse(False, "Character not found.")
+        Case &H46: Call Event_CharUpgradeResponse(False, "That character was not found.")
         Case &H7A: Call Event_CharUpgradeResponse(False, "Upgrade failed.")
-        Case &H7B: Call Event_CharUpgradeResponse(False, "Character is expired.")
-        Case &H7C: Call Event_CharUpgradeResponse(False, "Character is already expansion.")
+        Case &H7B: Call Event_CharUpgradeResponse(False, "That character has expired.")
+        Case &H7C: Call Event_CharUpgradeResponse(False, "That is already an expansion character.")
         Case Else: Call Event_CharUpgradeResponse(False, "Unknown response to RECV_MCP_CHARDELETE: 0x" & Right$("00000000" & Hex(Result), 4))
     End Select
 End Sub
@@ -787,6 +787,8 @@ Private Sub Event_CharListResponse()
     Dim RealmAutoChooseWait  As Long
     Dim i                    As Integer
     Dim Character()          As Variant
+    Dim CharStats            As clsUserStats
+    Dim CharDate             As Date
     
     m_RetrievingCharacterList = False
     
@@ -841,23 +843,38 @@ Private Sub Event_CharListResponse()
         ' set focus
         On Error Resume Next
         frmRealm.SetFocus
+        
     ElseIf RealmCharIndex >= 0 Then
         ' valid entry: choose after X seconds
         m_AutoChooseWait = RealmAutoChooseWait
         m_AutoChooseTarget = RealmCharIndex
         If m_AutoChooseWait = 0 Then
             Character() = m_CharacterList.Item(m_AutoChooseTarget + 1)
+            Set CharStats = Character(1)
+            CharDate = Character(2)
             If LenB(Character(0)) > 0 Then
-                frmChat.AddChat RTBColors.InformationText, "[REALM] Automatically logging on as " & Character(0) & "..."
-                Call SEND_MCP_CHARLOGON(Character(0))
+                If (Sgn(DateDiff("s", UtcNow, CharDate)) >= 0) Then
+                    ' must be PX2D if isExpansion, otherwise doesn't matter
+                    If (CharStats.IsExpansionCharacter() Imp (BotVars.Product = "PX2D")) Then
+                        frmChat.AddChat RTBColors.InformationText, "[REALM] Automatically logging on as " & Character(0) & "..."
+                        Call SEND_MCP_CHARLOGON(Character(0))
+                        Exit Sub
+                    Else
+                        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Character auto-logon fail: You must use Diablo II: Lord of Destruction to choose that character."
+                    End If
+                Else
+                    frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Character auto-logon fail: That character has expired."
+                End If
             Else
-                frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Character choose fail."
-                frmRealm.Show
+                frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Character auto-logon fail: Empty character name."
             End If
-        Else
-            frmChat.AddChat RTBColors.SuccessText, "[REALM] Listed " & m_CharacterList.Count & " characters."
-            frmRealm.Show
         End If
+        
+        frmChat.AddChat RTBColors.SuccessText, "[REALM] Listed " & m_CharacterList.Count & " characters."
+        
+        m_AutoChooseWait = -1
+        frmRealm.Show
+        
     Else
         If m_CharacterList.Count = 0 Then
             frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] There are no characters on this account."
