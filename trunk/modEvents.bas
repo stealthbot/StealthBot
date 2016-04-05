@@ -1472,11 +1472,17 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             
             If (Not CheckBlock(Username)) Then
                 ' display message
-                frmChat.AddChat RTBColors.JoinText, "-- ", _
-                    IIf(AcqOps, RTBColors.TalkUsernameOp, RTBColors.JoinUsername), Username, _
-                    RTBColors.JoinUsername, " [" & Ping & "ms]", _
-                    RTBColors.JoinText, " has joined the channel using " & UserStats.ToString, _
-                    RTBColors.JoinUsername, IIf(AcqOps, " and acquired ops", vbNullString), RTBColors.JoinText, "."
+                If AcqOps Or (Flags And 2) Then
+                    frmChat.AddChat RTBColors.JoinText, "-- ", _
+                        RTBColors.TalkUsernameOp, Username, _
+                        RTBColors.JoinUsername, " [" & Ping & "ms]", _
+                        RTBColors.JoinText, " has joined the channel using " & UserStats.ToString, _
+                        RTBColors.JoinUsername, IIf(Flags And 2, " with ops", " and acquired ops"), RTBColors.JoinText, "."
+                Else
+                    frmChat.AddChat RTBColors.JoinText, "-- ", _
+                        RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
+                        RTBColors.JoinText, " has joined the channel using " & UserStats.ToString & "."
+                End If
             End If
             ' dispose user stats instance
             Set UserStats = Nothing
