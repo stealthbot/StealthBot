@@ -1531,11 +1531,21 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
         
         backupPath = m_ConfigPath & "-backup"
         
-        Set fso = CreateObject("Scripting.FileSystemObject")
-        If (fso.FileExists(m_ConfigPath) And (Not fso.FileExists(backupPath))) Then
-            fso.MoveFile m_ConfigPath, backupPath
+        If (LenB(Dir$(m_ConfigPath)) > 0) Then
+            Dim iPostfix As Integer
+            iPostfix = 1
             
-            Call frmChat.AddChat(RTBColors.InformationText, "Your config file is being updated. A backup of your old file will be placed in your profile directory.")
+            ' If a backup already exists, find an available filename
+            Do While (LenB(Dir$(backupPath)) > 0)
+                iPostfix = iPostfix + 1
+                backupPath = m_ConfigPath & "-backup" & CStr(iPostfix)
+            Loop
+            
+            ' Copy the file and delete the original
+            Call FileCopy(m_ConfigPath, backupPath)
+            Call Kill(m_ConfigPath)
+            
+            Call frmChat.AddChat(RTBColors.InformationText, "Your config file is being updated. A backup of your old file has been placed in your bot folder.")
         End If
         Set fso = Nothing
         
