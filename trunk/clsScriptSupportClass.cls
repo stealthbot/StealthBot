@@ -1570,6 +1570,13 @@ Public Function GetCurrentServerIP()
     End If
 End Function
 
+'// IIF
+'// Returns a different value based on if a statement is true or false.
+'//  see: https://msdn.microsoft.com/en-us/library/27ydhh0d(v=vs.90).aspx
+Public Function IIf(ByVal bExpression As Boolean, ByVal vTruePart As Variant, ByVal vFalsePart As Variant) As Variant
+    IIf = Interaction.IIf(bExpression, vTruePart, vFalsePart)
+End Function
+
 'Class_Terminate doesn't run when a UI form is created via a script. I made this sub so the bot's Unload sub can explicitly _
     call the code within Class_Terminate to kill all the objects. - FrOzeN
 Public Sub Dispose()
