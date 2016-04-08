@@ -1803,8 +1803,8 @@ Private Sub LoadDefaults()
     m_ShitlistGroup = vbNullString
     m_TagbanGroup = vbNullString
     m_SafelistGroup = vbNullString
-    m_RetainOldBans = True
-    m_StoreAllBans = True
+    m_RetainOldBans = False
+    m_StoreAllBans = False
     m_ChannelProtectionMessage = vbNullString
     m_IdleBan = False
     m_IdleBanDelay = 300
