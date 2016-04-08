@@ -653,9 +653,6 @@ Public Property Get ToString() As String
         
         Case PRODUCT_WAR3, PRODUCT_W3XP
             buf = buf & WarCraftIII_ToString()
-            
-        Case Else
-            Exit Property
     End Select
     
     'buf = buf & "."
