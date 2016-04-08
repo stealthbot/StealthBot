@@ -399,7 +399,7 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
                     
                     Exit For
                 Else
-                    Banlist(pos).IsActive = False
+                    Banlist(i).IsActive = False
                 End If
             End If
         Next i
