@@ -8,7 +8,7 @@ Option Explicit
 Private Type NMHDR
     hWndFrom As Long
     idFrom   As Long
-    code     As Long
+    Code     As Long
 End Type
 
 Private Type CHARRANGE
@@ -44,6 +44,7 @@ Private Const WM_COMMAND = &H111
 Private Const WM_USER = &H400
 Private Const WM_NCDESTROY = &H82
 Private Const WM_COPYDATA = &H4A
+Private Const WM_CTLCOLORSTATIC = &H138
 Public Const WM_ICONNOTIFY = WM_USER + 100
 ' RTB rich edit control messages
 Private Const EM_SETEVENTMASK = &H445
@@ -127,24 +128,27 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wPara
     If Msg = WM_NOTIFY Then
         CopyMemory uHead, ByVal lParam, LenB(uHead)
        
-        If (uHead.code = EN_LINK) Then
+        If (uHead.Code = EN_LINK) Then
             CopyMemory eLink, ByVal lParam, LenB(eLink)
        
             With eLink
+                eText.chrg.cpMin = .chrg.cpMin
+                eText.chrg.cpMax = .chrg.cpMax
+                eText.lpstrText = Space$(1024)
+    
+                lLen = SendMessageAny(uHead.hWndFrom, EM_GETTEXTRANGE, 0, eText)
+                sText = Left$(eText.lpstrText, lLen)
+                
                 If .Msg = WM_LBUTTONDBLCLK Then
-                    eText.chrg.cpMin = .chrg.cpMin
-                    eText.chrg.cpMax = .chrg.cpMax
-                    eText.lpstrText = Space$(1024)
-       
-                    lLen = SendMessageAny(uHead.hWndFrom, EM_GETTEXTRANGE, 0, eText)
-                    sText = Left$(eText.lpstrText, lLen)
-       
                     ShellOpenURL sText, , False
+                ElseIf .Msg = WM_RBUTTONUP Then
+                    frmChat.mnuRTCopyURL.Visible = True
+                    frmChat.PopupMenu frmChat.mnuRTPopup
                 End If
             End With
             
         ' See if this is the start of a drag.
-        ElseIf uHead.code = LVN_BEGINDRAG Then
+        ElseIf uHead.Code = LVN_BEGINDRAG Then
             ' A drag is beginning. Ignore this event.
             ' Indicate we have handled this.
             NewWindowProc = 1

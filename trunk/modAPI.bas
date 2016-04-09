@@ -66,7 +66,7 @@ Public Declare Function CallWindowProc Lib "user32" _
    Alias "CallWindowProcA" _
   (ByVal lpPrevWndFunc As Long, _
    ByVal hWnd As Long, _
-   ByVal msg As Long, _
+   ByVal Msg As Long, _
    ByVal wParam As Long, _
    ByVal lParam As Long) As Long
 
@@ -90,7 +90,7 @@ Public Declare Function SetForegroundWindow Lib "user32" (ByVal hWnd As Long) As
 Public Declare Function FindWindowEx Lib "user32" Alias "FindWindowExA" (ByVal hWnd1 As Long, ByVal hWnd2 As Long, ByVal lpsz1 As String, ByVal lpsz2 As String) As Long
 
 Public Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
-Public Declare Function SetCursorPos Lib "user32" (ByVal X As Long, ByVal y As Long) As Long
+Public Declare Function SetCursorPos Lib "user32" (ByVal x As Long, ByVal y As Long) As Long
 
 Public Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" ( _
     ByVal hWnd As Long, _
@@ -150,7 +150,7 @@ Public Declare Function SetActiveWindow Lib "user32" (ByVal hWnd As Long) As Lon
 Public Declare Function GetComputerName Lib "kernel32" Alias "GetComputerNameA" (ByVal sBuffer As String, lSize As Long) As Long
 Public Declare Function GetUserName Lib "advapi32.dll" Alias "GetUserNameA" (ByVal lpBuffer As String, nSize As Long) As Long
 Public Declare Function GetSystemDefaultLCID Lib "kernel32" () As Long
-Public Declare Function GetFocus Lib "user" () As Integer
+Public Declare Function GetFocus Lib "User" () As Integer
 
 Public Const LOCALE_SABBREVCTRYNAME As Long = &H7
 Public Const LOCALE_SENGCOUNTRY     As Long = &H1002

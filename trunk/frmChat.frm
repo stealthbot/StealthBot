@@ -1014,9 +1014,9 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
-      AutoVerbMenu    =   -1  'True
       TextRTF         =   $"frmChat.frx":78860
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -1039,9 +1039,9 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
-      AutoVerbMenu    =   -1  'True
       OLEDropMode     =   0
       TextRTF         =   $"frmChat.frx":788DB
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -1607,6 +1607,18 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuPopFLRefresh 
          Caption         =   "R&efresh and Reorder"
+      End
+   End
+   Begin VB.Menu mnuRTPopup 
+      Caption         =   "rtpopup"
+      Visible         =   0   'False
+      Begin VB.Menu mnuRTCopy 
+         Caption         =   "&Copy"
+         Shortcut        =   ^C
+      End
+      Begin VB.Menu mnuRTCopyURL 
+         Caption         =   "Copy &Link Address"
+         Visible         =   0   'False
       End
    End
 End

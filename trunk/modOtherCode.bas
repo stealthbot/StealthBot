@@ -149,22 +149,22 @@ Public Function GetTimeStamp(Optional DateTime As Date) As String
     Select Case (BotVars.TSSetting)
         Case 0
             GetTimeStamp = _
-                " [" & Format(DateTime, "HH:MM:SS AM/PM") & "] "
+                "[" & Format(DateTime, "HH:MM:SS AM/PM") & "] "
             
         Case 1
             GetTimeStamp = _
-                " [" & Format(DateTime, "HH:MM:SS") & "] "
+                "[" & Format(DateTime, "HH:MM:SS") & "] "
         
         Case 2
             GetTimeStamp = _
-                " [" & Format(DateTime, "HH:MM:SS") & "." & Right$("000" & GetCurrentMS, 3) & "] "
+                "[" & Format(DateTime, "HH:MM:SS") & "." & Right$("000" & GetCurrentMS, 3) & "] "
         
         Case 3
             GetTimeStamp = vbNullString
         
         Case Else
             GetTimeStamp = _
-                " [" & Format(DateTime, "HH:MM:SS AM/PM") & "] "
+                "[" & Format(DateTime, "HH:MM:SS AM/PM") & "] "
     End Select
 End Function
 
