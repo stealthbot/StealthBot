@@ -4,7 +4,7 @@ Begin VB.Form frmCommands
    BackColor       =   &H00000000&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Command Manager"
-   ClientHeight    =   7185
+   ClientHeight    =   6180
    ClientLeft      =   45
    ClientTop       =   435
    ClientWidth     =   9330
@@ -21,7 +21,7 @@ Begin VB.Form frmCommands
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   7185
+   ScaleHeight     =   6180
    ScaleWidth      =   9330
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
@@ -29,11 +29,11 @@ Begin VB.Form frmCommands
       BackColor       =   &H00000000&
       Caption         =   "Command Syntax"
       ForeColor       =   &H00FFFFFF&
-      Height          =   975
-      Left            =   120
+      Height          =   1935
+      Left            =   4200
       TabIndex        =   22
-      Top             =   6120
-      Width           =   9135
+      Top             =   4080
+      Width           =   5055
       Begin VB.Label lblRequirements 
          BackStyle       =   0  'Transparent
          Caption         =   "Command Requirements"
@@ -42,7 +42,7 @@ Begin VB.Form frmCommands
          Left            =   240
          TabIndex        =   24
          Top             =   435
-         Width           =   8655
+         Width           =   4095
       End
       Begin VB.Label lblSyntax 
          BackStyle       =   0  'Transparent
@@ -58,10 +58,10 @@ Begin VB.Form frmCommands
          EndProperty
          ForeColor       =   &H00808000&
          Height          =   255
-         Left            =   260
+         Left            =   255
          TabIndex        =   23
          Top             =   240
-         Width           =   8655
+         Width           =   4200
       End
    End
    Begin vbalTreeViewLib6.vbalTreeView trvCommands 
@@ -108,18 +108,18 @@ Begin VB.Form frmCommands
    Begin VB.Frame fraCommand 
       BackColor       =   &H00000000&
       ForeColor       =   &H00FFFFFF&
-      Height          =   5895
+      Height          =   3855
       Left            =   4200
       TabIndex        =   12
       Top             =   120
       Width           =   5055
       Begin VB.CommandButton cmdDeleteCommand 
-         Caption         =   "&Delete Command"
+         Caption         =   "&Delete"
          Height          =   300
-         Left            =   3480
+         Left            =   2400
          TabIndex        =   14
-         Top             =   5400
-         Width           =   1455
+         Top             =   3360
+         Width           =   855
       End
       Begin VB.CommandButton cmdFlagRemove 
          Caption         =   "-"
@@ -138,20 +138,20 @@ Begin VB.Form frmCommands
          Width           =   270
       End
       Begin VB.CommandButton cmdDiscard 
-         Caption         =   "Di&scard Changes"
+         Caption         =   "Di&scard"
          Height          =   300
-         Left            =   1860
+         Left            =   3240
          TabIndex        =   13
-         Top             =   5400
-         Width           =   1455
+         Top             =   3360
+         Width           =   855
       End
       Begin VB.CommandButton cmdSave 
-         Caption         =   "&Save Changes"
+         Caption         =   "&Save"
          Height          =   300
-         Left            =   240
+         Left            =   4080
          TabIndex        =   15
-         Top             =   5400
-         Width           =   1455
+         Top             =   3360
+         Width           =   855
       End
       Begin VB.ComboBox cboFlags 
          BackColor       =   &H00993300&
@@ -185,20 +185,19 @@ Begin VB.Form frmCommands
          BackColor       =   &H00000000&
          Caption         =   "Disable"
          ForeColor       =   &H00FFFFFF&
-         Height          =   495
+         Height          =   255
          Left            =   240
          TabIndex        =   11
-         Top             =   4920
+         Top             =   2880
          Visible         =   0   'False
          Width           =   4695
       End
       Begin VB.TextBox txtDescription 
          BackColor       =   &H00993300&
          ForeColor       =   &H00FFFFFF&
-         Height          =   1575
+         Height          =   615
          Left            =   240
          MultiLine       =   -1  'True
-         ScrollBars      =   2  'Vertical
          TabIndex        =   9
          Top             =   1200
          Width           =   4695
@@ -206,12 +205,11 @@ Begin VB.Form frmCommands
       Begin VB.TextBox txtSpecialNotes 
          BackColor       =   &H00993300&
          ForeColor       =   &H00FFFFFF&
-         Height          =   1695
+         Height          =   615
          Left            =   240
          MultiLine       =   -1  'True
-         ScrollBars      =   2  'Vertical
          TabIndex        =   10
-         Top             =   3120
+         Top             =   2160
          Width           =   4695
       End
       Begin VB.CommandButton cmdFlagAdd 
@@ -277,7 +275,7 @@ Begin VB.Form frmCommands
          Height          =   255
          Left            =   240
          TabIndex        =   16
-         Top             =   2880
+         Top             =   1920
          Width           =   2175
       End
    End
