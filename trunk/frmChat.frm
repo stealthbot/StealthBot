@@ -1651,6 +1651,14 @@ Private Type sockaddr_in
     sin_zero As String * 8
 End Type
 
+Private Const SB_INET_UNSET As String = vbNullString
+Private Const SB_INET_NEWS1 As String = "SBNEWS_AUTOCONNECT"
+Private Const SB_INET_NEWS  As String = "SBNEWS"
+Private Const SB_INET_BNLS1 As String = "BNLSFINDER"
+Private Const SB_INET_BNLS2 As String = "BNLSFINDER_DEFAULT"
+Private Const SB_INET_VBYTE As String = "VERBYTE"
+Private Const SB_INET_BETA  As String = "AUTHBETA"
+
 ' LET IT BEGIN
 Private Sub Form_Load()
     Dim s As String
@@ -1877,8 +1885,6 @@ Private Sub Form_Load()
     On Error Resume Next
     'News call and scripting events
     
-    If Not Config.DisableNews Then DisplayNews
-    
     LoadScripts
     'InitMenus
     InitScripts
@@ -1894,18 +1900,18 @@ Private Sub Form_Load()
         Call Config.Save
     End If
     
-    '#If BETA = 0 Then
-        If Config.AutoConnect Then
-            Call DoConnect
-        End If
-    '#End If
-    
     #If COMPILE_DEBUG = 0 Then
         If Config.MinimizeOnStartup Then
             frmChat.WindowState = vbMinimized
             Call Form_Resize
         End If
     #End If
+    
+    If Not Config.DisableNews Then
+        Call DoINetRequest(GetNewsURL(), SB_INET_NEWS1, True)
+    ElseIf Config.AutoConnect Then
+        Call DoConnect
+    End If
     
     'Now loads scripts when the bot opens, instead of after connecting. - FrOzeN
     'RunInAll "Event_Load"
@@ -2001,12 +2007,93 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-
-Private Sub DisplayNews()
+' asynchronous INet
+Private Function DoINetRequest(ByVal URL As String, ByVal Request As String, ByVal CancelStillExecuting As Boolean) As Boolean
     Dim ret As String
-    ret = INet.OpenURL(GetNewsURL())
+    With INet
+        If .StillExecuting Then
+            If CancelStillExecuting Then
+                .Cancel
+            Else
+                DoINetRequest = False
+                Exit Function
+            End If
+        End If
+        
+        .RequestTimeout = 5
+        .Tag = Request
+        .Execute URL
+        
+        DoINetRequest = True
+    End With
+End Function
+
+' asynchronous INet response
+Private Sub INet_StateChanged(ByVal State As Integer)
+    Dim strData As String
+    Dim Buffer As String
     
-    HandleNews ret
+    Select Case State
+        Case icResponseCompleted, icError
+            If INet.ResponseCode >= 1000 Then
+                Buffer = "INet Error #" & INet.ResponseCode & ": " & INet.ResponseInfo
+            ElseIf INet.ResponseCode <> 200 Then
+                Buffer = "HTTP Error " & INet.ResponseCode & " " & INet.ResponseInfo
+            Else
+                Do
+                    strData = INet.GetChunk(1024, icString)
+                    If Len(strData) = 0 Then Exit Do
+                    Buffer = Buffer & strData
+                Loop
+            End If
+            
+            Select Case INet.Tag
+                Case SB_INET_NEWS
+                    Call HandleNews(Buffer, INet.ResponseCode)
+                Case SB_INET_NEWS1
+                    Call HandleNews(Buffer, INet.ResponseCode)
+                    If Config.AutoConnect And Not g_Connected Then
+                        Call DoConnect
+                    End If
+                Case SB_INET_VBYTE
+                    Call HandleUpdateVerbyte(Buffer, INet.ResponseCode)
+            End Select
+            
+            INet.Tag = SB_INET_UNSET
+            INet.Cancel
+    End Select
+End Sub
+
+Private Sub HandleUpdateVerbyte(ByVal Buffer As String, ByVal ResponseCode As Long)
+    On Error Resume Next
+    
+    Dim ary() As String
+    Dim i As Integer
+    
+    If INet.ResponseCode <> 200 Then
+        AddChat RTBColors.ErrorMessageText, Buffer & ". Error retrieving version bytes from http://www.stealthbot.net. Please visit it for instructions."
+    ElseIf Len(Buffer) <> 11 Then
+        AddChat RTBColors.ErrorMessageText, "Format not understood. Error retrieving version bytes from http://www.stealthbot.net. Please visit it for instructions."
+    Else
+        'W2 SC D2 W3
+        Dim keys(3) As String
+        
+        keys(0) = "W2"
+        keys(1) = "SC"
+        keys(2) = "D2"
+        keys(3) = "W3"
+        
+        ary() = Split(Buffer, " ")
+        
+        For i = 0 To 3
+            Config.SetVersionByte keys(i), CLng(Val("&H" & ary(i)))
+        Next i
+        Config.SetVersionByte "D2X", CLng(Val("&H" & ary(2)))
+        
+        Call Config.Save
+        
+        AddChat RTBColors.SuccessText, "Your config.ini file has been loaded with current version bytes."
+    End If
 End Sub
 
 
@@ -3251,12 +3338,6 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-Private Sub INet_StateChanged(ByVal State As Integer)
-    If (Not (BotLoaded)) Then
-        BotLoaded = True
-    End If
-End Sub
-
 Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim i As Integer
     
@@ -4410,9 +4491,9 @@ Private Sub MoveFriend(startPos As Integer, endPos As Integer)
 End Sub
 
 Private Sub mnuGetNews_Click()
-    On Error Resume Next
-    
-    DisplayNews
+    If Not DoINetRequest(GetNewsURL(), SB_INET_NEWS, False) Then
+        Call HandleNews("INet is busy")
+    End If
 End Sub
 
 Sub mnuHelpReadme_Click()
@@ -4759,34 +4840,8 @@ Private Sub mnuToggleWWUse_Click()
 End Sub
 
 Private Sub mnuUpdateVerbytes_Click()
-    Dim s As String, ary() As String
-    Dim i As Integer
-    
-    Dim keys(3) As String
-    
-    keys(0) = "W2"
-    keys(1) = "SC"
-    keys(2) = "D2"
-    keys(3) = "W3"
-    
-    If Not INet.StillExecuting Then
-        s = INet.OpenURL(VERBYTE_SOURCE)
-        
-        If Len(s) = 11 Then
-            'W2 SC D2 W3
-            ary() = Split(s, " ")
-            
-            For i = 0 To 3
-                Config.SetVersionByte keys(i), CLng(Val("&H" & ary(i)))
-            Next i
-            Config.SetVersionByte "D2X", CLng(Val("&H" & ary(2)))
-            
-            Call Config.Save
-            
-            AddChat RTBColors.SuccessText, "Your config.ini file has been loaded with current version bytes."
-        Else
-            AddChat RTBColors.ErrorMessageText, "Error retrieving version bytes from http://www.stealthbot.net! Please visit it for instructions."
-        End If
+    If Not DoINetRequest(VERBYTE_SOURCE, SB_INET_VBYTE, False) Then
+        Call HandleUpdateVerbyte("INet is busy")
     End If
 End Sub
 
