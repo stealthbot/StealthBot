@@ -3325,21 +3325,15 @@ Private Sub lvChannel_dblClick()
 
     If (Len(s) > 0) Then
         With cboSend
-            UniTextComboBoxAppendText cboSend, s
-            
-            On Error Resume Next
-            cboSend.SetFocus
-            cboSend.selStart = UniTextCaptionGetLength(cboSend)
-            
-            '.SelStart = cboSendSelStart 'IIf(cboSendSelStart > 0, cboSendSelStart, 0)
-            '.SelLength = cboSendSelLength 'IIf(cboSendSelLength > 0, cboSendSelLength + 1, 0)
-            '.SelText = s
+            .selStart = cboSendSelStart 'IIf(cboSendSelStart > 0, cboSendSelStart, 0)
+            .selLength = cboSendSelLength 'IIf(cboSendSelLength > 0, cboSendSelLength + 1, 0)
+            .SelText = s
             
             ' This is correct - sets the cursor properly
-            'cboSendSelStart = Len(.Text)
-            'cboSendSelLength = 0
+            cboSendSelStart = Len(.Text)
+            cboSendSelLength = 0
             
-            '.SetFocus
+            .SetFocus
         End With
     End If
 End Sub
@@ -3354,14 +3348,11 @@ Private Sub lvChannel_KeyUp(KeyCode As Integer, Shift As Integer)
         
         With lvChannel
             If Not (.SelectedItem Is Nothing) Then
+                cboSend.selStart = Len(cboSend.Text)
+                cboSend.SelText = .SelectedItem.Text
+    
                 KeyCode = 0
                 Shift = 0
-                
-                UniTextComboBoxAppendText cboSend, .SelectedItem.Text
-                
-                On Error Resume Next
-                cboSend.SetFocus
-                cboSend.selStart = UniTextCaptionGetLength(cboSend)
                 
                 Exit Sub
             End If
@@ -3379,14 +3370,11 @@ Private Sub lvFriendList_KeyUp(KeyCode As Integer, Shift As Integer)
         
         With lvFriendList
             If Not (.SelectedItem Is Nothing) Then
+                cboSend.selStart = Len(cboSend.Text)
+                cboSend.SelText = .SelectedItem.Text
+    
                 KeyCode = 0
                 Shift = 0
-                
-                UniTextComboBoxAppendText cboSend, .SelectedItem.Text
-                
-                On Error Resume Next
-                cboSend.SetFocus
-                cboSend.selStart = UniTextCaptionGetLength(cboSend)
                 
                 Exit Sub
             End If
@@ -3404,14 +3392,11 @@ Private Sub lvClanList_KeyUp(KeyCode As Integer, Shift As Integer)
         
         With lvClanList
             If Not (.SelectedItem Is Nothing) Then
+                cboSend.selStart = Len(cboSend.Text)
+                cboSend.SelText = .SelectedItem.Text
+    
                 KeyCode = 0
                 Shift = 0
-                
-                UniTextComboBoxAppendText cboSend, .SelectedItem.Text
-                
-                On Error Resume Next
-                cboSend.SetFocus
-                cboSend.selStart = UniTextCaptionGetLength(cboSend)
                 
                 Exit Sub
             End If
@@ -3955,24 +3940,16 @@ Private Sub mnuPopClanWebProfileW3XP_Click()
 End Sub
 
 Private Sub mnuPopClanWhisper_Click()
-    Dim Value As String
+    On Error Resume Next
     
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    Value = UniTextCaptionGetText(cboSend)
-    
-    If LenB(Value) > 0 Then
-        Value = "/w " & CleanUsername(GetClanSelectedUser, True) & Space$(1) & Value
+    If cboSend.Text <> vbNullString Then
+        AddQ "/w " & CleanUsername(GetClanSelectedUser, True) & Space(1) & _
+                cboSend.Text, PRIORITY.CONSOLE_MESSAGE
         
-        AddQ Value, PRIORITY.CONSOLE_MESSAGE
-        
-        UniTextComboBoxAddItem cboSend, Value, 0
-        UniTextCaptionSetText cboSend, vbNullString
-        
-        'cboSend.AddItem cboSend.Text, 0
-        'cboSend.Text = vbNullString
-        
-        On Error Resume Next
+        cboSend.AddItem cboSend.Text, 0
+        cboSend.Text = vbNullString
         cboSend.SetFocus
     End If
 End Sub
@@ -4181,18 +4158,15 @@ Private Sub mnuPopFLWhisper_Click()
     
     If Not PopupMenuFLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    Value = UniTextCaptionGetText(cboSend)
+    Value = cboSend.Text
     
     If LenB(Value) > 0 Then
         Value = "/w " & CleanUsername(GetFriendsSelectedUser, True) & Space$(1) & Value
         
         AddQ Value, PRIORITY.CONSOLE_MESSAGE
         
-        UniTextComboBoxAddItem cboSend, Value, 0
-        UniTextCaptionSetText cboSend, vbNullString
-        
-        'cboSend.AddItem cboSend.Text, 0
-        'cboSend.Text = vbNullString
+        cboSend.AddItem Value, 0
+        cboSend.Text = vbNullString
         
         On Error Resume Next
         cboSend.SetFocus
@@ -4600,24 +4574,15 @@ Private Sub mnuPopUnsquelch_Click()
 End Sub
 
 Private Sub mnuPopWhisper_Click()
-    Dim Value As String
+    On Error Resume Next
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
-    
-    Value = UniTextCaptionGetText(cboSend)
-    
-    If LenB(Value) > 0 Then
-        Value = "/w " & CleanUsername(GetSelectedUser, True) & Space$(1) & Value
+    If cboSend.Text <> vbNullString Then
+        AddQ "/w " & CleanUsername(GetSelectedUser, True) & Space(1) & _
+                cboSend.Text, PRIORITY.CONSOLE_MESSAGE
         
-        AddQ Value, PRIORITY.CONSOLE_MESSAGE
-        
-        UniTextComboBoxAddItem cboSend, Value, 0
-        UniTextCaptionSetText cboSend, vbNullString
-        
-        'cboSend.AddItem cboSend.Text, 0
-        'cboSend.Text = vbNullString
-        
-        On Error Resume Next
+        cboSend.AddItem cboSend.Text, 0
+        cboSend.Text = vbNullString
         cboSend.SetFocus
     End If
 End Sub
@@ -4928,11 +4893,8 @@ Private Sub rtbChat_KeyPress(KeyAscii As Integer)
         Exit Sub
     End If
 
-    UniTextComboBoxSetSelectedText cboSend, ChrW$(KeyAscii)
-    'cboSend.SelText = ChrW$(KeyAscii)
-    
-    On Error Resume Next
     cboSend.SetFocus
+    cboSend.SelText = Chr$(KeyAscii)
 End Sub
 
 Private Sub rtbWhispers_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -4958,11 +4920,8 @@ Private Sub rtbWhispers_KeyPress(KeyAscii As Integer)
         Exit Sub
     End If
 
-    UniTextComboBoxSetSelectedText cboSend, ChrW$(KeyAscii)
-    'cboSend.SelText = ChrW$(KeyAscii)
-    
-    On Error Resume Next
     cboSend.SetFocus
+    cboSend.SelText = Chr$(KeyAscii)
 End Sub
 
 Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -5317,10 +5276,6 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     Dim m As String
     Dim s As String ',sClosest As String
     Dim Vetoed As Boolean
-    Dim ClipboardText As String
-    Dim Value As String
-    Dim newValue As String
-    
     
     Const S_SHIFT = 1
     Const S_CTRL = 2
@@ -5349,40 +5304,48 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
 
         Select Case (KeyCode)
             Case KEY_SPACE
-                Value = UniTextCaptionGetText(cboSend)
-                
-                If (LenB(LastWhisper) > 0) Then
-                    If (Len(Value) >= 3) Then
-                        If StrComp(Left$(Value, 3), "/r ", vbTextCompare) = 0 Then
-                            newValue = "/w " & CleanUsername(LastWhisper, True) & Space$(1)
-                            UniTextCaptionSetText cboSend, newValue
-                            cboSend.selStart = UniTextCaptionGetLength(cboSend)
+                With cboSend
+                    If (LenB(LastWhisper) > 0) Then
+                        If (Len(.Text) >= 3) Then
+                            If StrComp(Left$(.Text, 3), "/r ", vbTextCompare) = 0 Then
+                                .selStart = 0
+                                .selLength = Len(.Text)
+                                .SelText = _
+                                    "/w " & CleanUsername(LastWhisper, True) & " "
+                                .selStart = Len(.Text)
+                            End If
+                        End If
+                        
+                        If (Len(.Text) >= 7) Then
+                            If StrComp(Left$(.Text, 7), "/reply ", vbTextCompare) = 0 Then
+                                .selStart = 0
+                                .selLength = Len(.Text)
+                                .SelText = _
+                                    "/w " & CleanUsername(LastWhisper, True) & " "
+                                .selStart = Len(.Text)
+                            End If
                         End If
                     End If
                     
-                    If (Len(Value) >= 7) Then
-                        If StrComp(Left$(Value, 7), "/reply ", vbTextCompare) = 0 Then
-                            newValue = "/w " & CleanUsername(LastWhisper, True) & Space$(1)
-                            UniTextCaptionSetText cboSend, newValue
-                            cboSend.selStart = UniTextCaptionGetLength(cboSend)
-                        End If
-                    End If
-                End If
-                
-                If (LenB(LastWhisperTo) > 0) Then
-                    If (Len(Value) >= 4) Then
-                        If StrComp(Left$(Value, 4), "/rw ", vbTextCompare) = 0 Then
-                            If StrComp(LastWhisperTo, "%f%") = 0 Then
-                                newValue = "/f m "
-                            Else
-                                newValue = "/w " & CleanUsername(LastWhisperTo, True) & Space$(1)
+                    If (LenB(LastWhisperTo) > 0) Then
+                        If (Len(.Text) >= 4) Then
+                            If StrComp(Left$(.Text, 4), "/rw ", vbTextCompare) = 0 Then
+                                .selStart = 0
+                                .selLength = Len(.Text)
+                                
+                                If StrComp(LastWhisperTo, "%f%") = 0 Then
+                                    .SelText = "/f m "
+                                Else
+                                    .SelText = _
+                                        "/w " & CleanUsername(LastWhisperTo, True) & " "
+                                End If
+                                
+                                .selStart = Len(.Text)
                             End If
-                            UniTextCaptionSetText cboSend, newValue
-                            cboSend.selStart = UniTextCaptionGetLength(cboSend)
                         End If
                     End If
-                End If
-            
+                End With
+
             Case KEY_PGDN 'ALT + PAGEDOWN
                 If Shift = S_ALT Then
                     If i < .ListItems.Count Then
@@ -5452,26 +5415,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         .ListItems.Item(.ListItems.Count).Ghosted = True
     
                         cboSend.SetFocus
-                        cboSend.SelLength = L
-                    End If
-                End If
-            
-            Case vbKeyX 'CUT
-                If (Shift = S_CTRL) Then
-                    On Error Resume Next
-                    ClipboardText = UniTextComboBoxGetSelectedText(cboSend)
-                    If LenB(ClipboardText) > 0 Then
-                        ClipboardSetUnicodeText ClipboardText
-                        UniTextComboBoxSetSelectedText cboSend, ClipboardText
-                    End If
-                End If
-            
-            Case vbKeyC 'COPY
-                If (Shift = S_CTRL) Then
-                    On Error Resume Next
-                    ClipboardText = UniTextComboBoxGetSelectedText(cboSend)
-                    If LenB(ClipboardText) > 0 Then
-                        ClipboardSetUnicodeText ClipboardText
+                        cboSend.selLength = L
                     End If
                 End If
                 
@@ -5486,20 +5430,17 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             
                 If (Shift = S_CTRL) Then
                     On Error Resume Next
-                    ClipboardText = ClipboardGetUnicodeText()
                     
-                    If (InStr(1, ClipboardText, ChrW$(13), vbTextCompare) <> 0) Then
-                        x() = Split(ClipboardText, ChrW$(10))
+                    If (InStr(1, Clipboard.GetText, Chr(13), vbTextCompare) <> 0) Then
+                        x() = Split(Clipboard.GetText, Chr(10))
                         
                         If UBound(x) > 0 Then
                             For n = LBound(x) To UBound(x)
-                                x(n) = Replace(x(n), ChrW$(13), vbNullString)
+                                x(n) = Replace(x(n), Chr(13), vbNullString)
                                 
                                 If (x(n) <> vbNullString) Then
                                     If (n <> LBound(x)) Then
-                                        Value = txtPre.Text & x(n) & txtPost.Text
-                                        
-                                        AddQ Value, PRIORITY.CONSOLE_MESSAGE
+                                        AddQ txtPre.Text & x(n) & txtPost.Text, PRIORITY.CONSOLE_MESSAGE
                                         
                                         cboSend.AddItem txtPre.Text & x(n) & txtPost.Text, 0
                                     Else
@@ -5514,14 +5455,9 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                             cboSend.Text = vbNullString
                             
                             MultiLinePaste = True
-                        Else
-                            UniTextComboBoxSetSelectedText cboSend, ClipboardText
                         End If
-                    Else
-                        UniTextComboBoxSetSelectedText cboSend, ClipboardText
                     End If
                 End If
-                KeyCode = 0
                 
             Case KEY_A
                 If (Shift = S_CTRL) Then
@@ -5806,7 +5742,7 @@ Private Sub cboSend_KeyPress(KeyAscii As Integer)
         End If
     End With
     
-    If UniTextCaptionGetLength(cboSend) > 223 Then
+    If Len(cboSend.Text) > 223 Then
         cboSend.ForeColor = vbRed
     Else
         cboSend.ForeColor = vbWhite

@@ -2875,6 +2875,271 @@ ERROR_HANDLER:
     
 End Function
 
+' Fixed font issue when an element was only 1 character long -Pyro (9/28/08)
+' Fixed issue with displaying null text.
+
+' I changed the location of where fontStr was being declared. I can't figure out why it makes any difference, but _
+    when I have it declared above I get memory errors, my IDE crashes, I runtime erro 380 and _
+  - Error (#-2147417848): Method 'SelFontName' of object 'IRichText' failed in DisplayRichText().
+'I believe it's something to do with the subclassing overwriting the memory, but it only occurs when run from the IDE. - FrOzeN
+
+Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Variant)
+    On Error GoTo ERROR_HANDLER
+   
+    Dim arr()          As Variant
+    Dim s              As String
+    Dim L              As Long
+    Dim lngVerticalPos As Long
+    Dim Diff           As Long
+    Dim i              As Long
+    Dim intRange       As Long
+    Dim blUnlock       As Boolean
+    Dim LogThis        As Boolean
+    Dim length         As Long
+    Dim Count          As Long
+    Dim str            As String
+    Dim arrCount       As Long
+    Dim selStart       As Long
+    Dim selLength      As Long
+    Dim blnHasFocus    As Boolean
+    Dim blnAtEnd       As Boolean
+    
+    Static RichTextErrorCounter As Integer
+
+    ' *****************************************
+    '              SANITY CHECKS
+    ' *****************************************
+    
+    If (StrictIsNumeric(saElements(0))) Then
+        Count = 2
+    
+        For i = LBound(saElements) To UBound(saElements) Step 2
+            ReDim Preserve arr(0 To Count) As Variant
+            
+            arr(Count) = saElements(i + 1)
+            arr(Count - 1) = saElements(i)
+            arr(Count - 2) = rtb.Font.Name
+            
+            Count = Count + 3
+        Next i
+        
+        saElements() = arr()
+    End If
+    
+    rtbChatLength = Len(rtb.Text)
+
+    For i = LBound(saElements) To UBound(saElements) Step 3
+        If (i >= UBound(saElements)) Then
+            Exit Sub
+        End If
+    
+        If (StrictIsNumeric(saElements(i + 1)) = False) Then
+            Exit Sub
+        End If
+        
+        length = _
+            length + Len(KillNull(saElements(i + 2)))
+    Next i
+    
+    If (length = 0) Then
+        Exit Sub
+    End If
+
+    If ((BotVars.LockChat = False) Or (rtb <> frmChat.rtbChat)) Then
+        
+        ' store rtb carat and whether rtb has focus
+        With rtb
+            selStart = .selStart
+            selLength = .selLength
+            blnHasFocus = (rtb.Parent.ActiveControl Is rtb And rtb.Parent.WindowState <> vbMinimized)
+            ' whether it's at the end or within one vbCrLf of the end
+            blnAtEnd = (selStart >= rtbChatLength - 2)
+        End With
+ 
+        lngVerticalPos = IsScrolling(rtb)
+    
+        If (lngVerticalPos) Then
+            rtb.Visible = False
+        
+            ' below causes smooth scrolling, but also screen flickers :(
+            'LockWindowUpdate rtb.hWnd
+        
+            blUnlock = True
+        End If
+        
+        If (rtb = frmChat.rtbChat) Then
+            LogThis = (BotVars.Logging > 0)
+        ElseIf (rtb = frmChat.rtbWhispers) Then
+            LogThis = (BotVars.Logging > 0)
+        End If
+        
+        If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
+            If (blUnlock = False) Then
+                rtb.Visible = False
+            
+                ' below causes smooth scrolling, but also screen flickers :(
+                'LockWindowUpdate rtb.hWnd
+            End If
+        
+            With rtb
+                .selStart = 0
+                .selLength = InStr(1, .Text, vbLf, vbBinaryCompare)
+                ' remove line from stored selection
+                selStart = selStart - .selLength
+                ' if selection included part of what was removed, add negative start point
+                ' to length to get difference length and start selection at 0
+                If selStart < 0 Then
+                    selLength = selLength + selStart
+                    selStart = 0
+                    ' if new length is negative, then the selection is now gone, so selection
+                    ' length should be 0
+                    If selLength < 0 Then selLength = 0
+                End If
+                .SelFontName = rtb.Font.Name
+                .SelFontSize = rtb.Font.Size
+                .SelText = ""
+            End With
+            
+            If (blUnlock = False) Then
+                rtb.Visible = True
+            
+                ' below causes smooth scrolling, but also screen flickers :(
+                'LockWindowUpdate &H0
+            End If
+        End If
+        
+        s = GetTimeStamp()
+        
+        With rtb
+            .selStart = Len(.Text)
+            .selLength = 0
+            .SelFontName = rtb.Font.Name
+            .SelFontSize = rtb.Font.Size
+            .SelBold = False
+            .SelItalic = False
+            .SelUnderline = False
+            .SelColor = RTBColors.TimeStamps
+            .SelText = s
+            .selLength = Len(.SelText)
+        End With
+
+        For i = LBound(saElements) To UBound(saElements) Step 3
+            If (InStr(1, saElements(i + 2), Chr(0), vbBinaryCompare) > 0) Then
+                KillNull saElements(i + 2)
+            End If
+        
+            If ((StrictIsNumeric(saElements(i + 1))) And (Len(saElements(i + 2)) > 0)) Then
+                L = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
+                
+                While (L > 0)
+                    Mid$(saElements(i + 2), L + 1, 1) = "/"
+                    
+                    L = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
+                Wend
+            
+                L = Len(rtb.Text)
+            
+                With rtb
+                    .selStart = L
+                    .selLength = 0
+                    .SelFontName = saElements(i)
+                    .SelColor = saElements(i + 1)
+                    .SelText = _
+                        saElements(i + 2) & Left$(vbCrLf, -2 * CLng((i + 2) = _
+                            UBound(saElements)))
+                    str = _
+                        str & saElements(i + 2)
+                    .selLength = Len(.SelText)
+                End With
+            End If
+        Next i
+        
+        If (LogThis) Then
+            If (rtb = frmChat.rtbChat) Then
+                g_Logger.WriteChat str
+            ElseIf (rtb = frmChat.rtbWhispers) Then
+                g_Logger.WriteWhisper str
+            End If
+        End If
+
+        ColorModify rtb, L
+
+        If (blUnlock) Then
+            SendMessage rtb.hWnd, WM_VSCROLL, _
+                SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&
+                
+            rtb.Visible = True
+                
+            ' below causes smooth scrolling, but also screen flickers :(
+            'LockWindowUpdate &H0
+        End If
+        
+        With rtb
+            ' if has focus
+            If blnHasFocus Then
+                ' restore carat location and selection if not previously at end
+                If Not blnAtEnd Then
+                    .selStart = selStart
+                    .selLength = selLength
+                End If
+                
+                ' restore focus
+                '.SetFocus
+            End If
+        End With
+    End If
+    
+    RichTextErrorCounter = 0
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+
+    RichTextErrorCounter = RichTextErrorCounter + 1
+    If RichTextErrorCounter > 2 Then
+        RichTextErrorCounter = 0
+        Exit Sub
+    End If
+    
+    If (Err.Number = 13 Or Err.Number = 91) Then
+        Exit Sub
+    End If
+
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in DisplayRichText()."
+    
+    Exit Sub
+    
+End Sub
+
+Public Function IsScrolling(ByRef rtb As RichTextBox) As Long
+
+    Dim lngVerticalPos As Long
+    Dim difference     As Long
+    Dim range          As Integer
+
+    If (g_OSVersion.IsWin2000Plus()) Then
+
+        GetScrollRange rtb.hWnd, SB_VERT, 0, range
+        
+        lngVerticalPos = SendMessage(rtb.hWnd, EM_GETTHUMB, 0&, 0&)
+        
+        If ((lngVerticalPos = 0) And (range > 0)) Then
+            lngVerticalPos = 1
+        End If
+
+        difference = ((lngVerticalPos + (rtb.Height / Screen.TwipsPerPixelY)) - _
+            range)
+
+        ' In testing it appears that if the value I calcuate as Diff is negative,
+        ' the scrollbar is not at the bottom.
+        If (difference < 0) Then
+            IsScrolling = lngVerticalPos
+        End If
+        
+    End If
+
+End Function
+
 Public Function ResolveHost(ByVal strHostName As String) As String
     Dim lServer As Long
     Dim HostInfo As HOSTENT

@@ -16,11 +16,6 @@ Option Explicit
 ' Written by Pyro
 '  2016-3-25
 
-
-Private Declare Function GetPrivateProfileString Lib "kernel32" Alias "GetPrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpDefault As String, ByVal lpReturnedString As String, ByVal nSize As Long, ByVal lpFileName As String) As Long
-Private Declare Function WritePrivateProfileString Lib "kernel32" Alias "WritePrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpString As String, ByVal lpFileName As String) As Long
-
-
 Private Const CONFIG_VERSION        As Integer = 6
 
 'Config sections
@@ -2296,9 +2291,8 @@ End Function
 
 
 Private Function ReadSetting(ByVal section As String, ByVal Key As String, Optional ByVal DefaultValue As String = vbNullString) As String
-    Dim Buffer As String * 256
-    Dim Length As Long
-    Dim Buf() As Byte
+    Dim Buffer As String
+    Dim length As Long
     
     ' If the config file doesn't exist, return the default.
     If Not FileExists() Then
@@ -2307,11 +2301,11 @@ Private Function ReadSetting(ByVal section As String, ByVal Key As String, Optio
     End If
     
     ' Create a buffer to read the value into.
-    Buffer = String$(255, vbNullChar)
+    Buffer = String(255, vbNull)
     
     ' Read the value into the buffer.
-    Length = GetPrivateProfileString(section, Key, DefaultValue, Buffer, 255, m_ConfigPath)
-    ReadSetting = modUnicode.UTF8Decode(Left$(Buffer, Length))
+    length = GetPrivateProfileString(section, Key, DefaultValue, Buffer, 255, m_ConfigPath)
+    ReadSetting = Left$(Buffer, length)
     
     'MsgBox section & "->" & key & ": [" & CStr(length) & "] " & ReadSetting
 End Function
@@ -2345,7 +2339,6 @@ End Function
 ' Sets a setting if needed.
 Private Sub WriteSetting(ByVal section As String, ByVal Key As String, ByVal Value As String)
     Dim currentVal As String
-    Value = Value
     currentVal = ReadSetting(section, Key)
     
     ' Only write if the value has changed or we are forcing a save.

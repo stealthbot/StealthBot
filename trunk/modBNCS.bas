@@ -1422,13 +1422,12 @@ On Error GoTo ERROR_HANDLER:
     Dim bSuccess As Boolean
     
     lResult = pBuff.GetDWORD
-    sInfo = pBuff.GetString(UTF8)
+    sInfo = pBuff.GetString
     bSuccess = False
     
     Select Case lResult
         Case &H0:
             bSuccess = True
-            
             Call Event_VersionCheck(0, sInfo)
             
         Case &H100, &H101: Call Event_VersionCheck(1, sInfo) 'Outdated/Invalid Version
@@ -1540,7 +1539,7 @@ On Error GoTo ERROR_HANDLER:
         
         .InsertNTString ds.CRevResult
         If (LenB(Config.CDKeyOwnerName) > 0) Then
-            .InsertNTString Config.CDKeyOwnerName, UTF8
+            .InsertNTString Config.CDKeyOwnerName
         Else
             .InsertNTString BotVars.Username
         End If

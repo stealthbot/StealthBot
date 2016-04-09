@@ -127,7 +127,7 @@ End Function
 
 Public Function KillNull(ByVal Text As String) As String
     Dim i As Integer
-    i = InStr(1, Text, ChrW$(0))
+    i = InStr(1, Text, Chr(0))
     If (i = 0) Then
         KillNull = Text
         Exit Function
@@ -183,7 +183,7 @@ Public Sub FullJoin(Channel As String, Optional ByVal i As Long = -1)
     Else
         PBuffer.InsertDWord &H2
     End If
-    PBuffer.InsertNTString Channel, UTF8
+    PBuffer.InsertNTString Channel
     PBuffer.SendPacket SID_JOINCHANNEL
 End Sub
 
@@ -201,7 +201,7 @@ Public Sub RejoinChannel(Channel As String)
     'on error resume next
     PBuffer.SendPacket SID_LEAVECHAT
     PBuffer.InsertDWord &H2
-    PBuffer.InsertNTString Channel, UTF8
+    PBuffer.InsertNTString Channel
     PBuffer.SendPacket SID_JOINCHANNEL
 End Sub
 
@@ -896,6 +896,169 @@ Public Function Conv(ByVal RawString As String) As Long
     
     Conv = lReturn
 End Function
+
+
+'// COLORMODIFY - where L is passed as the start position of the text to be checked
+Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
+    Dim i As Long
+    Dim s As String
+    Dim temp As Long
+    Dim selStart As Long
+    Dim selLength As Long
+    
+    If L = 0 Then L = 1
+    
+    temp = L
+    
+    With rtb
+        ' store previous selstart and len
+        selStart = .selStart
+        selLength = .selLength
+        
+        If InStr(temp, .Text, "ÿc", vbTextCompare) > 0 Then
+            .Visible = False
+            Do
+                i = InStr(temp, .Text, "ÿc", vbTextCompare)
+                
+                If StrictIsNumeric(Mid$(.Text, i + 2, 1)) Then
+                    s = GetColorVal(Mid$(.Text, i + 2, 1))
+                    .selStart = i - 1
+                    .selLength = 3
+                    .SelText = vbNullString
+                    .selStart = i - 1
+                    .selLength = Len(.Text) + 1 - i
+                    .SelColor = s
+                Else
+                    Select Case Mid$(.Text, i + 2, 1)
+                        Case "i"
+                            .selStart = i - 1
+                            .selLength = 3
+                            .SelText = vbNullString
+                            .selStart = i - 1
+                            .selLength = Len(.Text) + 1 - 1
+                            If .SelItalic = True Then
+                                .SelItalic = False
+                            Else
+                                .SelItalic = True
+                            End If
+                            
+                        Case "b", "."       'BOLD
+                            .selStart = i - 1
+                            .selLength = 3
+                            .SelText = vbNullString
+                            .selStart = i - 1
+                            .selLength = Len(.Text) + 1 - 1
+                            If .SelBold = True Then
+                                .SelBold = False
+                            Else
+                                .SelBold = True
+                            End If
+                            
+                        Case "u", "."       'underline
+                            .selStart = i - 1
+                            .selLength = 3
+                            .SelText = vbNullString
+                            .selStart = i - 1
+                            .selLength = Len(.Text) + 1 - 1
+                            If .SelUnderline = True Then
+                                .SelUnderline = False
+                            Else
+                                .SelUnderline = True
+                            End If
+                            
+                        Case ";"
+                            .selStart = i - 1
+                            .selLength = 3
+                            .SelText = vbNullString
+                            .selStart = i - 1
+                            .selLength = Len(.Text) + 1 - 1
+                            .SelColor = HTMLToRGBColor("8D00CE")    'Purple
+                            
+                        Case ":"
+                            .selStart = i - 1
+                            .selLength = 3
+                            .SelText = vbNullString
+                            .selStart = i - 1
+                            .selLength = Len(.Text) + 1 - 1
+                            .SelColor = 186408      '// Lighter green
+                            
+                        Case "<"
+                            .selStart = i - 1
+                            .selLength = 3
+                            .SelText = vbNullString
+                            .selStart = i - 1
+                            .selLength = Len(.Text) + 1 - 1
+                            .SelColor = HTMLToRGBColor("00A200")    'Dark green
+                        'Case Else: Debug.Print s
+                    End Select
+                End If
+                temp = temp + 1
+                
+            Loop While InStr(temp, .Text, "ÿc", vbTextCompare) > 0
+            .Visible = True
+        End If
+        
+        '// Check for SC color codes
+        temp = L
+        
+        If InStr(temp, .Text, "Á", vbBinaryCompare) > 0 Then
+            .Visible = False
+            Do
+                i = InStr(temp, .Text, "Á", vbBinaryCompare)
+                s = GetScriptColorString(Mid$(.Text, i + 1, 1))
+                
+                If Len(s) > 0 Then
+                    .Visible = False
+                    .selStart = i - 1
+                    .selLength = 2
+                    .SelText = vbNullString
+                    .selStart = i - 1
+                    .selLength = Len(.Text) + 1 - 1
+                    .SelColor = s
+                    .Visible = True
+                End If
+                
+                temp = temp + 1
+                
+            Loop While InStr(temp, .Text, "Á", vbBinaryCompare) > 0
+            .Visible = True
+        End If
+        
+        ' restore previous selstart and len
+        .selStart = selStart
+        .selLength = selLength
+    End With
+End Sub
+
+Public Function GetScriptColorString(ByVal scCC As String) As String
+    Select Case Asc(scCC)
+        Case Asc("Q"): GetScriptColorString = RGB(93, 93, 93)       'Grey
+        Case Asc("R"): GetScriptColorString = RGB(30, 224, 54)      'Green
+        Case Asc("Z"), Asc("X"), Asc("S"): GetScriptColorString = RGB(160, 169, 116)    'Yellow
+        Case Asc("Y"), Asc("["), Asc("Y"): GetScriptColorString = RGB(231, 38, 82)      'Red
+        Case Asc("V"), Asc("@"): GetScriptColorString = RGB(98, 77, 232)      'Blue
+        Case Asc("W"), Asc("P"): GetScriptColorString = vbWhite               'White
+        Case Asc("T"), Asc("U"), Asc("V"): GetScriptColorString = HTMLToRGBColor("00CCCC") 'cyan/teal
+        Case Else: GetScriptColorString = vbNullString
+    End Select
+End Function
+
+Public Function GetColorVal(ByVal d2CC As String) As String
+    Select Case CInt(d2CC)
+        Case 1: GetColorVal = HTMLToRGBColor("CE3E3E")  'Red
+        Case 2: GetColorVal = HTMLToRGBColor("00CE00")  'Green
+        Case 3: GetColorVal = HTMLToRGBColor("44409C")  'Blue
+        Case 4: GetColorVal = HTMLToRGBColor("A19160")  'Gold
+        Case 5: GetColorVal = HTMLToRGBColor("555555")  'Grey
+        Case 6: GetColorVal = HTMLToRGBColor("080808")  'Black
+        Case 7: GetColorVal = HTMLToRGBColor("A89D65")  'Gold
+        Case 8: GetColorVal = HTMLToRGBColor("CE8800")  'Gold-Orange
+        Case 9: GetColorVal = HTMLToRGBColor("CECE51")  'Light Yellow
+        Case 0: GetColorVal = HTMLToRGBColor("FFFFFF")  'White
+    End Select
+End Function
+
+
 'Originally from DPChat by Zorm - cleaned up and adapted to my needs
 Public Sub ProfileParse(Data As String)
     On Error Resume Next

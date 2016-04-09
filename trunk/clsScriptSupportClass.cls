@@ -1179,14 +1179,6 @@ Public Function Clipboard() As VB.Clipboard
     Set Clipboard = VB.Clipboard
 End Function
 
-Public Function ChrW(ByVal lChar As Long) As String
-    ChrW = ChrW$(lChar)
-End Function
-
-Public Function AscW(ByVal s As String) As Long
-    AscW = AscW&(s)
-End Function
-
 '// TWIPSPERPIXELX
 '// Get the horizontal ratio of twips/pixel.
 Public Function TwipsPerPixelX() As Single
