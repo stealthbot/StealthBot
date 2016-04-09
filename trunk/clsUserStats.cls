@@ -62,7 +62,7 @@ Private Const IC_PGT_D = 101
 
 ' variables
 Private m_stat_string         As String
-Private m_game                As String
+Private m_Game                As String
 Private m_icon                As String
 Private m_spawn               As Boolean
 Private m_clan                As String
@@ -88,11 +88,11 @@ Private m_realm               As String
 Private m_are_stats_valid     As Boolean
 
 Public Property Let Game(ByVal str As String)
-    m_game = str
+    m_Game = str
 End Property
 
 Public Property Get Game() As String
-    Game = m_game
+    Game = m_Game
 End Property
 
 Public Property Let IsValid(ByVal bln As Boolean)
