@@ -3406,21 +3406,17 @@ End Sub
 
 Private Sub lvFriendList_dblClick()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
-        UniTextComboBoxAppendText cboSend, lvFriendList.SelectedItem.Text
-        
-        On Error Resume Next
+        cboSend.Text = cboSend.Text & lvFriendList.SelectedItem.Text
         cboSend.SetFocus
-        cboSend.selStart = UniTextCaptionGetLength(cboSend)
+        cboSend.selStart = Len(cboSend.Text)
     End If
 End Sub
 
 Private Sub lvClanList_dblClick()
-    If Not (lvClanList.SelectedItem Is Nothing) Then
-        UniTextComboBoxAppendText cboSend, lvClanList.SelectedItem.Text
-        
-        On Error Resume Next
+    If Not (lvClanList.SelectedItem Is Nothing) And Len(cboSend.Text) < 200 Then
+        cboSend.Text = cboSend.Text & lvClanList.SelectedItem.Text
         cboSend.SetFocus
-        cboSend.selStart = UniTextCaptionGetLength(cboSend)
+        cboSend.selStart = Len(cboSend.Text)
     End If
 End Sub
 
