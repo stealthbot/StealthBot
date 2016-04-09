@@ -8,7 +8,7 @@ Public Function GetNewsURL() As String
         "&lv=" & lLauncherVersion
 End Function
 
-Public Sub HandleNews(ByVal s As String, ByVal ResponseCode As Long)
+Public Sub HandleNews(ByVal Buffer As String, ByVal ResponseCode As Long)
     On Error Resume Next
     
     Dim Splt()    As String
@@ -16,14 +16,14 @@ Public Sub HandleNews(ByVal s As String, ByVal ResponseCode As Long)
     Dim i         As Integer
     Dim OldValue  As Boolean
     
-    Splt() = Split(s, "|")
+    Splt() = Split(Buffer, "|")
     
     ' New format 2.7+ -at
     'Beta Build 0 | Regular Build 1 | Launcher Build 2 | Regular News 3 | Beta News 4
-    If ResponseCode <> 200 Then
-        AddChat RTBColors.ErrorMessageText, Buffer & ". Error retrieving news from http://www.stealthbot.net."
+    If ResponseCode <> 0 Then
+        frmChat.AddChat RTBColors.ErrorMessageText, Buffer & ". Error retrieving news from http://www.stealthbot.net."
     ElseIf UBound(Splt) <> 4 Then
-        AddChat RTBColors.ErrorMessageText, "Format not understood. Error retrieving news from http://www.stealthbot.net."
+        frmChat.AddChat RTBColors.ErrorMessageText, "Format not understood. Error retrieving news from http://www.stealthbot.net."
     Else
         OldValue = frmChat.mnuUTF8.Checked ' old value of UTF8 encoding setting
         frmChat.mnuUTF8.Checked = False
