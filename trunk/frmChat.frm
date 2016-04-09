@@ -3966,6 +3966,7 @@ Private Sub mnuPopFLAddLeft_Click()
     On Error Resume Next
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     Dim Index As Integer
+    Dim s As String
     
     If txtPre.Enabled Then 'fix for topic 25290 -a
         s = vbNullString
@@ -4656,7 +4657,7 @@ Private Sub mnuPopWebProfile_Click()
             Exit Sub
     End Select
     
-    GetW3LadderProfile StripAccountNumber(CleanUsername(GetFriendsSelectedUser)), webProd
+    GetW3LadderProfile StripAccountNumber(CleanUsername(GetSelectedUser)), webProd
 End Sub
 
 Private Sub mnuClearedTxt_Click()
