@@ -1328,7 +1328,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim BanningUser As Boolean
     Dim pStats      As String
     Dim isbanned    As Boolean
-    Dim AcqOps      As Boolean
+    Dim AcqFlags    As Long
     Dim ToDisplay   As Boolean
     
     If (Len(Username) < 1) Then
@@ -1434,10 +1434,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                             ' will combine with userjoins
                             ToDisplay = True
                             
-                            ' is operator
-                            If UserEvent.Flags And 2 Then
-                                AcqOps = True
-                            End If
+                            AcqFlags = UserEvent.Flags
                             
                         ' user stats update / user in channel
                         Case ID_USER
@@ -1472,7 +1469,19 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             
             If (Not CheckBlock(Username)) Then
                 ' display message
-                If AcqOps Or (Flags And 2) Then
+                If (AcqFlags And USER_BLIZZREP) Or (Flags And USER_BLIZZREP) Then
+                    frmChat.AddChat RTBColors.JoinText, "-- ", _
+                        RGB(97, 105, 255), Username, _
+                        RTBColors.JoinUsername, " [" & Ping & "ms]", _
+                        RTBColors.JoinText, " has joined the channel using " & UserStats.ToString, _
+                        RTBColors.JoinUsername, " as a Blizzard Representative", RTBColors.JoinText, "."
+                ElseIf (AcqFlags And USER_SYSOP) Or (Flags And USER_SYSOP) Then
+                    frmChat.AddChat RTBColors.JoinText, "-- ", _
+                        RGB(97, 105, 255), Username, _
+                        RTBColors.JoinUsername, " [" & Ping & "ms]", _
+                        RTBColors.JoinText, " has joined the channel using " & UserStats.ToString, _
+                        RTBColors.JoinUsername, " as a Battle.net system op", RTBColors.JoinText, "."
+                ElseIf (AcqFlags And USER_CHANNELOP) Or (Flags And USER_CHANNELOP) Then
                     frmChat.AddChat RTBColors.JoinText, "-- ", _
                         RTBColors.TalkUsernameOp, Username, _
                         RTBColors.JoinUsername, " [" & Ping & "ms]", _
@@ -1569,6 +1578,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
 
     Dim UserObj   As clsUserObj
     
+    Dim UserColor As Long
     Dim UserIndex As Integer
     Dim i         As Integer
     Dim ii        As Integer
@@ -1592,8 +1602,11 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         If (g_Channel.Users(UserIndex).Queue.Count = 0) Then
             If ((Not JoinMessagesOff) And (Not CheckBlock(Username))) Then
                 'If (GetVeto = False) Then
+                    UserColor = RTBColors.JoinUsername
+                    If g_Channel.Users(UserIndex).IsOperator Then UserColor = RTBColors.TalkUsernameOp
+                    If g_Channel.Users(UserIndex).IsBlizzRep Or g_Channel.Users(UserIndex).IsBnetAdmin Then UserColor = RGB(97, 105, 255)
                     frmChat.AddChat RTBColors.JoinText, "-- ", _
-                        IIf(g_Channel.Users(UserIndex).IsOperator, RTBColors.TalkUsernameOp, RTBColors.JoinUsername), g_Channel.Users(UserIndex).DisplayName, _
+                        UserColor, g_Channel.Users(UserIndex).DisplayName, _
                         RTBColors.JoinText, " has left the channel."
                 'End If
             End If
