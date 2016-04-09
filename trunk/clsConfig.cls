@@ -1901,6 +1901,12 @@ Private Sub LoadDefaults()
     m_RegisterEmailAction = "PROMPT"
     m_RegisterEmailDefault = vbNullString
     m_RealmServerPassword = "password"
+    
+    Dim i As Integer
+    For i = LBound(m_ProductKeys) To UBound(m_ProductKeys)
+        m_VersionBytes(i) = -1
+        m_LogonSystems(i) = -1
+    Next
 
     '[Debug]
     m_DebugWarden = False
