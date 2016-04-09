@@ -539,7 +539,7 @@ End Function
 
 
 
-Private Sub writeDocToFile(ByVal filePath As String)
+Private Sub writeDocToFile(ByVal FilePath As String)
     
     On Error GoTo ERROR_HANDLER
     
@@ -565,8 +565,9 @@ Private Sub writeDocToFile(ByVal filePath As String)
     
     '// open the file for writing
     iFileNo = FreeFile
-    Open filePath For Output As #iFileNo
-    Print #iFileNo, writer.output
+    Open FilePath For Output As #iFileNo
+    
+        Print #iFileNo, Replace(writer.output, Chr$(9), "  ", , , vbBinaryCompare)
     
     '// close the file
     Close #iFileNo
@@ -636,9 +637,9 @@ Private Function getParameters(ByRef commandNode As IXMLDOMNode) As Collection
             If (parameter.selectSingleNode("match").Attributes.getNamedItem("case-sensitive").Text = "1") Then
                 .MatchCaseSensitive = True
             End If
-            .MatchError = parameter.selectSingleNode("error").Text
-            .description = parameter.selectSingleNode("documentation/description").Text
-            .SpecialNotes = parameter.selectSingleNode("documentation/specialnotes").Text
+            .MatchError = Trim$(parameter.selectSingleNode("error").Text)
+            .description = Trim$(parameter.selectSingleNode("documentation/description").Text)
+            .SpecialNotes = Trim$(parameter.selectSingleNode("documentation/specialnotes").Text)
         End With
         On Error GoTo 0
         
@@ -674,7 +675,7 @@ Private Function getRestrictions(ByRef parameterNode As IXMLDOMNode) As Collecti
             .Name = getName(RestrictionNode)
             .MatchMessage = getMatchMessage(RestrictionNode)
             If (Not RestrictionNode.selectSingleNode("error") Is Nothing) Then
-                .MatchError = RestrictionNode.selectSingleNode("error").Text
+                .MatchError = Trim$(RestrictionNode.selectSingleNode("error").Text)
             End If
             .MatchCaseSensitive = getMatchCase(RestrictionNode)
             .RequiredFlags = getFlags(RestrictionNode)
