@@ -447,7 +447,22 @@ ERROR_HANDLER:
     
 End Function
 
-
+Public Function StripAccountNumber(ByVal Username As String) As String
+    Dim numpos As Integer
+    Dim atpos As Integer
+    
+    numpos = InStr(1, Username, "#", vbBinaryCompare)
+    If numpos > 0 Then
+        atpos = InStr(numpos, Username, "@", vbBinaryCompare)
+        If atpos > 0 Then
+            StripAccountNumber = Left$(Username, numpos - 1) & Mid$(Username, atpos)
+        Else
+            StripAccountNumber = Left$(Username, numpos - 1)
+        End If
+    Else
+        StripAccountNumber = Username
+    End If
+End Function
 
 Public Function StripRealm(ByVal Username As String) As String
     If (InStr(1, Username, "@", vbBinaryCompare) > 0) Then
@@ -482,14 +497,14 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
                 .InsertNTString Message
             End If
 
-            .SendPacket &HE
+            .SendPacket SID_CHATCOMMAND
         End With
         
         If (Tag = "request_receipt") Then
             g_request_receipt = True
         
             With PBuffer
-                .SendPacket &H65
+                .SendPacket SID_FRIENDSLIST
             End With
         End If
     End If
@@ -1121,7 +1136,7 @@ Public Sub RequestSystemKeys()
         .InsertNTString "System\Last Logoff"
         .InsertNTString "System\Time Logged"
         
-        .SendPacket &H26
+        .SendPacket SID_READUSERDATA
     End With
 End Sub
 
@@ -1271,7 +1286,8 @@ Public Sub AddName(ByVal Username As String, ByVal AccountName As String, ByVal 
     '    If ForcePosition > 0 Then isPriority = ForcePosition
     '
     If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or _
-            ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&)) Then
+            ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Or _
+            ((Flags And USER_SYSOP&) = USER_SYSOP&)) Then
         
         If (ForcePosition = 0) Then
             isPriority = 1
@@ -1311,7 +1327,7 @@ Public Sub AddName(ByVal Username As String, ByVal AccountName As String, ByVal 
         
         .Enabled = True
         
-        .Refresh
+        '.Refresh
     End With
     
     frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
@@ -1535,13 +1551,18 @@ End Function
 
 '//10-15-2009 - Hdx - Updated url to new address
 Public Sub GetW3LadderProfile(ByVal sPlayer As String, ByVal eType As enuWebProfileTypes)
-    Const W3LadderURLFormat As String = "http://classic.battle.net/war3/ladder/{0}-player-profile.aspx?Gateway={1}&PlayerName={2}"
+    Const W3LadderURLFormat As String = "http://{0}.battle.net/war3/ladder/{1}-player-profile.aspx?Gateway={2}&PlayerName={3}"
     Dim W3LadderURL As String
     Dim W3WebProfileType As String
+    Dim W3Realm As String
+    Dim W3Domain As String
+    W3Domain = "classic"
     
     If (LenB(sPlayer) > 0) Then
         W3WebProfileType = IIf(eType = W3XP, PRODUCT_W3XP, PRODUCT_WAR3)
-        W3LadderURL = StringFormat(W3LadderURLFormat, W3WebProfileType, GetW3Realm(sPlayer), NameWithoutRealm(sPlayer, 1))
+        W3Realm = GetW3Realm(sPlayer)
+        If W3Realm = "Kalimdor" Then W3Domain = "asialadders"
+        W3LadderURL = StringFormat(W3LadderURLFormat, W3Domain, LCase$(W3WebProfileType), W3Realm, NameWithoutRealm(sPlayer, 1))
         
         ShellOpenURL W3LadderURL, sPlayer & "'s " & UCase$(W3WebProfileType) & " ladder profile"
     End If
