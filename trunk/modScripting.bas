@@ -82,7 +82,7 @@ Public Sub LoadScripts()
     Dim CurrentModule As Module
     Dim Paths         As New Collection
     Dim strPath       As String
-    Dim fileName      As String
+    Dim FileName      As String
     Dim fileExt       As String
     Dim i             As Integer
     Dim j             As Integer
@@ -103,17 +103,17 @@ Public Sub LoadScripts()
     ' ensure scripts folder exists
     If (LenB(Dir$(strPath)) > 0) Then
         ' grab initial script file name
-        fileName = Dir$(strPath)
+        FileName = Dir$(strPath)
         
         ' grab script files
         ' note: if we don't enumerate this list prior to script loading,
         ' scripting errors can kill further script loading.
-        Do While (fileName <> vbNullString)
+        Do While (FileName <> vbNullString)
             ' add script file to collection
-            Paths.Add fileName
+            Paths.Add FileName
         
             ' grab next script file name
-            fileName = Dir$()
+            FileName = Dir$()
         Loop
 
         ' Cycle through each of the files.
@@ -180,7 +180,7 @@ ERROR_HANDLER:
 
 End Sub
 
-Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As String, Optional ByVal defaults As Boolean = True) As Boolean
+Private Function FileToModule(ByRef ScriptModule As Module, ByVal FilePath As String, Optional ByVal defaults As Boolean = True) As Boolean
 
     On Error GoTo ERROR_HANDLER
 
@@ -205,7 +205,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
         Set includes = New Collection
     End If
 
-    Open filePath For Input As #f
+    Open FilePath For Input As #f
         Do While (EOF(f) = False)
             Line Input #f, strLine
             
@@ -243,7 +243,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
                                     
                                     ' check if file exists to include
                                     If LenB(Dir$(strFullPath)) = 0 Then
-                                        frmChat.AddChat RTBColors.ErrorMessageText, "Scripting warning: " & Dir$(filePath) & " is trying to include " & _
+                                        frmChat.AddChat RTBColors.ErrorMessageText, "Scripting warning: " & Dir$(FilePath) & " is trying to include " & _
                                             "a file that does not exist: " & strPath
                                         blnIncIsValid = False
                                     End If
@@ -251,7 +251,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
                                     ' check if file is already included by this script
                                     For i = 1 To includes.Count
                                         If StrComp(includes(i), strFullPath, vbTextCompare) = 0 Then
-                                            frmChat.AddChat RTBColors.ErrorMessageText, "Scripting warning: " & Dir$(filePath) & " is trying to include " & _
+                                            frmChat.AddChat RTBColors.ErrorMessageText, "Scripting warning: " & Dir$(FilePath) & " is trying to include " & _
                                                 "a file that has already been included: " & strPath
                                             blnIncIsValid = False
                                         End If
@@ -312,7 +312,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
         Set ScriptModule.CodeObject.DataBuffer = SharedScriptSupport.DataBufferEx()
         
         ' set the Script("Path") value
-        GetScriptDictionary(ScriptModule)("Path") = filePath
+        GetScriptDictionary(ScriptModule)("Path") = FilePath
         
         ' add this as the "first" include for this script, with no name so that later it is changed to "scriptname"
         AddInclude ScriptModule, vbNullString, lineCount
@@ -341,7 +341,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
         strContent = vbNullString
     Else
         ' this is an #include, store our information
-        AddInclude ScriptModule, "#" & Mid$(filePath, InStrRev(filePath, "\", -1, vbBinaryCompare) + 1), lineCount
+        AddInclude ScriptModule, "#" & Mid$(FilePath, InStrRev(FilePath, "\", -1, vbBinaryCompare) + 1), lineCount
     End If
     
     FileToModule = True
@@ -605,7 +605,7 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
         
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
             
-            '' check if module has the procedure before calling it!
+            ' check if module has the procedure before calling it!
             'For Each Proc In obj.Procedures
             '    If StrComp(Proc.Name, arr(0), vbTextCompare) = 0 Then
             '        ' it does, count args
@@ -1337,11 +1337,11 @@ Public Function GetVeto() As Boolean
     
 End Function
 
-Private Function GetFileExtension(ByVal fileName As String)
+Private Function GetFileExtension(ByVal FileName As String)
         
     Dim arr() As String
 
-    arr = Split(fileName, ".")
+    arr = Split(FileName, ".")
     
     If UBound(arr) = 0 Then
         GetFileExtension = ""
@@ -1374,13 +1374,13 @@ Private Function IsValidFileExtension(ByVal ext As String) As Boolean
 
 End Function
 
-Private Function CleanFileName(ByVal fileName As String) As String
+Private Function CleanFileName(ByVal FileName As String) As String
     
     On Error Resume Next
     
-    If (InStr(1, fileName, ".") > 1) Then
+    If (InStr(1, FileName, ".") > 1) Then
         CleanFileName = _
-            Left$(fileName, InStr(1, fileName, ".") - 1)
+            Left$(FileName, InStr(1, FileName, ".") - 1)
     End If
 
 End Function
@@ -1492,7 +1492,9 @@ Public Sub SC_Error()
         frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Scripting {0} error '{1}' in {2}: (line {3}; column {4})", _
             ErrType, Number, Name, line, Column)
         frmChat.AddChat RTBColors.ErrorMessageText, description
-        frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Offending line: >> {0}", Text)
+        If LenB(Trim$(Text)) > 0 Then
+            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Offending line: >> {0}", Text)
+        End If
     End If
     
     m_sc_control.Error.Clear
