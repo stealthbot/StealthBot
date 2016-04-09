@@ -302,7 +302,7 @@ Private Function Timestamp(Optional TimeDate As Date) As String
             Timestamp = Format(TimeDate, "HH:MM:SS")
         
         Case 2
-            Timestamp = Format(TimeDate, "HH:MM:SS") & "." &  Right$("000" & GetCurrentMS, 3)
+            Timestamp = Format(TimeDate, "HH:MM:SS") & "." & Right$("000" & GetCurrentMS, 3)
         
         Case Else
             Timestamp = Format(TimeDate, "HH:MM:SS AM/PM")

@@ -40,7 +40,7 @@ End Sub
 
 Public Sub RequestFriendsList(ByRef pBuff As clsDataBuffer)
     'ResetList
-    pBuff.SendPacket &H65
+    pBuff.SendPacket SID_FRIENDSLIST
 End Sub
 
 Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)

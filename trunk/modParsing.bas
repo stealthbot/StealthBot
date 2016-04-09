@@ -199,7 +199,7 @@ End Function
 
 Public Sub RejoinChannel(Channel As String)
     'on error resume next
-    PBuffer.SendPacket &H10
+    PBuffer.SendPacket SID_LEAVECHAT
     PBuffer.InsertDWord &H2
     PBuffer.InsertNTString Channel
     PBuffer.SendPacket SID_JOINCHANNEL
@@ -216,7 +216,7 @@ Public Sub RequestProfile(strUser As String)
         .InsertNTString "Profile\Sex"
         .InsertNTString "Profile\Location"
         .InsertNTString "Profile\Description"
-        .SendPacket &H26
+        .SendPacket SID_READUSERDATA
     End With
 End Sub
 
@@ -227,7 +227,7 @@ Public Sub RequestSpecificKey(ByVal sUsername As String, ByVal sKey As String)
         .InsertDWord GetTickCount()
         .InsertNTString ReverseConvertUsernameGateway(sUsername)
         .InsertNTString sKey
-        .SendPacket &H26
+        .SendPacket SID_READUSERDATA
     End With
 End Sub
 
@@ -265,7 +265,7 @@ Public Sub SetProfile(ByVal Location As String, ByVal description As String, Opt
         .InsertNTString description
         .InsertNTString Sex
         
-        .SendPacket &H27
+        .SendPacket SID_WRITEUSERDATA
     End With
 End Sub
 
@@ -321,7 +321,7 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
                 .InsertNTString pData(i)
             Next i
             
-            .SendPacket &H27
+            .SendPacket SID_WRITEUSERDATA
         End With
     End If
 End Sub

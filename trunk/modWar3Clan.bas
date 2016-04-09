@@ -33,13 +33,13 @@ Public Sub RequestClanList()
     frmChat.lvClanList.ListItems.Clear
     
     PBuffer.InsertDWord &H1
-    PBuffer.SendPacket &H7D
+    PBuffer.SendPacket SID_CLANMEMBERLIST
 End Sub
 
 Public Sub DisbandClan()
     With PBuffer
         .InsertDWord &H1
-        .SendPacket &H73
+        .SendPacket SID_CLANDISBAND
     End With
 End Sub
 
@@ -48,20 +48,20 @@ Public Sub InviteToClan(Username As String) '//Works
     With PBuffer
         .InsertDWord &H1
         .InsertNTString Username
-        .SendPacket &H77
+        .SendPacket SID_CLANINVITATION
     End With
 End Sub
 
 Public Sub RequestClanMOTD(Optional ByVal cookie As Long = &H0)
     PBuffer.InsertDWord cookie
-    PBuffer.SendPacket &H7C
+    PBuffer.SendPacket SID_CLANMOTD
 End Sub
 
 Public Sub SetClanMOTD(Message As String) '//Works
     With PBuffer
         .InsertDWord &H0
         .InsertNTString Message
-        .SendPacket &H7B
+        .SendPacket SID_CLANSETMOTD
     End With
 End Sub
 
@@ -70,7 +70,7 @@ Public Sub PromoteMember(Username As String, Rank As Integer)
         .InsertDWord &H3
         .InsertNTString Username
         .InsertByte Rank
-        .SendPacket &H7A
+        .SendPacket SID_CLANRANKCHANGE
     End With
 End Sub
 
@@ -79,7 +79,7 @@ Public Sub DemoteMember(Username As String, Rank As Integer)
         .InsertDWord &H1
         .InsertNTString Username
         .InsertByte Rank
-        .SendPacket &H7A
+        .SendPacket SID_CLANRANKCHANGE
     End With
 End Sub
 
@@ -87,7 +87,7 @@ Public Sub RemoveMember(Username As String)
     With PBuffer
         .InsertDWord &H1
         .InsertNTString Username
-        .SendPacket &H78
+        .SendPacket SID_CLANREMOVEMEMBER
     End With
 End Sub
 
@@ -95,7 +95,7 @@ Public Sub MakeMemberChieftain(Username As String)
     With PBuffer
         .InsertDWord &H1
         .InsertNTString Username
-        .SendPacket &H74
+        .SendPacket SID_CLANMAKECHIEFTAIN
     End With
 End Sub
 
@@ -114,7 +114,7 @@ Public Function DebugOutput(ByVal sIn As String) As String
 
     Dim x1 As Long, y1 As Long
     Dim iLen As Long, iPos As Long
-    Dim sB As String, sT As String
+    Dim sB As String, st As String
     Dim sOut As String
     Dim offset As Long, sOffset As String
     'build random string to display
@@ -133,7 +133,7 @@ Public Function DebugOutput(ByVal sIn As String) As String
     For x1 = 0 To ((iLen - 1) \ 16)
         sOffset = Right$("0000" & Hex(offset), 4)
         sB = String(48, " ")
-        sT = "................"
+        st = "................"
         For y1 = 1 To 16
             iPos = 16 * x1 + y1
             If iPos > iLen Then Exit For
@@ -142,12 +142,12 @@ Public Function DebugOutput(ByVal sIn As String) As String
             Select Case Asc(Mid(sIn, iPos, 1))
                 Case 0, 9, 10, 13
                 Case Else
-                    Mid(sT, y1, 1) = Mid(sIn, iPos, 1)
+                    Mid(st, y1, 1) = Mid(sIn, iPos, 1)
             End Select
         Next y1
         If Len(sOut) > 0 Then sOut = sOut & vbCrLf
         sOut = sOut & sOffset & ":  "
-        sOut = sOut & sB & "  " & sT
+        sOut = sOut & sB & "  " & st
         offset = offset + 16
     Next x1
 

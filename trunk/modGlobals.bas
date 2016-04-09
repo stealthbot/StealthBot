@@ -71,7 +71,6 @@ Public SkipUICEvents As Boolean
 Public JoinMessagesOff As Boolean
 Public Filters As Boolean
 Public mail As Boolean
-Public BotLoaded As Boolean
 Public ProtectMsg As String
 
 Public LastWhisper As String

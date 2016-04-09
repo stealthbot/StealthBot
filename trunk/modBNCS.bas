@@ -23,21 +23,54 @@ Public Const SID_MESSAGEBOX             As Byte = &H19
 Public Const SID_LOGONCHALLENGEEX       As Byte = &H1D
 Public Const SID_CLIENTID2              As Byte = &H1E
 Public Const SID_PING                   As Byte = &H25
+Public Const SID_READUSERDATA           As Byte = &H26
+Public Const SID_WRITEUSERDATA          As Byte = &H27
 Public Const SID_LOGONCHALLENGE         As Byte = &H28
-Public Const SID_ICONDATA               As Byte = &H2D
+Public Const SID_GETICONDATA            As Byte = &H2D
 Public Const SID_CDKEY                  As Byte = &H30
+Public Const SID_CHANGEPASSWORD         As Byte = &H31
+Public Const SID_PROFILE                As Byte = &H35
 Public Const SID_CDKEY2                 As Byte = &H36
 Public Const SID_LOGONRESPONSE2         As Byte = &H3A
 Public Const SID_CREATEACCOUNT2         As Byte = &H3D
 Public Const SID_LOGONREALMEX           As Byte = &H3E
 Public Const SID_QUERYREALMS2           As Byte = &H40
+Public Const SID_WARCRAFTGENERAL        As Byte = &H44
 Public Const SID_EXTRAWORK              As Byte = &H4C
 Public Const SID_AUTH_INFO              As Byte = &H50
 Public Const SID_AUTH_CHECK             As Byte = &H51
 Public Const SID_AUTH_ACCOUNTCREATE     As Byte = &H52
 Public Const SID_AUTH_ACCOUNTLOGON      As Byte = &H53
 Public Const SID_AUTH_ACCOUNTLOGONPROOF As Byte = &H54
+Public Const SID_AUTH_ACCOUNTCHANGE     As Byte = &H55
+Public Const SID_AUTH_ACCOUNTCHANGEPROOF As Byte = &H56
 Public Const SID_SETEMAIL               As Byte = &H59
+Public Const SID_RESETPASSWORD          As Byte = &H5A
+Public Const SID_CHANGEEMAIL            As Byte = &H5B
+Public Const SID_FRIENDSLIST            As Byte = &H65
+Public Const SID_FRIENDSUPDATE          As Byte = &H66
+Public Const SID_FRIENDSADD             As Byte = &H67
+Public Const SID_FRIENDSREMOVE          As Byte = &H68
+Public Const SID_FRIENDSPOSITION        As Byte = &H69
+Public Const SID_CLANFINDCANDIDATES     As Byte = &H70
+Public Const SID_CLANINVITEMULTIPLE     As Byte = &H71
+Public Const SID_CLANCREATIONINVITATION As Byte = &H72
+Public Const SID_CLANDISBAND            As Byte = &H73
+Public Const SID_CLANMAKECHIEFTAIN      As Byte = &H74
+Public Const SID_CLANINFO               As Byte = &H75
+Public Const SID_CLANQUITNOTIFY         As Byte = &H76
+Public Const SID_CLANINVITATION         As Byte = &H77
+Public Const SID_CLANREMOVEMEMBER       As Byte = &H78
+Public Const SID_CLANINVITATIONRESPONSE As Byte = &H79
+Public Const SID_CLANRANKCHANGE         As Byte = &H7A
+Public Const SID_CLANSETMOTD            As Byte = &H7B
+Public Const SID_CLANMOTD               As Byte = &H7C
+Public Const SID_CLANMEMBERLIST         As Byte = &H7D
+Public Const SID_CLANMEMBERREMOVED      As Byte = &H7E
+Public Const SID_CLANMEMBERSTATUSCHANGE As Byte = &H7F
+Public Const SID_CLANMEMBERRANKCHANGE   As Byte = &H81
+Public Const SID_CLANMEMBERINFORMATION  As Byte = &H82
+
 
 ' SID_CHATEVENT EVENT IDs
 Public Const ID_USER = &H1
@@ -113,7 +146,7 @@ On Error GoTo ERROR_HANDLER:
         Case SID_LOGONCHALLENGEEX:       Call RECV_SID_LOGONCHALLENGEEX(pBuff)       '0x1D
         Case SID_PING:                   Call RECV_SID_PING(pBuff)                   '0x25
         Case SID_LOGONCHALLENGE:         Call RECV_SID_LOGONCHALLENGE(pBuff)         '0x28
-        Case SID_ICONDATA:               'Don't Throw Unknown Error                  '0x2D
+        Case SID_GETICONDATA:            'Don't Throw Unknown Error                  '0x2D
         Case SID_CDKEY:                  Call RECV_SID_CDKEY(pBuff)                  '0x30
         Case SID_CDKEY2:                 Call RECV_SID_CDKEY2(pBuff)                 '0x36
         Case SID_LOGONRESPONSE2:         Call RECV_SID_LOGONRESPONSE2(pBuff)         '0x3A
@@ -1928,7 +1961,7 @@ On Error GoTo ERROR_HANDLER:
             
             If (Not BotVars.UseUDP) Then
                 SEND_SID_UDPPINGRESPONSE
-                'We dont use ICONDATA .SendPacket &H2D
+                'We dont use ICONDATA .SendPacket SID_GETICONDATA
             End If
         End If
         

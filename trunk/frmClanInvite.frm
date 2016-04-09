@@ -123,10 +123,10 @@ Private Sub cmdAccept_Click()
         .InsertByte &H6
     
         If Clan.isNew = 1 Then
-            .SendPacket &H72
+            .SendPacket SID_CLANCREATIONINVITATION
             Clan.isNew = 0
         Else
-            .SendPacket &H79
+            .SendPacket SID_CLANINVITATIONRESPONSE
         End If
     End With
     AwaitingClanMembership = 1
@@ -144,10 +144,10 @@ Sub cmdDecline_Click()
         .InsertByte &H4
     
         If Clan.isNew = 1 Then
-            .SendPacket &H72
+            .SendPacket SID_CLANCREATIONINVITATION
             Clan.isNew = 0
         Else
-            .SendPacket &H79
+            .SendPacket SID_CLANINVITATIONRESPONSE
         End If
     End With
     
