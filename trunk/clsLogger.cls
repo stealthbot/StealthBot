@@ -27,7 +27,7 @@ Private Enum LOG_TYPES
     COMMAND_MSG = &H8
 End Enum
 
-Private m_logsCreated As Collection 
+Private m_logsCreated As Collection
 Private m_logPath     As String     ' the path to the log file
 
 Private Sub Class_Initialize()
@@ -66,7 +66,7 @@ Public Function WriteWarning(ByVal sWarning As String, Optional ByVal source As 
     End If
 End Function
 
-Public Function WriteError(ByVal sError As String, Optional ByVal source As String, Optional TimeDate As Date)    
+Public Function WriteError(ByVal sError As String, Optional ByVal source As String, Optional TimeDate As Date)
     source = LCase$(source)
     
     If (LenB(source) > 0) Then

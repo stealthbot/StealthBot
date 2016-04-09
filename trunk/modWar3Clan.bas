@@ -60,7 +60,7 @@ End Sub
 Public Sub SetClanMOTD(Message As String) '//Works
     With PBuffer
         .InsertDWord &H0
-        .InsertNTString Message
+        .InsertNTString Message, UTF8
         .SendPacket SID_CLANSETMOTD
     End With
 End Sub
