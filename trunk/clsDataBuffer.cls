@@ -191,7 +191,7 @@ Public Function InsertNTString(ByRef Data As String, _
             arrStr() = StrConv(Data, vbFromUnicode)
             
         Case STRINGENCODING.UTF8
-            arrStr() = modUTF8.UTF8Encode(Data)
+            arrStr() = modUnicode.UTF8Encode(Data)
             
         Case STRINGENCODING.UTF16
             arrStr() = StrConv(Data, vbUnicode)
