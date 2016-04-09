@@ -2037,7 +2037,7 @@ Private Sub INet_StateChanged(ByVal State As Integer)
         Case icResponseCompleted, icError
             If INet.ResponseCode >= 1000 Then
                 Buffer = "INet Error #" & INet.ResponseCode & ": " & INet.ResponseInfo
-            ElseIf INet.ResponseCode <> 200 Then
+            ElseIf INet.ResponseCode <> 0 Then
                 Buffer = "HTTP Error " & INet.ResponseCode & " " & INet.ResponseInfo
             Else
                 Do
@@ -2045,6 +2045,10 @@ Private Sub INet_StateChanged(ByVal State As Integer)
                     If Len(strData) = 0 Then Exit Do
                     Buffer = Buffer & strData
                 Loop
+                
+                If LenB(Buffer) = 0 Then
+                    Buffer = "Empty response"
+                End If
             End If
             
             Select Case INet.Tag
@@ -2070,7 +2074,7 @@ Private Sub HandleUpdateVerbyte(ByVal Buffer As String, ByVal ResponseCode As Lo
     Dim ary() As String
     Dim i As Integer
     
-    If INet.ResponseCode <> 200 Then
+    If INet.ResponseCode <> 0 Then
         AddChat RTBColors.ErrorMessageText, Buffer & ". Error retrieving version bytes from http://www.stealthbot.net. Please visit it for instructions."
     ElseIf Len(Buffer) <> 11 Then
         AddChat RTBColors.ErrorMessageText, "Format not understood. Error retrieving version bytes from http://www.stealthbot.net. Please visit it for instructions."
@@ -4466,7 +4470,7 @@ End Sub
 
 Private Sub mnuGetNews_Click()
     If Not DoINetRequest(GetNewsURL(), SB_INET_NEWS, False) Then
-        Call HandleNews("INet is busy")
+        Call HandleNews("INet is busy", -1)
     End If
 End Sub
 
@@ -4806,7 +4810,7 @@ End Sub
 
 Private Sub mnuUpdateVerbytes_Click()
     If Not DoINetRequest(VERBYTE_SOURCE, SB_INET_VBYTE, False) Then
-        Call HandleUpdateVerbyte("INet is busy")
+        Call HandleUpdateVerbyte("INet is busy", -1)
     End If
 End Sub
 
