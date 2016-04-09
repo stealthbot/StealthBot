@@ -2,5 +2,7 @@ trunk/Bot.vbw
 trunk/Launcher/Launcher.vbw
 trunk/Plugins/
 trunk/Logs/
-trunk/Installer/Build/
 
+*.suo
+*.tmp
+Installer/StealthBotInstaller.cache
