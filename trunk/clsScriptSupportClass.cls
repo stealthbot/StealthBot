@@ -1570,11 +1570,47 @@ Public Function GetCurrentServerIP()
     End If
 End Function
 
+'// CHOOSE
+'// Returns the chosen value based on the given index.
+'//  see: https://msdn.microsoft.com/en-us/library/aa262690(v=vs.60).aspx
+Public Function Choose(ByVal aIndex As Single, ParamArray pChoice() As Variant) As Variant
+    Choose = Null
+    If aIndex > 0 And aIndex <= UBound(pChoice) Then
+        Choose = pChoice(aIndex - 1)
+    End If
+End Function
+
 '// IIF
 '// Returns a different value based on if a statement is true or false.
-'//  see: https://msdn.microsoft.com/en-us/library/27ydhh0d(v=vs.90).aspx
+'//  see: https://msdn.microsoft.com/en-us/library/aa445024(v=vs.60).aspx
 Public Function IIf(ByVal bExpression As Boolean, ByVal vTruePart As Variant, ByVal vFalsePart As Variant) As Variant
     IIf = Interaction.IIf(bExpression, vTruePart, vFalsePart)
+End Function
+
+'// PARTITION
+'// Returns the range that the specified Number appears in in the given interval defined by Start, Stop, and Interval.
+'//  see: https://msdn.microsoft.com/en-us/library/aa445092(v=vs.60).aspx
+Public Function Partition(ByVal aNumber As Long, ByVal aStart As Long, ByVal aStop As Long, ByVal aInterval As Long) As String
+    Partition = Null
+    If aInterval > 0 And aStop > aStart Then
+        Partition = Interaction.Partition(aNumber, aStart, aStop, aInterval)
+    End If
+End Function
+
+'// SWITCH
+'// Returns the first even item in the parameter list after the odd expression that is true.
+'// There must be an even number of arguments.
+'//  see: https://msdn.microsoft.com/en-us/library/aa263378(v=vs.60).aspx
+Public Function Switch(ParamArray pVarExpr() As Variant) As Variant
+    Dim i As Long
+    
+    Switch = Null
+    For i = 0 To UBound(pVarExpr) - 1 Step 2
+        If pVarExpr(i) Then
+            Switch = pVarExpr(i + 1)
+            Exit Function
+        End If
+    Next i
 End Function
 
 'Class_Terminate doesn't run when a UI form is created via a script. I made this sub so the bot's Unload sub can explicitly _
