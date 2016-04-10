@@ -7178,8 +7178,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     '[Other] MathAllowUI - Will allow People to use MessageBox/InputBox or other UI related commands in the .eval/.math commands ~Hdx 09-25-07
     SCRestricted.AllowUI = Config.MathAllowUI
     BotVars.NoRTBAutomaticCopy = Config.DisableRTBAutoCopy
-    BotVars.GreetMsg = Config.GreetMessage
+    
     BotVars.UseGreet = Config.GreetMessage
+    BotVars.GreetMsg = Config.GreetMessageText
     BotVars.WhisperGreet = Config.WhisperGreet
     
     BotVars.ProxyIP = Config.ProxyIP
