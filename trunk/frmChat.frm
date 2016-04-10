@@ -1014,6 +1014,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmChat.frx":78860
@@ -1038,6 +1039,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       OLEDropMode     =   0
@@ -1378,6 +1380,12 @@ Begin VB.Form frmChat
       Begin VB.Menu mnuPopInvite 
          Caption         =   "&Invite to Warcraft III Clan"
       End
+      Begin VB.Menu mnuPopShitlist 
+         Caption         =   "Shi&tlist"
+      End
+      Begin VB.Menu mnuPopSafelist 
+         Caption         =   "S&afelist"
+      End
       Begin VB.Menu mnuPopSep1 
          Caption         =   "-"
       End
@@ -1404,12 +1412,6 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuPopBan 
          Caption         =   "&Ban"
-      End
-      Begin VB.Menu mnuPopShitlist 
-         Caption         =   "Shi&tlist"
-      End
-      Begin VB.Menu mnuPopSafelist 
-         Caption         =   "S&afelist"
       End
       Begin VB.Menu mnuPopSquelch 
          Caption         =   "S&quelch"
@@ -1543,16 +1545,18 @@ Begin VB.Form frmChat
       Begin VB.Menu mnuPopClanDemote 
          Caption         =   "&Demote"
       End
-      Begin VB.Menu mnuPopClanSep3 
-         Caption         =   "-"
-         Visible         =   0   'False
-      End
       Begin VB.Menu mnuPopClanRemove 
-         Caption         =   "&Remove from Clan"
+         Caption         =   "Remove from Clan"
       End
       Begin VB.Menu mnuPopClanLeave 
-         Caption         =   "&Leave Clan"
+         Caption         =   "Leave Clan"
          Visible         =   0   'False
+      End
+      Begin VB.Menu mnuPopClanMakeChief 
+         Caption         =   "Make Chieftain"
+      End
+      Begin VB.Menu mnuPopClanDisband 
+         Caption         =   "Disband Clan"
       End
    End
    Begin VB.Menu mnuPopFList 
@@ -1604,7 +1608,7 @@ Begin VB.Form frmChat
          Caption         =   "-"
       End
       Begin VB.Menu mnuPopFLRefresh 
-         Caption         =   "R&efresh and Reorder"
+         Caption         =   "Refresh and Reorder"
       End
    End
    Begin VB.Menu mnuRTPopup 
@@ -3907,6 +3911,19 @@ Private Sub mnuPopClanDemote_Click()
     End If
 End Sub
 
+Private Sub mnuPopClanDisband_Click()
+    If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
+    
+    If MsgBox("Are you sure you want to disband this clan?", vbYesNo Or vbCritical, "StealthBot") = vbYes Then
+        With PBuffer
+            .InsertDWord &H1    '//cookie
+            .SendPacket SID_CLANDISBAND
+        End With
+        
+        AwaitingSelfRemoval = 1
+    End If
+End Sub
+
 Private Sub mnuPopClanLeave_Click()
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
@@ -3918,6 +3935,20 @@ Private Sub mnuPopClanLeave_Click()
         End With
 
         AwaitingSelfRemoval = 1
+    End If
+End Sub
+
+Private Sub mnuPopClanMakeChief_Click()
+    If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
+    
+    If MsgBox("Are you sure you want to make " & GetClanSelectedUser & " the new Chieftain?", vbYesNo Or vbCritical, "StealthBot") = vbYes Then
+        With PBuffer
+            .InsertDWord &H1    '//cookie
+            .InsertNTString GetClanSelectedUser
+            .SendPacket SID_CLANMAKECHIEFTAIN
+        End With
+        
+        AwaitingClanInfo = 1
     End If
 End Sub
 
@@ -7934,7 +7965,7 @@ On Error GoTo ERROR_HANDLER:
     With lvClanList
         .ListItems.Add .ListItems.Count + 1, , Name, , visible_rank
         If (BotVars.NoColoring = False) Then
-            If (StrComp(GetCurrentUsername, Name) = 0) Then
+            If (StrComp(StripAccountNumber(GetCurrentUsername), Name) = 0) Then
                 .ListItems(.ListItems.Count).ForeColor = FormColors.ChannelListSelf
             End If
         End If
@@ -8008,11 +8039,15 @@ Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single,
                 mnuPopClanDemote.Enabled = CanMoveDown
                 mnuPopClanRemove.Enabled = CanRemove
                 mnuPopClanLeave.Enabled = CanLeave
+                mnuPopClanDisband.Enabled = CanDisband
+                mnuPopClanMakeChief.Enabled = CanMakeChief
                 
                 mnuPopClanPromote.Visible = Not IsSelf
                 mnuPopClanDemote.Visible = Not IsSelf
                 mnuPopClanRemove.Visible = Not IsSelf
-                mnuPopClanLeave.Visible = IsSelf
+                mnuPopClanLeave.Visible = IsSelf And (MyRank <> 4)
+                mnuPopClanDisband.Visible = IsSelf And (MyRank = 4)
+                mnuPopClanMakeChief.Visible = Not IsSelf And (MyRank = 4)
             End If
         End If
         
