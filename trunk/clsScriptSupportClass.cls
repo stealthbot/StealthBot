@@ -1179,13 +1179,29 @@ Public Function Clipboard() As VB.Clipboard
     Set Clipboard = VB.Clipboard
 End Function
 
-Public Function ChrW(ByVal lChar As Long) As String
-    ChrW = ChrW$(lChar)
+Public Function UTF8Encode(ByVal s As String) As String
+    UTF8Encode = modUnicode.UTF8Encode(s)
 End Function
 
-Public Function AscW(ByVal s As String) As Long
-    AscW = AscW&(s)
+Public Function UTF8Decode(ByVal s As String) As String
+    UTF8Decode = modUnicode.UTF8Decode(s)
 End Function
+
+Public Function GetClipboardTextW() As String
+    GetClipboardTextW = ClipboardGetUnicodeText()
+End Function
+
+Public Sub SetClipboardTextW(ByVal s As String)
+    Call ClipboardSetUnicodeText(s)
+End Sub
+
+Public Function GetControlCaptionW(ByVal ctrl As Object) As String
+    GetControlCaptionW = UniTextCaptionGetText(ctrl)
+End Function
+
+Public Sub SetControlCaptionW(ByVal ctrl As Object, ByVal s As String)
+    Call UniTextCaptionSetText(ctrl, s)
+End Sub
 
 '// TWIPSPERPIXELX
 '// Get the horizontal ratio of twips/pixel.
