@@ -179,7 +179,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             
             cookie = inBuf.GetDWORD
             inBuf.GetDWORD
-            Message = inBuf.GetString
+            Message = inBuf.GetString(UTF8)
         
             RaiseEvent ClanMOTD(cookie, Message)
 

@@ -211,6 +211,7 @@ End Function
 
 Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI, Optional Peek As Boolean = False) As String
     Dim i As Integer
+    Dim sDecode As String
 
     For i = m_bufpos To m_bufsize
         If (m_buf(i) = &H0) Then
