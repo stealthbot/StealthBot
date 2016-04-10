@@ -199,7 +199,7 @@ Private m_PingSpoofing              As Byte
 Private m_UseUDP                    As Boolean
 Private m_CustomStatstring          As String
 Private m_ForceDefaultLocaleID      As Boolean
-Private m_CustomUDPString           As String
+Private m_UDPString                 As String
 Private m_CDKeyOwnerName            As String
 Private m_UseLowerCasePassword      As Boolean
 Private m_IgnoreVersionCheck        As Boolean
@@ -210,6 +210,9 @@ Private m_AutoCreateChannels        As String
 Private m_RegisterEmailAction       As String
 Private m_RegisterEmailDefault      As String
 Private m_RealmServerPassword       As String
+Private m_ProtocolID                As Long
+Private m_PlatformID                As String
+Private m_ProductLanguage           As String
 Private m_VersionBytes(8)           As Long     'XXVerByte
 Private m_LogonSystems(8)           As Long     'XXLogonSystem
 
@@ -1346,12 +1349,12 @@ Public Property Let ForceDefaultLocaleID(ByVal sValue As Boolean)
     m_ForceDefaultLocaleID = sValue
 End Property
 
-Public Property Get CustomUDPString() As String
-    CustomUDPString = m_CustomUDPString
+Public Property Get UDPString() As String
+    UDPString = m_UDPString
 End Property
 
-Public Property Let CustomUDPString(ByVal sValue As String)
-    m_CustomUDPString = sValue
+Public Property Let UDPString(ByVal sValue As String)
+    m_UDPString = sValue
 End Property
 
 Public Property Get CDKeyOwnerName() As String
@@ -1432,6 +1435,30 @@ End Property
 
 Public Property Let RealmServerPassword(ByVal sValue As String)
     m_RealmServerPassword = sValue
+End Property
+
+Public Property Get ProtocolID() As Long
+    ProtocolID = m_ProtocolID
+End Property
+
+Public Property Let ProtocolID(ByVal lValue As Long)
+    m_ProtocolID = lValue
+End Property
+
+Public Property Get PlatformID() As String
+    PlatformID = m_PlatformID
+End Property
+
+Public Property Let PlatformID(ByVal sValue As String)
+    m_PlatformID = sValue
+End Property
+
+Public Property Get ProductLanguage() As String
+    ProductLanguage = m_ProductLanguage
+End Property
+
+Public Property Let ProductLanguage(ByVal sValue As String)
+    m_ProductLanguage = sValue
 End Property
 
 
@@ -1702,7 +1729,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_EMULATION, "UseUDP", m_UseUDP
     WriteSetting SECTION_EMULATION, "CustomStatstring", m_CustomStatstring
     WriteSetting SECTION_EMULATION, "ForceDefaultLocaleID", m_ForceDefaultLocaleID
-    WriteSetting SECTION_EMULATION, "UDPString", m_CustomUDPString
+    WriteSetting SECTION_EMULATION, "UDPString", m_UDPString
     WriteSetting SECTION_EMULATION, "KeyOwner", m_CDKeyOwnerName
     WriteSetting SECTION_EMULATION, "LowerCasePassword", m_UseLowerCasePassword
     WriteSetting SECTION_EMULATION, "IgnoreVersionCheck", m_IgnoreVersionCheck
@@ -1713,6 +1740,9 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_EMULATION, "RegisterEmailAction", m_RegisterEmailAction
     WriteSetting SECTION_EMULATION, "RegisterEmailDefault", m_RegisterEmailDefault
     WriteSetting SECTION_EMULATION, "RealmServerPassword", m_RealmServerPassword
+    WriteSetting SECTION_EMULATION, "ProtocolID", m_ProtocolID
+    WriteSetting SECTION_EMULATION, "PlatformID", m_PlatformID
+    WriteSetting SECTION_EMULATION, "ProductLanguage", m_ProductLanguage
     
     WriteSetting SECTION_DEBUG, "Warden", m_DebugWarden
     
@@ -1890,7 +1920,7 @@ Private Sub LoadDefaults()
     m_UseUDP = False
     m_CustomStatstring = vbNullString
     m_ForceDefaultLocaleID = False
-    m_CustomUDPString = vbNullString
+    m_UDPString = "bnet"
     m_CDKeyOwnerName = vbNullString
     m_UseLowerCasePassword = True
     m_IgnoreVersionCheck = False
@@ -1901,6 +1931,9 @@ Private Sub LoadDefaults()
     m_RegisterEmailAction = "PROMPT"
     m_RegisterEmailDefault = vbNullString
     m_RealmServerPassword = "password"
+    m_ProtocolID = 0
+    m_PlatformID = "IX86"
+    m_ProductLanguage = vbNullString
     
     Dim i As Integer
     For i = LBound(m_ProductKeys) To UBound(m_ProductKeys)
@@ -2042,7 +2075,7 @@ Private Sub LoadVersion5Config()
     m_IgnoreCDKeyLength = ReadSettingB(SECTION_OVERRIDE, "SetKeyIgnoreLength", m_IgnoreCDKeyLength)
     m_CustomStatstring = ReadSetting(SECTION_OVERRIDE, "SetBotStatstring", m_CustomStatstring)
     m_ForceDefaultLocaleID = ReadSettingB(SECTION_OVERRIDE, "ForceDefaultLocaleId", m_ForceDefaultLocaleID)
-    m_CustomUDPString = ReadSetting(SECTION_OVERRIDE, "UdpString", m_CustomUDPString)
+    m_UDPString = ReadSetting(SECTION_OVERRIDE, "UdpString", m_UDPString)
     m_CDKeyOwnerName = ReadSetting(SECTION_OVERRIDE, "OwnerName", m_CDKeyOwnerName)
     m_UseLowerCasePassword = ReadSettingB(SECTION_OVERRIDE, "LowerCasePassword", m_UseLowerCasePassword)
     m_IgnoreVersionCheck = ReadSettingB(SECTION_OVERRIDE, "Ignore0x51Reply", m_IgnoreVersionCheck)
@@ -2218,7 +2251,7 @@ Private Sub LoadVersion6Config()
     m_UseUDP = ReadSettingB(SECTION_EMULATION, "UseUDP", m_UseUDP)
     m_CustomStatstring = ReadSetting(SECTION_EMULATION, "CustomStatstring", m_CustomStatstring)
     m_ForceDefaultLocaleID = ReadSettingB(SECTION_EMULATION, "ForceDefaultLocaleID", m_ForceDefaultLocaleID)
-    m_CustomUDPString = ReadSetting(SECTION_EMULATION, "UDPString", m_CustomUDPString)
+    m_UDPString = ReadSetting(SECTION_EMULATION, "UDPString", m_UDPString)
     m_CDKeyOwnerName = ReadSetting(SECTION_EMULATION, "KeyOwner", m_CDKeyOwnerName)
     m_UseLowerCasePassword = ReadSettingB(SECTION_EMULATION, "LowerCasePassword", m_UseLowerCasePassword)
     m_IgnoreVersionCheck = ReadSettingB(SECTION_EMULATION, "IgnoreVersionCheck", m_IgnoreVersionCheck)
@@ -2229,6 +2262,9 @@ Private Sub LoadVersion6Config()
     m_RegisterEmailAction = ReadSetting(SECTION_EMULATION, "RegisterEmailAction", m_RegisterEmailAction)
     m_RegisterEmailDefault = ReadSetting(SECTION_EMULATION, "RegisterEmailDefault", m_RegisterEmailDefault)
     m_RealmServerPassword = ReadSetting(SECTION_EMULATION, "RealmServerPassword", m_RealmServerPassword)
+    m_ProtocolID = ReadSettingL(SECTION_EMULATION, "ProtocolID", m_ProtocolID)
+    m_PlatformID = ReadSetting(SECTION_EMULATION, "PlatformID", m_PlatformID)
+    m_ProductLanguage = ReadSetting(SECTION_EMULATION, "ProductLanguage", m_ProductLanguage)
 
     m_DebugWarden = ReadSettingB(SECTION_DEBUG, "Warden", m_DebugWarden)
 

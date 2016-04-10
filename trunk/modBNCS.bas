@@ -261,7 +261,7 @@ On Error GoTo ERROR_HANDLER:
     Dim pBuff As New clsDataBuffer
     
     With pBuff
-        .InsertDWord GetDWORDOverride("PlatID", PLATFORM_INTEL)               'Platform ID
+        .InsertDWord GetDWORDOverride(Config.PlatformID)                      'Platform ID
         .InsertDWord GetDWORD(BotVars.Product)                                'Product ID
         .InsertDWord IIf(lVerByte = 0, GetVerByte(BotVars.Product), lVerByte) 'VersionByte
         .InsertDWord 0  'Unknown
@@ -355,7 +355,7 @@ On Error GoTo ERROR_HANDLER:
     
     Dim pBuff As New clsDataBuffer
     With pBuff
-        .InsertDWord GetDWORDOverride("PlatID", PLATFORM_INTEL)               'Platform ID
+        .InsertDWord GetDWORDOverride(Config.PlatformID)                      'Platform ID
         .InsertDWord GetDWORD(BotVars.Product)                                'Product ID
         .InsertDWord IIf(lVerByte = 0, GetVerByte(BotVars.Product), lVerByte) 'VersionByte
         .InsertDWord ds.CRevVersion                                           'Exe Version
@@ -649,11 +649,7 @@ On Error GoTo ERROR_HANDLER:
 
     Dim pBuff As New clsDataBuffer
 
-    If Len(Config.CustomUDPString) = 4 Then
-        pBuff.InsertNonNTString Config.CustomUDPString
-    Else
-        pBuff.InsertDWord &H626E6574 'bnet
-    End If
+    pBuff.InsertDWord GetDWORDOverride(Config.UDPString, &H626E6574)    'default: bnet
     pBuff.SendPacket SID_UDPPINGRESPONSE
     
     Set pBuff = Nothing
@@ -1378,11 +1374,11 @@ On Error GoTo ERROR_HANDLER:
     
     With pBuff
     
-        .InsertDWord GetLongOverride("ProtID", 0)                             'ProtocolID
-        .InsertDWord GetDWORDOverride("PlatID", PLATFORM_INTEL)               'Platform ID
+        .InsertDWord Config.ProtocolID                                        'ProtocolID
+        .InsertDWord GetDWORDOverride(Config.PlatformID, PLATFORM_INTEL)      'Platform ID
         .InsertDWord GetDWORD(BotVars.Product)                                'Product ID
         .InsertDWord IIf(lVerByte = 0, GetVerByte(BotVars.Product), lVerByte) 'VersionByte
-        .InsertDWord GetLongOverride("ProdLang", 0)                           'Product Language
+        .InsertDWord GetDWORDOverride(Config.ProductLanguage)                 'Product Language
         .InsertDWord LocalIP                                                  'Local IP
         .InsertDWord GetTimeZoneBias                                          'Time Zone Bias
         If Config.ForceDefaultLocaleID Then
@@ -1850,10 +1846,6 @@ On Error GoTo ERROR_HANDLER:
     
     lRet = GetProductInfo(sProduct).KeyCount
     
-    sOverride = ReadCfg$("Override", StringFormat("{0}KeyCount", GetProductKey))
-    
-    If (LenB(sOverride) > 0 And StrictIsNumeric(sOverride)) Then lRet = CLng(sOverride)
-    
     GetCDKeyCount = lRet
     Exit Function
 ERROR_HANDLER:
@@ -1894,40 +1886,16 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.GetLogonSystem()", Err.Number, Err.description, OBJECT_NAME))
 End Function
 
-'This will return a Long, that is Overrideable by the config, based on product ID, with a default.
-'GetProdLongOverride("ProtId", 0, PRODUCT_DRTL) would return 0, unless the user had D1ProtID= something in there config
-Private Function GetLongOverride(sKey As String, lDefault As Long) As Long
+'Converts the normalized (forward: IX86, STAR, etc) string representation of a DWORD into it's numeric equivalent.
+Private Function GetDWORDOverride(ByVal sDwordString As String, Optional ByVal lDefault As Long = 0) As Long
 On Error GoTo ERROR_HANDLER:
 
-    Dim sOverride As String
     Dim lRet      As Long
-    
     lRet = lDefault
     
-    sOverride = ReadCfg$("Override", StringFormat("{0}{1}", GetProductKey, sKey))
-    
-    If (LenB(sOverride) > 0 And StrictIsNumeric(sOverride)) Then lRet = CLng(sOverride)
-    
-    GetLongOverride = lRet
-    Exit Function
-ERROR_HANDLER:
-    GetLongOverride = lRet
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetLongOverride()", Err.Number, Err.description, OBJECT_NAME))
-End Function
-
-'Same as above, except converts the override data to a dword (EXA: "68XI" to 0x49583836)
-Private Function GetDWORDOverride(sKey As String, lDefault As Long) As Long
-On Error GoTo ERROR_HANDLER:
-
-    Dim sOverride As String
-    Dim lRet      As Long
-    
-    lRet = lDefault
-    
-    sOverride = ReadCfg$("Override", StringFormat("{0}{1}", GetProductKey, sKey))
-    
-    If (LenB(sOverride) > 0) Then lRet = GetDWORD(sOverride)
+    If ((LenB(sDwordString) > 0) And (Len(sDwordString) < 5)) Then
+        lRet = GetDWORD(StrReverse(sDwordString))
+    End If
     
     GetDWORDOverride = lRet
     Exit Function
