@@ -705,10 +705,9 @@ Public Property Get IconCode() As Integer
             
             Case PRODUCT_WAR3, PRODUCT_W3XP
                 IconCode = _
-                    GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(Game), _
-                        IIf(IsWCG, Icon, ""))
-
-                If (IconCode <> ICUNKNOWN) Then
+                    GetW3ImageListPosition(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1))
+                
+                If IconCode > 0 Then
                     If (Game = PRODUCT_W3XP) Then
                         IconCode = (ICON_START_W3XP + IconCode)
                     Else
@@ -737,6 +736,40 @@ Public Property Get IconCode() As Integer
         End Select
     End If
 End Property
+
+Private Function GetW3ImageListPosition(ByVal Icon As String, ByRef Race As String) As Integer
+    Dim IMLPos As Integer
+    Dim PerTier As Integer
+        
+    If Game = PRODUCT_WAR3 Then
+        PerTier = 5
+    Else
+        PerTier = 6
+    End If
+    
+    Select Case Race
+        Case "H"
+            IMLPos = 1
+        Case "N"
+            IMLPos = 1 + (PerTier * 1)
+        Case "U"
+            IMLPos = 1 + (PerTier * 2)
+        Case "O"
+            IMLPos = 1 + (PerTier * 3)
+        Case "R"
+            IMLPos = 1 + (PerTier * 4)
+        Case "T", "D"
+            IMLPos = 1 + (PerTier * 5)
+        Case Else
+            IMLPos = 0
+    End Select
+    
+    If StrictIsNumeric(Icon) And IMLPos > 0 Then
+        IMLPos = IMLPos + (CInt(Icon) - 1)
+    End If
+    
+    GetW3ImageListPosition = IMLPos
+End Function
 
 Private Sub Parse()
     On Error GoTo ERROR_HANDLER
