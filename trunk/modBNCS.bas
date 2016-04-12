@@ -857,7 +857,7 @@ On Error GoTo ERROR_HANDLER:
         .InsertNTString BotVars.CDKey
         
         If (LenB(Config.CDKeyOwnerName) > 0) Then
-            .InsertNTString Config.CDKeyOwnerName
+            .InsertNTString Config.CDKeyOwnerName, UTF8
         Else
             .InsertNTString BotVars.Username
         End If
@@ -945,7 +945,7 @@ On Error GoTo ERROR_HANDLER:
         .InsertNonNTString oKey.Hash
         
         If (LenB(Config.CDKeyOwnerName) > 0) Then
-            .InsertNTString Config.CDKeyOwnerName
+            .InsertNTString Config.CDKeyOwnerName, UTF8
         Else
             .InsertNTString BotVars.Username
         End If

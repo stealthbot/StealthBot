@@ -197,8 +197,12 @@ Public Function InsertNTString(ByRef Data As String, _
         Case STRINGENCODING.UTF8
             ' encode Unicode (VB6 string) with UTF-8
             arrStr() = modUnicode.UTF8Encode(Data)
-            ' \x00 null terminator
-            i = UBound(arrStr) + 1
+            If LenB(Data) = 0 Then
+                i = 1
+            Else
+                ' \x00 null terminator
+                i = UBound(arrStr) + 1
+            End If
             
         Case STRINGENCODING.UTF16
             ' use Unicode (VB6 string) as-is
