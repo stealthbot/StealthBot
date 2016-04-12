@@ -161,6 +161,13 @@ Public Sub OnHome(Command As clsCommandObj)
     End If
 End Sub
 
+Public Sub OnReturn(Command As clsCommandObj)
+    If (LenB(BotVars.LastChannel) > 0) Then
+        ' go to last channel
+        Call FullJoin(BotVars.LastChannel, 2)
+    End If
+End Sub
+
 Public Sub OnIgnore(Command As clsCommandObj)
     If (Command.IsValid) Then
         If (Command.IsLocal) Then
