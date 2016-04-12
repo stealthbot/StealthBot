@@ -2332,9 +2332,9 @@ End Function
 
 
 Private Function ReadSetting(ByVal section As String, ByVal Key As String, Optional ByVal DefaultValue As String = vbNullString) As String
-    Dim Buffer As String * 256
+    Dim Buffer As String * 255
     Dim Length As Long
-    Dim Buf() As Byte
+    Dim buf() As Byte
     
     ' If the config file doesn't exist, return the default.
     If Not FileExists() Then
@@ -2342,12 +2342,9 @@ Private Function ReadSetting(ByVal section As String, ByVal Key As String, Optio
         Exit Function
     End If
     
-    ' Create a buffer to read the value into.
-    Buffer = String$(255, vbNullChar)
-    
     ' Read the value into the buffer.
     Length = GetPrivateProfileString(section, Key, DefaultValue, Buffer, 255, m_ConfigPath)
-    ReadSetting = modUnicode.UTF8Decode(Left$(Buffer, Length))
+    ReadSetting = modUnicode.UTF8DecodeS(Left$(Buffer, Length))
     
     'MsgBox section & "->" & key & ": [" & CStr(length) & "] " & ReadSetting
 End Function
@@ -2381,12 +2378,12 @@ End Function
 ' Sets a setting if needed.
 Private Sub WriteSetting(ByVal section As String, ByVal Key As String, ByVal Value As String)
     Dim currentVal As String
-    Value = Value
+    
     currentVal = ReadSetting(section, Key)
     
     ' Only write if the value has changed or we are forcing a save.
     If (m_ForceSave Or (StrComp(currentVal, Value, vbBinaryCompare) <> 0)) Then
-        WritePrivateProfileString section, Key, Value, m_ConfigPath
+        WritePrivateProfileString section, Key, modUnicode.UTF8EncodeS(Value), m_ConfigPath
         
         If m_DebugConfig Then frmChat.AddChat RTBColors.InformationText, StringFormat("[CONFIG] Set setting: {0}.{1} -> {2}", section, Key, Value)
     End If

@@ -161,10 +161,15 @@ Private m_iCount        As Long
 Private m_bClipboardIsOpen As Boolean
 Private m_hWnd          As Long
 
+' UTF8Encode
+' STRING -> BYTE()
+' expects a standard VB6 Unicode string
+' returns a BYTE() for packet write (no null terminator in returned array)
 Public Function UTF8Encode(ByRef str As String) As Byte()
     Dim UTF8Buffer() As Byte
     Dim UTF8Chars    As Long
     Dim lstr         As String
+    Dim i            As Integer
     
     lstr = str
     
@@ -187,7 +192,34 @@ Public Function UTF8Encode(ByRef str As String) As Byte()
     UTF8Encode = UTF8Buffer
 End Function
 
-Public Function UTF8Decode(ByRef str As String, Optional LocaleID As Long = 1252) As String
+' UTF8EncodeS
+' STRING -> STRING
+' expects a standard VB6 Unicode string
+' returns a VB6 Unicode string conversion of UTF-8 suitable for file and script output (UTF-8)
+Public Function UTF8EncodeS(ByVal str As String) As String
+    Dim arrStr() As Byte
+    arrStr() = modUnicode.UTF8Encode(str)
+    UTF8EncodeS = StrConv(arrStr(), vbUnicode)
+End Function
+
+' UTF8Decode
+' BYTE() -> STRING
+' expects a buffer of bytes in UTF-8 (null terminator(s) are stripped)
+' returns a VB6 Unicode string
+Public Function UTF8Decode(ByRef arrStr() As Byte, Optional LocaleID As Long = 1252) As String
+    Dim sStr As String
+    
+    sStr = StrConv(arrStr, vbUnicode)
+    sStr = KillNull(sStr)
+    
+    UTF8Decode = UTF8DecodeS(sStr, LocaleID)
+End Function
+
+' UTF8DecodeS
+' STRING -> STRING
+' expects a VB6 Unicode string that was not UTF-8 decoded [i.e. StrConv(byte[], vbUnicode)]
+' returns a VB6 Unicode string, decoded
+Public Function UTF8DecodeS(ByRef str As String, Optional LocaleID As Long = 1252) As String
     Dim UnicodeBuffer As String
     Dim UnicodeChars  As Long
     Dim lstr          As String
@@ -210,7 +242,7 @@ Public Function UTF8Decode(ByRef str As String, Optional LocaleID As Long = 1252
             UnicodeChars)
    
     ' translate from unicode to ansi
-    UTF8Decode = StrConv(UnicodeBuffer, vbFromUnicode)
+    UTF8DecodeS = StrConv(UnicodeBuffer, vbFromUnicode)
 End Function
 
 Public Sub UniTextCaptionSetText(ctrl As Object, sUniCaption As String)

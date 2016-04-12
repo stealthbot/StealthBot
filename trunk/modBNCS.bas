@@ -196,8 +196,8 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord 0
         .InsertDWord 0
         .InsertDWord 0
-        .InsertNTString GetComputerLanName
-        .InsertNTString GetComputerUsername
+        .InsertNTString GetComputerLanName, UTF8
+        .InsertNTString GetComputerUsername, UTF8
         .SendPacket SID_CLIENTID
     End With
     Set pBuff = Nothing
@@ -400,7 +400,7 @@ Private Sub SEND_SID_ENTERCHAT()
 On Error GoTo ERROR_HANDLER:
     Dim pBuff As New clsDataBuffer
     pBuff.InsertNTString BotVars.Username
-    pBuff.InsertNTString Config.CustomStatstring
+    pBuff.InsertNTString Config.CustomStatstring, UTF8
     pBuff.SendPacket SID_ENTERCHAT
     Set pBuff = Nothing
 
@@ -726,8 +726,8 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord 0
         .InsertDWord 0
         .InsertDWord 0
-        .InsertNTString GetComputerLanName
-        .InsertNTString GetComputerUsername
+        .InsertNTString GetComputerLanName, UTF8
+        .InsertNTString GetComputerUsername, UTF8
         .SendPacket SID_CLIENTID2
     End With
     Set pBuff = Nothing

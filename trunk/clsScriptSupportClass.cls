@@ -1180,11 +1180,11 @@ Public Function Clipboard() As VB.Clipboard
 End Function
 
 Public Function UTF8Encode(ByVal s As String) As String
-    UTF8Encode = modUnicode.UTF8Encode(s)
+    UTF8Encode = modUnicode.UTF8EncodeS(s)
 End Function
 
 Public Function UTF8Decode(ByVal s As String) As String
-    UTF8Decode = modUnicode.UTF8Decode(s)
+    UTF8Decode = modUnicode.UTF8DecodeS(s)
 End Function
 
 Public Function GetClipboardTextW() As String

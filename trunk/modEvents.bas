@@ -209,7 +209,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     Call frmChat.ClearChannel
     
     If (frmChat.mnuUTF8.Checked) Then
-        ToANSI = UTF8Decode(ChannelName)
+        ToANSI = UTF8DecodeS(ChannelName)
         
         If (Len(ToANSI) > 0) Then
             ChannelName = ToANSI
@@ -711,6 +711,16 @@ End Sub
 
 Public Sub Event_ServerError(ByVal Message As String)
 On Error GoTo ERROR_HANDLER:
+    Dim ToANSI As String
+    
+    If (frmChat.mnuUTF8.Checked) Then
+        ToANSI = UTF8DecodeS(Message)
+        
+        If (Len(ToANSI) > 0) Then
+            Message = ToANSI
+        End If
+    End If
+    
     frmChat.AddChat RTBColors.ErrorMessageText, Message
     
     RunInAll "Event_ServerError", Message
@@ -805,7 +815,7 @@ On Error GoTo ERROR_HANDLER:
     Username = ConvertUsername(Username)
 
     If (frmChat.mnuUTF8.Checked) Then
-        ToANSI = UTF8Decode(Message)
+        ToANSI = UTF8DecodeS(Message)
         
         If (Len(ToANSI) > 0) Then
             Message = ToANSI
@@ -1031,6 +1041,14 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim pos         As Integer
     Dim PassedQueue As Boolean
     
+    If (frmChat.mnuUTF8.Checked) Then
+        ToANSI = UTF8DecodeS(Message)
+        
+        If (Len(ToANSI) > 0) Then
+            Message = ToANSI
+        End If
+    End If
+    
     pos = g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     If (pos > 0) Then
@@ -1061,14 +1079,6 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     
     ' convert user name
     Username = UserObj.DisplayName
-    
-    If (frmChat.mnuUTF8.Checked) Then
-        ToANSI = UTF8Decode(Message)
-        
-        If (Len(ToANSI) > 0) Then
-            Message = ToANSI
-        End If
-    End If
     
     If (QueuedEventID = 0) Then
         If (g_Channel.Self.IsOperator) Then
@@ -1685,6 +1695,14 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     Dim pos           As Integer
     Dim blnCheck      As Boolean
     
+    If (frmChat.mnuUTF8.Checked) Then
+        ToANSI = UTF8DecodeS(Message)
+        
+        If (Len(ToANSI) > 0) Then
+            Message = ToANSI
+        End If
+    End If
+    
     pos = g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     If (pos > 0) Then
@@ -1716,14 +1734,6 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     
     ' convert user name
     Username = UserObj.DisplayName
-    
-    If (frmChat.mnuUTF8.Checked) Then
-        ToANSI = UTF8Decode(Message)
-        
-        If (Len(ToANSI) > 0) Then
-            Message = ToANSI
-        End If
-    End If
     
     If (QueuedEventID = 0) Then
         If (g_Channel.Self.IsOperator) Then
@@ -1961,7 +1971,7 @@ On Error GoTo ERROR_HANDLER:
     
     Username = ConvertUsername(Username)
     
-    ToANSI = UTF8Decode(Message)
+    ToANSI = UTF8DecodeS(Message)
     
     If (Len(ToANSI) > 0) Then
         Message = ToANSI
@@ -2093,7 +2103,7 @@ On Error GoTo ERROR_HANDLER:
     Dim WWIndex As Integer
     Dim ToANSI  As String
     
-    ToANSI = UTF8Decode(Message)
+    ToANSI = UTF8DecodeS(Message)
     
     If (Len(ToANSI) > 0) Then
         Message = ToANSI

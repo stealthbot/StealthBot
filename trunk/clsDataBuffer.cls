@@ -185,48 +185,77 @@ Public Function InsertNTString(ByRef Data As String, _
     Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI)
     
     Dim arrStr() As Byte
+    Dim i As Integer
     
     Select Case (Encoding)
         Case STRINGENCODING.ANSI
+            ' convert from Unicode (VB6 string) to CURRENT CODE PAGE
             arrStr() = StrConv(Data, vbFromUnicode)
+            ' \x00 null terminator
+            i = UBound(arrStr) + 1
             
         Case STRINGENCODING.UTF8
+            ' encode Unicode (VB6 string) with UTF-8
             arrStr() = modUnicode.UTF8Encode(Data)
+            ' \x00 null terminator
+            i = UBound(arrStr) + 1
             
         Case STRINGENCODING.UTF16
-            arrStr() = StrConv(Data, vbUnicode)
+            ' use Unicode (VB6 string) as-is
+            arrStr() = Data
+            ' \u0000 null terminator
+            i = UBound(arrStr) + 2
     End Select
     
     ' resize buffer and include terminating null character
-    ReDim Preserve m_buf(0 To (m_bufsize + (UBound(arrStr) + 2)))
+    ReDim Preserve m_buf(0 To (m_bufsize + i + 1))
     
     ' copy data to buffer
     If (Data <> vbNullString) Then
-        CopyMemory m_buf(m_bufsize), arrStr(0), (UBound(arrStr) + 1)
+        CopyMemory m_buf(m_bufsize), arrStr(0), i
     End If
 
     ' store buffer Length
-    m_bufsize = (m_bufsize + (UBound(arrStr) + 2))
+    m_bufsize = (m_bufsize + i + 1)
 End Function
 
 Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI, Optional Peek As Boolean = False) As String
     Dim i As Integer
-    Dim sDecode As String
+    
+    Dim arrStr() As Byte
 
     For i = m_bufpos To m_bufsize
         If (m_buf(i) = &H0) Then
             Exit For
         End If
     Next i
+    
+    ' resize buffer and include terminating null character
+    ReDim arrStr(0 To i - m_bufpos)
 
     If (i < m_bufsize) Then
-        GetString = String$(i - m_bufpos, Chr$(0))
+        'GetString = String$(i - m_bufpos, Chr$(0))
             
         ' copy data to buffer
-        CopyMemory ByVal GetString, m_buf(m_bufpos), i - m_bufpos
+        CopyMemory arrStr(0), m_buf(m_bufpos), i - m_bufpos
         
         If (Not Peek) Then m_bufpos = i + 1
     End If
+    
+    Select Case (Encoding)
+        Case STRINGENCODING.ANSI
+            ' convert from CURRENT CODE PAGE to Unicode (VB6 string)
+            GetString = StrConv(arrStr(), vbUnicode)
+            GetString = KillNull(GetString)
+            
+        Case STRINGENCODING.UTF8
+            ' decode result as Unicode (encoded in UTF-8)
+            GetString = UTF8Decode(arrStr())
+            
+        Case STRINGENCODING.UTF16
+            ' use Unicode (VB6 string) as-is
+            GetString = arrStr()
+    End Select
 End Function
 
 Public Function GetRaw(Optional ByVal Length As Integer = -1, Optional Peek As Boolean = False) As String
