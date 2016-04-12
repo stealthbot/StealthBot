@@ -36,12 +36,6 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Dim doUpdate        As Boolean
     Dim Displayed       As Boolean  ' stores whether this event has been displayed by another event in the RTB
 
-    ' if this is the public channel before the home channel,
-    ' skip userinchannel events for quick loading! -Ribose/2009-11-17
-    If SkipUICEvents Then
-        Exit Sub
-    End If
-    
     ' if our username is for some reason null, we don't
     ' want to continue, possibly causing further errors
     If (LenB(Username) < 1) Then
@@ -91,7 +85,6 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
             With UserObj
                 .Name = Username
                 .Statstring = Message
-                .Stats.Statstring = Message
                 .Clan = .Stats.Clan
                 .Game = Product
             End With
@@ -1156,12 +1149,6 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         Exit Sub
     End If
 
-    ' if this is the public channel before the home channel,
-    ' skip userinchannel events for quick loading! -Ribose/2009-08-11
-    If SkipUICEvents Then
-        Exit Sub
-    End If
-
     UserIndex = g_Channel.GetUserIndexEx(CleanUsername(Username))
 
     If (UserIndex > 0) Then
@@ -1202,7 +1189,6 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         .JoinTime = g_Channel.JoinTime
         .Clan = sClan
         .Statstring = originalstatstring
-        .Stats.Statstring = originalstatstring
     End With
     
     If (UserIndex = 0) Then
@@ -1345,12 +1331,6 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         Exit Sub
     End If
 
-    ' if this is the public channel before the home channel,
-    ' skip userjoin events for quick loading! -Ribose/2009-09-08
-    If SkipUICEvents Then
-        Exit Sub
-    End If
-    
     UserIndex = g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     If (QueuedEventID > 0) Then
@@ -1374,7 +1354,6 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                 .JoinTime = UtcNow
                 .Clan = sClan
                 .Statstring = originalstatstring
-                .Stats.Statstring = originalstatstring
             End With
 
             If (BotVars.ChatDelay > 0) Then
@@ -1596,12 +1575,6 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim pos       As Integer
     Dim bln       As Boolean
 
-    ' if this is the public channel before the home channel,
-    ' skip userleaves events for quick loading! -Ribose/2009-09-08
-    If SkipUICEvents Then
-        Exit Sub
-    End If
-    
     UserIndex = g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     If (UserIndex > 0) Then
@@ -2195,10 +2168,10 @@ ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_ChannelList()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
+
 '10/01/09 - Hdx - This is for SID_MESSAGEBOX, for now it'll raise it's own event, and Event_ServerError
 Public Function Event_MessageBox(lStyle As Long, sText As String, sCaption As String)
 On Error GoTo ERROR_HANDLER:
-
     Call Event_ServerError(sText)
     
     RunInAll "Event_MessageBox", lStyle, sText, sCaption

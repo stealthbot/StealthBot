@@ -66,7 +66,6 @@ Public ProfileRequest As Boolean
 Public Protect As Boolean
 Public QC(1 To 9) As String
 Public PublicChannels As Collection
-Public SkipUICEvents As Boolean
 
 Public JoinMessagesOff As Boolean
 Public Filters As Boolean
