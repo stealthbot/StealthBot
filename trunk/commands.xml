@@ -4319,6 +4319,25 @@
     </access>
   </command>
 
+  <command name="return">
+    <aliases>
+      <alias>joinlast</alias>
+    </aliases>
+
+    <documentation>
+      <description>
+        Makes the bot return to the previous channel.
+      </description>
+    </documentation>
+
+    <access>
+      <rank>90</rank>
+      <flags>
+        <flag>J</flag>
+      </flags>
+    </access>
+  </command>
+
   <command name="quickrejoin">
     <aliases>
       <alias>qrejoin</alias>

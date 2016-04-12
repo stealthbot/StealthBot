@@ -174,6 +174,7 @@ Public Function DispatchCommand(Command As clsCommandObj)
         Case "quickrejoin":    Call modCommandsChat.OnQuickRejoin(Command)
         Case "reconnect":      Call modCommandsChat.OnReconnect(Command)
         Case "rejoin":         Call modCommandsChat.OnReJoin(Command)
+        Case "return":         Call modCommandsChat.OnReturn(Command)
         Case "say":            Call modCommandsChat.OnSay(Command)
         Case "scq":            Call modCommandsChat.OnSCQ(Command)
         Case "shout":          Call modCommandsChat.OnShout(Command)
@@ -366,7 +367,7 @@ Public Function OnRemOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
             
             If (res) Then
                 If (BotVars.LogDBActions) Then
-                    Call LogDBAction(RemEntry, IIf(InBot, "console", Username), sUsername, dbType)
+                    Call LogDbAction(RemEntry, IIf(InBot, "console", Username), sUsername, dbType)
                 End If
                 tmpbuf = StringFormat("{0} has been removed from the database.", DBUserToString(sUsername, dbType))
             Else
@@ -818,7 +819,7 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                     
                     ' log actions
                     If (BotVars.LogDBActions) Then
-                        Call LogDBAction(ModEntry, IIf(InBot, "console", Username), DB(i).Username, _
+                        Call LogDbAction(ModEntry, IIf(InBot, "console", Username), DB(i).Username, _
                             DB(i).Type, DB(i).Rank, DB(i).Flags, DB(i).Groups)
                     End If
                     
@@ -862,7 +863,7 @@ Public Function OnAddOld(ByVal Username As String, ByRef dbAccess As udtGetAcces
                 
                 ' log actions
                 If (BotVars.LogDBActions) Then
-                    Call LogDBAction(AddEntry, IIf(InBot, "console", Username), DB(UBound(DB)).Username, _
+                    Call LogDbAction(AddEntry, IIf(InBot, "console", Username), DB(UBound(DB)).Username, _
                         DB(UBound(DB)).Type, DB(UBound(DB)).Rank, DB(UBound(DB)).Flags, DB(UBound(DB)).Groups)
                 End If
             End If

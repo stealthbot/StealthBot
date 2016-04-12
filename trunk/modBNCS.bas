@@ -1961,20 +1961,16 @@ End Sub
 ' do channel join home (first time?)
 Public Sub DoChannelJoinHome(Optional FirstTime As Boolean = True)
 On Error GoTo ERROR_HANDLER:
-
-    'SkipUICEvents = True
     
-    If (FirstTime And Config.DefaultChannelJoin) Then
+    If (FirstTime And Config.DefaultChannelJoin) Or (LenB(Config.HomeChannel) = 0 And LenB(BotVars.LastChannel) = 0) Then
+        ' product home override or home/last channel are both empty
         Call DoChannelJoinProductHome
     End If
     
     If (LenB(BotVars.LastChannel) > 0) Then
         ' go to "last channel" (for /reconnect and re-entering chat)
         Call FullJoin(BotVars.LastChannel, 2)
-    ElseIf (LenB(Config.HomeChannel) = 0) Then
-        ' do product home join instead
-        Call DoChannelJoinProductHome
-    Else
+    ElseIf (LenB(Config.HomeChannel) > 0) Then
         ' go home
         Call FullJoin(Config.HomeChannel, 2)
     End If
