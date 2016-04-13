@@ -1883,8 +1883,8 @@ Private Sub LoadDefaults()
     m_RealmHideMotd = False
 
     '[UI-Position]
-    m_PositionLeft = -1
-    m_PositionTop = -1
+    m_PositionLeft = 0
+    m_PositionTop = 0
     m_PositionHeight = 600
     m_PositionWidth = 800
     m_IsMaximized = False

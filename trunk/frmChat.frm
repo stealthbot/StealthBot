@@ -1782,13 +1782,9 @@ Private Sub Form_Load()
         Me.Width = (IIf(CLng(Config.PositionWidth) < 300, 300, CLng(Config.PositionWidth)) * Screen.TwipsPerPixelX)
     End If
 
-    If Config.PositionLeft > 0 Then
-        Me.Left = CLng(Config.PositionLeft) * Screen.TwipsPerPixelX
-    End If
-        
-    If Config.PositionTop > 0 Then
-        Me.Top = CLng(Config.PositionTop) * Screen.TwipsPerPixelY
-    End If
+    'Set window position
+    Me.Left = CLng(Config.PositionLeft) * Screen.TwipsPerPixelX
+    Me.Top = CLng(Config.PositionTop) * Screen.TwipsPerPixelY
 
     'Make sure the window is on the screen
     If Config.EnforceScreenBounds Then
