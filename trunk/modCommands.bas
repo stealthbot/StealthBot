@@ -25,23 +25,32 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     
     Dim commands         As Collection
     Dim Command          As clsCommandObj
+    Dim sCommand         As String
     
     ' replace message variables
     Message = Replace(Message, "%me", IIf(IsLocal, GetCurrentUsername, Username), 1, -1, vbTextCompare)
     
+    ' Should the command system be bypassed entirely?
     If ((IsLocal) And (Left$(Message, 3) = "///")) Then
         frmChat.AddQ Mid$(Message, 3)
         Exit Function
     End If
 
+    ' Get all of the commands in the message
     Set commands = clsCommandObj.IsCommand(Message, IIf(IsLocal, modGlobals.CurrentUsername, CleanUsername(Username)), _
             IsLocal, WasWhispered, Chr$(0))
 
     For Each Command In commands
         If (Command.HasAccess) Then
-            'this is eww but i'll change it later
-            LogCommand IIf(Command.IsLocal, vbNullString, Username), Command.IsLocal & Space(1) & Command.Args
+        
+            ' Log the command
+            sCommand = Command.Name
+            If (LenB(Command.Args) > 0) Then
+                sCommand = sCommand & ": " & Command.Args
+            End If
+            LogCommand IIf(Command.IsLocal, vbNullString, Username), sCommand
             
+            ' Fire the command event
             If (LenB(Command.docs.Owner) = 0) Then
                 Call DispatchCommand(Command)
                 Call RunInSingle(Nothing, "Event_Command", Command)
@@ -56,7 +65,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         If (commands.Count = 0) Then frmChat.AddQ Message
     End If
     
-    'Unload memory - FrOzeN
+    'Unload memory
     Set Command = Nothing
     Set commands = Nothing
     

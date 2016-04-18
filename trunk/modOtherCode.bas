@@ -2570,41 +2570,10 @@ Public Sub LogCommand(ByVal Caller As String, ByVal CString As String)
 
     If (LenB(CString) > 0) Then
         If (LenB(Caller) = 0) Then
-            Caller = "console"
+            Caller = "%console%"
         End If
     
         g_Logger.WriteCommand Caller & " -> " & CString
-    
-        'f = FreeFile
-        '
-        'sPath = GetProfilePath() & "\Logs\commands.txt"
-        '
-        'If (LenB(Caller) = 0) Then
-        '    Caller = "bot console"
-        'End If
-        '
-        'If (LenB(dir$(sPath)) = 0) Then
-        '    Open sPath For Output As #f
-        'Else
-        '    Open sPath For Append As #f
-        '
-        '    If ((LOF(f) > BotVars.MaxLogFileSize) And (BotVars.MaxLogFileSize > 0)) Then
-        '        Close #f
-        '
-        '        Call Kill(sPath)
-        '
-        '        Open sPath For Output As #f
-        '            Print #f, "Logfile cleared automatically on " & _
-        '                Format(Now, "HH:MM:SS MM/DD/YY") & "."
-        '    End If
-        'End If
-        '
-        'Action = "[" & Format(Now, "HH:MM:SS MM/DD/YY") & _
-        '    "][" & Caller & "]-> " & CString
-        '
-        'Print #f, Action
-        '
-        'Close #f
     End If
 
     Exit Sub
