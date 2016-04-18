@@ -496,29 +496,31 @@ On Error GoTo ERROR_HANDLER
         If (Script Is Nothing) Then
             Command.Respond "Error: Could not find specified script."
         Else
-            Dim Version  As String
-            Dim VerTotal As Integer
-            Dim Author   As String
+            Dim ScriptInfo  As Dictionary
+            Dim Version     As String
+            Dim VerTotal    As Integer
+            Dim Author      As String
+            Dim Description As String
             
-            Version = StringFormat("{0}.{1} Revision {2}", _
-                GetScriptDictionary(Script)("Major"), _
-                GetScriptDictionary(Script)("Minor"), _
-                GetScriptDictionary(Script)("Revision"))
+            Set ScriptInfo = GetScriptDictionary(Script)
+            
+            Version = StringFormat("{0}.{1}{2}", Val(ScriptInfo("Major")), Val(ScriptInfo("Minor")), _
+                IIf(Val(ScriptInfo("Revision")) > 0, " Revision " & Val(ScriptInfo("Revision")), vbNullString))
                 
-            VerTotal = Val(GetScriptDictionary(Script)("Major")) _
-                     + Val(GetScriptDictionary(Script)("Minor")) _
-                     + Val(GetScriptDictionary(Script)("Revision"))
+            VerTotal = Val(ScriptInfo("Major")) + Val(ScriptInfo("Minor")) + Val(ScriptInfo("Revision"))
                      
-            Author = GetScriptDictionary(Script)("Author")
+            Author = ScriptInfo("Author")
+            Description = ScriptInfo("Description")
             
             If ((LenB(Author) = 0) And (VerTotal = 0)) Then
                 Command.Respond StringFormat("There is no additional information for the '{0}' script.", _
                     GetScriptName(Script.Name))
             Else
-                Command.Respond StringFormat("{0}{1}{2}", _
+                Command.Respond StringFormat("{0}{1}{2}{3}", _
                     GetScriptName(Script.Name), _
                     IIf(VerTotal > 0, " v" & Version, vbNullString), _
-                    IIf(LenB(Author) > 0, " by " & Author, vbNullString))
+                    IIf(LenB(Author) > 0, " by " & Author, vbNullString), _
+                    IIf(LenB(Description) > 0, ": " & Description, vbNullString))
             End If
         End If
     End If
