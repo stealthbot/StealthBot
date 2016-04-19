@@ -127,6 +127,12 @@ Public Property Get DisplayName() As String
     DisplayName = ConvertUsername(m_actual_name)
 End Property
 
+' Converts the username to always contain the gateway
+'  3 = gateway convention: show all
+Public Property Get FullName() As String
+    FullName = ConvertUsername(m_actual_name, 3)
+End Property
+
 Public Property Get Flags() As Long
     Flags = m_flags
 End Property

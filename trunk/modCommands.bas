@@ -1476,12 +1476,12 @@ Private Function CheckUser(ByVal User As String, Optional ByVal allow_illegal As
 End Function
 
 ' this fully converts a username based on naming conventions
-Public Function ConvertUsername(ByVal Username As String) As String
+Public Function ConvertUsername(ByVal Username As String, Optional ByVal iConvention As Integer = -1) As String
     If (LenB(Username) = 0) Then
         ConvertUsername = Username
     Else
         ' handle namespace conversions (@gateways)
-        ConvertUsername = ConvertUsernameGateway(Username)
+        ConvertUsername = ConvertUsernameGateway(Username, iConvention)
         
         ' handle D2 naming conventions
         ConvertUsername = ConvertUsernameD2(ConvertUsername, Username)
@@ -1489,7 +1489,7 @@ Public Function ConvertUsername(ByVal Username As String) As String
 End Function
 
 ' this converts a username only on gateway conventions
-Public Function ConvertUsernameGateway(ByVal Username As String) As String
+Public Function ConvertUsernameGateway(ByVal Username As String, Optional ByVal iConvertType As Integer = -1) As String
     Dim Index          As Long    ' index of substring in string
     Dim Gateways(5, 2) As String  ' list of known namespaces
     Dim blnIsW3        As Boolean ' whether this bot is on WC3
@@ -1518,7 +1518,11 @@ Public Function ConvertUsernameGateway(ByVal Username As String) As String
          (StrReverse$(BotVars.Product) = PRODUCT_W3XP))
     
     ' store how we will be converting namespaces
-    intConvert = BotVars.GatewayConventions
+    If (iConvertType = -1) Then
+        intConvert = BotVars.GatewayConventions
+    Else
+        intConvert = iConvertType
+    End If
     
     ' get my gateway
     MyGateway = BotVars.Gateway
