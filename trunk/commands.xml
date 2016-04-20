@@ -285,7 +285,7 @@
         </documentation>
       </argument>
 
-      <argument name="UpperRank" type="numeic" optional="1">
+      <argument name="UpperRank" type="numeric" optional="1">
         <documentation>
           <description>
             Finds users between this rank and the rank specified in the first parameter
@@ -428,7 +428,7 @@
     </documentation>
 
     <arguments>
-      <argument name="value" type="numeic" optional="1">
+      <argument name="value" type="numeric" optional="1">
         <documentation>
           <description>
             The maximum value to roll.
