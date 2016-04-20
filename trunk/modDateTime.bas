@@ -127,3 +127,33 @@ Public Function GetTimeZoneBias() As Long
     End Select    
 End Function
 
+Public Function GetTimeZoneName() As String
+    Dim TZinfo   As TIME_ZONE_INFORMATION   ' holds time zone info
+    Dim lngL     As Long                    ' time zone info result
+    Dim i        As Long                    ' counter
+    Dim b        As Integer                 ' a single character from the time zone name
+    Dim str      As String                  ' return string
+
+    ' Get the time zone info
+    lngL = GetTimeZoneInformation(TZinfo)
+    
+    ' Convert the name
+    For i = 0 To 31
+    
+        ' Standard or daylight savings?
+        If lngL = TIME_ZONE_ID_DAYLIGHT Then
+            b = TZinfo.DaylightName(i)
+        Else
+            b = TZinfo.StandardName(i)
+        End If
+        
+        ' Name is null-padded
+        If b = 0 Then
+            Exit For
+        Else
+            str = str & Chr(b)
+        End If
+    Next
+    
+    GetTimeZoneName = str
+End Function

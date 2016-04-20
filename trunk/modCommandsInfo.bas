@@ -624,7 +624,7 @@ Public Sub OnTagBans(Command As clsCommandObj)
 End Sub
 
 Public Sub OnTime(Command As clsCommandObj)
-    Command.Respond "The current time on this computer is " & Time & " on " & Format(Date, "MM-dd-yyyy") & "."
+    Command.Respond StringFormat("The current time on this computer is {0} on {1} ({2}).", Time, Format(Date, "MM-dd-yyyy"), GetTimeZoneName())
 End Sub
 
 Public Sub OnTrigger(Command As clsCommandObj)
