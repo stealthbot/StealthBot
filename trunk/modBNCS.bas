@@ -235,6 +235,13 @@ On Error GoTo ERROR_HANDLER:
         End If
     End If
     
+    ' If the server does not recognize the version byte we sent it, it will send back an empty seed string.
+    If (LenB(ds.CRevSeed) = 0) Then
+        Call HandleEmptyCRevSeed
+        
+        Exit Sub
+    End If
+    
     If (BotVars.BNLS) Then
         Call modBNLS.SEND_BNLS_VERSIONCHECKEX2(ds.CRevFileTimeRaw, ds.CRevFileName, ds.CRevSeed)
     Else
@@ -1318,6 +1325,13 @@ On Error GoTo ERROR_HANDLER:
         End If
     End If
     
+    ' If the server does not recognize the version byte we sent it, it will send back an empty seed string.
+    If (LenB(ds.CRevSeed) = 0) Then
+        Call HandleEmptyCRevSeed
+        
+        Exit Sub
+    End If
+    
     If (Len(ds.ServerSig) = 128) Then
         If (ds.NLS.VerifyServerSignature(frmChat.sckBNet.RemoteHostIP, ds.ServerSig)) Then
             frmChat.AddChat RTBColors.SuccessText, "[BNCS] Server signature validated!"
@@ -2022,3 +2036,13 @@ Public Function CanSpawn(ByVal sProduct As String, ByVal iKeyLength As Integer) 
     End Select
     CanSpawn = False
 End Function
+
+Public Sub HandleEmptyCRevSeed()
+    frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] CheckRevision seed was returned empty! This is usually due to an unrecognized verison byte."
+    If (BotVars.BNLS) Then
+        frmChat.HandleBnlsError "[BNCS] The BNLS server you are using may be misconfigured."
+    Else
+        frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] You can reset your version bytes to the latest by going to Bot -> Update Version Bytes"
+        frmChat.DoDisconnect
+    End If
+End Sub
