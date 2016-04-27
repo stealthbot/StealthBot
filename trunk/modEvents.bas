@@ -556,7 +556,6 @@ End Sub
 
 Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountName As String)
 On Error GoTo ERROR_HANDLER:
-    Dim D2CharName As String
     Dim sChannel   As String
     Dim ShowW3     As Boolean
     Dim ShowD2     As Boolean
@@ -601,7 +600,6 @@ On Error GoTo ERROR_HANDLER:
     ' if D2 and on a char, we need to tell the whole world this so that Self is known later on
     If (StrComp(Stats.Game, PRODUCT_D2DV, vbBinaryCompare) = 0) Or (StrComp(Stats.Game, PRODUCT_D2XP, vbBinaryCompare) = 0) Then
         If (LenB(Stats.CharacterName) > 0) Then
-            D2CharName = " (with the character " & Stats.CharacterTitleAndName & ")"
             CurrentUsername = Stats.CharacterName & "*" & CurrentUsername
         End If
     End If
@@ -612,8 +610,6 @@ On Error GoTo ERROR_HANDLER:
     frmChat.mnuSepZ.Visible = (ShowW3 Or ShowD2)
     frmChat.mnuIgnoreInvites.Visible = ShowW3
     frmChat.mnuRealmSwitch.Visible = ShowD2
-    
-    Set Stats = Nothing
 
     SharedScriptSupport.myUsername = GetCurrentUsername
     
@@ -621,7 +617,7 @@ On Error GoTo ERROR_HANDLER:
         .InitListviewTabs
     
         .AddChat RTBColors.InformationText, "[BNCS] Logged on as ", RTBColors.SuccessText, Username, _
-            RTBColors.InformationText, StringFormat("{0}.", D2CharName)
+            RTBColors.InformationText, StringFormat(" using {0}.", Stats.ToString)
             
         .tmrAccountLock.Enabled = False
         
@@ -1197,7 +1193,6 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Username = UserObj.DisplayName
     
     'ParseStatstring OriginalStatstring, Stats, Clan
-    
     If (StatUpdate = False) Then
         'frmChat.AddChat vbRed, UserObj.Stats.IconCode
     
