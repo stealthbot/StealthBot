@@ -1474,7 +1474,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             If (Not CheckBlock(Username)) Then
                 Dim UserColor As Long
                 Dim FDesc As String
-                FDesc = FlagDescription(Flags, False)
+                FDesc = FlagDescription(AcqFlags Or Flags, False)
                 
                 If LenB(FDesc) > 0 Then
                     FDesc = " as a " & FDesc
