@@ -4805,7 +4805,7 @@ Private Function SaveSettings() As Boolean
     Config.HomeChannel = txtHomeChan.Text
     Config.Server = cboServer.Text
     
-    Config.UseSpawn = CBool(CanSpawn(Config.Game, Len(Config.CDKey)) And Config.UseSpawn)
+    Config.UseSpawn = CBool(CanSpawn(Config.Game, Len(Config.CDKey)) And CBool(chkSpawn.Value))
     Config.UseD2Realms = CBool(chkUseRealm.Value)
     
     ' Advanced connection settings
