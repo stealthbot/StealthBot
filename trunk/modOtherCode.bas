@@ -1181,12 +1181,20 @@ Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long, Icon
     
     If (BotVars.ShowFlagsIcons = False) Then
         i = IconCode ' disable any of the below flags-based icons
-    ElseIf ((Flags And USER_BLIZZREP) = USER_BLIZZREP) Then 'Flags = 1: blizzard rep
+    ElseIf (Flags And USER_BLIZZREP) = USER_BLIZZREP Then 'Flags = 1: blizzard rep
         i = ICBLIZZ
-    ElseIf ((Flags And USER_SYSOP) = USER_SYSOP) Then 'Flags = 8: battle.net sysop
+    ElseIf (Flags And USER_SYSOP) = USER_SYSOP Then 'Flags = 8: battle.net sysop
         i = ICSYSOP
-    ElseIf (Flags And USER_CHANNELOP&) = USER_CHANNELOP& Then 'op
+    ElseIf (Flags And USER_CHANNELOP) = USER_CHANNELOP Then 'op
         i = ICGAVEL
+    ElseIf (Flags And USER_GUEST) = USER_GUEST Then 'guest
+        i = ICSPECS
+    ElseIf (Flags And USER_SPEAKER) = USER_SPEAKER Then 'speaker
+        i = ICSPEAKER
+    ElseIf (Flags And USER_GFPLAYER) = USER_GFPLAYER Then 'GF player
+        i = IC_GF_PLAYER
+    ElseIf (Flags And USER_GFOFFICIAL) = USER_GFOFFICIAL Then 'GF official
+        i = IC_GF_OFFICIAL
     ElseIf (Flags And USER_SQUELCHED) = USER_SQUELCHED Then 'squelched
         i = ICSQUELCH
     Else
@@ -2009,58 +2017,76 @@ Public Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal 
     GetNameColor = FormColors.ChannelListText
 End Function
 
-Public Function FlagDescription(ByVal Flags As Long) As String
-    Dim s0ut          As String
-    Dim multipleFlags As Boolean
-        
-    If ((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
-        s0ut = "Squelched"
-        
-        multipleFlags = True
+Public Function FlagDescription(ByVal Flags As Long, ByVal ShowAll As Boolean) As String
+    Dim sOut As String
+    Dim sSep As String
+    
+    sOut = vbNullString
+    sSep = vbNullString
+    
+    If (Flags And USER_SQUELCHED) = USER_SQUELCHED And ShowAll Then
+        sOut = sOut & sSep & "squelched"
+        sSep = ", "
     End If
     
-    If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
-        If (multipleFlags) Then
-            s0ut = s0ut & ", channel op"
+    If (Flags And USER_CHANNELOP) = USER_CHANNELOP Then
+        sOut = sOut & sSep & "channel operator"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_BLIZZREP) = USER_BLIZZREP Then
+        sOut = sOut & sSep & "Blizzard representative"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_SYSOP) = USER_SYSOP Then
+        sOut = sOut & sSep & "Battle.net system operator"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_NOUDP) = USER_NOUDP And ShowAll Then
+        sOut = sOut & sSep & "UDP plug"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_BEEPENABLED) = USER_BEEPENABLED And ShowAll Then
+        sOut = sOut & sSep & "beep enabled"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_GUEST) = USER_GUEST Then
+        sOut = sOut & sSep & "guest"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_SPEAKER) = USER_SPEAKER Then
+        sOut = sOut & sSep & "speaker"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_GFOFFICIAL) = USER_GFOFFICIAL Then
+        sOut = sOut & sSep & "GF official"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_GFPLAYER) = USER_GFPLAYER Then
+        sOut = sOut & sSep & "GF player"
+        sSep = ", "
+    End If
+    
+    If (LenB(sOut) = 0) And ShowAll Then
+        If (Flags = &H0&) Then
+            sOut = "normal"
         Else
-            s0ut = "Channel op"
-        End If
-        
-        multipleFlags = True
-    End If
-    
-    If (((Flags And USER_BLIZZREP) = USER_BLIZZREP) Or _
-        ((Flags And USER_SYSOP) = USER_SYSOP)) Then
-       
-        If (multipleFlags) Then
-            s0ut = s0ut & _
-                ", Blizzard representative"
-        Else
-            s0ut = "Blizzard representative"
-        End If
-        
-        multipleFlags = True
-    End If
-    
-    If ((Flags And USER_NOUDP&) = USER_NOUDP&) Then
-        If (multipleFlags) Then
-            s0ut = s0ut & ", UDP plug"
-        Else
-            s0ut = "UDP plug"
-        End If
-        
-        multipleFlags = True
-    End If
-    
-    If (LenB(s0ut) = 0) Then
-        If (Flags = &H0) Then
-            s0ut = "Normal"
-        Else
-            s0ut = "Altered"
+            sOut = "unknown"
         End If
     End If
     
-    FlagDescription = s0ut & " [0x" & Right$("00000000" & Hex(Flags), 8) & "]"
+    FlagDescription = sOut
+    
+    If ShowAll Then
+        FlagDescription = FlagDescription & " [0x" & Right$("00000000" & Hex(Flags), 8) & "]"
+    End If
 End Function
 
 'Returns TRUE if the specified argument was a command line switch,

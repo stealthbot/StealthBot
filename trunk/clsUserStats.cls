@@ -16,50 +16,6 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-' game icons
-Private Const ICSTAR = 1
-Private Const ICSEXP = 2
-Private Const ICD2DV = 3
-Private Const ICD2XP = 4
-Private Const ICW2BN = 5
-Private Const ICWAR3 = 6
-Private Const ICGAVEL = 7
-Private Const ICUNKNOWN = 8
-Private Const ICBLIZZ = 9
-Private Const ICSYSOP = 103
-Private Const ICCHAT = 10
-Private Const ICDIABLO = 11
-Private Const ICDIABLOSW = 12
-Private Const ICSQUELCH = 13
-Private Const ICJSTR = 14
-Private Const ICWAR3X = 15
-Private Const LAG_PLUG = 16
-Private Const LAG_1 = 17
-Private Const LAG_2 = 18
-Private Const LAG_3 = 19
-Private Const LAG_4 = 20
-Private Const LAG_5 = 21
-Private Const LAG_6 = 22
-Private Const MONITOR_ONLINE = 23
-Private Const MONITOR_OFFLINE = 24
-Private Const ICSCSW = 25
-
-' world cyber games icons
-Private Const IC_WCG_PLAYER = 89
-Private Const IC_WCG_REF = 90
-Private Const IC_WCRF = 104
-Private Const IC_WCPL = 105
-Private Const IC_WCGO = 106
-Private Const IC_WCSI = 107
-Private Const IC_WCBR = 108
-Private Const IC_WCPG = 109
-
-' pgtour icons
-Private Const IC_PGT_A = 92
-Private Const IC_PGT_B = 95
-Private Const IC_PGT_C = 98
-Private Const IC_PGT_D = 101
-
 ' variables
 Private m_stat_string         As String
 Private m_Game                As String
@@ -678,14 +634,11 @@ Public Property Get IconCode() As Integer
         End If
         
         Select Case Game
-            Case PRODUCT_DRTL
+            Case PRODUCT_DRTL, PRODUCT_DSHR
                 If (IsValid) Then
-                    IconCode = (ICON_START_DRTL + CharacterClassID)
-                End If
-                
-            Case PRODUCT_DSHR
-                If (IsValid) Then
-                    IconCode = ICON_START_DSHR
+                    IconCode = (ICON_START_D1 + (CharacterClassID * 4) + Dots)
+                    
+                    If IsSpawn Then IconCode = IC_DIAB_SPAWN
                 End If
             
             Case PRODUCT_D2DV, PRODUCT_D2XP
@@ -697,22 +650,30 @@ Public Property Get IconCode() As Integer
                 intWins = Wins
                 If (intWins > 10&) Then intWins = 10&
                 IconCode = CInt(ICON_START_SC + intWins)
+                
+                If IsSpawn Then IconCode = IC_STAR_SPAWN
+            
+            Case PRODUCT_JSTR
+                intWins = Wins
+                If (intWins > 10&) Then intWins = 10&
+                IconCode = CInt(ICON_START_SC + intWins)
+                
+                If IsSpawn Then IconCode = IC_JSTR_SPAWN
             
             Case PRODUCT_W2BN
                 intWins = Wins
                 If (intWins > 10&) Then intWins = 10&
                 IconCode = CInt(ICON_START_W2 + intWins)
+                
+                If IsSpawn Then IconCode = IC_W2BN_SPAWN
             
             Case PRODUCT_WAR3, PRODUCT_W3XP
-                IconCode = _
-                    GetW3ImageListPosition(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1))
+                IconCode = GetW3ImageListPosition(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1))
                 
-                If IconCode > 0 Then
-                    If (Game = PRODUCT_W3XP) Then
-                        IconCode = (ICON_START_W3XP + IconCode)
-                    Else
-                        IconCode = (ICON_START_WAR3 + IconCode)
-                    End If
+                If (Game = PRODUCT_W3XP) Then
+                    IconCode = (ICON_START_W3XP + IconCode)
+                Else
+                    IconCode = (ICON_START_WAR3 + IconCode)
                 End If
             
         End Select
@@ -732,7 +693,7 @@ Public Property Get IconCode() As Integer
             Case PRODUCT_D2XP: IconCode = ICD2XP
             Case PRODUCT_WAR3: IconCode = ICWAR3
             Case PRODUCT_W3XP: IconCode = ICWAR3X
-            Case Else:   IconCode = ICUNKNOWN
+            Case Else:         IconCode = ICUNKNOWN
         End Select
     End If
 End Property
@@ -740,13 +701,15 @@ End Property
 Private Function GetW3ImageListPosition(ByVal Icon As String, ByRef Race As String) As Integer
     Dim IMLPos As Integer
     Dim PerTier As Integer
-        
+    
+    ' choose game
     If Game = PRODUCT_WAR3 Then
         PerTier = 5
     Else
         PerTier = 6
     End If
     
+    ' choose race
     Select Case Race
         Case "H"
             IMLPos = 1
@@ -764,6 +727,8 @@ Private Function GetW3ImageListPosition(ByVal Icon As String, ByRef Race As Stri
             IMLPos = 0
     End Select
     
+    ' if race known, add tier to it
+    ' otherwise, defaults to IMLPos 1, which is W3 unknown icon (but an icon is present)
     If StrictIsNumeric(Icon) And IMLPos > 0 Then
         IMLPos = IMLPos + (CInt(Icon) - 1)
     End If
@@ -825,6 +790,7 @@ End Sub
 
 Private Sub ParseDiablo()
     Dim Values() As String
+    Dim lngIsSpawn As Long
     
     ReDim Preserve Values(0)
     Values() = Split(Statstring, Space$(1))
@@ -843,7 +809,15 @@ Private Sub ParseDiablo()
     Dexterity = Val(Values(5))
     Vitality = Val(Values(6))
     Gold = Val(Values(7))
+    lngIsSpawn = Val(Values(8))
     
+    If CharacterClassID < 0 Or CharacterClassID > 2 Or Dots < 0 Or Dots > 3 Or lngIsSpawn < 0 Or lngIsSpawn > 1 Then
+        IsValid = False
+        
+        Exit Sub
+    End If
+    
+    IsSpawn = CBool(lngIsSpawn)
 End Sub
 
 Private Sub ParseDiabloII()
@@ -898,8 +872,10 @@ End Sub
 Private Function StarCraft_ToString() As String
     Dim buf As String
     
-    If ((Statstring = vbNullString) Or (IsValid = False)) Then
+    If (Statstring = vbNullString) Then
         buf = " (No stats available)"
+    ElseIf (IsValid = False) Then
+        buf = " (Custom: " & Statstring & ")"
     Else
         buf = _
             " (" & Wins() & " wins" & IIf(LadderRating(), ", with a rating of " & LadderRating() & _
@@ -965,8 +941,11 @@ Private Function WarCraftIII_ToString() As String
         If (IsWCG) Then
             buf = " (" & IconName() & " icon"
         Else
-            buf = " (Level: " & Level() & ", icon tier " & IconTier() & ", " & IconName() & _
-                    " icon"
+            buf = " (Level " & Level()
+        End If
+        
+        If (Icon() <> vbNullString) Then
+            buf = buf & ", icon tier " & IconTier() & ", " & IconName() & " icon"
         End If
         
         If (Clan() <> vbNullString) Then

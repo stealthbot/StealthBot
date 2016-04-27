@@ -55,61 +55,77 @@ Public Const BNET_MSG_LENGTH = 233
 Public Const COLOR_TEAL& = &H99CC00
 Public Const COLOR_BLUE& = &HCC9900
 
+' prod icons
+Public Const ICUNKNOWN = 1
+Public Const ICSTAR = 2
+Public Const ICSEXP = 3
+Public Const ICD2DV = 4
+Public Const ICD2XP = 5
+Public Const ICW2BN = 6
+Public Const ICWAR3 = 7
+Public Const ICCHAT = 8
+Public Const ICDIABLO = 9
+Public Const ICDIABLOSW = 10
+Public Const ICJSTR = 11
+Public Const ICWAR3X = 12
+Public Const ICSCSW = 13
 
-' Icons
-Public Const ICON_START_WAR3& = 62
-Public Const ICON_START_W3XP& = 25
-Public Const ICON_START_D2& = 110
-Public Const ICON_START_SC& = 117
-Public Const ICON_START_W2& = 128
-Public Const ICON_START_DRTL& = 139
-Public Const ICON_START_DSHR& = 142
+' stats spawn icons
+Public Const IC_STAR_SPAWN = 132
+Public Const IC_JSTR_SPAWN = 133
+Public Const IC_W2BN_SPAWN = 145
+Public Const IC_DIAB_SPAWN = 158
 
-Public Const ICSTAR = 1
-Public Const ICSEXP = 2
-Public Const ICD2DV = 3
-Public Const ICD2XP = 4
-Public Const ICW2BN = 5
-Public Const ICWAR3 = 6
-Public Const ICGAVEL = 7
-Public Const ICUNKNOWN = 8
-Public Const ICBLIZZ = 9
-Public Const ICSYSOP = 103
-Public Const ICCHAT = 10
-Public Const ICDIABLO = 11
-Public Const ICDIABLOSW = 12
-Public Const ICSQUELCH = 13
-Public Const ICJSTR = 14
-Public Const ICWAR3X = 15
-Public Const LAG_PLUG = 16
-Public Const LAG_1 = 17
-Public Const LAG_2 = 18
-Public Const LAG_3 = 19
-Public Const LAG_4 = 20
-Public Const LAG_5 = 21
-Public Const LAG_6 = 22
-Public Const MONITOR_ONLINE = 23
-Public Const MONITOR_OFFLINE = 24
-Public Const ICSCSW = 25
+' stats icon sequences
+Public Const ICON_START_WAR3 = 68
+Public Const ICON_START_W3XP = 31
+Public Const ICON_START_D2 = 114
+Public Const ICON_START_SC = 121
+Public Const ICON_START_W2 = 134
+Public Const ICON_START_D1 = 146
 
-'World Cyber Games icons
-Public Const IC_WCG_PLAYER = 89
-Public Const IC_WCG_REF = 90
+' flags icons
+Public Const ICGAVEL = 14
+Public Const ICBLIZZ = 15
+Public Const ICSYSOP = 16
+Public Const ICSQUELCH = 17
+Public Const ICSPEAKER = 18
+Public Const ICSPECS = 19
 
-'UPDATED WCG Icons
-Public Const IC_WCRF = 104
-Public Const IC_WCPL = 105
-Public Const IC_WCGO = 106
-Public Const IC_WCSI = 107
-Public Const IC_WCBR = 108
-Public Const IC_WCPG = 109
+' flags icons: GF
+Public Const IC_GF_OFFICIAL = 20
+Public Const IC_GF_PLAYER = 21
 
-'PGTour icons
-Public Const IC_PGT_A = 92
-Public Const IC_PGT_B = 95
-Public Const IC_PGT_C = 98
-Public Const IC_PGT_D = 101
+' Lag icons
+Public Const LAG_PLUG = 22
+Public Const LAG_1 = 23
+Public Const LAG_2 = 24
+Public Const LAG_3 = 25
+Public Const LAG_4 = 26
+Public Const LAG_5 = 27
+Public Const LAG_6 = 28
 
+' State icons
+Public Const MONITOR_ONLINE = 29
+Public Const MONITOR_OFFLINE = 30
+
+' World Cyber Games icons
+Public Const IC_WCG_PLAYER = 94
+Public Const IC_WCG_REF = 95
+
+' UPDATED WCG Icons
+Public Const IC_WCRF = 108
+Public Const IC_WCPL = 109
+Public Const IC_WCGO = 110
+Public Const IC_WCSI = 111
+Public Const IC_WCBR = 112
+Public Const IC_WCPG = 113
+
+' PGTour icons
+Public Const IC_PGT_A = 96
+Public Const IC_PGT_B = 99
+Public Const IC_PGT_C = 102
+Public Const IC_PGT_D = 105
 
 'Mode1 Values
 Public Const BVT_VOTE_ADD As Byte = 1

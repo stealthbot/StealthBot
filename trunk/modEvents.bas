@@ -124,7 +124,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
             If (Flags <> PreviousFlags) Then
                 If (g_Channel.Self.IsOperator) Then
                     If ((Username = GetCurrentUsername) And _
-                            ((PreviousFlags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
+                            ((PreviousFlags And USER_CHANNELOP) <> USER_CHANNELOP)) Then
                             
                         g_Channel.CheckUsers
                     Else
@@ -135,31 +135,40 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                 pos = checkChannel(Username)
                 
                 If (pos) Then
+                    Dim NewFlags As Long
+                    
                     frmChat.lvChannel.ListItems.Remove pos
+                    
+                    ' voodoo magic: only show flags that are new
+                    NewFlags = Not (Flags Imp PreviousFlags)
                 
-                    If ((UserObj.IsOperator) And _
-                            ((PreviousFlags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
-                            
-                        AddName Username, UserObj.Name, Product, Flags, Ping, UserObj.Stats.IconCode, _
-                            Clan, 1
+                    If (NewFlags And USER_CHANNELOP) = USER_CHANNELOP Or _
+                        (NewFlags And USER_BLIZZREP) = USER_BLIZZREP Or _
+                        (NewFlags And USER_SYSOP) = USER_SYSOP Then
+                        pos = 1
+                    End If
+                    
+                    AddName Username, UserObj.Name, Product, Flags, Ping, UserObj.Stats.IconCode, _
+                        Clan, pos
+                    
+                    ' default to display this event
+                    Displayed = False
+                    
+                    ' check whether it has been
+                    If QueuedEventID > 0 And UserObj.Queue.Count >= QueuedEventID Then
+                        Set UserEvent = UserObj.Queue(QueuedEventID)
+                        Displayed = UserEvent.Displayed
+                    End If
+                    
+                    ' display if it has not
+                    If Not Displayed Then
+                        Dim FDesc As String
+                        FDesc = FlagDescription(NewFlags, False)
                         
-                        ' default to display this event
-                        Displayed = False
-                        
-                        ' check whether it has been
-                        If QueuedEventID > 0 And UserObj.Queue.Count >= QueuedEventID Then
-                            Set UserEvent = UserObj.Queue(QueuedEventID)
-                            Displayed = UserEvent.Displayed
+                        If LenB(FDesc) > 0 Then
+                            frmChat.AddChat RTBColors.JoinUsername, "-- ", RTBColors.JoinedChannelName, _
+                                Username, RTBColors.JoinText, " has acquired " & FDesc & "."
                         End If
-                        
-                        ' display if it has not
-                        If Not Displayed Then
-                            frmChat.AddChat RTBColors.JoinedChannelText, "-- ", RTBColors.JoinedChannelName, _
-                                Username, RTBColors.JoinedChannelText, " has acquired ops."
-                        End If
-                    Else
-                        AddName Username, UserObj.Name, Product, Flags, Ping, UserObj.Stats.IconCode, _
-                            Clan, pos
                     End If
                 End If
             End If
@@ -1213,10 +1222,31 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 
                 ' display if it has not already been
                 If Not Displayed Then
+                    Dim UserColor As Long
+                    Dim FDesc As String
+                    FDesc = FlagDescription(Flags, False)
+                    
+                    If LenB(FDesc) > 0 Then
+                        FDesc = " as a " & FDesc
+                    End If
+                    
+                    ' display message
+                    If (Flags And USER_BLIZZREP) Then
+                        UserColor = RGB(97, 105, 255)
+                    ElseIf (Flags And USER_SYSOP) Then
+                        UserColor = RGB(97, 105, 255)
+                    ElseIf (Flags And USER_CHANNELOP) Then
+                        UserColor = RTBColors.TalkUsernameOp
+                    Else
+                        UserColor = RTBColors.JoinUsername
+                    End If
+                    
                     frmChat.AddChat RTBColors.JoinText, "-- Stats updated: ", _
-                        IIf(AcqOps, RTBColors.TalkUsernameOp, RTBColors.JoinUsername), Username, _
+                        UserColor, Username, _
                         RTBColors.JoinUsername, " [" & Ping & "ms]", _
-                        RTBColors.JoinText, " is using " & UserObj.Stats.ToString & "."
+                        RTBColors.JoinText, " is using " & UserObj.Stats.ToString, _
+                        RTBColors.JoinUsername, FDesc, _
+                        RTBColors.JoinText, "."
                 End If
             End If
             
@@ -1447,30 +1477,31 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             End If
             
             If (Not CheckBlock(Username)) Then
+                Dim UserColor As Long
+                Dim FDesc As String
+                FDesc = FlagDescription(Flags, False)
+                
+                If LenB(FDesc) > 0 Then
+                    FDesc = " as a " & FDesc
+                End If
+                
                 ' display message
                 If (AcqFlags And USER_BLIZZREP) Or (Flags And USER_BLIZZREP) Then
-                    frmChat.AddChat RTBColors.JoinText, "-- ", _
-                        RGB(97, 105, 255), Username, _
-                        RTBColors.JoinUsername, " [" & Ping & "ms]", _
-                        RTBColors.JoinText, " has joined the channel using " & UserStats.ToString, _
-                        RTBColors.JoinUsername, " as a Blizzard Representative", RTBColors.JoinText, "."
+                    UserColor = RGB(97, 105, 255)
                 ElseIf (AcqFlags And USER_SYSOP) Or (Flags And USER_SYSOP) Then
-                    frmChat.AddChat RTBColors.JoinText, "-- ", _
-                        RGB(97, 105, 255), Username, _
-                        RTBColors.JoinUsername, " [" & Ping & "ms]", _
-                        RTBColors.JoinText, " has joined the channel using " & UserStats.ToString, _
-                        RTBColors.JoinUsername, " as a Battle.net system op", RTBColors.JoinText, "."
+                    UserColor = RGB(97, 105, 255)
                 ElseIf (AcqFlags And USER_CHANNELOP) Or (Flags And USER_CHANNELOP) Then
-                    frmChat.AddChat RTBColors.JoinText, "-- ", _
-                        RTBColors.TalkUsernameOp, Username, _
-                        RTBColors.JoinUsername, " [" & Ping & "ms]", _
-                        RTBColors.JoinText, " has joined the channel using " & UserStats.ToString, _
-                        RTBColors.JoinUsername, IIf(Flags And 2, " with ops", " and acquired ops"), RTBColors.JoinText, "."
+                    UserColor = RTBColors.TalkUsernameOp
                 Else
-                    frmChat.AddChat RTBColors.JoinText, "-- ", _
-                        RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
-                        RTBColors.JoinText, " has joined the channel using " & UserStats.ToString & "."
+                    UserColor = RTBColors.JoinUsername
                 End If
+                
+                frmChat.AddChat RTBColors.JoinText, "-- ", _
+                    UserColor, Username, _
+                    RTBColors.JoinUsername, " [" & Ping & "ms]", _
+                    RTBColors.JoinText, " has joined the channel using " & UserStats.ToString, _
+                    RTBColors.JoinUsername, FDesc, _
+                    RTBColors.JoinText, "."
             End If
             ' dispose user stats instance
             Set UserStats = Nothing
@@ -1557,7 +1588,6 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
 
     Dim UserObj   As clsUserObj
     
-    Dim UserColor As Long
     Dim UserIndex As Integer
     Dim i         As Integer
     Dim ii        As Integer
@@ -1575,12 +1605,22 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         If (g_Channel.Users(UserIndex).Queue.Count = 0) Then
             If ((Not JoinMessagesOff) And (Not CheckBlock(Username))) Then
                 'If (GetVeto = False) Then
+                Dim UserColor As Long
+                
+                ' display message
+                If (Flags And USER_BLIZZREP) Then
+                    UserColor = RGB(97, 105, 255)
+                ElseIf (Flags And USER_SYSOP) Then
+                    UserColor = RGB(97, 105, 255)
+                ElseIf (Flags And USER_CHANNELOP) Then
+                    UserColor = RTBColors.TalkUsernameOp
+                Else
                     UserColor = RTBColors.JoinUsername
-                    If g_Channel.Users(UserIndex).IsOperator Then UserColor = RTBColors.TalkUsernameOp
-                    If g_Channel.Users(UserIndex).IsBlizzRep Or g_Channel.Users(UserIndex).IsBnetAdmin Then UserColor = RGB(97, 105, 255)
-                    frmChat.AddChat RTBColors.JoinText, "-- ", _
-                        UserColor, g_Channel.Users(UserIndex).DisplayName, _
-                        RTBColors.JoinText, " has left the channel."
+                End If
+                
+                frmChat.AddChat RTBColors.JoinText, "-- ", _
+                    UserColor, g_Channel.Users(UserIndex).DisplayName, _
+                    RTBColors.JoinText, " has left the channel."
                 'End If
             End If
         End If

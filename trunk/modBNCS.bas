@@ -92,21 +92,23 @@ Public Const ID_EMOTE = &H17
 Public Const ID_CONNECTED = &H18
 Public Const ID_DISCONNECTED = &H19
 
+' battle.net user flag constants
+Public Const USER_BLIZZREP    As Long = &H1
+Public Const USER_CHANNELOP   As Long = &H2
+Public Const USER_SPEAKER     As Long = &H4
+Public Const USER_SYSOP       As Long = &H8
+Public Const USER_NOUDP       As Long = &H10
+Public Const USER_BEEPENABLED As Long = &H100
+Public Const USER_KBKOFFICIAL As Long = &H1000
+Public Const USER_JAILED      As Long = &H100000
+Public Const USER_SQUELCHED   As Long = &H20
+Public Const USER_PGLPLAYER   As Long = &H200
+Public Const USER_GFOFFICIAL  As Long = &H100000
+Public Const USER_GFPLAYER    As Long = &H200000
+Public Const USER_GUEST       As Long = &H40
+Public Const USER_PGLOFFICIAL As Long = &H400
+Public Const USER_KBKPLAYER   As Long = &H800
 
-Public Const USER_BLIZZREP& = &H1
-Public Const USER_CHANNELOP& = &H2
-Public Const USER_SPEAKER& = &H4
-Public Const USER_SYSOP& = &H8
-Public Const USER_NOUDP& = &H10
-Public Const USER_BEEPENABLED& = &H100
-Public Const USER_KBKOFFICIAL& = &H1000
-Public Const USER_JAILED& = &H100000
-Public Const USER_SQUELCHED& = &H20
-Public Const USER_PGLPLAYER& = &H200
-Public Const USER_GFPLAYER& = &H200000
-Public Const USER_GUEST& = &H40
-Public Const USER_PGLOFFICIAL& = &H400
-Public Const USER_KBKPLAYER& = &H800
 
 Public Const BNCS_NLS As Long = 1 'New:    SID_AUTH_*
 Public Const BNCS_OLS As Long = 2 'Old:    SID_CLIENTID2

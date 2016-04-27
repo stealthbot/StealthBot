@@ -16,21 +16,6 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-' battle.net user flag constants
-Private Const USER_BLIZZREP    As Long = &H1
-Private Const USER_CHANNELOP   As Long = &H2
-Private Const USER_SPEAKER     As Long = &H4
-Private Const USER_SYSOP       As Long = &H8
-Private Const USER_NOUDP       As Long = &H10
-Private Const USER_BEEPENABLED As Long = &H100
-Private Const USER_KBKOFFICIAL As Long = &H1000
-Private Const USER_JAILED      As Long = &H100000
-Private Const USER_SQUELCHED   As Long = &H20
-Private Const USER_PGLPLAYER   As Long = &H200
-Private Const USER_GFPLAYER    As Long = &H200000
-Private Const USER_GUEST       As Long = &H40
-Private Const USER_PGLOFFICIAL As Long = &H400
-Private Const USER_KBKPLAYER   As Long = &H800
 
 Private m_flags            As Long
 Private m_ping             As Long
