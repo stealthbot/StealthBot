@@ -6940,10 +6940,6 @@ End Sub
 Sub ReloadConfig(Optional Mode As Byte = 0)
     On Error GoTo ERROR_HANDLER
 
-    Const MN                 As String = "Main"
-    Const OT                 As String = "Other"
-    Const OV                 As String = "Override"
-
     Dim default_group_access As udtGetAccessResponse
     Dim s                    As String
     Dim i                    As Integer
