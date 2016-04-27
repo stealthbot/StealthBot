@@ -13,26 +13,20 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-'clsClanPacketHandler - project StealthBot - authored by Stealth (stealth@stealthbot.net)
-
-'Special thanks:
-'-  Ethereal packetlogger was used in my own research
-'-  thanks to Arta[vL] and BNetDocs (http://bnetdocs.valhallalegends.com) for additional assistance
-
-Private Const SID_FRIENDLIST& = &H65
-Private Const SID_FRIENDUPDATE& = &H66
-Private Const SID_FRIENDADDED& = &H67
-Private Const SID_FRIENDREMOVED& = &H68
-Private Const SID_FRIENDMOVED& = &H69
+Private Const SID_FRIENDSLIST& = &H65
+Private Const SID_FRIENDSUPDATE& = &H66
+Private Const SID_FRIENDSADD& = &H67
+Private Const SID_FRIENDSREMOVE& = &H68
+Private Const SID_FRIENDSPOSITION& = &H69
 
 Public Event FriendUpdate(ByVal Username As String, ByVal FLIndex As Byte)
 Public Event FriendAdded(ByVal Username As String, ByVal Product As String, ByVal Location As Byte, _
                             ByVal Status As Byte, ByVal Channel As String)
 Public Event FriendRemoved(ByVal Username As String)
+Public Event FriendListReceived(ByVal FriendCount As Byte)
 Public Event FriendListEntry(ByVal Username As String, ByVal Product As String, ByVal Channel As String, _
                              ByVal Status As Byte, ByVal Location As Byte)
 Public Event FriendMoved()
-
 
 Private Sub Class_Initialize()
     Set g_Friends = New Collection
@@ -46,191 +40,143 @@ End Sub
 Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
     On Error GoTo ERROR_HANDLER
     
-    Dim n As Integer, bytTemp As Byte
-    Dim s As String
-    Dim Position As Long
+    Dim pBuff As New clsDataBuffer
     Dim flTemp As clsFriendObj
-
-    Position = 1
+    Dim n As Integer
     
+    pBuff.Data = Data
+
     Select Case PacketID
-        Case SID_FRIENDLIST
-            Set g_Friends = New Collection
-        
+        Case SID_FRIENDSLIST
             '0x65 packet format
             '(BYTE)       Number of Entries
-            n = Asc(Mid$(Data, 1, 1))
-            
+            'For each entry:
+            '(STRING)     Account
+            '(BYTE)       Status
+            '(BYTE)       Location
+            '(DWORD)      ProductID
+            '(STRING)     Location name
+
             Call ResetList
             
-            Position = 2
-            'Set flTemp = Nothing
+            n = pBuff.GetByte()     ' Number of entries
+            RaiseEvent FriendListReceived(n)
             
             If (n > 0) Then
+            
+                'For each entry
                 For n = 0 To n - 1
-                    'If (g_Friends.Count > n) Then
-                    '    Set flTemp = g_Friends(n + 1)
-                    'Else
-                        Set flTemp = New clsFriendObj
-                    'End If
-                    ''debug.print DebugOutput(Mid$(Data, Position)) & vbCrLf
-                    s = ""
-                    
+                    Set flTemp = New clsFriendObj
+
                     With flTemp
-                        'For each entry:
-                        '(STRING)         Account
-                        s = KillNull(Mid$(Data, Position))
-                        .Name = s
-                        'debug.print "Username: " & s
-                        Position = Position + Len(.Name) + 1 'account for chr(0) at end
-                        'debug.print "Position incremented " & Len(.Name) + 1 & " to " & Position
+                        .Name = pBuff.GetString()       ' Account
+                        .Status = pBuff.GetByte()       ' Status
+                        .LocationID = pBuff.GetByte()   ' Location
                         
-                        '(BYTE)       Status
-                        bytTemp = Asc(Mid$(Data, Position, 1))
-                        .Status = bytTemp
-                        Position = Position + 1
-                        
-                        'debug.print "Status: " & .Status
-                        'debug.print "Position incremented 1 to " & Position
-                        
-                        '(BYTE)       Location
-                        bytTemp = Asc(Mid$(Data, Position, 1))
-                        .LocationID = bytTemp
-                        Position = Position + 1
-                        
-                        'debug.print "Location: " & .Location
-                        'debug.print "Position incremented 1 to " & Position
-                        
-                        '(DWORD)      ProductID
-                        s = Mid$(Data, Position, 4)
-                        If Conv(s) = 0 Then
+                        ' Product ID
+                        .Game = StrReverse(pBuff.GetRaw(4))
+                        If Conv(.Game) = 0 Then
                             .Game = "OFFL"
-                        Else
-                            .Game = StrReverse(s)
                         End If
-                        Position = Position + 4
                         
-                        'debug.print "ProductID: " & .Game
-                        'debug.print "Position incremented 4 to " & Position
-                        
-                        '(STRING)         Channel
-                        s = KillNull(Mid$(Data, Position))
-                        Position = Position + Len(s) + 1
-                        .Location = s
+                        ' Location name
+                        .Location = pBuff.GetString()
                     End With
                     
-                    ''debug.print "Successfully added: " & flTemp.Name
-                    
-                    'If (g_Friends.Count > n) Then
-                    '    RaiseEvent FriendUpdate(flTemp.DisplayName, n + 1)
-                    'Else
-                        g_Friends.Add flTemp
-                        
-                        'frmChat.AddChat vbRed, flTemp.Name & ":" & flTemp.DisplayName
-                        
-                        RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.Game, flTemp.Location, flTemp.Status, _
-                             flTemp.LocationID)
-                    'End If
-                        
+                    ' Add to the internal list
+                    g_Friends.Add flTemp
+
+                    RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.Game, flTemp.Location, flTemp.Status, _
+                         flTemp.LocationID)
+                         
                     Set flTemp = Nothing
-                    
                 Next n
             End If
             
-        Case SID_FRIENDUPDATE
-            Exit Sub
-        
+        Case SID_FRIENDSUPDATE
+            '0x66 packet format
             '(BYTE)       Entry number
-            n = Asc(Mid$(Data, Position, 1)) + 1
+            '(BYTE)       Status
+            '(BYTE)       Location
+            '(DWORD)      ProductID
+            '(STRING)     Location name
             
-            Position = 2 ' Position + 1
+            n = pBuff.GetByte() + 1
             
             With g_Friends(n)
-                '(BYTE) Flags
-                bytTemp = Asc(Mid$(Data, Position, 1))
-                Position = Position + 1
-                .Status = bytTemp
+                .Status = pBuff.GetByte()       ' Status
+                .LocationID = pBuff.GetByte()   ' Location
                 
-                '(BYTE) Location
-                bytTemp = Asc(Mid$(Data, Position, 1))
-                Position = Position + 1
-                .LocationID = bytTemp
+                ' NOTE: There is a server bug here where, when this packet is sent automaticlaly
+                '   (not requested), the ProductID field contains your own product instead.
+                '   Because of this, we ignore that field completely and wait for the periodic updates
+                '   to update the value.
+                '   (see: https://bnetdocs.org/packet/384/sid-friendsupdate)
                 
-                '(DWORD) Product ID
-                s = Mid$(Data, Position, 4)
-                Position = Position + 4
-                .Game = StrReverse(s)
-
-                '(STRING) Location str (blank = private)
-                s = Mid$(Data, Position)
+                pBuff.GetDWORD
+                ' Product ID
+                '.Game = StrReverse(pBuff.GetRaw(4))
+                'If Conv(.Game) = 0 Then
+                '    .Game = "OFFL"
+                'End If
                 
-                If (Len(s) > 1) Then
-                    s = Left$(s, Len(s) - 1)
-                End If
-                
-                .Location = IIf(LenB(s) > 0, s, "(private)")
+                ' Location name
+                .Location = pBuff.GetString()
                 
                 RaiseEvent FriendUpdate(.DisplayName, n)
             End With
         
-        Case SID_FRIENDADDED
-            Exit Sub
-        
+        Case SID_FRIENDSADD
+            '0x67 packet format
+            '(STRING)       Account
+            '(BYTE)         Status
+            '(BYTE)         Location
+            '(DWORD)        ProductID
+            '(STRING)       Location name
+            
             Set flTemp = New clsFriendObj
         
             With flTemp
-                '(STRING)         Account
-                s = KillNull(Mid$(Data, Position))
-                Position = Position + Len(s) + 1
-                .Name = s
-                            
-                '(BYTE)       Friend Status
-                bytTemp = Asc(Mid$(Data, Position, 1))
-                Position = Position + 1
-                .Status = bytTemp
+                .Name = pBuff.GetString()       ' Account
+                .Status = pBuff.GetByte()       ' Status
+                .LocationID = pBuff.GetByte()   ' Location
                 
-                '(BYTE)       Friend Location
-                bytTemp = Asc(Mid$(Data, Position, 1))
-                Position = Position + 1
-                .LocationID = bytTemp
+                ' Product ID
+                .Game = StrReverse(pBuff.GetRaw(4))
+                If Conv(.Game) = 0 Then
+                    .Game = "OFFL"
+                End If
                 
-                '(DWORD)      ProductID
-                s = Mid$(Data, Position, 4)
-                Position = Position + 4
-                .Game = IIf(Conv(s) > 0, StrReverse(s), "OFFL")
-                
-                '(STRING)         Channel
-                s = KillNull(Mid$(Data, Position))
-                .Location = s
+                ' Location name
+                .Location = pBuff.GetString()
 
                 RaiseEvent FriendAdded(.DisplayName, .Game, .LocationID, .Status, .Location)
             End With
             
-            g_Friends.Add flTemp, flTemp.Name
+            ' Add to the internal list
+            g_Friends.Add flTemp
             
             Set flTemp = Nothing
         
-        Case SID_FRIENDREMOVED
-            Exit Sub
-        
+        Case SID_FRIENDSREMOVE
+            '0x68 packet format
             '(BYTE)       Entry Number
-            bytTemp = Asc(Mid$(Data, 1, 1)) + 1
             
-            If bytTemp > 0 And bytTemp <= g_Friends.Count Then
-                RaiseEvent FriendRemoved(g_Friends.Item(bytTemp).DisplayName)
+            n = pBuff.GetByte() + 1
+            
+            If n > 0 And n <= g_Friends.Count Then
+                RaiseEvent FriendRemoved(g_Friends.Item(n).DisplayName)
                 
-                g_Friends.Remove bytTemp
+                g_Friends.Remove n
             End If
+        
+        Case SID_FRIENDSPOSITION
+            '0x69 packet format
+            '(BYTE)     Old Position
+            '(BYTE)     New Position
             
-        
-        Case SID_FRIENDMOVED
-            Exit Sub
-        
-            '(BYTE) Old Position
-            '(BYTE) New Position
             Set flTemp = Nothing
             RaiseEvent FriendMoved
-            
     
     End Select
     
@@ -265,6 +211,17 @@ Public Function UsernameToFLIndex(ByVal sUsername As String) As Integer
             End If
         Next i
     End If
+End Function
+
+' Returns true if the specified product automatically receives friend update packets.
+'   (SID_FRIENDSUPDATE, SID_FRIENDSADD, SID_FRIENDSREMOVE, SID_FRIENDSPOSITION)
+Public Function SupportsFriendPackets(ByVal sProduct As String) As Boolean
+    Select Case GetProductInfo(sProduct).Code
+        Case PRODUCT_STAR, PRODUCT_SEXP, PRODUCT_WAR3, PRODUCT_W3XP
+            SupportsFriendPackets = True
+        Case Else
+            SupportsFriendPackets = False
+    End Select
 End Function
 
 

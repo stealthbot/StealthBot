@@ -3317,8 +3317,12 @@ Public Sub AddFriend(ByVal Username As String, ByVal Product As String, IsOnline
 End Sub
 
 Private Sub FriendListHandler_FriendAdded(ByVal Username As String, ByVal Product As String, ByVal Location As Byte, ByVal Status As Byte, ByVal Channel As String)
-    'AddFriend Username, Product, (Location > 0)
-    'lblCurrentChannel.Caption = GetChannelString
+    AddFriend Username, Product, (Location > 0)
+    lblCurrentChannel.Caption = GetChannelString
+End Sub
+
+Private Sub FriendListHandler_FriendListReceived(ByVal FriendCount As Byte)
+    lvFriendList.ListItems.Clear
 End Sub
 
 Private Sub FriendListHandler_FriendListEntry(ByVal Username As String, ByVal Product As String, ByVal Channel As String, ByVal Status As Byte, ByVal Location As Byte)
@@ -3327,23 +3331,21 @@ Private Sub FriendListHandler_FriendListEntry(ByVal Username As String, ByVal Pr
 End Sub
 
 Private Sub FriendListHandler_FriendMoved()
-    'lvFriendList.ListItems.Clear
-    Call FriendListHandler.ResetList
     Call FriendListHandler.RequestFriendsList(PBuffer)
 End Sub
 
 Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
-    'Dim X As ListItem
+    Dim flItem As ListItem
     
-    'Set X = lvFriendList.FindItem(Username)
+    Set flItem = lvFriendList.FindItem(Username)
    
-    'If (Not (X Is Nothing)) Then
-    '    lvFriendList.ListItems.Remove X.index
-    '
-    '    Set X = Nothing
-    'End If
+    If (Not (flItem Is Nothing)) Then
+        lvFriendList.ListItems.Remove flItem.Index
     
-    'lblCurrentChannel.Caption = GetChannelString
+        Set flItem = Nothing
+    End If
+    
+    lblCurrentChannel.Caption = GetChannelString
 End Sub
 
 Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLIndex As Byte)
@@ -6044,16 +6046,14 @@ End Sub
 ' PROFILE AMP (1 minute - useful minimum song length)
 ' BNCS.SID_NULL (2 minutes - keep alive)
 ' BNCS.SID_CLANMOTD (10 minutes - may change)
-' BNCS.SID_FRIENDSLIST (10 minutes - for D1,W2,D2 [no update], SC,W3 [bug in SID_FRIENDSUPDATE])
+' BNCS.SID_FRIENDSLIST (5 minutes - for D1,W2,D2 [no update], SC,W3 [bug in SID_FRIENDSUPDATE])
 Private Sub tmrIdleTimer_Timer()
     On Error GoTo ERROR_HANDLER
 
-' long-counter
-Static lCounter As Long
+    ' long-counter
+    Static lCounter As Long
     
     lCounter = lCounter + 1
-    
-    'If lCounter >
     
     If g_Online Then
         ' bot idle (30 second interval (x config value), offset 0 seconds)
@@ -6083,14 +6083,11 @@ Static lCounter As Long
                 ' request clan MOTD instead of NULL
                 'AddQ "CLAN MOTD"
                 RequestClanMOTD
-            ' if friend list updates enabled, then (10 minute interval; offset -15 seconds from 4th minute)
-            ElseIf Config.FriendsListTab And (lCounter Mod 600&) = 225& Then
+            ' if friend list updates enabled, then (5 minute interval; offset -15 seconds from 4th minute)
+            ElseIf Config.FriendsListTab And (lCounter Mod 300&) = 225& Then
                 ' request friendlist instead of FL
                 'AddQ "FRIENDS"
-                If (lvFriendList.ListItems.Count > 0) And (Not _
-                        (BotVars.Product = "PX3W" Or BotVars.Product = "3RAW" Or _
-                        BotVars.Product = "PXES" Or BotVars.Product = "RATS")) Then
-                    ' do not request friends list if list confirmed empty (SC,W3 will be updated on /f a)
+                If (lvFriendList.ListItems.Count > 0) Then
                     Call FriendListHandler.RequestFriendsList(PBuffer)
                 Else
                     PBuffer.SendPacket SID_NULL

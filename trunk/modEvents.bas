@@ -868,10 +868,10 @@ On Error GoTo ERROR_HANDLER:
             (InStr(1, Message, " in your friends list.", vbBinaryCompare) > 0) Or _
             (InStr(1, Message, " of your friends list.", vbBinaryCompare) > 0)) Then
             
-            frmChat.lvFriendList.ListItems.Clear
-            
             If Config.FriendsListTab Then
-                Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
+                If Not frmChat.FriendListHandler.SupportsFriendPackets(Config.Game) Then
+                    Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
+                End If
             End If
         End If
         
