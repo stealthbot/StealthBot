@@ -57,8 +57,12 @@ Public UserCancelledConnect As Boolean
 Public BotIsClosing As Boolean
 
 'To determine when to reset the BNLS list for the auto-BNLS server locator
-Public GotBNLSList As Boolean
-Public LocatingAltBNLS As Boolean
+Public BNLSFinderGotList   As Boolean
+Public BNLSFinderEntries() As String
+Public BNLSFinderIndex     As Integer
+Public BNLSFinderLatest    As String
+
+Public Const ERROR_FINDBNLSSERVER As Integer = 12345
 
 'VARIABLES
 Public CurrentUsername As String

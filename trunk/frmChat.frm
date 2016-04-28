@@ -1970,7 +1970,7 @@ Private Sub Form_Load()
     #End If
     
     If Not Config.DisableNews Then
-        Call DoINetRequest(GetNewsURL(), SB_INET_NEWS1, True)
+        Call RequestINetPage(GetNewsURL(), SB_INET_NEWS1, True)
     ElseIf Config.AutoConnect Then
         Call DoConnect
     End If
@@ -2070,14 +2070,17 @@ ERROR_HANDLER:
 End Sub
 
 ' asynchronous INet
-Private Function DoINetRequest(ByVal URL As String, ByVal Request As String, ByVal CancelStillExecuting As Boolean) As Boolean
+Private Function RequestINetPage(ByVal URL As String, ByVal Request As String, ByVal CancelStillExecuting As Boolean) As Boolean
+    On Error GoTo ERROR_HANDLER:
+
     Dim ret As String
     With INet
         If .StillExecuting Then
             If CancelStillExecuting Then
                 .Cancel
             Else
-                DoINetRequest = False
+                RequestINetPage = False
+                
                 Exit Function
             End If
         End If
@@ -2086,8 +2089,17 @@ Private Function DoINetRequest(ByVal URL As String, ByVal Request As String, ByV
         .Tag = Request
         .Execute URL
         
-        DoINetRequest = True
+        RequestINetPage = True
     End With
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in RequestINetPage()."
+    
+    RequestINetPage = False
+    
+    Exit Function
 End Function
 
 ' asynchronous INet response
@@ -2123,6 +2135,10 @@ Private Sub INet_StateChanged(ByVal State As Integer)
                     End If
                 Case SB_INET_VBYTE
                     Call HandleUpdateVerbyte(Buffer, INet.ResponseCode)
+                Case SB_INET_BNLS1
+                    Call HandleFindBNLSServerListResult(Buffer, INet.ResponseCode, True)
+                Case SB_INET_BNLS2
+                    Call HandleFindBNLSServerListResult(Buffer, INet.ResponseCode, False)
             End Select
             
             INet.Tag = SB_INET_UNSET
@@ -2413,12 +2429,11 @@ Public Function HandleBnlsError(ByVal ErrorMessage As String) As Boolean
     
     ' Is the BNLS server finder enabled?
     If Config.BNLSFinder Then
-        LocatingAltBNLS = True
         Call RotateBnlsServer
     Else
         AddChat RTBColors.ErrorMessageText, ErrorMessage
-        UserCancelledConnect = False
         
+        UserCancelledConnect = False
         DoDisconnect 1, True
     End If
     
@@ -2437,132 +2452,120 @@ Public Sub RotateBnlsServer()
     'Notify user other BNLS servers are being located
     AddChat RTBColors.InformationText, "[BNLS] Locating other BNLS servers..."
     
-    Call DoDisconnect
+    Call FindBNLSServer
+End Sub
+
+Public Sub HandleFindBNLSServerListResult(ByVal strReturn As String, ByVal Result As Integer, ByVal ConfigListSource As Boolean)
+    ' convert to LF
+    strReturn = Replace(strReturn, vbCr, vbLf)
+    strReturn = Replace(strReturn, vbLf & vbLf, vbLf)
     
-    BotVars.BNLSServer = FindBnlsServer()
-    If Len(BotVars.BNLSServer) = 0 Then
-        Call DoDisconnect
+    If (INet.ResponseCode <> 0) Or (Right$(strReturn, 1) <> vbLf) Then
+        If ConfigListSource Then
+            If Not RequestINetPage(BNLS_DEFAULT_SOURCE, SB_INET_BNLS2, True) Then
+                Call HandleFindBNLSServerListResult("INet is busy", -1, False)
+            End If
+        Else
+            AddChat RTBColors.ErrorMessageText, "[BNLS] " & strReturn & ". Unable to use BNLS server finder."
+            AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured while trying to locate an alternative BNLS server."
+            AddChat RTBColors.ErrorMessageText, "[BNLS]   You may not be connected to the internet or may be having DNS resolution issues."
+            AddChat RTBColors.ErrorMessageText, "[BNLS]   Visit http://www.stealthbot.net/ and check the Technical Support forum for more information."
+            DoDisconnect
+    
+            ' ensure that we update our listing on following connection(s)
+            BNLSFinderGotList = False
+            
+            ' ensure checker starts at 0 again on following connection(s)
+            BNLSFinderIndex = 0
+        End If
+        
         Exit Sub
+    Else
+        ' Split the page up into an array of servers.
+        BNLSFinderEntries() = Split(strReturn, vbLf)
     End If
     
-    'Reconnect BNLS using the newly located BNLS server
-    With sckBNLS
-        .RemoteHost = BotVars.BNLSServer
-        .Connect
-    End With
+    'Mark GotBNLSList as True so it's no longer downloaded for each attempt
+    BNLSFinderGotList = True
     
-    AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
+    Call FindBNLSServerEntry
 End Sub
 
 'Locates alternative BNLS servers for the bot to use if the current one fails
-'Added by FrOzeN on 2/sep/09
-'Last updated by FrOzeN on 4/sep/09
-'Broken apart and moved around by Pyro, 2016-03-27
-Public Function FindBnlsServer()
+Public Sub FindBNLSServer()
     'Error handler
-    On Error GoTo BNLS_Alt_Finder_Error
+    On Error GoTo ERROR_HANDLER
     
-    Static strBNLS()   As String
-    Static intCounter  As Integer
-    Static firstServer As String
-    
-    Const FIND_ALT_BNLS_ERROR As Integer = 12345
-    
-    FindBnlsServer = vbNullString
-        
-    intCounter = intCounter + 1
+    BNLSFinderIndex = BNLSFinderIndex + 1
     
     'Check if the BNLS list has been downloaded
-    If (GotBNLSList = False) Then
-        Dim strReturn As String
-        
+    If (BNLSFinderGotList = False) Then
         'Reset the counter
-        intCounter = 0
-                
-        If (INet.StillExecuting = False) Then
-            ' store first bnls server used so that we can avoid connecting to it again
-            firstServer = BotVars.BNLSServer
+        BNLSFinderIndex = 0
         
-            'Get the servers as a list from http://stealthbot.net/p/bnls.php
-            strReturn = vbNullString
-            If (LenB(Config.BNLSFinderSource) > 0) Then
-                strReturn = INet.OpenURL(Config.BNLSFinderSource)
+        ' store first bnls server used so that we can avoid connecting to it again
+        BNLSFinderLatest = BotVars.BNLSServer
+        
+        'Get the servers as a list from http://stealthbot.net/p/bnls.php
+        If (LenB(Config.BNLSFinderSource) > 0) Then
+            If Not RequestINetPage(Config.BNLSFinderSource, SB_INET_BNLS1, True) Then
+                Call HandleFindBNLSServerListResult("INet is busy", -1, False)
             End If
-            
-            If ((strReturn = vbNullString) Or (Right(strReturn, 2) <> vbCrLf)) Then
-                strReturn = INet.OpenURL(BNLS_DEFAULT_SOURCE)
-                If ((strReturn = vbNullString) Or (Left(strReturn, 1) <> vbLf)) Then
-                    AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured while trying to locate an alternative BNLS server."
-                    AddChat RTBColors.ErrorMessageText, "[BNLS]   You may not be connected to the internet or may be having DNS resolution issues."
-                    AddChat RTBColors.ErrorMessageText, "[BNLS]   Visit http://www.stealthbot.net/ and check the Technical Support forum for more information."
-            
-                    ' ensure that we update our listing on following connection(s)
-                    GotBNLSList = False
-                    
-                    ' ensure checker starts at 0 again on following connection(s)
-                    intCounter = 0
-            
-                    Exit Function
-                Else
-                    ' Split the page up into an array of servers.
-                    strBNLS() = Split(strReturn, vbLf)
-                End If
-            Else
-                ' Split the page up into an array of servers.
-                strBNLS() = Split(strReturn, vbCrLf)
-            End If
-            
-            'Mark GotBNLSList as True so it's no longer downloaded for each attempt
-            GotBNLSList = True
         Else
-            'The Inet control seems to still be running
-            Err.Raise FIND_ALT_BNLS_ERROR, , "Unable to use BNLS server finder. Visit http://www.stealthbot.net/ " & _
-                "and check the Technical Support forum for more information."
+            If Not RequestINetPage(BNLS_DEFAULT_SOURCE, SB_INET_BNLS2, True) Then
+                Call HandleFindBNLSServerListResult("INet is busy", -1, False)
+            End If
         End If
+        
+        Exit Sub
     End If
     
-    If intCounter > UBound(strBNLS) Then
+    Call FindBNLSServerEntry
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+
+    'Display the error message to the user
+    If Err.Number = ERROR_FINDBNLSSERVER Then
+        AddChat RTBColors.ErrorMessageText, "[BNLS] " & Err.description
+        AddChat RTBColors.ErrorMessageText, "[BNLS]   Visit http://www.stealthbot.net/ and check the Technical Support forum for more information."
+        DoDisconnect
+        
+        ' ensure that we update our listing on following connection(s)
+        BNLSFinderGotList = False
+        
+        ' ensure checker starts at 0 again on following connection(s)
+        BNLSFinderIndex = 0
+    
+    Else
+        Resume Next
+    End If
+
+    Exit Sub
+End Sub
+
+Sub FindBNLSServerEntry()
+    If BNLSFinderIndex > UBound(BNLSFinderEntries) Then
         'All BNLS servers have been tried and failed
-        Err.Raise FIND_ALT_BNLS_ERROR, , "All the BNLS servers have failed. Visit http://www.stealthbot.net/ " & _
-            "and check the Technical Support forum for more information."
+        Err.Raise ERROR_FINDBNLSSERVER, , "All the BNLS servers have failed."
     End If
     
     ' keep increasing counter until we find a server that is valid and isn't the same as the first one
-    Do While (StrComp(strBNLS(intCounter), firstServer, vbTextCompare) = 0) Or (LenB(strBNLS(intCounter)) = 0)
-        intCounter = intCounter + 1
+    Do While (StrComp(BNLSFinderEntries(BNLSFinderIndex), BNLSFinderLatest, vbTextCompare) = 0) Or (LenB(BNLSFinderEntries(BNLSFinderIndex)) = 0)
+        BNLSFinderIndex = BNLSFinderIndex + 1
         
-        If intCounter > UBound(strBNLS) Then
+        If BNLSFinderIndex > UBound(BNLSFinderEntries) Then
             'All BNLS servers have been tried and failed
-            Err.Raise FIND_ALT_BNLS_ERROR, , "All the BNLS servers have failed. Visit http://www.stealthbot.net/ " & _
-                "and check the Technical Support forum for more information."
+            Err.Raise ERROR_FINDBNLSSERVER, , "All the BNLS servers have failed."
             Exit Do
         End If
     Loop
     
-    FindBnlsServer = strBNLS(intCounter)
-
-    Exit Function
+    BotVars.BNLSServer = BNLSFinderEntries(BNLSFinderIndex)
     
-BNLS_Alt_Finder_Error:
-
-    'Display the error message to the user
-    If Err.Number = FIND_ALT_BNLS_ERROR Then
-        AddChat RTBColors.ErrorMessageText, "[BNLS] " & Err.description
-        
-        ' ensure that we update our listing on following connection(s)
-        GotBNLSList = False
-        
-        ' ensure checker starts at 0 again on following connection(s)
-        intCounter = 0
-    
-    Else
-        
-        Resume Next
-    
-    End If
-
-    Exit Function
-End Function
+    ConnectBNLS
+End Sub
 
 ' Updated 8/8/07 to support new prefix/suffix box feature
 Sub Form_Resize()
@@ -4559,7 +4562,7 @@ Private Sub MoveFriend(startPos As Integer, endPos As Integer)
 End Sub
 
 Private Sub mnuGetNews_Click()
-    If Not DoINetRequest(GetNewsURL(), SB_INET_NEWS, False) Then
+    If Not RequestINetPage(GetNewsURL(), SB_INET_NEWS, False) Then
         Call HandleNews("INet is busy", -1)
     End If
 End Sub
@@ -4899,7 +4902,7 @@ Private Sub mnuToggleWWUse_Click()
 End Sub
 
 Private Sub mnuUpdateVerbytes_Click()
-    If Not DoINetRequest(VERBYTE_SOURCE, SB_INET_VBYTE, False) Then
+    If Not RequestINetPage(VERBYTE_SOURCE, SB_INET_VBYTE, False) Then
         Call HandleUpdateVerbyte("INet is busy", -1)
     End If
 End Sub
@@ -6289,8 +6292,27 @@ Private Sub txtPost_KeyPress(KeyAscii As Integer)
     End If
 End Sub
 
+Sub ConnectBNLS()
+    ' Don't try and connect if we don't have a server to connect to.
+    If Len(BotVars.BNLSServer) = 0 Then
+        AddChat RTBColors.ErrorMessageText, "[BNLS] A working BNLS server could not be found."
+        AddChat RTBColors.ErrorMessageText, "[BNLS]   Go to Settings -> Bot Settings -> Connection Settings -> Advanced and either set a server or use the automatic server finder."
+        Call DoDisconnect
+        Exit Sub
+    End If
+    
+    Call Event_BNLSConnecting
+    
+    With sckBNLS
+        If .State <> 0 Then .Close
+        
+        .RemoteHost = BotVars.BNLSServer
+        .RemotePort = 9367
+        .Connect
+    End With
+End Sub
+
 Sub Connect()
-    Dim BNLS As Byte
     Dim NotEnoughInfo As Boolean
     Dim MissingInfo As String
     
@@ -6380,28 +6402,13 @@ Sub Connect()
         If BotVars.BNLS Then
             If Len(BotVars.BNLSServer) = 0 Then
                 If BotVars.UseAltBnls Then
-                    BotVars.BNLSServer = FindBnlsServer()
+                    Call FindBNLSServer
+                    
+                    Exit Sub
                 End If
             End If
             
-            ' Don't try and connect if we don't have a server to connect to.
-            If Len(BotVars.BNLSServer) = 0 Then
-                AddChat RTBColors.ErrorMessageText, "[BNLS] A working BNLS server could not be found."
-                AddChat RTBColors.ErrorMessageText, "[BNLS]   Go to Settings -> Bot Settings -> Connection Settings -> Advanced and either set a server or use the automatic server finder."
-                Call DoDisconnect
-                Exit Sub
-            End If
-            
-            Call Event_BNLSConnecting
-            
-            With sckBNLS
-                If .State <> 0 Then .Close
-                
-                .RemoteHost = BotVars.BNLSServer
-                .RemotePort = 9367
-                .Connect
-            End With
-            BNLS = 1
+            Call ConnectBNLS
         Else
             Call Event_BNetConnecting
         End If
@@ -8045,7 +8052,7 @@ Sub DoConnect()
     UserCancelledConnect = False
     
     'Reset the BNLS auto-locator list
-    GotBNLSList = False
+    BNLSFinderGotList = False
     
     'If Not IsValidIPAddress(BotVars.Server) And BotVars.UseProxy Then
         'AddChat RTBColors.ErrorMessageText, "[PROXY] Proxied connections must use a direct server IP address, such as those listed below your desired gateway in the Connection Settings menu, to connect."
@@ -8178,6 +8185,14 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         
         ' clean up email reg
         Unload frmEMailReg
+        
+        ' close any pending INet
+        INet.Tag = SB_INET_UNSET
+        INet.Cancel
+        
+        ' reset BNLS finder
+        BNLSFinderGotList = False
+        BNLSFinderIndex = 0
         
         BotVars.LastChannel = vbNullString
         
