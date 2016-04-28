@@ -5910,12 +5910,8 @@ Private Sub sckBNet_Close()
     sckBNet.Close
     If sckBNLS.State <> 0 Then sckBNLS.Close
     
-    'If it's locating another BNLS then don't message the user about the disconnection to Battle.net
-    If LocatingAltBNLS Then
-        LocatingAltBNLS = False
-    Else
-        Call Event_BNetDisconnected
-    End If
+    Call Event_BNetDisconnected
+    
     ds.ClientToken = 0
     g_Connected = False
 End Sub
