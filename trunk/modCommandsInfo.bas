@@ -204,13 +204,13 @@ Public Sub OnHelp(Command As clsCommandObj)
     Else
         If (docs.aliases.Count > 1) Then
             Command.Respond StringFormat("[{0} (Aliases: {4})]: {1} (Syntax: {2}). {3}", _
-            docs.Name, docs.description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort, docs.AliasString)
+            docs.Name, docs.Description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort, docs.AliasString)
         ElseIf (docs.aliases.Count = 1) Then
             Command.Respond StringFormat("[{0} (Alias: {4})]: {1} (Syntax: {2}). {3}", _
-            docs.Name, docs.description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort, docs.AliasString)
+            docs.Name, docs.Description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort, docs.AliasString)
         Else
             Command.Respond StringFormat("[{0}]: {1} (Syntax: {2}). {3}", _
-            docs.Name, docs.description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort)
+            docs.Name, docs.Description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort)
         End If
     End If
     Set docs = Nothing
@@ -234,7 +234,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnHelpAttr()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnHelpAttr()."
 End Sub
 
 Public Sub OnHelpRank(Command As clsCommandObj)
@@ -258,7 +258,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnHelpRank()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnHelpRank()."
 End Sub
 
 Public Sub OnInfo(Command As clsCommandObj)
@@ -341,7 +341,7 @@ On Error GoTo ERROR_HANDLER
         
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnInitPerf()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnInitPerf()."
 End Sub
 
 Public Sub OnLastSeen(Command As clsCommandObj)
@@ -498,7 +498,7 @@ On Error GoTo ERROR_HANDLER
         Else
             Dim ScriptInfo  As Dictionary
             Dim Version     As String
-            Dim VerTotal    As Integer
+            Dim VerTotal    As Double
             Dim Author      As String
             Dim Description As String
             
@@ -512,7 +512,7 @@ On Error GoTo ERROR_HANDLER
             Author = ScriptInfo("Author")
             Description = ScriptInfo("Description")
             
-            If ((LenB(Author) = 0) And (VerTotal = 0)) Then
+            If ((LenB(Author) = 0) And (VerTotal = 0) And (LenB(Description) = 0)) Then
                 Command.Respond StringFormat("There is no additional information for the '{0}' script.", _
                     GetScriptName(Script.Name))
             Else
@@ -520,13 +520,13 @@ On Error GoTo ERROR_HANDLER
                     GetScriptName(Script.Name), _
                     IIf(VerTotal > 0, " v" & Version, vbNullString), _
                     IIf(LenB(Author) > 0, " by " & Author, vbNullString), _
-                    IIf(LenB(Description) > 0, ": " & Description, vbNullString))
+                    IIf(LenB(Description) > 0, ": " & Description, "."))
             End If
         End If
     End If
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnScriptDetail()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnScriptDetail()."
 End Sub
 
 Public Sub OnScripts(Command As clsCommandObj)
@@ -565,7 +565,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnScripts()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnScripts()."
 End Sub
 
 Public Sub OnServer(Command As clsCommandObj)
@@ -775,7 +775,7 @@ On Error GoTo ERROR_HANDLER
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.GetAllCommandsFor()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.GetAllCommandsFor()."
 End Function
 
 Public Function GetPing(ByVal Username As String) As Long
@@ -907,7 +907,7 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modCommandCode.SearchDatabase()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandCode.SearchDatabase()."
 End Sub
 
 ' Gets the number of non-null items in a list. Optionally passes the list formatted as a string.
