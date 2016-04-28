@@ -642,30 +642,36 @@ Public Property Get IconCode() As Integer
                 End If
             
             Case PRODUCT_D2DV, PRODUCT_D2XP
-                If (LenB(Statstring) > 0) Then
+                If (IsValid And LenB(Statstring) > 0) Then
                     IconCode = (ICON_START_D2 + CharacterClassID - 1)
                 End If
             
             Case PRODUCT_STAR, PRODUCT_SEXP
-                intWins = Wins
-                If (intWins > 10&) Then intWins = 10&
-                IconCode = CInt(ICON_START_SC + intWins)
-                
-                If IsSpawn Then IconCode = IC_STAR_SPAWN
+                If (IsValid) Then
+                    intWins = Wins
+                    If (intWins > 10&) Then intWins = 10&
+                    IconCode = CInt(ICON_START_SC + intWins)
+                    
+                    If IsSpawn Then IconCode = IC_STAR_SPAWN
+                End If
             
             Case PRODUCT_JSTR
-                intWins = Wins
-                If (intWins > 10&) Then intWins = 10&
-                IconCode = CInt(ICON_START_SC + intWins)
-                
-                If IsSpawn Then IconCode = IC_JSTR_SPAWN
+                If (IsValid) Then
+                    intWins = Wins
+                    If (intWins > 10&) Then intWins = 10&
+                    IconCode = CInt(ICON_START_SC + intWins)
+                    
+                    If IsSpawn Then IconCode = IC_JSTR_SPAWN
+                End If
             
             Case PRODUCT_W2BN
-                intWins = Wins
-                If (intWins > 10&) Then intWins = 10&
-                IconCode = CInt(ICON_START_W2 + intWins)
-                
-                If IsSpawn Then IconCode = IC_W2BN_SPAWN
+                If (IsValid) Then
+                    intWins = Wins
+                    If (intWins > 10&) Then intWins = 10&
+                    IconCode = CInt(ICON_START_W2 + intWins)
+                    
+                    If IsSpawn Then IconCode = IC_W2BN_SPAWN
+                End If
             
             Case PRODUCT_WAR3, PRODUCT_W3XP
                 IconCode = GetW3ImageListPosition(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1))
@@ -743,6 +749,7 @@ Private Sub Parse()
     If (Statstring = vbNullString) Then
         Exit Sub
     End If
+    
     Select Case (Game)
         Case PRODUCT_SSHR, PRODUCT_STAR, PRODUCT_JSTR, PRODUCT_SEXP
             Call ParseStarCraft
@@ -770,22 +777,28 @@ End Sub
 
 Private Sub ParseStarCraft()
     Dim Values() As String
+    Dim lngIsSpawn As Long
     
     ReDim Preserve Values(0)
     Values() = Split(Statstring, Space$(1))
     
-    If (UBound(Values) <> 8) Then
+    If (UBound(Values) >= 4) Then
+        LadderRating = Val(Values(0))
+        LadderRank = Val(Values(1))
+        Wins = Val(Values(2))
+        lngIsSpawn = Val(Values(3))
+        IsSpawn = CBool(lngIsSpawn)
+        
+        If (UBound(Values) >= 8) Then
+            Icon = CStr(Values(8))
+        End If
+    Else
         IsValid = False
-    
-        Exit Sub
     End If
-            
-    LadderRating = Val(Values(0))
-    LadderRank = Val(Values(1))
-    Wins = Val(Values(2))
-    IsSpawn = CBool(Val(Values(3)))
-    LadderRank = Val(Values(5))
-    Icon = CStr(Values(8))
+    
+    If lngIsSpawn < 0 Or lngIsSpawn > 1 Then
+        IsValid = False
+    End If
 End Sub
 
 Private Sub ParseDiablo()
@@ -810,14 +823,11 @@ Private Sub ParseDiablo()
     Vitality = Val(Values(6))
     Gold = Val(Values(7))
     lngIsSpawn = Val(Values(8))
+    IsSpawn = CBool(lngIsSpawn)
     
     If CharacterClassID < 0 Or CharacterClassID > 2 Or Dots < 0 Or Dots > 3 Or lngIsSpawn < 0 Or lngIsSpawn > 1 Then
         IsValid = False
-        
-        Exit Sub
     End If
-    
-    IsSpawn = CBool(lngIsSpawn)
 End Sub
 
 Private Sub ParseDiabloII()
@@ -833,17 +843,24 @@ Private Sub ParseDiabloII()
         
         If (UBound(Values) >= 2) Then
             MakeArr Values(2), charData
-        
-            CharacterClassID = charData(13)
-            Level = charData(25)
-            CharacterFlags = charData(26)
-        
-            If (UBound(charData) >= 26) Then
-                ActsCompleted = ((charData(27) Xor &H80) / 2)
-
-                IsLadderCharacter = (charData(30) <> &HFF)
+            
+            If (UBound(charData) >= 13) Then
+                CharacterClassID = charData(13)
+                If (UBound(charData) >= 27) Then
+                    Level = charData(25)
+                    CharacterFlags = charData(26)
+                    ActsCompleted = ((charData(27) Xor &H80) / 2)
+    
+                    If (UBound(charData) >= 30) Then
+                        IsLadderCharacter = (charData(30) <> &HFF)
+                    End If
+                End If
             End If
         End If
+    End If
+    
+    If CharacterClassID > 7 Or CharacterClassID < 0 Or CurrentDifficultyID > 3 Or CurrentDifficultyID < 0 Then
+        IsValid = False
     End If
 End Sub
 
@@ -858,11 +875,12 @@ Private Sub ParseWarCraftIII()
     Values() = Split(Statstring, Space$(1))
     
     If (UBound(Values) = 0) Then
+        Level = Val(Values(0))
         Exit Sub
     End If
     
-    Icon = Values(0)
     Level = Val(Values(1))
+    Icon = Values(0)
     
     If (UBound(Values) > 1) Then
         Clan = StrReverse$(Values(2))
@@ -872,18 +890,16 @@ End Sub
 Private Function StarCraft_ToString() As String
     Dim buf As String
     
-    If (Statstring = vbNullString) Then
+    If ((Statstring = vbNullString) Or (IsValid = False)) Then
         buf = " (No stats available)"
-    ElseIf (IsValid = False) Then
-        buf = " (Custom: " & Statstring & ")"
     Else
         buf = _
             " (" & Wins() & " wins" & IIf(LadderRating(), ", with a rating of " & LadderRating() & _
                 " on the ladder", "") & ")"
-    End If
-            
-    If (IsSpawn()) Then
-        buf = buf & " (spawn)"
+        
+        If (IsSpawn()) Then
+            buf = buf & " (spawn)"
+        End If
     End If
     
     StarCraft_ToString = buf
@@ -892,26 +908,27 @@ End Function
 Private Function Diablo_ToString() As String
     Dim buf As String
     
-    If (Statstring = vbNullString) Then
+    If ((Statstring = vbNullString) Or (IsValid = False)) Then
         buf = " (No stats available)"
-    ElseIf (IsValid = False) Then
-        buf = " (Custom: " & Statstring & ")"
     Else
         buf = _
             " (Level " & Level() & " " & CharacterClass() & " with " & Dots() & " dots, " & Strength() & _
                 " strength, " & Magic() & " magic, " & Dexterity() & " dexterity, " & Vitality() & _
                     " vitality, and " & Gold() & " gold)"
+        
+        If (IsSpawn()) Then
+            buf = buf & " (spawn)"
+        End If
     End If
     
-    If (IsSpawn()) Then
-        buf = buf & " (spawn)"
-    End If
     Diablo_ToString = buf
 End Function
 
 Private Function DiabloII_ToString() As String
     Dim buf As String
-    If ((Statstring = vbNullString) Or (IsValid = False)) Then
+    If (IsValid = False) Then
+        buf = " (No stats available)"
+    ElseIf (Statstring = vbNullString) Then
         buf = " (Open character)"
     Else
         buf = " ("
@@ -922,7 +939,7 @@ Private Function DiabloII_ToString() As String
                     IIf(IsLadderCharacter(), "ladder ", vbNullString) & CharacterClass()
         
         buf = _
-            buf & " on " & Realm() & ")"
+            buf & " on Realm " & Realm() & ")"
     End If
     
     DiabloII_ToString = buf
@@ -938,13 +955,10 @@ Private Function WarCraftIII_ToString() As String
     If ((Statstring = vbNullString) Or (IsValid = False)) Then
         buf = " (No stats available)"
     Else
+        buf = " (Level " & Level()
         If (IsWCG) Then
-            buf = " (" & IconName() & " icon"
-        Else
-            buf = " (Level " & Level()
-        End If
-        
-        If (Icon() <> vbNullString) Then
+            buf = buf & ", " & IconName() & " icon"
+        ElseIf (Icon() <> vbNullString) Then
             buf = buf & ", icon tier " & IconTier() & ", " & IconName() & " icon"
         End If
         
