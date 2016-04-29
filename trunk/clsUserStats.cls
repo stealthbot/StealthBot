@@ -926,10 +926,11 @@ End Function
 
 Private Function DiabloII_ToString() As String
     Dim buf As String
-    If (IsValid = False) Then
-        buf = " (No stats available)"
-    ElseIf (Statstring = vbNullString) Then
+    
+    If (Statstring = vbNullString) Then
         buf = " (Open character)"
+    ElseIf (IsValid = False) Then
+        buf = " (No stats available)"
     Else
         buf = " ("
 
