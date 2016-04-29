@@ -532,14 +532,18 @@ On Error GoTo ERROR_HANDLER:
     
                 
     If (LenB(sText) > 0) Then
-        Dim cUserStats As New clsUserStats
-        With cUserStats
-            .Statstring = sText
-            sProduct = .Game
-            sParsed = .ToString
-            sClanTag = .Clan
-        End With
-        Set cUserStats = Nothing
+        Select Case EventID
+            Case ID_JOIN, ID_USER, ID_USERFLAGS:
+                ' Use the statstring parser to determine some properties.
+                Dim cUserStats As New clsUserStats
+                With cUserStats
+                    .Statstring = sText
+                    sProduct = .Game
+                    sParsed = .ToString
+                    sClanTag = .Clan
+                End With
+                Set cUserStats = Nothing
+        End Select
     End If
                 
     If sProduct = PRODUCT_WAR3 Or sProduct = PRODUCT_W3XP Then
