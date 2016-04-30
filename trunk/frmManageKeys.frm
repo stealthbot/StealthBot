@@ -27,10 +27,10 @@ Begin VB.Form frmManageKeys
       Top             =   1320
       _ExtentX        =   1005
       _ExtentY        =   1005
-      BackColor       =   -2147483643
+      BackColor       =   0
       ImageWidth      =   28
       ImageHeight     =   18
-      MaskColor       =   12632256
+      UseMaskColor    =   0   'False
       _Version        =   393216
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   8
@@ -39,31 +39,31 @@ Begin VB.Form frmManageKeys
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":2FD7
+            Picture         =   "frmManageKeys.frx":028E
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":3347
+            Picture         =   "frmManageKeys.frx":0528
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":638D
+            Picture         =   "frmManageKeys.frx":07D2
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":9858
+            Picture         =   "frmManageKeys.frx":0B84
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":CA84
+            Picture         =   "frmManageKeys.frx":0E1A
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":F08C
+            Picture         =   "frmManageKeys.frx":11C8
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":1186F
+            Picture         =   "frmManageKeys.frx":1802
             Key             =   ""
          EndProperty
       EndProperty
@@ -242,7 +242,7 @@ Private Sub cmdSetKey_Click()
         If ((lvKeys.SelectedItem.SmallIcon = 6) Or (lvKeys.SelectedItem.SmallIcon = 8)) Then
             frmChat.SettingsForm.txtExpKey.Text = lvKeys.SelectedItem.Tag
         Else
-            frmChat.SettingsForm.txtCdKey.Text = lvKeys.SelectedItem.Tag
+            frmChat.SettingsForm.txtCDKey.Text = lvKeys.SelectedItem.Tag
         End If
         
         Call cmdDone_Click
@@ -263,12 +263,12 @@ Private Sub cmdEdit_Click()
 End Sub
 
 Private Sub lvKeys_Click()
-    Dim value As Boolean
-    value = (Not (lvKeys.SelectedItem Is Nothing))
+    Dim Value As Boolean
+    Value = (Not (lvKeys.SelectedItem Is Nothing))
     
-    cmdEdit.Enabled = value
-    cmdDelete.Enabled = value
-    cmdSetKey.Enabled = value
+    cmdEdit.Enabled = Value
+    cmdDelete.Enabled = Value
+    cmdSetKey.Enabled = Value
 End Sub
 
 Private Sub lvKeys_DblClick()

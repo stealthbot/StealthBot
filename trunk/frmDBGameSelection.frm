@@ -29,10 +29,10 @@ Begin VB.Form frmDBGameSelection
       Top             =   2280
       _ExtentX        =   1005
       _ExtentY        =   1005
-      BackColor       =   -2147483643
+      BackColor       =   0
       ImageWidth      =   28
       ImageHeight     =   18
-      MaskColor       =   12632256
+      UseMaskColor    =   0   'False
       _Version        =   393216
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   12
@@ -41,47 +41,47 @@ Begin VB.Form frmDBGameSelection
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBGameSelection.frx":3046
+            Picture         =   "frmDBGameSelection.frx":02AA
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBGameSelection.frx":61AF
+            Picture         =   "frmDBGameSelection.frx":0454
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBGameSelection.frx":93DB
+            Picture         =   "frmDBGameSelection.frx":06EA
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBGameSelection.frx":B9E3
+            Picture         =   "frmDBGameSelection.frx":0A98
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBGameSelection.frx":EEAE
+            Picture         =   "frmDBGameSelection.frx":0E4A
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBGameSelection.frx":11691
+            Picture         =   "frmDBGameSelection.frx":1484
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBGameSelection.frx":1483C
+            Picture         =   "frmDBGameSelection.frx":1626
             Key             =   ""
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBGameSelection.frx":17885
+            Picture         =   "frmDBGameSelection.frx":17C4
             Key             =   ""
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBGameSelection.frx":1A921
+            Picture         =   "frmDBGameSelection.frx":1A7E
             Key             =   ""
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBGameSelection.frx":1DE64
+            Picture         =   "frmDBGameSelection.frx":20C4
             Key             =   ""
          EndProperty
          BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBGameSelection.frx":207F5
+            Picture         =   "frmDBGameSelection.frx":26FE
             Key             =   ""
          EndProperty
       EndProperty
