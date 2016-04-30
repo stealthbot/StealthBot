@@ -4515,6 +4515,11 @@ Private Sub mnuDisableVoidView_Click()
     mnuDisableVoidView.Checked = Not (mnuDisableVoidView.Checked)
     Config.VoidView = Not CBool(mnuDisableVoidView.Checked)
     Call Config.Save
+    
+    If Config.VoidView And g_Channel.IsSilent Then
+        tmrSilentChannel(1).Enabled = Config.VoidView
+        AddQ "/unignore " & GetCurrentUsername
+    End If
 End Sub
 
 Private Sub mnuDisconnect2_Click()
@@ -5459,38 +5464,38 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             Case KEY_SPACE
                 With cboSend
                     If (LenB(LastWhisper) > 0) Then
-                        If (Len(.Text) >= 3) Then
-                            If StrComp(Left$(.Text, 3), "/r ", vbTextCompare) = 0 Then
+                        If (Len(.Text) >= 2) Then
+                            If StrComp(Left$(.Text, 2), "/r", vbTextCompare) = 0 Then
                                 .selStart = 0
                                 .selLength = Len(.Text)
                                 .SelText = _
-                                    "/w " & CleanUsername(LastWhisper, True) & " "
+                                    "/w " & CleanUsername(LastWhisper, True)
                                 .selStart = Len(.Text)
                             End If
                         End If
                         
-                        If (Len(.Text) >= 7) Then
-                            If StrComp(Left$(.Text, 7), "/reply ", vbTextCompare) = 0 Then
+                        If (Len(.Text) >= 6) Then
+                            If StrComp(Left$(.Text, 6), "/reply", vbTextCompare) = 0 Then
                                 .selStart = 0
                                 .selLength = Len(.Text)
                                 .SelText = _
-                                    "/w " & CleanUsername(LastWhisper, True) & " "
+                                    "/w " & CleanUsername(LastWhisper, True)
                                 .selStart = Len(.Text)
                             End If
                         End If
                     End If
                     
                     If (LenB(LastWhisperTo) > 0) Then
-                        If (Len(.Text) >= 4) Then
-                            If StrComp(Left$(.Text, 4), "/rw ", vbTextCompare) = 0 Then
+                        If (Len(.Text) >= 3) Then
+                            If StrComp(Left$(.Text, 3), "/rw", vbTextCompare) = 0 Then
                                 .selStart = 0
                                 .selLength = Len(.Text)
                                 
                                 If StrComp(LastWhisperTo, "%f%") = 0 Then
-                                    .SelText = "/f m "
+                                    .SelText = "/f m"
                                 Else
                                     .SelText = _
-                                        "/w " & CleanUsername(LastWhisperTo, True) & " "
+                                        "/w " & CleanUsername(LastWhisperTo, True)
                                 End If
                                 
                                 .selStart = Len(.Text)

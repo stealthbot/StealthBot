@@ -26,7 +26,7 @@ Private m_clan_rank        As Integer
 Private m_join_date        As Date
 Private m_last_speak_date  As Date
 Private m_stats_string     As String
-Private m_game             As String
+Private m_Game             As String
 Private m_total_bans       As Long
 Private m_total_kicks      As Long
 Private m_operator_date    As Date
@@ -67,11 +67,7 @@ Public Property Let CharacterName(ByVal str As String)
 End Property
 
 Public Property Get Game() As String
-    Game = m_game
-End Property
-
-Public Property Let Game(ByVal str As String)
-    m_game = str
+    Game = m_stats.Game
 End Property
 
 Public Property Get PendingBan() As Boolean
@@ -101,11 +97,7 @@ Public Property Let Statstring(ByVal str As String)
 End Property
 
 Public Property Get Clan() As String
-    Clan = m_clan
-End Property
-
-Public Property Let Clan(ByVal str As String)
-    m_clan = str
+    Clan = m_stats.Clan
 End Property
 
 Public Property Get DisplayName() As String
@@ -232,12 +224,10 @@ Public Sub DisplayQueue()
     
         Select Case (CurrentEvent.EventID)
             Case ID_USER
-                Call Event_UserInChannel(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, _
-                    CurrentEvent.GameID, CurrentEvent.Clan, CurrentEvent.Statstring, CurrentEvent.IconCode, j)
+                Call Event_UserInChannel(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, j)
                     
             Case ID_JOIN
-                Call Event_UserJoins(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, _
-                    CurrentEvent.GameID, CurrentEvent.Clan, CurrentEvent.Statstring, CurrentEvent.IconCode, j)
+                Call Event_UserJoins(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, j)
             
             Case ID_TALK
                 Call Event_UserTalk(Name, CurrentEvent.Flags, CurrentEvent.Message, CurrentEvent.Ping, j)
@@ -246,8 +236,7 @@ Public Sub DisplayQueue()
                 Call Event_UserEmote(Name, CurrentEvent.Flags, CurrentEvent.Message, j)
             
             Case ID_USERFLAGS
-                Call Event_FlagsUpdate(Name, CurrentEvent.Statstring, CurrentEvent.Flags, CurrentEvent.Ping, _
-                    CurrentEvent.GameID, j)
+                Call Event_FlagsUpdate(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, j)
         End Select
     Next j
     
@@ -270,9 +259,7 @@ Public Function Clone() As Object
     Clone.Name = Name
     Clone.Ping = Ping
     Clone.Flags = Flags
-    Clone.Clan = Clan
     Clone.CharacterName = CharacterName
-    Clone.Game = Game
     Clone.JoinTime = JoinTime
     Clone.LastTalkTime = LastTalkTime
     Clone.PassedChannelAuth = PassedChannelAuth

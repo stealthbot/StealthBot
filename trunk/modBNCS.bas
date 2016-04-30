@@ -524,37 +524,23 @@ On Error GoTo ERROR_HANDLER:
     EventID = pBuff.GetDWORD
     lFlags = pBuff.GetDWORD
     lPing = pBuff.GetDWORD
-    pBuff.GetDWORD 'IP Address
-    pBuff.GetDWORD 'Account Number
-    pBuff.GetDWORD 'Reg Auth
+    pBuff.GetDWORD                  'IP Address
+    pBuff.GetDWORD                  'Account Number
+    pBuff.GetDWORD                  'Reg Auth
     sUsername = pBuff.GetString
     sText = pBuff.GetString
     
                 
-    If (LenB(sText) > 0) Then
-        Dim cUserStats As New clsUserStats
-        With cUserStats
-            .Statstring = sText
-            sProduct = .Game
-            sParsed = .ToString
-            sClanTag = .Clan
-        End With
-        Set cUserStats = Nothing
-    End If
-                
-    If sProduct = PRODUCT_WAR3 Or sProduct = PRODUCT_W3XP Then
-        If Len(sText) > 4 Then sW3Icon = StrReverse(Mid$(sText, 6, 4))
-    End If
                 
     Select Case EventID
-        Case ID_JOIN:        Call Event_UserJoins(sUsername, lFlags, sParsed, lPing, sProduct, sClanTag, sText, sW3Icon)
+        Case ID_JOIN:        Call Event_UserJoins(sUsername, lFlags, sText, lPing)
         Case ID_LEAVE:       Call Event_UserLeaves(sUsername, lFlags)
-        Case ID_USER:        Call Event_UserInChannel(sUsername, lFlags, sParsed, lPing, sProduct, sClanTag, sText, sW3Icon)
+        Case ID_USER:        Call Event_UserInChannel(sUsername, lFlags, sText, lPing)
         Case ID_WHISPER:     Call Event_WhisperFromUser(sUsername, lFlags, sText, lPing)
         Case ID_TALK:        Call Event_UserTalk(sUsername, lFlags, sText, lPing)
         Case ID_BROADCAST:   Call Event_ServerInfo(sUsername, StringFormat("BROADCAST from {0}: {1}", sUsername, sText))
         Case ID_CHANNEL:     Call Event_JoinedChannel(sText, lFlags)
-        Case ID_USERFLAGS:   Call Event_FlagsUpdate(sUsername, sText, lFlags, lPing, sProduct)
+        Case ID_USERFLAGS:   Call Event_FlagsUpdate(sUsername, lFlags, sText, lPing)
         Case ID_WHISPERSENT: Call Event_WhisperToUser(sUsername, lFlags, sText, lPing)
         Case ID_CHANNELFULL, ID_CHANNELDOESNOTEXIST, ID_CHANNELRESTRICTED: Call Event_ChannelJoinError(EventID, sText)
         Case ID_INFO:        Call Event_ServerInfo(sUsername, sText)
