@@ -65,35 +65,35 @@ Begin VB.Form frmDBManager
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":08DF
+            Picture         =   "frmDBManager.frx":0949
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":094E
+            Picture         =   "frmDBManager.frx":09B8
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":09C9
+            Picture         =   "frmDBManager.frx":0A33
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":0A44
+            Picture         =   "frmDBManager.frx":0AAE
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":0CB9
+            Picture         =   "frmDBManager.frx":0D23
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":10B2
+            Picture         =   "frmDBManager.frx":111C
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":14BC
+            Picture         =   "frmDBManager.frx":1526
             Key             =   ""
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":176C
+            Picture         =   "frmDBManager.frx":17D6
             Key             =   ""
          EndProperty
       EndProperty
@@ -512,7 +512,7 @@ Private Sub Form_Load()
     Me.Icon = frmChat.Icon
     
     ' this line is gay but for some reason I can't set the ImageList for vbalTV in the designer/VB properties -Ribose
-    trvUsers.ImageList = icons.hImageList
+    trvUsers.ImageList = Icons.hImageList
     'TODO get images, because i broke the imagelist we had... :(
     
     ' has our database been loaded?
@@ -2474,7 +2474,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
     
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        "Error (#" & Err.Number & "): " & Err.description & " in DB_remove().")
+        "Error (#" & Err.Number & "): " & Err.Description & " in DB_remove().")
         
     DB_remove = False
     

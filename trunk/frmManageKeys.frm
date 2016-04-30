@@ -29,7 +29,7 @@ Begin VB.Form frmManageKeys
       _ExtentY        =   1005
       BackColor       =   0
       ImageWidth      =   28
-      ImageHeight     =   18
+      ImageHeight     =   14
       UseMaskColor    =   0   'False
       _Version        =   393216
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
@@ -39,31 +39,31 @@ Begin VB.Form frmManageKeys
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":028E
+            Picture         =   "frmManageKeys.frx":02C2
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":0528
+            Picture         =   "frmManageKeys.frx":04EC
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":07D2
+            Picture         =   "frmManageKeys.frx":0726
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":0B84
+            Picture         =   "frmManageKeys.frx":0A68
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":0E1A
+            Picture         =   "frmManageKeys.frx":0C8E
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":11C8
+            Picture         =   "frmManageKeys.frx":0FCC
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":1802
+            Picture         =   "frmManageKeys.frx":14B6
             Key             =   ""
          EndProperty
       EndProperty
