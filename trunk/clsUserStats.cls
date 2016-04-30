@@ -232,7 +232,7 @@ Public Property Let Statstring(ByVal str As String)
         Exit Property
     End If
     Game = StrReverse$(Left$(str, 4))
-    If (Len(str) >= 5) Then
+    If (Len(str) >= 4) Then
         str = Mid$(str, 5)
         
         If (Left$(str, 1) = " ") Then
@@ -620,69 +620,69 @@ Public Property Get IconCode() As Integer
     Dim intWins As Long
     
     If (BotVars.ShowStatsIcons) Then
-        Select Case (StrReverse$(Icon))
-            Case "WCRF": IconCode = IC_WCRF
-            Case "WCPL": IconCode = IC_WCPL
-            Case "WCGO": IconCode = IC_WCGO
-            Case "WCSI": IconCode = IC_WCSI
-            Case "WCBR": IconCode = IC_WCBR
-            Case "WCPG": IconCode = IC_WCPG
-        End Select
-        
-        If (IconCode) Then
-            Exit Property
-        End If
-        
-        Select Case Game
-            Case PRODUCT_DRTL, PRODUCT_DSHR
-                If (IsValid) Then
+        If (IsValid And LenB(Statstring) > 0) Then
+            Select Case (StrReverse$(Icon))
+                Case "WCRF": IconCode = IC_WCRF
+                Case "WCPL": IconCode = IC_WCPL
+                Case "WCGO": IconCode = IC_WCGO
+                Case "WCSI": IconCode = IC_WCSI
+                Case "WCBR": IconCode = IC_WCBR
+                Case "WCPG": IconCode = IC_WCPG
+            End Select
+            
+            If (IconCode) Then
+                Exit Property
+            End If
+            
+            Select Case Game
+                Case PRODUCT_DRTL, PRODUCT_DSHR
+                    ' display icon based on D1 class and number of dots
                     IconCode = (ICON_START_D1 + (CharacterClassID * 4) + Dots)
                     
+                    ' if spawn flag, use DSHR warrior
                     If IsSpawn Then IconCode = IC_DIAB_SPAWN
-                End If
-            
-            Case PRODUCT_D2DV, PRODUCT_D2XP
-                If (IsValid And LenB(Statstring) > 0) Then
-                    IconCode = (ICON_START_D2 + CharacterClassID - 1)
-                End If
-            
-            Case PRODUCT_STAR, PRODUCT_SEXP
-                If (IsValid) Then
-                    intWins = Wins
-                    If (intWins > 10&) Then intWins = 10&
-                    IconCode = CInt(ICON_START_SC + intWins)
-                    
-                    If IsSpawn Then IconCode = IC_STAR_SPAWN
-                End If
-            
-            Case PRODUCT_JSTR
-                If (IsValid) Then
-                    intWins = Wins
-                    If (intWins > 10&) Then intWins = 10&
-                    IconCode = CInt(ICON_START_SC + intWins)
-                    
-                    If IsSpawn Then IconCode = IC_JSTR_SPAWN
-                End If
-            
-            Case PRODUCT_W2BN
-                If (IsValid) Then
-                    intWins = Wins
-                    If (intWins > 10&) Then intWins = 10&
-                    IconCode = CInt(ICON_START_W2 + intWins)
-                    
-                    If IsSpawn Then IconCode = IC_W2BN_SPAWN
-                End If
-            
-            Case PRODUCT_WAR3, PRODUCT_W3XP
-                IconCode = GetW3ImageListPosition(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1))
                 
-                If (Game = PRODUCT_W3XP) Then
-                    IconCode = (ICON_START_W3XP + IconCode)
-                Else
-                    IconCode = (ICON_START_WAR3 + IconCode)
-                End If
-            
-        End Select
+                Case PRODUCT_D2DV, PRODUCT_D2XP
+                    ' display icon based on D2 class
+                    IconCode = (ICON_START_D2 + CharacterClassID - 1)
+                
+                Case PRODUCT_STAR, PRODUCT_SEXP, PRODUCT_SSHR, PRODUCT_JSTR, PRODUCT_W2BN
+                    ' display icon based on wins
+                    intWins = Wins
+                    If (intWins > 10&) Then intWins = 10&
+                    
+                    ' choose starting point
+                    If Game = PRODUCT_W2BN Then
+                        IconCode = CInt(ICON_START_W2 + intWins)
+                    Else
+                        IconCode = CInt(ICON_START_SC + intWins)
+                    End If
+                    
+                    ' if spawn flag, use spawn icon
+                    If IsSpawn Then
+                        Select Case Game
+                            Case PRODUCT_W2BN: IconCode = IC_W2BN_SPAWN
+                            Case PRODUCT_JSTR: IconCode = IC_JSTR_SPAWN
+                            Case Else:         IconCode = IC_STAR_SPAWN
+                        End Select
+                    End If
+                
+                Case PRODUCT_WAR3, PRODUCT_W3XP
+                    ' if icon field is present
+                    If (LenB(Icon()) > 0) Then
+                        ' display icon
+                        IconCode = GetW3ImageListPosition(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1))
+                        
+                        ' choose starting point
+                        If (Game = PRODUCT_W3XP) Then
+                            IconCode = (ICON_START_W3XP + IconCode)
+                        Else
+                            IconCode = (ICON_START_WAR3 + IconCode)
+                        End If
+                    End If
+                
+            End Select
+        End If
     End If
     
     If ((IconCode = 0) Or (IconCode = ICUNKNOWN)) Then
@@ -745,10 +745,8 @@ End Function
 Private Sub Parse()
     On Error GoTo ERROR_HANDLER
     
-    IsValid = True
-    If (Statstring = vbNullString) Then
-        Exit Sub
-    End If
+    ' empty stats are invalid, unless a specific product says otherwise
+    IsValid = False
     
     Select Case (Game)
         Case PRODUCT_SSHR, PRODUCT_STAR, PRODUCT_JSTR, PRODUCT_SEXP
@@ -779,6 +777,12 @@ Private Sub ParseStarCraft()
     Dim Values() As String
     Dim lngIsSpawn As Long
     
+    If (Statstring = vbNullString) Then
+        Exit Sub
+    End If
+    
+    IsValid = True
+    
     ReDim Preserve Values(0)
     Values() = Split(Statstring, Space$(1))
     
@@ -804,6 +808,12 @@ End Sub
 Private Sub ParseDiablo()
     Dim Values() As String
     Dim lngIsSpawn As Long
+    
+    If (Statstring = vbNullString) Then
+        Exit Sub
+    End If
+    
+    IsValid = True
     
     ReDim Preserve Values(0)
     Values() = Split(Statstring, Space$(1))
@@ -833,6 +843,13 @@ End Sub
 Private Sub ParseDiabloII()
     Dim Values()   As String
     Dim charData() As Integer
+    
+    ' empty D2 stats is valid ("Open character")
+    IsValid = True
+    
+    If (Statstring = vbNullString) Then
+        Exit Sub
+    End If
     
     ReDim Preserve Values(0)
     Values() = Split(Statstring, ",", 3)
@@ -871,6 +888,12 @@ End Sub
 Private Sub ParseWarCraftIII()
     Dim Values() As String
     
+    If (Statstring = vbNullString) Then
+        Exit Sub
+    End If
+    
+    IsValid = True
+    
     ReDim Preserve Values(0)
     Values() = Split(Statstring, Space$(1))
     
@@ -890,8 +913,10 @@ End Sub
 Private Function StarCraft_ToString() As String
     Dim buf As String
     
-    If ((Statstring = vbNullString) Or (IsValid = False)) Then
+    If (Statstring = vbNullString) Then
         buf = " (No stats available)"
+    ElseIf (IsValid = False) Then
+        buf = " (Unrecognized stats)"
     Else
         buf = _
             " (" & Wins() & " wins" & IIf(LadderRating(), ", with a rating of " & LadderRating() & _
@@ -908,8 +933,10 @@ End Function
 Private Function Diablo_ToString() As String
     Dim buf As String
     
-    If ((Statstring = vbNullString) Or (IsValid = False)) Then
+    If (Statstring = vbNullString) Then
         buf = " (No stats available)"
+    ElseIf (IsValid = False) Then
+        buf = " (Unrecognized stats)"
     Else
         buf = _
             " (Level " & Level() & " " & CharacterClass() & " with " & Dots() & " dots, " & Strength() & _
@@ -926,10 +953,11 @@ End Function
 
 Private Function DiabloII_ToString() As String
     Dim buf As String
-    If (IsValid = False) Then
-        buf = " (No stats available)"
-    ElseIf (Statstring = vbNullString) Then
+    
+    If (Statstring = vbNullString) Then
         buf = " (Open character)"
+    ElseIf (IsValid = False) Then
+        buf = " (Unrecognized stats)"
     Else
         buf = " ("
 
@@ -952,8 +980,10 @@ End Function
 Private Function WarCraftIII_ToString() As String
     Dim buf As String
     
-    If ((Statstring = vbNullString) Or (IsValid = False)) Then
+    If (Statstring = vbNullString) Then
         buf = " (No stats available)"
+    ElseIf (IsValid = False) Then
+        buf = " (Unrecognized stats)"
     Else
         buf = " (Level " & Level()
         If (IsWCG) Then
