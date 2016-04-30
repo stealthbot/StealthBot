@@ -26,7 +26,7 @@ Private m_clan_rank        As Integer
 Private m_join_date        As Date
 Private m_last_speak_date  As Date
 Private m_stats_string     As String
-Private m_game             As String
+Private m_Game             As String
 Private m_total_bans       As Long
 Private m_total_kicks      As Long
 Private m_operator_date    As Date
@@ -67,11 +67,7 @@ Public Property Let CharacterName(ByVal str As String)
 End Property
 
 Public Property Get Game() As String
-    Game = m_game
-End Property
-
-Public Property Let Game(ByVal str As String)
-    m_game = str
+    Game = m_stats.Game
 End Property
 
 Public Property Get PendingBan() As Boolean
@@ -101,11 +97,7 @@ Public Property Let Statstring(ByVal str As String)
 End Property
 
 Public Property Get Clan() As String
-    Clan = m_clan
-End Property
-
-Public Property Let Clan(ByVal str As String)
-    m_clan = str
+    Clan = m_stats.Clan
 End Property
 
 Public Property Get DisplayName() As String
@@ -270,9 +262,7 @@ Public Function Clone() As Object
     Clone.Name = Name
     Clone.Ping = Ping
     Clone.Flags = Flags
-    Clone.Clan = Clan
     Clone.CharacterName = CharacterName
-    Clone.Game = Game
     Clone.JoinTime = JoinTime
     Clone.LastTalkTime = LastTalkTime
     Clone.PassedChannelAuth = PassedChannelAuth

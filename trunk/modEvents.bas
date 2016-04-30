@@ -85,8 +85,6 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
             With UserObj
                 .Name = Username
                 .Statstring = Message
-                .Clan = .Stats.Clan
-                .Game = Product
             End With
         End If
     End If
@@ -1179,10 +1177,8 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     With UserObj
         .Name = Username
         .Flags = Flags
-        .Game = Product
         .Ping = Ping
         .JoinTime = g_Channel.JoinTime
-        .Clan = sClan
         .Statstring = originalstatstring
     End With
     
@@ -1365,9 +1361,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                 .Name = Username
                 .Flags = Flags
                 .Ping = Ping
-                .Game = Product
                 .JoinTime = UtcNow
-                .Clan = sClan
                 .Statstring = originalstatstring
             End With
 
