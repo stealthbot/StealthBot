@@ -224,12 +224,10 @@ Public Sub DisplayQueue()
     
         Select Case (CurrentEvent.EventID)
             Case ID_USER
-                Call Event_UserInChannel(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, _
-                    CurrentEvent.GameID, CurrentEvent.Clan, CurrentEvent.Statstring, CurrentEvent.IconCode, j)
+                Call Event_UserInChannel(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, j)
                     
             Case ID_JOIN
-                Call Event_UserJoins(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, _
-                    CurrentEvent.GameID, CurrentEvent.Clan, CurrentEvent.Statstring, CurrentEvent.IconCode, j)
+                Call Event_UserJoins(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, j)
             
             Case ID_TALK
                 Call Event_UserTalk(Name, CurrentEvent.Flags, CurrentEvent.Message, CurrentEvent.Ping, j)
@@ -238,8 +236,7 @@ Public Sub DisplayQueue()
                 Call Event_UserEmote(Name, CurrentEvent.Flags, CurrentEvent.Message, j)
             
             Case ID_USERFLAGS
-                Call Event_FlagsUpdate(Name, CurrentEvent.Statstring, CurrentEvent.Flags, CurrentEvent.Ping, _
-                    CurrentEvent.GameID, j)
+                Call Event_FlagsUpdate(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, j)
         End Select
     Next j
     
