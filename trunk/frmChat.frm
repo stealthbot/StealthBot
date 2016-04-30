@@ -4515,6 +4515,11 @@ Private Sub mnuDisableVoidView_Click()
     mnuDisableVoidView.Checked = Not (mnuDisableVoidView.Checked)
     Config.VoidView = Not CBool(mnuDisableVoidView.Checked)
     Call Config.Save
+    
+    If Config.VoidView And g_Channel.IsSilent Then
+        tmrSilentChannel(1).Enabled = Config.VoidView
+        AddQ "/unignore " & GetCurrentUsername
+    End If
 End Sub
 
 Private Sub mnuDisconnect2_Click()
