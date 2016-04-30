@@ -21,7 +21,6 @@ Private m_gtc         As Long
 Private m_ping        As Long
 Private m_flags       As Long
 Private m_message     As String
-Private m_stats       As clsUserStats
 Private m_clan        As String
 Private m_game_id     As String
 Private m_icon_code   As String
@@ -30,12 +29,6 @@ Private m_displayed   As Boolean
 
 Private Sub Class_Initialize()
     EventTick = GetTickCount()
-    
-    Set m_stats = New clsUserStats
-End Sub
-
-Private Sub Class_Terminate()
-    Set m_stats = Nothing
 End Sub
 
 Public Property Get EventID() As Long
@@ -101,8 +94,6 @@ End Property
 
 Public Property Let Statstring(ByVal str As String)
     m_stat_string = str
-    
-    m_stats.Statstring = str
 End Property
 
 Public Property Get IconCode() As String
