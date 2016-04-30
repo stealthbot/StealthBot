@@ -618,21 +618,18 @@ End Property
 
 Public Property Get IconCode() As Integer
     Dim intWins As Long
+    Dim strIcon As String
     
     If (BotVars.ShowStatsIcons) Then
+        strIcon = StrReverse(Icon())
         If (IsValid And LenB(Statstring) > 0) Then
-            Select Case (StrReverse$(Icon))
-                Case "WCRF": IconCode = IC_WCRF
-                Case "WCPL": IconCode = IC_WCPL
-                Case "WCGO": IconCode = IC_WCGO
-                Case "WCSI": IconCode = IC_WCSI
-                Case "WCBR": IconCode = IC_WCBR
-                Case "WCPG": IconCode = IC_WCPG
+            Select Case strIcon
+                Case vbNullString, Game: ' icon is current product or icon is not set
+                Case Else: ' if icon field is present and custom
+                    ' display icon
+                    IconCode = GetIconImageListPosition(strIcon)
+                    Exit Property
             End Select
-            
-            If (IconCode) Then
-                Exit Property
-            End If
             
             Select Case Game
                 Case PRODUCT_DRTL, PRODUCT_DSHR
@@ -667,79 +664,88 @@ Public Property Get IconCode() As Integer
                         End Select
                     End If
                 
-                Case PRODUCT_WAR3, PRODUCT_W3XP
-                    ' if icon field is present
-                    If (LenB(Icon()) > 0) Then
-                        ' display icon
-                        IconCode = GetW3ImageListPosition(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1))
-                        
-                        ' choose starting point
-                        If (Game = PRODUCT_W3XP) Then
-                            IconCode = (ICON_START_W3XP + IconCode)
-                        Else
-                            IconCode = (ICON_START_WAR3 + IconCode)
-                        End If
-                    End If
-                
             End Select
         End If
     End If
     
     If ((IconCode = 0) Or (IconCode = ICUNKNOWN)) Then
-        Select Case (Game)
-            Case PRODUCT_CHAT: IconCode = ICCHAT
-            Case PRODUCT_SSHR: IconCode = ICSCSW
-            Case PRODUCT_STAR: IconCode = ICSTAR
-            Case PRODUCT_JSTR: IconCode = ICJSTR
-            Case PRODUCT_SEXP: IconCode = ICSEXP
-            Case PRODUCT_DSHR: IconCode = ICDIABLOSW
-            Case PRODUCT_DRTL: IconCode = ICDIABLO
-            Case PRODUCT_W2BN: IconCode = ICW2BN
-            Case PRODUCT_D2DV: IconCode = ICD2DV
-            Case PRODUCT_D2XP: IconCode = ICD2XP
-            Case PRODUCT_WAR3: IconCode = ICWAR3
-            Case PRODUCT_W3XP: IconCode = ICWAR3X
-            Case Else:         IconCode = ICUNKNOWN
-        End Select
+        IconCode = GetIconImageListPosition(Game())
     End If
 End Property
 
-Private Function GetW3ImageListPosition(ByVal Icon As String, ByRef Race As String) As Integer
-    Dim IMLPos As Integer
+Private Function GetIconImageListPosition(ByVal Icon As String) As Integer
+    Dim IconCode As Integer
+    Dim IMLSeq As Integer
     Dim PerTier As Integer
     
-    ' choose game
-    If Game = PRODUCT_WAR3 Then
-        PerTier = 5
-    Else
-        PerTier = 6
-    End If
+    IconCode = ICUNKNOWN
     
-    ' choose race
-    Select Case Race
-        Case "H"
-            IMLPos = 1
-        Case "N"
-            IMLPos = 1 + (PerTier * 1)
-        Case "U"
-            IMLPos = 1 + (PerTier * 2)
-        Case "O"
-            IMLPos = 1 + (PerTier * 3)
-        Case "R"
-            IMLPos = 1 + (PerTier * 4)
-        Case "T", "D"
-            IMLPos = 1 + (PerTier * 5)
-        Case Else
-            IMLPos = 0
+    Select Case Icon
+        Case PRODUCT_CHAT: IconCode = ICCHAT
+        Case PRODUCT_SSHR: IconCode = ICSCSW
+        Case PRODUCT_STAR: IconCode = ICSTAR
+        Case PRODUCT_JSTR: IconCode = ICJSTR
+        Case PRODUCT_SEXP: IconCode = ICSEXP
+        Case PRODUCT_DSHR: IconCode = ICDIABLOSW
+        Case PRODUCT_DRTL: IconCode = ICDIABLO
+        Case PRODUCT_W2BN: IconCode = ICW2BN
+        Case PRODUCT_D2DV: IconCode = ICD2DV
+        Case PRODUCT_D2XP: IconCode = ICD2XP
+        Case PRODUCT_WAR3: IconCode = ICWAR3
+        Case PRODUCT_W3XP: IconCode = ICWAR3X
+        
+        Case "WCRF": IconCode = IC_WCRF
+        Case "WCPL": IconCode = IC_WCPL
+        Case "WCGO": IconCode = IC_WCGO
+        Case "WCSI": IconCode = IC_WCSI
+        Case "WCBR": IconCode = IC_WCBR
+        Case "WCPG": IconCode = IC_WCPG
+        
+        Case Else: IconCode = ICUNKNOWN
     End Select
     
-    ' if race known, add tier to it
-    ' otherwise, defaults to IMLPos 1, which is W3 unknown icon (but an icon is present)
-    If StrictIsNumeric(Icon) And IMLPos > 0 Then
-        IMLPos = IMLPos + (CInt(Icon) - 1)
+    If IconCode <> ICUNKNOWN Then
+        ' special named icon
+        GetIconImageListPosition = IconCode
+    ElseIf (StrComp(Left$(Icon, 2), "W3", vbBinaryCompare) = 0) Then
+        ' W3 stats icon: choose starting point and per-tier
+        If (Game = PRODUCT_WAR3) Then
+            IMLSeq = ICON_START_WAR3
+            PerTier = 5
+        Else
+            IMLSeq = ICON_START_W3XP
+            PerTier = 6
+        End If
+        
+        ' choose race
+        Select Case Mid$(Icon, 3, 1)
+            Case "H"
+                IconCode = IMLSeq + 1
+            Case "N"
+                IconCode = IMLSeq + 1 + (PerTier * 1)
+            Case "U"
+                IconCode = IMLSeq + 1 + (PerTier * 2)
+            Case "O"
+                IconCode = IMLSeq + 1 + (PerTier * 3)
+            Case "R"
+                IconCode = IMLSeq + 1 + (PerTier * 4)
+            Case "T", "D"
+                IconCode = IMLSeq + 1 + (PerTier * 5)
+            Case Else 'starting point is "unknown icon" icon
+                IconCode = IMLSeq
+        End Select
+        
+        ' if race known, add tier to it
+        ' otherwise, defaults to IMLPos 1, which is W3 unknown icon (but an icon is present)
+        If StrictIsNumeric(Mid$(Icon, 4, 1)) And IconCode > IMLSeq Then
+            IconCode = IconCode + (CInt(Mid$(Icon, 4, 1)) - 1)
+        End If
+    Else
+        ' unknown icon - use "unknown icon" icon
+        IconCode = ICON_START_WAR3
     End If
     
-    GetW3ImageListPosition = IMLPos
+    GetIconImageListPosition = IconCode
 End Function
 
 Private Sub Parse()
