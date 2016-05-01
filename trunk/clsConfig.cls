@@ -213,6 +213,7 @@ Private m_RealmServerPassword       As String
 Private m_ProtocolID                As Long
 Private m_PlatformID                As String
 Private m_ProductLanguage           As String
+Private m_ServerCommandList         As String
 Private m_VersionBytes(8)           As Long     'XXVerByte
 Private m_LogonSystems(8)           As Long     'XXLogonSystem
 
@@ -1461,6 +1462,14 @@ Public Property Let ProductLanguage(ByVal sValue As String)
     m_ProductLanguage = sValue
 End Property
 
+Public Property Get ServerCommandList() As String
+    ServerCommandList = m_ServerCommandList
+End Property
+
+Public Property Let ServerCommandList(ByVal sValue As String)
+    m_ServerCommandList = sValue
+End Property
+
 
 '-------------------------
 '   SECTION: DEBUG
@@ -1743,6 +1752,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_EMULATION, "ProtocolID", m_ProtocolID
     WriteSetting SECTION_EMULATION, "PlatformID", m_PlatformID
     WriteSetting SECTION_EMULATION, "ProductLanguage", m_ProductLanguage
+    WriteSetting SECTION_EMULATION, "ServerCommandList", m_ServerCommandList
     
     WriteSetting SECTION_DEBUG, "Warden", m_DebugWarden
     
@@ -1934,6 +1944,7 @@ Private Sub LoadDefaults()
     m_ProtocolID = 0
     m_PlatformID = "IX86"
     m_ProductLanguage = vbNullString
+    m_ServerCommandList = "w %,whisper %,m %,msg %,f m,clan mail,c mail,clan motd,c motd,away,dnd,ban %,kick %,j,join,channel,me,emote"
     
     Dim i As Integer
     For i = LBound(m_ProductKeys) To UBound(m_ProductKeys)

@@ -102,7 +102,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in BNCSParsePacket()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in BNCSParsePacket()."
     
     Exit Sub
 End Sub
@@ -231,15 +231,15 @@ Public Sub RequestSpecificKey(ByVal sUsername As String, ByVal sKey As String)
     End With
 End Sub
 
-Public Sub SetProfile(ByVal Location As String, ByVal description As String, Optional ByVal Sex As String = vbNullString)
+Public Sub SetProfile(ByVal Location As String, ByVal Description As String, Optional ByVal Sex As String = vbNullString)
     'Dim i As Byte
     Const MAX_DESCR As Long = 510
     Const MAX_SEX As Long = 200
     Const MAX_LOC As Long = 200
     
     '// Sanity checks
-    If Len(description) > MAX_DESCR Then
-        description = Left$(description, MAX_DESCR)
+    If Len(Description) > MAX_DESCR Then
+        Description = Left$(Description, MAX_DESCR)
     End If
     
     If Len(Sex) > MAX_SEX Then
@@ -262,7 +262,7 @@ Public Sub SetProfile(ByVal Location As String, ByVal description As String, Opt
         .InsertNTString "Profile\Sex"
                                             '// Values()
         .InsertNTString Location
-        .InsertNTString description
+        .InsertNTString Description
         .InsertNTString Sex
         
         .SendPacket SID_WRITEUSERDATA
@@ -275,7 +275,7 @@ End Sub
 '//     field from profiles
 '// 2009-07-14: corrected a problem in this method, thanks Jack (t=42494) -andy
 '//     method was erasing profile data
-Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
+Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
     'Dim i As Byte
     Const MAX_DESCR As Long = 510
     Const MAX_SEX As Long = 200
@@ -296,14 +296,14 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
     End If
     
     '// Sanity checks
-    If (LenB(description) > 0) Then
-        If (Len(description) > MAX_DESCR) Then
-            description = Left$(description, MAX_DESCR)
+    If (LenB(Description) > 0) Then
+        If (Len(Description) > MAX_DESCR) Then
+            Description = Left$(Description, MAX_DESCR)
         End If
         
         nKeys = nKeys + 1
         pKeys(nKeys) = "Profile\Description"
-        pData(nKeys) = description
+        pData(nKeys) = Description
     End If
         
     If nKeys > 0 Then
@@ -530,7 +530,7 @@ ParseStatString_Exit:
 
 ParseStatString_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure ParseStatString of Module modParsing"
+    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ParseStatString of Module modParsing"
     outbuf = "- Error parsing statstring. [" & Replace(Statstring, Chr(0), "") & "]"
     
     Resume ParseStatString_Exit
@@ -732,8 +732,8 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
     Dim i As Long
     Dim s As String
     Dim temp As Long
-    Dim selStart As Long
-    Dim selLength As Long
+    Dim SelStart As Long
+    Dim SelLength As Long
     
     If L = 0 Then L = 1
     
@@ -741,8 +741,8 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
     
     With rtb
         ' store previous selstart and len
-        selStart = .selStart
-        selLength = .selLength
+        SelStart = .SelStart
+        SelLength = .SelLength
         
         If InStr(temp, .Text, "ÿc", vbTextCompare) > 0 Then
             .Visible = False
@@ -751,20 +751,20 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                 
                 If StrictIsNumeric(Mid$(.Text, i + 2, 1)) Then
                     s = GetColorVal(Mid$(.Text, i + 2, 1))
-                    .selStart = i - 1
-                    .selLength = 3
+                    .SelStart = i - 1
+                    .SelLength = 3
                     .SelText = vbNullString
-                    .selStart = i - 1
-                    .selLength = Len(.Text) + 1 - i
+                    .SelStart = i - 1
+                    .SelLength = Len(.Text) + 1 - i
                     .SelColor = s
                 Else
                     Select Case Mid$(.Text, i + 2, 1)
                         Case "i"
-                            .selStart = i - 1
-                            .selLength = 3
+                            .SelStart = i - 1
+                            .SelLength = 3
                             .SelText = vbNullString
-                            .selStart = i - 1
-                            .selLength = Len(.Text) + 1 - 1
+                            .SelStart = i - 1
+                            .SelLength = Len(.Text) + 1 - 1
                             If .SelItalic = True Then
                                 .SelItalic = False
                             Else
@@ -772,11 +772,11 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             End If
                             
                         Case "b", "."       'BOLD
-                            .selStart = i - 1
-                            .selLength = 3
+                            .SelStart = i - 1
+                            .SelLength = 3
                             .SelText = vbNullString
-                            .selStart = i - 1
-                            .selLength = Len(.Text) + 1 - 1
+                            .SelStart = i - 1
+                            .SelLength = Len(.Text) + 1 - 1
                             If .SelBold = True Then
                                 .SelBold = False
                             Else
@@ -784,11 +784,11 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             End If
                             
                         Case "u", "."       'underline
-                            .selStart = i - 1
-                            .selLength = 3
+                            .SelStart = i - 1
+                            .SelLength = 3
                             .SelText = vbNullString
-                            .selStart = i - 1
-                            .selLength = Len(.Text) + 1 - 1
+                            .SelStart = i - 1
+                            .SelLength = Len(.Text) + 1 - 1
                             If .SelUnderline = True Then
                                 .SelUnderline = False
                             Else
@@ -796,27 +796,27 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             End If
                             
                         Case ";"
-                            .selStart = i - 1
-                            .selLength = 3
+                            .SelStart = i - 1
+                            .SelLength = 3
                             .SelText = vbNullString
-                            .selStart = i - 1
-                            .selLength = Len(.Text) + 1 - 1
+                            .SelStart = i - 1
+                            .SelLength = Len(.Text) + 1 - 1
                             .SelColor = HTMLToRGBColor("8D00CE")    'Purple
                             
                         Case ":"
-                            .selStart = i - 1
-                            .selLength = 3
+                            .SelStart = i - 1
+                            .SelLength = 3
                             .SelText = vbNullString
-                            .selStart = i - 1
-                            .selLength = Len(.Text) + 1 - 1
+                            .SelStart = i - 1
+                            .SelLength = Len(.Text) + 1 - 1
                             .SelColor = 186408      '// Lighter green
                             
                         Case "<"
-                            .selStart = i - 1
-                            .selLength = 3
+                            .SelStart = i - 1
+                            .SelLength = 3
                             .SelText = vbNullString
-                            .selStart = i - 1
-                            .selLength = Len(.Text) + 1 - 1
+                            .SelStart = i - 1
+                            .SelLength = Len(.Text) + 1 - 1
                             .SelColor = HTMLToRGBColor("00A200")    'Dark green
                         'Case Else: Debug.Print s
                     End Select
@@ -838,11 +838,11 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                 
                 If Len(s) > 0 Then
                     .Visible = False
-                    .selStart = i - 1
-                    .selLength = 2
+                    .SelStart = i - 1
+                    .SelLength = 2
                     .SelText = vbNullString
-                    .selStart = i - 1
-                    .selLength = Len(.Text) + 1 - 1
+                    .SelStart = i - 1
+                    .SelLength = Len(.Text) + 1 - 1
                     .SelColor = s
                     .Visible = True
                 End If
@@ -854,8 +854,8 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
         End If
         
         ' restore previous selstart and len
-        .selStart = selStart
-        .selLength = selLength
+        .SelStart = SelStart
+        .SelLength = SelLength
     End With
 End Sub
 

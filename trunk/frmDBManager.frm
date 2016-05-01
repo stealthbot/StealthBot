@@ -2222,13 +2222,13 @@ Private Sub txtRank_KeyPress(KeyAscii As Integer)
 End Sub
 
 Private Sub txtRank_Change()
-    Dim selStart As Long
+    Dim SelStart As Long
     
     If (Val(txtRank.Text) > 200) Then
         With txtRank
-            selStart = .selStart
+            SelStart = .SelStart
             .Text = "200"
-            .selStart = selStart
+            .SelStart = SelStart
         End With
     End If
 

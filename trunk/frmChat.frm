@@ -1078,7 +1078,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1104,7 +1103,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2221,7 +2219,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             
             With rtbWhispers
                 .Visible = False
-                .selStart = 0
+                .SelStart = 0
                 .SelLength = InStr(1, .Text, vbLf, vbBinaryCompare)
                 If BotVars.Logging < 2 Then Print #1, Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
                 .SelText = vbNullString
@@ -2239,13 +2237,13 @@ Sub AddWhisper(ParamArray saElements() As Variant)
         End Select
         
         With rtbWhispers
-            .selStart = Len(.Text)
+            .SelStart = Len(.Text)
             .SelLength = 0
             .SelColor = RTBColors.TimeStamps
             If .SelBold = True Then .SelBold = False
             If .SelItalic = True Then .SelItalic = False
             .SelText = s
-            .selStart = Len(.Text)
+            .SelStart = Len(.Text)
         End With
         
         For i = LBound(saElements) To UBound(saElements) Step 2
@@ -2254,12 +2252,12 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             
             If Len(saElements(i + 1)) > 0 Then
                 With rtbWhispers
-                    .selStart = Len(.Text)
-                    L = .selStart
+                    .SelStart = Len(.Text)
+                    L = .SelStart
                     .SelLength = 0
                     .SelColor = saElements(i)
                     .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
-                    .selStart = Len(.Text)
+                    .SelStart = Len(.Text)
                 End With
             End If
         Next i
@@ -3439,27 +3437,29 @@ Public Sub ListviewTabs_Click(PreviousTab As Integer)
     
     CurrentTab = ListviewTabs.Tab
     
-    'If PreviousTab <> CurrentTab And ListviewTabs.TabEnabled(CurrentTab) Then
-        Select Case CurrentTab
-            Case LVW_BUTTON_CHANNEL ' = 0 = Channel button clicked
-                lblCurrentChannel.ToolTipText = "Currently in " & g_Channel.SType() & _
-                    " channel " & g_Channel.Name & " (" & g_Channel.Users.Count & ")"
-                
-                lvChannel.ZOrder vbBringToFront
-                
-            Case LVW_BUTTON_FRIENDS ' = 1 = Friends button clicked
-                lblCurrentChannel.ToolTipText = "Currently viewing " & g_Friends.Count & " friends"
+    Select Case CurrentTab
+        Case LVW_BUTTON_CHANNEL ' = 0 = Channel button clicked
+            lblCurrentChannel.ToolTipText = "Currently in " & g_Channel.SType() & _
+                " channel " & g_Channel.Name & " (" & g_Channel.Users.Count & ")"
             
-                lvFriendList.ZOrder vbBringToFront
-                
-            Case LVW_BUTTON_CLAN ' = 2 = Clan button clicked
-                lblCurrentChannel.ToolTipText = "Currently viewing " & _
-                    g_Clan.Members.Count & " members of clan " & Clan.Name
+            lvChannel.ZOrder vbBringToFront
             
-                lvClanList.ZOrder vbBringToFront
-                
-        End Select
-    'End If
+        Case LVW_BUTTON_FRIENDS ' = 1 = Friends button clicked
+            lblCurrentChannel.ToolTipText = "Currently viewing " & g_Friends.Count & " friends"
+        
+            lvFriendList.ZOrder vbBringToFront
+            
+        Case LVW_BUTTON_CLAN ' = 2 = Clan button clicked
+            lblCurrentChannel.ToolTipText = "Currently viewing " & _
+                g_Clan.Members.Count & " members of clan " & Clan.Name
+        
+            lvClanList.ZOrder vbBringToFront
+            
+    End Select
+    
+    lvChannel.HideSelection = True
+    lvFriendList.HideSelection = True
+    lvClanList.HideSelection = True
     
     lblCurrentChannel.Caption = GetChannelString
 End Sub
@@ -3478,8 +3478,8 @@ Private Sub lvChannel_dblClick()
 
     If (Len(s) > 0) Then
         With cboSend
-            .selStart = cboSendSelStart 'IIf(cboSendSelStart > 0, cboSendSelStart, 0)
-            .selLength = cboSendSelLength 'IIf(cboSendSelLength > 0, cboSendSelLength + 1, 0)
+            .SelStart = cboSendSelStart 'IIf(cboSendSelStart > 0, cboSendSelStart, 0)
+            .SelLength = cboSendSelLength 'IIf(cboSendSelLength > 0, cboSendSelLength + 1, 0)
             .SelText = s
             
             ' This is correct - sets the cursor properly
@@ -3501,7 +3501,7 @@ Private Sub lvChannel_KeyUp(KeyCode As Integer, Shift As Integer)
         
         With lvChannel
             If Not (.SelectedItem Is Nothing) Then
-                cboSend.selStart = Len(cboSend.Text)
+                cboSend.SelStart = Len(cboSend.Text)
                 cboSend.SelText = .SelectedItem.Text
     
                 KeyCode = 0
@@ -3523,7 +3523,7 @@ Private Sub lvFriendList_KeyUp(KeyCode As Integer, Shift As Integer)
         
         With lvFriendList
             If Not (.SelectedItem Is Nothing) Then
-                cboSend.selStart = Len(cboSend.Text)
+                cboSend.SelStart = Len(cboSend.Text)
                 cboSend.SelText = .SelectedItem.Text
     
                 KeyCode = 0
@@ -3545,7 +3545,7 @@ Private Sub lvClanList_KeyUp(KeyCode As Integer, Shift As Integer)
         
         With lvClanList
             If Not (.SelectedItem Is Nothing) Then
-                cboSend.selStart = Len(cboSend.Text)
+                cboSend.SelStart = Len(cboSend.Text)
                 cboSend.SelText = .SelectedItem.Text
     
                 KeyCode = 0
@@ -3561,7 +3561,7 @@ Private Sub lvFriendList_dblClick()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         cboSend.Text = cboSend.Text & lvFriendList.SelectedItem.Text
         cboSend.SetFocus
-        cboSend.selStart = Len(cboSend.Text)
+        cboSend.SelStart = Len(cboSend.Text)
     End If
 End Sub
 
@@ -3569,7 +3569,7 @@ Private Sub lvClanList_dblClick()
     If Not (lvClanList.SelectedItem Is Nothing) And Len(cboSend.Text) < 200 Then
         cboSend.Text = cboSend.Text & lvClanList.SelectedItem.Text
         cboSend.SetFocus
-        cboSend.selStart = Len(cboSend.Text)
+        cboSend.SelStart = Len(cboSend.Text)
     End If
 End Sub
 
@@ -3912,7 +3912,7 @@ Private Sub mnuPopClanAddLeft_Click()
         txtPre.Text = StringFormat("/w {0} ", GetClanSelectedUser)
         
         cboSend.SetFocus
-        cboSend.selStart = Len(cboSend.Text)
+        cboSend.SelStart = Len(cboSend.Text)
     End If
 End Sub
 
@@ -4155,7 +4155,7 @@ Private Sub mnuPopFLAddLeft_Click()
         txtPre.Text = s
         
         cboSend.SetFocus
-        cboSend.selStart = Len(cboSend.Text)
+        cboSend.SelStart = Len(cboSend.Text)
     End If
 End Sub
 
@@ -4687,7 +4687,7 @@ Private Sub mnuPopAddLeft_Click()
         txtPre.Text = s
         
         cboSend.SetFocus
-        cboSend.selStart = Len(cboSend.Text)
+        cboSend.SelStart = Len(cboSend.Text)
     End If
 End Sub
 
@@ -5355,7 +5355,7 @@ Private Sub cboSend_GotFocus()
     On Error Resume Next
 
     Dim i As Integer
-    cboSend.selStart = cboSendSelStart
+    cboSend.SelStart = cboSendSelStart
     cboSend.SelLength = cboSendSelLength
 
     If (BotVars.NoAutocompletion = False) Then
@@ -5422,450 +5422,474 @@ End Sub
 Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     On Error GoTo ERROR_HANDLER
     
-    Static strbuf        As String
-    Static User          As String
-    Static spaceIndex(2) As Long
-
-    Dim temp As udtGetAccessResponse
+    Static ACBuffer    As String
+    Static ACWordStart As Long
+    Static ACWordEnd   As Long
+    Static ACUserPLen  As Long
+    Static ACUserIndex As Integer
     
-    Dim i As Long
-    Dim L As Long
-    Dim n As Integer
-    Dim c As Integer ',oldSelStart As Integer
-    Dim x() As String
-    Dim m As String
-    Dim s As String ',sClosest As String
-    Dim Vetoed As Boolean
+    Dim AccessAmount As udtGetAccessResponse
     
-    Const S_SHIFT = 1
-    Const S_CTRL = 2
-    Const S_ALT = 4
-    Const S_CTRLALT = 6
-    Const S_CTRLSHIFT = 3
-    Const S_CTRLSHIFTALT = 7
-    Const L_ARROW = 38
-    Const R_ARROW = 39
-
-    Const K_END = 35
+    Dim Vetoed As Boolean '
     
-    'AddChat vbRed, "KeyCode: " & KeyCode
-    'AddChat vbRed, "Shift: " & Shift
+    Dim i           As Integer
+    Dim j           As Integer
+    Dim SavedSelPos As Long
+    Dim SavedSelLen As Long
+    Dim CurrentTab  As Integer
+    Dim CurrentList As ListView
+    Dim CurrentUser As Long
+    
+    SavedSelPos = cboSend.SelStart
+    SavedSelLen = cboSend.SelLength
+    
+    CurrentTab = ListviewTabs.Tab
+    Select Case CurrentTab
+        Case LVW_BUTTON_FRIENDS: Set CurrentList = lvFriendList
+        Case LVW_BUTTON_CLAN:    Set CurrentList = lvClanList
+        Case Else:               Set CurrentList = lvChannel
+    End Select
+    
+    If (Not (CurrentList.SelectedItem Is Nothing)) Then
+        CurrentUser = CurrentList.SelectedItem.Index
+    End If
 
-
-    L = cboSend.selStart
-
-    With lvChannel
-
-        If (Not (.SelectedItem Is Nothing)) Then
-            i = .SelectedItem.Index
-        End If
-        
-        'MsgBox KeyCode
-
-        Select Case (KeyCode)
-            Case KEY_SPACE
-                With cboSend
-                    If (LenB(LastWhisper) > 0) Then
-                        If (Len(.Text) >= 2) Then
-                            If StrComp(Left$(.Text, 2), "/r", vbTextCompare) = 0 Then
-                                .selStart = 0
-                                .selLength = Len(.Text)
-                                .SelText = _
-                                    "/w " & CleanUsername(LastWhisper, True)
-                                .selStart = Len(.Text)
-                            End If
-                        End If
-                        
-                        If (Len(.Text) >= 6) Then
-                            If StrComp(Left$(.Text, 6), "/reply", vbTextCompare) = 0 Then
-                                .selStart = 0
-                                .selLength = Len(.Text)
-                                .SelText = _
-                                    "/w " & CleanUsername(LastWhisper, True)
-                                .selStart = Len(.Text)
-                            End If
+    Select Case (KeyCode)
+        Case vbKeySpace
+            With cboSend
+                If (LenB(LastWhisper) > 0) Then
+                    If (Len(.Text) >= 2) Then
+                        If StrComp(Left$(.Text, 2), "/r", vbTextCompare) = 0 Then
+                            .SelStart = 0
+                            .SelLength = Len(.Text)
+                            .SelText = "/w " & CleanUsername(LastWhisper, True)
+                            .SelStart = Len(.Text)
                         End If
                     End If
                     
-                    If (LenB(LastWhisperTo) > 0) Then
-                        If (Len(.Text) >= 3) Then
-                            If StrComp(Left$(.Text, 3), "/rw", vbTextCompare) = 0 Then
-                                .selStart = 0
-                                .selLength = Len(.Text)
-                                
-                                If StrComp(LastWhisperTo, "%f%") = 0 Then
-                                    .SelText = "/f m"
-                                Else
-                                    .SelText = _
-                                        "/w " & CleanUsername(LastWhisperTo, True)
-                                End If
-                                
-                                .selStart = Len(.Text)
-                            End If
+                    If (Len(.Text) >= 6) Then
+                        If StrComp(Left$(.Text, 6), "/reply", vbTextCompare) = 0 Then
+                            .SelStart = 0
+                            .SelLength = Len(.Text)
+                            .SelText = "/w " & CleanUsername(LastWhisper, True)
+                            .SelStart = Len(.Text)
                         End If
+                    End If
+                End If
+                
+                If (LenB(LastWhisperTo) > 0) Then
+                    If (Len(.Text) >= 3) Then
+                        If StrComp(Left$(.Text, 3), "/rw", vbTextCompare) = 0 Then
+                            .SelStart = 0
+                            .SelLength = Len(.Text)
+                            
+                            If StrComp(LastWhisperTo, "%f%") = 0 Then
+                                .SelText = "/f m"
+                            Else
+                                .SelText = "/w " & CleanUsername(LastWhisperTo, True)
+                            End If
+                            
+                            .SelStart = Len(.Text)
+                        End If
+                    End If
+                End If
+            End With
+
+        Case vbKeyPageDown 'ALT + PAGEDOWN
+            If Shift = vbAltMask Then
+                With CurrentList
+                    If CurrentUser > 0 And CurrentUser < .ListItems.Count Then
+                        .HideSelection = False
+                        With .ListItems.Item(CurrentUser + 1)
+                            .Selected = True
+                            .EnsureVisible
+                        End With
                     End If
                 End With
 
-            Case KEY_PGDN 'ALT + PAGEDOWN
-                If Shift = S_ALT Then
-                    If i < .ListItems.Count Then
-                        .ListItems.Item(i + 1).Selected = True
-                        .ListItems.Item(i).Ghosted = False
-                        .ListItems.Item(i + 1).Ghosted = True
-                    End If
+                cboSend.SetFocus
+                cboSend.SelStart = SavedSelPos
+                cboSend.SelLength = SavedSelLen
+                Exit Sub
+            End If
 
-                    cboSend.SetFocus
-                    cboSend.selStart = L
+        Case vbKeyPageUp 'ALT + PAGEUP
+            If Shift = vbAltMask Then
+                With CurrentList
+                    If CurrentUser > 1 Then
+                        .HideSelection = False
+                        With .ListItems.Item(CurrentUser - 1)
+                            .Selected = True
+                            .EnsureVisible
+                        End With
+                    End If
+                End With
+
+                cboSend.SetFocus
+                cboSend.SelStart = SavedSelPos
+                cboSend.SelLength = SavedSelLen
+                Exit Sub
+            End If
+
+        Case vbKeyHome 'ALT+HOME
+            If Shift = vbAltMask Then
+                With CurrentList
+                    If .ListItems.Count > 0 Then
+                        .HideSelection = False
+                        With .ListItems.Item(1)
+                            .Selected = True
+                            .EnsureVisible
+                        End With
+                    End If
+                End With
+
+                cboSend.SetFocus
+                cboSend.SelStart = SavedSelPos
+                cboSend.SelLength = SavedSelLen
+                Exit Sub
+            End If
+
+        Case vbKeyEnd 'ALT+END
+            If Shift = vbAltMask Then
+                With CurrentList
+                    If .ListItems.Count > 0 Then
+                        .HideSelection = False
+                        With .ListItems.Item(.ListItems.Count)
+                            .Selected = True
+                            .EnsureVisible
+                        End With
+                    End If
+                End With
+
+                cboSend.SetFocus
+                cboSend.SelStart = SavedSelPos
+                cboSend.SelLength = SavedSelLen
+                Exit Sub
+            End If
+
+        Case vbKeyN, vbKeyInsert 'ALT + N or ALT + INSERT
+            If (Shift = vbAltMask) Then
+                If (Not (CurrentList.SelectedItem Is Nothing)) Then
+                    cboSend.SelText = CurrentList.SelectedItem.Text
+                    cboSend.SelStart = cboSend.SelStart + Len(CurrentList.SelectedItem.Text)
                     Exit Sub
                 End If
+            End If
 
-            Case KEY_PGUP 'ALT + PAGEUP
-                If Shift = S_ALT Then
-                    If i > 1 Then
-                        .ListItems.Item(i - 1).Selected = True
-                        .ListItems.Item(i).Ghosted = False
-                        .ListItems.Item(i - 1).Ghosted = True
-                    End If
-
-                    cboSend.SetFocus
-                    cboSend.selStart = L
-                    Exit Sub
-                End If
-
-            Case KEY_ALTN, KEY_INSERT 'ALT + N or ALT + INSERT
-                If (Shift = S_ALT) Then
-                    's = NameWithoutRealm(GetSelectedUser)
-                    'c = .SelectedItem.Index
-                    'Unfinished business - suggestion from Engel
-                                            
-                    If (Not (.SelectedItem Is Nothing)) Then
-                        cboSend.SelText = .SelectedItem.Text
-                        cboSend.selStart = cboSend.selStart + Len(.SelectedItem.Text)
-                    End If
-                End If
-
-            Case KEY_HOME 'ALT+HOME
-                If Shift = S_ALT Then
-                    If (i > 0) Then
-                        .ListItems.Item(1).Selected = True
-                        
-                        For c = 1 To .ListItems.Count
-                            .ListItems.Item(c).Ghosted = False
-                        Next c
-                        
-                        .ListItems.Item(1).Ghosted = True
-    
-                        cboSend.SetFocus
-                        cboSend.selStart = L
-                    Else
-                        If .ListItems.Count > 0 Then
-                            .ListItems(1).Selected = True
-                            .ListItems(1).Ghosted = True
-                            cboSend.SetFocus
-                            cboSend.selStart = L
-                        End If
-                    End If
-                End If
-
-            Case KEY_END 'ALT+END
-                If Shift = S_ALT Then
-                    If (.ListItems.Count > 0) Then
-                        .ListItems.Item(.ListItems.Count).Selected = True
-                        .ListItems.Item(i).Ghosted = False
-                        .ListItems.Item(.ListItems.Count).Ghosted = True
-    
-                        cboSend.SetFocus
-                        cboSend.selLength = L
-                    End If
-                End If
-                
-            Case KEY_V 'PASTE
-                If (IsScrolling(rtbChat)) Then
-                    LockWindowUpdate rtbChat.hWnd
-                
-                    SendMessage rtbChat.hWnd, EM_SCROLL, SB_BOTTOM, &H0
-                    
-                    LockWindowUpdate &H0
-                End If
+        Case vbKeyV 'PASTE
+            Dim x() As String
+            Dim n As Long
             
-                If (Shift = S_CTRL) Then
-                    On Error Resume Next
+            If (IsScrolling(rtbChat)) Then
+                LockWindowUpdate rtbChat.hWnd
+            
+                SendMessage rtbChat.hWnd, EM_SCROLL, SB_BOTTOM, &H0
+                
+                LockWindowUpdate &H0
+            End If
+        
+            If (Shift = vbCtrlMask) Then
+                On Error Resume Next
+                
+                If (InStr(1, Clipboard.GetText, Chr(13), vbTextCompare) <> 0) Then
+                    x() = Split(Clipboard.GetText, Chr(10))
                     
-                    If (InStr(1, Clipboard.GetText, Chr(13), vbTextCompare) <> 0) Then
-                        x() = Split(Clipboard.GetText, Chr(10))
-                        
-                        If UBound(x) > 0 Then
-                            For n = LBound(x) To UBound(x)
-                                x(n) = Replace(x(n), Chr(13), vbNullString)
-                                
-                                If (x(n) <> vbNullString) Then
-                                    If (n <> LBound(x)) Then
-                                        AddQ txtPre.Text & x(n) & txtPost.Text, PRIORITY.CONSOLE_MESSAGE
-                                        
-                                        cboSend.AddItem txtPre.Text & x(n) & txtPost.Text, 0
-                                    Else
-                                        AddQ txtPre.Text & cboSend.Text & x(n) & txtPost.Text, _
-                                            PRIORITY.CONSOLE_MESSAGE
-                                        
-                                        cboSend.AddItem txtPre.Text & cboSend.Text & x(n) & txtPost.Text, 0
-                                    End If
+                    If UBound(x) > 0 Then
+                        For n = LBound(x) To UBound(x)
+                            x(n) = Replace(x(n), Chr(13), vbNullString)
+                            
+                            If (x(n) <> vbNullString) Then
+                                If (n <> LBound(x)) Then
+                                    AddQ txtPre.Text & x(n) & txtPost.Text, PRIORITY.CONSOLE_MESSAGE
+                                    
+                                    cboSend.AddItem txtPre.Text & x(n) & txtPost.Text, 0
+                                Else
+                                    AddQ txtPre.Text & cboSend.Text & x(n) & txtPost.Text, _
+                                        PRIORITY.CONSOLE_MESSAGE
+                                    
+                                    cboSend.AddItem txtPre.Text & cboSend.Text & x(n) & txtPost.Text, 0
                                 End If
-                            Next n
-                            
-                            cboSend.Text = vbNullString
-                            
-                            MultiLinePaste = True
-                        End If
+                            End If
+                        Next n
+                        
+                        cboSend.Text = vbNullString
+                        
+                        MultiLinePaste = True
                     End If
                 End If
-                
-            Case KEY_A
-                If (Shift = S_CTRL) Then
-                    c = ListviewTabs.Tab
-                    If (c <> LVW_BUTTON_CHANNEL) Then
-                        ListviewTabs.Tab = LVW_BUTTON_CHANNEL
-                        Call ListviewTabs_Click(LVW_BUTTON_CHANNEL)
-                    Else
-                        cboSend.selStart = 0
-                        cboSend.SelLength = Len(cboSend.Text)
-                    End If
-                End If
-                
-            Case KEY_S
-                If (Shift = S_CTRL) Then
-                    c = ListviewTabs.Tab
-                    If (c <> LVW_BUTTON_FRIENDS) And (ListviewTabs.TabEnabled(LVW_BUTTON_FRIENDS)) Then
-                        ListviewTabs.Tab = LVW_BUTTON_FRIENDS
-                        Call ListviewTabs_Click(LVW_BUTTON_FRIENDS)
-                    End If
-                End If
-                
-            Case KEY_D
-                If (Shift = S_CTRL) Then
-                    c = ListviewTabs.Tab
-                    If (c <> LVW_BUTTON_CLAN) And (ListviewTabs.TabEnabled(LVW_BUTTON_CLAN)) Then
-                        ListviewTabs.Tab = LVW_BUTTON_CLAN
-                        Call ListviewTabs_Click(LVW_BUTTON_CLAN)
-                    End If
-                End If
-                
-            Case KEY_B
-                If (Shift = S_CTRL) Then
-                    cboSend.SelText = "ÿcb"
-                End If
-                
-            'Case KEY_J
-            '    If (Shift = S_CTRL) Then
-            '        Call mnuToggle_Click
-            '    End If
-                
-            Case KEY_U
-                If (Shift = S_CTRL) Then
-                    cboSend.SelText = "ÿcu"
-                End If
-                
-            Case KEY_I
-                If (Shift = S_CTRL) Then
-                    cboSend.SelText = "ÿci"
-                End If
-                
-            Case KEY_DELETE
-                strbuf = vbNullString
-                
-            Case vbKeyTab
-                Dim prevStart As Long
-                Dim tmpStr    As String
-                Dim res       As String
+            End If
             
-                If (Shift) Then
-                    Call cboSend_LostFocus
-                    
-                    If (txtPre.Visible = True) Then
-                        Call txtPre.SetFocus
+        Case vbKeyA
+            If (Shift = vbCtrlMask) Then
+                If (CurrentTab <> LVW_BUTTON_CHANNEL) Then
+                    ListviewTabs.Tab = LVW_BUTTON_CHANNEL
+                    Call ListviewTabs_Click(CurrentTab)
+                Else
+                    cboSend.SelStart = 0
+                    cboSend.SelLength = Len(cboSend.Text)
+                End If
+            End If
+            
+        Case vbKeyS
+            If (Shift = vbCtrlMask) Then
+                If (CurrentTab <> LVW_BUTTON_FRIENDS) And (ListviewTabs.TabEnabled(LVW_BUTTON_FRIENDS)) Then
+                    ListviewTabs.Tab = LVW_BUTTON_FRIENDS
+                    Call ListviewTabs_Click(CurrentTab)
+                End If
+            End If
+            
+        Case vbKeyD
+            If (Shift = vbCtrlMask) Then
+                If (CurrentTab <> LVW_BUTTON_CLAN) And (ListviewTabs.TabEnabled(LVW_BUTTON_CLAN)) Then
+                    ListviewTabs.Tab = LVW_BUTTON_CLAN
+                    Call ListviewTabs_Click(CurrentTab)
+                End If
+            End If
+            
+        Case vbKeyB
+            If (Shift = vbCtrlMask) Then
+                cboSend.SelText = "ÿcb"
+            End If
+            
+        'Case vbKeyJ
+        '    If (Shift = vbCtrlMask) Then
+        '        Call mnuToggle_Click
+        '    End If
+            
+        Case vbKeyU
+            If (Shift = vbCtrlMask) Then
+                cboSend.SelText = "ÿcu"
+            End If
+            
+        Case vbKeyI
+            If (Shift = vbCtrlMask) Then
+                cboSend.SelText = "ÿci"
+            End If
+            
+        Case vbKeyDelete
+            ACUserIndex = 0
+            
+        Case vbKeyTab
+            Dim ACList As Collection
+            Dim ACUser As String
+            Dim ACText As String
+            
+            If (Shift <> 0) Then
+                Call cboSend_LostFocus
+                
+                If (txtPre.Visible = True) Then
+                    Call txtPre.SetFocus
+                Else
+                    Call ListviewTabs.SetFocus
+                    Call ListviewTabs_Click(0)
+                End If
+            Else
+            
+                With cboSend
+                    ' check if auto-complete active
+                    If ACUserIndex = 0 Then
+                        ' reset the static variables and auto-complete the current word
+                        ACBuffer = .Text
+                        
+                        If .SelStart = 0 Then
+                            ACWordStart = 1
+                        Else
+                            ACWordStart = InStrRev(ACBuffer, Space$(1), .SelStart, vbBinaryCompare) + 1
+                        End If
+                        ACWordEnd = InStr(.SelStart + 1, ACBuffer, Space$(1), vbBinaryCompare)
+                        If ACWordEnd = 0 Then ACWordEnd = Len(ACBuffer) + 1
+                        
+                        ACUserPLen = ACWordEnd - ACWordStart
+                        If ACUserPLen < 0 Then ACUserPLen = 0
+                        
+                        'AddChat vbWhite, ACWordEnd - ACWordStart
+                        'AddChat vbWhite, Mid$(ACBuffer, ACWordStart, ACUserPLen)
+                        
+                        ACUserIndex = 1
                     Else
-                        Call ListviewTabs.SetFocus
+                        ' advance last auto-complete
+                        ACUserIndex = ACUserIndex + 1
+                    End If
+                    
+                    ' repopulate autocomplete candidates
+                    ' sort as we get them
+                    Set ACList = New Collection
+                    'If ACUserPLen > 0 Then
+                    For i = 1 To CurrentList.ListItems.Count
+                        If StrComp(Left$(CurrentList.ListItems.Item(i).Text, ACUserPLen), Mid$(ACBuffer, ACWordStart, ACUserPLen), vbTextCompare) = 0 Then
+                            For j = 1 To ACList.Count
+                                If StrComp(CurrentList.ListItems.Item(i).Text, ACList.Item(j), vbTextCompare) < 0 Then
+                                    Exit For
+                                End If
+                            Next j
+                            
+                            'AddChat vbYellow, j & " - " & CurrentList.ListItems.Item(i).Text
+                            
+                            ' add at found position
+                            If j - 1 = ACList.Count Then
+                                ACList.Add CurrentList.ListItems.Item(i).Text
+                            Else
+                                ACList.Add CurrentList.ListItems.Item(i).Text, , j
+                            End If
+                        End If
+                    Next i
+                    'End If
+                    
+                    ' set the user to the next candidate
+                    ACUser = vbNullString
+                    If ACList.Count > 0 Then
+                        If ACList.Count < ACUserIndex Then
+                            ACUserIndex = 1
+                        End If
+                        
+                        ACUser = ACList.Item(ACUserIndex)
+                    End If
+                    Set ACList = Nothing
+                    
+                    ' save to the text box
+                    If (LenB(ACUser) > 0) Then
+                        If (ACWordStart > 1) Then
+                            ACText = Left$(ACBuffer, ACWordStart - 1)
+                        ElseIf (ACWordStart = 1) Then
+                            ' only includes the postfix for the first word
+                            ACUser = ACUser & BotVars.AutoCompletePostfix
+                        End If
+                        
+                        ACText = ACText & ACUser & Space$(1)
+                        
+                        SavedSelPos = Len(ACText)
+                        
+                        If (ACWordEnd > 0) Then
+                            ACText = ACText & Mid$(ACBuffer, ACWordEnd + 1)
+                        End If
+                        
+                        .Text = ACText
+                        .SelStart = SavedSelPos
+                    Else
+                        ACUserIndex = 0
+                    End If
+                End With
+            End If
+            
+        Case vbKeyReturn
+            Dim DoRunCommands     As Boolean
+            Dim Value             As String
+            Dim NoProcs()         As String
+            Dim StartOutfilterPos As Long
+            
+            If (IsScrolling(rtbChat)) Then
+                LockWindowUpdate rtbChat.hWnd
+            
+                SendMessage rtbChat.hWnd, EM_SCROLL, SB_BOTTOM, &H0
+                
+                LockWindowUpdate &H0
+            End If
+            
+            DoRunCommands = True
+        
+            Select Case (Shift)
+                Case vbShiftMask 'CTRL+ENTER - rewhisper
+                    If LenB(cboSend.Text) > 0 Then
+                        Value = "/w " & LastWhisperTo & Space(1)
+                        DoRunCommands = False
+                    End If
+                    
+                Case vbShiftMask Or vbCtrlMask 'CTRL+SHIFT+ENTER - reply
+                    If LenB(cboSend.Text) > 0 Then
+                        Value = "/w " & LastWhisper & Space(1)
+                        DoRunCommands = False
+                    End If
+            
+                Case Else 'normal ENTER - old rules apply
+                    If LenB(cboSend.Text) > 0 Then
+                        Value = vbNullString
+                    End If
+            End Select
+            
+            ' prefix box
+            If txtPre.Visible Then Value = Value & txtPre.Text
+            ' sendbox
+            Value = Value & cboSend.Text
+            ' suffix box
+            If txtPost.Visible Then Value = Value & txtPost.Text
+            
+            If DoRunCommands Then
+                On Error Resume Next
+                DoRunCommands = Not RunInAll("Event_PressedEnter", Value)
+                On Error GoTo 0
+            End If
+            
+            If (Left$(Value, 6) = "/tell ") Then
+                Value = "/w " & Mid$(Value, 7)
+            End If
+                
+            If DoRunCommands Then
+                If (Left$(Value, 1) = "/") Then
+                    If (LenB(Config.ServerCommandList) > 0) Then
+                        Dim Args() As String
+                        Dim UserArg As String
+                        Dim CommandList As String
+                        
+                        CommandList = Config.ServerCommandList
+                        
+                        ' please note: only commands with "%" as the first argument (or no "%" arguments)
+                        ' (i.e. "/w %", "/ban %") are supported to be correctly no-processed
+                        ' complexify here if that is needed
+                        Args() = Split(Value, Space(1), 3)
+                        If UBound(Args) > 0 Then UserArg = Args(1)
+                        
+                        CommandList = Replace(CommandList, "%", UserArg)
+                        
+                        NoProcs() = Split(CommandList, ",")
+                    Else
+                        ReDim NoProcs(0)
+                    End If
+                    
+                    For i = LBound(NoProcs) To UBound(NoProcs)
+                        If (LenB(NoProcs(i)) > 0) And (StrComp(Left$(Value, Len(NoProcs(i)) + 2), "/" & NoProcs(i) & Space$(1), vbTextCompare) = 0) Then
+                            DoRunCommands = False
+                            StartOutfilterPos = Len(NoProcs(i)) + 3
+                            Exit For
+                        End If
+                    Next i
+                    
+                    If DoRunCommands Then
+                        ProcessCommand GetCurrentUsername, Value, True, False
+                    Else
+                        DoRunCommands = False
                     End If
                 Else
-                    With cboSend
-                        If (User = vbNullString) Then
-                            strbuf = .Text
-                            
-                            If (.selStart > 0) Then
-                                ' grab space before cursor
-                                spaceIndex(0) = _
-                                    InStrRev(strbuf, Space$(1), .selStart, vbBinaryCompare)
-                                
-                                ' grab space after cursor
-                                spaceIndex(1) = _
-                                    InStr(.selStart, strbuf, Space$(1), vbBinaryCompare)
-                            End If
-                            
-                            If (spaceIndex(0) > 0) Then
-                                User = Mid$(strbuf, spaceIndex(0), _
-                                    IIf(spaceIndex(1), spaceIndex(1) - spaceIndex(0), Len(.Text)))
-                            Else
-                                User = Mid$(strbuf, 1, IIf(spaceIndex(1), spaceIndex(1) - 1, Len(.Text)))
-                            End If
-                            
-                            MatchIndex = 1
-                        Else
-                            MatchIndex = MatchIndex + 1
-                        End If
-                        
-                        If (User <> vbNullString) Then
-                            res = MatchClosest(User, IIf(MatchIndex, MatchIndex, 1))
-
-                            ' final check
-                            If (res <> vbNullString) Then
-                                Dim selStart As Long
-                                Dim tmp      As String
-
-                                If (spaceIndex(0) > 0) Then
-                                    tmp = Left$(strbuf, spaceIndex(0))
-                                ElseIf (spaceIndex(0) = 0) Then
-                                    ' only includes the postfix for the first word
-                                    res = res & BotVars.AutoCompletePostfix
-                                End If
-                                
-                                res = res & Space(1)
-                                
-                                tmp = tmp & res
-                                
-                                selStart = Len(tmp)
-                                
-                                If (spaceIndex(1) > 0) Then
-                                    tmp = tmp & Mid$(strbuf, spaceIndex(1))
-                                End If
-                                
-                                .Text = tmp
-                                
-                                .selStart = selStart
-                            End If
-                        End If
-                    End With
+                    DoRunCommands = False
                 End If
-                
-            Case KEY_ENTER
-                If (IsScrolling(rtbChat)) Then
-                    LockWindowUpdate rtbChat.hWnd
-                
-                    SendMessage rtbChat.hWnd, EM_SCROLL, SB_BOTTOM, &H0
-                    
-                    LockWindowUpdate &H0
-                End If
+            End If
             
-                'n = UsernameToIndex(CurrentUsername)
+            If Not DoRunCommands Then
+                ' Don't do replacements for a command unless it involves text that will be seen by someone else
+                '  and don't replace text in the command itself or the target username
+                Value = Left$(Value, StartOutfilterPos) & OutFilterMsg(Mid$(Value, StartOutfilterPos + 1))
                 
-                'Debug.Print n
-                
-                'If (n > 0) Then
-                '    With colUsersInChannel
-                '        .Item(n).Acts
-                '    End With
-                'End If
+                Call AddQ(Value, PRIORITY.CONSOLE_MESSAGE)
+            End If
             
-                Select Case (Shift)
-                    Case S_CTRL 'CTRL+ENTER - rewhisper
-                        If LenB(cboSend.Text) > 0 Then
-                            AddQ "/w " & LastWhisperTo & Space(1) & cboSend.Text, _
-                                PRIORITY.CONSOLE_MESSAGE
-                                
-                            cboSend.Text = vbNullString
-                        End If
-                        
-                    Case S_CTRLSHIFT 'CTRL+SHIFT+ENTER - reply
-                        If LenB(cboSend.Text) > 0 Then
-                            AddQ "/w " & LastWhisper & Space(1) & cboSend.Text, _
-                                PRIORITY.CONSOLE_MESSAGE
-                            cboSend.Text = vbNullString
-                        End If
-                
-                    Case Else 'normal ENTER - old rules apply
-                    
-                        If (LenB(cboSend.Text) > 0) Then
-                            On Error Resume Next
-                            
-                            'If (g_Channel.IsSilent) And Not mnuDisableVoidView.Checked Then
-                            '    BNCSBuffer.VoidTrimBuffer
-                            'End If
-                            
-                            If (Not RunInAll("Event_PressedEnter", cboSend.Text)) Then
-                                
-                                s = vbNullString
-                                If txtPre.Visible Then s = txtPre.Text
-                                s = s & cboSend.Text
-                                If txtPost.Visible Then s = s & txtPost.Text
-                            
-                                If (Left$(s, 6) = "/tell ") Then
-                                    s = "/w " & Mid$(s, 7)
-                                    
-                                    Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
-                                    
-                                    GoTo theEnd
-                                
-                                ElseIf (LCase(Left$(s, 1)) = "/") Then
-                                    Dim aSplt() As String
-                                    
-                                    aSplt = Split(s, Space(1), 3)
-                                    m = vbNullString
-                                    
-                                    ' Don't do replacements for a command unless it involves text that will be seen by someone else
-                                    '  and don't replace text in the command itself or the target username
-                                    
-                                    If (UBound(aSplt) > 0) Then
-                                        Select Case LCase$(aSplt(0))
-                                            Case "/w", "/m", "/whisper", "/msg", "/ban", "/kick"
-                                                m = StringFormat("{0} {1}", aSplt(0), aSplt(1))
-                                            Case "/away", "/dnd"
-                                                m = aSplt(0)
-                                            Case "/f"
-                                                If ((LCase$(aSplt(1)) = "m") Or (LCase$(aSplt(1)) = "msg")) Then
-                                                    m = StringFormat("{0} {1}", aSplt(0), aSplt(1))
-                                                End If
-                                        End Select
-                                        
-                                        If ((Len(m) > 0) And (Len(s) > (Len(m) + 1))) Then
-                                            m = m & OutFilterMsg(Mid(s, Len(m) + 1))
-                                        End If
-                                    End If
-                                    
-                                    If (LenB(m) = 0) Then m = s
-                                    ProcessCommand GetCurrentUsername, m, True, False
-                                Else
-                                    Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
-                                End If
-                                
-                                'Ignore rest of code as the bot is closing
-                                If BotIsClosing Then
-                                    Exit Sub
-                                End If
-                                
-                            End If
-theEnd:
-                            cboSend.AddItem cboSend.Text, 0
-                            
-                            cboSend.Text = vbNullString
-                            
-                            If Me.WindowState <> vbMinimized Then
-                                cboSend.SetFocus
-                            End If
-                        End If
-                    'case...
-                End Select
-                
-                '########## end ENTER cases
+            'Ignore rest of code as the bot is closing
+            If BotIsClosing Then
+                Exit Sub
+            End If
             
+            cboSend.AddItem Value, 0
             
-        End Select
-    End With
+            cboSend.Text = vbNullString
+            
+            If Me.WindowState <> vbMinimized Then
+                On Error Resume Next
+                cboSend.SetFocus
+            End If
+    End Select
+    
+    CurrentList.HideSelection = True
     
     If (KeyCode <> vbKeyTab) Then
-        User = vbNullString
-        
-        strbuf = vbNullString
-        
-        spaceIndex(0) = 0
-        spaceIndex(1) = 0
+        ACUserIndex = 0
     End If
 
     Exit Sub
@@ -7319,7 +7343,7 @@ Private Sub ChangeRTBFont(rtb As RichTextBox, ByVal NewFont As String, ByVal New
     Dim tmpBuffer As String
     
     With rtb
-        .selStart = 0
+        .SelStart = 0
         .SelLength = Len(.Text)
         .SelFontSize = NewSize
         .SelFontName = NewFont
@@ -7328,7 +7352,7 @@ Private Sub ChangeRTBFont(rtb As RichTextBox, ByVal NewFont As String, ByVal New
         .Font.Name = NewFont
         .Font.Size = NewSize
         .TextRTF = tmpBuffer
-        .selStart = Len(.Text)
+        .SelStart = Len(.Text)
     End With
 End Sub
 
@@ -8244,5 +8268,5 @@ End Sub
 Public Sub RecordcboSendSelInfo()
     'Debug.Print "SelStart: " & cboSend.SelStart & ", SelLength: " & cboSend.SelLength
     cboSendSelLength = cboSend.SelLength
-    cboSendSelStart = cboSend.selStart
+    cboSendSelStart = cboSend.SelStart
 End Sub

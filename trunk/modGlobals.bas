@@ -64,6 +64,8 @@ Public BNLSFinderLatest    As String
 
 Public Const ERROR_FINDBNLSSERVER As Integer = 12345
 
+
+
 'VARIABLES
 Public CurrentUsername As String
 Public ProfileRequest As Boolean

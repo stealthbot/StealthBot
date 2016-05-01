@@ -340,7 +340,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in Ban()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in Ban()."
 
     Exit Function
 End Function
@@ -415,7 +415,7 @@ Public Function StringFormatA(source As String, params() As Variant) As String
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in StringFormatA().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in StringFormatA().")
 
     StringFormatA = vbNullString
     
@@ -440,7 +440,7 @@ Public Function StringFormat(source As String, ParamArray params() As Variant)
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in StringFormat().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in StringFormat().")
 
 
     StringFormat = vbNullString
@@ -526,7 +526,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
     Exit Sub
 
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in bnetSend().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in bnetSend().")
 
     Exit Sub
     
@@ -634,7 +634,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Function
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Voting()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Voting()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 Public Function GetAccess(ByVal Username As String, Optional dbType As String = _
@@ -1001,7 +1001,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
 ERROR_HANDLER:
     'Ignores error 28: "Out of stack memory"
     If Err.Number <> 28 Then
-        Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in " & _
+        Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in " & _
             "GetCumulativeAccess().")
     End If
 
@@ -1685,7 +1685,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.{3}()", Err.Number, Err.description, "modOtherCode", "GetFolderPath")
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.{3}()", Err.Number, Err.Description, "modOtherCode", "GetFolderPath")
 End Function
 
 'Public Function OKToDoAutocompletion(ByRef sText As String, ByVal KeyAscii As Integer) As Boolean
@@ -1753,12 +1753,12 @@ Public Sub OpenReadme()
     ShellOpenURL "http://www.stealthbot.net/wiki/Main_Page", "the StealthBot Wiki"
 End Sub
 
-Sub ShellOpenURL(ByVal FullURL As String, Optional ByVal description As String = vbNullString, Optional ByVal DisplayMessage As Boolean = True, Optional ByVal Verb As String = "open")
+Sub ShellOpenURL(ByVal FullURL As String, Optional ByVal Description As String = vbNullString, Optional ByVal DisplayMessage As Boolean = True, Optional ByVal Verb As String = "open")
     ShellExecute frmChat.hWnd, Verb, FullURL, vbNullString, vbNullString, vbNormalFocus
     
     If DisplayMessage Then
-        If LenB(description) > 0 Then description = description & " at "
-        frmChat.AddChat RTBColors.ConsoleText, "Opening " & description & "[ " & FullURL & " ]..."
+        If LenB(Description) > 0 Then Description = Description & " at "
+        frmChat.AddChat RTBColors.ConsoleText, "Opening " & Description & "[ " & FullURL & " ]..."
     End If
 End Sub
 
@@ -2213,7 +2213,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Function
 ERROR_HANDLER:
-    sRet = StringFormat("Error #{0}: {1} in modOtherCode.SetCommandLine()|CommandLine: {2}", Err.Number, Err.description, sCommandLine)
+    sRet = StringFormat("Error #{0}: {1} in modOtherCode.SetCommandLine()|CommandLine: {2}", Err.Number, Err.Description, sCommandLine)
     SetCommandLine = Split(sRet, "|")
     Err.Clear
 End Function
@@ -2247,7 +2247,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.{3}()", Err.Number, Err.description, "modOtherCode", "AddEnvPath")
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.{3}()", Err.Number, Err.Description, "modOtherCode", "AddEnvPath")
     Err.Clear
 End Function
 
@@ -2437,7 +2437,7 @@ Public Function ListFileLoad(ByVal sPath As String, Optional ByVal MaxItems As I
 ERROR_HANDLER:
 
     frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.ListFileLoad()", _
-        Err.Number, Err.description, OBJECT_NAME)
+        Err.Number, Err.Description, OBJECT_NAME)
 End Function
 
 Public Sub ListFileAppendItem(ByVal sPath As String, ByVal Item As String)
@@ -2462,7 +2462,7 @@ Public Sub ListFileAppendItem(ByVal sPath As String, ByVal Item As String)
 ERROR_HANDLER:
 
     frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.ListFileAppendItem()", _
-        Err.Number, Err.description, OBJECT_NAME)
+        Err.Number, Err.Description, OBJECT_NAME)
 End Sub
 
 Public Sub ListFileSave(ByVal sPath As String, ByVal List As Collection)
@@ -2485,7 +2485,7 @@ Public Sub ListFileSave(ByVal sPath As String, ByVal List As Collection)
 ERROR_HANDLER:
 
     frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.ListFileSave()", _
-        Err.Number, Err.description, OBJECT_NAME)
+        Err.Number, Err.Description, OBJECT_NAME)
 End Sub
 
 ' Updated 4/10/06 to support millisecond pauses
@@ -2605,7 +2605,7 @@ Public Sub LogCommand(ByVal Caller As String, ByVal CString As String)
     Exit Sub
 
 LogCommand_Error:
-    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in " & _
+    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in " & _
         "Procedure; LogCommand; of; Module; modOtherCode; "
     
     Exit Sub
@@ -2787,7 +2787,7 @@ Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Lon
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: " & Err.description & " in SplitByLen()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: " & Err.Description & " in SplitByLen()."
     
     Exit Function
 End Function
@@ -2894,8 +2894,8 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim Count          As Long
     Dim str            As String
     Dim arrCount       As Long
-    Dim selStart       As Long
-    Dim selLength      As Long
+    Dim SelStart       As Long
+    Dim SelLength      As Long
     Dim blnHasFocus    As Boolean
     Dim blnAtEnd       As Boolean
     
@@ -2944,11 +2944,11 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         
         ' store rtb carat and whether rtb has focus
         With rtb
-            selStart = .selStart
-            selLength = .selLength
+            SelStart = .SelStart
+            SelLength = .SelLength
             blnHasFocus = (rtb.Parent.ActiveControl Is rtb And rtb.Parent.WindowState <> vbMinimized)
             ' whether it's at the end or within one vbCrLf of the end
-            blnAtEnd = (selStart >= rtbChatLength - 2)
+            blnAtEnd = (SelStart >= rtbChatLength - 2)
         End With
  
         lngVerticalPos = IsScrolling(rtb)
@@ -2977,18 +2977,18 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         
             With rtb
-                .selStart = 0
-                .selLength = InStr(1, .Text, vbLf, vbBinaryCompare)
+                .SelStart = 0
+                .SelLength = InStr(1, .Text, vbLf, vbBinaryCompare)
                 ' remove line from stored selection
-                selStart = selStart - .selLength
+                SelStart = SelStart - .SelLength
                 ' if selection included part of what was removed, add negative start point
                 ' to length to get difference length and start selection at 0
-                If selStart < 0 Then
-                    selLength = selLength + selStart
-                    selStart = 0
+                If SelStart < 0 Then
+                    SelLength = SelLength + SelStart
+                    SelStart = 0
                     ' if new length is negative, then the selection is now gone, so selection
                     ' length should be 0
-                    If selLength < 0 Then selLength = 0
+                    If SelLength < 0 Then SelLength = 0
                 End If
                 .SelFontName = rtb.Font.Name
                 .SelFontSize = rtb.Font.Size
@@ -3006,8 +3006,8 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         s = GetTimeStamp()
         
         With rtb
-            .selStart = Len(.Text)
-            .selLength = 0
+            .SelStart = Len(.Text)
+            .SelLength = 0
             .SelFontName = rtb.Font.Name
             .SelFontSize = rtb.Font.Size
             .SelBold = False
@@ -3015,7 +3015,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             .SelUnderline = False
             .SelColor = RTBColors.TimeStamps
             .SelText = s
-            .selLength = Len(.SelText)
+            .SelLength = Len(.SelText)
         End With
 
         For i = LBound(saElements) To UBound(saElements) Step 3
@@ -3035,8 +3035,8 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 L = Len(rtb.Text)
             
                 With rtb
-                    .selStart = L
-                    .selLength = 0
+                    .SelStart = L
+                    .SelLength = 0
                     .SelFontName = saElements(i)
                     .SelColor = saElements(i + 1)
                     .SelText = _
@@ -3044,7 +3044,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                             UBound(saElements)))
                     str = _
                         str & saElements(i + 2)
-                    .selLength = Len(.SelText)
+                    .SelLength = Len(.SelText)
                 End With
             End If
         Next i
@@ -3074,8 +3074,8 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             If blnHasFocus Then
                 ' restore carat location and selection if not previously at end
                 If Not blnAtEnd Then
-                    .selStart = selStart
-                    .selLength = selLength
+                    .SelStart = SelStart
+                    .SelLength = SelLength
                 End If
                 
                 ' restore focus
@@ -3100,7 +3100,7 @@ ERROR_HANDLER:
         Exit Sub
     End If
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in DisplayRichText()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in DisplayRichText()."
     
     Exit Sub
     
