@@ -3474,7 +3474,7 @@ Private Sub lvChannel_dblClick()
     Dim Value As String
 
     Value = GetSelectedUser
-    If cboSendSelStart = 0 Then Value = Value & BotVars.AutoCompletePostfix
+    If LenB(cboSend.Text) = 0 Then Value = Value & BotVars.AutoCompletePostfix
     Value = Value & Space$(1)
 
     If (Len(Value) > 0) Then
@@ -3561,7 +3561,7 @@ Private Sub lvFriendList_dblClick()
     Dim Value As String
 
     Value = GetFriendsSelectedUser
-    If cboSendSelStart = 0 Then Value = Value & BotVars.AutoCompletePostfix
+    If LenB(cboSend.Text) = 0 Then Value = Value & BotVars.AutoCompletePostfix
     Value = Value & Space$(1)
 
     If (Len(Value) > 0) Then
@@ -3582,7 +3582,7 @@ Private Sub lvClanList_dblClick()
     Dim Value As String
 
     Value = GetClanSelectedUser
-    If cboSendSelStart = 0 Then Value = Value & BotVars.AutoCompletePostfix
+    If LenB(cboSend.Text) = 0 Then Value = Value & BotVars.AutoCompletePostfix
     Value = Value & Space$(1)
 
     If (Len(Value) > 0) Then
