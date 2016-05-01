@@ -1078,6 +1078,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1103,6 +1104,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3469,21 +3471,19 @@ End Sub
 ' These two properties are zeroed out as the control loses focus and inaccessible
 '  (zeroed) at both access time in this method AND in the _LostFocus sub
 Private Sub lvChannel_dblClick()
-    Dim s           As String
-    Dim T           As String
-    Dim oldSelStart As Long
-    
-    s = GetSelectedUser
-    oldSelStart = cboSendSelStart
+    Dim Value As String
 
-    If (Len(s) > 0) Then
+    Value = GetSelectedUser
+    If cboSendSelStart = 0 Then Value = Value & BotVars.AutoCompletePostfix
+    Value = Value & Space$(1)
+
+    If (Len(Value) > 0) Then
         With cboSend
-            .SelStart = cboSendSelStart 'IIf(cboSendSelStart > 0, cboSendSelStart, 0)
-            .SelLength = cboSendSelLength 'IIf(cboSendSelLength > 0, cboSendSelLength + 1, 0)
-            .SelText = s
+            .SelStart = cboSendSelStart
+            .SelLength = cboSendSelLength
+            .SelText = Value
             
-            ' This is correct - sets the cursor properly
-            cboSendSelStart = Len(.Text)
+            cboSendSelStart = cboSendSelStart + Len(Value)
             cboSendSelLength = 0
             
             .SetFocus
@@ -3558,18 +3558,44 @@ Private Sub lvClanList_KeyUp(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub lvFriendList_dblClick()
-    If Not (lvFriendList.SelectedItem Is Nothing) Then
-        cboSend.Text = cboSend.Text & lvFriendList.SelectedItem.Text
-        cboSend.SetFocus
-        cboSend.SelStart = Len(cboSend.Text)
+    Dim Value As String
+
+    Value = GetFriendsSelectedUser
+    If cboSendSelStart = 0 Then Value = Value & BotVars.AutoCompletePostfix
+    Value = Value & Space$(1)
+
+    If (Len(Value) > 0) Then
+        With cboSend
+            .SelStart = cboSendSelStart
+            .SelLength = cboSendSelLength
+            .SelText = Value
+            
+            cboSendSelStart = cboSendSelStart + Len(Value)
+            cboSendSelLength = 0
+            
+            .SetFocus
+        End With
     End If
 End Sub
 
 Private Sub lvClanList_dblClick()
-    If Not (lvClanList.SelectedItem Is Nothing) And Len(cboSend.Text) < 200 Then
-        cboSend.Text = cboSend.Text & lvClanList.SelectedItem.Text
-        cboSend.SetFocus
-        cboSend.SelStart = Len(cboSend.Text)
+    Dim Value As String
+
+    Value = GetClanSelectedUser
+    If cboSendSelStart = 0 Then Value = Value & BotVars.AutoCompletePostfix
+    Value = Value & Space$(1)
+
+    If (Len(Value) > 0) Then
+        With cboSend
+            .SelStart = cboSendSelStart
+            .SelLength = cboSendSelLength
+            .SelText = Value
+            
+            cboSendSelStart = cboSendSelStart + Len(Value)
+            cboSendSelLength = 0
+            
+            .SetFocus
+        End With
     End If
 End Sub
 
@@ -5439,6 +5465,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     Dim CurrentTab  As Integer
     Dim CurrentList As ListView
     Dim CurrentUser As Long
+    Dim Value       As String
     
     SavedSelPos = cboSend.SelStart
     SavedSelLen = cboSend.SelLength
@@ -5570,8 +5597,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
         Case vbKeyN, vbKeyInsert 'ALT + N or ALT + INSERT
             If (Shift = vbAltMask) Then
                 If (Not (CurrentList.SelectedItem Is Nothing)) Then
-                    cboSend.SelText = CurrentList.SelectedItem.Text
-                    cboSend.SelStart = cboSend.SelStart + Len(CurrentList.SelectedItem.Text)
+                    Value = CurrentList.SelectedItem.Text
+                    If cboSend.SelStart = 0 Then Value = Value & BotVars.AutoCompletePostfix
+                    Value = Value & Space$(1)
+                    
+                    cboSend.SelText = Value
+                    cboSend.SelStart = cboSend.SelStart + Len(Value)
                     Exit Sub
                 End If
             End If
@@ -5773,7 +5804,6 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             
         Case vbKeyReturn
             Dim DoRunCommands     As Boolean
-            Dim Value             As String
             Dim NoProcs()         As String
             Dim StartOutfilterPos As Long
             
