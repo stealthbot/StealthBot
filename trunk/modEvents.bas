@@ -133,11 +133,13 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                 
                 If (pos) Then
                     Dim NewFlags As Long
+                    Dim LostFlags As Long
                     
                     frmChat.lvChannel.ListItems.Remove pos
                     
                     ' voodoo magic: only show flags that are new
                     NewFlags = Not (Flags Imp PreviousFlags)
+                    LostFlags = Not (PreviousFlags Imp Flags)
                 
                     If (NewFlags And USER_CHANNELOP) = USER_CHANNELOP Or _
                         (NewFlags And USER_BLIZZREP) = USER_BLIZZREP Or _
@@ -159,12 +161,19 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                     
                     ' display if it has not
                     If Not Displayed Then
-                        Dim FDesc As String
-                        FDesc = FlagDescription(NewFlags, False)
+                        Dim FDescN As String
+                        Dim FDescO As String
+                        FDescN = FlagDescription(NewFlags, False)
+                        FDescO = FlagDescription(LostFlags, False)
                         
-                        If LenB(FDesc) > 0 Then
+                        If LenB(FDescN) > 0 Then
                             frmChat.AddChat RTBColors.JoinUsername, "-- ", RTBColors.JoinedChannelName, _
-                                Username, RTBColors.JoinText, " has acquired " & FDesc & "."
+                                Username, RTBColors.JoinText, " is now a " & FDescN & "."
+                        End If
+                        
+                        If LenB(FDescO) > 0 Then
+                            frmChat.AddChat RTBColors.JoinUsername, "-- ", RTBColors.JoinedChannelName, _
+                                Username, RTBColors.JoinText, " is no longer a " & FDescO & "."
                         End If
                     End If
                 End If
@@ -186,7 +195,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_FlagsUpdate()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_FlagsUpdate()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
@@ -319,7 +328,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_JoinedChannel()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_JoinedChannel()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
@@ -548,7 +557,7 @@ Public Sub Event_LeftChatEnvironment()
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_LeftChatEnvironment()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_LeftChatEnvironment()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountName As String)
@@ -653,7 +662,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_LoggedOnAs()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_LoggedOnAs()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 ' updated 8-10-05 for new logging system
@@ -701,7 +710,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_LogonEvent()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_LogonEvent()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_ServerError(ByVal Message As String)
@@ -712,7 +721,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_ServerError()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_ServerError()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_ChannelJoinError(ByVal EventID As Integer, ByVal ChannelName As String)
@@ -775,7 +784,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_ChannelJoinError()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_ChannelJoinError()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
@@ -1010,7 +1019,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_ServerInfo()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_ServerInfo()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
@@ -1109,7 +1118,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_UserEmote()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_UserEmote()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, ByVal Statstring As String, ByVal Ping As Long, Optional QueuedEventID As Integer = 0)
@@ -1306,7 +1315,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_UserInChannel()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_UserInChannel()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal Statstring As String, ByVal Ping As Long, Optional QueuedEventID As Integer = 0)
@@ -1551,7 +1560,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_UserJoins()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_UserJoins()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
@@ -1643,7 +1652,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_UserLeaves()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_UserLeaves()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
@@ -1790,7 +1799,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_UserTalk()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_UserTalk()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Private Function CheckMessage(Username As String, Message As String) As Boolean
@@ -1836,7 +1845,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Function
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.CheckMessage()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.CheckMessage()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
@@ -1933,7 +1942,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_VersionCheck()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_VersionCheck()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long)
@@ -2068,7 +2077,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_WhisperFromUser()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_WhisperFromUser()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 ' Flags and ping are deliberately not used at this time
@@ -2129,7 +2138,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_WhisperToUser()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_WhisperToUser()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 
@@ -2167,7 +2176,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_ChannelList()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_ChannelList()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '10/01/09 - Hdx - This is for SID_MESSAGEBOX, for now it'll raise it's own event, and Event_ServerError
@@ -2180,7 +2189,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Function
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_MessageBox()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_MessageBox()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 Public Function CleanUsername(ByVal Username As String, Optional ByVal PrependNamingStar As Boolean = False) As String
@@ -2220,7 +2229,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Function
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.CleanUsername()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.CleanUsername()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 'Private Function GetDiablo2CharacterName(ByVal Username As String) As String
