@@ -2276,6 +2276,7 @@ Private Sub LoadVersion6Config()
     m_ProtocolID = ReadSettingL(SECTION_EMULATION, "ProtocolID", m_ProtocolID)
     m_PlatformID = ReadSetting(SECTION_EMULATION, "PlatformID", m_PlatformID)
     m_ProductLanguage = ReadSetting(SECTION_EMULATION, "ProductLanguage", m_ProductLanguage)
+    m_ServerCommandList = ReadSetting(SECTION_EMULATION, "ServerCommandList", m_ServerCommandList)
 
     m_DebugWarden = ReadSettingB(SECTION_DEBUG, "Warden", m_DebugWarden)
 
