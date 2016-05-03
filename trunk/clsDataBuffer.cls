@@ -338,7 +338,9 @@ Public Function SendPacket(Optional PacketID As Byte)
         End Select
     End If
     
-    If PacketID = SID_LEAVECHAT Then
+    ' These two packets cause the client to leave chat, and do not have any responses.
+    '  (SID_NOTIFYJOIN is not valid unless it's at least 10 bytes long)
+    If (PacketID = SID_LEAVECHAT Or (PacketID = SID_NOTIFYJOIN And m_bufsize >= 10)) Then
         ' there's no response to this one!
         Call Event_LeftChatEnvironment
     End If

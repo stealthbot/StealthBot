@@ -22,6 +22,7 @@ Public Const SID_UDPPINGRESPONSE        As Byte = &H14
 Public Const SID_MESSAGEBOX             As Byte = &H19
 Public Const SID_LOGONCHALLENGEEX       As Byte = &H1D
 Public Const SID_CLIENTID2              As Byte = &H1E
+Public Const SID_NOTIFYJOIN             As Byte = &H22
 Public Const SID_PING                   As Byte = &H25
 Public Const SID_READUSERDATA           As Byte = &H26
 Public Const SID_WRITEUSERDATA          As Byte = &H27
