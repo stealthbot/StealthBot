@@ -64,6 +64,7 @@ Private m_bClientBans                   As Boolean
 Private m_byTSSetting                   As Byte
 Private m_sHomeChannel                  As String
 Private m_sLastChannel                  As String
+Private m_colPublicChannels             As Collection
 Private m_bQuietTime                    As Boolean
 Private m_bUseBackupChan                As Boolean
 Private m_sBackupChan                   As String
@@ -484,6 +485,14 @@ End Property
 
 Public Property Let LastChannel(ByVal sLastChannel As String)
     m_sLastChannel = sLastChannel
+End Property
+
+Public Property Get PublicChannels() As Collection
+    Set PublicChannels = m_colPublicChannels
+End Property
+
+Public Property Set PublicChannels(ByVal colPublicChannels As Collection)
+    Set m_colPublicChannels = colPublicChannels
 End Property
 
 Public Property Get QuietTime() As Boolean

@@ -60,7 +60,7 @@ Public Sub LoadQuickChannels()
         
     End If
 
-    DoQuickChannelMenu
+    PrepareQuickChannelMenu
 End Sub
 
 Public Function GetDefaultQC(ByVal Index As Integer) As String
@@ -109,7 +109,7 @@ Public Sub SaveQuickChannels()
     Set QCCollection = Nothing
 End Sub
 
-Public Sub DoQuickChannelMenu()
+Public Sub PrepareQuickChannelMenu()
     Dim i As Integer
     Dim Caption As String
     Dim ShownAddQC As Boolean
@@ -122,34 +122,99 @@ Public Sub DoQuickChannelMenu()
     For i = 0 To 8
         Caption = Trim$(QC(i + 1))
         
-        If LenB(Caption) > 0 Then
-            If StrComp(Caption, g_Channel.Name, vbTextCompare) = 0 Then
-                FoundThisChannel = True
-            End If
-            
-            frmChat.mnuCustomChannels(i).Visible = True
-            
-            Caption = Replace(Caption, "&", "&&", , , vbBinaryCompare)
-            If StrComp(Caption, "-", vbBinaryCompare) = 0 Then
-                Caption = "&-"
-            End If
-            
-            frmChat.mnuCustomChannels(i).Caption = Caption
-        Else
-            frmChat.mnuCustomChannels(i).Visible = False
-            
-            frmChat.mnuCustomChannels(i).Caption = vbNullString
-            
-            If Not ShownAddQC And LenB(g_Channel.Name) > 0 Then
-                frmChat.mnuCustomChannelAdd.Visible = True
-                frmChat.mnuCustomChannelAdd.Caption = StringFormat("&Add {0}{1}{0} as F{2}", Chr$(34), g_Channel.Name, CStr(i + 1))
+        With frmChat.mnuCustomChannels(i)
+            If LenB(Caption) > 0 Then
+                If StrComp(Caption, g_Channel.Name, vbTextCompare) = 0 Then
+                    FoundThisChannel = True
+                End If
                 
-                ShownAddQC = True
+                .Visible = True
+                .Caption = MakeChannelMenuItemSafe(Caption)
+            Else
+                If Not ShownAddQC And LenB(g_Channel.Name) > 0 Then
+                    frmChat.mnuCustomChannelAdd.Visible = True
+                    frmChat.mnuCustomChannelAdd.Caption = StringFormat("&Add {0}{1}{0} as F{2}", Chr$(34), MakeChannelMenuItemSafe(g_Channel.Name, True), CStr(i + 1))
+                    
+                    ShownAddQC = True
+                End If
+                
+                .Visible = False
+                .Caption = vbNullString
             End If
-        End If
+        End With
     Next i
     
     If FoundThisChannel Or Not ShownAddQC Then
         frmChat.mnuCustomChannelAdd.Visible = False
     End If
 End Sub
+
+Public Sub PrepareHomeChannelMenu()
+    Dim ShowHome As Boolean
+    Dim ShowLast As Boolean
+
+    ShowHome = (LenB(Config.HomeChannel) > 0 And StrComp(Config.HomeChannel, g_Channel.Name, vbTextCompare) <> 0)
+    With frmChat.mnuHomeChannel
+        .Caption = MakeChannelMenuItemSafe(Config.HomeChannel, True) & " (&Home Channel)"
+        .Visible = ShowHome
+    End With
+
+    ShowLast = (LenB(BotVars.LastChannel) > 0 And StrComp(BotVars.LastChannel, g_Channel.Name, vbTextCompare) <> 0)
+    With frmChat.mnuLastChannel
+        .Caption = MakeChannelMenuItemSafe(BotVars.LastChannel, True) & " (&Previous Channel)"
+        .Visible = ShowLast
+    End With
+
+    frmChat.mnuQCDash.Visible = (ShowHome Or ShowLast)
+End Sub
+
+Public Sub PreparePublicChannelMenu()
+    Dim i As Integer
+    Dim AnyVisible As Boolean
+
+    ' unload all menu items
+    For i = 1 To frmChat.mnuPublicChannels.Count - 1
+        Call Unload(frmChat.mnuPublicChannels(i))
+    Next i
+
+    ' hide 0th menu item
+    With frmChat.mnuPublicChannels(0)
+        .Caption = vbNullString
+        .Visible = False
+    End With
+
+    AnyVisible = False
+
+    If Not BotVars.PublicChannels Is Nothing Then
+        If BotVars.PublicChannels.Count > 0 Then
+            For i = 1 To BotVars.PublicChannels.Count
+                AnyVisible = True
+
+                If (i > 1) Then
+                    ' load a new one
+                    Call Load(frmChat.mnuPublicChannels(i - 1))
+                End If
+
+                With frmChat.mnuPublicChannels(i - 1)
+                    .Caption = MakeChannelMenuItemSafe(BotVars.PublicChannels.Item(i))
+                    .Visible = True
+                End With
+            Next i
+        End If
+    End If
+
+    ' dash and header visibility
+    frmChat.mnuPCDash.Visible = AnyVisible
+    frmChat.mnuPCHeader.Visible = AnyVisible
+End Sub
+
+Private Function MakeChannelMenuItemSafe(ByVal sChannel As String, Optional ByVal CanBeDash As Boolean = False) As String
+    sChannel = Replace(sChannel, "&", "&&", , , vbBinaryCompare)
+
+    If Not CanBeDash And StrComp(sChannel, "-", vbBinaryCompare) = 0 Then
+        sChannel = "&-"
+    End If
+
+    MakeChannelMenuItemSafe = sChannel
+End Function
+

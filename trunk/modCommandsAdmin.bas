@@ -242,6 +242,7 @@ Public Sub OnSetHome(Command As clsCommandObj)
     Call Config.Save
     
     BotVars.HomeChannel = Config.HomeChannel
+    PrepareHomeChannelMenu
     If LenB(Channel) = 0 Then
         Command.Respond "Home channel set to server default."
     Else

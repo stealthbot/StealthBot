@@ -1078,7 +1078,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1104,7 +1103,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1187,12 +1185,15 @@ Begin VB.Form frmChat
          Caption         =   "Channel &List"
          Begin VB.Menu mnuHomeChannel 
             Caption         =   "&Bot Home"
+            Visible         =   0   'False
          End
          Begin VB.Menu mnuLastChannel 
             Caption         =   "&Last Channel"
+            Visible         =   0   'False
          End
          Begin VB.Menu mnuQCDash 
             Caption         =   "-"
+            Visible         =   0   'False
          End
          Begin VB.Menu mnuQCHeader 
             Caption         =   "- QuickChannels -"
@@ -3411,26 +3412,6 @@ ERROR_HANDLER:
 End Sub
 
 Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
-    Dim i As Integer
-    
-    ' show home channel
-    mnuHomeChannel.Visible = (mnuHomeChannel.Caption <> vbNullString And StrComp(Config.HomeChannel, g_Channel.Name, vbTextCompare) <> 0)
-    mnuLastChannel.Visible = (mnuLastChannel.Caption <> vbNullString And StrComp(BotVars.LastChannel, g_Channel.Name, vbTextCompare) <> 0)
-    mnuQCDash.Visible = (mnuHomeChannel.Visible Or mnuLastChannel.Visible)
-    
-    ' show quick channels (section always visible)
-    'frmChat.mnuQCHeader.Visible = (mnuCustomChannels(0).Caption <> vbNullString)
-    'For i = 0 To mnuCustomChannels.Count - 1
-    '    mnuCustomChannels(i).Visible = (mnuCustomChannels(i).Caption <> vbNullString)
-    'Next i
- 
-    ' show public channels
-    mnuPCDash.Visible = (mnuPublicChannels(0).Caption <> vbNullString)
-    mnuPCHeader.Visible = (mnuPublicChannels(0).Caption <> vbNullString)
-    For i = 0 To mnuPublicChannels.Count - 1
-        mnuPublicChannels(i).Visible = (mnuPublicChannels(i).Caption <> vbNullString)
-    Next i
-        
     PopupMenu mnuQCTop
 End Sub
 
@@ -3876,28 +3857,6 @@ Private Sub lvClanList_MouseMove(Button As Integer, Shift As Integer, x As Singl
             End If
         End If
     End If
-End Sub
-
-Private Sub mnuBot_Click()
-    Dim i As Integer
-    
-    ' show home channel
-    mnuHomeChannel.Visible = (mnuHomeChannel.Caption <> vbNullString And StrComp(Config.HomeChannel, g_Channel.Name, vbTextCompare) <> 0)
-    mnuLastChannel.Visible = (mnuLastChannel.Caption <> vbNullString And StrComp(BotVars.LastChannel, g_Channel.Name, vbTextCompare) <> 0)
-    mnuQCDash.Visible = (mnuHomeChannel.Visible Or mnuLastChannel.Visible)
-    
-    ' show quick channels (section always visible)
-    'frmChat.mnuQCHeader.Visible = (mnuCustomChannels(0).Caption <> vbNullString)
-    'For i = 0 To mnuCustomChannels.Count - 1
-    '    mnuCustomChannels(i).Visible = (mnuCustomChannels(i).Caption <> vbNullString)
-    'Next i
- 
-    ' show public channels
-    mnuPCDash.Visible = (mnuPublicChannels(0).Caption <> vbNullString)
-    mnuPCHeader.Visible = (mnuPublicChannels(0).Caption <> vbNullString)
-    For i = 0 To mnuPublicChannels.Count - 1
-        mnuPublicChannels(i).Visible = (mnuPublicChannels(i).Caption <> vbNullString)
-    Next i
 End Sub
 
 Private Sub mnuCatchPhrases_Click()
@@ -4504,13 +4463,15 @@ Private Sub mnuPublicChannels_Click(Index As Integer)
     '    Exit Sub
     'End If
     
-    If Not PublicChannels Is Nothing Then
-        Select Case Config.AutoCreateChannels
-            Case "ALERT", "NEVER"
-                Call FullJoin(PublicChannels.Item(Index + 1), 0)
-            Case Else ' "ALWAYS"
-                Call FullJoin(PublicChannels.Item(Index + 1), 2)
-        End Select
+    If Not BotVars.PublicChannels Is Nothing Then
+        If BotVars.PublicChannels.Count > Index Then
+            Select Case Config.AutoCreateChannels
+                Case "ALERT", "NEVER"
+                    Call FullJoin(BotVars.PublicChannels.Item(Index + 1), 0)
+                Case Else ' "ALWAYS"
+                    Call FullJoin(BotVars.PublicChannels.Item(Index + 1), 2)
+            End Select
+        End If
         'AddQ "/join " & PublicChannels.Item(Index + 1), PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
@@ -5024,7 +4985,7 @@ Private Sub mnuCustomChannelAdd_Click()
         For i = LBound(QC) To UBound(QC)
             If LenB(Trim$(QC(i))) = 0 Then
                 QC(i) = g_Channel.Name
-                DoQuickChannelMenu
+                PrepareQuickChannelMenu
                 
                 Exit Sub
             End If
@@ -8149,8 +8110,6 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
             UserCancelledConnect = True
         End If
         
-        DoQuickChannelMenu
-        
         If (UserCancelledConnect) Then
             'AddChat vbRed, "DISC!"
         
@@ -8207,19 +8166,12 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         mnuIgnoreInvites.Visible = False
         mnuRealmSwitch.Visible = False
         
-        mnuHomeChannel.Caption = vbNullString
-        mnuLastChannel.Caption = vbNullString
+        BotVars.LastChannel = vbNullString
+        PrepareHomeChannelMenu
+        PrepareQuickChannelMenu
         
-        Set PublicChannels = Nothing
-        
-        With mnuPublicChannels(0)
-            .Caption = vbNullString
-            .Visible = False
-        End With
-        
-        For i = 1 To mnuPublicChannels.Count - 1
-            Call Unload(mnuPublicChannels(i))
-        Next i
+        Set BotVars.PublicChannels = Nothing
+        PreparePublicChannelMenu
         
         If ((Me.WindowState = vbNormal) And _
             (DoNotShow = 0)) Then
@@ -8250,8 +8202,6 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         ' reset BNLS finder
         BNLSFinderGotList = False
         BNLSFinderIndex = 0
-        
-        BotVars.LastChannel = vbNullString
         
         PassedClanMotdCheck = False
         

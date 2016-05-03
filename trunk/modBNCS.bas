@@ -174,7 +174,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Function
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNCSRecvPacket()", Err.Number, Err.description, OBJECT_NAME))
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNCSRecvPacket()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 '*********************************
@@ -207,7 +207,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CLIENTID()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CLIENTID()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -253,7 +253,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_STARTVERSIONING()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_STARTVERSIONING()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -282,7 +282,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_STARTVERSIONING()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_STARTVERSIONING()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 '*******************************
 'SID_REPORTVERSION (0x07) S->C
@@ -333,7 +333,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_REPORTVERSION()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_REPORTVERSION()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -378,7 +378,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_STARTVERSIONING()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_STARTVERSIONING()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -396,7 +396,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_ENTERCHAT()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_ENTERCHAT()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -416,7 +416,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_ENTERCHAT()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_ENTERCHAT()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -433,7 +433,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_ENTERCHAT()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_ENTERCHAT()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -445,14 +445,25 @@ Private Sub RECV_SID_GETCHANNELLIST(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
 
     Dim sChannels() As String
-    sChannels = Split(pBuff.GetRaw(), Chr$(0))
+    Dim sChannel As String
+    
+    sChannels() = Split(vbNullString)
+    
+    Do
+        sChannel = pBuff.GetString()
+        
+        If LenB(sChannel) > 0 Then
+            ReDim Preserve sChannels(UBound(sChannels) + 1)
+            sChannels(UBound(sChannels)) = Trim$(sChannel)
+        End If
+    Loop While LenB(sChannel) > 0
     
     Call Event_ChannelList(sChannels)
     
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_GETCHANNELLIST()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_GETCHANNELLIST()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -470,7 +481,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_GETCHANNELLIST()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_GETCHANNELLIST()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -491,7 +502,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CHATCOMMAND()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CHATCOMMAND()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 
@@ -555,7 +566,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CHATEVENT()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CHATEVENT()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*********************************
@@ -631,7 +642,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_LOCALEINFO()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_LOCALEINFO()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -652,7 +663,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_UDPPINGRESPONSE()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_UDPPINGRESPONSE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -670,7 +681,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_MESSAGEBOX()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_MESSAGEBOX()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '********************************
@@ -688,7 +699,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONCHALLENGEEX()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONCHALLENGEEX()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*********************************
@@ -730,7 +741,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CLIENTID2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CLIENTID2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -748,7 +759,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_PING()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_PING()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -773,7 +784,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_PING()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_PING()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '********************************
@@ -789,7 +800,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONCHALLENGE()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONCHALLENGE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -825,7 +836,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CDKEY()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CDKEY()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -865,7 +876,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CDKEY()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CDKEY()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -901,7 +912,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CDKEY2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CDKEY2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -953,7 +964,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CDKEY2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CDKEY2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 
@@ -1006,7 +1017,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONRESPONSE2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONRESPONSE2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -1040,7 +1051,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_LOGONRESPONSE2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_LOGONRESPONSE2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -1078,7 +1089,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CREATEACCOUNT2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CREATEACCOUNT2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**************************************
@@ -1108,7 +1119,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CREATEACCOUNT2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CREATEACCOUNT2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -1175,7 +1186,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONREALMEX()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONREALMEX()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -1202,7 +1213,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_LOGONREALMEX()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_LOGONREALMEX()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -1257,7 +1268,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Recv_SID_QUERYREALMS2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Recv_SID_QUERYREALMS2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -1275,7 +1286,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_QUERYREALMS2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_QUERYREALMS2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -1341,7 +1352,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_INFO()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_INFO()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -1404,7 +1415,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_INFO()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_INFO()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -1457,7 +1468,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_CHECK()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_CHECK()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -1551,7 +1562,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_CHECK()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_CHECK()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**********************************
@@ -1592,7 +1603,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTCREATE()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTCREATE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**********************************
@@ -1618,7 +1629,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTCREATE()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTCREATE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**********************************
@@ -1659,7 +1670,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTLOGON()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTLOGON()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**********************************
@@ -1680,7 +1691,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTLOGON()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTLOGON()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**************************************
@@ -1727,7 +1738,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTLOGONPROOF()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTLOGONPROOF()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**************************************
@@ -1748,7 +1759,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTLOGONPROOF()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTLOGONPROOF()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -1767,7 +1778,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_SETEMAIL()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_SETEMAIL()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '**************************************
@@ -1788,7 +1799,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_SETEMAIL()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_SETEMAIL()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '=======================================================================================================
@@ -1807,7 +1818,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.DoRegisterEmail()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.DoRegisterEmail()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '=======================================================================================================
@@ -1835,7 +1846,7 @@ On Error GoTo ERROR_HANDLER:
 ERROR_HANDLER:
     CompileCheckrevision = False
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.CompileCheckrevision()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.CompileCheckrevision()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 Public Function GetCDKeyCount(Optional sProduct As String = vbNullString) As Long
@@ -1852,7 +1863,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Function
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetCDKeyCount()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.GetCDKeyCount()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 Public Function GetLogonSystem(Optional sProduct As String = vbNullString) As Long
@@ -1885,7 +1896,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Function
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetLogonSystem()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.GetLogonSystem()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 'Converts the normalized (forward: IX86, STAR, etc) string representation of a DWORD into it's numeric equivalent.
@@ -1904,7 +1915,7 @@ On Error GoTo ERROR_HANDLER:
 ERROR_HANDLER:
     GetDWORDOverride = lRet
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetDWORDOverride()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.GetDWORDOverride()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 Private Function GetDWORD(sData As String) As Long
@@ -1916,7 +1927,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Function
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetDWORD()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.GetDWORD()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 Public Sub SendEnterChatSequence()
@@ -1957,7 +1968,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SendEnterChatSequence()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SendEnterChatSequence()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 ' do channel join home (first time?)
@@ -1980,7 +1991,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.DoChannelJoinHome()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.DoChannelJoinHome()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 
@@ -1998,7 +2009,7 @@ Public Sub DoChannelJoinProductHome()
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.DoChannelJoinProductHome()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.DoChannelJoinProductHome()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Sub DoQueryRealms()

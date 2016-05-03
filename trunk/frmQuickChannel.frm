@@ -535,7 +535,7 @@ Private Sub cmdDone_Click()
     
     SaveQuickChannels
     
-    DoQuickChannelMenu
+    PrepareQuickChannelMenu
     
     Unload Me
 End Sub

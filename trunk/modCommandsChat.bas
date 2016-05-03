@@ -316,6 +316,8 @@ Public Sub OnReconnect(Command As clsCommandObj)
         
         ' reinstate last channel
         BotVars.LastChannel = LastChannel
+        PrepareHomeChannelMenu
+        PrepareQuickChannelMenu
     Else
         frmChat.AddChat RTBColors.SuccessText, "Connection initialized."
         
