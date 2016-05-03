@@ -1514,19 +1514,43 @@ Public Function GetFilePath(ByVal sFileName As String) As String
 End Function
 
 Public Function GetVersionByte(ByVal sProductCode As String) As Long
-    GetVersionByte = m_VersionBytes(GetProductIndex(sProductCode))
+    Dim iIndex As Integer
+    iIndex = GetProductIndex(GetProductInfo(sProductCode).ShortCode)
+    
+    If (iIndex >= LBound(m_VersionBytes) And iIndex <= UBound(m_VersionBytes)) Then
+        GetVersionByte = m_VersionBytes(iIndex)
+    Else
+        GetVersionByte = 0
+    End If
 End Function
 
 Public Sub SetVersionByte(ByVal sProductCode As String, ByVal iValue As Long)
-    m_VersionBytes(GetProductIndex(sProductCode)) = iValue
+    Dim iIndex As Integer
+    iIndex = GetProductIndex(GetProductInfo(sProductCode).ShortCode)
+    
+    If (iIndex >= LBound(m_VersionBytes) And iIndex <= UBound(m_VersionBytes)) Then
+        m_VersionBytes(iIndex) = iValue
+    End If
 End Sub
 
 Public Function GetLogonSystem(ByVal sProductCode As String) As Long
-    GetLogonSystem = m_LogonSystems(GetProductIndex(sProductCode))
+    Dim iIndex As Integer
+    iIndex = GetProductIndex(GetProductInfo(sProductCode).ShortCode)
+    
+    If (iIndex >= LBound(m_LogonSystems) And iIndex <= UBound(m_LogonSystems)) Then
+        GetLogonSystem = m_LogonSystems(iIndex)
+    Else
+        GetLogonSystem = 0
+    End If
 End Function
 
 Public Sub SetLogonSystem(ByVal sProductCode As String, ByVal iValue As Long)
-    m_LogonSystems(GetProductIndex(sProductCode)) = iValue
+    Dim iIndex As Integer
+    iIndex = GetProductIndex(GetProductInfo(sProductCode).ShortCode)
+    
+    If (iIndex >= LBound(m_LogonSystems) And iIndex <= UBound(m_LogonSystems)) Then
+        m_LogonSystems(iIndex) = iValue
+    End If
 End Sub
 
 
@@ -2286,6 +2310,7 @@ Private Sub LoadVersion6Config()
     For i = LBound(m_ProductKeys) To UBound(m_ProductKeys)
         sVal = ReadSetting(SECTION_EMULATION, m_ProductKeys(i) & "VerByte")
         If LenB(sVal) > 0 Then m_VersionBytes(i) = CLng(Val("&H" & sVal))
+        
         sVal = ReadSetting(SECTION_EMULATION, m_ProductKeys(i) & "LogonSystem")
         If LenB(sVal) > 0 Then m_LogonSystems(i) = CLng(Val("&H" & sVal))
     Next
@@ -2405,6 +2430,7 @@ Private Function GetProductIndex(ByVal Code As String) As Integer
             Exit Function
         End If
     Next
+    GetProductIndex = -1
 End Function
 
 Private Sub Class_Initialize()
