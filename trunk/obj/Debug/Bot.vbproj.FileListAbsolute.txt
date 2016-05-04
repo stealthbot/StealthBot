@@ -1,0 +1,13 @@
+C:\Users\David\Documents\GitHub\StealthBot\trunk\upgrade\obj\Debug\Interop.InetCtlsObjects.dll
+C:\Users\David\Documents\GitHub\StealthBot\trunk\upgrade\obj\Debug\Interop.MSScriptControl.dll
+C:\Users\David\Documents\GitHub\StealthBot\trunk\upgrade\obj\Debug\Interop.MSWinsockLib.dll
+C:\Users\David\Documents\GitHub\StealthBot\trunk\upgrade\obj\Debug\Interop.MSXML2.dll
+C:\Users\David\Documents\GitHub\StealthBot\trunk\upgrade\obj\Debug\Interop.Scripting.dll
+C:\Users\David\Documents\GitHub\StealthBot\trunk\upgrade\obj\Debug\Interop.SSubTimer6.dll
+C:\Users\David\Documents\GitHub\StealthBot\trunk\upgrade\obj\Debug\Interop.TLI.dll
+C:\Users\David\Documents\GitHub\StealthBot\trunk\upgrade\obj\Debug\Interop.vbalTreeViewLib6.dll
+C:\Users\David\Documents\GitHub\StealthBot\trunk\upgrade\obj\Debug\Interop.VBScript_RegExp_55.dll
+C:\Users\David\Documents\GitHub\StealthBot\trunk\upgrade\obj\Debug\AxInterop.InetCtlsObjects.dll
+C:\Users\David\Documents\GitHub\StealthBot\trunk\upgrade\obj\Debug\AxInterop.MSWinsockLib.dll
+C:\Users\David\Documents\GitHub\StealthBot\trunk\upgrade\obj\Debug\AxInterop.vbalTreeViewLib6.dll
+C:\Users\David\Documents\GitHub\StealthBot\trunk\upgrade\obj\Debug\Bot.vbproj.ResolveComReference.cache

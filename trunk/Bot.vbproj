@@ -1,0 +1,643 @@
+﻿<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <MyType>WindowsForms</MyType>
+    <ProductVersion>8.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2616EED5-016C-41BA-8FE0-5E42B09107E3}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <AssemblyName>StealthBot</AssemblyName>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>StealthBot.frmChat</StartupObject>
+    <AssemblyMajorVersion>2</AssemblyMajorVersion>
+    <AssemblyMinorVersion>7</AssemblyMinorVersion>
+    <AssemblyRevisionNumber>490</AssemblyRevisionNumber>
+    <GenerateRevisionNumber>False</GenerateRevisionNumber>
+    <AssemblyCompanyName>Andy T (Stealth@USEast)</AssemblyCompanyName>
+    <StartWithIE>False</StartWithIE>
+    <ApplicationIcon>Bot.ico</ApplicationIcon>
+    <RootNamespace>StealthBot</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>.\bin\</OutputPath>
+    <DocumentationFile>StealthBot.xml</DocumentationFile>
+    <DebugSymbols>True</DebugSymbols>
+    <DefineDebug>True</DefineDebug>
+    <DefineTrace>True</DefineTrace>
+    <DefineConstants>BETA = 1 : DEV_RELEASE = 2 : Win32=True</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
+    <NoWarn>42016,42017,42018,42019,42032</NoWarn>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>.\bin\</OutputPath>
+    <DocumentationFile>StealthBot.xml</DocumentationFile>
+    <DebugSymbols>False</DebugSymbols>
+    <DefineDebug>False</DefineDebug>
+    <DefineTrace>True</DefineTrace>
+    <DefineConstants>BETA = 1 : DEV_RELEASE = 2 : Win32=True</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
+    <NoWarn>42016,42017,42018,42019,42032</NoWarn>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic.Compatibility">
+      <Name>Microsoft.VisualBasic.Compatibility</Name>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic.PowerPacks.VS">
+      <Name>Microsoft.VisualBasic.PowerPacks.VS</Name>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.XML">
+      <Name>System.XML</Name>
+    </Reference>
+    <COMReference Include="AxInetCtlsObjects">
+      <Guid>{48E59290-9880-11CF-9754-00AA00C00908}</Guid>
+      <Lcid>0</Lcid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <WrapperTool>aximp</WrapperTool>
+    </COMReference>
+    <COMReference Include="AxMSWinsockLib">
+      <Guid>{248DD890-BB45-11CF-9ABC-0080C7E7B78D}</Guid>
+      <Lcid>0</Lcid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <WrapperTool>aximp</WrapperTool>
+    </COMReference>
+    <COMReference Include="AxvbalTreeViewLib6">
+      <Guid>{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}</Guid>
+      <Lcid>0</Lcid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>1</VersionMinor>
+      <WrapperTool>aximp</WrapperTool>
+    </COMReference>
+    <COMReference Include="InetCtlsObjects">
+      <Guid>{48E59290-9880-11CF-9754-00AA00C00908}</Guid>
+      <Lcid>0</Lcid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+    <COMReference Include="MSScriptControl">
+      <Guid>{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}</Guid>
+      <Lcid>0</Lcid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+    <COMReference Include="MSWinsockLib">
+      <Guid>{248DD890-BB45-11CF-9ABC-0080C7E7B78D}</Guid>
+      <Lcid>0</Lcid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+    <COMReference Include="MSXML2">
+      <Guid>{F5078F18-C551-11D3-89B9-0000F81FE221}</Guid>
+      <Lcid>0</Lcid>
+      <VersionMajor>6</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+    <COMReference Include="Scripting">
+      <Guid>{420B2830-E718-11CF-893D-00A0C9054228}</Guid>
+      <Lcid>0</Lcid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+    <COMReference Include="SSubTimer6">
+      <Guid>{71A2702D-C7D8-11D2-BEF8-525400DFB47A}</Guid>
+      <Lcid>0</Lcid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+    <COMReference Include="TLI">
+      <Guid>{8B217740-717D-11CE-AB5B-D41203C10000}</Guid>
+      <Lcid>0</Lcid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+    <COMReference Include="vbalTreeViewLib6">
+      <Guid>{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}</Guid>
+      <Lcid>0</Lcid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>1</VersionMinor>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+    <COMReference Include="VBScript_RegExp_55">
+      <Guid>{3F4DACA7-160D-11D2-A8E9-00104B365C9F}</Guid>
+      <Lcid>0</Lcid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>5</VersionMinor>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="Microsoft.VisualBasic.Compatibility" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.vb" />
+    <Compile Include="AxInetArray.vb" />
+    <Compile Include="AxWinsockArray.vb" />
+    <Compile Include="clsBanlistUserObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsBNCSQueue.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsBNCSRecvBuffer.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsBNLSRecvBuffer.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsBotVars.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsChannelObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsClanMemberObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsClanObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsClanPacketHandler.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsColor.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsCommandDocObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsCommandDocObjStatic.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsCommandGeneratorObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsCommandObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsCommandObjStatic.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsCommandParamsObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsCommandRestrictionObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsConfig.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsCRC32.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsCToolTip.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsDataBuffer.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsDataStorage.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsDBEntryObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsErrorHandler.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsFriendlistHandler.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsFriendObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsiTunes.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsKeyDecoder.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsLogger.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsMCPHandler.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsMenuObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsNLS.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsOSVersion.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsQueue.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsQueueObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsQuotesObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsScriptSupportClass.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsSLongTimer.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsUserEventObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsUserObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsUserStats.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsWinamp.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="frmAbout.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmAbout.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmAbout.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCatch.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmCatch.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCatch.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmChat.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmChat.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmChat.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmClanInvite.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmClanInvite.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmClanInvite.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCommands.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmCommands.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCommands.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCustomInputBox.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmCustomInputBox.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCustomInputBox.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDBGameSelection.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmDBGameSelection.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmDBGameSelection.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDBManager.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmDBManager.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmDBManager.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDBNameEntry.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmDBNameEntry.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmDBNameEntry.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDBType.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmDBType.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmDBType.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEMailReg.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmEMailReg.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmEMailReg.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmFilters.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmFilters.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmFilters.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmManageKeys.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmManageKeys.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmManageKeys.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmProfile.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmProfile.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmProfile.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmQuickChannel.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmQuickChannel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmQuickChannel.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRealm.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmRealm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmRealm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmScript.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmScript.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmScript.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSettings.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmSettings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmSettings.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSplash.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmSplash.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmSplash.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmWhisperWindow.Designer.vb">
+      <SubType>Code</SubType>
+      <DependentUpon>frmWhisperWindow.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmWhisperWindow.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LineShapeArray.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modAPI.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modBNCS.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modBNCSutil.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modBNLS.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modChatQueue.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modColors.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modCommandDocsObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modCommands.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modCommandsAdmin.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modCommandsChat.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modCommandsClan.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modCommandsInfo.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modCommandsMisc.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modCommandsMP3.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modCommandsOps.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modConstants.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modDateTime.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modEnum.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modEvents.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modGlobals.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modMail.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modMediaPlayer.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modMenuObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modNews.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modOtherCode.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modPacketBuffer.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modParsing.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modProxySupport.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modQueueObj.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modQuickChannels.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modRegistry.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modScripting.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modSHA1.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modStaticClasses.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modSystray.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modTimerProcs.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modUnsignedConversions.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modUTF8.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modWar3Clan.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modWarden.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modWhisperWindows.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modWindow.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RectangleShapeArray.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="UpgradeSupport.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="frmAbout.resX">
+      <DependentUpon>frmAbout.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCatch.resX">
+      <DependentUpon>frmCatch.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmChat.resX">
+      <DependentUpon>frmChat.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmClanInvite.resX">
+      <DependentUpon>frmClanInvite.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCommands.resX">
+      <DependentUpon>frmCommands.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCustomInputBox.resX">
+      <DependentUpon>frmCustomInputBox.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDBGameSelection.resX">
+      <DependentUpon>frmDBGameSelection.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDBManager.resX">
+      <DependentUpon>frmDBManager.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDBNameEntry.resX">
+      <DependentUpon>frmDBNameEntry.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDBType.resX">
+      <DependentUpon>frmDBType.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEMailReg.resX">
+      <DependentUpon>frmEMailReg.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmFilters.resX">
+      <DependentUpon>frmFilters.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmManageKeys.resX">
+      <DependentUpon>frmManageKeys.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmProfile.resX">
+      <DependentUpon>frmProfile.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmQuickChannel.resX">
+      <DependentUpon>frmQuickChannel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRealm.resX">
+      <DependentUpon>frmRealm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmScript.resX">
+      <DependentUpon>frmScript.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSettings.resX">
+      <DependentUpon>frmSettings.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSplash.resX">
+      <DependentUpon>frmSplash.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmWhisperWindow.resX">
+      <DependentUpon>frmWhisperWindow.vb</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="Bot.ico" />
+    <None Include="_UpgradeReport.htm">
+      <SubType>Preview</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="My Project\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
