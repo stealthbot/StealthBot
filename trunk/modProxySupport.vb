@@ -104,109 +104,109 @@ Module modProxySupport
 		ds.SendData(buf)
 	End Sub
 	
-	Public Sub ParseProxyPacket(ByVal Data As String)
-		Dim s0ut As String
-		Dim lColor As Integer
-		Dim Message As Byte
-		Static ReceivedMethodReply As Boolean
-		
-		Select Case Asc(Mid(Data, 1, 1))
-			Case &H0, &H4, &H5
-				Message = Asc(Mid(Data, 2, 1))
-				
-				If Not BotVars.ProxyIsSocks5 Then
-					Select Case Message
-						Case 90
-							s0ut = "[PROXY] SOCKS4 request granted."
-							lColor = RTBColors.SuccessText
-							UpdateProxyStatus(modEnum.enuProxyStatus.psOnline)
-							frmChat.InitBNetConnection()
-						Case 91
-							s0ut = "[PROXY] Request rejected or failed."
-							UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected)
-							lColor = RTBColors.ErrorMessageText
-						Case 92
-							s0ut = "[PROXY] Request rejected: the SOCKS server cannot connect to identd on the client."
-							UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected)
-							lColor = RTBColors.ErrorMessageText
-						Case 93
-							s0ut = "[PROXY] Request rejected: client program and identd report different userids."
-							UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected)
-							lColor = RTBColors.ErrorMessageText
-						Case Else
-							s0ut = "[PROXY] Unknown/unhandled proxy message. ID: " & Message
-							lColor = RTBColors.InformationText
-							UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected)
-							
-					End Select
-					
-					If Message >= 91 Then
-						'UPGRADE_NOTE: State was upgraded to CtlState. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-						If frmChat.sckBNet.CtlState <> 0 Then
-							frmChat.sckBNet.Close()
-						End If
-					End If
-				Else
-					'o  REP    Reply field:
-					s0ut = "[PROXY] "
-					
-					Select Case Message
-						Case 0 '00' succeeded
-							If ReceivedMethodReply Then
-								ReceivedMethodReply = False
-								s0ut = s0ut & "SOCKS5 logon succeeded."
-								lColor = RTBColors.SuccessText
-								
-								UpdateProxyStatus(modEnum.enuProxyStatus.psOnline)
-								
-								frmChat.InitBNetConnection()
-							Else
-								ReceivedMethodReply = True
-							End If
-							
-						Case 1 '01' general SOCKS server failure
-							s0ut = s0ut & "General server failure."
-							lColor = RTBColors.ErrorMessageText
-						Case 2 '02' connection not allowed by ruleset
-							s0ut = s0ut & "Connection not allowed by server ruleset."
-							lColor = RTBColors.ErrorMessageText
-						Case 3 '03' Network unreachable
-							s0ut = s0ut & "Destination network unreachable."
-							lColor = RTBColors.ErrorMessageText
-						Case 4 '04' Host unreachable
-							s0ut = s0ut & "Destination host unreachable."
-							lColor = RTBColors.ErrorMessageText
-						Case 5 '05' Connection refused
-							s0ut = s0ut & "Connection refused."
-							lColor = RTBColors.ErrorMessageText
-						Case 6 '06' TTL expired
-							s0ut = s0ut & "Server-side TTL expiration."
-							lColor = RTBColors.ErrorMessageText
-						Case 7 '07' Command not supported
-							s0ut = s0ut & "Command not supported."
-							lColor = RTBColors.ErrorMessageText
-						Case 8 '08' Address type not supported
-							s0ut = s0ut & "Address type not supported."
-							lColor = RTBColors.ErrorMessageText
-						Case Else '09' to X'FF' unassigned
-							s0ut = s0ut & "Unknown response code."
-							lColor = RTBColors.ErrorMessageText
-					End Select
-					
-					If Message > 0 Then UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected)
-					
-					s0ut = s0ut & " (" & Message & ")"
-				End If
-				
-			Case Else
-				s0ut = "[PROXY] Unknown/unhandled proxy message. Message ID: " & Asc(Mid(Data, 2, 1)) & ", VN Byte: " & Asc(Mid(Data, 1, 1))
-				lColor = RTBColors.InformationText
-				UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected)
-				
-		End Select
-		
-		If lColor > 0 Then frmChat.AddChat(lColor, s0ut)
-	End Sub
+    Public Sub ParseProxyPacket(ByVal Data() As Byte)
+        Dim s0ut As String
+        Dim lColor As Integer
+        Dim Message As Byte
+        Static ReceivedMethodReply As Boolean
+
+        Select Case Data(0)
+            Case &H0, &H4, &H5
+                Message = Data(1)
+
+                If Not BotVars.ProxyIsSocks5 Then
+                    Select Case Message
+                        Case 90
+                            s0ut = "[PROXY] SOCKS4 request granted."
+                            lColor = RTBColors.SuccessText
+                            UpdateProxyStatus(modEnum.enuProxyStatus.psOnline)
+                            frmChat.InitBNetConnection()
+                        Case 91
+                            s0ut = "[PROXY] Request rejected or failed."
+                            UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected)
+                            lColor = RTBColors.ErrorMessageText
+                        Case 92
+                            s0ut = "[PROXY] Request rejected: the SOCKS server cannot connect to identd on the client."
+                            UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected)
+                            lColor = RTBColors.ErrorMessageText
+                        Case 93
+                            s0ut = "[PROXY] Request rejected: client program and identd report different userids."
+                            UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected)
+                            lColor = RTBColors.ErrorMessageText
+                        Case Else
+                            s0ut = "[PROXY] Unknown/unhandled proxy message. ID: " & Message
+                            lColor = RTBColors.InformationText
+                            UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected)
+
+                    End Select
+
+                    If Message >= 91 Then
+                        'UPGRADE_NOTE: State was upgraded to CtlState. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
+                        If frmChat.sckBNet.CtlState <> 0 Then
+                            frmChat.sckBNet.Close()
+                        End If
+                    End If
+                Else
+                    'o  REP    Reply field:
+                    s0ut = "[PROXY] "
+
+                    Select Case Message
+                        Case 0 '00' succeeded
+                            If ReceivedMethodReply Then
+                                ReceivedMethodReply = False
+                                s0ut = s0ut & "SOCKS5 logon succeeded."
+                                lColor = RTBColors.SuccessText
+
+                                UpdateProxyStatus(modEnum.enuProxyStatus.psOnline)
+
+                                frmChat.InitBNetConnection()
+                            Else
+                                ReceivedMethodReply = True
+                            End If
+
+                        Case 1 '01' general SOCKS server failure
+                            s0ut = s0ut & "General server failure."
+                            lColor = RTBColors.ErrorMessageText
+                        Case 2 '02' connection not allowed by ruleset
+                            s0ut = s0ut & "Connection not allowed by server ruleset."
+                            lColor = RTBColors.ErrorMessageText
+                        Case 3 '03' Network unreachable
+                            s0ut = s0ut & "Destination network unreachable."
+                            lColor = RTBColors.ErrorMessageText
+                        Case 4 '04' Host unreachable
+                            s0ut = s0ut & "Destination host unreachable."
+                            lColor = RTBColors.ErrorMessageText
+                        Case 5 '05' Connection refused
+                            s0ut = s0ut & "Connection refused."
+                            lColor = RTBColors.ErrorMessageText
+                        Case 6 '06' TTL expired
+                            s0ut = s0ut & "Server-side TTL expiration."
+                            lColor = RTBColors.ErrorMessageText
+                        Case 7 '07' Command not supported
+                            s0ut = s0ut & "Command not supported."
+                            lColor = RTBColors.ErrorMessageText
+                        Case 8 '08' Address type not supported
+                            s0ut = s0ut & "Address type not supported."
+                            lColor = RTBColors.ErrorMessageText
+                        Case Else '09' to X'FF' unassigned
+                            s0ut = s0ut & "Unknown response code."
+                            lColor = RTBColors.ErrorMessageText
+                    End Select
+
+                    If Message > 0 Then UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected)
+
+                    s0ut = s0ut & " (" & Message & ")"
+                End If
+
+            Case Else
+                s0ut = "[PROXY] Unknown/unhandled proxy message. Message ID: " & Data(1) & ", VN Byte: " & Data(0)
+                lColor = RTBColors.InformationText
+                UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected)
+
+        End Select
+
+        If lColor > 0 Then frmChat.AddChat(lColor, s0ut)
+    End Sub
 	
 	Sub UpdateProxyStatus(ByVal NewStatus As modEnum.enuProxyStatus, Optional ByVal AddtlInfo As Integer = 0)
 		BotVars.ProxyStatus = NewStatus

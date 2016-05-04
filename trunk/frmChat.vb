@@ -4531,7 +4531,7 @@ ERROR_HANDLER:
 		g_Connected = True
 		
 		'sckBNet.SendData ChrW(1)
-		Call Send(sckBNet.SocketHandle, ChrW(1), 1, 0)
+        Call Send(sckBNet.SocketHandle, New Byte() {1}, 1, 0)
 		
 		If BotVars.BNLS Then
 			modBNLS.SEND_BNLS_REQUESTVERSIONBYTE()
@@ -4577,7 +4577,7 @@ ERROR_HANDLER:
 		AddChat(RTBColors.SuccessText, "[REALM] Connected!")
 		
 		'sckMCP.SendData ChrW(1)
-		Call Send(sckMCP.SocketHandle, ChrW(1), 1, 0)
+        Call Send(sckMCP.SocketHandle, New Byte() {1}, 1, 0)
 		
 		If Not ds.MCPHandler Is Nothing Then
 			ds.MCPHandler.SEND_MCP_STARTUP()
@@ -6051,46 +6051,39 @@ ERROR_HANDLER:
 	Private Sub sckBNet_DataArrival(ByVal eventSender As System.Object, ByVal eventArgs As AxMSWinsockLib.DMSWinsockControlEvents_DataArrivalEvent) Handles sckBNet.DataArrival
 		'On Error GoTo ERROR_HANDLER
 		
-		Dim strTemp As String
+        Dim bData() As Byte
 		Dim fTemp As String
 		Dim BufferLimit As Integer
 		Dim interations As Short
 		
-        sckBNet.GetData(strTemp)
-		
-		'    Debug.Print "--> socket received a packet"
-		'    Debug.Print DebugOutput(strTemp)
+        sckBNet.GetData(bData, vbArray + vbByte, eventArgs.bytesTotal)
 		
 		If Not BotVars.UseProxy Or BotVars.ProxyStatus = modEnum.enuProxyStatus.psOnline Then
-			'Debug.Print String(50, "-")
-			BNCSBuffer.AddData(strTemp)
-			
-			While BNCSBuffer.FullPacket And BufferLimit < 20
-				
-				strTemp = BNCSBuffer.GetPacket
-				
-				'BNCSBuffer.WriteLog "Parsing the following packet:", True
-				'BNCSBuffer.WriteLog strTemp
-				
-				Call BNCSParsePacket(strTemp)
-				
-				'interations = (interations + 1)
-				
-				'If (interations >= 2000) Then
-				'    MsgBox "ahhhh!"
-				'
-				'    Exit Sub
-				'End If
-				
-				' Why do we need this?  Anyway, it's causing topic id #26093
-				' (The Void issue).
-				'BufferLimit = (BufferLimit + 1) 'DebugOutput Left$(strBuffer, lngLen)
-			End While
-		Else
-			'proxy is ON and NOT CONNECTED
-			'parse incoming data
-			ParseProxyPacket(strTemp)
-		End If
+            BNCSBuffer.AddData(bData)
+
+            While BNCSBuffer.FullPacket And BufferLimit < 20
+
+                bData = BNCSBuffer.GetPacket
+
+                Call BNCSParsePacket(bData)
+
+                'interations = (interations + 1)
+
+                'If (interations >= 2000) Then
+                '    MsgBox "ahhhh!"
+                '
+                '    Exit Sub
+                'End If
+
+                ' Why do we need this?  Anyway, it's causing topic id #26093
+                ' (The Void issue).
+                'BufferLimit = (BufferLimit + 1) 'DebugOutput Left$(strBuffer, lngLen)
+            End While
+        Else
+            'proxy is ON and NOT CONNECTED
+            'parse incoming data
+            ParseProxyPacket(bData)
+        End If
 		
 		Exit Sub
 		

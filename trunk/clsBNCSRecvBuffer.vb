@@ -5,8 +5,9 @@ Friend Class clsBNCSRecvBuffer
     Private bData() As Byte
     Private DataSize As Integer
 
-    Public Sub AddData(ByVal Data As String)
+    Public Sub AddData(ByVal Data() As Byte)
         ReDim Preserve bData(DataSize + Data.Length - 1)
+        Data.CopyTo(bData, DataSize)
     End Sub
 
     Public Function GetBuffer() As Byte()

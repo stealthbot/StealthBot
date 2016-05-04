@@ -7,6 +7,7 @@ Friend Class clsBNLSRecvBuffer
 	
     Public Sub AddData(ByRef Data() As Byte)
         ReDim Preserve bData(DataSize + Data.Length - 1)
+        Data.CopyTo(bData, DataSize)
     End Sub
 
     Public Function FullPacket() As Boolean
