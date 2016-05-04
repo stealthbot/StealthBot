@@ -7,107 +7,112 @@ Module modParsing
 	Public Sub SendHeader()
 		frmChat.sckBNet.SendData(ChrW(1))
 	End Sub
-	
-	Public Sub BNCSParsePacket(ByVal PacketData As String)
-		On Error GoTo ERROR_HANDLER
-		
-		Dim pD As clsDataBuffer ' Packet debuffer object
-		Dim PacketLen As Integer ' Length of the packet minus the header
-		Dim PacketID As Byte ' Battle.net packet ID
-		Dim s As String ' Temporary string
-		Dim L As Integer ' Temporary long
-		Dim s2 As String ' Temporary string
-		Dim s3 As String ' Temporary string
-		Dim ClanTag As String ' User clan tag
-		Dim Product As String ' User product
-		Dim w3icon As String ' Warcraft III icon code
-		Dim B As Boolean ' Temporary bool
-		Dim sArr() As String ' Temp String array
-		Dim veto As Boolean
-		
-		
-		'--------------
-		'| Initialize |
-		'--------------
-		pD = New clsDataBuffer
-		PacketLen = Len(PacketData) - 4
-		
-		'###########################################################################
-		
-		If PacketLen >= 0 Then
-			' Start packet debuffer
-			pD.Data = Mid(PacketData, 5)
-			' Get packet ID
-			PacketID = Asc(Mid(PacketData, 2, 1))
-			
-			If MDebug("all") Then
-				frmChat.AddChat(COLOR_BLUE, "BNET RECV 0x" & ZeroOffset(PacketID, 2))
-			End If
-			
-			CachePacket(modEnum.enuPL_DirectionTypes.StoC, modEnum.enuPL_ServerTypes.stBNCS, PacketID, Len(PacketData), PacketData)
-			
-			' Added 2007-06-08 for a packet logging menu feature to aid tech support
-			WritePacketData(modEnum.enuPL_ServerTypes.stBNCS, modEnum.enuPL_DirectionTypes.StoC, PacketID, PacketLen, PacketData)
-			
-			If (RunInAll("Event_PacketReceived", "BNCS", PacketID, Len(PacketData), PacketData)) Then
-				Exit Sub
-			End If
-			
-			'This will be taken out when Warden is moved to a script like I want.
-			If (modWarden.WardenData(WardenInstance, PacketData, False)) Then
-				Exit Sub
-			End If
-			
-			'--------------
-			'| Parse      |
-			'--------------
-			
-			Select Case PacketID
-				
-				'###########################################################################
-				Case &H26 'SID_READUSERDATA
-					ProfileParse(PacketData)
-					
-					'###########################################################################
-				Case Is >= &H65 'Friends List or Clan-related packet
-					' Hand the packet off to the appropriate handler
-					If PacketID >= &H70 Then
-						' added in response to the clan channel takeover exploit
-						' discovered 11/7/05
-						If IsW3 Then
-							frmChat.ParseClanPacket(PacketID, IIf(Len(PacketData) > 4, Mid(PacketData, 5), vbNullString))
-						End If
-					Else
-						If (g_request_receipt) Then
-							g_request_receipt = False
-							
-							If (Caching) Then
-								frmChat.cacheTimer_Tick(Nothing, New System.EventArgs())
-							End If
-							
-							Exit Sub
-						End If
-						
-						frmChat.ParseFriendsPacket(PacketID, Mid(PacketData, 5))
-					End If
-					
-					'###########################################################################
-				Case Else
-					Call modBNCS.BNCSRecvPacket(PacketData)
-					
-			End Select
-		End If
-		
-		'UPGRADE_NOTE: Object pD may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-		pD = Nothing
-		
-		Exit Sub
-		
-ERROR_HANDLER: 
-		frmChat.AddChat(RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in BNCSParsePacket().")
-		
-		Exit Sub
-	End Sub
+
+    Public Sub BNCSParsePacket(ByVal PacketData As String)
+        BNCSParsePacket(System.Text.Encoding.Default.GetBytes(PacketData))
+    End Sub
+
+    Public Sub BNCSParsePacket(ByVal PacketData() As Byte)
+        On Error GoTo ERROR_HANDLER
+
+        Dim pD As clsDataBuffer ' Packet debuffer object
+        Dim PacketLen As Integer ' Length of the packet minus the header
+        Dim PacketID As Byte ' Battle.net packet ID
+        Dim s As String ' Temporary string
+        Dim L As Integer ' Temporary long
+        Dim s2 As String ' Temporary string
+        Dim s3 As String ' Temporary string
+        Dim ClanTag As String ' User clan tag
+        Dim Product As String ' User product
+        Dim w3icon As String ' Warcraft III icon code
+        Dim B As Boolean ' Temporary bool
+        Dim sArr() As String ' Temp String array
+        Dim veto As Boolean
+
+
+        '--------------
+        '| Initialize |
+        '--------------
+        pD = New clsDataBuffer
+        PacketLen = Len(PacketData) - 4
+
+        '###########################################################################
+
+        If PacketLen >= 0 Then
+            ' Start packet debuffer
+            Buffer.BlockCopy(PacketData, 4, pD.Data, 0, PacketLen)
+
+            ' Get packet ID
+            PacketID = PacketData(1)
+
+            If MDebug("all") Then
+                frmChat.AddChat(COLOR_BLUE, "BNET RECV 0x" & ZeroOffset(PacketID, 2))
+            End If
+
+            CachePacket(modEnum.enuPL_DirectionTypes.StoC, modEnum.enuPL_ServerTypes.stBNCS, PacketID, Len(PacketData), PacketData)
+
+            ' Added 2007-06-08 for a packet logging menu feature to aid tech support
+            WritePacketData(modEnum.enuPL_ServerTypes.stBNCS, modEnum.enuPL_DirectionTypes.StoC, PacketID, PacketLen, PacketData)
+
+            If (RunInAll("Event_PacketReceived", "BNCS", PacketID, Len(PacketData), PacketData)) Then
+                Exit Sub
+            End If
+
+            'This will be taken out when Warden is moved to a script like I want.
+            If (modWarden.WardenData(WardenInstance, PacketData, False)) Then
+                Exit Sub
+            End If
+
+            '--------------
+            '| Parse      |
+            '--------------
+
+            Select Case PacketID
+
+                '###########################################################################
+                Case &H26 'SID_READUSERDATA
+                    ProfileParse(System.Text.Encoding.Default.GetString(PacketData))
+
+                    '###########################################################################
+                Case Is >= &H65 'Friends List or Clan-related packet
+                    ' Hand the packet off to the appropriate handler
+                    If PacketID >= &H70 Then
+                        ' added in response to the clan channel takeover exploit
+                        ' discovered 11/7/05
+                        If IsW3() Then
+                            frmChat.ParseClanPacket(PacketID, IIf(PacketLen > 0, pD.Data, vbNullString))
+                        End If
+                    Else
+                        If (g_request_receipt) Then
+                            g_request_receipt = False
+
+                            If (Caching) Then
+                                frmChat.cacheTimer_Tick(Nothing, New System.EventArgs())
+                            End If
+
+                            Exit Sub
+                        End If
+
+                        frmChat.ParseFriendsPacket(PacketID, pD.Data)
+                    End If
+
+                    '###########################################################################
+                Case Else
+                    Call modBNCS.BNCSRecvPacket(PacketData)
+
+            End Select
+        End If
+
+        'UPGRADE_NOTE: Object pD may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+        pD = Nothing
+
+        Exit Sub
+
+ERROR_HANDLER:
+        frmChat.AddChat(RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in BNCSParsePacket().")
+
+        Exit Sub
+    End Sub
 	
 	Public Function StrToHex(ByVal String1 As String, Optional ByVal NoSpaces As Boolean = False) As String
 		Dim strTemp, strReturn As String

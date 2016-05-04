@@ -39,7 +39,7 @@ Module modAPI
 	'Public Declare Function A2 Lib "bnetauth.dll" (ByVal outbuf As String, ByVal Key As Long) As Long
 	'Public Declare Function X Lib "bnetauth.dll" (ByVal outbuf As String, ByVal Password As String) As Long
 	
-	Public Declare Function Send Lib "ws2_32.dll"  Alias "send"(ByVal s As Integer, ByVal buf As String, ByVal datalen As Integer, ByVal Flags As Integer) As Integer
+    Public Declare Function Send Lib "ws2_32.dll" Alias "send" (ByVal s As Integer, ByVal buf() As Byte, ByVal datalen As Integer, ByVal Flags As Integer) As Integer
 	
 	Public Declare Function SendBytes Lib "ws2_32.dll"  Alias "send"(ByVal s As Integer, ByRef buf() As Byte, ByVal datalen As Integer, ByVal Flags As Integer) As Integer
 	

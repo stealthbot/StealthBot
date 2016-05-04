@@ -24,15 +24,15 @@ Friend Class clsKeyDecoder
 	
 	Private Declare Function kd_val2 Lib "BNCSutil.dll" (ByVal decoder As Integer) As Integer
 	
-	Private Declare Function kd_longVal2 Lib "BNCSutil.dll" (ByVal decoder As Integer, ByVal Out As String) As Integer
+    Private Declare Function kd_longVal2 Lib "BNCSutil.dll" (ByVal decoder As Integer, ByVal Out() As Byte) As Integer
 	
 	Private Declare Function kd_calculateHash Lib "BNCSutil.dll" (ByVal decoder As Integer, ByVal ClientToken As Integer, ByVal ServerToken As Integer) As Integer
 	
-	Private Declare Function kd_getHash Lib "BNCSutil.dll" (ByVal decoder As Integer, ByVal Out As String) As Integer
+    Private Declare Function kd_getHash Lib "BNCSutil.dll" (ByVal decoder As Integer, ByVal Out() As Byte) As Integer
 	
 	Private Declare Function kd_isValid Lib "BNCSutil.dll" (ByVal decoder As Integer) As Integer
 	
-	Private Declare Sub calcHashBuf Lib "BNCSutil.dll" (ByVal Data As String, ByVal length As Integer, ByVal Hash As String)
+    Private Declare Sub calcHashBuf Lib "BNCSutil.dll" (ByVal Data() As Byte, ByVal length As Integer, ByVal Hash() As Byte)
 	
 	
 	Private m_ProductLookup As Scripting.Dictionary
@@ -41,7 +41,7 @@ Friend Class clsKeyDecoder
 	Private m_Handle As Integer ' A handle to this decoder
 	Private m_Key As String ' The key supplied during initialization
 	Private m_HashSize As Integer ' The size of the returned hash.
-	Private m_Hash As String ' The celculated keyhash
+    Private m_Hash() As Byte ' The celculated keyhash
 	
 	' Performs initial key analysis
 	Public Function Initialize(ByVal strCdKey As String) As Boolean
@@ -101,30 +101,27 @@ Friend Class clsKeyDecoder
 	End Property
 	
 	' Returns the key's private value
-	Public ReadOnly Property PrivateValue() As String
-		Get
-			Dim sBuffer As String
-			sBuffer = New String(vbNullChar, kd_val2Length(m_Handle))
-			
-			If (kd_longVal2(m_Handle, sBuffer) <= 0) Then
-				Call CopyMemory(sBuffer, kd_val2(m_Handle), 4)
-			End If
-			
-			PrivateValue = sBuffer
-		End Get
-	End Property
+    Public ReadOnly Property PrivateValue() As Byte()
+        Get
+            ReDim PrivateValue(kd_val2Length(m_Handle) - 1)
+
+            If (kd_longVal2(m_Handle, PrivateValue) <= 0) Then
+                PrivateValue = BitConverter.GetBytes(kd_val2(m_Handle))
+            End If
+        End Get
+    End Property
 	
 	' Returns the calculated hash of the key's product, public, and private values.
-	Public ReadOnly Property Hash() As String
-		Get
-			If Not (m_HashSize > 0) Then
-				Hash = vbNullString
-				Exit Property
-			End If
-			
-			Hash = m_Hash
-		End Get
-	End Property
+    Public ReadOnly Property Hash() As Byte()
+        Get
+            If Not (m_HashSize > 0) Then
+                Hash = Nothing
+                Exit Property
+            End If
+
+            Hash = m_Hash
+        End Get
+    End Property
 	
 	' Calculates the key's hash
 	Public Function CalculateHash(ByVal ClientToken As Integer, ByVal ServerToken As Integer, Optional ByVal LogonSystem As Integer = BNCS_NLS) As Boolean
@@ -143,8 +140,9 @@ Friend Class clsKeyDecoder
 			If LogonSystem = BNCS_NLS Then
 				.InsertDWord(0)
 			End If
-			.InsertNonNTString(PrivateValue)
-			m_Hash = New String(vbNullChar, 20)
+            .InsertByteArr(PrivateValue)
+
+            ReDim m_Hash(20)
 			If KeyLength = 26 Then
 				' fuck, this shit doesn't even give correct sha1s:
 				'm_Hash = SHA1b(.Data)
@@ -153,11 +151,11 @@ Friend Class clsKeyDecoder
 				If m_HashSize <= 0 Then
 					CalculateHash = False
 				Else
-					m_Hash = New String(vbNullChar, m_HashSize)
+                    ReDim m_Hash(m_HashSize)
 					Call kd_getHash(m_Handle, m_Hash)
 				End If
 			Else
-				Call calcHashBuf(.Data, Len(.Data), m_Hash)
+                Call calcHashBuf(.Data, Len(.Data), m_Hash)
 			End If
 		End With
 		

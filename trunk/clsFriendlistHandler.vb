@@ -29,169 +29,169 @@ Friend Class clsFriendlistHandler
 		pBuff.SendPacket(SID_FRIENDSLIST)
 	End Sub
 	
-	Public Sub ParsePacket(ByVal PacketID As Integer, ByRef Data As String)
-		On Error GoTo ERROR_HANDLER
-		
-		Dim pBuff As New clsDataBuffer
-		Dim flTemp As clsFriendObj
-		Dim n As Short
-		
-		pBuff.Data = Data
-		
-		Select Case PacketID
-			Case SID_FRIENDSLIST
-				'0x65 packet format
-				'(BYTE)       Number of Entries
-				'For each entry:
-				'(STRING)     Account
-				'(BYTE)       Status
-				'(BYTE)       Location
-				'(DWORD)      ProductID
-				'(STRING)     Location name
-				
-				Call ResetList()
-				
-				n = pBuff.GetByte() ' Number of entries
-				RaiseEvent FriendListReceived(n)
-				
-				If (n > 0) Then
-					
-					'For each entry
-					For n = 0 To n - 1
-						flTemp = New clsFriendObj
-						
-						With flTemp
-							.Name = pBuff.GetString() ' Account
-							.Status = pBuff.GetByte() ' Status
-							.LocationID = pBuff.GetByte() ' Location
-							
-							' Product ID
-							.Game = StrReverse(pBuff.GetRaw(4))
-							If Conv(.Game) = 0 Then
-								.Game = "OFFL"
-							End If
-							
-							' Location name
-							.Location = pBuff.GetString()
-						End With
-						
-						' Add to the internal list
-						g_Friends.Add(flTemp)
-						
-						RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.Game, flTemp.Location, flTemp.Status, flTemp.LocationID)
-						
-						'UPGRADE_NOTE: Object flTemp may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-						flTemp = Nothing
-					Next n
-				End If
-				
-			Case SID_FRIENDSUPDATE
-				'0x66 packet format
-				'(BYTE)       Entry number
-				'(BYTE)       Status
-				'(BYTE)       Location
-				'(DWORD)      ProductID
-				'(STRING)     Location name
-				
-				n = pBuff.GetByte() + 1
-				
-				With g_Friends.Item(n)
-					'UPGRADE_WARNING: Couldn't resolve default property of object g_Friends(n).Status. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					.Status = pBuff.GetByte() ' Status
-					'UPGRADE_WARNING: Couldn't resolve default property of object g_Friends(n).LocationID. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					.LocationID = pBuff.GetByte() ' Location
-					
-					' NOTE: There is a server bug here where, when this packet is sent automaticlaly
-					'   (not requested), the ProductID field contains your own product instead.
-					'   Because of this, we ignore that field completely and wait for the periodic updates
-					'   to update the value.
-					'   (see: https://bnetdocs.org/packet/384/sid-friendsupdate)
-					
-					pBuff.GetDWORD()
-					' Product ID
-					'.Game = StrReverse(pBuff.GetRaw(4))
-					'If Conv(.Game) = 0 Then
-					'    .Game = "OFFL"
-					'End If
-					
-					' Location name
-					'UPGRADE_WARNING: Couldn't resolve default property of object g_Friends(n).Location. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					.Location = pBuff.GetString()
-					
-					'UPGRADE_WARNING: Couldn't resolve default property of object g_Friends(n).DisplayName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					RaiseEvent FriendUpdate(.DisplayName, n)
-				End With
-				
-			Case SID_FRIENDSADD
-				'0x67 packet format
-				'(STRING)       Account
-				'(BYTE)         Status
-				'(BYTE)         Location
-				'(DWORD)        ProductID
-				'(STRING)       Location name
-				
-				flTemp = New clsFriendObj
-				
-				With flTemp
-					.Name = pBuff.GetString() ' Account
-					.Status = pBuff.GetByte() ' Status
-					.LocationID = pBuff.GetByte() ' Location
-					
-					' Product ID
-					.Game = StrReverse(pBuff.GetRaw(4))
-					If Conv(.Game) = 0 Then
-						.Game = "OFFL"
-					End If
-					
-					' Location name
-					.Location = pBuff.GetString()
-					
-					RaiseEvent FriendAdded(.DisplayName, .Game, .LocationID, .Status, .Location)
-				End With
-				
-				' Add to the internal list
-				g_Friends.Add(flTemp)
-				
-				'UPGRADE_NOTE: Object flTemp may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-				flTemp = Nothing
-				
-			Case SID_FRIENDSREMOVE
-				'0x68 packet format
-				'(BYTE)       Entry Number
-				
-				n = pBuff.GetByte() + 1
-				
-				If n > 0 And n <= g_Friends.Count() Then
-					'UPGRADE_WARNING: Couldn't resolve default property of object g_Friends.Item(n).DisplayName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					RaiseEvent FriendRemoved(g_Friends.Item(n).DisplayName)
-					
-					g_Friends.Remove(n)
-				End If
-				
-			Case SID_FRIENDSPOSITION
-				'0x69 packet format
-				'(BYTE)     Old Position
-				'(BYTE)     New Position
-				
-				'UPGRADE_NOTE: Object flTemp may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-				flTemp = Nothing
-				RaiseEvent FriendMoved()
-				
-		End Select
-		
-		'UPGRADE_NOTE: Object flTemp may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-		flTemp = Nothing
-		
-		Exit Sub
-		
-ERROR_HANDLER: 
-		frmChat.AddChat(RTBColors.ErrorMessageText, "Error: " & Err.Description & " in ParsePacket().")
-		
-		Exit Sub
-		
-		'debug.print "Error " & Err.Number & " (" & Err.Description & ") in procedure ParsePacket of Class Module clsFriendListHandler"
-		
-	End Sub
+    Public Sub ParsePacket(ByVal PacketID As Integer, ByRef Data() As Byte)
+        On Error GoTo ERROR_HANDLER
+
+        Dim pBuff As New clsDataBuffer
+        Dim flTemp As clsFriendObj
+        Dim n As Short
+
+        pBuff.Data = Data
+
+        Select Case PacketID
+            Case SID_FRIENDSLIST
+                '0x65 packet format
+                '(BYTE)       Number of Entries
+                'For each entry:
+                '(STRING)     Account
+                '(BYTE)       Status
+                '(BYTE)       Location
+                '(DWORD)      ProductID
+                '(STRING)     Location name
+
+                Call ResetList()
+
+                n = pBuff.GetByte() ' Number of entries
+                RaiseEvent FriendListReceived(n)
+
+                If (n > 0) Then
+
+                    'For each entry
+                    For n = 0 To n - 1
+                        flTemp = New clsFriendObj
+
+                        With flTemp
+                            .Name = pBuff.GetString() ' Account
+                            .Status = pBuff.GetByte() ' Status
+                            .LocationID = pBuff.GetByte() ' Location
+
+                            ' Product ID
+                            .game = StrReverse(pBuff.GetRaw(4))
+                            If Conv(.game) = 0 Then
+                                .game = "OFFL"
+                            End If
+
+                            ' Location name
+                            .Location = pBuff.GetString()
+                        End With
+
+                        ' Add to the internal list
+                        g_Friends.Add(flTemp)
+
+                        RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.game, flTemp.Location, flTemp.Status, flTemp.LocationID)
+
+                        'UPGRADE_NOTE: Object flTemp may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+                        flTemp = Nothing
+                    Next n
+                End If
+
+            Case SID_FRIENDSUPDATE
+                '0x66 packet format
+                '(BYTE)       Entry number
+                '(BYTE)       Status
+                '(BYTE)       Location
+                '(DWORD)      ProductID
+                '(STRING)     Location name
+
+                n = pBuff.GetByte() + 1
+
+                With g_Friends.Item(n)
+                    'UPGRADE_WARNING: Couldn't resolve default property of object g_Friends(n).Status. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    .Status = pBuff.GetByte() ' Status
+                    'UPGRADE_WARNING: Couldn't resolve default property of object g_Friends(n).LocationID. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    .LocationID = pBuff.GetByte() ' Location
+
+                    ' NOTE: There is a server bug here where, when this packet is sent automaticlaly
+                    '   (not requested), the ProductID field contains your own product instead.
+                    '   Because of this, we ignore that field completely and wait for the periodic updates
+                    '   to update the value.
+                    '   (see: https://bnetdocs.org/packet/384/sid-friendsupdate)
+
+                    pBuff.GetDWORD()
+                    ' Product ID
+                    '.Game = StrReverse(pBuff.GetRaw(4))
+                    'If Conv(.Game) = 0 Then
+                    '    .Game = "OFFL"
+                    'End If
+
+                    ' Location name
+                    'UPGRADE_WARNING: Couldn't resolve default property of object g_Friends(n).Location. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    .Location = pBuff.GetString()
+
+                    'UPGRADE_WARNING: Couldn't resolve default property of object g_Friends(n).DisplayName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    RaiseEvent FriendUpdate(.DisplayName, n)
+                End With
+
+            Case SID_FRIENDSADD
+                '0x67 packet format
+                '(STRING)       Account
+                '(BYTE)         Status
+                '(BYTE)         Location
+                '(DWORD)        ProductID
+                '(STRING)       Location name
+
+                flTemp = New clsFriendObj
+
+                With flTemp
+                    .Name = pBuff.GetString() ' Account
+                    .Status = pBuff.GetByte() ' Status
+                    .LocationID = pBuff.GetByte() ' Location
+
+                    ' Product ID
+                    .game = StrReverse(pBuff.GetRaw(4))
+                    If Conv(.game) = 0 Then
+                        .game = "OFFL"
+                    End If
+
+                    ' Location name
+                    .Location = pBuff.GetString()
+
+                    RaiseEvent FriendAdded(.DisplayName, .game, .LocationID, .Status, .Location)
+                End With
+
+                ' Add to the internal list
+                g_Friends.Add(flTemp)
+
+                'UPGRADE_NOTE: Object flTemp may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+                flTemp = Nothing
+
+            Case SID_FRIENDSREMOVE
+                '0x68 packet format
+                '(BYTE)       Entry Number
+
+                n = pBuff.GetByte() + 1
+
+                If n > 0 And n <= g_Friends.Count() Then
+                    'UPGRADE_WARNING: Couldn't resolve default property of object g_Friends.Item(n).DisplayName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    RaiseEvent FriendRemoved(g_Friends.Item(n).DisplayName)
+
+                    g_Friends.Remove(n)
+                End If
+
+            Case SID_FRIENDSPOSITION
+                '0x69 packet format
+                '(BYTE)     Old Position
+                '(BYTE)     New Position
+
+                'UPGRADE_NOTE: Object flTemp may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+                flTemp = Nothing
+                RaiseEvent FriendMoved()
+
+        End Select
+
+        'UPGRADE_NOTE: Object flTemp may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+        flTemp = Nothing
+
+        Exit Sub
+
+ERROR_HANDLER:
+        frmChat.AddChat(RTBColors.ErrorMessageText, "Error: " & Err.Description & " in ParsePacket().")
+
+        Exit Sub
+
+        'debug.print "Error " & Err.Number & " (" & Err.Description & ") in procedure ParsePacket of Class Module clsFriendListHandler"
+
+    End Sub
 	
 	Public Sub ResetList()
 		'frmChat.lvFriendList.ListItems.Clear

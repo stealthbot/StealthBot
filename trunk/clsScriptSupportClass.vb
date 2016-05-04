@@ -1135,7 +1135,7 @@ Friend Class clsScriptSupportClass
 		Dim e As Integer
 		
 		'UPGRADE_ISSUE: Constant vbFromUnicode was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="55B59875-9A95-4B71-9D6A-7C294BF7139D"'
-		Call modSHA1.DefaultSHA1( System.Text.UnicodeEncoding.Unicode.GetBytes(StrConv(Data, vbFromUnicode)), a, B, c, d, e)
+        Call modSHA1.DefaultSHA1(System.Text.Encoding.Default.GetBytes(Data), a, B, c, d, e)
 		
 		If inHex Then
 			Sha1 = LCase(Hex(a) & Hex(B) & Hex(c) & Hex(d) & Hex(e))

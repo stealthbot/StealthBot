@@ -127,61 +127,61 @@ Module modBNCS
 	
 	Public ds As New clsDataStorage 'Need to rename this -.-
 	
-	Public Function BNCSRecvPacket(ByVal sData As String) As Boolean
-		On Error GoTo ERROR_HANDLER
-		Static pBuff As New clsDataBuffer
-		
-		Dim PacketID As Byte
-		
-		BNCSRecvPacket = True
-		With pBuff
-			.Clear()
-			.Data = sData
-			.GetByte()
-			PacketID = .GetByte
-			.GetWord()
-		End With
-		
-		Select Case PacketID
-			Case SID_NULL 'Don't Throw Unknown Error                  '0x00
-			Case SID_CLIENTID 'Don't Throw Unknown Error                  '0x05
-			Case SID_STARTVERSIONING : Call RECV_SID_STARTVERSIONING(pBuff) '0x06
-			Case SID_REPORTVERSION : Call RECV_SID_REPORTVERSION(pBuff) '0x07
-			Case SID_ENTERCHAT : Call RECV_SID_ENTERCHAT(pBuff) '0x0A
-			Case SID_GETCHANNELLIST : Call RECV_SID_GETCHANNELLIST(pBuff) '0x0B
-			Case SID_CHATEVENT : Call RECV_SID_CHATEVENT(pBuff) '0x0F
-			Case SID_MESSAGEBOX : Call RECV_SID_MESSAGEBOX(pBuff) '0x19
-			Case SID_LOGONCHALLENGEEX : Call RECV_SID_LOGONCHALLENGEEX(pBuff) '0x1D
-			Case SID_PING : Call RECV_SID_PING(pBuff) '0x25
-			Case SID_LOGONCHALLENGE : Call RECV_SID_LOGONCHALLENGE(pBuff) '0x28
-			Case SID_GETICONDATA 'Don't Throw Unknown Error                  '0x2D
-			Case SID_CDKEY : Call RECV_SID_CDKEY(pBuff) '0x30
-			Case SID_CDKEY2 : Call RECV_SID_CDKEY2(pBuff) '0x36
-			Case SID_LOGONRESPONSE2 : Call RECV_SID_LOGONRESPONSE2(pBuff) '0x3A
-			Case SID_CREATEACCOUNT2 : Call RECV_SID_CREATEACCOUNT2(pBuff) '0x3D
-			Case SID_LOGONREALMEX : Call RECV_SID_LOGONREALMEX(pBuff) '0x3C
-			Case SID_QUERYREALMS2 : Call RECV_SID_QUERYREALMS2(pBuff) '0x40
-			Case SID_EXTRAWORK 'Don't Throw Unknown Error                  '0x4C
-			Case SID_AUTH_INFO : Call RECV_SID_AUTH_INFO(pBuff) '0x50
-			Case SID_AUTH_CHECK : Call RECV_SID_AUTH_CHECK(pBuff) '0x51
-			Case SID_AUTH_ACCOUNTCREATE : Call RECV_SID_AUTH_ACCOUNTCREATE(pBuff) '0x52
-			Case SID_AUTH_ACCOUNTLOGON : Call RECV_SID_AUTH_ACCOUNTLOGON(pBuff) '0x53
-			Case SID_AUTH_ACCOUNTLOGONPROOF : Call RECV_SID_AUTH_ACCOUNTLOGONPROOF(pBuff) '0x54
-			Case SID_SETEMAIL : Call RECV_SID_SETEMAIL(pBuff) '0x59
-				
-			Case Else
-				BNCSRecvPacket = False
-				If (MDebug("debug") And (MDebug("all") Or MDebug("unknown"))) Then
-					Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] Unhandled packet 0x{0}", ZeroOffset(CInt(PacketID), 2)))
-					Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] Packet data: {0}{1}", vbNewLine, DebugOutput(sData)))
-				End If
-				
-		End Select
-		
-		Exit Function
-ERROR_HANDLER: 
-		Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNCSRecvPacket()", Err.Number, Err.Description, OBJECT_NAME))
-	End Function
+    Public Function BNCSRecvPacket(ByVal Data() As Byte) As Boolean
+        On Error GoTo ERROR_HANDLER
+        Static pBuff As New clsDataBuffer
+
+        Dim PacketID As Byte
+
+        BNCSRecvPacket = True
+        With pBuff
+            .Clear()
+            .Data = Data
+            .GetByte()
+            PacketID = .GetByte
+            .GetWord()
+        End With
+
+        Select Case PacketID
+            Case SID_NULL 'Don't Throw Unknown Error                  '0x00
+            Case SID_CLIENTID 'Don't Throw Unknown Error                  '0x05
+            Case SID_STARTVERSIONING : Call RECV_SID_STARTVERSIONING(pBuff) '0x06
+            Case SID_REPORTVERSION : Call RECV_SID_REPORTVERSION(pBuff) '0x07
+            Case SID_ENTERCHAT : Call RECV_SID_ENTERCHAT(pBuff) '0x0A
+            Case SID_GETCHANNELLIST : Call RECV_SID_GETCHANNELLIST(pBuff) '0x0B
+            Case SID_CHATEVENT : Call RECV_SID_CHATEVENT(pBuff) '0x0F
+            Case SID_MESSAGEBOX : Call RECV_SID_MESSAGEBOX(pBuff) '0x19
+            Case SID_LOGONCHALLENGEEX : Call RECV_SID_LOGONCHALLENGEEX(pBuff) '0x1D
+            Case SID_PING : Call RECV_SID_PING(pBuff) '0x25
+            Case SID_LOGONCHALLENGE : Call RECV_SID_LOGONCHALLENGE(pBuff) '0x28
+            Case SID_GETICONDATA 'Don't Throw Unknown Error                  '0x2D
+            Case SID_CDKEY : Call RECV_SID_CDKEY(pBuff) '0x30
+            Case SID_CDKEY2 : Call RECV_SID_CDKEY2(pBuff) '0x36
+            Case SID_LOGONRESPONSE2 : Call RECV_SID_LOGONRESPONSE2(pBuff) '0x3A
+            Case SID_CREATEACCOUNT2 : Call RECV_SID_CREATEACCOUNT2(pBuff) '0x3D
+            Case SID_LOGONREALMEX : Call RECV_SID_LOGONREALMEX(pBuff) '0x3C
+            Case SID_QUERYREALMS2 : Call RECV_SID_QUERYREALMS2(pBuff) '0x40
+            Case SID_EXTRAWORK 'Don't Throw Unknown Error                  '0x4C
+            Case SID_AUTH_INFO : Call RECV_SID_AUTH_INFO(pBuff) '0x50
+            Case SID_AUTH_CHECK : Call RECV_SID_AUTH_CHECK(pBuff) '0x51
+            Case SID_AUTH_ACCOUNTCREATE : Call RECV_SID_AUTH_ACCOUNTCREATE(pBuff) '0x52
+            Case SID_AUTH_ACCOUNTLOGON : Call RECV_SID_AUTH_ACCOUNTLOGON(pBuff) '0x53
+            Case SID_AUTH_ACCOUNTLOGONPROOF : Call RECV_SID_AUTH_ACCOUNTLOGONPROOF(pBuff) '0x54
+            Case SID_SETEMAIL : Call RECV_SID_SETEMAIL(pBuff) '0x59
+
+            Case Else
+                BNCSRecvPacket = False
+                If (MDebug("debug") And (MDebug("all") Or MDebug("unknown"))) Then
+                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] Unhandled packet 0x{0}", ZeroOffset(CInt(PacketID), 2)))
+                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] Packet data: {0}{1}", vbNewLine, DebugOutput(Data)))
+                End If
+
+        End Select
+
+        Exit Function
+ERROR_HANDLER:
+        Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNCSRecvPacket()", Err.Number, Err.Description, OBJECT_NAME))
+    End Function
 	
 	'*********************************
 	' SID_CLIENTID (0x05) C->S

@@ -112,52 +112,56 @@ Module modWar3Clan
 			Case Else : GetRank = "Unknown"
 		End Select
 	End Function
-	
-	Public Function DebugOutput(ByVal sIn As String) As String
-		
-		Dim x1, y1 As Integer
-		Dim iLen, iPos As Integer
-		Dim sB, st As String
-		Dim sOut As String
-		Dim offset As Integer
-		Dim sOffset As String
-		'build random string to display
-		'    y1 = 256
-		'    sIn = String(y1, 0)
-		'    For x1 = 1 To 256
-		'        Mid(sIn, x1, 1) = Chr(x1 - 1)
-		'        Mid(sIn, x1, 1) = Chr(255 * Rnd())
-		'    Next x1
-		iLen = Len(sIn)
-		
-		If iLen = 0 Then Exit Function
-		sOut = vbNullString
-		offset = 0
-		
-		For x1 = 0 To ((iLen - 1) \ 16)
-			sOffset = Right("0000" & Hex(offset), 4)
-			sB = New String(" ", 48)
-			st = "................"
-			For y1 = 1 To 16
-				iPos = 16 * x1 + y1
-				If iPos > iLen Then Exit For
-				
-				Mid(sB, 3 * (y1 - 1) + 1, 2) = Right("00" & Hex(Asc(Mid(sIn, iPos, 1))), 2) & " "
-				Select Case Asc(Mid(sIn, iPos, 1))
-					Case 0, 9, 10, 13
-					Case Else
-						Mid(st, y1, 1) = Mid(sIn, iPos, 1)
-				End Select
-			Next y1
-			If Len(sOut) > 0 Then sOut = sOut & vbCrLf
-			sOut = sOut & sOffset & ":  "
-			sOut = sOut & sB & "  " & st
-			offset = offset + 16
-		Next x1
-		
-		'sDebugBuf = sDebugBuf & vbCrLf & vbCrLf & sOut
-		DebugOutput = sOut
-	End Function
+
+    Public Function DebugOutput(ByVal sIn As String) As String
+        DebugOutput = DebugOutput(System.Text.Encoding.Default.GetBytes(sIn))
+    End Function
+
+    Public Function DebugOutput(ByVal bIn() As Byte) As String
+
+        Dim x1, y1 As Integer
+        Dim iLen, iPos As Integer
+        Dim sB, st As String
+        Dim sOut As String
+        Dim offset As Integer
+        Dim sOffset As String
+        'build random string to display
+        '    y1 = 256
+        '    sIn = String(y1, 0)
+        '    For x1 = 1 To 256
+        '        Mid(sIn, x1, 1) = Chr(x1 - 1)
+        '        Mid(sIn, x1, 1) = Chr(255 * Rnd())
+        '    Next x1
+        iLen = Len(bIn)
+
+        If iLen = 0 Then Exit Function
+        sOut = vbNullString
+        offset = 0
+
+        For x1 = 0 To ((iLen - 1) \ 16)
+            sOffset = Right("0000" & Hex(offset), 4)
+            sB = New String(" ", 48)
+            st = "................"
+            For y1 = 1 To 16
+                iPos = 16 * x1 + y1
+                If iPos > iLen Then Exit For
+
+                Mid(sB, 3 * (y1 - 1) + 1, 2) = Right("00" & Hex(bIn(iPos)), 2) & " "
+                Select Case bIn(iPos)
+                    Case 0, 9, 10, 13
+                    Case Else
+                        Mid(st, y1, 1) = Chr(bIn(iPos))
+                End Select
+            Next y1
+            If Len(sOut) > 0 Then sOut = sOut & vbCrLf
+            sOut = sOut & sOffset & ":  "
+            sOut = sOut & sB & "  " & st
+            offset = offset + 16
+        Next x1
+
+        'sDebugBuf = sDebugBuf & vbCrLf & vbCrLf & sOut
+        DebugOutput = sOut
+    End Function
 	
 	Public Function TimeSinceLastRemoval() As Integer
 		Dim L As Integer

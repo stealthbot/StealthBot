@@ -83,7 +83,7 @@ Module modWarden
 	Private Declare Sub mediv_random_get_bytes Lib "Warden.dll" (ByRef Context As MedivRandomContext, ByVal Buffer As String, ByVal length As Integer)
 	
 	Private Declare Function warden_init Lib "Warden.dll" (ByVal SocketHandle As Integer) As Integer
-	Private Declare Function warden_data Lib "Warden.dll" (ByVal Instance As Integer, ByVal Direction As Integer, ByVal PacketID As Integer, ByVal Data As String, ByVal length As Integer) As Integer
+    Private Declare Function warden_data Lib "Warden.dll" (ByVal Instance As Integer, ByVal Direction As Integer, ByVal PacketID As Integer, ByVal Data() As Byte, ByVal length As Integer) As Integer
 	Private Declare Function warden_cleanup Lib "Warden.dll" (ByVal Instance As Integer) As Integer
 	Private Declare Function warden_set_data_file Lib "Warden.dll" (ByVal Instance As Integer, ByVal File As String, ByVal length As Integer) As Integer
 	Private Declare Function warden_config Lib "Warden.dll" (ByVal Instance As Integer, ByVal ConfigBit As Integer, ByVal Enabled As Byte) As Integer
@@ -261,117 +261,121 @@ trap:
 		End If
 	End Function
 	
-	Public Function WardenData(ByRef Instance As Integer, ByRef sData As String, ByRef Send As Boolean) As Boolean
-		Dim ID As Integer
-		Dim Result As Integer
-		Dim Data As String
-		
-		ID = Asc(Mid(sData, 2, 1))
-		Data = Mid(sData, 5)
-		
-		If (Instance = 0) Then
-			If (MDebug("warden")) Then
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Attempted to call Data() with an invalid instance.")
-			End If
-			WardenData = False
-			Exit Function
-		End If
-		
-		Result = warden_data(Instance, WARDEN_BNCS Or IIf(Send, WARDEN_SEND, WARDEN_RECV), ID, Data, Len(Data))
-		
-		Select Case Result
-			Case WARDEN_SUCCESS '//All Went Well, Don't handle the packet Internally
-				If (MDebug("warden")) Then
-					Select Case Asc(Left(Data, 1))
-						Case 0 : frmChat.AddChat(RTBColors.InformationText, "[Warden] Handled Module Information")
-						Case 1 : frmChat.AddChat(RTBColors.InformationText, "[Warden] Handled Module Transfer")
-						Case 2 : frmChat.AddChat(RTBColors.InformationText, "[Warden] Handled Cheat Check")
-						Case 5 : frmChat.AddChat(RTBColors.InformationText, "[Warden] Handled New Crypt Keys")
-						Case Else : frmChat.AddChat(RTBColors.InformationText, "[Warden] Handled Unknown 0x" & ZeroOffset(Asc(Left(Data, 1)), 2))
-					End Select
-				End If
-				'case WARDEN_UNKNOWN_PROTOCOL '//Not used, will be when adding support for MCP/UDP
-			Case WARDEN_UNKNOWN_SUBID '//Unknown Sub-ID [Not 0x00, 0x01, 0x02, or 0x05]
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Unknown sub-command 0x" & ZeroOffset(Asc(Left(Data, 1)), 2) & ", you will be disconnected soon.")
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?unknown&id=0x" & ZeroOffset(Asc(Left(Data, 1)), 2) & " .")
-				
-				If (MDebug("warden")) Then
-					frmChat.AddChat(RTBColors.InformationText, "[Warden] Packet Data:" & vbNewLine & DebugOutput(Data))
-				End If
-				
-			Case WARDEN_RAW_FAILURE '//The module was not able to handle the packet itself (most likely 0x05)
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] The Warden module was unable to handle a packet, you will be disconnected soon.")
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?handlefailed .")
-				
-				If (MDebug("warden")) Then
-					frmChat.AddChat(RTBColors.InformationText, "[Warden] Packet Data:" & vbNewLine & DebugOutput(Data))
-				End If
-				
-			Case WARDEN_PACKET_FAILURE '//Something went HORRIBLY wrong in warden_packet, should NEVER happen.
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Something went horribly wrong in Warden_Packet(), you will be disconnected soon.")
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?horrible .")
-				
-				If (MDebug("warden")) Then
-					frmChat.AddChat(RTBColors.InformationText, "[Warden] Packet Data:" & vbNewLine & DebugOutput(Data))
-				End If
-				
-			Case WARDEN_INIT_FAILURE '//Calling Init() in the module failed
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Unable to initalize the Warden module, you will be disconnected soon.")
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?init .")
-				
-				'case WARDEN_LOAD_FILE_FAILURE '//Could not load module from file [Not to bad, prolly just dosen't exist] This should never come up
-				
-			Case WARDEN_LOAD_MD5_FAILURE '//Failed MD5 checksum when loading module [Either Bad tranfer or HD file corrupt]
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Transfer failed because the MD5 checksum incorrect, you will be disconnected soon.")
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/md5 .")
-				
-			Case WARDEN_LOAD_INVALID_SIGNATURE '//Module failed RSA verification
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Transfer failed because the RSA signature is invalid, you will be disconnected soon.")
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?rsa .")
-				
-			Case WARDEN_LOAD_DECOMPRESS_FAILURE '//Module failed to decompress properly
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Failed to decompress the Warden module, you will be disconnected soon.")
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?decompress .")
-				
-			Case WARDEN_LOAD_PREP_FAILURE '//Module prepare failed, Usually if module is corrupt
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Failed to prep the Warden module, you will be disconnected soon.")
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?prep .")
-				
-			Case WARDEN_CHECK_UNKNOWN_COMMAND '//Unknown sub-command in CHEAT_CHECKS
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] The Warden has asked us to perform an unknown cheat-check, you will be disconnected soon.")
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit " & "http://www.stealthbot.net/sb/issues/warden/?unknownCheatCheck .")
-				
-				If (MDebug("warden")) Then
-					frmChat.AddChat(RTBColors.InformationText, "[Warden] Packet Data: " & vbNewLine & DebugOutput(Data))
-				End If
-				
-			Case WARDEN_CHECK_TO_MANY_LIBS '//There were more then 4 libraries in a single 0x02 packet [this is eww yes, but I'll figure out a beter way later]
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] To many libraries in Cheat Check, you will be disconnected soon")
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit " & "http://www.stealthbot.net/sb/issues/warden/?toomanylibs .")
-				
-				If (MDebug("warden")) Then
-					frmChat.AddChat(RTBColors.InformationText, "[Warden] Packet Data: " & vbNewLine & DebugOutput(Data))
-				End If
-				
-			Case WARDEN_MEM_UNKNOWN_PRODUCT '//The product from 0x50 != WC3, SC, or D2
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Unknown product code form SID_AUTH_INFO, you will be diconnected soon")
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit " & "http://www.stealthbot.net/sb/issues/warden/?unknownProdCode .")
-				
-			Case WARDEN_MEM_UNKNOWN_SEGMENT '//Could not read segment from ini file
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Could not read a segment from Warden.ini, you will be disconnected soon.")
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Make sure you have the latest Warden data from http://www.stealthbot.net/sb/warden/")
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For more information on this, please visit " & "http://www.stealthbot.net/sb/issues/warden/?unknownSegment .")
-				
-				If (MDebug("warden")) Then
-					frmChat.AddChat(RTBColors.InformationText, "[Warden] Packet Data: " & vbNewLine & DebugOutput(Data))
-				End If
-				
-			Case WARDEN_INVALID_INSTANCE '//The instance passed to this function was invalid
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] An Invalid instance was passed to Data, Did Init() fail?")
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit " & "http://www.stealthbot.net/sb/issues/warden/?invalidInstance .")
-				
-		End Select
-		
-		WardenData = (Result <> WARDEN_IGNORE)
-	End Function
+    Public Function WardenData(ByRef Instance As Integer, ByRef bData() As Byte, ByRef Send As Boolean) As Boolean
+        Dim ID As Integer
+        Dim Result As Integer
+        Dim Data() As Byte
+
+        ' Packet ID
+        ID = bData(1)
+
+        ' Packet Data
+        ReDim Data(bData.Length - 4)
+        Buffer.BlockCopy(bData, 4, Data, 0, Data.Length)
+
+        If (Instance = 0) Then
+            If (MDebug("warden")) Then
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Attempted to call Data() with an invalid instance.")
+            End If
+            WardenData = False
+            Exit Function
+        End If
+
+        Result = warden_data(Instance, WARDEN_BNCS Or IIf(Send, WARDEN_SEND, WARDEN_RECV), ID, Data, Len(Data))
+
+        Select Case Result
+            Case WARDEN_SUCCESS '//All Went Well, Don't handle the packet Internally
+                If (MDebug("warden")) Then
+                    Select Case Data(0)
+                        Case 0 : frmChat.AddChat(RTBColors.InformationText, "[Warden] Handled Module Information")
+                        Case 1 : frmChat.AddChat(RTBColors.InformationText, "[Warden] Handled Module Transfer")
+                        Case 2 : frmChat.AddChat(RTBColors.InformationText, "[Warden] Handled Cheat Check")
+                        Case 5 : frmChat.AddChat(RTBColors.InformationText, "[Warden] Handled New Crypt Keys")
+                        Case Else : frmChat.AddChat(RTBColors.InformationText, "[Warden] Handled Unknown 0x" & ZeroOffset(Data(0), 2))
+                    End Select
+                End If
+                'case WARDEN_UNKNOWN_PROTOCOL '//Not used, will be when adding support for MCP/UDP
+            Case WARDEN_UNKNOWN_SUBID '//Unknown Sub-ID [Not 0x00, 0x01, 0x02, or 0x05]
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Unknown sub-command 0x" & ZeroOffset(Data(0), 2) & ", you will be disconnected soon.")
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?unknown&id=0x" & ZeroOffset(Data(0), 2) & " .")
+
+                If (MDebug("warden")) Then
+                    frmChat.AddChat(RTBColors.InformationText, "[Warden] Packet Data:" & vbNewLine & DebugOutput(Data))
+                End If
+
+            Case WARDEN_RAW_FAILURE '//The module was not able to handle the packet itself (most likely 0x05)
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] The Warden module was unable to handle a packet, you will be disconnected soon.")
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?handlefailed .")
+
+                If (MDebug("warden")) Then
+                    frmChat.AddChat(RTBColors.InformationText, "[Warden] Packet Data:" & vbNewLine & DebugOutput(Data))
+                End If
+
+            Case WARDEN_PACKET_FAILURE '//Something went HORRIBLY wrong in warden_packet, should NEVER happen.
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Something went horribly wrong in Warden_Packet(), you will be disconnected soon.")
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?horrible .")
+
+                If (MDebug("warden")) Then
+                    frmChat.AddChat(RTBColors.InformationText, "[Warden] Packet Data:" & vbNewLine & DebugOutput(Data))
+                End If
+
+            Case WARDEN_INIT_FAILURE '//Calling Init() in the module failed
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Unable to initalize the Warden module, you will be disconnected soon.")
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?init .")
+
+                'case WARDEN_LOAD_FILE_FAILURE '//Could not load module from file [Not to bad, prolly just dosen't exist] This should never come up
+
+            Case WARDEN_LOAD_MD5_FAILURE '//Failed MD5 checksum when loading module [Either Bad tranfer or HD file corrupt]
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Transfer failed because the MD5 checksum incorrect, you will be disconnected soon.")
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/md5 .")
+
+            Case WARDEN_LOAD_INVALID_SIGNATURE '//Module failed RSA verification
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Transfer failed because the RSA signature is invalid, you will be disconnected soon.")
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?rsa .")
+
+            Case WARDEN_LOAD_DECOMPRESS_FAILURE '//Module failed to decompress properly
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Failed to decompress the Warden module, you will be disconnected soon.")
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?decompress .")
+
+            Case WARDEN_LOAD_PREP_FAILURE '//Module prepare failed, Usually if module is corrupt
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Failed to prep the Warden module, you will be disconnected soon.")
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?prep .")
+
+            Case WARDEN_CHECK_UNKNOWN_COMMAND '//Unknown sub-command in CHEAT_CHECKS
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] The Warden has asked us to perform an unknown cheat-check, you will be disconnected soon.")
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit " & "http://www.stealthbot.net/sb/issues/warden/?unknownCheatCheck .")
+
+                If (MDebug("warden")) Then
+                    frmChat.AddChat(RTBColors.InformationText, "[Warden] Packet Data: " & vbNewLine & DebugOutput(Data))
+                End If
+
+            Case WARDEN_CHECK_TO_MANY_LIBS '//There were more then 4 libraries in a single 0x02 packet [this is eww yes, but I'll figure out a beter way later]
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] To many libraries in Cheat Check, you will be disconnected soon")
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit " & "http://www.stealthbot.net/sb/issues/warden/?toomanylibs .")
+
+                If (MDebug("warden")) Then
+                    frmChat.AddChat(RTBColors.InformationText, "[Warden] Packet Data: " & vbNewLine & DebugOutput(Data))
+                End If
+
+            Case WARDEN_MEM_UNKNOWN_PRODUCT '//The product from 0x50 != WC3, SC, or D2
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Unknown product code form SID_AUTH_INFO, you will be diconnected soon")
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit " & "http://www.stealthbot.net/sb/issues/warden/?unknownProdCode .")
+
+            Case WARDEN_MEM_UNKNOWN_SEGMENT '//Could not read segment from ini file
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Could not read a segment from Warden.ini, you will be disconnected soon.")
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Make sure you have the latest Warden data from http://www.stealthbot.net/sb/warden/")
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For more information on this, please visit " & "http://www.stealthbot.net/sb/issues/warden/?unknownSegment .")
+
+                If (MDebug("warden")) Then
+                    frmChat.AddChat(RTBColors.InformationText, "[Warden] Packet Data: " & vbNewLine & DebugOutput(Data))
+                End If
+
+            Case WARDEN_INVALID_INSTANCE '//The instance passed to this function was invalid
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] An Invalid instance was passed to Data, Did Init() fail?")
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] For information on this, please visit " & "http://www.stealthbot.net/sb/issues/warden/?invalidInstance .")
+
+        End Select
+
+        WardenData = (Result <> WARDEN_IGNORE)
+    End Function
 End Module

@@ -509,7 +509,7 @@ ERROR_HANDLER:
 		If (frmChat.sckBNet.CtlState = 7) Then
 			With PBuffer
 				If (frmChat.mnuUTF8.Checked) Then
-					.InsertNTString(Message, modPacketBuffer.STRINGENCODING.UTF8)
+                    .InsertNTString(Message, System.Text.Encoding.UTF8)
 				Else
 					.InsertNTString(Message)
 				End If
@@ -3286,5 +3286,10 @@ ERROR_HANDLER:
 	Private Function MonitorEnumProc(ByVal hMonitor As Integer, ByVal hDCMonitor As Integer, ByVal lprcMonitor As Integer, ByRef dwData As Integer) As Integer
 		dwData = dwData + 1
 		MonitorEnumProc = 1
-	End Function
+    End Function
+
+    Public Function ArrayContains(Of T)(ByVal aArray() As T, ByVal value As T) As Boolean
+        ArrayContains = Array.Exists(aArray, Function(x) x.Equals(value))
+    End Function
+
 End Module

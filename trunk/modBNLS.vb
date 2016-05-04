@@ -11,53 +11,53 @@ Module modBNLS
 	
 	Public BNLSAuthorized As Boolean
 	
-	Public Function BNLSRecvPacket(ByVal sData As String) As Boolean
-		On Error GoTo ERROR_HANDLER
-		Static pBuff As New clsDataBuffer
-		
-		Dim PacketID As Byte
-		
-		BNLSRecvPacket = True
-		With pBuff
-			.Clear()
-			.Data = sData
-			.GetWord()
-			PacketID = .GetByte
-		End With
-		
-		If (MDebug("all")) Then
-			frmChat.AddChat(COLOR_BLUE, StringFormat("BNLS RECV 0x{0}", ZeroOffset(PacketID, 2)))
-		End If
-		
-		CachePacket(modEnum.enuPL_DirectionTypes.StoC, modEnum.enuPL_ServerTypes.stBNLS, PacketID, Len(sData), sData)
-		
-		' Added 2007-06-08 for a packet logging menu feature to aid tech support
-		WritePacketData(modEnum.enuErrorSources.BNLS, modEnum.enuPL_DirectionTypes.StoC, PacketID, Len(sData), sData)
-		
-		If (RunInAll("Event_PacketReceived", "BNLS", PacketID, Len(sData), sData)) Then
-			Exit Function
-		End If
-		
-		Select Case PacketID
-			
-			Case BNLS_AUTHORIZE : Call RECV_BNLS_AUTHORIZE(pBuff)
-			Case BNLS_AUTHORIZEPROOF : Call RECV_BNLS_AUTHORIZEPROOF(pBuff)
-			Case BNLS_REQUESTVERSIONBYTE : Call RECV_BNLS_REQUESTVERSIONBYTE(pBuff)
-			Case BNLS_VERSIONCHECKEX2 : Call RECV_BNLS_VERSIONCHECKEX2(pBuff)
-				
-			Case Else
-				BNLSRecvPacket = False
-				If (MDebug("debug") And (MDebug("all") Or MDebug("unknown"))) Then
-					Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNLS] Unhandled packet 0x{0}", ZeroOffset(CInt(PacketID), 2)))
-					Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNLS] Packet data: {0}{1}", vbNewLine, DebugOutput(sData)))
-				End If
-				
-		End Select
-		
-		Exit Function
-ERROR_HANDLER: 
-		Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNLSRecvPacket()", Err.Number, Err.Description, OBJECT_NAME))
-	End Function
+    Public Function BNLSRecvPacket(ByVal Data() As Byte) As Boolean
+        On Error GoTo ERROR_HANDLER
+        Static pBuff As New clsDataBuffer
+
+        Dim PacketID As Byte
+
+        BNLSRecvPacket = True
+        With pBuff
+            .Clear()
+            .Data = Data
+            .GetWord()
+            PacketID = .GetByte
+        End With
+
+        If (MDebug("all")) Then
+            frmChat.AddChat(COLOR_BLUE, StringFormat("BNLS RECV 0x{0}", ZeroOffset(PacketID, 2)))
+        End If
+
+        CachePacket(modEnum.enuPL_DirectionTypes.StoC, modEnum.enuPL_ServerTypes.stBNLS, PacketID, Len(Data), Data)
+
+        ' Added 2007-06-08 for a packet logging menu feature to aid tech support
+        WritePacketData(modEnum.enuErrorSources.BNLS, modEnum.enuPL_DirectionTypes.StoC, PacketID, Len(Data), Data)
+
+        If (RunInAll("Event_PacketReceived", "BNLS", PacketID, Len(Data), Data)) Then
+            Exit Function
+        End If
+
+        Select Case PacketID
+
+            Case BNLS_AUTHORIZE : Call RECV_BNLS_AUTHORIZE(pBuff)
+            Case BNLS_AUTHORIZEPROOF : Call RECV_BNLS_AUTHORIZEPROOF(pBuff)
+            Case BNLS_REQUESTVERSIONBYTE : Call RECV_BNLS_REQUESTVERSIONBYTE(pBuff)
+            Case BNLS_VERSIONCHECKEX2 : Call RECV_BNLS_VERSIONCHECKEX2(pBuff)
+
+            Case Else
+                BNLSRecvPacket = False
+                If (MDebug("debug") And (MDebug("all") Or MDebug("unknown"))) Then
+                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNLS] Unhandled packet 0x{0}", ZeroOffset(CInt(PacketID), 2)))
+                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNLS] Packet data: {0}{1}", vbNewLine, DebugOutput(Data)))
+                End If
+
+        End Select
+
+        Exit Function
+ERROR_HANDLER:
+        Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNLSRecvPacket()", Err.Number, Err.Description, OBJECT_NAME))
+    End Function
 	
 	'*******************************
 	'BNLS_AUTHORIZE (0x0E) S->C

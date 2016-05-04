@@ -4586,17 +4586,19 @@ ERROR_HANDLER:
 	
 	Private Sub sckMCP_DataArrival(ByVal eventSender As System.Object, ByVal eventArgs As AxMSWinsockLib.DMSWinsockControlEvents_DataArrivalEvent) Handles sckMCP.DataArrival
 		On Error GoTo ERROR_HANDLER
-		
-		Dim strTemp As String
-		
-        sckMCP.GetData(strTemp)
-		MCPBuffer.AddData(strTemp)
-		
+
+        Dim bData() As Byte
+
+        ' Get the data and add it to the buffer
+        sckMCP.GetData(bData, vbArray + vbByte, eventArgs.bytesTotal)
+        MCPBuffer.AddData(bData)
+
+        ' If we have full packets, parse them
 		While MCPBuffer.FullPacket
-			strTemp = MCPBuffer.GetPacket
+            bData = MCPBuffer.GetPacket
 			
 			If Not ds.MCPHandler Is Nothing Then
-				Call ds.MCPHandler.ParsePacket(strTemp)
+                Call ds.MCPHandler.ParsePacket(bData)
 			End If
 		End While
 		
@@ -6182,10 +6184,10 @@ ERROR_HANDLER:
 	
 	Private Sub sckBNLS_DataArrival(ByVal eventSender As System.Object, ByVal eventArgs As AxMSWinsockLib.DMSWinsockControlEvents_DataArrivalEvent) Handles sckBNLS.DataArrival
 		On Error GoTo ERROR_HANDLER
+
+        Dim bData() As Byte
 		
-		Dim strTemp As String
-		
-        sckBNLS.GetData(strTemp)
+        sckBNLS.GetData(bData, vbArray + vbByte, eventArgs.bytesTotal)
 		
 		If BotVars.UseProxy And (BotVars.ProxyStatus = modEnum.enuProxyStatus.psConnecting Or BotVars.ProxyStatus = modEnum.enuProxyStatus.psLoggingIn) Then
 			
@@ -6197,35 +6199,35 @@ ERROR_HANDLER:
 					'do an instr search to find the method number.
 					'For public proxys you are looking for chr(0)
 					'<macyui>
-					
-					If InStr(1, strTemp, Chr(5)) > 0 Or InStr(1, strTemp, Chr(4)) > 0 Then
-						If InStr(1, strTemp, Chr(0)) > 0 Then
-							UpdateProxyStatus(modEnum.enuProxyStatus.psLoggingIn, PROXY_LOGGING_IN)
-							
-							LogonToProxy(sckBNLS, BotVars.BNLSServer, 9367, False)
-						Else
-							UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected, PROXY_IS_NOT_PUBLIC)
-							sckBNLS.Close()
-						End If
-					Else
-						UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected, PROXY_IS_NOT_PUBLIC)
-						sckBNLS.Close()
-					End If
-					
-				Case modEnum.enuProxyStatus.psLoggingIn
-					'Then when it sends back chr(5) & chr(0) indicating
-					'connection success, login and proceed as usual.
-					
-					If InStr(1, strTemp, Chr(5)) > 0 And InStr(1, strTemp, Chr(0)) > 0 Then
-						UpdateProxyStatus(modEnum.enuProxyStatus.psOnline, PROXY_LOGIN_SUCCESS)
-					Else
-						UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected, PROXY_LOGIN_FAILED)
-						sckBNLS.Close()
-					End If
-					
-			End Select
+
+                    If ArrayContains(bData, 4) Or ArrayContains(bData, 5) Then
+                        If ArrayContains(bData, 0) Then
+                            UpdateProxyStatus(modEnum.enuProxyStatus.psLoggingIn, PROXY_LOGGING_IN)
+
+                            LogonToProxy(sckBNLS, BotVars.BNLSServer, 9367, False)
+                        Else
+                            UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected, PROXY_IS_NOT_PUBLIC)
+                            sckBNLS.Close()
+                        End If
+                    Else
+                        UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected, PROXY_IS_NOT_PUBLIC)
+                        sckBNLS.Close()
+                    End If
+
+                Case modEnum.enuProxyStatus.psLoggingIn
+                    'Then when it sends back chr(5) & chr(0) indicating
+                    'connection success, login and proceed as usual.
+
+                    If ArrayContains(bData, 5) And ArrayContains(bData, 0) Then
+                        UpdateProxyStatus(modEnum.enuProxyStatus.psOnline, PROXY_LOGIN_SUCCESS)
+                    Else
+                        UpdateProxyStatus(modEnum.enuProxyStatus.psNotConnected, PROXY_LOGIN_FAILED)
+                        sckBNLS.Close()
+                    End If
+
+            End Select
 		Else
-			BNLSBuffer.AddData(strTemp)
+            BNLSBuffer.AddData(bData)
 			
 			While BNLSBuffer.FullPacket
 				modBNLS.BNLSRecvPacket(BNLSBuffer.GetPacket)
@@ -6847,13 +6849,13 @@ ERROR_HANDLER:
 		Exit Sub
 	End Sub
 	
-	Public Sub ParseFriendsPacket(ByVal PacketID As Integer, ByVal Contents As String)
-		FriendListHandler.ParsePacket(PacketID, Contents)
-	End Sub
+    Public Sub ParseFriendsPacket(ByVal PacketID As Integer, ByVal Data() As Byte)
+        FriendListHandler.ParsePacket(PacketID, Data)
+    End Sub
 	
-	Public Sub ParseClanPacket(ByVal PacketID As Integer, ByVal Contents As String)
-		ClanHandler.ParseClanPacket(PacketID, Contents)
-	End Sub
+    Public Sub ParseClanPacket(ByVal PacketID As Integer, ByVal Data() As Byte)
+        ClanHandler.ParseClanPacket(PacketID, Data)
+    End Sub
 	
 	Public Sub RecordWindowPosition(Optional ByRef Maximized As Boolean = False)
 		'Don't record other position information if maximized, otherwise when they unmaximize it will be fullscreen width and height. - FrOzeN
