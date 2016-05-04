@@ -57,8 +57,7 @@ Friend Class clsErrorHandler
 					
 					ExReconMinutes = (20 * 60)
 					
-					'UPGRADE_WARNING: Add a delegate for AddressOf ExtendedReconnect_TimerProc Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E9E157F7-EF0C-4016-87B7-7D7FBBC6EE08"'
-					ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, 1000, AddressOf ExtendedReconnect_TimerProc)
+                    ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, 1000, AddressOf ExtendedReconnect_TimerProc)
 					
 					UserCancelledConnect = False
 					
@@ -121,8 +120,7 @@ Friend Class clsErrorHandler
 		Else
 			ExReconMinutes = (BotVars.ReconnectDelay / 1000)
 			
-			'UPGRADE_WARNING: Add a delegate for AddressOf ExtendedReconnect_TimerProc Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E9E157F7-EF0C-4016-87B7-7D7FBBC6EE08"'
-			ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, 1000, AddressOf ExtendedReconnect_TimerProc)
+            ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, 1000, AddressOf ExtendedReconnect_TimerProc)
 			
 			UserCancelledConnect = False
 		End If

@@ -1,5 +1,8 @@
 Option Strict Off
 Option Explicit On
+
+Public Delegate Sub TimerProc_Callback(ByVal hWnd As Integer, ByVal uMsg As Integer, ByVal idEvent As Integer, ByVal dwTimer As Integer)
+
 Module modTimerProcs
 	
 	Public Sub Reconnect_TimerProc(ByVal hWnd As Integer, ByVal uMsg As Integer, ByVal idEvent As Integer, ByVal dwTimer As Integer)
@@ -70,8 +73,7 @@ Module modTimerProcs
 		frmClanInvite.cmdAccept.Enabled = True
 		frmClanInvite.cmdDecline.Enabled = True
 		
-		'UPGRADE_WARNING: Add a delegate for AddressOf ClanInviteTimerProc2 Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E9E157F7-EF0C-4016-87B7-7D7FBBC6EE08"'
-		ClanAcceptTimerID = SetTimer(frmClanInvite.Handle.ToInt32, 0, 28000, AddressOf ClanInviteTimerProc2)
+        ClanAcceptTimerID = SetTimer(frmClanInvite.Handle.ToInt32, 0, 28000, AddressOf ClanInviteTimerProc2)
 	End Function
 	
 	'/* Timer proc 2 for invite accept form - autodeclines after 30 seconds */
@@ -122,8 +124,7 @@ Module modTimerProcs
 						End If
 					End With
 					
-					'UPGRADE_WARNING: Add a delegate for AddressOf QueueTimerProc Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E9E157F7-EF0C-4016-87B7-7D7FBBC6EE08"'
-					QueueTimerID = SetTimer(0, 0, NewDelay + ExtraDelay, AddressOf QueueTimerProc)
+                    QueueTimerID = SetTimer(0, 0, NewDelay + ExtraDelay, AddressOf QueueTimerProc)
 				End If
 			End If
 		End If

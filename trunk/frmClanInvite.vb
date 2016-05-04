@@ -51,8 +51,7 @@ Friend Class frmClanInvite
 		cmdAccept.Enabled = False
 		cmdDecline.Enabled = False
 		
-		'UPGRADE_WARNING: Add a delegate for AddressOf ClanInviteTimerProc Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E9E157F7-EF0C-4016-87B7-7D7FBBC6EE08"'
-		ClanAcceptTimerID = SetTimer(Me.Handle.ToInt32, 0, 2000, AddressOf ClanInviteTimerProc)
+        ClanAcceptTimerID = SetTimer(Me.Handle.ToInt32, 0, 2000, AddressOf ClanInviteTimerProc)
 	End Sub
 	
 	Private Sub frmClanInvite_FormClosed(ByVal eventSender As System.Object, ByVal eventArgs As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed

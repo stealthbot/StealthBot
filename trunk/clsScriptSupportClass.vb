@@ -777,8 +777,7 @@ Friend Class clsScriptSupportClass
 	'//  that menu option on the bot's Settings menu
 	'// The command must wait before reloading the script so all operations are cleared.
 	Public Sub ReloadScript()
-		'UPGRADE_WARNING: Add a delegate for AddressOf ScriptReload_TimerProc Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E9E157F7-EF0C-4016-87B7-7D7FBBC6EE08"'
-		SCReloadTimerID = SetTimer(frmChat.Handle.ToInt32, 0, 400, AddressOf ScriptReload_TimerProc)
+        SCReloadTimerID = SetTimer(frmChat.Handle.ToInt32, 0, 400, AddressOf ScriptReload_TimerProc)
 	End Sub
 	
 	
@@ -787,8 +786,7 @@ Friend Class clsScriptSupportClass
 	'//   Recommended to modify the timeout setting in your settings.ini file rather than using this sub directly.
 	Public Sub SetSCTimeout(ByVal newValue As Integer)
 		If (newValue > 1 And newValue < 60001) Then
-			'UPGRADE_WARNING: Add a delegate for AddressOf ScriptReload_TimerProc Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E9E157F7-EF0C-4016-87B7-7D7FBBC6EE08"'
-			SCReloadTimerID = SetTimer(frmChat.Handle.ToInt32, newValue, 400, AddressOf ScriptReload_TimerProc)
+            SCReloadTimerID = SetTimer(frmChat.Handle.ToInt32, newValue, 400, AddressOf ScriptReload_TimerProc)
 		End If
 	End Sub
 	

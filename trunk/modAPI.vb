@@ -31,7 +31,7 @@ Module modAPI
 	Public Declare Function GetUserDefaultLangID Lib "kernel32" () As Integer
 	Public Declare Function GetLocaleInfo Lib "kernel32"  Alias "GetLocaleInfoA"(ByVal locale As Integer, ByVal LCType As Integer, ByVal lpLCData As String, ByVal cchData As Integer) As Integer
 	
-	Public Declare Function SetTimer Lib "user32" (ByVal hWnd As Integer, ByVal nIDEvent As Integer, ByVal uElapse As Integer, ByVal lpTimerFunc As Integer) As Integer
+    Public Declare Function SetTimer Lib "user32" (ByVal hWnd As Integer, ByVal nIDEvent As Integer, ByVal uElapse As Integer, ByVal lpTimerFunc As TimerProc_Callback) As Integer
 	Public Declare Function KillTimer Lib "user32" (ByVal hWnd As Integer, ByVal nIDEvent As Integer) As Integer
 	
 	Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Integer)

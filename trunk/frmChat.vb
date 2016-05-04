@@ -5521,8 +5521,7 @@ ERROR_HANDLER:
 					End If
 					
 					' set the delay before our next queue cycle
-					'UPGRADE_WARNING: Add a delegate for AddressOf QueueTimerProc Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E9E157F7-EF0C-4016-87B7-7D7FBBC6EE08"'
-					QueueTimerID = SetTimer(0, 0, delay, AddressOf QueueTimerProc)
+                    QueueTimerID = SetTimer(0, 0, delay, AddressOf QueueTimerProc)
 				End If
 			Next i
 			
