@@ -201,16 +201,10 @@
     <Compile Include="clsCommandDocObj.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="clsCommandDocObjStatic.vb">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="clsCommandGeneratorObj.vb">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="clsCommandObj.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="clsCommandObjStatic.vb">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="clsCommandParamsObj.vb">
@@ -534,9 +528,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="modSHA1.vb">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="modStaticClasses.vb">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="modSystray.vb">
