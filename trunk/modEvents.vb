@@ -38,10 +38,9 @@ Module modEvents
 		
 		' if our username is for some reason null, we don't
 		' want to continue, possibly causing further errors
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Username) < 1) Then
-			Exit Sub
-		End If
+        If (Len(Username) < 1) Then
+            Exit Sub
+        End If
 		
 		
 		UserIndex = g_Channel.GetUserIndexEx(CleanUsername(Username))
@@ -162,15 +161,13 @@ Module modEvents
 							FDescN = FlagDescription(NewFlags, False)
 							FDescO = FlagDescription(LostFlags, False)
 							
-							'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-							If LenB(FDescN) > 0 Then
-								frmChat.AddChat(RTBColors.JoinUsername, "-- ", RTBColors.JoinedChannelName, Username, RTBColors.JoinText, " is now a " & FDescN & ".")
-							End If
+                            If Len(FDescN) > 0 Then
+                                frmChat.AddChat(RTBColors.JoinUsername, "-- ", RTBColors.JoinedChannelName, Username, RTBColors.JoinText, " is now a " & FDescN & ".")
+                            End If
 							
-							'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-							If LenB(FDescO) > 0 Then
-								frmChat.AddChat(RTBColors.JoinUsername, "-- ", RTBColors.JoinedChannelName, Username, RTBColors.JoinText, " is no longer a " & FDescO & ".")
-							End If
+                            If Len(FDescO) > 0 Then
+                                frmChat.AddChat(RTBColors.JoinUsername, "-- ", RTBColors.JoinedChannelName, Username, RTBColors.JoinText, " is no longer a " & FDescO & ".")
+                            End If
 						End If
 					End If
 				End If
@@ -203,10 +200,9 @@ ERROR_HANDLER:
 		
 		' if our channel is for some reason null, we don't
 		' want to continue, possibly causing further errors
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(ChannelName) = 0) Then
-			Exit Sub
-		End If
+        If (Len(ChannelName) = 0) Then
+            Exit Sub
+        End If
 		
 		LastChannel = g_Channel.Name
 		
@@ -235,14 +231,13 @@ ERROR_HANDLER:
 		
 		' if we've just left another channel, call event script
 		' function indicating that we've done so.
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(LastChannel) > 0) Then
-			On Error Resume Next
-			
-			RunInAll("Event_ChannelLeave")
-			
-			On Error GoTo ERROR_HANDLER
-		End If
+        If (Len(LastChannel) > 0) Then
+            On Error Resume Next
+
+            RunInAll("Event_ChannelLeave")
+
+            On Error GoTo ERROR_HANDLER
+        End If
 		
 		With g_Channel
 			.Name = ChannelName
@@ -376,12 +371,11 @@ ERROR_HANDLER:
 			
 			'MsgBox PPLRespondTo
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(PPLRespondTo) > 0 Then
-				U = "/w " & PPLRespondTo & " "
-			Else
-				U = vbNullString
-			End If
+            If Len(PPLRespondTo) > 0 Then
+                U = "/w " & PPLRespondTo & " "
+            Else
+                U = vbNullString
+            End If
 			
 			If KeyName = "Profile\Location" Then
 Repeat2: 
@@ -426,10 +420,9 @@ Repeat2:
 				
 				PPL = False
 				
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If LenB(PPLRespondTo) > 0 Then
-					PPLRespondTo = vbNullString
-				End If
+                If Len(PPLRespondTo) > 0 Then
+                    PPLRespondTo = vbNullString
+                End If
 				
 			ElseIf KeyName = "Profile\Sex" Then 
 Repeat4: 
@@ -576,10 +569,9 @@ ERROR_HANDLER:
 		
 		' if D2 and on a char, we need to tell the whole world this so that Self is known later on
 		If (StrComp(Stats.Game, PRODUCT_D2DV, CompareMethod.Binary) = 0) Or (StrComp(Stats.Game, PRODUCT_D2XP, CompareMethod.Binary) = 0) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Stats.CharacterName) > 0) Then
-				CurrentUsername = Stats.CharacterName & "*" & CurrentUsername
-			End If
+            If (Len(Stats.CharacterName) > 0) Then
+                CurrentUsername = Stats.CharacterName & "*" & CurrentUsername
+            End If
 		End If
 		
 		' show home channel in menu
@@ -629,17 +621,16 @@ ERROR_HANDLER:
 		Stats = Nothing
 		
 		RequestSystemKeys()
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(BotVars.Gateway) > 0) Then
-			' PvPGN: we already have our gateway, we're logged on
-			SetTitle(GetCurrentUsername & ", online in channel " & g_Channel.Name)
-			
-			Call InsertDummyQueueEntry()
-			
-			On Error Resume Next
-			
-			RunInAll("Event_LoggedOn", CurrentUsername, BotVars.Product)
-		End If
+        If (Len(BotVars.Gateway) > 0) Then
+            ' PvPGN: we already have our gateway, we're logged on
+            SetTitle(GetCurrentUsername() & ", online in channel " & g_Channel.Name)
+
+            Call InsertDummyQueueEntry()
+
+            On Error Resume Next
+
+            RunInAll("Event_LoggedOn", CurrentUsername, BotVars.Product)
+        End If
 		
 		Exit Sub
 ERROR_HANDLER: 
@@ -713,52 +704,51 @@ ERROR_HANDLER:
 		
 		'frmChat.AddChat RTBColors.ErrorMessageText, Message
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(BotVars.Gateway) = 0) Then
-			' continue gateway discovery
-			SEND_SID_CHATCOMMAND("/whoami")
-		Else
-			ChannelCreateOption = Config.AutoCreateChannels
-			
-			Select Case ChannelCreateOption
-				Case "ALERT"
-					Select Case EventID
-						Case ID_CHANNELDOESNOTEXIST
-							ChannelJoinError = "Channel does not exist." & vbNewLine & "Do you want to create it?"
-							ChannelJoinButtons = MsgBoxStyle.YesNo Or MsgBoxStyle.Question Or MsgBoxStyle.DefaultButton1
-						Case ID_CHANNELFULL
-							ChannelJoinError = "Channel is full."
-							ChannelJoinButtons = MsgBoxStyle.OKOnly Or MsgBoxStyle.Exclamation Or MsgBoxStyle.DefaultButton1
-						Case ID_CHANNELRESTRICTED
-							ChannelJoinError = "Channel is restricted."
-							ChannelJoinButtons = MsgBoxStyle.OKOnly Or MsgBoxStyle.Exclamation Or MsgBoxStyle.DefaultButton1
-					End Select
-					
-					ChannelJoinResult = MsgBox("Failed to join " & ChannelName & ":" & vbNewLine & ChannelJoinError, ChannelJoinButtons, "StealthBot")
-					
-					If ChannelJoinResult = MsgBoxResult.Yes Then
-						Call FullJoin(ChannelName, 2)
-					End If
-					
-				Case Else
-					' "ALWAYS" - handle it as error to bot
-					' "NEVER" - failed to join or create
-					Select Case EventID
-						Case ID_CHANNELDOESNOTEXIST
-							Message = "[BNCS] Channel does not exist."
-						Case ID_CHANNELFULL
-							Message = "[BNCS] Channel is full."
-						Case ID_CHANNELRESTRICTED
-							Message = "[BNCS] Channel is restricted."
-					End Select
-					
-					frmChat.AddChat(RTBColors.ErrorMessageText, Message)
-					
-			End Select
-			
-			'should we expose?
-			'RunInAll "Event_ChannelJoinError", EventID, ChannelName
-		End If
+        If (Len(BotVars.Gateway) = 0) Then
+            ' continue gateway discovery
+            SEND_SID_CHATCOMMAND("/whoami")
+        Else
+            ChannelCreateOption = Config.AutoCreateChannels
+
+            Select Case ChannelCreateOption
+                Case "ALERT"
+                    Select Case EventID
+                        Case ID_CHANNELDOESNOTEXIST
+                            ChannelJoinError = "Channel does not exist." & vbNewLine & "Do you want to create it?"
+                            ChannelJoinButtons = MsgBoxStyle.YesNo Or MsgBoxStyle.Question Or MsgBoxStyle.DefaultButton1
+                        Case ID_CHANNELFULL
+                            ChannelJoinError = "Channel is full."
+                            ChannelJoinButtons = MsgBoxStyle.OkOnly Or MsgBoxStyle.Exclamation Or MsgBoxStyle.DefaultButton1
+                        Case ID_CHANNELRESTRICTED
+                            ChannelJoinError = "Channel is restricted."
+                            ChannelJoinButtons = MsgBoxStyle.OkOnly Or MsgBoxStyle.Exclamation Or MsgBoxStyle.DefaultButton1
+                    End Select
+
+                    ChannelJoinResult = MsgBox("Failed to join " & ChannelName & ":" & vbNewLine & ChannelJoinError, ChannelJoinButtons, "StealthBot")
+
+                    If ChannelJoinResult = MsgBoxResult.Yes Then
+                        Call FullJoin(ChannelName, 2)
+                    End If
+
+                Case Else
+                    ' "ALWAYS" - handle it as error to bot
+                    ' "NEVER" - failed to join or create
+                    Select Case EventID
+                        Case ID_CHANNELDOESNOTEXIST
+                            Message = "[BNCS] Channel does not exist."
+                        Case ID_CHANNELFULL
+                            Message = "[BNCS] Channel is full."
+                        Case ID_CHANNELRESTRICTED
+                            Message = "[BNCS] Channel is restricted."
+                    End Select
+
+                    frmChat.AddChat(RTBColors.ErrorMessageText, Message)
+
+            End Select
+
+            'should we expose?
+            'RunInAll "Event_ChannelJoinError", EventID, ChannelName
+        End If
 		
 		Exit Sub
 ERROR_HANDLER: 
@@ -1106,10 +1096,9 @@ ERROR_HANDLER:
 		Dim AcqOps As Boolean
 		Dim NewIcon As Integer ' temp store new icon
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Username) < 1) Then
-			Exit Sub
-		End If
+        If (Len(Username) < 1) Then
+            Exit Sub
+        End If
 		
 		UserIndex = g_Channel.GetUserIndexEx(CleanUsername(Username))
 		
@@ -1186,10 +1175,9 @@ ERROR_HANDLER:
 					If Not Displayed Then
 						FDesc = FlagDescription(Flags, False)
 						
-						'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-						If LenB(FDesc) > 0 Then
-							FDesc = " as a " & FDesc
-						End If
+                        If Len(FDesc) > 0 Then
+                            FDesc = " as a " & FDesc
+                        End If
 						
 						' display message
 						If (Flags And USER_BLIZZREP) Then
@@ -1397,14 +1385,13 @@ ERROR_HANDLER:
 								ToDisplay = True
 								
 								' is stats different / provided?
-								'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-								If LenB(UserEvent.Statstring) > 0 Then
-									If StrComp(UserEvent.Statstring, UserObj.Statstring) Then
-										
-										' store stats update stats in object used in userjoins message generation
-										UserObj.Statstring = UserEvent.Statstring
-									End If
-								End If
+                                If Len(UserEvent.Statstring) > 0 Then
+                                    If StrComp(UserEvent.Statstring, UserObj.Statstring) Then
+
+                                        ' store stats update stats in object used in userjoins message generation
+                                        UserObj.Statstring = UserEvent.Statstring
+                                    End If
+                                End If
 								
 						End Select
 						
@@ -1424,10 +1411,9 @@ ERROR_HANDLER:
 				If (Not CheckBlock(Username)) Then
 					FDesc = FlagDescription(AcqFlags Or Flags, False)
 					
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If LenB(FDesc) > 0 Then
-						FDesc = " as a " & FDesc
-					End If
+                    If Len(FDesc) > 0 Then
+                        FDesc = " as a " & FDesc
+                    End If
 					
 					' display message
 					If (AcqFlags And USER_BLIZZREP) Or (Flags And USER_BLIZZREP) Then
@@ -1473,14 +1459,13 @@ ERROR_HANDLER:
 				''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 				
 				If (BotVars.UseGreet) Then
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(BotVars.GreetMsg)) Then
-						If (BotVars.WhisperGreet) Then
-							frmChat.AddQ("/w " & Username & Space(1) & DoReplacements(BotVars.GreetMsg, Username, Ping))
-						Else
-							frmChat.AddQ(DoReplacements(BotVars.GreetMsg, Username, Ping))
-						End If
-					End If
+                    If (Len(BotVars.GreetMsg)) Then
+                        If (BotVars.WhisperGreet) Then
+                            frmChat.AddQ("/w " & Username & Space(1) & DoReplacements(BotVars.GreetMsg, Username, Ping))
+                        Else
+                            frmChat.AddQ(DoReplacements(BotVars.GreetMsg, Username, Ping))
+                        End If
+                    End If
 				End If
 				
 				''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1810,8 +1795,7 @@ ERROR_HANDLER:
 				End If
 				
 			Case 1
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Version check failed! " & "The version byte for this attempt was 0x" & Hex(GetVerByte((BotVars.Product))) & "." & IIf(LenB(ExtraInfo) = 0, vbNullString, " Extra Information: " & ExtraInfo))
+                frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Version check failed! " & "The version byte for this attempt was 0x" & Hex(GetVerByte((BotVars.Product))) & "." & IIf(Len(ExtraInfo) = 0, vbNullString, " Extra Information: " & ExtraInfo))
 				
 				If (BotVars.BNLS) Then
 					If (frmChat.HandleBnlsError("[BNCS] BNLS has not been updated yet, " & "or you experienced an error. Try connecting again.")) Then
@@ -2088,10 +2072,9 @@ ERROR_HANDLER:
 		For x = 0 To UBound(sChannels)
 			sChannel = sChannels(x)
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(sChannel) > 0 Then
-				BotVars.PublicChannels.Add(sChannel)
-			End If
+            If Len(sChannel) > 0 Then
+                BotVars.PublicChannels.Add(sChannel)
+            End If
 		Next x
 		
 		PreparePublicChannelMenu()

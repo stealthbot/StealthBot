@@ -1893,24 +1893,22 @@ Friend Class clsConfig
 			backupPath = m_ConfigPath & "-backup"
 			
 			'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Dir(m_ConfigPath)) > 0) Then
-				iPostfix = 1
-				
-				' If a backup already exists, find an available filename
-				'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				Do While (LenB(Dir(backupPath)) > 0)
-					iPostfix = iPostfix + 1
-					backupPath = m_ConfigPath & "-backup" & CStr(iPostfix)
-				Loop 
-				
-				' Copy the file and delete the original
-				Call FileCopy(m_ConfigPath, backupPath)
-				Call Kill(m_ConfigPath)
-				
-				Call frmChat.AddChat(RTBColors.InformationText, "Your config file is being updated. A backup of your old file has been placed in your bot folder.")
-			End If
+            If (Len(Dir(m_ConfigPath)) > 0) Then
+                iPostfix = 1
+
+                ' If a backup already exists, find an available filename
+                'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                Do While (Len(Dir(backupPath)) > 0)
+                    iPostfix = iPostfix + 1
+                    backupPath = m_ConfigPath & "-backup" & CStr(iPostfix)
+                Loop
+
+                ' Copy the file and delete the original
+                Call FileCopy(m_ConfigPath, backupPath)
+                Call Kill(m_ConfigPath)
+
+                Call frmChat.AddChat(RTBColors.InformationText, "Your config file is being updated. A backup of your old file has been placed in your bot folder.")
+            End If
 			'UPGRADE_NOTE: Object fso may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 			fso = Nothing
 			
@@ -2435,11 +2433,9 @@ Friend Class clsConfig
 		Dim sVal As String
 		For i = LBound(m_ProductKeys) To UBound(m_ProductKeys)
 			sVal = ReadSetting(SECTION_OVERRIDE, m_ProductKeys(i) & "VerByte")
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(sVal) > 0 Then m_VersionBytes(i) = CInt(Val("&H" & sVal))
+            If Len(sVal) > 0 Then m_VersionBytes(i) = CInt(Val("&H" & sVal))
 			sVal = ReadSetting(SECTION_OVERRIDE, m_ProductKeys(i) & "LogonSystem")
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(sVal) > 0 Then m_LogonSystems(i) = CInt(Val("&H" & sVal))
+            If Len(sVal) > 0 Then m_LogonSystems(i) = CInt(Val("&H" & sVal))
 		Next 
 		
 		Call ConformValues()
@@ -2616,12 +2612,10 @@ Friend Class clsConfig
 		Dim sVal As String
 		For i = LBound(m_ProductKeys) To UBound(m_ProductKeys)
 			sVal = ReadSetting(SECTION_EMULATION, m_ProductKeys(i) & "VerByte")
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(sVal) > 0 Then m_VersionBytes(i) = CInt(Val("&H" & sVal))
+            If Len(sVal) > 0 Then m_VersionBytes(i) = CInt(Val("&H" & sVal))
 			
 			sVal = ReadSetting(SECTION_EMULATION, m_ProductKeys(i) & "LogonSystem")
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(sVal) > 0 Then m_LogonSystems(i) = CInt(Val("&H" & sVal))
+            If Len(sVal) > 0 Then m_LogonSystems(i) = CInt(Val("&H" & sVal))
 		Next 
 		
 		Call ConformValues()

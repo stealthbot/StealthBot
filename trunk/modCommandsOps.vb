@@ -30,19 +30,17 @@ Module modCommandsOps
 			
 			If (i > UBound(Phrases)) Then
 				'Thats a lot of crap.. It check if the last item in Phrases is not just whitespace
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(Trim(Phrases(UBound(Phrases)))) > 0) Then
-					ReDim Preserve Phrases(UBound(Phrases) + 1)
-				End If
+                If (Len(Trim(Phrases(UBound(Phrases)))) > 0) Then
+                    ReDim Preserve Phrases(UBound(Phrases) + 1)
+                End If
 				
 				Phrases(UBound(Phrases)) = sPhrase
 				
 				FileOpen(iFile, GetFilePath(FILE_PHRASE_BANS), OpenMode.Output)
 				For i = LBound(Phrases) To UBound(Phrases)
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(Trim(Phrases(i))) > 0) Then
-						PrintLine(iFile, Phrases(i))
-					End If
+                    If (Len(Trim(Phrases(i))) > 0) Then
+                        PrintLine(iFile, Phrases(i))
+                    End If
 				Next i
 				FileClose(iFile)
 				
@@ -82,12 +80,11 @@ Module modCommandsOps
 	Public Sub OnCAdd(ByRef Command_Renamed As clsCommandObj)
 		Dim sArgs As String
 		If (Command_Renamed.IsValid) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Command_Renamed.Argument("Message")) > 0) Then
-				sArgs = "--banmsg " & Command_Renamed.Argument("Message")
-			Else
-				sArgs = "--banmsg Client Ban"
-			End If
+            If (Len(Command_Renamed.Argument("Message")) > 0) Then
+                sArgs = "--banmsg " & Command_Renamed.Argument("Message")
+            Else
+                sArgs = "--banmsg Client Ban"
+            End If
 			
 			'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			Command_Renamed.Args = StringFormat("{0} +B --type GAME {1}", Command_Renamed.Argument("Game"), sArgs)
@@ -109,16 +106,15 @@ Module modCommandsOps
 		If (Command_Renamed.IsValid) Then
 			Select Case (LCase(Command_Renamed.Argument("SubCommand")))
 				Case "on", "true", "enable", "enabled"
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(Command_Renamed.Argument("Value")) > 0) Then
-						
-						BotVars.ChannelPassword = Command_Renamed.Argument("Value")
-						If (BotVars.ChannelPasswordDelay <= 0) Then BotVars.ChannelPasswordDelay = 30
-						
-						Command_Renamed.Respond(StringFormat("Channel password protection enabled, delay set to {0}.", BotVars.ChannelPasswordDelay))
-					Else
-						Command_Renamed.Respond("Error: You must supply a password.")
-					End If
+                    If (Len(Command_Renamed.Argument("Value")) > 0) Then
+
+                        BotVars.ChannelPassword = Command_Renamed.Argument("Value")
+                        If (BotVars.ChannelPasswordDelay <= 0) Then BotVars.ChannelPasswordDelay = 30
+
+                        Command_Renamed.Respond(StringFormat("Channel password protection enabled, delay set to {0}.", BotVars.ChannelPasswordDelay))
+                    Else
+                        Command_Renamed.Respond("Error: You must supply a password.")
+                    End If
 					
 				Case "off", "false", "disable", "disabled"
 					BotVars.ChannelPassword = vbNullString
@@ -140,12 +136,11 @@ Module modCommandsOps
 					
 				Case Else
 					
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If ((LenB(BotVars.ChannelPassword) = 0) Or (BotVars.ChannelPasswordDelay = 0)) Then
-						Command_Renamed.Respond("Channel password protection is currently disabled.")
-					Else
-						Command_Renamed.Respond(StringFormat("Channel password protection is currently enabled. Password [{0}], Delay [{1}].", BotVars.ChannelPassword, BotVars.ChannelPasswordDelay))
-					End If
+                    If ((Len(BotVars.ChannelPassword) = 0) Or (BotVars.ChannelPasswordDelay = 0)) Then
+                        Command_Renamed.Respond("Channel password protection is currently disabled.")
+                    Else
+                        Command_Renamed.Respond(StringFormat("Channel password protection is currently enabled. Password [{0}], Delay [{1}].", BotVars.ChannelPassword, BotVars.ChannelPasswordDelay))
+                    End If
 			End Select
 		End If
 	End Sub
@@ -159,32 +154,31 @@ Module modCommandsOps
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub OnD2LevelBan(ByRef Command_Renamed As clsCommandObj)
 		Dim Level As Short
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Command_Renamed.Argument("Level")) > 0) Then
-			Level = CShort(Command_Renamed.Argument("Level"))
-			If (Level > 0) Then
-				If (Level < 256) Then
-					Command_Renamed.Respond(StringFormat("Banning Diablo II users under level {0}.", Level))
-					BotVars.BanD2UnderLevel = CByte(Level)
-				Else
-					Command_Renamed.Respond("Error: Invalid level specified.")
-				End If
-			Else
-				BotVars.BanD2UnderLevel = 0
-				Command_Renamed.Respond("Diablo II level bans disabled.")
-			End If
-			
-			If Config.LevelBanD2 <> BotVars.BanD2UnderLevel Then
-				Config.LevelBanD2 = BotVars.BanD2UnderLevel
-				Call Config.Save()
-			End If
-		Else
-			If (BotVars.BanD2UnderLevel = 0) Then
-				Command_Renamed.Respond("Currently not banning Diablo II users by level.")
-			Else
-				Command_Renamed.Respond(StringFormat("Currently banning Diablo II users under level {0}.", BotVars.BanD2UnderLevel))
-			End If
-		End If
+        If (Len(Command_Renamed.Argument("Level")) > 0) Then
+            Level = CShort(Command_Renamed.Argument("Level"))
+            If (Level > 0) Then
+                If (Level < 256) Then
+                    Command_Renamed.Respond(StringFormat("Banning Diablo II users under level {0}.", Level))
+                    BotVars.BanD2UnderLevel = CByte(Level)
+                Else
+                    Command_Renamed.Respond("Error: Invalid level specified.")
+                End If
+            Else
+                BotVars.BanD2UnderLevel = 0
+                Command_Renamed.Respond("Diablo II level bans disabled.")
+            End If
+
+            If Config.LevelBanD2 <> BotVars.BanD2UnderLevel Then
+                Config.LevelBanD2 = BotVars.BanD2UnderLevel
+                Call Config.Save()
+            End If
+        Else
+            If (BotVars.BanD2UnderLevel = 0) Then
+                Command_Renamed.Respond("Currently not banning Diablo II users by level.")
+            Else
+                Command_Renamed.Respond(StringFormat("Currently banning Diablo II users under level {0}.", BotVars.BanD2UnderLevel))
+            End If
+        End If
 	End Sub
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
@@ -223,18 +217,16 @@ Module modCommandsOps
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub OnDes(ByRef Command_Renamed As clsCommandObj)
 		If (g_Channel.Self.IsOperator) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Command_Renamed.Argument("Username")) > 0) Then
-				Call frmChat.AddQ("/designate " & Command_Renamed.Argument("Username"), (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE), (Command_Renamed.Username))
-				Command_Renamed.Respond(StringFormat("I have designated {0}.", Command_Renamed.Argument("Username")))
-			Else
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(g_Channel.OperatorHeir) > 0) Then
-					Command_Renamed.Respond(StringFormat("I have designated {0}.", g_Channel.OperatorHeir))
-				Else
-					Command_Renamed.Respond("No user has been designated.")
-				End If
-			End If
+            If (Len(Command_Renamed.Argument("Username")) > 0) Then
+                Call frmChat.AddQ("/designate " & Command_Renamed.Argument("Username"), (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE), (Command_Renamed.Username))
+                Command_Renamed.Respond(StringFormat("I have designated {0}.", Command_Renamed.Argument("Username")))
+            Else
+                If (Len(g_Channel.OperatorHeir) > 0) Then
+                    Command_Renamed.Respond(StringFormat("I have designated {0}.", g_Channel.OperatorHeir))
+                Else
+                    Command_Renamed.Respond("No user has been designated.")
+                End If
+            End If
 		Else
 			Command_Renamed.Respond(ERROR_NOT_OPS)
 		End If
@@ -415,30 +407,29 @@ Module modCommandsOps
 			
 			sTarget = StripInvalidNameChars(Command_Renamed.Argument("Username"))
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(sTarget) > 0) Then
-				If (InStr(1, sTarget, "@") > 0) Then sTarget = StripRealm(sTarget)
-				
-				If (dbAccess.Rank < 101) Then
-					If (GetSafelist(sTarget) Or GetSafelist(Command_Renamed.Argument("Username"))) Then
-						Command_Renamed.Respond("Error: That user is safelisted.")
-						Exit Sub
-					End If
-				End If
-				
-				'UPGRADE_WARNING: Couldn't resolve default property of object dbTarget. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				dbTarget = GetCumulativeAccess(Command_Renamed.Argument("Username"))
-				
-				If ((dbTarget.Rank >= dbAccess.Rank) Or ((InStr(1, dbTarget.Flags, "A", CompareMethod.Text) > 0) And (dbAccess.Rank < 101))) Then
-					Command_Renamed.Respond("Error: You do not have enought access to do that.")
-				Else
-					'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					Call frmChat.AddQ(StringFormat("/ban {0} {1}", Command_Renamed.Argument("Username"), Command_Renamed.Argument("Message")),  , (Command_Renamed.Username))
-					'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					Call frmChat.AddQ(StringFormat("/squelch {0}", Command_Renamed.Argument("Username")),  , (Command_Renamed.Username))
-					Command_Renamed.Respond(StringFormat("User {0}{1}{0} IPBanned.", Chr(34), Command_Renamed.Argument("Username")))
-				End If
-			End If
+            If (Len(sTarget) > 0) Then
+                If (InStr(1, sTarget, "@") > 0) Then sTarget = StripRealm(sTarget)
+
+                If (dbAccess.Rank < 101) Then
+                    If (GetSafelist(sTarget) Or GetSafelist(Command_Renamed.Argument("Username"))) Then
+                        Command_Renamed.Respond("Error: That user is safelisted.")
+                        Exit Sub
+                    End If
+                End If
+
+                'UPGRADE_WARNING: Couldn't resolve default property of object dbTarget. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                dbTarget = GetCumulativeAccess(Command_Renamed.Argument("Username"))
+
+                If ((dbTarget.Rank >= dbAccess.Rank) Or ((InStr(1, dbTarget.Flags, "A", CompareMethod.Text) > 0) And (dbAccess.Rank < 101))) Then
+                    Command_Renamed.Respond("Error: You do not have enought access to do that.")
+                Else
+                    'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    Call frmChat.AddQ(StringFormat("/ban {0} {1}", Command_Renamed.Argument("Username"), Command_Renamed.Argument("Message")), , (Command_Renamed.Username))
+                    'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    Call frmChat.AddQ(StringFormat("/squelch {0}", Command_Renamed.Argument("Username")), , (Command_Renamed.Username))
+                    Command_Renamed.Respond(StringFormat("User {0}{1}{0} IPBanned.", Chr(34), Command_Renamed.Argument("Username")))
+                End If
+            End If
 		End If
 	End Sub
 	
@@ -513,32 +504,31 @@ Module modCommandsOps
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub OnLevelBan(ByRef Command_Renamed As clsCommandObj)
 		Dim Level As Short
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Command_Renamed.Argument("Level")) > 0) Then
-			Level = CShort(Command_Renamed.Argument("Level"))
-			If (Level > 0) Then
-				If (Level < 256) Then
-					Command_Renamed.Respond(StringFormat("Banning Warcraft III users under level {0}.", Level))
-					BotVars.BanUnderLevel = CByte(Level)
-				Else
-					Command_Renamed.Respond("Error: Invalid level specified.")
-				End If
-			Else
-				BotVars.BanUnderLevel = 0
-				Command_Renamed.Respond("Levelbans disabled.")
-			End If
-			
-			If Config.LevelBanW3 <> BotVars.BanUnderLevel Then
-				Config.LevelBanW3 = BotVars.BanUnderLevel
-				Call Config.Save()
-			End If
-		Else
-			If (BotVars.BanUnderLevel = 0) Then
-				Command_Renamed.Respond("Currently not banning Warcraft III users by level.")
-			Else
-				Command_Renamed.Respond(StringFormat("Currently banning Warcraft III users under level {0}.", BotVars.BanUnderLevel))
-			End If
-		End If
+        If (Len(Command_Renamed.Argument("Level")) > 0) Then
+            Level = CShort(Command_Renamed.Argument("Level"))
+            If (Level > 0) Then
+                If (Level < 256) Then
+                    Command_Renamed.Respond(StringFormat("Banning Warcraft III users under level {0}.", Level))
+                    BotVars.BanUnderLevel = CByte(Level)
+                Else
+                    Command_Renamed.Respond("Error: Invalid level specified.")
+                End If
+            Else
+                BotVars.BanUnderLevel = 0
+                Command_Renamed.Respond("Levelbans disabled.")
+            End If
+
+            If Config.LevelBanW3 <> BotVars.BanUnderLevel Then
+                Config.LevelBanW3 = BotVars.BanUnderLevel
+                Call Config.Save()
+            End If
+        Else
+            If (BotVars.BanUnderLevel = 0) Then
+                Command_Renamed.Respond("Currently not banning Warcraft III users by level.")
+            Else
+                Command_Renamed.Respond(StringFormat("Currently banning Warcraft III users under level {0}.", BotVars.BanUnderLevel))
+            End If
+        End If
 	End Sub
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
@@ -713,12 +703,11 @@ Module modCommandsOps
 					
 					Call WildCardBan("*", ProtectMsg, 1)
 					
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(Command_Renamed.Username) > 0) Then
-						Command_Renamed.Respond(StringFormat("Lockdown activated by {0}.", Command_Renamed.Username))
-					Else
-						Command_Renamed.Respond("Lockdown activated.")
-					End If
+                    If (Len(Command_Renamed.Username) > 0) Then
+                        Command_Renamed.Respond(StringFormat("Lockdown activated by {0}.", Command_Renamed.Username))
+                    Else
+                        Command_Renamed.Respond("Lockdown activated.")
+                    End If
 				Else
 					Command_Renamed.Respond(ERROR_NOT_OPS)
 				End If
@@ -799,17 +788,14 @@ Module modCommandsOps
 		Dim sArgs As String
 		Dim dbAccess As udtGetAccessResponse
 		If (Command_Renamed.IsValid) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(BotVars.DefaultSafelistGroup) > 0) Then
-				'UPGRADE_WARNING: Couldn't resolve default property of object dbAccess. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				dbAccess = GetAccess(BotVars.DefaultSafelistGroup, "GROUP")
-				
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(dbAccess.Username) > 0) Then sArgs = "--group " & BotVars.DefaultSafelistGroup
-			End If
+            If (Len(BotVars.DefaultSafelistGroup) > 0) Then
+                'UPGRADE_WARNING: Couldn't resolve default property of object dbAccess. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                dbAccess = GetAccess(BotVars.DefaultSafelistGroup, "GROUP")
+
+                If (Len(dbAccess.Username) > 0) Then sArgs = "--group " & BotVars.DefaultSafelistGroup
+            End If
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(sArgs) = 0) Then sArgs = "+S"
+            If (Len(sArgs) = 0) Then sArgs = "+S"
 			'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			sArgs = StringFormat("{0} {1} --type USER", Command_Renamed.Argument("Username"), sArgs)
 			
@@ -836,26 +822,22 @@ Module modCommandsOps
 		
 		Dim dbAccess As udtGetAccessResponse
 		If (Command_Renamed.IsValid) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(BotVars.DefaultShitlistGroup) > 0) Then
-				'UPGRADE_WARNING: Couldn't resolve default property of object dbAccess. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				dbAccess = GetAccess(BotVars.DefaultShitlistGroup, "GROUP")
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(dbAccess.Username) > 0) Then
-					sArgs = "--group " & BotVars.DefaultShitlistGroup
-				End If
-			End If
+            If (Len(BotVars.DefaultShitlistGroup) > 0) Then
+                'UPGRADE_WARNING: Couldn't resolve default property of object dbAccess. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                dbAccess = GetAccess(BotVars.DefaultShitlistGroup, "GROUP")
+                If (Len(dbAccess.Username) > 0) Then
+                    sArgs = "--group " & BotVars.DefaultShitlistGroup
+                End If
+            End If
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(sArgs) = 0) Then sArgs = "+B"
+            If (Len(sArgs) = 0) Then sArgs = "+B"
 			'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			sArgs = StringFormat("{0} {1} --type USER", Command_Renamed.Argument("Username"), sArgs)
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Command_Renamed.Argument("Message")) > 0) Then
-				'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				sArgs = StringFormat("{0} --banmsg {1}", sArgs, Command_Renamed.Argument("Message"))
-			End If
+            If (Len(Command_Renamed.Argument("Message")) > 0) Then
+                'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                sArgs = StringFormat("{0} --banmsg {1}", sArgs, Command_Renamed.Argument("Message"))
+            End If
 			
 			Command_Renamed.Args = sArgs
 			Call OnAdd(Command_Renamed)
@@ -912,25 +894,21 @@ Module modCommandsOps
 		Dim sArgs As String
 		Dim dbAccess As udtGetAccessResponse
 		If (Command_Renamed.IsValid) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(BotVars.DefaultTagbansGroup) > 0) Then
-				'UPGRADE_WARNING: Couldn't resolve default property of object dbAccess. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				dbAccess = GetAccess(BotVars.DefaultTagbansGroup, "GROUP")
-				
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(dbAccess.Username) > 0) Then
-					sArgs = "--group " & BotVars.DefaultTagbansGroup
-				End If
-			End If
+            If (Len(BotVars.DefaultTagbansGroup) > 0) Then
+                'UPGRADE_WARNING: Couldn't resolve default property of object dbAccess. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                dbAccess = GetAccess(BotVars.DefaultTagbansGroup, "GROUP")
+
+                If (Len(dbAccess.Username) > 0) Then
+                    sArgs = "--group " & BotVars.DefaultTagbansGroup
+                End If
+            End If
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(sArgs) = 0) Then sArgs = "+B"
+            If (Len(sArgs) = 0) Then sArgs = "+B"
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Command_Renamed.Argument("Message")) > 0) Then
-				'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				sArgs = StringFormat("{0} --banmsg {1}", sArgs, Command_Renamed.Argument("Message"))
-			End If
+            If (Len(Command_Renamed.Argument("Message")) > 0) Then
+                'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                sArgs = StringFormat("{0} --banmsg {1}", sArgs, Command_Renamed.Argument("Message"))
+            End If
 			
 			If (InStr(Command_Renamed.Argument("Tag"), "*") = 0) Then
 				'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -1008,13 +986,12 @@ Module modCommandsOps
 				sTargetUser = Command_Renamed.Argument("Username")
 				
 				' If no user was specified, unban the last banned user.
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(sTargetUser) = 0) Then
-					If (g_Channel.Banlist.Count() > 0) Then
-						'UPGRADE_WARNING: Couldn't resolve default property of object g_Channel.Banlist().Name. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-						sTargetUser = g_Channel.Banlist.Item(g_Channel.Banlist.Count()).Name
-					End If
-				End If
+                If (Len(sTargetUser) = 0) Then
+                    If (g_Channel.Banlist.Count() > 0) Then
+                        'UPGRADE_WARNING: Couldn't resolve default property of object g_Channel.Banlist().Name. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        sTargetUser = g_Channel.Banlist.Item(g_Channel.Banlist.Count()).Name
+                    End If
+                End If
 				
 				If (InStr(1, sTargetUser, "*", CompareMethod.Binary) <> 0) Then
 					Call WildCardBan(sTargetUser, vbNullString, 2)
@@ -1181,8 +1158,7 @@ Module modCommandsOps
 		If (g_Channel.Self.IsOperator) Then
 			If (g_Channel.Users.Count() < 1) Then Exit Function
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(sBanMsg) = 0) Then sBanMsg = sMatch
+            If (Len(sBanMsg) = 0) Then sBanMsg = sMatch
 			
 			sMatch = PrepareCheck(sMatch)
 			
@@ -1230,23 +1206,22 @@ Module modCommandsOps
 				For i = 1 To g_Channel.Banlist.Count()
 					With g_Channel.Banlist.Item(i)
 						'UPGRADE_WARNING: Couldn't resolve default property of object g_Channel.Banlist().DisplayName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-						'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-						'UPGRADE_WARNING: Couldn't resolve default property of object g_Channel.Banlist(i).IsActive. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-						If ((.IsActive) And (LenB(.DisplayName) > 0)) Then
-							If (sMatch = "*") Then
-								'UPGRADE_WARNING: Couldn't resolve default property of object g_Channel.Banlist().DisplayName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-								'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-								Call frmChat.AddQ(StringFormat("{0} {1}", sCommand, .DisplayName))
-							Else
-								'UPGRADE_WARNING: Couldn't resolve default property of object g_Channel.Banlist().DisplayName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-								sName = PrepareCheck(.DisplayName)
-								If (sName Like sMatch) Then
-									'UPGRADE_WARNING: Couldn't resolve default property of object g_Channel.Banlist().DisplayName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-									'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-									Call frmChat.AddQ(StringFormat("{0} {1}", sCommand, .DisplayName))
-								End If
-							End If
-						End If
+                        'UPGRADE_WARNING: Couldn't resolve default property of object g_Channel.Banlist(i).IsActive. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        If ((.IsActive) And (Len(.DisplayName) > 0)) Then
+                            If (sMatch = "*") Then
+                                'UPGRADE_WARNING: Couldn't resolve default property of object g_Channel.Banlist().DisplayName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                                'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                                Call frmChat.AddQ(StringFormat("{0} {1}", sCommand, .DisplayName))
+                            Else
+                                'UPGRADE_WARNING: Couldn't resolve default property of object g_Channel.Banlist().DisplayName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                                sName = PrepareCheck(.DisplayName)
+                                If (sName Like sMatch) Then
+                                    'UPGRADE_WARNING: Couldn't resolve default property of object g_Channel.Banlist().DisplayName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                                    'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                                    Call frmChat.AddQ(StringFormat("{0} {1}", sCommand, .DisplayName))
+                                End If
+                            End If
+                        End If
 					End With
 				Next i
 			End If

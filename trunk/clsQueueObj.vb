@@ -41,18 +41,18 @@ Friend Class clsQueueOBj
 	End Property
 	
 	
-	Public Property PRIORITY_Renamed() As Short
-		Get
-			
-			PRIORITY = m_priority
-			
-		End Get
-		Set(ByVal Value As Short)
-			
-			m_priority = Value
-			
-		End Set
-	End Property
+    Public Property PRIORITY() As Short
+        Get
+
+            PRIORITY = m_priority
+
+        End Get
+        Set(ByVal Value As Short)
+
+            m_priority = Value
+
+        End Set
+    End Property
 	
 	
 	Public Property Tag() As String

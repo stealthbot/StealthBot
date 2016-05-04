@@ -12,11 +12,10 @@ Module modCommandsAdmin
 		Dim i As Short
 		ReDim Preserve response(0)
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If ((Not Command_Renamed.IsValid) Or LenB(Trim(Command_Renamed.Argument("username"))) = 0) Then
-			Command_Renamed.Respond("You must specify a user to add.")
-			Exit Sub
-		End If
+        If ((Not Command_Renamed.IsValid) Or Len(Trim(Command_Renamed.Argument("username"))) = 0) Then
+            Command_Renamed.Respond("You must specify a user to add.")
+            Exit Sub
+        End If
 		
 		' special case: d2 naming conventions
 		Dim Username As Object
@@ -227,12 +226,11 @@ Module modCommandsAdmin
 	Public Sub OnSetCommandLine(ByRef Command_Renamed As clsCommandObj)
 		If (Command_Renamed.IsValid) Then
 			Call SetCommandLine(Command_Renamed.Argument("CommandLine"))
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(CommandLine) > 0) Then
-				Command_Renamed.Respond(StringFormat("Command Line set to: {0}", CommandLine))
-			Else
-				Command_Renamed.Respond("Command Line cleared.")
-			End If
+            If (Len(CommandLine) > 0) Then
+                Command_Renamed.Respond(StringFormat("Command Line set to: {0}", CommandLine))
+            Else
+                Command_Renamed.Respond("Command Line cleared.")
+            End If
 		Else
 			Command_Renamed.Respond("You must specify a new command line.")
 		End If
@@ -250,16 +248,15 @@ Module modCommandsAdmin
 					strKey = vbNullString
 				End If
 			End If
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(strKey) > 0) Then
-				Config.ExpKey = strKey
-				Call Config.Save()
-				
-				BotVars.ExpKey = Config.ExpKey
-				Command_Renamed.Respond("New expansion cdkey set.")
-			Else
-				Command_Renamed.Respond("The cdkey you specified was invalid.")
-			End If
+            If (Len(strKey) > 0) Then
+                Config.ExpKey = strKey
+                Call Config.Save()
+
+                BotVars.ExpKey = Config.ExpKey
+                Command_Renamed.Respond("New expansion cdkey set.")
+            Else
+                Command_Renamed.Respond("The cdkey you specified was invalid.")
+            End If
 		Else
 			Command_Renamed.Respond("You must specify a cdkey.")
 		End If
@@ -275,12 +272,11 @@ Module modCommandsAdmin
 		
 		BotVars.HomeChannel = Config.HomeChannel
 		PrepareHomeChannelMenu()
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(Channel) = 0 Then
-			Command_Renamed.Respond("Home channel set to server default.")
-		Else
-			Command_Renamed.Respond(StringFormat("New home channel set to {0}{1}{0}.", Chr(34), Config.HomeChannel))
-		End If
+        If Len(Channel) = 0 Then
+            Command_Renamed.Respond("Home channel set to server default.")
+        Else
+            Command_Renamed.Respond(StringFormat("New home channel set to {0}{1}{0}.", Chr(34), Config.HomeChannel))
+        End If
 	End Sub
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
@@ -295,16 +291,15 @@ Module modCommandsAdmin
 					strKey = vbNullString
 				End If
 			End If
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(strKey) > 0) Then
-				Config.CDKey = strKey
-				Call Config.Save()
-				
-				BotVars.CDKey = Config.CDKey
-				Command_Renamed.Respond("New CD key set.")
-			Else
-				Command_Renamed.Respond("The CD key you specified was invalid.")
-			End If
+            If (Len(strKey) > 0) Then
+                Config.CDKey = strKey
+                Call Config.Save()
+
+                BotVars.CDKey = Config.CDKey
+                Command_Renamed.Respond("New CD key set.")
+            Else
+                Command_Renamed.Respond("The CD key you specified was invalid.")
+            End If
 		Else
 			Command_Renamed.Respond("You must specify a CD key.")
 		End If

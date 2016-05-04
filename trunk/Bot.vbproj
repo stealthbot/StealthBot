@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <MyType>WindowsForms</MyType>
-    <ProductVersion>8.0.30729</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2616EED5-016C-41BA-8FE0-5E42B09107E3}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -162,8 +162,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.vb" />
-    <Compile Include="AxInetArray.vb" />
-    <Compile Include="AxWinsockArray.vb" />
+    <Compile Include="AxInetArray.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AxWinsockArray.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="clsBanlistUserObj.vb">
       <SubType>Code</SubType>
     </Compile>
@@ -431,7 +435,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="LineShapeArray.vb">
-      <SubType>Code</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="modAPI.vb">
       <SubType>Code</SubType>
@@ -560,7 +564,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RectangleShapeArray.vb">
-      <SubType>Code</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="UpgradeSupport.vb">
       <SubType>Code</SubType>
@@ -626,9 +630,6 @@
       <DependentUpon>frmWhisperWindow.vb</DependentUpon>
     </EmbeddedResource>
     <Content Include="Bot.ico" />
-    <None Include="_UpgradeReport.htm">
-      <SubType>Preview</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="My Project\" />

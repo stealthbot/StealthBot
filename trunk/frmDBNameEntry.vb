@@ -20,18 +20,17 @@ Friend Class frmDBNameEntry
 		Me.Text = StringFormat("New Entry - {0} Name", frmDBManager.m_entrytype)
 		
 		With txtEntry
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(frmDBManager.m_entryname) = 0 Then
-				'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				lblEntry.Text = StringFormat("Choose the name for this new {0} entry.", frmDBManager.m_entrytype)
-				.Text = vbNullString
-			Else
-				'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				lblEntry.Text = StringFormat("Rename this {0} entry.", frmDBManager.m_entrytype)
-				.Text = frmDBManager.m_entryname
-				.SelectionStart = 0
-				.SelectionLength = Len(frmDBManager.m_entryname)
-			End If
+            If Len(frmDBManager.m_entryname) = 0 Then
+                'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                lblEntry.Text = StringFormat("Choose the name for this new {0} entry.", frmDBManager.m_entrytype)
+                .Text = vbNullString
+            Else
+                'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                lblEntry.Text = StringFormat("Rename this {0} entry.", frmDBManager.m_entrytype)
+                .Text = frmDBManager.m_entryname
+                .SelectionStart = 0
+                .SelectionLength = Len(frmDBManager.m_entryname)
+            End If
 			
 			If StrComp(frmDBManager.m_entrytype, "Clan", CompareMethod.Text) = 0 Then
 				'UPGRADE_WARNING: TextBox property txtEntry.MaxLength has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
@@ -63,8 +62,7 @@ Friend Class frmDBNameEntry
 	Private Function CanSave() As Boolean
 		With txtEntry
 			CanSave = True
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			CanSave = CanSave And (LenB(.Text) > 0)
+            CanSave = CanSave And (Len(.Text) > 0)
 			'UPGRADE_WARNING: TextBox property txtEntry.MaxLength has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
 			CanSave = CanSave And (Len(.Text) <= .Maxlength)
 			CanSave = CanSave And (StrComp(.Text, "%", CompareMethod.Binary) <> 0)

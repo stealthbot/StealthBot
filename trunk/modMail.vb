@@ -95,23 +95,19 @@ Module modMail
 		MailFile = GetFilePath(FILE_MAILDB)
 		
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Dir(MailFile)) = 0) Then
-			FileOpen(f, MailFile, OpenMode.Output)
-			FileClose(f)
-		End If
+        If (Len(Dir(MailFile)) = 0) Then
+            FileOpen(f, MailFile, OpenMode.Output)
+            FileClose(f)
+        End If
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		FileOpen(f, MailFile, OpenMode.Random, , , LenB(temp))
+        FileOpen(f, MailFile, OpenMode.Random, , , Len(temp))
 		
 		If (LOF(f) > 0) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			i = LOF(f) \ LenB(temp)
+            i = LOF(f) \ Len(temp)
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LOF(f) Mod LenB(temp) <> 0) Then
-				i = (i + 1)
-			End If
+            If (LOF(f) Mod Len(temp) <> 0) Then
+                i = (i + 1)
+            End If
 		Else
 			i = 0
 		End If

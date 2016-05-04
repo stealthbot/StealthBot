@@ -15,35 +15,33 @@ Module modQuickChannels
 		
 		' "upgrade" a QC.ini to a QC.txt, deletes QC.ini
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Dir(GetFilePath("QuickChannels.ini"))) > 0) Then
-			
-			UseDefaultQC = False
-			
-			Call UpgradeQuickChannelsToList()
-			
-		End If
+        If (Len(Dir(GetFilePath("QuickChannels.ini"))) > 0) Then
+
+            UseDefaultQC = False
+
+            Call UpgradeQuickChannelsToList()
+
+        End If
 		
 		' read QC.txt
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(Dir(GetFilePath(FILE_QUICK_CHANNELS))) > 0 Then
-			
-			UseDefaultQC = False
-			
-			QCCollection = ListFileLoad(GetFilePath(FILE_QUICK_CHANNELS), 9)
-			
-			For i = 1 To QCCollection.Count()
-				
-				'UPGRADE_WARNING: Couldn't resolve default property of object QCCollection.Item(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				QC(i) = Trim(QCCollection.Item(i))
-				
-			Next i
-			
-			'UPGRADE_NOTE: Object QCCollection may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-			QCCollection = Nothing
-			
-		End If
+        If Len(Dir(GetFilePath(FILE_QUICK_CHANNELS))) > 0 Then
+
+            UseDefaultQC = False
+
+            QCCollection = ListFileLoad(GetFilePath(FILE_QUICK_CHANNELS), 9)
+
+            For i = 1 To QCCollection.Count()
+
+                'UPGRADE_WARNING: Couldn't resolve default property of object QCCollection.Item(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                QC(i) = Trim(QCCollection.Item(i))
+
+            Next i
+
+            'UPGRADE_NOTE: Object QCCollection may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+            QCCollection = Nothing
+
+        End If
 		
 		' no QC files, use defaults and save it
 		If UseDefaultQC Then
@@ -53,17 +51,15 @@ Module modQuickChannels
 				
 				LineText = GetDefaultQC(i)
 				
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If LenB(LineText) > 0 Then
-					
-					QC(i + 1) = LineText
-					
-					i = i + 1
-					
-				End If
+                If Len(LineText) > 0 Then
+
+                    QC(i + 1) = LineText
+
+                    i = i + 1
+
+                End If
 				
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			Loop Until LenB(LineText) = 0
+            Loop Until Len(LineText) = 0
 			
 			'Call SaveQuickChannels
 			
@@ -107,10 +103,9 @@ Module modQuickChannels
 		Dim QCCollection As New Collection
 		
 		For i = LBound(QC) To UBound(QC)
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(QC(i)) = 0 Then
-				QC(i) = " "
-			End If
+            If Len(QC(i)) = 0 Then
+                QC(i) = " "
+            End If
 			QCCollection.Add(QC(i))
 		Next i
 		
@@ -134,27 +129,25 @@ Module modQuickChannels
 			Caption = Trim(QC(i + 1))
 			
 			With frmChat.mnuCustomChannels(i)
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If LenB(Caption) > 0 Then
-					If StrComp(Caption, g_Channel.Name, CompareMethod.Text) = 0 Then
-						FoundThisChannel = True
-					End If
-					
-					.Visible = True
-					.Text = MakeChannelMenuItemSafe(Caption)
-				Else
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If Not ShownAddQC And LenB(g_Channel.Name) > 0 Then
-						frmChat.mnuCustomChannelAdd.Visible = True
-						'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-						frmChat.mnuCustomChannelAdd.Text = StringFormat("&Add {0}{1}{0} as F{2}", Chr(34), MakeChannelMenuItemSafe(g_Channel.Name, True), CStr(i + 1))
-						
-						ShownAddQC = True
-					End If
-					
-					.Visible = False
-					.Text = vbNullString
-				End If
+                If Len(Caption) > 0 Then
+                    If StrComp(Caption, g_Channel.Name, CompareMethod.Text) = 0 Then
+                        FoundThisChannel = True
+                    End If
+
+                    .Visible = True
+                    .Text = MakeChannelMenuItemSafe(Caption)
+                Else
+                    If Not ShownAddQC And Len(g_Channel.Name) > 0 Then
+                        frmChat.mnuCustomChannelAdd.Visible = True
+                        'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        frmChat.mnuCustomChannelAdd.Text = StringFormat("&Add {0}{1}{0} as F{2}", Chr(34), MakeChannelMenuItemSafe(g_Channel.Name, True), CStr(i + 1))
+
+                        ShownAddQC = True
+                    End If
+
+                    .Visible = False
+                    .Text = vbNullString
+                End If
 			End With
 		Next i
 		
@@ -167,15 +160,13 @@ Module modQuickChannels
 		Dim ShowHome As Boolean
 		Dim ShowLast As Boolean
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		ShowHome = (LenB(Config.HomeChannel) > 0 And StrComp(Config.HomeChannel, g_Channel.Name, CompareMethod.Text) <> 0)
+        ShowHome = (Len(Config.HomeChannel) > 0 And StrComp(Config.HomeChannel, g_Channel.Name, CompareMethod.Text) <> 0)
 		With frmChat.mnuHomeChannel
 			.Text = MakeChannelMenuItemSafe(Config.HomeChannel, True) & " (&Home Channel)"
 			.Visible = ShowHome
 		End With
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		ShowLast = (LenB(BotVars.LastChannel) > 0 And StrComp(BotVars.LastChannel, g_Channel.Name, CompareMethod.Text) <> 0)
+        ShowLast = (Len(BotVars.LastChannel) > 0 And StrComp(BotVars.LastChannel, g_Channel.Name, CompareMethod.Text) <> 0)
 		With frmChat.mnuLastChannel
 			.Text = MakeChannelMenuItemSafe(BotVars.LastChannel, True) & " (&Previous Channel)"
 			.Visible = ShowLast

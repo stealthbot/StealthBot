@@ -23,8 +23,7 @@ Module modCommandsMisc
 		
 		If (Command_Renamed.IsValid) Then
 			If (Command_Renamed.IsLocal) Then
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(Command_Renamed.Username) = 0) Then Command_Renamed.Username = BotVars.Username
+                If (Len(Command_Renamed.Username) = 0) Then Command_Renamed.Username = BotVars.Username
 			End If
 			With temp
 				.To_Renamed = Command_Renamed.Argument("Recipient")
@@ -127,49 +126,46 @@ ERROR_HANDLER:
 					End If
 					
 				Case "set"
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(Command_Renamed.Argument("Value")) > 0) Then
-						BotVars.GreetMsg = Command_Renamed.Argument("Value")
-						Command_Renamed.Respond("Greet message set.") '1732 - 10/15/2009 - Hdx - Greet Set command will respond now.
-					Else
-						Command_Renamed.Respond("You must supply a greet message.")
-					End If
+                    If (Len(Command_Renamed.Argument("Value")) > 0) Then
+                        BotVars.GreetMsg = Command_Renamed.Argument("Value")
+                        Command_Renamed.Respond("Greet message set.") '1732 - 10/15/2009 - Hdx - Greet Set command will respond now.
+                    Else
+                        Command_Renamed.Respond("You must supply a greet message.")
+                    End If
 			End Select
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If ((LenB(Command_Renamed.Argument("SubCommand")) > 0) And (LCase(Command_Renamed.Argument("SubCommand")) <> "status")) Then
-				Config.GreetMessage = BotVars.UseGreet
-				Config.WhisperGreet = BotVars.WhisperGreet
-				Config.GreetMessageText = BotVars.GreetMsg
-				Call Config.Save()
-			End If
+            If ((Len(Command_Renamed.Argument("SubCommand")) > 0) And (LCase(Command_Renamed.Argument("SubCommand")) <> "status")) Then
+                Config.GreetMessage = BotVars.UseGreet
+                Config.WhisperGreet = BotVars.WhisperGreet
+                Config.GreetMessageText = BotVars.GreetMsg
+                Call Config.Save()
+            End If
 		End If
 	End Sub
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub OnIdle(ByRef Command_Renamed As clsCommandObj)
 		If (Command_Renamed.IsValid) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Command_Renamed.Argument("Enable")) > 0) Then
-				Select Case LCase(Command_Renamed.Argument("Enable"))
-					Case "on", "true"
-						Config.IdleMessage = True
-					Case "off", "false"
-						Config.IdleMessage = False
-					Case "toggle"
-						Config.IdleMessage = Not Config.IdleMessage
-				End Select
-				
-				If Config.IdleMessage Then
-					Command_Renamed.Respond("Idle messages enabled.")
-				Else
-					Command_Renamed.Respond("Idle messages disabled.")
-				End If
-				
-				Call Config.Save()
-			Else
-				Command_Renamed.Respond("Idle messages are currently " & IIf(Config.IdleMessage, "enabled", "disabled") & ".")
-			End If
+            If (Len(Command_Renamed.Argument("Enable")) > 0) Then
+                Select Case LCase(Command_Renamed.Argument("Enable"))
+                    Case "on", "true"
+                        Config.IdleMessage = True
+                    Case "off", "false"
+                        Config.IdleMessage = False
+                    Case "toggle"
+                        Config.IdleMessage = Not Config.IdleMessage
+                End Select
+
+                If Config.IdleMessage Then
+                    Command_Renamed.Respond("Idle messages enabled.")
+                Else
+                    Command_Renamed.Respond("Idle messages disabled.")
+                End If
+
+                Call Config.Save()
+            Else
+                Command_Renamed.Respond("Idle messages are currently " & IIf(Config.IdleMessage, "enabled", "disabled") & ".")
+            End If
 		End If
 	End Sub
 	
@@ -177,15 +173,13 @@ ERROR_HANDLER:
 	Public Sub OnIdleTime(ByRef Command_Renamed As clsCommandObj)
 		Dim delay As Short
 		If (Command_Renamed.IsValid) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Command_Renamed.Argument("Delay")) > 0) Then
-				delay = Val(Command_Renamed.Argument("Delay"))
-				Config.IdleMessageDelay = (delay * 2)
-				Call Config.Save()
-			End If
+            If (Len(Command_Renamed.Argument("Delay")) > 0) Then
+                delay = Val(Command_Renamed.Argument("Delay"))
+                Config.IdleMessageDelay = (delay * 2)
+                Call Config.Save()
+            End If
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			Command_Renamed.Respond(StringFormat("The idle message wait time {0} {1} minute{2}.", IIf(LenB(Command_Renamed.Argument("Delay")) > 0, "has been set to", "is"), delay, IIf(delay > 1, "s", vbNullString)))
+            Command_Renamed.Respond(StringFormat("The idle message wait time {0} {1} minute{2}.", IIf(Len(Command_Renamed.Argument("Delay")) > 0, "has been set to", "is"), delay, IIf(delay > 1, "s", vbNullString)))
 		End If
 	End Sub
 	
@@ -282,12 +276,11 @@ ERROR_HANDLER:
 				'UPGRADE_WARNING: Couldn't resolve default property of object frmChat.SCRestricted.Eval(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				sResult = frmChat.SCRestricted.Eval(sStatement)
 				
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(sResult) > 0) Then
-					Command_Renamed.Respond(StringFormat("The statement {0}{1}{0} evaluates to: {2}.", Chr(34), sStatement, sResult))
-				Else
-					Command_Renamed.Respond("Evaluation error.")
-				End If
+                If (Len(sResult) > 0) Then
+                    Command_Renamed.Respond(StringFormat("The statement {0}{1}{0} evaluates to: {2}.", Chr(34), sStatement, sResult))
+                Else
+                    Command_Renamed.Respond("Evaluation error.")
+                End If
 			End If
 		End If
 		Exit Sub
@@ -307,8 +300,7 @@ ERROR_HANDLER:
 		
 		If (Command_Renamed.IsValid) Then
 			If (Command_Renamed.IsLocal) Then
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(Command_Renamed.Username) = 0) Then Command_Renamed.Username = BotVars.Username
+                If (Len(Command_Renamed.Username) = 0) Then Command_Renamed.Username = BotVars.Username
 			End If
 			
 			temp.From = Command_Renamed.Username
@@ -378,27 +370,25 @@ ERROR_HANDLER:
 			End If
 			
 			'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Dir(sFilePath)) > 0) Then
-				'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				Command_Renamed.Respond(StringFormat("Contents of file {0}:", Replace(sFilePath, StringFormat("{0}\", CurDir()), vbNullString,  , 1, CompareMethod.Text)))
-				
-				iFile = FreeFile
-				FileOpen(iFile, sFilePath, OpenMode.Input)
-				Do While (Not EOF(iFile))
-					sLine = LineInput(iFile)
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(sLine) > 0) Then
-						iLineNumber = iLineNumber + 1
-						Command_Renamed.Respond(StringFormat("Line {0}: {1}", iLineNumber, sLine))
-					End If
-				Loop 
-				FileClose(iFile)
-				
-				Command_Renamed.Respond("End of File.")
-			Else
-				Command_Renamed.Respond("Error: The specified file could not be found.")
-			End If
+            If (Len(Dir(sFilePath)) > 0) Then
+                'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                Command_Renamed.Respond(StringFormat("Contents of file {0}:", Replace(sFilePath, StringFormat("{0}\", CurDir()), vbNullString, , 1, CompareMethod.Text)))
+
+                iFile = FreeFile()
+                FileOpen(iFile, sFilePath, OpenMode.Input)
+                Do While (Not EOF(iFile))
+                    sLine = LineInput(iFile)
+                    If (Len(sLine) > 0) Then
+                        iLineNumber = iLineNumber + 1
+                        Command_Renamed.Respond(StringFormat("Line {0}: {1}", iLineNumber, sLine))
+                    End If
+                Loop
+                FileClose(iFile)
+
+                Command_Renamed.Respond("End of File.")
+            Else
+                Command_Renamed.Respond("Error: The specified file could not be found.")
+            End If
 		End If
 		
 		Exit Sub
@@ -413,12 +403,11 @@ ERROR_HANDLER:
 		Dim maxValue As Integer
 		Dim Number As Integer
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Command_Renamed.Argument("Value")) > 0) Then
-			maxValue = System.Math.Abs(Val(Command_Renamed.Argument("Value")))
-		Else
-			maxValue = 100
-		End If
+        If (Len(Command_Renamed.Argument("Value")) > 0) Then
+            maxValue = System.Math.Abs(Val(Command_Renamed.Argument("Value")))
+        Else
+            maxValue = 100
+        End If
 		
 		Randomize()
 		Number = CInt(Rnd() * maxValue)

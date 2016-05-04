@@ -105,81 +105,80 @@ Module modScripting
 		
 		' ensure scripts folder exists
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Dir(strPath)) > 0) Then
-			' grab initial script file name
-			'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-			FileName = Dir(strPath)
-			
-			' grab script files
-			' note: if we don't enumerate this list prior to script loading,
-			' scripting errors can kill further script loading.
-			Do While (FileName <> vbNullString)
-				' add script file to collection
-				Paths.Add(FileName)
-				
-				' grab next script file name
-				'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-				FileName = Dir()
-			Loop 
-			
-			' Cycle through each of the files.
-			For i = 1 To Paths.Count()
-				' Does the file have the extension for a script?
-				'UPGRADE_WARNING: Couldn't resolve default property of object Paths(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				'UPGRADE_WARNING: Couldn't resolve default property of object GetFileExtension(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				If (IsValidFileExtension(GetFileExtension(Paths.Item(i)))) Then
-					' Add a new module to the script control.
-					CurrentModule = m_sc_control.Modules.Add(CStr(m_sc_control.Modules.Count + 1))
-					
-					' store the temporary name of the module for parsing errors
-					'UPGRADE_WARNING: Couldn't resolve default property of object Paths(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					m_TempMdlName = Paths.Item(i)
-					
-					' set executing module reference for parsing errors and module-specific functions
-					m_ExecutingMdl = CurrentModule
-					
-					' Load the file into the module.
-					'UPGRADE_WARNING: Couldn't resolve default property of object Paths(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					res = FileToModule(CurrentModule, strPath & Paths.Item(i))
-					
-					' set executing module to nothing
-					'UPGRADE_NOTE: Object m_ExecutingMdl may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-					m_ExecutingMdl = Nothing
-					
-					' Does the script have a valid name?
-					If (IsScriptNameValid(CurrentModule) = False) Then
-						' No. Try to fix it.
-						'UPGRADE_WARNING: Couldn't resolve default property of object GetScriptDictionary()(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-						GetScriptDictionary(CurrentModule)("Name") = CleanFileName(m_TempMdlName)
-						
-						' Is it valid now?
-						If (IsScriptNameValid(CurrentModule) = False) Then
-							' No, disable it.
-							
-							'UPGRADE_WARNING: Couldn't resolve default property of object Paths(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-							frmChat.AddChat(RTBColors.ErrorMessageText, "Scripting error: " & Paths.Item(i) & " has been " & "disabled due to a naming issue.")
-							
-							str_Renamed = strPath & "\disabled\"
-							
-							MkDir(str_Renamed)
-							
-							'UPGRADE_WARNING: Couldn't resolve default property of object Paths(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-							Kill(str_Renamed & Paths.Item(i))
-							
-							'UPGRADE_WARNING: Couldn't resolve default property of object Paths(i). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-							Rename(strPath & Paths.Item(i), str_Renamed & Paths.Item(i))
-							
-							InitScriptControl(m_sc_control)
-							
-							LoadScripts()
-							
-							Exit Sub
-						End If
-					End If
-				End If
-			Next i
-		End If
+        If (Len(Dir(strPath)) > 0) Then
+            ' grab initial script file name
+            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            FileName = Dir(strPath)
+
+            ' grab script files
+            ' note: if we don't enumerate this list prior to script loading,
+            ' scripting errors can kill further script loading.
+            Do While (FileName <> vbNullString)
+                ' add script file to collection
+                Paths.Add(FileName)
+
+                ' grab next script file name
+                'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                FileName = Dir()
+            Loop
+
+            ' Cycle through each of the files.
+            For i = 1 To Paths.Count()
+                ' Does the file have the extension for a script?
+                'UPGRADE_WARNING: Couldn't resolve default property of object Paths(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                'UPGRADE_WARNING: Couldn't resolve default property of object GetFileExtension(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                If (IsValidFileExtension(GetFileExtension(Paths.Item(i)))) Then
+                    ' Add a new module to the script control.
+                    CurrentModule = m_sc_control.Modules.Add(CStr(m_sc_control.Modules.Count + 1))
+
+                    ' store the temporary name of the module for parsing errors
+                    'UPGRADE_WARNING: Couldn't resolve default property of object Paths(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    m_TempMdlName = Paths.Item(i)
+
+                    ' set executing module reference for parsing errors and module-specific functions
+                    m_ExecutingMdl = CurrentModule
+
+                    ' Load the file into the module.
+                    'UPGRADE_WARNING: Couldn't resolve default property of object Paths(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    res = FileToModule(CurrentModule, strPath & Paths.Item(i))
+
+                    ' set executing module to nothing
+                    'UPGRADE_NOTE: Object m_ExecutingMdl may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
+                    m_ExecutingMdl = Nothing
+
+                    ' Does the script have a valid name?
+                    If (IsScriptNameValid(CurrentModule) = False) Then
+                        ' No. Try to fix it.
+                        'UPGRADE_WARNING: Couldn't resolve default property of object GetScriptDictionary()(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        GetScriptDictionary(CurrentModule)("Name") = CleanFileName(m_TempMdlName)
+
+                        ' Is it valid now?
+                        If (IsScriptNameValid(CurrentModule) = False) Then
+                            ' No, disable it.
+
+                            'UPGRADE_WARNING: Couldn't resolve default property of object Paths(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            frmChat.AddChat(RTBColors.ErrorMessageText, "Scripting error: " & Paths.Item(i) & " has been " & "disabled due to a naming issue.")
+
+                            str_Renamed = strPath & "\disabled\"
+
+                            MkDir(str_Renamed)
+
+                            'UPGRADE_WARNING: Couldn't resolve default property of object Paths(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            Kill(str_Renamed & Paths.Item(i))
+
+                            'UPGRADE_WARNING: Couldn't resolve default property of object Paths(i). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            Rename(strPath & Paths.Item(i), str_Renamed & Paths.Item(i))
+
+                            InitScriptControl(m_sc_control)
+
+                            LoadScripts()
+
+                            Exit Sub
+                        End If
+                    End If
+                End If
+            Next i
+        End If
 		
 		InitMenus()
 		
@@ -255,12 +254,11 @@ ERROR_HANDLER:
 									
 									' check if file exists to include
 									'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-									'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-									If LenB(Dir(strFullPath)) = 0 Then
-										'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-										frmChat.AddChat(RTBColors.ErrorMessageText, "Scripting warning: " & Dir(FilePath) & " is trying to include " & "a file that does not exist: " & strPath)
-										blnIncIsValid = False
-									End If
+                                    If Len(Dir(strFullPath)) = 0 Then
+                                        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                                        frmChat.AddChat(RTBColors.ErrorMessageText, "Scripting warning: " & Dir(FilePath) & " is trying to include " & "a file that does not exist: " & strPath)
+                                        blnIncIsValid = False
+                                    End If
 									
 									' check if file is already included by this script
 									For i = 1 To includes.Count()
@@ -280,10 +278,9 @@ ERROR_HANDLER:
 							End If
 						End If
 					End If
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				ElseIf (((LenB(strLine) > 0) And (StrComp(Left(strLine, 1), "'") <> 0)) Or ((LenB(strLine) = 3) And (StrComp(strLine, "rem", CompareMethod.Text) <> 0)) Or ((LenB(strLine) > 3) And (StrComp(Left(strLine, 3), "rem", CompareMethod.Text) <> 0) And (InStr(1, Mid(strLine, 4, 1), "abcdefghijklmnopqrstuvwxyz01243567890_", CompareMethod.Text) = 0))) Then 
-					' this line is not a comment or blank line, stop checking for #include
-					blnCheckOperands = False
+                ElseIf (((Len(strLine) > 0) And (StrComp(Left(strLine, 1), "'") <> 0)) Or ((Len(strLine) = 3) And (StrComp(strLine, "rem", CompareMethod.Text) <> 0)) Or ((Len(strLine) > 3) And (StrComp(Left(strLine, 3), "rem", CompareMethod.Text) <> 0) And (InStr(1, Mid(strLine, 4, 1), "abcdefghijklmnopqrstuvwxyz01243567890_", CompareMethod.Text) = 0))) Then
+                    ' this line is not a comment or blank line, stop checking for #include
+                    blnCheckOperands = False
 				End If
 			End If
 			
@@ -1537,8 +1534,7 @@ ERROR_HANDLER:
 					line = line - m_arrIncs(i).lineCount
 				End If
 			Next i
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(Name) = 0 Or Left(Name, 1) = "#" Then Name = m_TempMdlName & Name
+            If Len(Name) = 0 Or Left(Name, 1) = "#" Then Name = m_TempMdlName & Name
 		End If
 		
 		' default to runtime error
@@ -1570,10 +1566,9 @@ ERROR_HANDLER:
 		If (StrComp(tmp, "False", CompareMethod.Text) <> 0) Then
 			frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Scripting {0} error '{1}' in {2}: (line {3}; column {4})", ErrType, Number, Name, line, Column))
 			frmChat.AddChat(RTBColors.ErrorMessageText, description)
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(Trim(Text)) > 0 Then
-				frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Offending line: >> {0}", Text))
-			End If
+            If Len(Trim(Text)) > 0 Then
+                frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Offending line: >> {0}", Text))
+            End If
 		End If
 		
 		m_sc_control.Error.Clear()
@@ -1588,22 +1583,21 @@ ERROR_HANDLER:
 		Dim i As Short
 		
 		' only loop if the scriptname was provided
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(scriptName) > 0 Then
-			' loop through modules
-			For i = 2 To m_sc_control.Modules.Count
-				' if Script("Name") = ScriptName then
-				If StrComp(GetScriptName(CStr(i)), scriptName, CompareMethod.Text) = 0 Then
-					' return this module
-					GetScriptModule = m_sc_control.Modules(i)
-					
-					Exit Function
-				End If
-			Next i
-		Else
-			' return currently executing
-			GetScriptModule = m_ExecutingMdl
-		End If
+        If Len(scriptName) > 0 Then
+            ' loop through modules
+            For i = 2 To m_sc_control.Modules.Count
+                ' if Script("Name") = ScriptName then
+                If StrComp(GetScriptName(CStr(i)), scriptName, CompareMethod.Text) = 0 Then
+                    ' return this module
+                    GetScriptModule = m_sc_control.Modules(i)
+
+                    Exit Function
+                End If
+            Next i
+        Else
+            ' return currently executing
+            GetScriptModule = m_ExecutingMdl
+        End If
 		
 		Exit Function
 		
@@ -1627,18 +1621,17 @@ ERROR_HANDLER:
 		Dim i As Short
 		
 		' only loop if the scriptname was provided
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(scriptName) > 0 Then
-			' loop through modules
-			For i = 2 To m_sc_control.Modules.Count
-				' if Script("Name") = ScriptName then
-				If StrComp(GetScriptName(CStr(i)), scriptName, CompareMethod.Text) = 0 Then
-					' return this ID
-					GetModuleID = m_sc_control.Modules(i).Name
-					Exit Function
-				End If
-			Next i
-		End If
+        If Len(scriptName) > 0 Then
+            ' loop through modules
+            For i = 2 To m_sc_control.Modules.Count
+                ' if Script("Name") = ScriptName then
+                If StrComp(GetScriptName(CStr(i)), scriptName, CompareMethod.Text) = 0 Then
+                    ' return this ID
+                    GetModuleID = m_sc_control.Modules(i).Name
+                    Exit Function
+                End If
+            Next i
+        End If
 		
 		' if this is the execute command, the current module is nothing
 		If m_ExecutingMdl Is Nothing Then
@@ -1671,11 +1664,10 @@ ERROR_HANDLER:
 		Dim Module_Renamed As MSScriptControl.Module
 		
 		' if not provided
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(ModuleID) = 0) Then
-			' use currently executing module ID
-			ModuleID = GetModuleID
-		End If
+        If (Len(ModuleID) = 0) Then
+            ' use currently executing module ID
+            ModuleID = GetModuleID()
+        End If
 		
 		If StrictIsNumeric(ModuleID) = False Then Exit Function
 		

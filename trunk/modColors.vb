@@ -109,66 +109,65 @@ Module modColors
 		
 		'Attempt to read
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		Dim SCLFVer As Short
+        Dim SCLFVer As Short
 		Dim i As Short
-		If LenB(Dir(sPath)) > 0 Then
-			FileOpen(f, sPath, OpenMode.Random, , , 4)
-			
-			
-			' old size = 112
-			' new size = 128
-			' added four listview color settings ~Ribose/2010-03-01
-			If LOF(f) = 112 Then
-				SCLFVer = 1
-			Else
-				SCLFVer = 2
-			End If
-			
-			i = 1
-			
-			If LOF(f) > 1 Then
-				With FormColors
-					.ChannelLabelBack = DoGet(f, i)
-					.ChannelLabelText = DoGet(f, i)
-					.ChannelListBack = DoGet(f, i)
-					.ChannelListText = DoGet(f, i)
-					If SCLFVer = 2 Then
-						.ChannelListSelf = DoGet(f, i)
-						.ChannelListIdle = DoGet(f, i)
-						.ChannelListSquelched = DoGet(f, i)
-						.ChannelListOps = DoGet(f, i)
-					End If
-					.RTBBack = DoGet(f, i)
-					.SendBoxesBack = DoGet(f, i)
-					.SendBoxesText = DoGet(f, i)
-				End With
-				
-				With RTBColors
-					.TalkBotUsername = DoGet(f, i)
-					.TalkUsernameNormal = DoGet(f, i)
-					.TalkUsernameOp = DoGet(f, i)
-					.TalkNormalText = DoGet(f, i)
-					.Carats = DoGet(f, i)
-					.EmoteText = DoGet(f, i)
-					.EmoteUsernames = DoGet(f, i)
-					.InformationText = DoGet(f, i)
-					.SuccessText = DoGet(f, i)
-					.ErrorMessageText = DoGet(f, i)
-					.TimeStamps = DoGet(f, i)
-					.ServerInfoText = DoGet(f, i)
-					.ConsoleText = DoGet(f, i)
-					.JoinText = DoGet(f, i)
-					.JoinUsername = DoGet(f, i)
-					.JoinedChannelName = DoGet(f, i)
-					.JoinedChannelText = DoGet(f, i)
-					.WhisperCarats = DoGet(f, i)
-					.WhisperText = DoGet(f, i)
-					.WhisperUsernames = DoGet(f, i)
-				End With
-			End If
-			FileClose(f)
-		End If
+        If Len(Dir(sPath)) > 0 Then
+            FileOpen(f, sPath, OpenMode.Random, , , 4)
+
+
+            ' old size = 112
+            ' new size = 128
+            ' added four listview color settings ~Ribose/2010-03-01
+            If LOF(f) = 112 Then
+                SCLFVer = 1
+            Else
+                SCLFVer = 2
+            End If
+
+            i = 1
+
+            If LOF(f) > 1 Then
+                With FormColors
+                    .ChannelLabelBack = DoGet(f, i)
+                    .ChannelLabelText = DoGet(f, i)
+                    .ChannelListBack = DoGet(f, i)
+                    .ChannelListText = DoGet(f, i)
+                    If SCLFVer = 2 Then
+                        .ChannelListSelf = DoGet(f, i)
+                        .ChannelListIdle = DoGet(f, i)
+                        .ChannelListSquelched = DoGet(f, i)
+                        .ChannelListOps = DoGet(f, i)
+                    End If
+                    .RTBBack = DoGet(f, i)
+                    .SendBoxesBack = DoGet(f, i)
+                    .SendBoxesText = DoGet(f, i)
+                End With
+
+                With RTBColors
+                    .TalkBotUsername = DoGet(f, i)
+                    .TalkUsernameNormal = DoGet(f, i)
+                    .TalkUsernameOp = DoGet(f, i)
+                    .TalkNormalText = DoGet(f, i)
+                    .Carats = DoGet(f, i)
+                    .EmoteText = DoGet(f, i)
+                    .EmoteUsernames = DoGet(f, i)
+                    .InformationText = DoGet(f, i)
+                    .SuccessText = DoGet(f, i)
+                    .ErrorMessageText = DoGet(f, i)
+                    .TimeStamps = DoGet(f, i)
+                    .ServerInfoText = DoGet(f, i)
+                    .ConsoleText = DoGet(f, i)
+                    .JoinText = DoGet(f, i)
+                    .JoinUsername = DoGet(f, i)
+                    .JoinedChannelName = DoGet(f, i)
+                    .JoinedChannelText = DoGet(f, i)
+                    .WhisperCarats = DoGet(f, i)
+                    .WhisperText = DoGet(f, i)
+                    .WhisperUsernames = DoGet(f, i)
+                End With
+            End If
+            FileClose(f)
+        End If
 		
 		With FormColors
 			If .ChannelLabelBack = -1 Then .ChannelLabelBack = &HCC3300

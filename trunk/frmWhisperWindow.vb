@@ -123,60 +123,58 @@ Friend Class frmWhisperWindow
 			.Filter = ".htm|HTML Documents"
 			.ShowDialog()
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(.FileName) > 0 Then
-				ToSave = Split(rtbWhispers.Text, vbCrLf)
-				f = FreeFile
-				
-				If InStr(1, .FileName, ".") = 0 Then
-					.FileName = .FileName & ".htm"
-				End If
-				
-				FileOpen(f, .FileName, OpenMode.Output)
-				PrintLine(f, "<html><head>")
-				PrintLine(f, "<title>StealthBot Conversation Log: " & GetCurrentUsername & " and " & m_sWhisperTo & "</title></head>")
-				PrintLine(f, "<body bgcolor='#000000'>")
-				
-				PrintLine(f, "<p><font color='#FFFFFF'><b>")
-				PrintLine(f, "StealthBot Conversation Log, between " & GetCurrentUsername & " and " & m_sWhisperTo & ".<br />")
-				PrintLine(f, "Conversation began: " & VB6.Format(m_StartDate, "HH:MM:SS, m/dd/yyyy"))
-				PrintLine(f, "</b></font></p>")
-				
-				PrintLine(f, "<p>")
-				
-				For i = 0 To UBound(ToSave)
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If LenB(ToSave(i)) > 0 Then
-						If InStr(ToSave(i), ":") > 0 Then
-							tMessage = Mid(ToSave(i), InStr(ToSave(i), ":") + 2)
-							tUsername = Split(ToSave(i), " ")(1)
-							tUsername = VB.Left(tUsername, InStr(tUsername, ":") - 1)
-						Else
-							tMessage = ToSave(i)
-						End If
-						
-						If StrComp(tUsername, GetCurrentUsername, CompareMethod.Text) = 0 Then
-							Print(f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.TalkBotUsername)) & "'><b>")
-						Else
-							Print(f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.WhisperUsernames)) & "'><b>")
-						End If
-						PrintLine(f, "» " & tUsername & "</b></font>")
-						
-						Print(f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.WhisperCarats)) & "'><b>")
-						PrintLine(f, ":</b></font> ")
-						
-						Print(f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.WhisperText)) & "'>")
-						PrintLine(f, tMessage & "</font><br />")
-						
-					End If
-				Next i
-				
-				PrintLine(f, "</p>")
-				PrintLine(f, "</body></html>")
-				FileClose(f)
-				
-				AddWhisper(System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Lime), "» Conversation saved.")
-			End If
+            If Len(.FileName) > 0 Then
+                ToSave = Split(rtbWhispers.Text, vbCrLf)
+                f = FreeFile()
+
+                If InStr(1, .FileName, ".") = 0 Then
+                    .FileName = .FileName & ".htm"
+                End If
+
+                FileOpen(f, .FileName, OpenMode.Output)
+                PrintLine(f, "<html><head>")
+                PrintLine(f, "<title>StealthBot Conversation Log: " & GetCurrentUsername() & " and " & m_sWhisperTo & "</title></head>")
+                PrintLine(f, "<body bgcolor='#000000'>")
+
+                PrintLine(f, "<p><font color='#FFFFFF'><b>")
+                PrintLine(f, "StealthBot Conversation Log, between " & GetCurrentUsername() & " and " & m_sWhisperTo & ".<br />")
+                PrintLine(f, "Conversation began: " & VB6.Format(m_StartDate, "HH:MM:SS, m/dd/yyyy"))
+                PrintLine(f, "</b></font></p>")
+
+                PrintLine(f, "<p>")
+
+                For i = 0 To UBound(ToSave)
+                    If Len(ToSave(i)) > 0 Then
+                        If InStr(ToSave(i), ":") > 0 Then
+                            tMessage = Mid(ToSave(i), InStr(ToSave(i), ":") + 2)
+                            tUsername = Split(ToSave(i), " ")(1)
+                            tUsername = VB.Left(tUsername, InStr(tUsername, ":") - 1)
+                        Else
+                            tMessage = ToSave(i)
+                        End If
+
+                        If StrComp(tUsername, GetCurrentUsername, CompareMethod.Text) = 0 Then
+                            Print(f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.TalkBotUsername)) & "'><b>")
+                        Else
+                            Print(f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.WhisperUsernames)) & "'><b>")
+                        End If
+                        PrintLine(f, "» " & tUsername & "</b></font>")
+
+                        Print(f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.WhisperCarats)) & "'><b>")
+                        PrintLine(f, ":</b></font> ")
+
+                        Print(f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.WhisperText)) & "'>")
+                        PrintLine(f, tMessage & "</font><br />")
+
+                    End If
+                Next i
+
+                PrintLine(f, "</p>")
+                PrintLine(f, "</body></html>")
+                FileClose(f)
+
+                AddWhisper(System.Drawing.ColorTranslator.ToOle(System.Drawing.Color.Lime), "» Conversation saved.")
+            End If
 		End With
 	End Sub
 	

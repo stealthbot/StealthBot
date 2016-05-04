@@ -541,10 +541,9 @@ Friend Class clsChannelObj
 										If (CurrentUser.Stats.Level < BotVars.BanD2UnderLevel) Then
 											Message = BotVars.BanUnderLevelMsg
 											
-											'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-											If LenB(Message) = 0 Then
-												Message = "You are below the required level for entry."
-											End If
+                                            If Len(Message) = 0 Then
+                                                Message = "You are below the required level for entry."
+                                            End If
 											
 											If InStr(1, Message, "%cl", CompareMethod.Text) > 0 Then
 												Message = Replace(Message, "%cl", CStr(CurrentUser.Stats.Level))
@@ -570,10 +569,9 @@ Friend Class clsChannelObj
 										If (CurrentUser.Stats.Level < BotVars.BanUnderLevel) Then
 											Message = BotVars.BanUnderLevelMsg
 											
-											'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-											If LenB(Message) = 0 Then
-												Message = "You are below the required level for entry."
-											End If
+                                            If Len(Message) = 0 Then
+                                                Message = "You are below the required level for entry."
+                                            End If
 											
 											If InStr(1, Message, "%cl", CompareMethod.Text) > 0 Then
 												Message = Replace(Message, "%cl", CStr(CurrentUser.Stats.Level))

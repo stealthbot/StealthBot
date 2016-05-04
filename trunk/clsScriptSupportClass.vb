@@ -437,12 +437,11 @@ Friend Class clsScriptSupportClass
 	Public Sub GetUserProfile(Optional ByVal Username As String = "")
 		SuppressProfileOutput = True
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(Username) > 0 Then
-			Call RequestProfile(Username)
-		Else
-			Call RequestProfile(GetCurrentUsername)
-		End If
+        If Len(Username) > 0 Then
+            Call RequestProfile(Username)
+        Else
+            Call RequestProfile(GetCurrentUsername)
+        End If
 	End Sub
 	
 	
@@ -648,10 +647,9 @@ Friend Class clsScriptSupportClass
 	'// You can also use it to read out of your own config file, by specifying a full path
 	'//     in the sFileName argument
 	Public Function GetConfigEntry(ByVal sSection As String, ByVal sEntryName As String, ByVal sFileName As String) As String
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(sFileName) = 0 Then
-			sFileName = GetConfigFilePath()
-		End If
+        If Len(sFileName) = 0 Then
+            sFileName = GetConfigFilePath()
+        End If
 		
 		sFileName = GetFilePath(sFileName)
 		
@@ -683,10 +681,9 @@ Friend Class clsScriptSupportClass
 	'// You can also use it to read out of your own config file, by specifying a full path
 	'//     in the sFileName argument
 	Public Sub WriteConfigEntry(ByVal sSection As String, ByVal sEntryName As String, ByVal sValue As String, ByVal sFileName As String)
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(sFileName) = 0 Then
-			sFileName = GetConfigFilePath()
-		End If
+        If Len(sFileName) = 0 Then
+            sFileName = GetConfigFilePath()
+        End If
 		
 		sFileName = GetFilePath(sFileName)
 		
@@ -1290,12 +1287,10 @@ Friend Class clsScriptSupportClass
 	'//     ScriptName - this function will return that script's working directory
 	Public Function GetWorkingDirectory(ByVal scriptName As String) As String
 		' if none provided, get current script name
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(scriptName) = 0 Then scriptName = modScripting.GetScriptName
+        If Len(scriptName) = 0 Then scriptName = modScripting.GetScriptName
 		
 		' if we are in /exec or something, return vbnullstring
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(scriptName) = 0 Then Exit Function
+        If Len(scriptName) = 0 Then Exit Function
 		
 		' return working directory
 		GetWorkingDirectory = BotPath() & "Scripts\" & scriptName & "\"
@@ -1303,10 +1298,9 @@ Friend Class clsScriptSupportClass
 		On Error Resume Next
 		
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(Dir(GetWorkingDirectory, FileAttribute.Directory)) = 0 Then
-			MkDir(GetWorkingDirectory)
-		End If
+        If Len(Dir(GetWorkingDirectory, FileAttribute.Directory)) = 0 Then
+            MkDir(GetWorkingDirectory)
+        End If
 	End Function
 	
 	'// CREATEOBJ
@@ -1382,11 +1376,10 @@ Friend Class clsScriptSupportClass
 		'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim Command_Renamed As clsCommandDocObj
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If ((LenB(scriptName) = 0) Or scriptName = Chr(0)) Then
-			frmChat.AddChat(RTBColors.ErrorMessageText, "Error: You can not create a command without an owner.")
-			Exit Function
-		End If
+        If ((Len(scriptName) = 0) Or scriptName = Chr(0)) Then
+            frmChat.AddChat(RTBColors.ErrorMessageText, "Error: You can not create a command without an owner.")
+            Exit Function
+        End If
 		
 		Command_Renamed = New clsCommandDocObj
 		
@@ -1483,11 +1476,10 @@ Friend Class clsScriptSupportClass
 		Path = GetFilePath(FILE_SCRIPT_INI, GetFolderPath("Scripts"))
 		
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Dir(Path)) = 0) Then
-			FileOpen(1, Path, OpenMode.Output)
-			FileClose(1)
-		End If
+        If (Len(Dir(Path)) = 0) Then
+            FileOpen(1, Path, OpenMode.Output)
+            FileClose(1)
+        End If
 		
 		GetSettingsEntry = ReadINI(scriptName, sEntryName, Path)
 		
@@ -1516,11 +1508,10 @@ Friend Class clsScriptSupportClass
 		Path = GetFilePath(FILE_SCRIPT_INI, GetFolderPath("Scripts"))
 		
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Dir(Path)) = 0) Then
-			FileOpen(1, Path, OpenMode.Output)
-			FileClose(1)
-		End If
+        If (Len(Dir(Path)) = 0) Then
+            FileOpen(1, Path, OpenMode.Output)
+            FileClose(1)
+        End If
 		
 		WriteINI(scriptName, sEntryName, sValue & IIf(Len(sDescription), " ; " & sDescription, ""), Path)
 		

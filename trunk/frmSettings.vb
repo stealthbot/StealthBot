@@ -381,26 +381,22 @@ Friend Class frmSettings
 		Next Item
 		
 		' Add the keys
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(Key1) > 0 Then keys.Add(Key1)
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(Key2) > 0 Then keys.Add(Key2)
+        If Len(Key1) > 0 Then keys.Add(Key1)
+        If Len(Key2) > 0 Then keys.Add(Key2)
 		
 		' Save the list
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(Key1) > 0 Or LenB(Key2) > 0 Then
-			ListFileSave(GetFilePath("Keys.txt"), keys)
-		End If
+        If Len(Key1) > 0 Or Len(Key2) > 0 Then
+            ListFileSave(GetFilePath("Keys.txt"), keys)
+        End If
 		
 		'UPGRADE_NOTE: Object keys may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		keys = Nothing
 	End Sub
 	
 	Private Sub lblManageKeys_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles lblManageKeys.Click
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(txtCDKey.Text) > 0 Then
-			Call lblAddCurrentKey_Click(lblAddCurrentKey, New System.EventArgs())
-		End If
+        If Len(txtCDKey.Text) > 0 Then
+            Call lblAddCurrentKey_Click(lblAddCurrentKey, New System.EventArgs())
+        End If
 		
 		frmManageKeys.Show()
 	End Sub
@@ -729,19 +725,18 @@ Friend Class frmSettings
 		Dim s As String
 		
 		If optW3XP.Checked Or optD2XP.Checked Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(txtExpKey.Text) = 0 Then
-				If optW3XP.Checked Then
-					s = "Warcraft III and a Frozen Throne"
-				Else
-					s = "Diablo II and a Lord of Destruction"
-				End If
-				
-				MsgBox("You must enter both a " & s & " CD-key to connect with an Expansion game.", MsgBoxStyle.OKOnly + MsgBoxStyle.Information)
-				ShowPanel(modEnum.enuSettingsPanels.spConnectionConfig)
-				txtExpKey.Focus()
-				InvalidConfigValues = True
-			End If
+            If Len(txtExpKey.Text) = 0 Then
+                If optW3XP.Checked Then
+                    s = "Warcraft III and a Frozen Throne"
+                Else
+                    s = "Diablo II and a Lord of Destruction"
+                End If
+
+                MsgBox("You must enter both a " & s & " CD-key to connect with an Expansion game.", MsgBoxStyle.OkOnly + MsgBoxStyle.Information)
+                ShowPanel(modEnum.enuSettingsPanels.spConnectionConfig)
+                txtExpKey.Focus()
+                InvalidConfigValues = True
+            End If
 		End If
 		
 	End Function
@@ -801,12 +796,11 @@ Friend Class frmSettings
 		If MsgBox("Are you sure you want to restore the default Values()?" & vbCrLf & "(All current color data will be lost unless exported)", MsgBoxStyle.YesNo + MsgBoxStyle.Exclamation) = MsgBoxResult.Yes Then
 			
 			'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(Dir(GetFilePath(FILE_COLORS))) > 0 Then
-				Kill(GetFilePath(FILE_COLORS))
-				Call GetColorLists()
-				Call LoadColors()
-			End If
+            If Len(Dir(GetFilePath(FILE_COLORS))) > 0 Then
+                Kill(GetFilePath(FILE_COLORS))
+                Call GetColorLists()
+                Call LoadColors()
+            End If
 		End If
 	End Sub
 	
@@ -816,8 +810,7 @@ Friend Class frmSettings
 		
 		f = FreeFile
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(sPath) = 0 Then sPath = GetFilePath(FILE_COLORS)
+        If Len(sPath) = 0 Then sPath = GetFilePath(FILE_COLORS)
 		
 		FileOpen(f, sPath, OpenMode.Random, , , 4)
 		
@@ -1249,8 +1242,7 @@ ShowCurrentColor_Error:
 		
 		chkConnectOnStartup.CheckState = System.Math.Abs(CInt(Config.AutoConnect))
 		txtReconDelay.Text = CStr(Config.ReconnectDelay)
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(txtReconDelay.Text) = 0 Then txtReconDelay.Text = CStr(1000)
+        If Len(txtReconDelay.Text) = 0 Then txtReconDelay.Text = CStr(1000)
 		
 		chkUseProxies.CheckState = System.Math.Abs(CInt(Config.UseProxy))
 		Call chkUseProxies_CheckStateChanged(chkUseProxies, New System.EventArgs())
@@ -1398,8 +1390,7 @@ ShowCurrentColor_Error:
 		End Select
 		
 		txtIdleMsg.Text = Config.IdleMessageText
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(txtIdleMsg.Text) = 0 Then txtIdleMsg.Text = "/me is a %v by Stealth - http://www.stealthbot.net"
+        If Len(txtIdleMsg.Text) = 0 Then txtIdleMsg.Text = "/me is a %v by Stealth - http://www.stealthbot.net"
 		
 		chkIdles.CheckState = System.Math.Abs(CInt(Config.IdleMessage))
 		Call chkIdles_CheckStateChanged(chkIdles, New System.EventArgs())

@@ -251,10 +251,9 @@ Friend Class frmChat
 		
 		Dim x As Short
 		For x = LBound(sStr) To UBound(sStr)
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(sStr(x)) > 0) Then
-				AddChat(RTBColors.InformationText, sStr(x))
-			End If
+            If (Len(sStr(x)) > 0) Then
+                AddChat(RTBColors.InformationText, sStr(x))
+            End If
 		Next x
 		
 		On Error Resume Next
@@ -262,13 +261,12 @@ Friend Class frmChat
 		VoteDuration = -1
 		
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Dir(GetConfigFilePath())) = 0) Then
-			AddChat(RTBColors.ServerInfoText, "If you're new to bots, start by choosing 'Bot Settings' " & "under the 'Settings' menu above.")
-			AddChat(RTBColors.ServerInfoText, "For more help, click the 'Step-By-Step Configuration' " & "button inside Settings.")
-			AddChat(RTBColors.ServerInfoText, "For more information and a list of commands, see the " & "Readme by clicking 'Readme' under the 'Help' menu.")
-			AddChat(RTBColors.ServerInfoText, "Please note that any usage of this program is subject to " & "the terms of the End-User License Agreement available at http://eula.stealthbot.net.")
-		End If
+        If (Len(Dir(GetConfigFilePath())) = 0) Then
+            AddChat(RTBColors.ServerInfoText, "If you're new to bots, start by choosing 'Bot Settings' " & "under the 'Settings' menu above.")
+            AddChat(RTBColors.ServerInfoText, "For more help, click the 'Step-By-Step Configuration' " & "button inside Settings.")
+            AddChat(RTBColors.ServerInfoText, "For more information and a list of commands, see the " & "Readme by clicking 'Readme' under the 'Help' menu.")
+            AddChat(RTBColors.ServerInfoText, "Please note that any usage of this program is subject to " & "the terms of the End-User License Agreement available at http://eula.stealthbot.net.")
+        End If
 		
 		
 		Randomize()
@@ -462,10 +460,9 @@ ERROR_HANDLER:
 						Buffer = Buffer & strData
 					Loop 
 					
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If LenB(Buffer) = 0 Then
-						Buffer = "Empty response"
-					End If
+                    If Len(Buffer) = 0 Then
+                        Buffer = "Empty response"
+                    End If
 				End If
 				
 				Select Case INet.Tag
@@ -858,16 +855,15 @@ ERROR_HANDLER:
 			BNLSFinderLatest = BotVars.BNLSServer
 			
 			'Get the servers as a list from http://stealthbot.net/p/bnls.php
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Config.BNLSFinderSource) > 0) Then
-				If Not RequestINetPage(Config.BNLSFinderSource, SB_INET_BNLS1, True) Then
-					Call HandleFindBNLSServerListResult("INet is busy", -1, False)
-				End If
-			Else
-				If Not RequestINetPage(BNLS_DEFAULT_SOURCE, SB_INET_BNLS2, True) Then
-					Call HandleFindBNLSServerListResult("INet is busy", -1, False)
-				End If
-			End If
+            If (Len(Config.BNLSFinderSource) > 0) Then
+                If Not RequestINetPage(Config.BNLSFinderSource, SB_INET_BNLS1, True) Then
+                    Call HandleFindBNLSServerListResult("INet is busy", -1, False)
+                End If
+            Else
+                If Not RequestINetPage(BNLS_DEFAULT_SOURCE, SB_INET_BNLS2, True) Then
+                    Call HandleFindBNLSServerListResult("INet is busy", -1, False)
+                End If
+            End If
 			
 			Exit Sub
 		End If
@@ -904,16 +900,15 @@ ERROR_HANDLER:
 		End If
 		
 		' keep increasing counter until we find a server that is valid and isn't the same as the first one
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		Do While (StrComp(BNLSFinderEntries(BNLSFinderIndex), BNLSFinderLatest, CompareMethod.Text) = 0) Or (LenB(BNLSFinderEntries(BNLSFinderIndex)) = 0)
-			BNLSFinderIndex = BNLSFinderIndex + 1
-			
-			If BNLSFinderIndex > UBound(BNLSFinderEntries) Then
-				'All BNLS servers have been tried and failed
-				Err.Raise(ERROR_FINDBNLSSERVER,  , "All the BNLS servers have failed.")
-				Exit Do
-			End If
-		Loop 
+        Do While (StrComp(BNLSFinderEntries(BNLSFinderIndex), BNLSFinderLatest, CompareMethod.Text) = 0) Or (Len(BNLSFinderEntries(BNLSFinderIndex)) = 0)
+            BNLSFinderIndex = BNLSFinderIndex + 1
+
+            If BNLSFinderIndex > UBound(BNLSFinderEntries) Then
+                'All BNLS servers have been tried and failed
+                Err.Raise(ERROR_FINDBNLSSERVER, , "All the BNLS servers have failed.")
+                Exit Do
+            End If
+        Loop
 		
 		BotVars.BNLSServer = BNLSFinderEntries(BNLSFinderIndex)
 		
@@ -935,8 +930,7 @@ ERROR_HANDLER:
 				Me.Hide()
 				
 				With nid
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					.cbSize = LenB(nid)
+                    .cbSize = Len(nid)
 					.hWnd = Me.Handle.ToInt32
 					.uId = ID_TASKBARICON
 					.uFlags = NIF_ICON Or NIF_TIP Or NIF_MESSAGE
@@ -1100,8 +1094,7 @@ ERROR_HANDLER:
 	
 	Function GenerateTooltip() As String
 		GenerateTooltip = New String(vbNullChar, 64)
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		GenerateTooltip = IIf(LenB(GetCurrentUsername) > 0, GetCurrentUsername, "offline") & " @ " & BotVars.Server & " (" & StrReverse(BotVars.Product) & ")" & Chr(0)
+        GenerateTooltip = IIf(Len(GetCurrentUsername) > 0, GetCurrentUsername, "offline") & " @ " & BotVars.Server & " (" & StrReverse(BotVars.Product) & ")" & Chr(0)
 	End Function
 	
 	Sub UpdateTrayTooltip()
@@ -1109,8 +1102,7 @@ ERROR_HANDLER:
 		
 		If Me.WindowState = System.Windows.Forms.FormWindowState.Minimized Then
 			With nid
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				.cbSize = LenB(nid)
+                .cbSize = Len(nid)
 				.hWnd = Me.Handle.ToInt32
 				.uId = ID_TASKBARICON
 				.uFlags = NIF_ICON Or NIF_TIP Or NIF_MESSAGE
@@ -1856,8 +1848,7 @@ ERROR_HANDLER:
 		Dim Value As String
 		
 		Value = GetSelectedUser
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(cboSend.Text) = 0 Then Value = Value & BotVars.AutoCompletePostfix
+        If Len(cboSend.Text) = 0 Then Value = Value & BotVars.AutoCompletePostfix
 		Value = Value & Space(1)
 		
 		If (Len(Value) > 0) Then
@@ -1950,8 +1941,7 @@ ERROR_HANDLER:
 		Dim Value As String
 		
 		Value = GetFriendsSelectedUser
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(cboSend.Text) = 0 Then Value = Value & BotVars.AutoCompletePostfix
+        If Len(cboSend.Text) = 0 Then Value = Value & BotVars.AutoCompletePostfix
 		Value = Value & Space(1)
 		
 		If (Len(Value) > 0) Then
@@ -1972,8 +1962,7 @@ ERROR_HANDLER:
 		Dim Value As String
 		
 		Value = GetClanSelectedUser
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(cboSend.Text) = 0 Then Value = Value & BotVars.AutoCompletePostfix
+        If Len(cboSend.Text) = 0 Then Value = Value & BotVars.AutoCompletePostfix
 		Value = Value & Space(1)
 		
 		If (Len(Value) > 0) Then
@@ -2020,8 +2009,7 @@ ERROR_HANDLER:
 					HasOps = g_Channel.Self.IsOperator()
 					
 					'UPGRADE_WARNING: Couldn't resolve default property of object g_Channel.Users().Clan. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					mnuPopInvite.Enabled = UserIsW3 And LenB(g_Channel.Users.Item(aInx).Clan) = 0 And InStr(1, GetSelectedUser, "#") = 0 And g_Clan.Self.Rank >= 3
+                    mnuPopInvite.Enabled = UserIsW3 And Len(g_Channel.Users.Item(aInx).Clan) = 0 And InStr(1, GetSelectedUser, "#") = 0 And g_Clan.Self.Rank >= 3
 					
 					mnuPopStats.Enabled = UserHasStats
 					mnuPopWebProfile.Enabled = UserIsW3
@@ -2297,10 +2285,9 @@ ERROR_HANDLER:
 							If (.IsOnline) Then
 								sTemp = sTemp & "online"
 								
-								'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-								If (LenB(.Location) > 0) Then
-									sTemp = sTemp & " in " & .Location
-								End If
+                                If (Len(.Location) > 0) Then
+                                    sTemp = sTemp & " in " & .Location
+                                End If
 							Else
 								sTemp = sTemp & "offline"
 							End If
@@ -2333,26 +2320,24 @@ ERROR_HANDLER:
 		
 		' Does the script folder exist?
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Dir(sPath, FileAttribute.Directory)) > 0) Then
-			'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-			Shell(StringFormat("explorer.exe {0}", sPath), AppWinStyle.NormalFocus)
-		Else
-			' Try and create it
-			MkDir(sPath)
-			
-			' Did it work?
-			'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Dir(sPath, FileAttribute.Directory)) > 0) Then
-				'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				Shell(StringFormat("explorer.exe {0}", sPath), AppWinStyle.NormalFocus)
-			Else
-				Call Me.AddChat(RTBColors.ErrorMessageText, "Your script folder does not exist, and could not be created.")
-				Call Me.AddChat(RTBColors.ErrorMessageText, "Script folder path: " & sPath)
-				Exit Sub
-			End If
-		End If
+        If (Len(Dir(sPath, FileAttribute.Directory)) > 0) Then
+            'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            Shell(StringFormat("explorer.exe {0}", sPath), AppWinStyle.NormalFocus)
+        Else
+            ' Try and create it
+            MkDir(sPath)
+
+            ' Did it work?
+            'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            If (Len(Dir(sPath, FileAttribute.Directory)) > 0) Then
+                'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                Shell(StringFormat("explorer.exe {0}", sPath), AppWinStyle.NormalFocus)
+            Else
+                Call Me.AddChat(RTBColors.ErrorMessageText, "Your script folder does not exist, and could not be created.")
+                Call Me.AddChat(RTBColors.ErrorMessageText, "Script folder path: " & sPath)
+                Exit Sub
+            End If
+        End If
 	End Sub
 	
 	Public Sub mnuPopClanAddLeft_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuPopClanAddLeft.Click
@@ -2645,13 +2630,12 @@ ERROR_HANDLER:
 			sPlayer = GetFriendsSelectedUser
 		End If
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(sPlayer) > 0 Then
-			If g_Clan.Self.Rank >= 3 Then
-				InviteToClan((ReverseConvertUsernameGateway(sPlayer)))
-				AddChat(RTBColors.InformationText, "[CLAN] Invitation sent to " & GetFriendsSelectedUser & ", awaiting reply.")
-			End If
-		End If
+        If Len(sPlayer) > 0 Then
+            If g_Clan.Self.Rank >= 3 Then
+                InviteToClan((ReverseConvertUsernameGateway(sPlayer)))
+                AddChat(RTBColors.InformationText, "[CLAN] Invitation sent to " & GetFriendsSelectedUser() & ", awaiting reply.")
+            End If
+        End If
 	End Sub
 	
 	Public Sub mnuPopFLProfile_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuPopFLProfile.Click
@@ -2799,18 +2783,17 @@ ERROR_HANDLER:
 		
 		Value = cboSend.Text
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(Value) > 0 Then
-			Value = "/w " & CleanUsername(GetFriendsSelectedUser, True) & Space(1) & Value
-			
-			AddQ(Value, (modQueueObj.PRIORITY.CONSOLE_MESSAGE))
-			
-			cboSend.Items.Insert(0, Value)
-			cboSend.Text = vbNullString
-			
-			On Error Resume Next
-			cboSend.Focus()
-		End If
+        If Len(Value) > 0 Then
+            Value = "/w " & CleanUsername(GetFriendsSelectedUser, True) & Space(1) & Value
+
+            AddQ(Value, (modQueueObj.PRIORITY.CONSOLE_MESSAGE))
+
+            cboSend.Items.Insert(0, Value)
+            cboSend.Text = vbNullString
+
+            On Error Resume Next
+            cboSend.Focus()
+        End If
 	End Sub
 	
 	Public Sub mnuPopInvite_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuPopInvite.Click
@@ -2821,13 +2804,12 @@ ERROR_HANDLER:
 			sPlayer = GetSelectedUser
 		End If
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(sPlayer) > 0 Then
-			If g_Clan.Self.Rank >= 3 Then
-				InviteToClan((ReverseConvertUsernameGateway(sPlayer)))
-				AddChat(RTBColors.InformationText, "[CLAN] Invitation sent to " & GetSelectedUser & ", awaiting reply.")
-			End If
-		End If
+        If Len(sPlayer) > 0 Then
+            If g_Clan.Self.Rank >= 3 Then
+                InviteToClan((ReverseConvertUsernameGateway(sPlayer)))
+                AddChat(RTBColors.InformationText, "[CLAN] Invitation sent to " & GetSelectedUser() & ", awaiting reply.")
+            End If
+        End If
 	End Sub
 	
 	Public Sub mnuPopProfile_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuPopProfile.Click
@@ -2902,25 +2884,23 @@ ERROR_HANDLER:
 	End Sub
 	
 	Public Sub mnuHomeChannel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuHomeChannel.Click
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Config.HomeChannel) = 0) Then
-			' do product home join instead
-			Call DoChannelJoinProductHome()
-		Else
-			' go home
-			Call FullJoin((Config.HomeChannel), 2)
-		End If
+        If (Len(Config.HomeChannel) = 0) Then
+            ' do product home join instead
+            Call DoChannelJoinProductHome()
+        Else
+            ' go home
+            Call FullJoin((Config.HomeChannel), 2)
+        End If
 	End Sub
 	
 	Public Sub mnuLastChannel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuLastChannel.Click
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(BotVars.LastChannel) = 0) Then
-			' do product home join instead
-			Call DoChannelJoinProductHome()
-		Else
-			' go to last
-			Call FullJoin((BotVars.LastChannel), 2)
-		End If
+        If (Len(BotVars.LastChannel) = 0) Then
+            ' do product home join instead
+            Call DoChannelJoinProductHome()
+        Else
+            ' go to last
+            Call FullJoin((BotVars.LastChannel), 2)
+        End If
 	End Sub
 	
 	Public Sub mnuRealmSwitch_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuRealmSwitch.Click
@@ -3340,12 +3320,11 @@ ERROR_HANDLER:
 		sPath = StringFormat("{0}{1}.txt", g_Logger.LogPath, VB6.Format(Today, "yyyy-MM-dd"))
 		
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(Dir(sPath)) = 0 Then
-			AddChat(RTBColors.ErrorMessageText, "The log file for today is empty.")
-		Else
-			ShellOpenURL(sPath,  , False)
-		End If
+        If Len(Dir(sPath)) = 0 Then
+            AddChat(RTBColors.ErrorMessageText, "The log file for today is empty.")
+        Else
+            ShellOpenURL(sPath, , False)
+        End If
 	End Sub
 	
 	Public Sub mnuRecordWindowPos_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuRecordWindowPos.Click
@@ -3412,12 +3391,11 @@ ERROR_HANDLER:
 		sPath = StringFormat("{0}{1}-WHISPERS.txt", g_Logger.LogPath, VB6.Format(Today, "yyyy-MM-dd"))
 		
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(Dir(sPath)) = 0 Then
-			AddChat(RTBColors.ErrorMessageText, "The whisper log file for today is empty.")
-		Else
-			ShellOpenURL(sPath,  , False)
-		End If
+        If Len(Dir(sPath)) = 0 Then
+            AddChat(RTBColors.ErrorMessageText, "The whisper log file for today is empty.")
+        Else
+            ShellOpenURL(sPath, , False)
+        End If
 	End Sub
 	
 	Private Sub mnuEditUsers_Click()
@@ -3487,20 +3465,18 @@ ERROR_HANDLER:
 	Public Sub mnuCustomChannelAdd_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuCustomChannelAdd.Click
 		Dim i As Short
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(g_Channel.Name) > 0 Then
-			
-			For i = LBound(QC) To UBound(QC)
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If LenB(Trim(QC(i))) = 0 Then
-					QC(i) = g_Channel.Name
-					PrepareQuickChannelMenu()
-					
-					Exit Sub
-				End If
-			Next i
-			
-		End If
+        If Len(g_Channel.Name) > 0 Then
+
+            For i = LBound(QC) To UBound(QC)
+                If Len(Trim(QC(i))) = 0 Then
+                    QC(i) = g_Channel.Name
+                    PrepareQuickChannelMenu()
+
+                    Exit Sub
+                End If
+            Next i
+
+        End If
 	End Sub
 	
 	Public Sub mnuCustomChannelEdit_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles mnuCustomChannelEdit.Click
@@ -4020,44 +3996,42 @@ EventExitSub:
 		Select Case (KeyCode)
 			Case System.Windows.Forms.Keys.Space
 				With cboSend
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(LastWhisper) > 0) Then
-						If (Len(.Text) >= 2) Then
-							If StrComp(VB.Left(.Text, 2), "/r", CompareMethod.Text) = 0 Then
-								.SelectionStart = 0
-								.SelectionLength = Len(.Text)
-								.SelectedText = "/w " & CleanUsername(LastWhisper, True)
-								.SelectionStart = Len(.Text)
-							End If
-						End If
-						
-						If (Len(.Text) >= 6) Then
-							If StrComp(VB.Left(.Text, 6), "/reply", CompareMethod.Text) = 0 Then
-								.SelectionStart = 0
-								.SelectionLength = Len(.Text)
-								.SelectedText = "/w " & CleanUsername(LastWhisper, True)
-								.SelectionStart = Len(.Text)
-							End If
-						End If
-					End If
+                    If (Len(LastWhisper) > 0) Then
+                        If (Len(.Text) >= 2) Then
+                            If StrComp(VB.Left(.Text, 2), "/r", CompareMethod.Text) = 0 Then
+                                .SelectionStart = 0
+                                .SelectionLength = Len(.Text)
+                                .SelectedText = "/w " & CleanUsername(LastWhisper, True)
+                                .SelectionStart = Len(.Text)
+                            End If
+                        End If
+
+                        If (Len(.Text) >= 6) Then
+                            If StrComp(VB.Left(.Text, 6), "/reply", CompareMethod.Text) = 0 Then
+                                .SelectionStart = 0
+                                .SelectionLength = Len(.Text)
+                                .SelectedText = "/w " & CleanUsername(LastWhisper, True)
+                                .SelectionStart = Len(.Text)
+                            End If
+                        End If
+                    End If
 					
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(LastWhisperTo) > 0) Then
-						If (Len(.Text) >= 3) Then
-							If StrComp(VB.Left(.Text, 3), "/rw", CompareMethod.Text) = 0 Then
-								.SelectionStart = 0
-								.SelectionLength = Len(.Text)
-								
-								If StrComp(LastWhisperTo, "%f%") = 0 Then
-									.SelectedText = "/f m"
-								Else
-									.SelectedText = "/w " & CleanUsername(LastWhisperTo, True)
-								End If
-								
-								.SelectionStart = Len(.Text)
-							End If
-						End If
-					End If
+                    If (Len(LastWhisperTo) > 0) Then
+                        If (Len(.Text) >= 3) Then
+                            If StrComp(VB.Left(.Text, 3), "/rw", CompareMethod.Text) = 0 Then
+                                .SelectionStart = 0
+                                .SelectionLength = Len(.Text)
+
+                                If StrComp(LastWhisperTo, "%f%") = 0 Then
+                                    .SelectedText = "/f m"
+                                Else
+                                    .SelectedText = "/w " & CleanUsername(LastWhisperTo, True)
+                                End If
+
+                                .SelectionStart = Len(.Text)
+                            End If
+                        End If
+                    End If
 				End With
 				
 			Case System.Windows.Forms.Keys.PageDown 'ALT + PAGEDOWN
@@ -4333,28 +4307,27 @@ EventExitSub:
 						ACList = Nothing
 						
 						' save to the text box
-						'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-						If (LenB(ACUser) > 0) Then
-							If (ACWordStart > 1) Then
-								ACText = VB.Left(ACBuffer, ACWordStart - 1)
-							ElseIf (ACWordStart = 1) Then 
-								' only includes the postfix for the first word
-								ACUser = ACUser & BotVars.AutoCompletePostfix
-							End If
-							
-							ACText = ACText & ACUser & Space(1)
-							
-							SavedSelPos = Len(ACText)
-							
-							If (ACWordEnd > 0) Then
-								ACText = ACText & Mid(ACBuffer, ACWordEnd + 1)
-							End If
-							
-							.Text = ACText
-							.SelectionStart = SavedSelPos
-						Else
-							ACUserIndex = 0
-						End If
+                        If (Len(ACUser) > 0) Then
+                            If (ACWordStart > 1) Then
+                                ACText = VB.Left(ACBuffer, ACWordStart - 1)
+                            ElseIf (ACWordStart = 1) Then
+                                ' only includes the postfix for the first word
+                                ACUser = ACUser & BotVars.AutoCompletePostfix
+                            End If
+
+                            ACText = ACText & ACUser & Space(1)
+
+                            SavedSelPos = Len(ACText)
+
+                            If (ACWordEnd > 0) Then
+                                ACText = ACText & Mid(ACBuffer, ACWordEnd + 1)
+                            End If
+
+                            .Text = ACText
+                            .SelectionStart = SavedSelPos
+                        Else
+                            ACUserIndex = 0
+                        End If
 					End With
 				End If
 				
@@ -4372,24 +4345,21 @@ EventExitSub:
 				
 				Select Case (Shift)
 					Case VB6.ShiftConstants.ShiftMask 'CTRL+ENTER - rewhisper
-						'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-						If LenB(cboSend.Text) > 0 Then
-							Value = "/w " & LastWhisperTo & Space(1)
-							DoRunCommands = False
-						End If
+                        If Len(cboSend.Text) > 0 Then
+                            Value = "/w " & LastWhisperTo & Space(1)
+                            DoRunCommands = False
+                        End If
 						
 					Case VB6.ShiftConstants.ShiftMask Or VB6.ShiftConstants.CtrlMask 'CTRL+SHIFT+ENTER - reply
-						'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-						If LenB(cboSend.Text) > 0 Then
-							Value = "/w " & LastWhisper & Space(1)
-							DoRunCommands = False
-						End If
+                        If Len(cboSend.Text) > 0 Then
+                            Value = "/w " & LastWhisper & Space(1)
+                            DoRunCommands = False
+                        End If
 						
 					Case Else 'normal ENTER - old rules apply
-						'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-						If LenB(cboSend.Text) > 0 Then
-							Value = vbNullString
-						End If
+                        If Len(cboSend.Text) > 0 Then
+                            Value = vbNullString
+                        End If
 				End Select
 				
 				' prefix box
@@ -4411,31 +4381,29 @@ EventExitSub:
 				
 				If DoRunCommands Then
 					If (VB.Left(Value, 1) = "/") Then
-						'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-						If (LenB(Config.ServerCommandList) > 0) Then
-							
-							CommandList = Config.ServerCommandList
-							
-							' please note: only commands with "%" as the first argument (or no "%" arguments)
-							' (i.e. "/w %", "/ban %") are supported to be correctly no-processed
-							' complexify here if that is needed
-							Args = Split(Value, Space(1), 3)
-							If UBound(Args) > 0 Then UserArg = Args(1)
-							
-							CommandList = Replace(CommandList, "%", UserArg)
-							
-							NoProcs = Split(CommandList, ",")
-						Else
-							ReDim NoProcs(0)
-						End If
+                        If (Len(Config.ServerCommandList) > 0) Then
+
+                            CommandList = Config.ServerCommandList
+
+                            ' please note: only commands with "%" as the first argument (or no "%" arguments)
+                            ' (i.e. "/w %", "/ban %") are supported to be correctly no-processed
+                            ' complexify here if that is needed
+                            Args = Split(Value, Space(1), 3)
+                            If UBound(Args) > 0 Then UserArg = Args(1)
+
+                            CommandList = Replace(CommandList, "%", UserArg)
+
+                            NoProcs = Split(CommandList, ",")
+                        Else
+                            ReDim NoProcs(0)
+                        End If
 						
 						For i = LBound(NoProcs) To UBound(NoProcs)
-							'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-							If (LenB(NoProcs(i)) > 0) And (StrComp(VB.Left(Value, Len(NoProcs(i)) + 2), "/" & NoProcs(i) & Space(1), CompareMethod.Text) = 0) Then
-								DoRunCommands = False
-								StartOutfilterPos = Len(NoProcs(i)) + 3
-								Exit For
-							End If
+                            If (Len(NoProcs(i)) > 0) And (StrComp(VB.Left(Value, Len(NoProcs(i)) + 2), "/" & NoProcs(i) & Space(1), CompareMethod.Text) = 0) Then
+                                DoRunCommands = False
+                                StartOutfilterPos = Len(NoProcs(i)) + 3
+                                Exit For
+                            End If
 						Next i
 						
 						If DoRunCommands Then
@@ -5060,17 +5028,16 @@ ERROR_HANDLER:
 					.RemotePort = 6112
 				Else
 					'// PROXY
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If BotVars.ProxyPort > 0 And LenB(BotVars.ProxyIP) > 0 Then
-						.RemoteHost = BotVars.ProxyIP
-						.RemotePort = BotVars.ProxyPort
-					Else
-						MsgBox("You have selected to use proxies, but no proxy is configured. Please set one up in the Advanced " & " section of Bot Settings.", MsgBoxStyle.Information)
-						
-						DoDisconnect()
-						
-						Exit Sub
-					End If
+                    If BotVars.ProxyPort > 0 And Len(BotVars.ProxyIP) > 0 Then
+                        .RemoteHost = BotVars.ProxyIP
+                        .RemotePort = BotVars.ProxyPort
+                    Else
+                        MsgBox("You have selected to use proxies, but no proxy is configured. Please set one up in the Advanced " & " section of Bot Settings.", MsgBoxStyle.Information)
+
+                        DoDisconnect()
+
+                        Exit Sub
+                    End If
 				End If
 				
 				If Not BotVars.BNLS Then .Connect()
@@ -5248,16 +5215,15 @@ ERROR_HANDLER:
 		hostPath = ReplaceEnvironmentVars(hostPath & "\hosts")
 		
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Dir(hostPath)) > 0) Then
-			FileOpen(f, hostPath, OpenMode.Input)
-			Do While (EOF(f) = False)
-				tmp = LineInput(f)
-				
-				hostFile = hostFile & tmp
-			Loop 
-			FileClose(f)
-		End If
+        If (Len(Dir(hostPath)) > 0) Then
+            FileOpen(f, hostPath, OpenMode.Input)
+            Do While (EOF(f) = False)
+                tmp = LineInput(f)
+
+                hostFile = hostFile & tmp
+            Loop
+            FileClose(f)
+        End If
 		
 		If (clsCRC32.CRC32(BETA_AUTH_URL) = BETA_AUTH_URL_CRC32) Then
 			If (InStr(1, hostFile, Split(BETA_AUTH_URL, ".")(1), CompareMethod.Text) = 0) Then
@@ -5507,19 +5473,17 @@ ERROR_HANDLER:
 				
 				' store working copy
 				Send = Splt(i)
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(Command_Renamed) > 0) Then
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(Send) > 0) Then
-						'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-						Send = StringFormat("{0} {1}", Command_Renamed, Send)
-					Else
-						Send = Command_Renamed
-					End If
-				ElseIf (VB.Left(Send, 1) = "/" And i > LBound(Splt)) Then 
-					'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					Send = StringFormat(" {0}", Send)
-				End If
+                If (Len(Command_Renamed) > 0) Then
+                    If (Len(Send) > 0) Then
+                        'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        Send = StringFormat("{0} {1}", Command_Renamed, Send)
+                    Else
+                        Send = Command_Renamed
+                    End If
+                ElseIf (VB.Left(Send, 1) = "/" And i > LBound(Splt)) Then
+                    'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    Send = StringFormat(" {0}", Send)
+                End If
 				
 				' create the queue object
 				Q = New clsQueueOBj
@@ -5613,10 +5577,9 @@ ERROR_HANDLER:
 		BotVars.TSSetting = Config.TimestampMode
 		
 		' Client settings
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(BotVars.Username) > 0 And StrComp(BotVars.Username, Config.Username, CompareMethod.Text) <> 0 Then
-			AddChat(RTBColors.ConsoleText, "Username set to " & Config.Username & ".")
-		End If
+        If Len(BotVars.Username) > 0 And StrComp(BotVars.Username, Config.Username, CompareMethod.Text) <> 0 Then
+            AddChat(RTBColors.ConsoleText, "Username set to " & Config.Username & ".")
+        End If
 		BotVars.Username = Config.Username
 		BotVars.Password = Config.Password
 		BotVars.CDKey = Config.CDKey
@@ -5998,16 +5961,15 @@ ERROR_HANDLER:
 		
 		s = GErrorHandler.GetErrorString(ErrorNumber, source)
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(s) > 0) Then
-			Select Case (bytType)
-				Case 0 : s = "[BNLS] " & s
-				Case 1 : s = "[BNCS] " & s
-				Case 2 : s = "[PROXY] " & s
-			End Select
-			
-			AddChat(RTBColors.ErrorMessageText, s)
-		End If
+        If (Len(s) > 0) Then
+            Select Case (bytType)
+                Case 0 : s = "[BNLS] " & s
+                Case 1 : s = "[BNCS] " & s
+                Case 2 : s = "[PROXY] " & s
+            End Select
+
+            AddChat(RTBColors.ErrorMessageText, s)
+        End If
 		
 		DisplayError = GErrorHandler.OKToProceed()
 	End Function
@@ -6453,31 +6415,30 @@ ERROR_HANDLER:
 			Gateways(4, 1) = "Westfall"
 			
 			CurrentGateway = -1
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(BotVars.Gateway) > 0) Then
-				For i = 0 To UBound(Gateways, 1)
-					If (StrComp(BotVars.Gateway, Gateways(i, 0)) = 0) Then
-						CurrentGateway = i
-						OtherGateway = Gateways(i, 1)
-						Exit For
-					End If
-					If (StrComp(BotVars.Gateway, Gateways(i, 1)) = 0) Then
-						CurrentGateway = i
-						OtherGateway = Gateways(i, 0)
-						Exit For
-					End If
-				Next i
-				If (CurrentGateway = -1) Then ' BotVars.Gateway not known, @[tab]=@BotVars.Gateway
-					OtherGateway = BotVars.Gateway
-					CurrentGateway = 0
-				End If
-			Else ' BotVars.Gateway is nothing, @[tab]
-				MatchClosest = vbNullString
-				
-				MatchIndex = 1
-				
-				Exit Function
-			End If
+            If (Len(BotVars.Gateway) > 0) Then
+                For i = 0 To UBound(Gateways, 1)
+                    If (StrComp(BotVars.Gateway, Gateways(i, 0)) = 0) Then
+                        CurrentGateway = i
+                        OtherGateway = Gateways(i, 1)
+                        Exit For
+                    End If
+                    If (StrComp(BotVars.Gateway, Gateways(i, 1)) = 0) Then
+                        CurrentGateway = i
+                        OtherGateway = Gateways(i, 0)
+                        Exit For
+                    End If
+                Next i
+                If (CurrentGateway = -1) Then ' BotVars.Gateway not known, @[tab]=@BotVars.Gateway
+                    OtherGateway = BotVars.Gateway
+                    CurrentGateway = 0
+                End If
+            Else ' BotVars.Gateway is nothing, @[tab]
+                MatchClosest = vbNullString
+
+                MatchIndex = 1
+
+                Exit Function
+            End If
 			
 			
 			If (startIndex > UBound(Gateways, 2)) Then
@@ -6528,12 +6489,11 @@ ERROR_HANDLER:
 		Else
 			Select Case ListviewTabs.SelectedIndex
 				Case 0
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If LenB(g_Channel.Name) = 0 Then
-						GetChannelString = BotVars.Gateway
-					Else
-						GetChannelString = g_Channel.Name & " (" & lvChannel.Items.Count & ")"
-					End If
+                    If Len(g_Channel.Name) = 0 Then
+                        GetChannelString = BotVars.Gateway
+                    Else
+                        GetChannelString = g_Channel.Name & " (" & lvChannel.Items.Count & ")"
+                    End If
 				Case 1 : GetChannelString = "Friends (" & lvFriendList.Items.Count & ")"
 				Case 2 : GetChannelString = "Clan " & g_Clan.Name & " (" & lvClanList.Items.Count & " members)"
 			End Select

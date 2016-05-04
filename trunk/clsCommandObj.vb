@@ -181,9 +181,8 @@ Friend Class clsCommandObj
 		sTemp = StripWord(sString)
 		If (StrictIsNumeric(sTemp, True)) Then
 			StripNumeric = sTemp
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		ElseIf LenB(sTemp) > 0 Then 
-			sString = sTemp & Space(1) & sString
+        ElseIf Len(sTemp) > 0 Then
+            sString = sTemp & Space(1) & sString
 		End If
 	End Function
 	
@@ -282,63 +281,58 @@ Friend Class clsCommandObj
 					sTemp = StripString(sArgs, Param.Name = Me.docs.Parameters.Item(Me.docs.Parameters.Count()).Name)
 			End Select
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Param.MatchMessage)) Then
-				If (Not CheckMatch((Param.MatchMessage), sTemp, (Param.MatchCaseSensitive))) Then
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(Param.MatchError) > 0) And (m_hasaccess) Then
-						
-						sError = Replace(Param.MatchError, "%Value", sTemp)
-						sError = Replace(sError, "%Rank", CStr(dbAccess.Rank))
-						sError = Replace(sError, "%Flags", dbAccess.Flags)
-						
-						Respond(sError)
-						
-						m_splithasrun = True
-						IsValid = False
-						Exit Sub
-					Else
-						If (LCase(Param.datatype) = "string") Then
-							'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-							sArgs = StringFormat("{0}{1}{0} {2}", Chr(34), sTemp, sArgs)
-						Else
-							'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-							sArgs = StringFormat("{0} {1}", sTemp, sArgs)
-						End If
-					End If
-				End If
-			End If
+            If (Len(Param.MatchMessage)) Then
+                If (Not CheckMatch((Param.MatchMessage), sTemp, (Param.MatchCaseSensitive))) Then
+                    If (Len(Param.MatchError) > 0) And (m_hasaccess) Then
+
+                        sError = Replace(Param.MatchError, "%Value", sTemp)
+                        sError = Replace(sError, "%Rank", CStr(dbAccess.Rank))
+                        sError = Replace(sError, "%Flags", dbAccess.Flags)
+
+                        Respond(sError)
+
+                        m_splithasrun = True
+                        IsValid = False
+                        Exit Sub
+                    Else
+                        If (LCase(Param.datatype) = "string") Then
+                            'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            sArgs = StringFormat("{0}{1}{0} {2}", Chr(34), sTemp, sArgs)
+                        Else
+                            'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            sArgs = StringFormat("{0} {1}", sTemp, sArgs)
+                        End If
+                    End If
+                End If
+            End If
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(sTemp) > 0) Then
-				For	Each Restriction In Param.Restrictions 'Loop Through the Restrictions
-					'UPGRADE_WARNING: Couldn't resolve default property of object m_restrictions(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					m_restrictions(Restriction.Name) = True
-					If (CheckMatch((Restriction.MatchMessage), sTemp, (Restriction.MatchCaseSensitive))) Then 'If they match (regex)
-						'If Rank = -1 It means it's missing, and it MUST have Flags. Or if Rank > User's Access
-						If (Restriction.RequiredRank = -1 Or Restriction.RequiredRank > dbAccess.Rank) Then
-							If (Not CheckForAnyFlags((Restriction.RequiredFlags), dbAccess.Flags)) Then
-								'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-								If (LenB(Restriction.MatchError)) And (m_hasaccess) Then
-									sError = Replace(Restriction.MatchError, "%Value", sTemp)
-									sError = Replace(sError, "%Rank", CStr(dbAccess.Rank))
-									sError = Replace(sError, "%Flags", dbAccess.Flags)
-									
-									Respond(sError)
-								End If
-								If (Restriction.Fatal) Then m_hasaccess = False
-								'UPGRADE_WARNING: Couldn't resolve default property of object m_restrictions(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-								m_restrictions(Restriction.Name) = False
-							End If
-						End If
-					End If
-				Next Restriction
-			End If
+            If (Len(sTemp) > 0) Then
+                For Each Restriction In Param.Restrictions 'Loop Through the Restrictions
+                    'UPGRADE_WARNING: Couldn't resolve default property of object m_restrictions(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    m_restrictions(Restriction.Name) = True
+                    If (CheckMatch((Restriction.MatchMessage), sTemp, (Restriction.MatchCaseSensitive))) Then 'If they match (regex)
+                        'If Rank = -1 It means it's missing, and it MUST have Flags. Or if Rank > User's Access
+                        If (Restriction.RequiredRank = -1 Or Restriction.RequiredRank > dbAccess.Rank) Then
+                            If (Not CheckForAnyFlags((Restriction.RequiredFlags), dbAccess.Flags)) Then
+                                If (Len(Restriction.MatchError)) And (m_hasaccess) Then
+                                    sError = Replace(Restriction.MatchError, "%Value", sTemp)
+                                    sError = Replace(sError, "%Rank", CStr(dbAccess.Rank))
+                                    sError = Replace(sError, "%Flags", dbAccess.Flags)
+
+                                    Respond(sError)
+                                End If
+                                If (Restriction.Fatal) Then m_hasaccess = False
+                                'UPGRADE_WARNING: Couldn't resolve default property of object m_restrictions(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                                m_restrictions(Restriction.Name) = False
+                            End If
+                        End If
+                    End If
+                Next Restriction
+            End If
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(sTemp) = 0 And Not Param.IsOptional) Then
-				IsValid = False
-			End If
+            If (Len(sTemp) = 0 And Not Param.IsOptional) Then
+                IsValid = False
+            End If
 			'UPGRADE_WARNING: Couldn't resolve default property of object m_xmlarguments(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			m_xmlarguments(Param.Name) = sTemp
 		Next Param
@@ -377,8 +371,7 @@ ERROR_HANDLER:
 		Dim i As Short
 		CheckForAnyFlags = False
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(sHave) = 0) Then Exit Function
+        If (Len(sHave) = 0) Then Exit Function
 		
 		For i = 1 To Len(sNeeded)
 			If (InStr(1, sHave, Mid(sNeeded, i, 1), CompareMethod.Text) > 0) Then
@@ -394,9 +387,8 @@ ERROR_HANDLER:
 	
 	'Adds a line to the response queue
 	Public Sub Respond(ByRef strResponse As Object)
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		'UPGRADE_WARNING: Couldn't resolve default property of object strResponse. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		If (LenB(strResponse) > 0) Then m_response.Add(CStr(strResponse))
+        'UPGRADE_WARNING: Couldn't resolve default property of object strResponse. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+        If (Len(strResponse) > 0) Then m_response.Add(CStr(strResponse))
 	End Sub
 	
 	'Cleares the response queue

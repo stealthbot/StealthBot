@@ -128,24 +128,23 @@ Friend Class frmRealm
 		Dim NewItem As System.Windows.Forms.ListViewItem
 		
 		With lvwChars
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(CharacterName) > 0) Then
-				If (FindCharacter(CharacterName) < 0) Then
-					'UPGRADE_WARNING: Lower bound of collection lvwChars.ListItems.ImageList has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-					NewItem = .Items.Add(CharacterName, CharacterStats.CharacterTitleAndName, CharacterStats.CharacterClassID + 1)
-					
-					NewItem.Tag = CStr(Index)
-					
-					If CharacterStats.IsExpansionCharacter Then
-						NewItem.ForeColor = System.Drawing.Color.Lime
-					End If
-					
-					If IsDateExpired(CharacterExpires) Then
-						NewItem.ForeColor = System.Drawing.Color.Red
-					End If
-					
-				End If
-			End If
+            If (Len(CharacterName) > 0) Then
+                If (FindCharacter(CharacterName) < 0) Then
+                    'UPGRADE_WARNING: Lower bound of collection lvwChars.ListItems.ImageList has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                    NewItem = .Items.Add(CharacterName, CharacterStats.CharacterTitleAndName, CharacterStats.CharacterClassID + 1)
+
+                    NewItem.Tag = CStr(Index)
+
+                    If CharacterStats.IsExpansionCharacter Then
+                        NewItem.ForeColor = System.Drawing.Color.Lime
+                    End If
+
+                    If IsDateExpired(CharacterExpires) Then
+                        NewItem.ForeColor = System.Drawing.Color.Red
+                    End If
+
+                End If
+            End If
 		End With
 	End Sub
 	
@@ -432,15 +431,14 @@ Friend Class frmRealm
 			Next i
 			
 			optCreateNew.Enabled = (ds.MCPHandler.CharacterCount < 8)
-			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(m_NewCharacterName) > 0 Then
-				NewSelection = FindCharacter(m_NewCharacterName)
-				
-				If NewSelection >= 0 Then m_Selection = NewSelection
-				
-				m_NewCharacterName = vbNullString
-			End If
+
+            If Len(m_NewCharacterName) > 0 Then
+                NewSelection = FindCharacter(m_NewCharacterName)
+
+                If NewSelection >= 0 Then m_Selection = NewSelection
+
+                m_NewCharacterName = vbNullString
+            End If
 			
 			If m_Selection < 0 Then m_Selection = 0
 			

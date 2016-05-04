@@ -97,10 +97,9 @@ Friend Class frmFilters
 				For i = 1 To i
 					s = ReadINI("TextFilters", "Filter" & i, FILE_FILTERS)
 					
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If LenB(s) > 0 Then
-						lbText.Items.Add(s)
-					End If
+                    If Len(s) > 0 Then
+                        lbText.Items.Add(s)
+                    End If
 				Next i
 			End If
 		End If
@@ -114,10 +113,9 @@ Friend Class frmFilters
 				For i = 1 To i
 					s = ReadINI("BlockList", "Filter" & i, FILE_FILTERS)
 					
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If LenB(s) > 0 Then
-						lbBlock.Items.Add(s)
-					End If
+                    If Len(s) > 0 Then
+                        lbBlock.Items.Add(s)
+                    End If
 				Next i
 			End If
 		End If
@@ -129,13 +127,12 @@ Friend Class frmFilters
 			For i = 1 To i
 				s = Replace(ReadINI("Outgoing", "Find" & i, FILE_FILTERS), "¦", " ")
 				
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If LenB(s) > 0 Then
-					'UPGRADE_WARNING: Lower bound of collection lvReplace.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-					lvReplace.Items.Insert(lvReplace.Items.Count + 1, s)
-					'UPGRADE_WARNING: Lower bound of collection lvReplace.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-					lvReplace.Items.Item(lvReplace.Items.Count).SubItems.Add(Replace(ReadINI("Outgoing", "Replace" & i, FILE_FILTERS), "¦", " "))
-				End If
+                If Len(s) > 0 Then
+                    'UPGRADE_WARNING: Lower bound of collection lvReplace.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                    lvReplace.Items.Insert(lvReplace.Items.Count + 1, s)
+                    'UPGRADE_WARNING: Lower bound of collection lvReplace.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                    lvReplace.Items.Item(lvReplace.Items.Count).SubItems.Add(Replace(ReadINI("Outgoing", "Replace" & i, FILE_FILTERS), "¦", " "))
+                End If
 			Next i
 		End If
 		

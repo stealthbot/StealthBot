@@ -35,26 +35,24 @@ Module modCommandsClan
 				Case "motd"
 					If (IsW3) Then
 						If (g_Clan.Self.Rank > 2) Then
-							'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-							If (LenB(Command_Renamed.Argument("Message")) = 0) Then
-								Command_Renamed.Respond("You must specify a message to set.")
-							Else
-								Command_Renamed.Respond("The clan MOTD has been set to: " & Command_Renamed.Argument("Message"))
-								Call frmChat.AddQ("/c motd " & Command_Renamed.Argument("Message"), (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE), (Command_Renamed.Username))
-							End If
+                            If (Len(Command_Renamed.Argument("Message")) = 0) Then
+                                Command_Renamed.Respond("You must specify a message to set.")
+                            Else
+                                Command_Renamed.Respond("The clan MOTD has been set to: " & Command_Renamed.Argument("Message"))
+                                Call frmChat.AddQ("/c motd " & Command_Renamed.Argument("Message"), (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE), (Command_Renamed.Username))
+                            End If
 						ElseIf (g_Clan.Self.Rank > 0) Then 
 							Command_Renamed.Respond("Error: The bot must be a shaman or chieftain in its clan to set the MOTD")
 						End If
 					End If
 				Case "mail"
 					If (g_Clan.Self.Rank > 2) Then
-						'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-						If (LenB(Command_Renamed.Argument("Message")) = 0) Then
-							Command_Renamed.Respond("You must specify a message to send.")
-						Else
-							Command_Renamed.Respond("E-mails have been sent to everyone in the clan who have choosen to receive them.")
-							Call frmChat.AddQ("/c mail " & Command_Renamed.Argument("Message"), (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE), (Command_Renamed.Username))
-						End If
+                        If (Len(Command_Renamed.Argument("Message")) = 0) Then
+                            Command_Renamed.Respond("You must specify a message to send.")
+                        Else
+                            Command_Renamed.Respond("E-mails have been sent to everyone in the clan who have choosen to receive them.")
+                            Call frmChat.AddQ("/c mail " & Command_Renamed.Argument("Message"), (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE), (Command_Renamed.Username))
+                        End If
 					ElseIf (g_Clan.Self.Rank > 0) Then 
 						Command_Renamed.Respond("Error: The bot must be a shaman or chieftain in its clan to send Clan mail.")
 					End If
@@ -67,28 +65,27 @@ Module modCommandsClan
 		Dim liUser As System.Windows.Forms.ListViewItem
 		If (Command_Renamed.IsValid) Then
 			If (IsW3) Then
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(g_Clan.Self.Name) > 0) Then
-					If (g_Clan.Self.Rank > 2) Then
-						liUser = frmChat.lvClanList.FindItemWithText(Command_Renamed.Argument("Username"))
-						
-						If (Not liUser Is Nothing) Then
-							'UPGRADE_ISSUE: MSComctlLib.ListItem property liUser.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-							If (liUser.SmallIcon > 1) Then
-								'UPGRADE_ISSUE: MSComctlLib.ListItem property liUser.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-								Call DemoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.SmallIcon - 1)
-							Else
-								Command_Renamed.Respond("Error: The specified user is already at the lowest demoteable ranking.")
-							End If
-						Else
-							Command_Renamed.Respond("Error: The specified user is not currently a member of this clan.")
-						End If
-					Else
-						Command_Renamed.Respond("Error: The bot must be a shaman or chieftain in its clan to demote.")
-					End If
-				Else
-					Command_Renamed.Respond("Error: The bot must be a member of a clan.")
-				End If
+                If (Len(g_Clan.Self.Name) > 0) Then
+                    If (g_Clan.Self.Rank > 2) Then
+                        liUser = frmChat.lvClanList.FindItemWithText(Command_Renamed.Argument("Username"))
+
+                        If (Not liUser Is Nothing) Then
+                            'UPGRADE_ISSUE: MSComctlLib.ListItem property liUser.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
+                            If (liUser.SmallIcon > 1) Then
+                                'UPGRADE_ISSUE: MSComctlLib.ListItem property liUser.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
+                                Call DemoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.SmallIcon - 1)
+                            Else
+                                Command_Renamed.Respond("Error: The specified user is already at the lowest demoteable ranking.")
+                            End If
+                        Else
+                            Command_Renamed.Respond("Error: The specified user is not currently a member of this clan.")
+                        End If
+                    Else
+                        Command_Renamed.Respond("Error: The bot must be a shaman or chieftain in its clan to demote.")
+                    End If
+                Else
+                    Command_Renamed.Respond("Error: The bot must be a member of a clan.")
+                End If
 			End If
 		End If
 	End Sub
@@ -96,16 +93,15 @@ Module modCommandsClan
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub OnDisbandClan(ByRef Command_Renamed As clsCommandObj)
 		If (IsW3) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(g_Clan.Self.Name) > 0) Then
-				If (g_Clan.Self.Rank >= 4) Then
-					Call DisbandClan()
-				Else
-					Command_Renamed.Respond("Error: The bot must be a chieftain to execute this command.")
-				End If
-			Else
-				Command_Renamed.Respond("Error: The bot must be a member of a clan.")
-			End If
+            If (Len(g_Clan.Self.Name) > 0) Then
+                If (g_Clan.Self.Rank >= 4) Then
+                    Call DisbandClan()
+                Else
+                    Command_Renamed.Respond("Error: The bot must be a chieftain to execute this command.")
+                End If
+            Else
+                Command_Renamed.Respond("Error: The bot must be a member of a clan.")
+            End If
 		End If
 	End Sub
 	
@@ -118,13 +114,12 @@ Module modCommandsClan
 		
 		If (IsW3) Then
 			If (g_Clan.Self.Rank >= 3) Then
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (Command_Renamed.IsValid Or LenB(Command_Renamed.Argument("Username")) = 0) Then
-					Call InviteToClan(Command_Renamed.Argument("Username"))
-					Command_Renamed.Respond(Command_Renamed.Argument("Username") & ": Clan invitation sent.")
-				Else
-					Command_Renamed.Respond("Error: You must specify a username to invite.")
-				End If
+                If (Command_Renamed.IsValid Or Len(Command_Renamed.Argument("Username")) = 0) Then
+                    Call InviteToClan(Command_Renamed.Argument("Username"))
+                    Command_Renamed.Respond(Command_Renamed.Argument("Username") & ": Clan invitation sent.")
+                Else
+                    Command_Renamed.Respond("Error: You must specify a username to invite.")
+                End If
 			Else
 				Command_Renamed.Respond("Error: The bot must be a shaman or chieftain in its clan to invite users.")
 			End If
@@ -148,12 +143,11 @@ Module modCommandsClan
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub OnMOTD(ByRef Command_Renamed As clsCommandObj)
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(g_Clan.Self.Name) > 0) Then
-			Command_Renamed.Respond(StringFormat("Clan {0}'s MOTD: {1}", g_Clan.Name, g_Clan.MOTD))
-		Else
-			Command_Renamed.Respond("Error: The bot must be a member of a clan.")
-		End If
+        If (Len(g_Clan.Self.Name) > 0) Then
+            Command_Renamed.Respond(StringFormat("Clan {0}'s MOTD: {1}", g_Clan.Name, g_Clan.MOTD))
+        Else
+            Command_Renamed.Respond("Error: The bot must be a member of a clan.")
+        End If
 	End Sub
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
@@ -161,28 +155,27 @@ Module modCommandsClan
 		Dim liUser As System.Windows.Forms.ListViewItem
 		If (Command_Renamed.IsValid) Then
 			If (IsW3) Then
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(g_Clan.Self.Name) > 0) Then
-					If (g_Clan.Self.Rank > 2) Then
-						liUser = frmChat.lvClanList.FindItemWithText(Command_Renamed.Argument("Username"))
-						
-						If (Not liUser Is Nothing) Then
-							'UPGRADE_ISSUE: MSComctlLib.ListItem property liUser.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-							If (liUser.SmallIcon < 3) Then
-								'UPGRADE_ISSUE: MSComctlLib.ListItem property liUser.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-								Call PromoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.SmallIcon + 1)
-							Else
-								Command_Renamed.Respond("Error: The specified user is already at the highest promotable ranking.")
-							End If
-						Else
-							Command_Renamed.Respond("Error: The specified user is not currently a member of this clan.")
-						End If
-					Else
-						Command_Renamed.Respond("Error: The bot must be a shaman or chieftain in its clan to promote.")
-					End If
-				Else
-					Command_Renamed.Respond("Error: The bot must be a member of a clan.")
-				End If
+                If (Len(g_Clan.Self.Name) > 0) Then
+                    If (g_Clan.Self.Rank > 2) Then
+                        liUser = frmChat.lvClanList.FindItemWithText(Command_Renamed.Argument("Username"))
+
+                        If (Not liUser Is Nothing) Then
+                            'UPGRADE_ISSUE: MSComctlLib.ListItem property liUser.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
+                            If (liUser.SmallIcon < 3) Then
+                                'UPGRADE_ISSUE: MSComctlLib.ListItem property liUser.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
+                                Call PromoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.SmallIcon + 1)
+                            Else
+                                Command_Renamed.Respond("Error: The specified user is already at the highest promotable ranking.")
+                            End If
+                        Else
+                            Command_Renamed.Respond("Error: The specified user is not currently a member of this clan.")
+                        End If
+                    Else
+                        Command_Renamed.Respond("Error: The bot must be a shaman or chieftain in its clan to promote.")
+                    End If
+                Else
+                    Command_Renamed.Respond("Error: The bot must be a member of a clan.")
+                End If
 			End If
 		End If
 	End Sub

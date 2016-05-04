@@ -47,8 +47,7 @@ Module modWar3Clan
 	End Sub
 	
 	Public Sub InviteToClan(ByRef Username As String) '//Works
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Username) = 0) Then Exit Sub
+        If (Len(Username) = 0) Then Exit Sub
 		With PBuffer
 			.InsertDWord(&H1)
 			.InsertNTString(Username)

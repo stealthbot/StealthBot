@@ -575,8 +575,7 @@ ERROR_HANDLER:
 	Public ReadOnly Property CharacterTitleAndName() As String
 		Get
 			CharacterTitleAndName = CharacterTitle()
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(CharacterTitleAndName) > 0) Then CharacterTitleAndName = CharacterTitleAndName & " "
+            If (Len(CharacterTitleAndName) > 0) Then CharacterTitleAndName = CharacterTitleAndName & " "
 			CharacterTitleAndName = CharacterTitleAndName & CharacterName()
 		End Get
 	End Property
@@ -688,51 +687,50 @@ ERROR_HANDLER:
 			
 			If (BotVars.ShowStatsIcons) Then
 				strIcon = StrReverse(Icon())
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (IsValid And LenB(Statstring) > 0) Then
-					Select Case strIcon
-						Case vbNullString, Game ' icon is current product or icon is not set
-						Case Else ' if icon field is present and custom
-							' display icon
-							IconCode = GetIconImageListPosition(strIcon)
-							Exit Property
-					End Select
-					
-					Select Case Game
-						Case PRODUCT_DRTL, PRODUCT_DSHR
-							' display icon based on D1 class and number of dots
-							IconCode = (ICON_START_D1 + (CharacterClassID * 4) + Dots)
-							
-							' if spawn flag, use DSHR warrior
-							If IsSpawn Then IconCode = IC_DIAB_SPAWN
-							
-						Case PRODUCT_D2DV, PRODUCT_D2XP
-							' display icon based on D2 class
-							IconCode = (ICON_START_D2 + CharacterClassID - 1)
-							
-						Case PRODUCT_STAR, PRODUCT_SEXP, PRODUCT_SSHR, PRODUCT_JSTR, PRODUCT_W2BN
-							' display icon based on wins
-							intWins = Wins
-							If (intWins > 10) Then intWins = 10
-							
-							' choose starting point
-							If Game = PRODUCT_W2BN Then
-								IconCode = CShort(ICON_START_W2 + intWins)
-							Else
-								IconCode = CShort(ICON_START_SC + intWins)
-							End If
-							
-							' if spawn flag, use spawn icon
-							If IsSpawn Then
-								Select Case Game
-									Case PRODUCT_W2BN : IconCode = IC_W2BN_SPAWN
-									Case PRODUCT_JSTR : IconCode = IC_JSTR_SPAWN
-									Case Else : IconCode = IC_STAR_SPAWN
-								End Select
-							End If
-							
-					End Select
-				End If
+                If (IsValid And Len(Statstring) > 0) Then
+                    Select Case strIcon
+                        Case vbNullString, Game ' icon is current product or icon is not set
+                        Case Else ' if icon field is present and custom
+                            ' display icon
+                            IconCode = GetIconImageListPosition(strIcon)
+                            Exit Property
+                    End Select
+
+                    Select Case Game
+                        Case PRODUCT_DRTL, PRODUCT_DSHR
+                            ' display icon based on D1 class and number of dots
+                            IconCode = (ICON_START_D1 + (CharacterClassID * 4) + Dots)
+
+                            ' if spawn flag, use DSHR warrior
+                            If IsSpawn Then IconCode = IC_DIAB_SPAWN
+
+                        Case PRODUCT_D2DV, PRODUCT_D2XP
+                            ' display icon based on D2 class
+                            IconCode = (ICON_START_D2 + CharacterClassID - 1)
+
+                        Case PRODUCT_STAR, PRODUCT_SEXP, PRODUCT_SSHR, PRODUCT_JSTR, PRODUCT_W2BN
+                            ' display icon based on wins
+                            intWins = Wins
+                            If (intWins > 10) Then intWins = 10
+
+                            ' choose starting point
+                            If Game = PRODUCT_W2BN Then
+                                IconCode = CShort(ICON_START_W2 + intWins)
+                            Else
+                                IconCode = CShort(ICON_START_SC + intWins)
+                            End If
+
+                            ' if spawn flag, use spawn icon
+                            If IsSpawn Then
+                                Select Case Game
+                                    Case PRODUCT_W2BN : IconCode = IC_W2BN_SPAWN
+                                    Case PRODUCT_JSTR : IconCode = IC_JSTR_SPAWN
+                                    Case Else : IconCode = IC_STAR_SPAWN
+                                End Select
+                            End If
+
+                    End Select
+                End If
 			End If
 			
 			If ((IconCode = 0) Or (IconCode = ICUNKNOWN)) Then

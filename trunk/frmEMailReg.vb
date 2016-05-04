@@ -29,23 +29,22 @@ Friend Class frmEMailReg
 			Case Else
 				' "VALUE" or "PROMPT" [default behavior]: use the provided value, or prompt with the form if empty
 				' note that "VALUE" and "PROMPT" behave the same
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If LenB(EMailValue) = 0 Then
-					' prompt: show email registration form
-					' this is the default behavior if no config value is specified
-					' (then depending on the user's selection, another one of this functions' actions will happen)
-					Show()
-					
-					On Error Resume Next
-					txtAddress.Focus()
-				Else
-					' value: send the provided email
-					frmChat.AddChat(RTBColors.SuccessText, "[EMAIL] E-mail address registered.")
-					
-					SEND_SID_SETEMAIL(EMailValue)
-					
-					ContinueLogonSequence()
-				End If
+                If Len(EMailValue) = 0 Then
+                    ' prompt: show email registration form
+                    ' this is the default behavior if no config value is specified
+                    ' (then depending on the user's selection, another one of this functions' actions will happen)
+                    Show()
+
+                    On Error Resume Next
+                    txtAddress.Focus()
+                Else
+                    ' value: send the provided email
+                    frmChat.AddChat(RTBColors.SuccessText, "[EMAIL] E-mail address registered.")
+
+                    SEND_SID_SETEMAIL(EMailValue)
+
+                    ContinueLogonSequence()
+                End If
 				
 		End Select
 	End Sub
@@ -65,12 +64,11 @@ Friend Class frmEMailReg
 	End Sub
 	
 	Private Sub cmdGo_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdGo.Click
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(txtAddress.Text) > 0 Then
-			Call DoRegisterEmail("VALUE", (txtAddress.Text))
-			
-			Me.Close()
-		End If
+        If Len(txtAddress.Text) > 0 Then
+            Call DoRegisterEmail("VALUE", (txtAddress.Text))
+
+            Me.Close()
+        End If
 	End Sub
 	
 	Private Sub cmdIgnore_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdIgnore.Click
@@ -121,7 +119,6 @@ Friend Class frmEMailReg
 	
 	'UPGRADE_WARNING: Event txtAddress.TextChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
 	Private Sub txtAddress_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtAddress.TextChanged
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		cmdGo.Enabled = (LenB(txtAddress.Text) > 0)
+        cmdGo.Enabled = (Len(txtAddress.Text) > 0)
 	End Sub
 End Class

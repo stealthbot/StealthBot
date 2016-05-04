@@ -7,47 +7,44 @@ Module modCommandsChat
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub OnAway(ByRef Command_Renamed As clsCommandObj)
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(m_AwayMessage) > 0) Then
-			Call frmChat.AddQ("/away", (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE))
-			If (Not Command_Renamed.IsLocal) Then
-				If (m_AwayMessage = " - ") Then
-					Call frmChat.AddQ("/me is back.", (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE))
-				Else
-					Call frmChat.AddQ("/me is back from (" & m_AwayMessage & ")", (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE))
-				End If
-			End If
-			m_AwayMessage = vbNullString
-		Else
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Command_Renamed.Argument("Message")) > 0) Then
-				m_AwayMessage = Command_Renamed.Argument("Message")
-				Call frmChat.AddQ("/away " & m_AwayMessage, (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE))
-				
-				If (Command_Renamed.IsLocal) Then Call frmChat.AddQ("/me is away (" & m_AwayMessage & ")")
-			Else
-				m_AwayMessage = " - "
-				Call frmChat.AddQ("/away", (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE))
-				If (Not Command_Renamed.IsLocal) Then Call frmChat.AddQ("/me is away.")
-			End If
-		End If
+        If (Len(m_AwayMessage) > 0) Then
+            Call frmChat.AddQ("/away", (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE))
+            If (Not Command_Renamed.IsLocal) Then
+                If (m_AwayMessage = " - ") Then
+                    Call frmChat.AddQ("/me is back.", (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE))
+                Else
+                    Call frmChat.AddQ("/me is back from (" & m_AwayMessage & ")", (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE))
+                End If
+            End If
+            m_AwayMessage = vbNullString
+        Else
+            If (Len(Command_Renamed.Argument("Message")) > 0) Then
+                m_AwayMessage = Command_Renamed.Argument("Message")
+                Call frmChat.AddQ("/away " & m_AwayMessage, (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE))
+
+                If (Command_Renamed.IsLocal) Then Call frmChat.AddQ("/me is away (" & m_AwayMessage & ")")
+            Else
+                m_AwayMessage = " - "
+                Call frmChat.AddQ("/away", (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE))
+                If (Not Command_Renamed.IsLocal) Then Call frmChat.AddQ("/me is away.")
+            End If
+        End If
 	End Sub
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub OnBack(ByRef Command_Renamed As clsCommandObj)
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(m_AwayMessage) > 0) Then
-			Call frmChat.AddQ("/away", (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE), (Command_Renamed.Username))
-			
-			If (Not Command_Renamed.IsLocal) Then
-				If (m_AwayMessage = " - ") Then
-					Call frmChat.AddQ("/me is back.", (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE))
-				Else
-					Call frmChat.AddQ("/me is back from (" & m_AwayMessage & ")", (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE))
-				End If
-				m_AwayMessage = vbNullString
-			End If
-		End If
+        If (Len(m_AwayMessage) > 0) Then
+            Call frmChat.AddQ("/away", (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE), (Command_Renamed.Username))
+
+            If (Not Command_Renamed.IsLocal) Then
+                If (m_AwayMessage = " - ") Then
+                    Call frmChat.AddQ("/me is back.", (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE))
+                Else
+                    Call frmChat.AddQ("/me is back from (" & m_AwayMessage & ")", (modQueueObj.PRIORITY.COMMAND_RESPONSE_MESSAGE))
+                End If
+                m_AwayMessage = vbNullString
+            End If
+        End If
 	End Sub
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
@@ -62,8 +59,7 @@ Module modCommandsChat
 				Command_Renamed.Respond("That username is already in the block list, or is under a wildcard block.")
 			Else
 				TotalString = ReadINI("BlockList", "Total", FiltersPath)
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(TotalString) = 0) Then TotalString = "0"
+                If (Len(TotalString) = 0) Then TotalString = "0"
 				
 				If (StrictIsNumeric(TotalString)) Then
 					Total = Int(CDbl(TotalString))
@@ -139,8 +135,7 @@ Module modCommandsChat
 				Command_Renamed.Respond("That filter is already in the list, or is under a wildcard.")
 			Else
 				TotalString = ReadINI("TextFilters", "Total", FiltersPath)
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(TotalString) = 0) Then TotalString = "0"
+                If (Len(TotalString) = 0) Then TotalString = "0"
 				
 				If (StrictIsNumeric(TotalString)) Then
 					Total = Int(CDbl(TotalString))
@@ -172,23 +167,21 @@ Module modCommandsChat
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub OnHome(ByRef Command_Renamed As clsCommandObj)
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Config.HomeChannel) = 0) Then
-			' do product home join instead
-			Call DoChannelJoinProductHome()
-		Else
-			' go home
-			Call FullJoin((Config.HomeChannel), 2)
-		End If
+        If (Len(Config.HomeChannel) = 0) Then
+            ' do product home join instead
+            Call DoChannelJoinProductHome()
+        Else
+            ' go home
+            Call FullJoin((Config.HomeChannel), 2)
+        End If
 	End Sub
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub OnReturn(ByRef Command_Renamed As clsCommandObj)
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(BotVars.LastChannel) > 0) Then
-			' go to last channel
-			Call FullJoin((BotVars.LastChannel), 2)
-		End If
+        If (Len(BotVars.LastChannel) > 0) Then
+            ' go to last channel
+            Call FullJoin((BotVars.LastChannel), 2)
+        End If
 	End Sub
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
@@ -242,8 +235,7 @@ Module modCommandsChat
 			FiltersPath = GetFilePath(FILE_FILTERS)
 			
 			TotalString = ReadINI("BlockList", "Total", FiltersPath)
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(TotalString) = 0) Then TotalString = "0"
+            If (Len(TotalString) = 0) Then TotalString = "0"
 			
 			If (StrictIsNumeric(TotalString)) Then
 				Total = Int(CDbl(TotalString))
@@ -280,8 +272,7 @@ Module modCommandsChat
 			FiltersPath = GetFilePath(FILE_FILTERS)
 			
 			TotalString = ReadINI("TextFilters", "Total", FiltersPath)
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(TotalString) = 0) Then TotalString = "0"
+            If (Len(TotalString) = 0) Then TotalString = "0"
 			
 			If (StrictIsNumeric(TotalString)) Then
 				Total = Int(CDbl(TotalString))
@@ -332,14 +323,13 @@ Module modCommandsChat
 		Dim LastChannel As String
 		If (g_Online) Then
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(g_Channel.Name) = 0 And LenB(BotVars.LastChannel) > 0 Then
-				' already outside chat environment
-				LastChannel = BotVars.LastChannel
-			Else
-				' in chat room
-				LastChannel = g_Channel.Name
-			End If
+            If Len(g_Channel.Name) = 0 And Len(BotVars.LastChannel) > 0 Then
+                ' already outside chat environment
+                LastChannel = BotVars.LastChannel
+            Else
+                ' in chat room
+                LastChannel = g_Channel.Name
+            End If
 			
 			Call frmChat.DoDisconnect()
 			
@@ -419,22 +409,20 @@ Module modCommandsChat
 			WatchUser = Command_Renamed.Argument("Username")
 			Command_Renamed.Respond(StringFormat("Now watching {0}{1}{0}.", Chr(34), Command_Renamed.Argument("Username")))
 		Else
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(WatchUser) > 0) Then
-				Command_Renamed.Respond(StringFormat("Stopped watching {0}{1}{0}.", Chr(34), WatchUser))
-				WatchUser = vbNullString
-			End If
+            If (Len(WatchUser) > 0) Then
+                Command_Renamed.Respond(StringFormat("Stopped watching {0}{1}{0}.", Chr(34), WatchUser))
+                WatchUser = vbNullString
+            End If
 		End If
 	End Sub
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub OnWatchOff(ByRef Command_Renamed As clsCommandObj)
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(WatchUser) > 0) Then
-			Command_Renamed.Respond(StringFormat("Stopped watching {0}{1}{0}.", Chr(34), WatchUser))
-			WatchUser = vbNullString
-		Else
-			Command_Renamed.Respond("Watch is disabled.")
-		End If
+        If (Len(WatchUser) > 0) Then
+            Command_Renamed.Respond(StringFormat("Stopped watching {0}{1}{0}.", Chr(34), WatchUser))
+            WatchUser = vbNullString
+        Else
+            Command_Renamed.Respond("Watch is disabled.")
+        End If
 	End Sub
 End Module

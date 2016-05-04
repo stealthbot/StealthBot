@@ -73,10 +73,9 @@ Module modCommandsInfo
 				End If
 				BanCount = 0
 			Next i
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(sResult) > LenB("Users(s) banned: , ")) Then 'We don't want to send an empty line
-				Command_Renamed.Respond(Replace(sResult, " , ", Space(1)))
-			End If
+            If (Len(sResult) > Len("Users(s) banned: , ")) Then 'We don't want to send an empty line
+                Command_Renamed.Respond(Replace(sResult, " , ", Space(1)))
+            End If
 		End If
 	End Sub
 	
@@ -104,33 +103,29 @@ Module modCommandsInfo
 			For i = 0 To UBound(DB)
 				With DB(i)
 					If (StrComp(Command_Renamed.Argument("Username"), .Username, CompareMethod.Text) = 0) Then
-						'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-						If ((Not .AddedBy = "%") And (LenB(.AddedBy) > 0)) Then
-							'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-							sRetAdd = StringFormat("{0} was added by {1} on {2}.", .Username, .AddedBy, .AddedOn)
-						End If
+                        If ((Not .AddedBy = "%") And (Len(.AddedBy) > 0)) Then
+                            'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            sRetAdd = StringFormat("{0} was added by {1} on {2}.", .Username, .AddedBy, .AddedOn)
+                        End If
 						
-						'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-						If ((Not .ModifiedBy = "%") And (LenB(.ModifiedBy) > 0)) Then
-							If ((Not .AddedOn = .ModifiedOn) Or (Not StrComp(.AddedBy, .ModifiedBy, CompareMethod.Text) = 0)) Then
-								'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-								sRetMod = StringFormat(" The entry was last modified by {0} on {1}.", .ModifiedBy, .ModifiedOn)
-							Else
-								sRetMod = " The entry has not been modified since it was added."
-							End If
-						End If
+                        If ((Not .ModifiedBy = "%") And (Len(.ModifiedBy) > 0)) Then
+                            If ((Not .AddedOn = .ModifiedOn) Or (Not StrComp(.AddedBy, .ModifiedBy, CompareMethod.Text) = 0)) Then
+                                'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                                sRetMod = StringFormat(" The entry was last modified by {0} on {1}.", .ModifiedBy, .ModifiedOn)
+                            Else
+                                sRetMod = " The entry has not been modified since it was added."
+                            End If
+                        End If
 						
-						'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-						If ((LenB(sRetAdd) > 0) Or (LenB(sRetMod) > 0)) Then
-							'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-							If (LenB(sRetAdd) > 0) Then
-								Command_Renamed.Respond(sRetAdd & sRetMod)
-							Else
-								Command_Renamed.Respond(Trim(sRetMod))
-							End If
-						Else
-							Command_Renamed.Respond("No detailed information is available for that user.")
-						End If
+                        If ((Len(sRetAdd) > 0) Or (Len(sRetMod) > 0)) Then
+                            If (Len(sRetAdd) > 0) Then
+                                Command_Renamed.Respond(sRetAdd & sRetMod)
+                            Else
+                                Command_Renamed.Respond(Trim(sRetMod))
+                            End If
+                        Else
+                            Command_Renamed.Respond("No detailed information is available for that user.")
+                        End If
 						
 						Exit Sub
 					End If
@@ -150,33 +145,31 @@ Module modCommandsInfo
 		If (Not Command_Renamed.IsValid) Then Exit Sub
 		
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Dir(GetFilePath(FILE_USERDB))) = 0) Then
-			Command_Renamed.Respond("No userlist available. Place a users.txt file in the bot's root directory.")
-			Exit Sub
-		End If
+        If (Len(Dir(GetFilePath(FILE_USERDB))) = 0) Then
+            Command_Renamed.Respond("No userlist available. Place a users.txt file in the bot's root directory.")
+            Exit Sub
+        End If
 		
 		ReDim Preserve bufResponse(0)
 		
 		Dim LowerRank As Short
 		Dim UpperRank As Short
 		If (StrictIsNumeric(Command_Renamed.Argument("Username/Rank"))) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Command_Renamed.Argument("UpperRank")) = 0) Then
-				Call SearchDatabase(bufResponse,  ,  ,  ,  , Val(Command_Renamed.Argument("Username/Rank")))
-			Else
-				
-				LowerRank = Val(Command_Renamed.Argument("Username/Rank"))
-				UpperRank = CShort(Command_Renamed.Argument("UpperRank"))
-				
-				If (UpperRank = LowerRank) Then
-					Call SearchDatabase(bufResponse,  ,  ,  ,  , LowerRank)
-				ElseIf (UpperRank > LowerRank) Then 
-					Call SearchDatabase(bufResponse,  ,  ,  ,  , LowerRank, UpperRank)
-				Else
-					Call SearchDatabase(bufResponse,  ,  ,  ,  , UpperRank, LowerRank)
-				End If
-			End If
+            If (Len(Command_Renamed.Argument("UpperRank")) = 0) Then
+                Call SearchDatabase(bufResponse, , , , , Val(Command_Renamed.Argument("Username/Rank")))
+            Else
+
+                LowerRank = Val(Command_Renamed.Argument("Username/Rank"))
+                UpperRank = CShort(Command_Renamed.Argument("UpperRank"))
+
+                If (UpperRank = LowerRank) Then
+                    Call SearchDatabase(bufResponse, , , , , LowerRank)
+                ElseIf (UpperRank > LowerRank) Then
+                    Call SearchDatabase(bufResponse, , , , , LowerRank, UpperRank)
+                Else
+                    Call SearchDatabase(bufResponse, , , , , UpperRank, LowerRank)
+                End If
+            End If
 		Else
 			Call SearchDatabase(bufResponse,  , PrepareCheck(Command_Renamed.Argument("Username/Rank")))
 		End If
@@ -226,22 +219,20 @@ Module modCommandsInfo
 		Dim docs As clsCommandDocObj
 		
 		strCommand = IIf(Command_Renamed.IsValid, Command_Renamed.Argument("Command"), "help")
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		strScript = IIf(LenB(Command_Renamed.Argument("ScriptOwner")) > 0, Command_Renamed.Argument("ScriptOwner"), Chr(0))
+        strScript = IIf(Len(Command_Renamed.Argument("ScriptOwner")) > 0, Command_Renamed.Argument("ScriptOwner"), Chr(0))
 		
 		docs = OpenCommand(strCommand, strScript)
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(docs.Name) = 0) Then
-			Command_Renamed.Respond("Sorry, but no related documentation could be found.")
-		Else
-			If (docs.aliases.Count() > 1) Then
-				Command_Renamed.Respond(StringFormat("[{0} (Aliases: {4})]: {1} (Syntax: {2}). {3}", docs.Name, docs.Description, docs.SyntaxString((Command_Renamed.IsLocal)), docs.RequirementsStringShort, docs.AliasString))
-			ElseIf (docs.aliases.Count() = 1) Then 
-				Command_Renamed.Respond(StringFormat("[{0} (Alias: {4})]: {1} (Syntax: {2}). {3}", docs.Name, docs.Description, docs.SyntaxString((Command_Renamed.IsLocal)), docs.RequirementsStringShort, docs.AliasString))
-			Else
-				Command_Renamed.Respond(StringFormat("[{0}]: {1} (Syntax: {2}). {3}", docs.Name, docs.Description, docs.SyntaxString((Command_Renamed.IsLocal)), docs.RequirementsStringShort))
-			End If
-		End If
+        If (Len(docs.Name) = 0) Then
+            Command_Renamed.Respond("Sorry, but no related documentation could be found.")
+        Else
+            If (docs.aliases.Count() > 1) Then
+                Command_Renamed.Respond(StringFormat("[{0} (Aliases: {4})]: {1} (Syntax: {2}). {3}", docs.Name, docs.description, docs.SyntaxString((Command_Renamed.IsLocal)), docs.RequirementsStringShort, docs.AliasString))
+            ElseIf (docs.aliases.Count() = 1) Then
+                Command_Renamed.Respond(StringFormat("[{0} (Alias: {4})]: {1} (Syntax: {2}). {3}", docs.Name, docs.description, docs.SyntaxString((Command_Renamed.IsLocal)), docs.RequirementsStringShort, docs.AliasString))
+            Else
+                Command_Renamed.Respond(StringFormat("[{0}]: {1} (Syntax: {2}). {3}", docs.Name, docs.description, docs.SyntaxString((Command_Renamed.IsLocal)), docs.RequirementsStringShort))
+            End If
+        End If
 		'UPGRADE_NOTE: Object docs may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		docs = Nothing
 		
@@ -255,12 +246,11 @@ Module modCommandsInfo
 		
 		If (Command_Renamed.IsValid) Then
 			tmpbuf = GetAllCommandsFor((Command_Renamed.docs),  , Command_Renamed.Argument("Flags"))
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(tmpbuf) > 0) Then
-				Command_Renamed.Respond("Commands available to specified flag(s): " & tmpbuf)
-			Else
-				Command_Renamed.Respond("No commands are available to the given flag(s).")
-			End If
+            If (Len(tmpbuf) > 0) Then
+                Command_Renamed.Respond("Commands available to specified flag(s): " & tmpbuf)
+            Else
+                Command_Renamed.Respond("No commands are available to the given flag(s).")
+            End If
 		End If
 		
 		Exit Sub
@@ -278,12 +268,11 @@ ERROR_HANDLER:
 		If (Command_Renamed.IsValid) Then
 			If (CShort(Command_Renamed.Argument("Rank")) > -1) Then
 				tmpbuf = GetAllCommandsFor((Command_Renamed.docs), CShort(Command_Renamed.Argument("Rank")))
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(tmpbuf) > 0) Then
-					Command_Renamed.Respond("Commands available to specified rank: " & tmpbuf)
-				Else
-					Command_Renamed.Respond("No commands are available to the given rank.")
-				End If
+                If (Len(tmpbuf) > 0) Then
+                    Command_Renamed.Respond("Commands available to specified rank: " & tmpbuf)
+                Else
+                    Command_Renamed.Respond("No commands are available to the given rank.")
+                End If
 			Else
 				Command_Renamed.Respond("The specified rank must be greater or equal to zero.")
 			End If
@@ -334,46 +323,44 @@ ERROR_HANDLER:
 			Exit Sub
 		End If
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Command_Renamed.Argument("Script")) > 0) Then
-			Script = modScripting.GetModuleByName(Command_Renamed.Argument("Script"))
-			If (Script Is Nothing) Then
-				Command_Renamed.Respond("Could not find the script specified.")
-			Else
-				'UPGRADE_WARNING: Couldn't resolve default property of object Script.CodeObject.GetSettingsEntry. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				If (Not StrComp(Script.CodeObject.GetSettingsEntry("Enabled"), "False", CompareMethod.Text) = 1) Then
-					Command_Renamed.Respond(StringFormat("The Script {0} loaded in {1}ms.", GetScriptName((Script.Name)), GetScriptDictionary(Script)("InitPerf")))
-				Else
-					Command_Renamed.Respond("That script is currently disabled.")
-				End If
-			End If
-		Else
-			If (frmChat.SControl.Modules.Count > 1) Then
-				If (Command_Renamed.IsLocal And Not Command_Renamed.PublicOutput) Then
-					Command_Renamed.Respond("Script initialization performance:")
-				Else
-					strRet = "Script initialization performance:"
-				End If
-				For i = 2 To frmChat.SControl.Modules.Count
-					Script = frmChat.SControl.Modules(i)
-					
-					'UPGRADE_WARNING: Couldn't resolve default property of object Script.CodeObject.GetSettingsEntry. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					If (Not StrComp(Script.CodeObject.GetSettingsEntry("Enabled"), "False", CompareMethod.Text) = 0) Then
-						If (Command_Renamed.IsLocal And Not Command_Renamed.PublicOutput) Then
-							Command_Renamed.Respond(StringFormat(" '{0}' loaded in {1}ms.", GetScriptName((Script.Name)), GetScriptDictionary(Script)("InitPerf")))
-						Else
-							'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-							strRet = StringFormat("{0} '{1}' {2}ms{3}", strRet, GetScriptName((Script.Name)), GetScriptDictionary(Script)("InitPerf"), IIf(i = frmChat.SControl.Modules.Count, vbNullString, ","))
-						End If
-					End If
-				Next i
-				
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(strRet)) Then Command_Renamed.Respond(strRet)
-			Else
-				Command_Renamed.Respond("There are no scripts currently loaded.")
-			End If
-		End If
+        If (Len(Command_Renamed.Argument("Script")) > 0) Then
+            Script = modScripting.GetModuleByName(Command_Renamed.Argument("Script"))
+            If (Script Is Nothing) Then
+                Command_Renamed.Respond("Could not find the script specified.")
+            Else
+                'UPGRADE_WARNING: Couldn't resolve default property of object Script.CodeObject.GetSettingsEntry. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                If (Not StrComp(Script.CodeObject.GetSettingsEntry("Enabled"), "False", CompareMethod.Text) = 1) Then
+                    Command_Renamed.Respond(StringFormat("The Script {0} loaded in {1}ms.", GetScriptName((Script.Name)), GetScriptDictionary(Script)("InitPerf")))
+                Else
+                    Command_Renamed.Respond("That script is currently disabled.")
+                End If
+            End If
+        Else
+            If (frmChat.SControl.Modules.Count > 1) Then
+                If (Command_Renamed.IsLocal And Not Command_Renamed.PublicOutput) Then
+                    Command_Renamed.Respond("Script initialization performance:")
+                Else
+                    strRet = "Script initialization performance:"
+                End If
+                For i = 2 To frmChat.SControl.Modules.Count
+                    Script = frmChat.SControl.Modules(i)
+
+                    'UPGRADE_WARNING: Couldn't resolve default property of object Script.CodeObject.GetSettingsEntry. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    If (Not StrComp(Script.CodeObject.GetSettingsEntry("Enabled"), "False", CompareMethod.Text) = 0) Then
+                        If (Command_Renamed.IsLocal And Not Command_Renamed.PublicOutput) Then
+                            Command_Renamed.Respond(StringFormat(" '{0}' loaded in {1}ms.", GetScriptName((Script.Name)), GetScriptDictionary(Script)("InitPerf")))
+                        Else
+                            'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            strRet = StringFormat("{0} '{1}' {2}ms{3}", strRet, GetScriptName((Script.Name)), GetScriptDictionary(Script)("InitPerf"), IIf(i = frmChat.SControl.Modules.Count, vbNullString, ","))
+                        End If
+                    End If
+                Next i
+
+                If (Len(strRet)) Then Command_Renamed.Respond(strRet)
+            Else
+                Command_Renamed.Respond("There are no scripts currently loaded.")
+            End If
+        End If
 		
 		Exit Sub
 ERROR_HANDLER: 
@@ -400,12 +387,11 @@ ERROR_HANDLER:
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub OnLastWhisper(ByRef Command_Renamed As clsCommandObj)
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(LastWhisper) > 0) Then
-			Command_Renamed.Respond(StringFormat("The last whisper to this bot was from {0} at {1} on {2}.", LastWhisper, FormatDateTime(LastWhisperFromTime, DateFormat.LongTime), FormatDateTime(LastWhisperFromTime, DateFormat.LongDate)))
-		Else
-			Command_Renamed.Respond("The bot has not been whispered since it logged on.")
-		End If
+        If (Len(LastWhisper) > 0) Then
+            Command_Renamed.Respond(StringFormat("The last whisper to this bot was from {0} at {1} on {2}.", LastWhisper, FormatDateTime(LastWhisperFromTime, DateFormat.LongTime), FormatDateTime(LastWhisperFromTime, DateFormat.LongDate)))
+        Else
+            Command_Renamed.Respond("The bot has not been whispered since it logged on.")
+        End If
 	End Sub
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
@@ -415,12 +401,11 @@ ERROR_HANDLER:
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub OnOwner(ByRef Command_Renamed As clsCommandObj)
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(BotVars.BotOwner)) Then
-			Command_Renamed.Respond("This bot's owner is " & BotVars.BotOwner & ".")
-		Else
-			Command_Renamed.Respond("There is no owner currently set.")
-		End If
+        If (Len(BotVars.BotOwner)) Then
+            Command_Renamed.Respond("This bot's owner is " & BotVars.BotOwner & ".")
+        Else
+            Command_Renamed.Respond("There is no owner currently set.")
+        End If
 	End Sub
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
@@ -431,13 +416,11 @@ ERROR_HANDLER:
 		If (Command_Renamed.IsValid) Then
 			sSubCommand = Command_Renamed.Argument("subcommand")
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(sSubCommand) = 0) Or (LCase(sSubCommand) = "list") Then
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If ListRespond(Command_Renamed, Phrases, "Banned phrases{%p}: ", IIf(LenB(sSubCommand) = 0, 2, -1)) Then
-					Exit Sub
-				End If
-			End If
+            If (Len(sSubCommand) = 0) Or (LCase(sSubCommand) = "list") Then
+                If ListRespond(Command_Renamed, Phrases, "Banned phrases{%p}: ", IIf(Len(sSubCommand) = 0, 2, -1)) Then
+                    Exit Sub
+                End If
+            End If
 			
 			iCount = GetListCount(Phrases)
 			If iCount = 0 Then
@@ -563,13 +546,11 @@ ERROR_HANDLER:
 				'UPGRADE_WARNING: Couldn't resolve default property of object ScriptInfo(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				Description = ScriptInfo("Description")
 				
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If ((LenB(Author) = 0) And (VerTotal = 0) And (LenB(Description) = 0)) Then
-					Command_Renamed.Respond(StringFormat("There is no additional information for the '{0}' script.", GetScriptName((Script.Name))))
-				Else
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					Command_Renamed.Respond(StringFormat("{0}{1}{2}{3}", GetScriptName((Script.Name)), IIf(VerTotal > 0, " v" & Version, vbNullString), IIf(LenB(Author) > 0, " by " & Author, vbNullString), IIf(LenB(Description) > 0, ": " & Description, ".")))
-				End If
+                If ((Len(Author) = 0) And (VerTotal = 0) And (Len(Description) = 0)) Then
+                    Command_Renamed.Respond(StringFormat("There is no additional information for the '{0}' script.", GetScriptName((Script.Name))))
+                Else
+                    Command_Renamed.Respond(StringFormat("{0}{1}{2}{3}", GetScriptName((Script.Name)), IIf(VerTotal > 0, " v" & Version, vbNullString), IIf(Len(Author) > 0, " by " & Author, vbNullString), IIf(Len(Description) > 0, ": " & Description, ".")))
+                End If
 			End If
 		End If
 		Exit Sub
@@ -680,12 +661,11 @@ ERROR_HANDLER:
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Sub OnTrigger(ByRef Command_Renamed As clsCommandObj)
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(BotVars.TriggerLong) = 1) Then
-			Command_Renamed.Respond(StringFormat("The bot's current trigger is {0} {1} {0} (Alt +0{2})", Chr(34), BotVars.TriggerLong, Asc(BotVars.TriggerLong)))
-		Else
-			Command_Renamed.Respond(StringFormat("The bot's current trigger is {0} {1} {0} (Length: {2})", Chr(34), BotVars.TriggerLong, Len(BotVars.TriggerLong)))
-		End If
+        If (Len(BotVars.TriggerLong) = 1) Then
+            Command_Renamed.Respond(StringFormat("The bot's current trigger is {0} {1} {0} (Alt +0{2})", Chr(34), BotVars.TriggerLong, Asc(BotVars.TriggerLong)))
+        Else
+            Command_Renamed.Respond(StringFormat("The bot's current trigger is {0} {1} {0} (Length: {2})", Chr(34), BotVars.TriggerLong, Len(BotVars.TriggerLong)))
+        End If
 	End Sub
 	
 	'UPGRADE_NOTE: Command was upgraded to Command_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
@@ -719,19 +699,17 @@ ERROR_HANDLER:
 				Command_Renamed.Respond(StringFormat("You are the bot owner, {0}.", Command_Renamed.Username))
 			Else
 				If (dbAccess.Rank > 0) Then
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(dbAccess.Flags) > 0) Then
-						Command_Renamed.Respond(StringFormat("{0} holds rank {1} and flags {2}.", Command_Renamed.Username, dbAccess.Rank, dbAccess.Flags))
-					Else
-						Command_Renamed.Respond(StringFormat("{0} holds rank {1}.", Command_Renamed.Username, dbAccess.Rank))
-					End If
+                    If (Len(dbAccess.Flags) > 0) Then
+                        Command_Renamed.Respond(StringFormat("{0} holds rank {1} and flags {2}.", Command_Renamed.Username, dbAccess.Rank, dbAccess.Flags))
+                    Else
+                        Command_Renamed.Respond(StringFormat("{0} holds rank {1}.", Command_Renamed.Username, dbAccess.Rank))
+                    End If
 				Else
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(dbAccess.Flags) > 0) Then
-						Command_Renamed.Respond(StringFormat("{0} has flags {1}.", Command_Renamed.Username, dbAccess.Flags))
-					Else
-						Command_Renamed.Respond(StringFormat("{0} has no rank or flags.", Command_Renamed.Username))
-					End If
+                    If (Len(dbAccess.Flags) > 0) Then
+                        Command_Renamed.Respond(StringFormat("{0} has flags {1}.", Command_Renamed.Username, dbAccess.Flags))
+                    Else
+                        Command_Renamed.Respond(StringFormat("{0} has no rank or flags.", Command_Renamed.Username))
+                    End If
 				End If
 			End If
 		End If
@@ -749,24 +727,21 @@ ERROR_HANDLER:
 			'UPGRADE_WARNING: Couldn't resolve default property of object dbAccess. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			dbAccess = GetCumulativeAccess(Command_Renamed.Argument("Username"))
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(dbAccess.Username) > 0) Then
-				If (dbAccess.Rank > 0) Then
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(dbAccess.Flags) > 0) Then
-						Command_Renamed.Respond(dbAccess.Username & " holds rank " & dbAccess.Rank & " and flags " & dbAccess.Flags & ".")
-					Else
-						Command_Renamed.Respond(dbAccess.Username & " holds rank " & dbAccess.Rank & ".")
-					End If
-				Else
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(dbAccess.Flags) > 0) Then
-						Command_Renamed.Respond(dbAccess.Username & " has flags " & dbAccess.Flags & ".")
-					End If
-				End If
-			Else
-				Command_Renamed.Respond("There was no such user found.")
-			End If
+            If (Len(dbAccess.Username) > 0) Then
+                If (dbAccess.Rank > 0) Then
+                    If (Len(dbAccess.Flags) > 0) Then
+                        Command_Renamed.Respond(dbAccess.Username & " holds rank " & dbAccess.Rank & " and flags " & dbAccess.Flags & ".")
+                    Else
+                        Command_Renamed.Respond(dbAccess.Username & " holds rank " & dbAccess.Rank & ".")
+                    End If
+                Else
+                    If (Len(dbAccess.Flags) > 0) Then
+                        Command_Renamed.Respond(dbAccess.Username & " has flags " & dbAccess.Flags & ".")
+                    End If
+                End If
+            Else
+                Command_Renamed.Respond("There was no such user found.")
+            End If
 		End If
 	End Sub
 	
@@ -790,29 +765,28 @@ ERROR_HANDLER:
 		'    Exit Function
 		'End If
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Flags) > 0) Then
-			If (BotVars.CaseSensitiveFlags) Then
-				xFunction = "text()='{0}'"
-			Else
-				'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				xFunction = StringFormat("translate(text(), '{0}', '{1}')='{2}'", UCase(AZ), LCase(AZ), "{0}")
-			End If
-			
-			For i = 1 To Len(Flags)
-				Flag = IIf(Mid(Flags, i, 1) = "\", "\\", Mid(Flags, i, 1))
-				If (Not BotVars.CaseSensitiveFlags) Then Flag = LCase(Flag)
-				If (Flag = "'") Then Flag = "&apos;"
-				
-				'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				xpath = StringFormat("{0}{1}{2}", xpath, StringFormat(xFunction, Flag), IIf(i = Len(Flags), vbNullString, " or "))
-			Next i
-			'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-			xpath = StringFormat("./command/access/flags/flag[{0}]", xpath)
-		Else
-			'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-			xpath = StringFormat("./command/access/rank[number() <= {0}]", Rank)
-		End If
+        If (Len(Flags) > 0) Then
+            If (BotVars.CaseSensitiveFlags) Then
+                xFunction = "text()='{0}'"
+            Else
+                'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                xFunction = StringFormat("translate(text(), '{0}', '{1}')='{2}'", UCase(AZ), LCase(AZ), "{0}")
+            End If
+
+            For i = 1 To Len(Flags)
+                Flag = IIf(Mid(Flags, i, 1) = "\", "\\", Mid(Flags, i, 1))
+                If (Not BotVars.CaseSensitiveFlags) Then Flag = LCase(Flag)
+                If (Flag = "'") Then Flag = "&apos;"
+
+                'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                xpath = StringFormat("{0}{1}{2}", xpath, StringFormat(xFunction, Flag), IIf(i = Len(Flags), vbNullString, " or "))
+            Next i
+            'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            xpath = StringFormat("./command/access/flags/flag[{0}]", xpath)
+        Else
+            'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            xpath = StringFormat("./command/access/rank[number() <= {0}]", Rank)
+        End If
 		
 		xmlDoc = commandDoc.XMLDocument
 		
@@ -820,12 +794,11 @@ ERROR_HANDLER:
 		
 		If (commands.length > 0) Then
 			For i = 0 To commands.length - 1
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(Flags) > 0) Then
-					thisCommand = commands(i).parentNode.parentNode.parentNode.Attributes.getNamedItem("name").Text
-				Else
-					thisCommand = commands(i).parentNode.parentNode.Attributes.getNamedItem("name").Text
-				End If
+                If (Len(Flags) > 0) Then
+                    thisCommand = commands(i).parentNode.parentNode.parentNode.attributes.getNamedItem("name").text
+                Else
+                    thisCommand = commands(i).parentNode.parentNode.attributes.getNamedItem("name").text
+                End If
 				
 				If (StrComp(thisCommand, lastCommand, CompareMethod.Text) <> 0) Then
 					'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -866,114 +839,106 @@ ERROR_HANDLER:
 		Dim tmpbuf As String
 		ReDim arrReturn(0)
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		Dim dbAccess As udtGetAccessResponse
+        Dim dbAccess As udtGetAccessResponse
 		Dim res As Boolean
 		Dim blnChecked As Boolean
 		Dim j As Short
-		If (LenB(Username) > 0) Then
-			'UPGRADE_WARNING: Couldn't resolve default property of object dbAccess. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-			dbAccess = GetAccess(Username, dbType)
-			
-			If (Not (dbAccess.Type = "%") And (Not StrComp(dbAccess.Type, "USER", CompareMethod.Text) = 0)) Then
-				dbAccess.Username = dbAccess.Username & " (" & LCase(dbAccess.Type) & ")"
-			End If
-			
-			If (dbAccess.Rank > 0) Then
-				tmpbuf = "Found user " & dbAccess.Username & ", who holds rank " & dbAccess.Rank & IIf(Len(dbAccess.Flags) > 0, " and flags " & dbAccess.Flags, vbNullString) & "."
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			ElseIf (LenB(dbAccess.Flags) > 0) Then 
-				tmpbuf = "Found user " & dbAccess.Username & ", with flags " & dbAccess.Flags & "."
-			Else
-				tmpbuf = "No such user(s) found."
-			End If
-		Else
-			For i = LBound(DB) To UBound(DB)
-				
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(DB(i).Username) > 0) Then
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(match) > 0) Then
-						If (Left(match, 1) = "!") Then
-							res = (Not (LCase(PrepareCheck(DB(i).Username)) Like (LCase(Mid(match, 2)))))
-						Else
-							res = (LCase(PrepareCheck(DB(i).Username)) Like (LCase(match)))
-						End If
-						blnChecked = True
-					End If
-					
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(Group) > 0) Then
-						If (StrComp(DB(i).Groups, Group, CompareMethod.Text) = 0) Then
-							res = IIf(blnChecked, res, True)
-						Else
-							res = False
-						End If
-						blnChecked = True
-					End If
-					
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(dbType) > 0) Then
-						If (StrComp(DB(i).Type, dbType, CompareMethod.Text) = 0) Then
-							res = IIf(blnChecked, res, True)
-						Else
-							res = False
-						End If
-						blnChecked = True
-					End If
-					
-					If ((lowerBound >= 0) And (upperBound >= 0)) Then
-						If ((DB(i).Rank >= lowerBound) And (DB(i).Rank <= upperBound)) Then
-							res = IIf(blnChecked, res, True)
-						Else
-							res = False
-						End If
-						blnChecked = True
-					ElseIf (lowerBound >= 0) Then 
-						If (DB(i).Rank = lowerBound) Then
-							res = IIf(blnChecked, res, True)
-						Else
-							res = False
-						End If
-						blnChecked = True
-					End If
-					
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(Flags) > 0) Then
-						
-						For j = 1 To Len(Flags)
-							If (InStr(1, DB(i).Flags, Mid(Flags, j, 1), CompareMethod.Binary) = 0) Then
-								Exit For
-							End If
-						Next j
-						
-						If (j = (Len(Flags) + 1)) Then
-							res = IIf(blnChecked, res, True)
-						Else
-							res = False
-						End If
-						blnChecked = True
-					End If
-					
-					If (res = True) Then
-						tmpbuf = tmpbuf & DBUserToString(DB(i).Username, DB(i).Type)
-						'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-						'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-						tmpbuf = StringFormat("{0}{1}{2}, ", tmpbuf, IIf(DB(i).Rank > 0, "\" & DB(i).Rank, vbNullString), IIf(LenB(DB(i).Flags) > 0, "\" & DB(i).Flags, vbNullString))
-						found = (found + 1)
-					End If
-				End If
-				
-				res = False
-				blnChecked = False
-			Next i
-			
-			If (found = 0) Then
-				arrReturn(0) = "No such user(s) found."
-			Else
-				Call SplitByLen(Mid(tmpbuf, 1, Len(tmpbuf) - Len(", ")), 180, arrReturn, "User(s) found: ",  , ", ")
-			End If
-		End If
+        If (Len(Username) > 0) Then
+            'UPGRADE_WARNING: Couldn't resolve default property of object dbAccess. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            dbAccess = GetAccess(Username, dbType)
+
+            If (Not (dbAccess.Type = "%") And (Not StrComp(dbAccess.Type, "USER", CompareMethod.Text) = 0)) Then
+                dbAccess.Username = dbAccess.Username & " (" & LCase(dbAccess.Type) & ")"
+            End If
+
+            If (dbAccess.Rank > 0) Then
+                tmpbuf = "Found user " & dbAccess.Username & ", who holds rank " & dbAccess.Rank & IIf(Len(dbAccess.Flags) > 0, " and flags " & dbAccess.Flags, vbNullString) & "."
+            ElseIf (Len(dbAccess.Flags) > 0) Then
+                tmpbuf = "Found user " & dbAccess.Username & ", with flags " & dbAccess.Flags & "."
+            Else
+                tmpbuf = "No such user(s) found."
+            End If
+        Else
+            For i = LBound(DB) To UBound(DB)
+
+                If (Len(DB(i).Username) > 0) Then
+                    If (Len(match) > 0) Then
+                        If (Left(match, 1) = "!") Then
+                            res = (Not (LCase(PrepareCheck(DB(i).Username)) Like (LCase(Mid(match, 2)))))
+                        Else
+                            res = (LCase(PrepareCheck(DB(i).Username)) Like (LCase(match)))
+                        End If
+                        blnChecked = True
+                    End If
+
+                    If (Len(Group) > 0) Then
+                        If (StrComp(DB(i).Groups, Group, CompareMethod.Text) = 0) Then
+                            res = IIf(blnChecked, res, True)
+                        Else
+                            res = False
+                        End If
+                        blnChecked = True
+                    End If
+
+                    If (Len(dbType) > 0) Then
+                        If (StrComp(DB(i).Type, dbType, CompareMethod.Text) = 0) Then
+                            res = IIf(blnChecked, res, True)
+                        Else
+                            res = False
+                        End If
+                        blnChecked = True
+                    End If
+
+                    If ((lowerBound >= 0) And (upperBound >= 0)) Then
+                        If ((DB(i).Rank >= lowerBound) And (DB(i).Rank <= upperBound)) Then
+                            res = IIf(blnChecked, res, True)
+                        Else
+                            res = False
+                        End If
+                        blnChecked = True
+                    ElseIf (lowerBound >= 0) Then
+                        If (DB(i).Rank = lowerBound) Then
+                            res = IIf(blnChecked, res, True)
+                        Else
+                            res = False
+                        End If
+                        blnChecked = True
+                    End If
+
+                    If (Len(Flags) > 0) Then
+
+                        For j = 1 To Len(Flags)
+                            If (InStr(1, DB(i).Flags, Mid(Flags, j, 1), CompareMethod.Binary) = 0) Then
+                                Exit For
+                            End If
+                        Next j
+
+                        If (j = (Len(Flags) + 1)) Then
+                            res = IIf(blnChecked, res, True)
+                        Else
+                            res = False
+                        End If
+                        blnChecked = True
+                    End If
+
+                    If (res = True) Then
+                        tmpbuf = tmpbuf & DBUserToString(DB(i).Username, DB(i).Type)
+                        'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        tmpbuf = StringFormat("{0}{1}{2}, ", tmpbuf, IIf(DB(i).Rank > 0, "\" & DB(i).Rank, vbNullString), IIf(Len(DB(i).Flags) > 0, "\" & DB(i).Flags, vbNullString))
+                        found = (found + 1)
+                    End If
+                End If
+
+                res = False
+                blnChecked = False
+            Next i
+
+            If (found = 0) Then
+                arrReturn(0) = "No such user(s) found."
+            Else
+                Call SplitByLen(Mid(tmpbuf, 1, Len(tmpbuf) - Len(", ")), 180, arrReturn, "User(s) found: ", , ", ")
+            End If
+        End If
 		
 		Exit Sub
 		
@@ -989,12 +954,11 @@ ERROR_HANDLER:
 		
 		iCount = 0
 		For i = LBound(aList) To UBound(aList)
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Trim(aList(i))) > 0) Then
-				'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				sList = StringFormat("{0}{1}, ", sList, aList(i))
-				iCount = iCount + 1
-			End If
+            If (Len(Trim(aList(i))) > 0) Then
+                'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                sList = StringFormat("{0}{1}, ", sList, aList(i))
+                iCount = iCount + 1
+            End If
 		Next i
 		sList = Left(sList, Len(sList) - 2)
 		GetListCount = iCount

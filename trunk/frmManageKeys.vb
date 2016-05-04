@@ -71,11 +71,10 @@ Friend Class frmManageKeys
 	End Sub
 	
 	Private Sub cmdDone_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdDone.Click
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(m_editing) > 0 Then
-			ProcessKey(m_editing)
-			m_editing = vbNullString
-		End If
+        If Len(m_editing) > 0 Then
+            ProcessKey(m_editing)
+            m_editing = vbNullString
+        End If
 		
 		Call Local_WriteCDKeys()
 		
@@ -152,20 +151,18 @@ Friend Class frmManageKeys
 		If KeyAscii = System.Windows.Forms.Keys.Return And cmdAdd.Enabled Then
 			Call cmdAdd_Click(cmdAdd, New System.EventArgs())
 		ElseIf KeyAscii = System.Windows.Forms.Keys.Escape Then 
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(m_editing) > 0 Then
-				ProcessKey(m_editing)
-				
-				m_editing = vbNullString
-				
-				txtActiveKey.Text = vbNullString
-				lvKeys.Focus()
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			ElseIf LenB(txtActiveKey.Text) > 0 Then 
-				txtActiveKey.Text = vbNullString
-			Else
-				Call cmdDone_Click(cmdDone, New System.EventArgs())
-			End If
+            If Len(m_editing) > 0 Then
+                ProcessKey(m_editing)
+
+                m_editing = vbNullString
+
+                txtActiveKey.Text = vbNullString
+                lvKeys.Focus()
+            ElseIf Len(txtActiveKey.Text) > 0 Then
+                txtActiveKey.Text = vbNullString
+            Else
+                Call cmdDone_Click(cmdDone, New System.EventArgs())
+            End If
 		End If
 		eventArgs.KeyChar = Chr(KeyAscii)
 		If KeyAscii = 0 Then

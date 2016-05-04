@@ -53,7 +53,7 @@ Friend Class frmScript
 		If XPos = -1 And YPos = -1 Then
 			ShowInputBox = InputBox(Text_Renamed, Title, Default_Renamed)
 		ElseIf XPos = -1 Then 
-			ShowInputBox = InputBox(Text_Renamed, Title, Default_Renamed, VB6.TwipsToPixelsX( ), VB6.TwipsToPixelsY(YPos))
+            ShowInputBox = InputBox(Text_Renamed, Title, Default_Renamed, -1, VB6.TwipsToPixelsY(YPos))
 		ElseIf YPos = -1 Then 
 			ShowInputBox = InputBox(Text_Renamed, Title, Default_Renamed, VB6.TwipsToPixelsX(XPos))
 		Else

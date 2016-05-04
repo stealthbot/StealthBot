@@ -272,12 +272,11 @@ Module modOtherCode
 	
 	Public Function CheckPath(ByVal sPath As String) As Integer
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Dir(sPath)) = 0) Then
-			frmChat.AddChat(RTBColors.ErrorMessageText, "[HASHES] " & Mid(sPath, InStrRev(sPath, "\") + 1) & " is missing.")
-			
-			CheckPath = 1
-		End If
+        If (Len(Dir(sPath)) = 0) Then
+            frmChat.AddChat(RTBColors.ErrorMessageText, "[HASHES] " & Mid(sPath, InStrRev(sPath, "\") + 1) & " is missing.")
+
+            CheckPath = 1
+        End If
 	End Function
 	
 	Public Function Ban(ByVal Inpt As String, ByRef SpeakerAccess As Short, Optional ByRef Kick As Short = 0) As String
@@ -290,63 +289,61 @@ Module modOtherCode
 		Dim i As Short
 		Dim pos As Short
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Inpt) > 0) Then
-			If (Kick > 2) Then
-				LastBan = vbNullString
-				
-				Exit Function
-			End If
-			
-			If (g_Channel.Self.IsOperator) Then
-				If (InStr(1, Inpt, Space(1), CompareMethod.Binary) <> 0) Then
-					Username = LCase(Left(Inpt, InStr(1, Inpt, Space(1), CompareMethod.Binary) - 1))
-				Else
-					Username = LCase(Inpt)
-				End If
-				
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(Username) > 0) Then
-					LastBan = LCase(Username)
-					
-					'CleanedUsername = StripRealm(CleanedUsername)
-					CleanedUsername = StripInvalidNameChars(Username)
-					
-					If (SpeakerAccess < 200) Then
-						If ((GetSafelist(CleanedUsername)) Or (GetSafelist(Username))) Then
-							Ban = "Error: That user is safelisted."
-							
-							Exit Function
-						End If
-					End If
-					
-					If (GetCumulativeAccess(Username).Rank >= SpeakerAccess) Then
-						Ban = "Error: You do not have sufficient access to do that."
-						
-						Exit Function
-					End If
-					
-					pos = g_Channel.GetUserIndex(Username)
-					
-					If (pos > 0) Then
-						'UPGRADE_WARNING: Couldn't resolve default property of object g_Channel.Users(pos).IsOperator. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-						If (g_Channel.Users.Item(pos).IsOperator) Then
-							Ban = "Error: You cannot ban a channel operator."
-							
-							Exit Function
-						End If
-					End If
-					
-					If (Kick = 0) Then
-						Call frmChat.AddQ("/ban " & Inpt)
-					Else
-						Call frmChat.AddQ("/kick " & Inpt)
-					End If
-				End If
-			Else
-				Ban = "The bot does not have ops."
-			End If
-		End If
+        If (Len(Inpt) > 0) Then
+            If (Kick > 2) Then
+                LastBan = vbNullString
+
+                Exit Function
+            End If
+
+            If (g_Channel.Self.IsOperator) Then
+                If (InStr(1, Inpt, Space(1), CompareMethod.Binary) <> 0) Then
+                    Username = LCase(Left(Inpt, InStr(1, Inpt, Space(1), CompareMethod.Binary) - 1))
+                Else
+                    Username = LCase(Inpt)
+                End If
+
+                If (Len(Username) > 0) Then
+                    LastBan = LCase(Username)
+
+                    'CleanedUsername = StripRealm(CleanedUsername)
+                    CleanedUsername = StripInvalidNameChars(Username)
+
+                    If (SpeakerAccess < 200) Then
+                        If ((GetSafelist(CleanedUsername)) Or (GetSafelist(Username))) Then
+                            Ban = "Error: That user is safelisted."
+
+                            Exit Function
+                        End If
+                    End If
+
+                    If (GetCumulativeAccess(Username).Rank >= SpeakerAccess) Then
+                        Ban = "Error: You do not have sufficient access to do that."
+
+                        Exit Function
+                    End If
+
+                    pos = g_Channel.GetUserIndex(Username)
+
+                    If (pos > 0) Then
+                        'UPGRADE_WARNING: Couldn't resolve default property of object g_Channel.Users(pos).IsOperator. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        If (g_Channel.Users.Item(pos).IsOperator) Then
+                            Ban = "Error: You cannot ban a channel operator."
+
+                            Exit Function
+                        End If
+                    End If
+
+                    If (Kick = 0) Then
+                        Call frmChat.AddQ("/ban " & Inpt)
+                    Else
+                        Call frmChat.AddQ("/kick " & Inpt)
+                    End If
+                End If
+            Else
+                Ban = "The bot does not have ops."
+            End If
+        End If
 		
 		Exit Function
 		
@@ -365,48 +362,47 @@ ERROR_HANDLER:
 		Dim NewUsername As String
 		Dim ThisCharOK As Boolean
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Username) > 0) Then
-			NewUsername = Username
-			
-			Allowed(0) = Asc("`")
-			Allowed(1) = Asc("[")
-			Allowed(2) = Asc("]")
-			Allowed(3) = Asc("{")
-			Allowed(4) = Asc("}")
-			Allowed(5) = Asc("_")
-			Allowed(6) = Asc("-")
-			Allowed(7) = Asc("@")
-			Allowed(8) = Asc("^")
-			Allowed(9) = Asc(".")
-			Allowed(10) = Asc("+")
-			Allowed(11) = Asc("=")
-			Allowed(12) = Asc("~")
-			Allowed(13) = Asc("|")
-			Allowed(14) = Asc("*")
-			
-			For i = 1 To Len(Username)
-				thisChar = Asc(Mid(Username, i, 1))
-				
-				ThisCharOK = False
-				
-				If (Not (IsAlpha(thisChar))) Then
-					If (Not (IsNumber(thisChar))) Then
-						For j = 0 To UBound(Allowed)
-							If (thisChar = Allowed(j)) Then
-								ThisCharOK = True
-							End If
-						Next j
-						
-						If (Not (ThisCharOK)) Then
-							NewUsername = Replace(NewUsername, Chr(thisChar), vbNullString)
-						End If
-					End If
-				End If
-			Next i
-			
-			StripInvalidNameChars = NewUsername
-		End If
+        If (Len(Username) > 0) Then
+            NewUsername = Username
+
+            Allowed(0) = Asc("`")
+            Allowed(1) = Asc("[")
+            Allowed(2) = Asc("]")
+            Allowed(3) = Asc("{")
+            Allowed(4) = Asc("}")
+            Allowed(5) = Asc("_")
+            Allowed(6) = Asc("-")
+            Allowed(7) = Asc("@")
+            Allowed(8) = Asc("^")
+            Allowed(9) = Asc(".")
+            Allowed(10) = Asc("+")
+            Allowed(11) = Asc("=")
+            Allowed(12) = Asc("~")
+            Allowed(13) = Asc("|")
+            Allowed(14) = Asc("*")
+
+            For i = 1 To Len(Username)
+                thisChar = Asc(Mid(Username, i, 1))
+
+                ThisCharOK = False
+
+                If (Not (IsAlpha(thisChar))) Then
+                    If (Not (IsNumber(thisChar))) Then
+                        For j = 0 To UBound(Allowed)
+                            If (thisChar = Allowed(j)) Then
+                                ThisCharOK = True
+                            End If
+                        Next j
+
+                        If (Not (ThisCharOK)) Then
+                            NewUsername = Replace(NewUsername, Chr(thisChar), vbNullString)
+                        End If
+                    End If
+                End If
+            Next i
+
+            StripInvalidNameChars = NewUsername
+        End If
 	End Function
 	
 	'// Utility Function for joining strings
@@ -1339,28 +1335,27 @@ ERROR_HANDLER:
 		Dim i As Short
 		
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Dir(GetFilePath(FILE_FILTERS))) > 0) Then
-			s = ReadINI("BlockList", "Total", GetFilePath(FILE_FILTERS))
-			
-			If (StrictIsNumeric(s)) Then
-				i = CShort(s)
-			Else
-				Exit Function
-			End If
-			
-			Username = PrepareCheck(Username)
-			
-			For i = 0 To i
-				s = ReadINI("BlockList", "Filter" & i, GetFilePath(FILE_FILTERS))
-				
-				If (Username Like PrepareCheck(s)) Then
-					CheckBlock = True
-					
-					Exit Function
-				End If
-			Next i
-		End If
+        If (Len(Dir(GetFilePath(FILE_FILTERS))) > 0) Then
+            s = ReadINI("BlockList", "Total", GetFilePath(FILE_FILTERS))
+
+            If (StrictIsNumeric(s)) Then
+                i = CShort(s)
+            Else
+                Exit Function
+            End If
+
+            Username = PrepareCheck(Username)
+
+            For i = 0 To i
+                s = ReadINI("BlockList", "Filter" & i, GetFilePath(FILE_FILTERS))
+
+                If (Username Like PrepareCheck(s)) Then
+                    CheckBlock = True
+
+                    Exit Function
+                End If
+            Next i
+        End If
 	End Function
 	
 	Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String = "", Optional ByVal Ping As Integer = 0) As Boolean
@@ -1511,18 +1506,17 @@ ERROR_HANDLER:
 		Dim i As Short
 		Dim CurrentByte As Byte
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(sIn) > 0) Then
-			For i = 1 To Len(sIn)
-				CurrentByte = Asc(Mid(sIn, i, 1))
-				
-				If (IsAlpha(CurrentByte)) Then
-					If (Not (IsUppercase(CurrentByte))) Then
-						Mid(sIn, i, 1) = Chr(CurrentByte - 32)
-					End If
-				End If
-			Next i
-		End If
+        If (Len(sIn) > 0) Then
+            For i = 1 To Len(sIn)
+                CurrentByte = Asc(Mid(sIn, i, 1))
+
+                If (IsAlpha(CurrentByte)) Then
+                    If (Not (IsUppercase(CurrentByte))) Then
+                        Mid(sIn, i, 1) = Chr(CurrentByte - 32)
+                    End If
+                End If
+            Next i
+        End If
 		
 		MyUCase = sIn
 	End Function
@@ -1554,16 +1548,15 @@ ERROR_HANDLER:
 		Dim W3Domain As String
 		W3Domain = "classic"
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(sPlayer) > 0) Then
-			W3WebProfileType = IIf(eType = modEnum.enuWebProfileTypes.W3XP, PRODUCT_W3XP, PRODUCT_WAR3)
-			W3Realm = GetW3Realm(sPlayer)
-			If W3Realm = "Kalimdor" Then W3Domain = "asialadders"
-			'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-			W3LadderURL = StringFormat(W3LadderURLFormat, W3Domain, LCase(W3WebProfileType), W3Realm, NameWithoutRealm(sPlayer, 1))
-			
-			ShellOpenURL(W3LadderURL, sPlayer & "'s " & UCase(W3WebProfileType) & " ladder profile")
-		End If
+        If (Len(sPlayer) > 0) Then
+            W3WebProfileType = IIf(eType = modEnum.enuWebProfileTypes.W3XP, PRODUCT_W3XP, PRODUCT_WAR3)
+            W3Realm = GetW3Realm(sPlayer)
+            If W3Realm = "Kalimdor" Then W3Domain = "asialadders"
+            'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            W3LadderURL = StringFormat(W3LadderURLFormat, W3Domain, LCase(W3WebProfileType), W3Realm, NameWithoutRealm(sPlayer, 1))
+
+            ShellOpenURL(W3LadderURL, sPlayer & "'s " & UCase(W3WebProfileType) & " ladder profile")
+        End If
 	End Sub
 	
 	Public Sub DoLastSeen(ByVal Username As String)
@@ -1614,31 +1607,28 @@ ERROR_HANDLER:
 	End Function
 	
 	Public Function GetW3Realm(Optional ByVal Username As String = "") As String
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Username) = 0) Then
-			GetW3Realm = BotVars.Gateway
-		Else
-			If (InStr(1, Username, "@", CompareMethod.Binary) > 0) Then
-				GetW3Realm = Mid(Username, InStr(1, Username, "@", CompareMethod.Binary) + 1)
-			Else
-				GetW3Realm = BotVars.Gateway
-			End If
-		End If
+        If (Len(Username) = 0) Then
+            GetW3Realm = BotVars.Gateway
+        Else
+            If (InStr(1, Username, "@", CompareMethod.Binary) > 0) Then
+                GetW3Realm = Mid(Username, InStr(1, Username, "@", CompareMethod.Binary) + 1)
+            Else
+                GetW3Realm = BotVars.Gateway
+            End If
+        End If
 	End Function
 	
 	Public Function GetConfigFilePath() As String
 		Static FilePath As String
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(FilePath) = 0) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If ((LenB(ConfigOverride) > 0)) Then
-				FilePath = ConfigOverride
-			Else
-				'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				FilePath = StringFormat("{0}Config.ini", GetProfilePath())
-			End If
-		End If
+        If (Len(FilePath) = 0) Then
+            If ((Len(ConfigOverride) > 0)) Then
+                FilePath = ConfigOverride
+            Else
+                'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                FilePath = StringFormat("{0}Config.ini", GetProfilePath())
+            End If
+        End If
 		
 		If (InStr(1, FilePath, "\", CompareMethod.Binary) = 0) Then
 			'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
@@ -1652,25 +1642,22 @@ ERROR_HANDLER:
 		Dim s As String
 		
 		If (InStr(FileName, "\") = 0) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(DefaultPath) = 0) Then
-				'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				GetFilePath = StringFormat("{0}{1}", GetProfilePath(), FileName)
-			Else
-				'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				GetFilePath = StringFormat("{0}{1}", DefaultPath, FileName)
-			End If
+            If (Len(DefaultPath) = 0) Then
+                'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                GetFilePath = StringFormat("{0}{1}", GetProfilePath(), FileName)
+            Else
+                'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                GetFilePath = StringFormat("{0}{1}", DefaultPath, FileName)
+            End If
 			
 			s = Config.GetFilePath(FileName)
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(s) > 0) Then
-				'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(Dir(s))) Then
-					GetFilePath = s
-				End If
-			End If
+            If (Len(s) > 0) Then
+                'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                If (Len(Dir(s))) Then
+                    GetFilePath = s
+                End If
+            End If
 		Else
 			GetFilePath = FileName
 		End If
@@ -1739,13 +1726,12 @@ ERROR_HANDLER:
 		'            End If
 		'        End If
 		'    Else
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(LastPath) > 0 Then
-			GetProfilePath = LastPath
-		Else
-			'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-			GetProfilePath = StringFormat("{0}\", CurDir())
-		End If
+        If Len(LastPath) > 0 Then
+            GetProfilePath = LastPath
+        Else
+            'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            GetProfilePath = StringFormat("{0}\", CurDir())
+        End If
 		'    End If
 		
 		LastPath = GetProfilePath
@@ -1759,8 +1745,7 @@ ERROR_HANDLER:
 		ShellExecute(frmChat.Handle.ToInt32, Verb, FullURL, vbNullString, vbNullString, AppWinStyle.NormalFocus)
 		
 		If DisplayMessage Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(Description) > 0 Then Description = Description & " at "
+            If Len(Description) > 0 Then Description = Description & " at "
 			frmChat.AddChat(RTBColors.ConsoleText, "Opening " & Description & "[ " & FullURL & " ]...")
 		End If
 	End Sub
@@ -2073,14 +2058,13 @@ ERROR_HANDLER:
 			sSep = ", "
 		End If
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(sOut) = 0) And ShowAll Then
-			If (Flags = &H0) Then
-				sOut = "normal"
-			Else
-				sOut = "unknown"
-			End If
-		End If
+        If (Len(sOut) = 0) And ShowAll Then
+            If (Flags = &H0) Then
+                sOut = "normal"
+            Else
+                sOut = "unknown"
+            End If
+        End If
 		
 		FlagDescription = sOut
 		
@@ -2124,15 +2108,14 @@ ERROR_HANDLER:
 						sTemp = Mid(sTemp, Len(sValue) + 2)
 					End If
 					
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(sValue) > 0) Then
-						'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-						If Dir(sValue) <> vbNullString Then
-							ChDir(sValue)
-							'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-							CommandLine = StringFormat("{0}-ppath {1}{2}{1} ", CommandLine, Chr(34), sValue)
-						End If
-					End If
+                    If (Len(sValue) > 0) Then
+                        'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                        If Dir(sValue) <> vbNullString Then
+                            ChDir(sValue)
+                            'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            CommandLine = StringFormat("{0}-ppath {1}{2}{1} ", CommandLine, Chr(34), sValue)
+                        End If
+                    End If
 					
 				Case "cpath"
 					If (Left(sTemp, 1) = Chr(34)) Then
@@ -2148,17 +2131,15 @@ ERROR_HANDLER:
 						sTemp = Mid(sTemp, Len(sValue) + 2)
 					End If
 					
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(sValue) > 0) Then
-						ConfigOverride = sValue
-						'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-						If (LenB(GetConfigFilePath()) = 0) Then
-							ConfigOverride = vbNullString
-						Else
-							'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-							CommandLine = StringFormat("{0}-cpath {1}{2}{1} ", CommandLine, Chr(34), sValue)
-						End If
-					End If
+                    If (Len(sValue) > 0) Then
+                        ConfigOverride = sValue
+                        If (Len(GetConfigFilePath()) = 0) Then
+                            ConfigOverride = vbNullString
+                        Else
+                            'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            CommandLine = StringFormat("{0}-cpath {1}{2}{1} ", CommandLine, Chr(34), sValue)
+                        End If
+                    End If
 					
 				Case "addpath"
 					If (Left(sTemp, 1) = Chr(34)) Then
@@ -2205,11 +2186,10 @@ ERROR_HANDLER:
 					End If
 					'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					sRet = StringFormat("{0}{1}YThe StealthBot Profile Launcher had an error!|", Chr(193), sRet)
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(sValue) > 0) Then
-						'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-						sRet = StringFormat("{0}{1}YOpen {2} for more information|", sRet, Chr(195), sValue)
-					End If
+                    If (Len(sValue) > 0) Then
+                        'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        sRet = StringFormat("{0}{1}YOpen {2} for more information|", sRet, Chr(195), sValue)
+                    End If
 					
 					'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 					CommandLine = StringFormat("{0}-launchererror {1}{2}{1} ", CommandLine, Chr(34), sValue)
@@ -2274,8 +2254,7 @@ ERROR_HANDLER:
 		Dim mmt As MMTIME
 		Dim lSize As Integer
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		lSize = LenB(mmt)
+        lSize = Runtime.InteropServices.Marshal.SizeOf(mmt)
 		
 		Call timeGetSystemTime(mmt, lSize)
 		
@@ -2430,26 +2409,24 @@ ERROR_HANDLER:
 		Dim List As New Collection
 		
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Dir(sPath)) > 0) Then
-			f = FreeFile
-			i = 0
-			
-			FileOpen(f, sPath, OpenMode.Input)
-			If (LOF(f) > 0) Then
-				Do 
-					s = LineInput(f)
-					
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If LenB(s) > 0 Then
-						List.Add(s)
-						i = i + 1
-					End If
-					
-				Loop Until EOF(f) Or (MaxItems >= 0 And i >= MaxItems)
-			End If
-			FileClose(f)
-		End If
+        If (Len(Dir(sPath)) > 0) Then
+            f = FreeFile()
+            i = 0
+
+            FileOpen(f, sPath, OpenMode.Input)
+            If (LOF(f) > 0) Then
+                Do
+                    s = LineInput(f)
+
+                    If Len(s) > 0 Then
+                        List.Add(s)
+                        i = i + 1
+                    End If
+
+                Loop Until EOF(f) Or (MaxItems >= 0 And i >= MaxItems)
+            End If
+            FileClose(f)
+        End If
 		
 		ListFileLoad = List
 		
@@ -2468,16 +2445,15 @@ ERROR_HANDLER:
 		f = FreeFile
 		
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Dir(sPath)) > 0) Then
-			FileOpen(f, sPath, OpenMode.Append)
-			PrintLine(f, Item)
-			FileClose(f)
-		Else
-			FileOpen(f, sPath, OpenMode.Output)
-			PrintLine(f, Item)
-			FileClose(f)
-		End If
+        If (Len(Dir(sPath)) > 0) Then
+            FileOpen(f, sPath, OpenMode.Append)
+            PrintLine(f, Item)
+            FileClose(f)
+        Else
+            FileOpen(f, sPath, OpenMode.Output)
+            PrintLine(f, Item)
+            FileClose(f)
+        End If
 		
 		Exit Sub
 		
@@ -2533,10 +2509,9 @@ ERROR_HANDLER:
 		'UPGRADE_NOTE: str was upgraded to str_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 		Dim str_Renamed As String
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If ((LenB(Caller) = 0) Or (StrComp(Caller, "(console)", CompareMethod.Text) = 0)) Then
-			Caller = "console"
-		End If
+        If ((Len(Caller) = 0) Or (StrComp(Caller, "(console)", CompareMethod.Text) = 0)) Then
+            Caller = "console"
+        End If
 		
 		Select Case (ActionType)
 			Case modEnum.enuDBActions.AddEntry
@@ -2614,15 +2589,13 @@ ERROR_HANDLER:
 		Dim Action As String
 		Dim f As Short
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(CString) > 0) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Caller) = 0) Then
-				Caller = "%console%"
-			End If
-			
-			g_Logger.WriteCommand(Caller & " -> " & CString)
-		End If
+        If (Len(CString) > 0) Then
+            If (Len(Caller) = 0) Then
+                Caller = "%console%"
+            End If
+
+            g_Logger.WriteCommand(Caller & " -> " & CString)
+        End If
 		
 		Exit Sub
 		
@@ -2675,19 +2648,17 @@ LogCommand_Error:
 	End Function
 	
 	Function GetProductKey(Optional ByVal Product As String = "") As String
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Product) = 0) Then
-			Product = StrReverse(BotVars.Product)
-		End If
+        If (Len(Product) = 0) Then
+            Product = StrReverse(BotVars.Product)
+        End If
 		
 		GetProductKey = GetProductInfo(Product).ShortCode
 		
 		'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(ReadCfg("Override", StringFormat("{0}ProdKey", Product))) > 0) Then
-			'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-			GetProductKey = ReadCfg("Override", StringFormat("{0}ProdKey", Product))
-		End If
+        If (Len(ReadCfg("Override", StringFormat("{0}ProdKey", Product))) > 0) Then
+            'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            GetProductKey = ReadCfg("Override", StringFormat("{0}ProdKey", Product))
+        End If
 	End Function
 	
 	Public Function InsertDummyQueueEntry() As Object
@@ -2714,16 +2685,15 @@ LogCommand_Error:
 		
 		' check for custom line postfix
 		s = Config.MultiLinePostfix
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(s) > 0 Then
-			If Left(s, 1) = "{" And Right(s, 1) = "}" Then
-				LinePostfix = Mid(s, 2, Len(s) - 2)
-			Else
-				LinePostfix = s
-			End If
-		Else
-			LinePostfix = "[more]"
-		End If
+        If Len(s) > 0 Then
+            If Left(s, 1) = "{" And Right(s, 1) = "}" Then
+                LinePostfix = Mid(s, 2, Len(s) - 2)
+            Else
+                LinePostfix = s
+            End If
+        Else
+            LinePostfix = "[more]"
+        End If
 		
 		' initialize our array
 		ReDim StringRet(0)

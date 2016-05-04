@@ -47,20 +47,18 @@ Module modCommandCode
 				
 				' Log the command
 				sCommand = Command_Renamed.Name
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(Command_Renamed.Args) > 0) Then
-					sCommand = sCommand & ": " & Command_Renamed.Args
-				End If
+                If (Len(Command_Renamed.Args) > 0) Then
+                    sCommand = sCommand & ": " & Command_Renamed.Args
+                End If
 				LogCommand(IIf(Command_Renamed.IsLocal, vbNullString, Username), sCommand)
 				
 				' Fire the command event
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(Command_Renamed.docs.Owner) = 0) Then
-					Call DispatchCommand(Command_Renamed)
-					Call RunInSingle(Nothing, "Event_Command", Command_Renamed)
-				Else
-					Call RunInSingle(modScripting.GetModuleByName(Command_Renamed.docs.Owner), "Event_Command", Command_Renamed)
-				End If
+                If (Len(Command_Renamed.docs.Owner) = 0) Then
+                    Call DispatchCommand(Command_Renamed)
+                    Call RunInSingle(Nothing, "Event_Command", Command_Renamed)
+                Else
+                    Call RunInSingle(modScripting.GetModuleByName(Command_Renamed.docs.Owner), "Event_Command", Command_Renamed)
+                End If
 			End If
 			If (DisplayOutput) Then Command_Renamed.SendResponse()
 		Next Command_Renamed
@@ -360,30 +358,29 @@ ERROR_HANDLER:
 		
 		Dim res As Boolean
 		If (Len(sUsername) > 0) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If ((GetAccess(sUsername, dbType).Rank = -1) And (LenB(GetAccess(sUsername, dbType).Flags) = 0)) Then
-				tmpbuf = "User not found."
-			ElseIf (GetAccess(sUsername, dbType).Rank >= dbAccess.Rank) Then 
-				tmpbuf = "That user has higher or equal access."
-			ElseIf ((Not InStr(1, GetAccess(sUsername, dbType).Flags, "L") = 0) And (Not (InBot)) And (InStr(1, GetAccess(Username, dbType).Flags, "A") = 0) And (GetAccess(Username, dbType).Rank <= 99)) Then 
-				
-				tmpbuf = "Error: That user is Locked."
-			Else
-				
-				dbType = User.Type
-				
-				res = DB_remove(sUsername, dbType)
-				
-				If (res) Then
-					If (BotVars.LogDBActions) Then
-						Call LogDbAction(modEnum.enuDBActions.RemEntry, IIf(InBot, "console", Username), sUsername, dbType)
-					End If
-					'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					tmpbuf = StringFormat("{0} has been removed from the database.", DBUserToString(sUsername, dbType))
-				Else
-					tmpbuf = "Error: There was a problem removing that entry from the database."
-				End If
-			End If
+            If ((GetAccess(sUsername, dbType).Rank = -1) And (Len(GetAccess(sUsername, dbType).Flags) = 0)) Then
+                tmpbuf = "User not found."
+            ElseIf (GetAccess(sUsername, dbType).Rank >= dbAccess.Rank) Then
+                tmpbuf = "That user has higher or equal access."
+            ElseIf ((Not InStr(1, GetAccess(sUsername, dbType).Flags, "L") = 0) And (Not (InBot)) And (InStr(1, GetAccess(Username, dbType).Flags, "A") = 0) And (GetAccess(Username, dbType).Rank <= 99)) Then
+
+                tmpbuf = "Error: That user is Locked."
+            Else
+
+                dbType = User.Type
+
+                res = DB_remove(sUsername, dbType)
+
+                If (res) Then
+                    If (BotVars.LogDBActions) Then
+                        Call LogDbAction(modEnum.enuDBActions.RemEntry, IIf(InBot, "console", Username), sUsername, dbType)
+                    End If
+                    'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    tmpbuf = StringFormat("{0} has been removed from the database.", DBUserToString(sUsername, dbType))
+                Else
+                    tmpbuf = "Error: There was a problem removing that entry from the database."
+                End If
+            End If
 		End If
 		cmdRet(0) = tmpbuf
 	End Function
@@ -1191,137 +1188,135 @@ ERROR_HANDLER:
 		Path = GetFilePath(FILE_USERDB)
 		
 		'UPGRADE_WARNING: Dir has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(Dir(Path)) > 0 Then
-			f = FreeFile
-			FileOpen(f, Path, OpenMode.Input)
-			
-			If LOF(f) > 1 Then
-				Do 
-					
-					s = LineInput(f)
-					
-					If InStr(1, s, " ", CompareMethod.Text) > 0 Then
-						x = Split(s, " ", 10)
-						
-						If UBound(x) > 0 Then
-							ReDim Preserve DB(i)
-							
-							With DB(i)
-								.Username = x(0)
-								
-								.Rank = 0
-								.AddedOn = Now
-								.AddedBy = "2.6r3Import"
-								.BanMessage = vbNullString
-								.Flags = vbNullString
-								.Groups = vbNullString
-								.ModifiedBy = "2.6r3Import"
-								.ModifiedOn = Now
-								.Type = "USER"
-								
-								If StrictIsNumeric(x(1)) Then
-									.Rank = Val(x(1))
-								Else
-									If x(1) <> "%" Then
-										.Flags = x(1)
-										
-										'If InStr(X(1), "S") > 0 Then
-										'    AddToSafelist .Name
-										'    .Flags = Replace(.Flags, "S", "")
-										'End If
-									End If
-								End If
-								
-								If UBound(x) > 1 Then
-									If StrictIsNumeric(x(2)) Then
-										.Rank = Int(CDbl(x(2)))
-									Else
-										If x(2) <> "%" Then
-											.Flags = x(2)
-										End If
-									End If
-									
-									'  0        1       2       3      4        5          6       7     8
-									' username access flags addedby addedon modifiedby modifiedon type banmsg
-									If UBound(x) > 2 Then
-										.AddedBy = x(3)
-										
-										If UBound(x) > 3 Then
-											.AddedOn = CDate(Replace(x(4), "_", " "))
-											
-											If UBound(x) > 4 Then
-												.ModifiedBy = x(5)
-												
-												If UBound(x) > 5 Then
-													.ModifiedOn = CDate(Replace(x(6), "_", " "))
-													
-													If UBound(x) > 6 Then
-														.Type = x(7)
-														
-														If UBound(x) > 7 Then
-															.Groups = x(8)
-															
-															If UBound(x) > 8 Then
-																.BanMessage = x(9)
-															End If
-														End If
-													End If
-												End If
-											End If
-										End If
-									End If
-									
-								End If
-								
-								If .Rank > 200 Then
-									.Rank = 200
-								End If
-								
-								If .Type = "" Or .Type = "%" Then
-									.Type = "USER"
-								End If
-								SaveDB = (.AddedOn = Now) Or SaveDB
-							End With
-							
-							i = i + 1
-						End If
-					End If
-					
-				Loop While Not EOF(f)
-			End If
-			
-			FileClose(f)
-		End If
+        If Len(Dir(Path)) > 0 Then
+            f = FreeFile()
+            FileOpen(f, Path, OpenMode.Input)
+
+            If LOF(f) > 1 Then
+                Do
+
+                    s = LineInput(f)
+
+                    If InStr(1, s, " ", CompareMethod.Text) > 0 Then
+                        x = Split(s, " ", 10)
+
+                        If UBound(x) > 0 Then
+                            ReDim Preserve DB(i)
+
+                            With DB(i)
+                                .Username = x(0)
+
+                                .Rank = 0
+                                .AddedOn = Now
+                                .AddedBy = "2.6r3Import"
+                                .BanMessage = vbNullString
+                                .Flags = vbNullString
+                                .Groups = vbNullString
+                                .ModifiedBy = "2.6r3Import"
+                                .ModifiedOn = Now
+                                .Type = "USER"
+
+                                If StrictIsNumeric(x(1)) Then
+                                    .Rank = Val(x(1))
+                                Else
+                                    If x(1) <> "%" Then
+                                        .Flags = x(1)
+
+                                        'If InStr(X(1), "S") > 0 Then
+                                        '    AddToSafelist .Name
+                                        '    .Flags = Replace(.Flags, "S", "")
+                                        'End If
+                                    End If
+                                End If
+
+                                If UBound(x) > 1 Then
+                                    If StrictIsNumeric(x(2)) Then
+                                        .Rank = Int(CDbl(x(2)))
+                                    Else
+                                        If x(2) <> "%" Then
+                                            .Flags = x(2)
+                                        End If
+                                    End If
+
+                                    '  0        1       2       3      4        5          6       7     8
+                                    ' username access flags addedby addedon modifiedby modifiedon type banmsg
+                                    If UBound(x) > 2 Then
+                                        .AddedBy = x(3)
+
+                                        If UBound(x) > 3 Then
+                                            .AddedOn = CDate(Replace(x(4), "_", " "))
+
+                                            If UBound(x) > 4 Then
+                                                .ModifiedBy = x(5)
+
+                                                If UBound(x) > 5 Then
+                                                    .ModifiedOn = CDate(Replace(x(6), "_", " "))
+
+                                                    If UBound(x) > 6 Then
+                                                        .Type = x(7)
+
+                                                        If UBound(x) > 7 Then
+                                                            .Groups = x(8)
+
+                                                            If UBound(x) > 8 Then
+                                                                .BanMessage = x(9)
+                                                            End If
+                                                        End If
+                                                    End If
+                                                End If
+                                            End If
+                                        End If
+                                    End If
+
+                                End If
+
+                                If .Rank > 200 Then
+                                    .Rank = 200
+                                End If
+
+                                If .Type = "" Or .Type = "%" Then
+                                    .Type = "USER"
+                                End If
+                                SaveDB = (.AddedOn = Now) Or SaveDB
+                            End With
+
+                            i = i + 1
+                        End If
+                    End If
+
+                Loop While Not EOF(f)
+            End If
+
+            FileClose(f)
+        End If
 		
 		' 9/13/06: Add the bot owner 200
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(BotVars.BotOwner) > 0) Then
-			For i = 0 To UBound(DB)
-				If (StrComp(DB(i).Username, BotVars.BotOwner, CompareMethod.Text) = 0) Then
-					found = True
-					
-					Exit For
-				End If
-			Next i
-			
-			If (found = False) Then
-				If (UBound(DB)) Then
-					ReDim Preserve DB(UBound(DB) + 1)
-				End If
-				
-				With DB(UBound(DB))
-					.Username = BotVars.BotOwner
-					.Type = "USER"
-					.Rank = 200
-					.AddedBy = "(console)"
-					.AddedOn = Now
-					.ModifiedBy = "(console)"
-					.ModifiedOn = Now
-				End With
-				SaveDB = True
-			End If
-		End If
+        If (Len(BotVars.BotOwner) > 0) Then
+            For i = 0 To UBound(DB)
+                If (StrComp(DB(i).Username, BotVars.BotOwner, CompareMethod.Text) = 0) Then
+                    found = True
+
+                    Exit For
+                End If
+            Next i
+
+            If (found = False) Then
+                If (UBound(DB)) Then
+                    ReDim Preserve DB(UBound(DB) + 1)
+                End If
+
+                With DB(UBound(DB))
+                    .Username = BotVars.BotOwner
+                    .Type = "USER"
+                    .Rank = 200
+                    .AddedBy = "(console)"
+                    .AddedOn = Now
+                    .ModifiedBy = "(console)"
+                    .ModifiedOn = Now
+                End With
+                SaveDB = True
+            End If
+        End If
 		
 		If (SaveDB) Then Call WriteDatabase(Path)
 	End Sub
@@ -1338,19 +1333,18 @@ ERROR_HANDLER:
 		
 		FileOpen(f, U, OpenMode.Output)
 		For i = LBound(DB) To UBound(DB)
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(DB(i).Username) > 0) Then
-				Print(f, DB(i).Username)
-				Print(f, " " & DB(i).Rank)
-				Print(f, " " & IIf(Len(DB(i).Flags) > 0, DB(i).Flags, "%"))
-				Print(f, " " & IIf(Len(DB(i).AddedBy) > 0, DB(i).AddedBy, "%"))
-				Print(f, " " & IIf(DB(i).AddedOn > System.Date.FromOADate(0), DateCleanup(DB(i).AddedOn), "%"))
-				Print(f, " " & IIf(Len(DB(i).ModifiedBy) > 0, DB(i).ModifiedBy, "%"))
-				Print(f, " " & IIf(DB(i).ModifiedOn > System.Date.FromOADate(0), DateCleanup(DB(i).ModifiedOn), "%"))
-				Print(f, " " & IIf(Len(DB(i).Type) > 0, DB(i).Type, "USER"))
-				Print(f, " " & IIf(Len(DB(i).Groups) > 0, DB(i).Groups, "%"))
-				PrintLine(f, " " & IIf(Len(DB(i).BanMessage) > 0, DB(i).BanMessage, "%"))
-			End If
+            If (Len(DB(i).Username) > 0) Then
+                Print(f, DB(i).Username)
+                Print(f, " " & DB(i).Rank)
+                Print(f, " " & IIf(Len(DB(i).Flags) > 0, DB(i).Flags, "%"))
+                Print(f, " " & IIf(Len(DB(i).AddedBy) > 0, DB(i).AddedBy, "%"))
+                Print(f, " " & IIf(DB(i).AddedOn > System.DateTime.FromOADate(0), DateCleanup(DB(i).AddedOn), "%"))
+                Print(f, " " & IIf(Len(DB(i).ModifiedBy) > 0, DB(i).ModifiedBy, "%"))
+                Print(f, " " & IIf(DB(i).ModifiedOn > System.DateTime.FromOADate(0), DateCleanup(DB(i).ModifiedOn), "%"))
+                Print(f, " " & IIf(Len(DB(i).Type) > 0, DB(i).Type, "USER"))
+                Print(f, " " & IIf(Len(DB(i).Groups) > 0, DB(i).Groups, "%"))
+                PrintLine(f, " " & IIf(Len(DB(i).BanMessage) > 0, DB(i).BanMessage, "%"))
+            End If
 		Next i
 		
 WriteDatabase_Exit: 
@@ -1465,16 +1459,15 @@ WriteDatabase_Error:
 	
 	' this fully converts a username based on naming conventions
 	Public Function ConvertUsername(ByVal Username As String, Optional ByVal iConvention As Short = -1) As String
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Username) = 0) Then
-			ConvertUsername = Username
-		Else
-			' handle namespace conversions (@gateways)
-			ConvertUsername = ConvertUsernameGateway(Username, iConvention)
-			
-			' handle D2 naming conventions
-			ConvertUsername = ConvertUsernameD2(ConvertUsername, Username)
-		End If
+        If (Len(Username) = 0) Then
+            ConvertUsername = Username
+        Else
+            ' handle namespace conversions (@gateways)
+            ConvertUsername = ConvertUsernameGateway(Username, iConvention)
+
+            ' handle D2 naming conventions
+            ConvertUsername = ConvertUsernameD2(ConvertUsername, Username)
+        End If
 	End Function
 	
 	' this converts a username only on gateway conventions
@@ -1515,11 +1508,10 @@ WriteDatabase_Error:
 		MyGateway = BotVars.Gateway
 		
 		' handle not having gateway yet
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(MyGateway) = 0) Then
-			ConvertUsernameGateway = Username
-			Exit Function
-		End If
+        If (Len(MyGateway) = 0) Then
+            ConvertUsernameGateway = Username
+            Exit Function
+        End If
 		
 		' get my namespace index
 		For i = 0 To 4
@@ -1616,8 +1608,7 @@ WriteDatabase_Error:
 				' get D2 character title, if available
 				UserObj = g_Channel.GetUserEx(RealUsername)
 				Title = UserObj.Stats.CharacterTitle
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(Title) > 0) Then Title = Title & " "
+                If (Len(Title) > 0) Then Title = Title & " "
 				'UPGRADE_NOTE: Object UserObj may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 				UserObj = Nothing
 				
@@ -1644,22 +1635,20 @@ WriteDatabase_Error:
 					' get D2 character name and title, if available
 					UserObj = g_Channel.GetUserEx(RealUsername)
 					Title = UserObj.Stats.CharacterTitle
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(Title) > 0) Then Title = Title & " "
+                    If (Len(Title) > 0) Then Title = Title & " "
 					Char_Renamed = UserObj.Stats.CharacterName
 					'UPGRADE_NOTE: Object UserObj may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 					UserObj = Nothing
 					
 					' if character name found
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If (LenB(Char_Renamed) = 0) Then
-						' if no character name, return *name
-						ConvertUsernameD2 = "*" & Username
-					Else
-						' if character name, return formatted name
-						'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-						ConvertUsernameD2 = StringFormat(strFormat, Title, Char_Renamed, Name)
-					End If
+                    If (Len(Char_Renamed) = 0) Then
+                        ' if no character name, return *name
+                        ConvertUsernameD2 = "*" & Username
+                    Else
+                        ' if character name, return formatted name
+                        'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        ConvertUsernameD2 = StringFormat(strFormat, Title, Char_Renamed, Name)
+                    End If
 				End If
 			Else
 				' if user has star in name at position 1, keep *name format
@@ -1680,10 +1669,9 @@ WriteDatabase_Error:
 		Dim blnOnThis As Boolean ' whether the user is on this namespace
 		Dim MyGatewayIndex As Short ' the bot's namespace index, 0=legacy 1=wc3
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Username) = 0) Then
-			Exit Function
-		End If
+        If (Len(Username) = 0) Then
+            Exit Function
+        End If
 		
 		' add * to D2 if not using D2 naming
 		If ((StrReverse(BotVars.Product) = PRODUCT_D2DV) Or (StrReverse(BotVars.Product) = PRODUCT_D2XP)) Then
@@ -1722,11 +1710,10 @@ WriteDatabase_Error:
 		MyGateway = BotVars.Gateway
 		
 		' handle not having gateway yet
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(MyGateway) = 0) Then
-			ReverseConvertUsernameGateway = Username
-			Exit Function
-		End If
+        If (Len(MyGateway) = 0) Then
+            ReverseConvertUsernameGateway = Username
+            Exit Function
+        End If
 		
 		' get my namespace index
 		For i = 0 To 4

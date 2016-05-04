@@ -263,15 +263,14 @@ ErrorHandler:
 		Call ClearTreeViewNodes(trvCommands)
 		
 		'// create xpath expression based on strScriptOwner
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(strScriptOwner) = 0 Then
-			xpath = "/commands/command[not(@owner)]"
-			'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
-		Else
-			'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-			xpath = StringFormat("/commands/command[@owner='{0}']", strScriptOwner)
-			'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
-		End If
+        If Len(strScriptOwner) = 0 Then
+            xpath = "/commands/command[not(@owner)]"
+            'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
+        Else
+            'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            xpath = StringFormat("/commands/command[@owner='{0}']", strScriptOwner)
+            'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
+        End If
 		
 		'// get a list of all the commands
 		commandNodes = m_Commands.XMLDocument.documentElement.selectNodes(xpath)
@@ -295,66 +294,64 @@ ErrorHandler:
 			commandName = commandNameArray(x)
 			'UPGRADE_WARNING: Couldn't resolve default property of object clsCommandObj.CleanXPathVar. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			commandName = clsCommandObj.CleanXPathVar(commandName)
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(commandName) > 0 Then
-				'// create xpath expression based on strScriptOwner
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If LenB(strScriptOwner) = 0 Then
-					'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					xpath = StringFormat("/commands/command[@name='{0}' and not(@owner)]", commandName)
-					'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
-				Else
-					'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					xpath = StringFormat("/commands/command[@name='{0}' and @owner='{1}']", commandName, strScriptOwner)
-					'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
-				End If
-				
-				xmlCommand = m_Commands.XMLDocument.documentElement.selectSingleNode(xpath)
-				
-				commandName = xmlCommand.Attributes.getNamedItem("name").Text
-				nCommand = trvCommands.nodes.Add(trvCommands.nodes.Parent, vbalTreeViewLib6.ETreeViewRelationshipContants.etvwChild, commandName, commandName)
-				
-				'// 08/30/2008 JSM - check if this command is the first alphabetically
-				If defaultNode Is Nothing Then
-					defaultNode = nCommand
-				Else
-					If StrComp(defaultNode.Text, nCommand.Text) > 0 Then
-						defaultNode = nCommand
-					End If
-				End If
-				
-				xmlArgs = xmlCommand.selectNodes("arguments/argument")
-				'// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
-				'//                  something, even if nothing matches the XPath expression.
-				For i = 0 To (xmlArgs.length - 1)
-					
-					argumentName = xmlArgs(i).Attributes.getNamedItem("name").Text
-					If (Not xmlArgs(i).Attributes.getNamedItem("optional") Is Nothing) Then
-						If (xmlArgs(i).Attributes.getNamedItem("optional").Text = "1") Then
-							'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-							argumentName = StringFormat("[{0}]", argumentName)
-						End If
-					End If
-					
-					'// Add the datatype to the argument name
-					If (Not xmlArgs(i).Attributes.getNamedItem("type") Is Nothing) Then
-						'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-						argumentName = StringFormat("{0} ({1})", argumentName, xmlArgs(i).Attributes.getNamedItem("type").Text)
-					Else
-						'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-						argumentName = StringFormat("{0} ({1})", argumentName, "String")
-					End If
-					
-					nArg = trvCommands.nodes.Add(nCommand, vbalTreeViewLib6.ETreeViewRelationshipContants.etvwChild, commandName & "." & argumentName, argumentName)
-					
-					xmlArgRestricions = xmlArgs(i).selectNodes("restrictions/restriction")
-					
-					For j = 0 To (xmlArgRestricions.length - 1)
-						restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
-						nArgRestriction = trvCommands.nodes.Add(nArg, vbalTreeViewLib6.ETreeViewRelationshipContants.etvwChild, commandName & "." & argumentName & "." & restrictionName, restrictionName)
-					Next j
-				Next i
-			End If '// Len(commandName) > 0
+            If Len(commandName) > 0 Then
+                '// create xpath expression based on strScriptOwner
+                If Len(strScriptOwner) = 0 Then
+                    'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    xpath = StringFormat("/commands/command[@name='{0}' and not(@owner)]", commandName)
+                    'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
+                Else
+                    'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    xpath = StringFormat("/commands/command[@name='{0}' and @owner='{1}']", commandName, strScriptOwner)
+                    'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
+                End If
+
+                xmlCommand = m_Commands.XMLDocument.documentElement.selectSingleNode(xpath)
+
+                commandName = xmlCommand.attributes.getNamedItem("name").text
+                nCommand = trvCommands.Nodes.Add(trvCommands.Nodes.Parent, vbalTreeViewLib6.ETreeViewRelationshipContants.etvwChild, commandName, commandName)
+
+                '// 08/30/2008 JSM - check if this command is the first alphabetically
+                If defaultNode Is Nothing Then
+                    defaultNode = nCommand
+                Else
+                    If StrComp(defaultNode.Text, nCommand.Text) > 0 Then
+                        defaultNode = nCommand
+                    End If
+                End If
+
+                xmlArgs = xmlCommand.selectNodes("arguments/argument")
+                '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
+                '//                  something, even if nothing matches the XPath expression.
+                For i = 0 To (xmlArgs.length - 1)
+
+                    argumentName = xmlArgs(i).attributes.getNamedItem("name").text
+                    If (Not xmlArgs(i).attributes.getNamedItem("optional") Is Nothing) Then
+                        If (xmlArgs(i).attributes.getNamedItem("optional").text = "1") Then
+                            'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            argumentName = StringFormat("[{0}]", argumentName)
+                        End If
+                    End If
+
+                    '// Add the datatype to the argument name
+                    If (Not xmlArgs(i).attributes.getNamedItem("type") Is Nothing) Then
+                        'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        argumentName = StringFormat("{0} ({1})", argumentName, xmlArgs(i).attributes.getNamedItem("type").text)
+                    Else
+                        'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                        argumentName = StringFormat("{0} ({1})", argumentName, "String")
+                    End If
+
+                    nArg = trvCommands.Nodes.Add(nCommand, vbalTreeViewLib6.ETreeViewRelationshipContants.etvwChild, commandName & "." & argumentName, argumentName)
+
+                    xmlArgRestricions = xmlArgs(i).selectNodes("restrictions/restriction")
+
+                    For j = 0 To (xmlArgRestricions.length - 1)
+                        restrictionName = xmlArgRestricions(j).attributes.getNamedItem("name").text
+                        nArgRestriction = trvCommands.Nodes.Add(nArg, vbalTreeViewLib6.ETreeViewRelationshipContants.etvwChild, commandName & "." & argumentName & "." & restrictionName, restrictionName)
+                    Next j
+                Next i
+            End If '// Len(commandName) > 0
 		Next x
 		
 		'// 08/30/2008 JSM - click the first command alphabetically
@@ -485,34 +482,33 @@ ErrorHandler:
 	Private Function GetNodeInfo(ByRef node As vbalTreeViewLib6.cTreeViewNode, ByRef commandName As String, ByRef argumentName As String, ByRef restrictionName As String) As NodeType
 		Dim s() As String
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(node.Key) > 0 Then
-			s = Split(node.Key, ".")
-			Select Case UBound(s)
-				Case 0
-					commandName = s(0)
-					argumentName = vbNullString
-					restrictionName = vbNullString
-					GetNodeInfo = NodeType.nCommand
-				Case 1
-					commandName = s(0)
-					argumentName = s(1)
-					restrictionName = vbNullString
-					GetNodeInfo = NodeType.nArgument
-				Case 2
-					commandName = s(0)
-					argumentName = s(1)
-					restrictionName = s(2)
-					GetNodeInfo = NodeType.nRestriction
-			End Select
-			'// strip the [ ] around optional parameters
-			If VB.Left(argumentName, 1) = "[" Then
-				argumentName = Mid(argumentName, 2, InStr(1, argumentName, "]") - 2)
-			End If
-			If (InStr(1, argumentName, "(") >= 0 And VB.Right(argumentName, 1) = ")") Then
-				argumentName = Mid(argumentName, 1, InStr(1, argumentName, "(") - 2)
-			End If
-		End If
+        If Len(node.Key) > 0 Then
+            s = Split(node.Key, ".")
+            Select Case UBound(s)
+                Case 0
+                    commandName = s(0)
+                    argumentName = vbNullString
+                    restrictionName = vbNullString
+                    GetNodeInfo = NodeType.nCommand
+                Case 1
+                    commandName = s(0)
+                    argumentName = s(1)
+                    restrictionName = vbNullString
+                    GetNodeInfo = NodeType.nArgument
+                Case 2
+                    commandName = s(0)
+                    argumentName = s(1)
+                    restrictionName = s(2)
+                    GetNodeInfo = NodeType.nRestriction
+            End Select
+            '// strip the [ ] around optional parameters
+            If VB.Left(argumentName, 1) = "[" Then
+                argumentName = Mid(argumentName, 2, InStr(1, argumentName, "]") - 2)
+            End If
+            If (InStr(1, argumentName, "(") >= 0 And VB.Right(argumentName, 1) = ")") Then
+                argumentName = Mid(argumentName, 1, InStr(1, argumentName, "(") - 2)
+            End If
+        End If
 	End Function
 	
 	Private Function getFlags() As Object

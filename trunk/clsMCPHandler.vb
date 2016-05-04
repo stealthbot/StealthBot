@@ -116,13 +116,12 @@ Friend Class clsMCPHandler
 			ChooseRealm = False
 			
 			' unless...
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(ChoiceValue) = 0 And m_RealmServerList.Count() > 0 Then
-				' if nothing was set, use first realm they list
-				'UPGRADE_WARNING: Couldn't resolve default property of object m_RealmServerList.Item()(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				sTitle = m_RealmServerList.Item(1)(0)
-				ChooseRealm = True
-			End If
+            If Len(ChoiceValue) = 0 And m_RealmServerList.Count() > 0 Then
+                ' if nothing was set, use first realm they list
+                'UPGRADE_WARNING: Couldn't resolve default property of object m_RealmServerList.Item()(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                sTitle = m_RealmServerList.Item(1)(0)
+                ChooseRealm = True
+            End If
 		End If
 		
 		Exit Function
@@ -144,20 +143,18 @@ ERROR_HANDLER:
 		
 		If Not ds.MCPHandler Is Nothing Then
 			If ds.MCPHandler.ChooseRealm(sTitle, sUserChoice) Then
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If LenB(sTitle) > 0 Then
-					Call ds.MCPHandler.RealmServerLogon(sTitle)
-				Else
-					' shouldn't happen
-					Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Realm logon error: That character was not found.")
-					Call SendEnterChatSequence()
-					frmChat.mnuRealmSwitch.Enabled = True
-				End If
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			ElseIf LenB(sUserChoice) > 0 Then 
-				Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] The realm {0}{1}{0} is offline or doesn't exist.", Chr(34), sUserChoice))
-				Call SendEnterChatSequence()
-				frmChat.mnuRealmSwitch.Enabled = True
+                If Len(sTitle) > 0 Then
+                    Call ds.MCPHandler.RealmServerLogon(sTitle)
+                Else
+                    ' shouldn't happen
+                    Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Realm logon error: That character was not found.")
+                    Call SendEnterChatSequence()
+                    frmChat.mnuRealmSwitch.Enabled = True
+                End If
+            ElseIf Len(sUserChoice) > 0 Then
+                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] The realm {0}{1}{0} is offline or doesn't exist.", Chr(34), sUserChoice))
+                Call SendEnterChatSequence()
+                frmChat.mnuRealmSwitch.Enabled = True
 			Else
 				Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] All Diablo II realms are currently offline.")
 				Call SendEnterChatSequence()
@@ -215,8 +212,7 @@ ERROR_HANDLER:
 		
 		RealmPassword = Config.RealmServerPassword
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(RealmPassword) = 0) Then RealmPassword = REALM_PASSWORD
+        If (Len(RealmPassword) = 0) Then RealmPassword = REALM_PASSWORD
 		
 		GetRealmPassword = RealmPassword
 	End Function
@@ -842,33 +838,32 @@ ERROR_HANDLER:
 			' nothing can be chosen
 			RealmCharIndex = -1
 		Else
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(RealmCharacter) > 0 Then
-				' invalid choice
-				RealmCharIndex = -1
-				
-				For i = 1 To m_CharacterList.Count()
-					' user entered a character name?
-					'UPGRADE_WARNING: Couldn't resolve default property of object m_CharacterList.Item(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					Character = m_CharacterList.Item(i)
-					'UPGRADE_WARNING: Couldn't resolve default property of object Character(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-					If (StrComp(Character(0), RealmCharacter, CompareMethod.Text) = 0) Then
-						' choose by name
-						RealmCharIndex = i - 1
-						Exit For
-						' user chose a character index?
-					ElseIf StrictIsNumeric(RealmCharacter) Then 
-						If i = CShort(RealmCharacter) Then
-							' choose by index
-							RealmCharIndex = i - 1
-							Exit For
-						End If
-					End If
-				Next i
-			Else
-				' no entry, choose first character after X seconds
-				RealmCharIndex = 0
-			End If
+            If Len(RealmCharacter) > 0 Then
+                ' invalid choice
+                RealmCharIndex = -1
+
+                For i = 1 To m_CharacterList.Count()
+                    ' user entered a character name?
+                    'UPGRADE_WARNING: Couldn't resolve default property of object m_CharacterList.Item(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    Character = m_CharacterList.Item(i)
+                    'UPGRADE_WARNING: Couldn't resolve default property of object Character(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                    If (StrComp(Character(0), RealmCharacter, CompareMethod.Text) = 0) Then
+                        ' choose by name
+                        RealmCharIndex = i - 1
+                        Exit For
+                        ' user chose a character index?
+                    ElseIf StrictIsNumeric(RealmCharacter) Then
+                        If i = CShort(RealmCharacter) Then
+                            ' choose by index
+                            RealmCharIndex = i - 1
+                            Exit For
+                        End If
+                    End If
+                Next i
+            Else
+                ' no entry, choose first character after X seconds
+                RealmCharIndex = 0
+            End If
 		End If
 		
 		If ds.EnteredChatFirstTime Then
@@ -900,26 +895,25 @@ ERROR_HANDLER:
 				CharStats = Character(1)
 				'UPGRADE_WARNING: Couldn't resolve default property of object Character(2). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				CharDate = Character(2)
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If LenB(Character(0)) > 0 Then
-					'UPGRADE_WARNING: DateDiff behavior may be different. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6B38EC3F-686D-4B2E-B5A5-9E8E7A762E32"'
-					If (System.Math.Sign(DateDiff(Microsoft.VisualBasic.DateInterval.Second, UtcNow, CharDate)) >= 0) Then
-						' must be PX2D if isExpansion, otherwise doesn't matter
-						If (VB6.Imp(CharStats.IsExpansionCharacter(), (BotVars.Product = "PX2D"))) Then
-							'UPGRADE_WARNING: Couldn't resolve default property of object Character(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-							frmChat.AddChat(RTBColors.InformationText, "[REALM] Automatically logging on as " & Character(0) & "...")
-							'UPGRADE_WARNING: Couldn't resolve default property of object Character(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-							Call SEND_MCP_CHARLOGON(Character(0))
-							Exit Sub
-						Else
-							frmChat.AddChat(RTBColors.ErrorMessageText, "[REALM] Character auto-logon fail: You must use Diablo II: Lord of Destruction to choose that character.")
-						End If
-					Else
-						frmChat.AddChat(RTBColors.ErrorMessageText, "[REALM] Character auto-logon fail: That character has expired.")
-					End If
-				Else
-					frmChat.AddChat(RTBColors.ErrorMessageText, "[REALM] Character auto-logon fail: Empty character name.")
-				End If
+                If Len(Character(0)) > 0 Then
+                    'UPGRADE_WARNING: DateDiff behavior may be different. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6B38EC3F-686D-4B2E-B5A5-9E8E7A762E32"'
+                    If (System.Math.Sign(DateDiff(Microsoft.VisualBasic.DateInterval.Second, UtcNow, CharDate)) >= 0) Then
+                        ' must be PX2D if isExpansion, otherwise doesn't matter
+                        If (VB6.Imp(CharStats.IsExpansionCharacter(), (BotVars.Product = "PX2D"))) Then
+                            'UPGRADE_WARNING: Couldn't resolve default property of object Character(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            frmChat.AddChat(RTBColors.InformationText, "[REALM] Automatically logging on as " & Character(0) & "...")
+                            'UPGRADE_WARNING: Couldn't resolve default property of object Character(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                            Call SEND_MCP_CHARLOGON(Character(0))
+                            Exit Sub
+                        Else
+                            frmChat.AddChat(RTBColors.ErrorMessageText, "[REALM] Character auto-logon fail: You must use Diablo II: Lord of Destruction to choose that character.")
+                        End If
+                    Else
+                        frmChat.AddChat(RTBColors.ErrorMessageText, "[REALM] Character auto-logon fail: That character has expired.")
+                    End If
+                Else
+                    frmChat.AddChat(RTBColors.ErrorMessageText, "[REALM] Character auto-logon fail: Empty character name.")
+                End If
 			End If
 			
 			frmChat.AddChat(RTBColors.SuccessText, "[REALM] Listed " & m_CharacterList.Count() & " characters.")

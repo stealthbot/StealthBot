@@ -244,12 +244,11 @@ ERROR_HANDLER:
 		End If
 		
 		' If the server does not recognize the version byte we sent it, it will send back an empty seed string.
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(ds.CRevSeed) = 0) Then
-			Call HandleEmptyCRevSeed()
-			
-			Exit Sub
-		End If
+        If (Len(ds.CRevSeed) = 0) Then
+            Call HandleEmptyCRevSeed()
+
+            Exit Sub
+        End If
 		
 		If (BotVars.BNLS) Then
 			Call modBNLS.SEND_BNLS_VERSIONCHECKEX2((ds.CRevFileTimeRaw), (ds.CRevFileName), (ds.CRevSeed))
@@ -362,12 +361,11 @@ ERROR_HANDLER:
 			End If
 		End If
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (ds.CRevChecksum = 0 Or ds.CRevVersion = 0 Or LenB(ds.CRevResult) = 0) Then
-			frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Check Revision Failed, sanity failed")
-			frmChat.DoDisconnect()
-			Exit Sub
-		End If
+        If (ds.CRevChecksum = 0 Or ds.CRevVersion = 0 Or Len(ds.CRevResult) = 0) Then
+            frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Check Revision Failed, sanity failed")
+            frmChat.DoDisconnect()
+            Exit Sub
+        End If
 		
 		Dim pBuff As New clsDataBuffer
 		With pBuff
@@ -458,13 +456,11 @@ ERROR_HANDLER:
 		Do 
 			sChannel = pBuff.GetString()
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(sChannel) > 0 Then
-				ReDim Preserve sChannels(UBound(sChannels) + 1)
-				sChannels(UBound(sChannels)) = Trim(sChannel)
-			End If
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		Loop While LenB(sChannel) > 0
+            If Len(sChannel) > 0 Then
+                ReDim Preserve sChannels(UBound(sChannels) + 1)
+                sChannels(UBound(sChannels)) = Trim(sChannel)
+            End If
+        Loop While Len(sChannel) > 0
 		
 		Call Event_ChannelList(sChannels)
 		
@@ -499,8 +495,7 @@ ERROR_HANDLER:
 	Public Sub SEND_SID_CHATCOMMAND(ByRef sText As String)
 		On Error GoTo ERROR_HANDLER
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(sText) = 0) Then Exit Sub
+        If (Len(sText) = 0) Then Exit Sub
 		
 		Dim pBuff As New clsDataBuffer
 		pBuff.InsertNTString(sText)
@@ -615,8 +610,7 @@ ERROR_HANDLER:
 		If (Len(LanguageAbr) = 0) Then LanguageAbr = "ENU"
 		If (Len(CountryCode) = 0) Then CountryCode = "1"
 		If (Not Len(CountryAbr) = 3) Then CountryAbr = "USA"
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(CountryName) = 0) Then CountryName = "United States"
+        If (Len(CountryName) = 0) Then CountryName = "United States"
 		
 		With pBuff
 			Call GetSystemTime(st)
@@ -867,12 +861,11 @@ ERROR_HANDLER:
 			.InsertBool(CanSpawn(BotVars.Product, oKey.KeyLength) And Config.UseSpawn)
 			.InsertNTString((BotVars.CDKey))
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Config.CDKeyOwnerName) > 0) Then
-				.InsertNTString((Config.CDKeyOwnerName))
-			Else
-				.InsertNTString((BotVars.Username))
-			End If
+            If (Len(Config.CDKeyOwnerName) > 0) Then
+                .InsertNTString((Config.CDKeyOwnerName))
+            Else
+                .InsertNTString((BotVars.Username))
+            End If
 			.SendPacket(SID_CDKEY)
 		End With
 		
@@ -956,12 +949,11 @@ ERROR_HANDLER:
 			.InsertDWord(ds.ClientToken)
 			.InsertNonNTString(oKey.Hash)
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Config.CDKeyOwnerName) > 0) Then
-				.InsertNTString((Config.CDKeyOwnerName))
-			Else
-				.InsertNTString((BotVars.Username))
-			End If
+            If (Len(Config.CDKeyOwnerName) > 0) Then
+                .InsertNTString((Config.CDKeyOwnerName))
+            Else
+                .InsertNTString((BotVars.Username))
+            End If
 			.SendPacket(SID_CDKEY2)
 		End With
 		
@@ -1209,8 +1201,7 @@ ERROR_HANDLER:
 	Public Sub SEND_SID_LOGONREALMEX(ByRef sRealmTitle As String, ByRef sRealmServerPassword As String)
 		On Error GoTo ERROR_HANDLER
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(sRealmTitle) = 0) Then Exit Sub
+        If (Len(sRealmTitle) = 0) Then Exit Sub
 		
 		Dim pBuff As New clsDataBuffer
 		pBuff.InsertDWord(ds.ClientToken)
@@ -1336,12 +1327,11 @@ ERROR_HANDLER:
 		End If
 		
 		' If the server does not recognize the version byte we sent it, it will send back an empty seed string.
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(ds.CRevSeed) = 0) Then
-			Call HandleEmptyCRevSeed()
-			
-			Exit Sub
-		End If
+        If (Len(ds.CRevSeed) = 0) Then
+            Call HandleEmptyCRevSeed()
+
+            Exit Sub
+        End If
 		
 		If (Len(ds.ServerSig) = 128) Then
 			If (ds.NLS.VerifyServerSignature(frmChat.sckBNet.RemoteHostIP, ds.ServerSig)) Then
@@ -1394,8 +1384,7 @@ ERROR_HANDLER:
 		
 		Call GetCountryData(CountryAbr, CountryName, CStr(VariantType.Null))
 		If (Not Len(CountryAbr) = 3) Then CountryAbr = "USA"
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(CountryName) = 0) Then CountryName = "United States"
+        If (Len(CountryName) = 0) Then CountryName = "United States"
 		
 		With pBuff
 			
@@ -1516,12 +1505,11 @@ ERROR_HANDLER:
 			End If
 		End If
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (ds.CRevChecksum = 0 Or ds.CRevVersion = 0 Or LenB(ds.CRevResult) = 0) Then
-			frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Check Revision Failed, sanity failed")
-			frmChat.DoDisconnect()
-			Exit Sub
-		End If
+        If (ds.CRevChecksum = 0 Or ds.CRevVersion = 0 Or Len(ds.CRevResult) = 0) Then
+            frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Check Revision Failed, sanity failed")
+            frmChat.DoDisconnect()
+            Exit Sub
+        End If
 		
 		keys = GetCDKeyCount
 		
@@ -1561,12 +1549,11 @@ ERROR_HANDLER:
 			Next i
 			
 			.InsertNTString((ds.CRevResult))
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Config.CDKeyOwnerName) > 0) Then
-				.InsertNTString((Config.CDKeyOwnerName))
-			Else
-				.InsertNTString((BotVars.Username))
-			End If
+            If (Len(Config.CDKeyOwnerName) > 0) Then
+                .InsertNTString((Config.CDKeyOwnerName))
+            Else
+                .InsertNTString((BotVars.Username))
+            End If
 			
 			.SendPacket(SID_AUTH_CHECK)
 		End With
@@ -1867,8 +1854,7 @@ ERROR_HANDLER:
 		Dim sOverride As String
 		Dim lRet As Integer
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(sProduct) = 0) Then sProduct = BotVars.Product
+        If (Len(sProduct) = 0) Then sProduct = BotVars.Product
 		
 		lRet = GetProductInfo(sProduct).KeyCount
 		
@@ -1891,8 +1877,7 @@ ERROR_HANDLER:
 		'GetLogonSystem = BNCS_NLS
 		'Exit Function
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(sProduct) = 0) Then sProduct = BotVars.Product
+        If (Len(sProduct) = 0) Then sProduct = BotVars.Product
 		
 		lRet = GetProductInfo(sProduct).LogonSystem
 		
@@ -1918,10 +1903,9 @@ ERROR_HANDLER:
 		Dim lRet As Integer
 		lRet = lDefault
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If ((LenB(sDwordString) > 0) And (Len(sDwordString) < 5)) Then
-			lRet = GetDWORD(StrReverse(sDwordString))
-		End If
+        If ((Len(sDwordString) > 0) And (Len(sDwordString) < 5)) Then
+            lRet = GetDWORD(StrReverse(sDwordString))
+        End If
 		
 		GetDWORDOverride = lRet
 		Exit Function
@@ -1961,19 +1945,18 @@ ERROR_HANDLER:
 			SEND_SID_GETCHANNELLIST()
 			
 			BotVars.Gateway = Config.PredefinedGateway
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(BotVars.Gateway) = 0) Then
-				If ((Not BotVars.Product = "VD2D") And (Not BotVars.Product = "PX2D") And (Not BotVars.Product = "PX3W") And (Not BotVars.Product = "3RAW")) Then
-					' join nowhere to force non-W3-non-D2 to enter chat environment
-					' so they can use /whoami (see Event_ChannelJoinError for where this completes)
-					Call FullJoin(BotVars.Product & BotVars.Username & Config.HomeChannel, 0)
-				Else
-					SEND_SID_CHATCOMMAND("/whoami")
-				End If
-			Else
-				'PvPGN: Straight home
-				Call DoChannelJoinHome()
-			End If
+            If (Len(BotVars.Gateway) = 0) Then
+                If ((Not BotVars.Product = "VD2D") And (Not BotVars.Product = "PX2D") And (Not BotVars.Product = "PX3W") And (Not BotVars.Product = "3RAW")) Then
+                    ' join nowhere to force non-W3-non-D2 to enter chat environment
+                    ' so they can use /whoami (see Event_ChannelJoinError for where this completes)
+                    Call FullJoin(BotVars.Product & BotVars.Username & Config.HomeChannel, 0)
+                Else
+                    SEND_SID_CHATCOMMAND("/whoami")
+                End If
+            Else
+                'PvPGN: Straight home
+                Call DoChannelJoinHome()
+            End If
 		End If
 		
 		Exit Sub
@@ -1985,21 +1968,18 @@ ERROR_HANDLER:
 	Public Sub DoChannelJoinHome(Optional ByRef FirstTime As Boolean = True)
 		On Error GoTo ERROR_HANDLER
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (FirstTime And Config.DefaultChannelJoin) Or (LenB(Config.HomeChannel) = 0 And LenB(BotVars.LastChannel) = 0) Then
-			' product home override or home/last channel are both empty
-			Call DoChannelJoinProductHome()
-		End If
+        If (FirstTime And Config.DefaultChannelJoin) Or (Len(Config.HomeChannel) = 0 And Len(BotVars.LastChannel) = 0) Then
+            ' product home override or home/last channel are both empty
+            Call DoChannelJoinProductHome()
+        End If
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(BotVars.LastChannel) > 0) Then
-			' go to "last channel" (for /reconnect and re-entering chat)
-			Call FullJoin((BotVars.LastChannel), 2)
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		ElseIf (LenB(Config.HomeChannel) > 0) Then 
-			' go home
-			Call FullJoin((Config.HomeChannel), 2)
-		End If
+        If (Len(BotVars.LastChannel) > 0) Then
+            ' go to "last channel" (for /reconnect and re-entering chat)
+            Call FullJoin((BotVars.LastChannel), 2)
+        ElseIf (Len(Config.HomeChannel) > 0) Then
+            ' go home
+            Call FullJoin((Config.HomeChannel), 2)
+        End If
 		
 		Exit Sub
 ERROR_HANDLER: 

@@ -224,9 +224,8 @@ Friend Class frmCustomInputBox
 				InputPresent = True
 			ElseIf CurrentPos = STEP_SERV And StrComp(cboServer.Text, "- choose one -", CompareMethod.Binary) <> 0 Then 
 				InputPresent = True
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			ElseIf LenB(txtInput.Text) > 0 Then 
-				InputPresent = True
+            ElseIf Len(txtInput.Text) > 0 Then
+                InputPresent = True
 			ElseIf CurrentPos = STEP_CHAN Or CurrentPos = STEP_OWNR Then 
 				InputPresent = True
 			End If
@@ -322,8 +321,7 @@ Friend Class frmCustomInputBox
 	'UPGRADE_WARNING: Event txtInput.TextChanged may fire when form is initialized. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="88B12AE1-6DE0-48A0-86F1-60C0686C026A"'
 	Sub txtInput_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtInput.TextChanged
 		' enabled: text field has input
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		cmdNext.Enabled = (LenB(txtInput.Text) > 0)
+        cmdNext.Enabled = (Len(txtInput.Text) > 0)
 		' always enabled for STEP_CHAN, STEP_OWNR
 		If CurrentPos = STEP_CHAN Or CurrentPos = STEP_OWNR Then cmdNext.Enabled = True
 	End Sub

@@ -66,19 +66,18 @@ Module modCommandsMP3
 		'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.IsLoaded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		If (MediaPlayer.IsLoaded()) Then
 			'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.TrackName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(MediaPlayer.TrackName) > 0) Then
-				'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.IsPaused. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.TrackLength. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.TrackTime. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.TrackName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.PlaylistCount. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.PlaylistPosition. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				Command_Renamed.Respond(StringFormat("Current MP3 [{0}/{1}]: {2} ({3}/{4}{5})", MediaPlayer.PlaylistPosition, MediaPlayer.PlaylistCount, MediaPlayer.TrackName, SecondsToString(MediaPlayer.TrackTime), SecondsToString(MediaPlayer.TrackLength), IIf(MediaPlayer.IsPaused, ", paused", vbNullString)))
-			Else
-				'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.Name. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				Command_Renamed.Respond(MediaPlayer.Name & " is not currently playing any media.")
-			End If
+            If (Len(MediaPlayer.TrackName) > 0) Then
+                'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.IsPaused. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.TrackLength. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.TrackTime. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.TrackName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.PlaylistCount. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.PlaylistPosition. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                Command_Renamed.Respond(StringFormat("Current MP3 [{0}/{1}]: {2} ({3}/{4}{5})", MediaPlayer.PlaylistPosition, MediaPlayer.PlaylistCount, MediaPlayer.TrackName, SecondsToString(MediaPlayer.TrackTime), SecondsToString(MediaPlayer.TrackLength), IIf(MediaPlayer.IsPaused, ", paused", vbNullString)))
+            Else
+                'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.Name. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                Command_Renamed.Respond(MediaPlayer.Name & " is not currently playing any media.")
+            End If
 		Else
 			'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.Name. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			Command_Renamed.Respond(MediaPlayer.Name & " is not loaded.")
@@ -121,17 +120,16 @@ Module modCommandsMP3
 		
 		'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.IsLoaded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		If (MediaPlayer.IsLoaded()) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(Command_Renamed.Argument("Song")) > 0) Then
-				'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.PlayTrack. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				MediaPlayer.PlayTrack(Command_Renamed.Argument("Song"))
-				'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.TrackName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				Command_Renamed.Respond("Now playing track: " & MediaPlayer.TrackName)
-			Else
-				'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.PlayTrack. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				MediaPlayer.PlayTrack()
-				Command_Renamed.Respond("Playback started.")
-			End If
+            If (Len(Command_Renamed.Argument("Song")) > 0) Then
+                'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.PlayTrack. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                MediaPlayer.PlayTrack(Command_Renamed.Argument("Song"))
+                'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.TrackName. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                Command_Renamed.Respond("Now playing track: " & MediaPlayer.TrackName)
+            Else
+                'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.PlayTrack. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                MediaPlayer.PlayTrack()
+                Command_Renamed.Respond("Playback started.")
+            End If
 		Else
 			'UPGRADE_WARNING: Couldn't resolve default property of object MediaPlayer.Name. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			Command_Renamed.Respond(MediaPlayer.Name & " is not loaded.")

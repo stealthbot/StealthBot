@@ -130,14 +130,12 @@ Module modWindow
 		End If
 		
 		If Msg = WM_NOTIFY Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			'UPGRADE_WARNING: Couldn't resolve default property of object uHead. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-			CopyMemory(uHead, lParam, LenB(uHead))
+            'UPGRADE_WARNING: Couldn't resolve default property of object uHead. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            CopyMemory(uHead, lParam, Len(uHead))
 			
 			If (uHead.code = EN_LINK) Then
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				'UPGRADE_WARNING: Couldn't resolve default property of object eLink. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				CopyMemory(eLink, lParam, LenB(eLink))
+                'UPGRADE_WARNING: Couldn't resolve default property of object eLink. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+                CopyMemory(eLink, lParam, Len(eLink))
 				
 				With eLink
 					If .Msg = WM_LBUTTONDBLCLK Then

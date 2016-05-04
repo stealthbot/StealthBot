@@ -83,8 +83,7 @@ ERROR_HANDLER:
 		On Error GoTo ERROR_HANDLER
 		
 		Dim pBuff As New clsDataBuffer
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		pBuff.InsertNTString(IIf(LenB(sBotID) = 0, "stealth", sBotID))
+        pBuff.InsertNTString(IIf(Len(sBotID) = 0, "stealth", sBotID))
 		pBuff.vLSendPacket(BNLS_AUTHORIZE)
 		'UPGRADE_NOTE: Object pBuff may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
 		pBuff = Nothing
@@ -124,9 +123,7 @@ ERROR_HANDLER:
 		Dim lChecksum As Integer
 		Dim pBuff As New clsDataBuffer
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		'UPGRADE_WARNING: Couldn't resolve default property of object StringFormat(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		lChecksum = cCRC.CRC32(StringFormat("{0}{1}", IIf(LenB(sPassword) = 0, "gn1ftx14oc", sPassword), ZeroOffset(lServerToken, 8)))
+        lChecksum = cCRC.CRC32(StringFormat("{0}{1}", IIf(Len(sPassword) = 0, "gn1ftx14oc", sPassword), ZeroOffset(lServerToken, 8)))
 		
 		
 		pBuff.InsertDWord(lChecksum)
@@ -192,8 +189,7 @@ ERROR_HANDLER:
 		
 		Dim pBuff As New clsDataBuffer
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		pBuff.InsertDWord(GetBNLSProductID(IIf(LenB(sProduct) = 0, BotVars.Product, sProduct)))
+        pBuff.InsertDWord(GetBNLSProductID(IIf(Len(sProduct) = 0, BotVars.Product, sProduct)))
 		pBuff.vLSendPacket(BNLS_REQUESTVERSIONBYTE)
 		
 		'UPGRADE_NOTE: Object pBuff may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
@@ -279,8 +275,7 @@ ERROR_HANDLER:
 	
 	'===================================================================================================
 	Public Function GetBNLSProductID(Optional ByVal sProdID As String = vbNullString) As Integer
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(sProdID) = 0) Then sProdID = BotVars.Product
+        If (Len(sProdID) = 0) Then sProdID = BotVars.Product
 		
 		GetBNLSProductID = GetProductInfo(sProdID).BNLS_ID
 	End Function

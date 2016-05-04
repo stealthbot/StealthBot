@@ -49,7 +49,7 @@ Friend Class frmDBManager
 		
 		' this line is gay but for some reason I can't set the ImageList for vbalTV in the designer/VB properties -Ribose
 		'UPGRADE_ISSUE: MSComctlLib.ImageList property Icons.hImageList was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-		trvUsers.set_ImageList(Icons.hImageList)
+        trvUsers.set_ImageList(icons)
 		'TODO get images, because i broke the imagelist we had... :(
 		
 		' has our database been loaded?
@@ -231,42 +231,41 @@ Friend Class frmDBManager
 		
 		Call VB6.ShowForm(frmDBNameEntry, VB6.FormShowConstants.Modal, Me)
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(m_entryname) > 0) Then
-			
-			Username = m_entryname
-			
-			If (GetAccess(Username, "USER").Username = vbNullString) Then
-				' redefine array to support new entry
-				ReDim Preserve m_DB(UBound(m_DB) + 1)
-				
-				' create new database entry
-				With m_DB(UBound(m_DB))
-					.Username = Username
-					.Type = "USER"
-					.AddedBy = "(console)"
-					.AddedOn = Now
-					.ModifiedBy = "(console)"
-					.ModifiedOn = Now
-				End With
-				
-				newNode = PlaceNewNode(Username, "USER", IC_USER)
-				
-				If (Not (newNode Is Nothing)) Then
-					' change misc. settings
-					With newNode
-						'.Image = 0
-						.Tag = "USER"
-						.Selected = True
-					End With
-					
-					'Call trvUsers_NodeClick(newNode)
-				End If
-			Else
-				' alert user that entry already exists
-				MsgBox("There is already an entry of this type matching " & "the specified name.")
-			End If
-		End If
+        If (Len(m_entryname) > 0) Then
+
+            Username = m_entryname
+
+            If (GetAccess(Username, "USER").Username = vbNullString) Then
+                ' redefine array to support new entry
+                ReDim Preserve m_DB(UBound(m_DB) + 1)
+
+                ' create new database entry
+                With m_DB(UBound(m_DB))
+                    .Username = Username
+                    .Type = "USER"
+                    .AddedBy = "(console)"
+                    .AddedOn = Now
+                    .ModifiedBy = "(console)"
+                    .ModifiedOn = Now
+                End With
+
+                newNode = PlaceNewNode(Username, "USER", IC_USER)
+
+                If (Not (newNode Is Nothing)) Then
+                    ' change misc. settings
+                    With newNode
+                        '.Image = 0
+                        .Tag = "USER"
+                        .Selected = True
+                    End With
+
+                    'Call trvUsers_NodeClick(newNode)
+                End If
+            Else
+                ' alert user that entry already exists
+                MsgBox("There is already an entry of this type matching " & "the specified name.")
+            End If
+        End If
 	End Sub
 	
 	Private Sub btnCreateGroup_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles btnCreateGroup.Click
@@ -278,41 +277,40 @@ Friend Class frmDBManager
 		
 		Call VB6.ShowForm(frmDBNameEntry, VB6.FormShowConstants.Modal, Me)
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(m_entryname) > 0) Then
-			
-			GroupName = m_entryname
-			
-			If (GetAccess(GroupName, "GROUP").Username = vbNullString) Then
-				ReDim Preserve m_DB(UBound(m_DB) + 1)
-				
-				With m_DB(UBound(m_DB))
-					.Username = GroupName
-					.Type = "GROUP"
-					.AddedBy = "(console)"
-					.AddedOn = Now
-					.ModifiedBy = "(console)"
-					.ModifiedOn = Now
-				End With
-				
-				newNode = PlaceNewNode(GroupName, "GROUP", IC_GROUP)
-				
-				Call UpdateGroupList()
-				
-				If (Not (newNode Is Nothing)) Then
-					' change misc. settings
-					With newNode
-						.Tag = "GROUP"
-						.Selected = True
-					End With
-					
-					'Call trvUsers_NodeClick(newNode)
-				End If
-			Else
-				' alert user that entry already exists
-				MsgBox("There is already an entry of this type matching " & "the specified name.")
-			End If
-		End If
+        If (Len(m_entryname) > 0) Then
+
+            GroupName = m_entryname
+
+            If (GetAccess(GroupName, "GROUP").Username = vbNullString) Then
+                ReDim Preserve m_DB(UBound(m_DB) + 1)
+
+                With m_DB(UBound(m_DB))
+                    .Username = GroupName
+                    .Type = "GROUP"
+                    .AddedBy = "(console)"
+                    .AddedOn = Now
+                    .ModifiedBy = "(console)"
+                    .ModifiedOn = Now
+                End With
+
+                newNode = PlaceNewNode(GroupName, "GROUP", IC_GROUP)
+
+                Call UpdateGroupList()
+
+                If (Not (newNode Is Nothing)) Then
+                    ' change misc. settings
+                    With newNode
+                        .Tag = "GROUP"
+                        .Selected = True
+                    End With
+
+                    'Call trvUsers_NodeClick(newNode)
+                End If
+            Else
+                ' alert user that entry already exists
+                MsgBox("There is already an entry of this type matching " & "the specified name.")
+            End If
+        End If
 	End Sub
 	
 	Sub btnCreateClan_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles btnCreateClan.Click
@@ -324,39 +322,38 @@ Friend Class frmDBManager
 		
 		Call VB6.ShowForm(frmDBNameEntry, VB6.FormShowConstants.Modal, Me)
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(m_entryname) > 0) Then
-			
-			ClanName = m_entryname
-			
-			If (GetAccess(ClanName, "CLAN").Username = vbNullString) Then
-				ReDim Preserve m_DB(UBound(m_DB) + 1)
-				
-				With m_DB(UBound(m_DB))
-					.Username = ClanName
-					.Type = "CLAN"
-					.AddedBy = "(console)"
-					.AddedOn = Now
-					.ModifiedBy = "(console)"
-					.ModifiedOn = Now
-				End With
-				
-				newNode = PlaceNewNode(ClanName, "CLAN", IC_CLAN)
-				
-				If (Not (newNode Is Nothing)) Then
-					' change misc. settings
-					With newNode
-						.Tag = "CLAN"
-						.Selected = True
-					End With
-					
-					'Call trvUsers_NodeClick(newNode)
-				End If
-			Else
-				' alert user that entry already exists
-				MsgBox("There is already an entry of this type matching " & "the specified name.")
-			End If
-		End If
+        If (Len(m_entryname) > 0) Then
+
+            ClanName = m_entryname
+
+            If (GetAccess(ClanName, "CLAN").Username = vbNullString) Then
+                ReDim Preserve m_DB(UBound(m_DB) + 1)
+
+                With m_DB(UBound(m_DB))
+                    .Username = ClanName
+                    .Type = "CLAN"
+                    .AddedBy = "(console)"
+                    .AddedOn = Now
+                    .ModifiedBy = "(console)"
+                    .ModifiedOn = Now
+                End With
+
+                newNode = PlaceNewNode(ClanName, "CLAN", IC_CLAN)
+
+                If (Not (newNode Is Nothing)) Then
+                    ' change misc. settings
+                    With newNode
+                        .Tag = "CLAN"
+                        .Selected = True
+                    End With
+
+                    'Call trvUsers_NodeClick(newNode)
+                End If
+            Else
+                ' alert user that entry already exists
+                MsgBox("There is already an entry of this type matching " & "the specified name.")
+            End If
+        End If
 	End Sub
 	
 	Sub btnCreateGame_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles btnCreateGame.Click
@@ -367,39 +364,38 @@ Friend Class frmDBManager
 		
 		Call VB6.ShowForm(frmDBGameSelection, VB6.FormShowConstants.Modal, Me)
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(m_entryname) > 0) Then
-			
-			GameEntry = m_entryname
-			
-			If (GetAccess(GameEntry, "GAME").Username = vbNullString) Then
-				ReDim Preserve m_DB(UBound(m_DB) + 1)
-				
-				With m_DB(UBound(m_DB))
-					.Username = GameEntry
-					.Type = "GAME"
-					.AddedBy = "(console)"
-					.AddedOn = Now
-					.ModifiedBy = "(console)"
-					.ModifiedOn = Now
-				End With
-				
-				newNode = PlaceNewNode(GameEntry, "GAME", IC_GAME)
-				
-				If (Not (newNode Is Nothing)) Then
-					' change misc. settings
-					With newNode
-						.Tag = "GAME"
-						.Selected = True
-					End With
-					
-					'Call trvUsers_NodeClick(newNode)
-				End If
-			Else
-				' alert user that entry already exists
-				MsgBox("There is already an entry of this type matching " & "the specified name.")
-			End If
-		End If
+        If (Len(m_entryname) > 0) Then
+
+            GameEntry = m_entryname
+
+            If (GetAccess(GameEntry, "GAME").Username = vbNullString) Then
+                ReDim Preserve m_DB(UBound(m_DB) + 1)
+
+                With m_DB(UBound(m_DB))
+                    .Username = GameEntry
+                    .Type = "GAME"
+                    .AddedBy = "(console)"
+                    .AddedOn = Now
+                    .ModifiedBy = "(console)"
+                    .ModifiedOn = Now
+                End With
+
+                newNode = PlaceNewNode(GameEntry, "GAME", IC_GAME)
+
+                If (Not (newNode Is Nothing)) Then
+                    ' change misc. settings
+                    With newNode
+                        .Tag = "GAME"
+                        .Selected = True
+                    End With
+
+                    'Call trvUsers_NodeClick(newNode)
+                End If
+            Else
+                ' alert user that entry already exists
+                MsgBox("There is already an entry of this type matching " & "the specified name.")
+            End If
+        End If
 	End Sub
 	
 	Private Function PlaceNewNode(ByRef EntryName As String, ByRef EntryType As String, ByRef EntryImage As Short) As vbalTreeViewLib6.cTreeViewNode
@@ -634,7 +630,7 @@ Friend Class frmDBManager
 		If Item.Ghosted Then
 			Item.Checked = False
 			'UPGRADE_ISSUE: MSComctlLib.ListItem property Item.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-			Item.SmallIcon = IIf(m_glistcount = 0, IC_EMPTY, IC_UNCHECKED)
+            Item.SmallIcon = IIf(m_glistcount = 0, IC_EMPTY, IC_UNCHECKED)
 			Exit Sub
 		End If
 		
@@ -839,20 +835,18 @@ Friend Class frmDBManager
 				
 				If HandleRenameEvent(Target, m_entryname) Then
 					
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If LenB(m_entryname) > 0 Then
-						Target.Text = m_entryname
-						'UPGRADE_NOTE: Refresh was upgraded to CtlRefresh. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-						trvUsers.CtlRefresh()
-						
-						Call UpdateGroupList()
-						
-						If m_modified Then
-							Call HandleUnsaved()
-						Else
-							Call HandleSaved()
-						End If
-					End If
+                    If Len(m_entryname) > 0 Then
+                        Target.Text = m_entryname
+                        trvUsers.Refresh()
+
+                        Call UpdateGroupList()
+
+                        If m_modified Then
+                            Call HandleUnsaved()
+                        Else
+                            Call HandleSaved()
+                        End If
+                    End If
 					
 				Else
 					' alert user that entry already exists
@@ -877,21 +871,19 @@ Friend Class frmDBManager
 			Exit Function
 		End If
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If NewString = Target.Text Or LenB(NewString) = 0 Then
-			' same name succeeds (no chnage); empty name success (cancelled)
-			Exit Function
-		End If
+        If NewString = Target.Text Or Len(NewString) = 0 Then
+            ' same name succeeds (no chnage); empty name success (cancelled)
+            Exit Function
+        End If
 		
 		For i = LBound(m_DB) To UBound(m_DB)
 			If (StrComp(Target.Text, m_DB(i).Username, CompareMethod.Text) = 0) Then
 				If (StrComp(Target.Tag, m_DB(i).Type, CompareMethod.Text) = 0) Then
-					'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-					If LenB(GetAccess(NewString, m_DB(i).Type).Username) > 0 Then
-						' already exists
-						HandleRenameEvent = False
-						Exit Function
-					End If
+                    If Len(GetAccess(NewString, m_DB(i).Type).Username) > 0 Then
+                        ' already exists
+                        HandleRenameEvent = False
+                        Exit Function
+                    End If
 					
 					' rename DB entry
 					m_DB(i).Username = NewString
@@ -1194,15 +1186,13 @@ ERROR_HANDLER:
 	' handle node collapse
 	Private Sub trvUsers_Collapse(ByVal eventSender As System.Object, ByVal eventArgs As AxvbalTreeViewLib6.__vbalTreeView_CollapseEvent) Handles trvUsers.Collapse
 		' refresh tree view
-		'UPGRADE_NOTE: Refresh was upgraded to CtlRefresh. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-		Call trvUsers.CtlRefresh()
+        Call trvUsers.Refresh()
 	End Sub
 	
 	' handle node expand
 	Private Sub trvUsers_Expand(ByVal eventSender As System.Object, ByVal eventArgs As AxvbalTreeViewLib6.__vbalTreeView_ExpandEvent) Handles trvUsers.Expand
 		' refresh tree view
-		'UPGRADE_NOTE: Refresh was upgraded to CtlRefresh. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-		Call trvUsers.CtlRefresh()
+        Call trvUsers.Refresh()
 	End Sub
 	
 	Private Sub trvUsers_KeyDownEvent(ByVal eventSender As System.Object, ByVal eventArgs As AxvbalTreeViewLib6.__vbalTreeView_KeyDownEvent) Handles trvUsers.KeyDownEvent
@@ -1517,8 +1507,7 @@ ERROR_HANDLER:
 		node.Selected = True
 		
 		' refresh tree view
-		'UPGRADE_NOTE: Refresh was upgraded to CtlRefresh. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-		Call trvUsers.CtlRefresh()
+        Call trvUsers.Refresh()
 	End Sub
 	
 	'Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1690,15 +1679,13 @@ ERROR_HANDLER:
 		grpwlk = GetAccessGroupWalk(Groups)
 		
 		lblInherit.Text = vbNullString
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If grpwlk.Rank > 0 And LenB(grpwlk.Flags) > 0 Then
-			lblInherit.Text = "Inherits rank " & grpwlk.Rank & " and flags " & grpwlk.Flags & " from groups."
-		ElseIf grpwlk.Rank > 0 Then 
-			lblInherit.Text = "Inherits rank " & grpwlk.Rank & " from groups."
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		ElseIf LenB(grpwlk.Flags) > 0 Then 
-			lblInherit.Text = "Inherits flags " & grpwlk.Flags & " from groups."
-		End If
+        If grpwlk.Rank > 0 And Len(grpwlk.Flags) > 0 Then
+            lblInherit.Text = "Inherits rank " & grpwlk.Rank & " and flags " & grpwlk.Flags & " from groups."
+        ElseIf grpwlk.Rank > 0 Then
+            lblInherit.Text = "Inherits rank " & grpwlk.Rank & " from groups."
+        ElseIf Len(grpwlk.Flags) > 0 Then
+            lblInherit.Text = "Inherits flags " & grpwlk.Flags & " from groups."
+        End If
 	End Sub
 	
 	Private Sub ClearGroupListChecks()
@@ -1727,18 +1714,17 @@ ERROR_HANDLER:
 		Dim Splt() As String
 		
 		' is it not in a group?
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(Groups) = 0 Or StrComp(Groups, "%", CompareMethod.Binary) = 0) Then
-			grp = vbNullString
-			' is entry member of multiple groups?
-		ElseIf (InStr(1, Groups, ",", CompareMethod.Binary) <> 0) Then 
-			' split up multiple groupings
-			Splt = Split(Groups, ",")
-			grp = Splt(0)
-		Else
-			' no need for special handling...
-			grp = Groups
-		End If
+        If (Len(Groups) = 0 Or StrComp(Groups, "%", CompareMethod.Binary) = 0) Then
+            grp = vbNullString
+            ' is entry member of multiple groups?
+        ElseIf (InStr(1, Groups, ",", CompareMethod.Binary) <> 0) Then
+            ' split up multiple groupings
+            Splt = Split(Groups, ",")
+            grp = Splt(0)
+        Else
+            ' no need for special handling...
+            grp = Groups
+        End If
 		
 		GetPrimaryGroup = grp
 	End Function
@@ -1798,16 +1784,15 @@ ERROR_HANDLER:
 		
 		For i = 1 To trvUsers.NodeCount
 			If (StrComp(trvUsers.nodes(i).Text, nodeName, CompareMethod.Text) = 0) Then
-				'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-				If (LenB(Tag_Renamed) > 0) Then
-					If (StrComp(trvUsers.nodes(i).Tag, Tag_Renamed, CompareMethod.Text) = 0) Then
-						FindNodeIndex = i
-						Exit Function
-					End If
-				Else
-					FindNodeIndex = i
-					Exit Function
-				End If
+                If (Len(Tag_Renamed) > 0) Then
+                    If (StrComp(trvUsers.Nodes(i).Tag, Tag_Renamed, CompareMethod.Text) = 0) Then
+                        FindNodeIndex = i
+                        Exit Function
+                    End If
+                Else
+                    FindNodeIndex = i
+                    Exit Function
+                End If
 			End If
 		Next i
 		
@@ -1940,17 +1925,16 @@ ERROR_HANDLER:
 		Dim i As Short
 		Dim j As Short
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If LenB(Groups) > 0 Then
-			Splt = Split(Groups, ",")
-			For j = LBound(Splt) To UBound(Splt)
-				If (StrComp(Splt(j), "%", CompareMethod.Binary) <> 0) Then
-					On Error GoTo ERROR_HANDLER
-					Call AllGroups.Add(Splt(j), Splt(j))
-					On Error GoTo 0
-				End If
-			Next j
-		End If
+        If Len(Groups) > 0 Then
+            Splt = Split(Groups, ",")
+            For j = LBound(Splt) To UBound(Splt)
+                If (StrComp(Splt(j), "%", CompareMethod.Binary) <> 0) Then
+                    On Error GoTo ERROR_HANDLER
+                    Call AllGroups.Add(Splt(j), Splt(j))
+                    On Error GoTo 0
+                End If
+            Next j
+        End If
 		
 		i = 1
 		Do While i <= AllGroups.Count()
@@ -1960,17 +1944,16 @@ ERROR_HANDLER:
 			If tmp.Rank > MaxRank Then MaxRank = tmp.Rank
 			CombFlags = CombFlags & tmp.Flags
 			
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If LenB(tmp.Groups) > 0 And StrComp(tmp.Groups, "%", CompareMethod.Text) <> 0 Then
-				Splt = Split(tmp.Groups, ",")
-				For j = LBound(Splt) To UBound(Splt)
-					If (StrComp(Splt(j), "%", CompareMethod.Binary) <> 0) Then
-						On Error GoTo ERROR_HANDLER
-						Call AllGroups.Add(Splt(j), Splt(j))
-						On Error GoTo 0
-					End If
-				Next j
-			End If
+            If Len(tmp.Groups) > 0 And StrComp(tmp.Groups, "%", CompareMethod.Text) <> 0 Then
+                Splt = Split(tmp.Groups, ",")
+                For j = LBound(Splt) To UBound(Splt)
+                    If (StrComp(Splt(j), "%", CompareMethod.Binary) <> 0) Then
+                        On Error GoTo ERROR_HANDLER
+                        Call AllGroups.Add(Splt(j), Splt(j))
+                        On Error GoTo 0
+                    End If
+                Next j
+            End If
 			i = i + 1
 		Loop 
 		

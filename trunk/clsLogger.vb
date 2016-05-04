@@ -56,34 +56,31 @@ Friend Class clsLogger
 	Public Function WriteWarning(ByVal sWarning As String, Optional ByVal source As String = "", Optional ByRef TimeDate As Date = #12:00:00 AM#) As Object
 		source = LCase(source)
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(source) > 0) Then
-			WriteLine_Renamed(LOG_TYPES.WARNING_MSG, "warning " & source & " " & sWarning, TimeDate)
-		Else
-			WriteLine_Renamed(LOG_TYPES.WARNING_MSG, "warning " & sWarning, TimeDate)
-		End If
+        If (Len(source) > 0) Then
+            WriteLine_Renamed(LOG_TYPES.WARNING_MSG, "warning " & source & " " & sWarning, TimeDate)
+        Else
+            WriteLine_Renamed(LOG_TYPES.WARNING_MSG, "warning " & sWarning, TimeDate)
+        End If
 	End Function
 	
 	Public Function WriteError(ByVal sError As String, Optional ByVal source As String = "", Optional ByRef TimeDate As Date = #12:00:00 AM#) As Object
 		source = LCase(source)
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(source) > 0) Then
-			WriteLine_Renamed(LOG_TYPES.ERROR_MSG, "error " & source & " " & sError, TimeDate)
-		Else
-			WriteLine_Renamed(LOG_TYPES.ERROR_MSG, "error " & sError, TimeDate)
-		End If
+        If (Len(source) > 0) Then
+            WriteLine_Renamed(LOG_TYPES.ERROR_MSG, "error " & source & " " & sError, TimeDate)
+        Else
+            WriteLine_Renamed(LOG_TYPES.ERROR_MSG, "error " & sError, TimeDate)
+        End If
 	End Function
 	
 	Public Function WriteEvent(ByVal sTitle As String, ByVal sEvent As String, Optional ByVal source As String = "", Optional ByRef TimeDate As Date = #12:00:00 AM#) As Object
 		source = LCase(source)
 		
-		'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		If (LenB(source) > 0) Then
-			WriteLine_Renamed(LOG_TYPES.EVENT_MSG, "event " & sTitle & " " & source & " " & sEvent, TimeDate)
-		Else
-			WriteLine_Renamed(LOG_TYPES.EVENT_MSG, "event " & sTitle & " " & sEvent, TimeDate)
-		End If
+        If (Len(source) > 0) Then
+            WriteLine_Renamed(LOG_TYPES.EVENT_MSG, "event " & sTitle & " " & source & " " & sEvent, TimeDate)
+        Else
+            WriteLine_Renamed(LOG_TYPES.EVENT_MSG, "event " & sTitle & " " & sEvent, TimeDate)
+        End If
 	End Function
 	
 	Public Function WriteCommand(ByVal sCommand As String, Optional ByRef TimeDate As Date = #12:00:00 AM#) As Object
@@ -102,12 +99,11 @@ Friend Class clsLogger
 		source = LCase(source)
 		
 		If (isDebug) Then
-			'UPGRADE_ISSUE: LenB function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-			If (LenB(source) > 0) Then
-				WriteLine_Renamed(LOG_TYPES.DEBUG_MSG, "debug " & source & " " & sDebugMessage, TimeDate)
-			Else
-				WriteLine_Renamed(LOG_TYPES.DEBUG_MSG, "debug " & sDebugMessage, TimeDate)
-			End If
+            If (Len(source) > 0) Then
+                WriteLine_Renamed(LOG_TYPES.DEBUG_MSG, "debug " & source & " " & sDebugMessage, TimeDate)
+            Else
+                WriteLine_Renamed(LOG_TYPES.DEBUG_MSG, "debug " & sDebugMessage, TimeDate)
+            End If
 		End If
 	End Function
 	
