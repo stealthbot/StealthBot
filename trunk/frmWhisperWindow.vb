@@ -117,12 +117,12 @@ Friend Class frmWhisperWindow
 		Dim tUsername, tMessage As String
 		
 		'UPGRADE_WARNING: CommonDialog variable was not upgraded Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="671167DC-EA81-475D-B690-7A40C7BF4A23"'
-		With cdl
-			.InitialDirectory = CurDir()
-			'UPGRADE_WARNING: Filter has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-			.Filter = ".htm|HTML Documents"
-			.ShowDialog()
-			
+        With New SaveFileDialog
+            .InitialDirectory = CurDir()
+            'UPGRADE_WARNING: Filter has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+            .Filter = ".htm|HTML Documents"
+            .ShowDialog()
+
             If Len(.FileName) > 0 Then
                 ToSave = Split(rtbWhispers.Text, vbCrLf)
                 f = FreeFile()

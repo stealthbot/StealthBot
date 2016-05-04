@@ -244,7 +244,7 @@ Friend Class frmChat
 		Me.Show()
 		Me.Refresh()
 		'UPGRADE_ISSUE: Form property frmChat.AutoRedraw was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-		Me.AutoRedraw = True
+        Me.DoubleBuffered = True
 		
 		AddChat(RTBColors.ConsoleText, "-> Welcome to " & CVERSION & ", by Stealth.")
 		AddChat(RTBColors.ConsoleText, "-> If you enjoy StealthBot, consider supporting its development at http://donate.stealthbot.net")
@@ -426,7 +426,8 @@ ERROR_HANDLER:
 			
 			.RequestTimeout = 5
 			.Tag = Request
-			.Execute(URL)
+            .URL = URL
+            .Execute()
 			
 			RequestINetPage = True
 		End With
@@ -4588,7 +4589,7 @@ ERROR_HANDLER:
 		
 		Dim strTemp As String
 		
-		sckMCP.GetData(strTemp, VariantType.String)
+        sckMCP.GetData(strTemp)
 		MCPBuffer.AddData(strTemp)
 		
 		While MCPBuffer.FullPacket
@@ -5228,7 +5229,7 @@ ERROR_HANDLER:
 		If (clsCRC32.CRC32(BETA_AUTH_URL) = BETA_AUTH_URL_CRC32) Then
 			If (InStr(1, hostFile, Split(BETA_AUTH_URL, ".")(1), CompareMethod.Text) = 0) Then
 				'UPGRADE_WARNING: Couldn't resolve default property of object INet.OpenURL(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				Result = CShort(Val(INet.OpenURL(BETA_AUTH_URL & Username)))
+                Result = CShort(Val(INet.OpenURL(BETA_AUTH_URL & Username, 0)))
 			End If
 		End If
 		
@@ -6053,7 +6054,7 @@ ERROR_HANDLER:
 		Dim BufferLimit As Integer
 		Dim interations As Short
 		
-		sckBNet.GetData(strTemp, VariantType.String)
+        sckBNet.GetData(strTemp)
 		
 		'    Debug.Print "--> socket received a packet"
 		'    Debug.Print DebugOutput(strTemp)
@@ -6184,7 +6185,7 @@ ERROR_HANDLER:
 		
 		Dim strTemp As String
 		
-		sckBNLS.GetData(strTemp, VariantType.String)
+        sckBNLS.GetData(strTemp)
 		
 		If BotVars.UseProxy And (BotVars.ProxyStatus = modEnum.enuProxyStatus.psConnecting Or BotVars.ProxyStatus = modEnum.enuProxyStatus.psLoggingIn) Then
 			

@@ -66,12 +66,14 @@ Module modWindow
 	Private hWndSet As New Scripting.Dictionary
 	Private hWndRTB As New Scripting.Dictionary
 	
+    Delegate Function WindowProc_Callback(ByVal hWnd As Integer, ByVal uMsg As Integer, ByVal wParam As Integer, ByVal lParam As Integer) As Integer
+
 	Public Sub HookWindowProc(ByVal hWnd As Integer)
 		
 		Dim OldWindowProc As Integer
 		
 		'UPGRADE_WARNING: Add a delegate for AddressOf NewWindowProc Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="E9E157F7-EF0C-4016-87B7-7D7FBBC6EE08"'
-		OldWindowProc = SetWindowLong(hWnd, GWL_WNDPROC, AddressOf NewWindowProc)
+        OldWindowProc = SetWindowProc(hWnd, GWL_WNDPROC, AddressOf NewWindowProc)
 		
 		'UPGRADE_WARNING: Couldn't resolve default property of object hWndSet(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 		hWndSet(hWnd) = OldWindowProc

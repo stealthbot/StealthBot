@@ -8,6 +8,8 @@ Module modOtherCode
 	Public Declare Function GetUserName Lib "advapi32.dll"  Alias "GetUserNameA"(ByVal lpBuffer As String, ByRef nSize As Integer) As Integer
 	Private Const MAX_COMPUTERNAME_LENGTH As Integer = 31
 	Private Const MAX_USERNAME_LENGTH As Integer = 256
+
+    Delegate Function MonitorEnumProc_Callback(ByVal hMonitor As Integer, ByVal hDCMonitor As Integer, ByVal lprcMonitor As Integer, ByRef dwData As Integer) As Integer
 	
 	Public Structure COMMAND_DATA
 		Dim Name As String

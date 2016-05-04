@@ -1211,22 +1211,19 @@ Friend Class clsScriptSupportClass
 		Dim Fonts() As String
 		Dim i As Short
 		
-		'UPGRADE_ISSUE: Screen property Screen.FontCount was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-		ReDim Fonts(Screen.FontCount - 1)
-		'UPGRADE_ISSUE: Screen property Screen.FontCount was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-		For i = 0 To Screen.FontCount - 1
-			'UPGRADE_ISSUE: Screen property Screen.Fonts was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-			Fonts(i) = Screen.Fonts(i)
-		Next i
+        ReDim Fonts(FontFamily.Families.Length - 1)
+        For i = 0 To FontFamily.Families.Length - 1
+            Fonts(i) = FontFamily.Families(i).Name
+        Next i
 		
 		GetAllFonts = VB6.CopyArray(Fonts)
 	End Function
 	
 	'// CLIPBOARD
 	'// Access to the system clipboard.
-	Public Function Clipboard() As Microsoft.VisualBasic.PC.Clipboard
-		My.Computer.Clipboard = My.Computer.Clipboard
-	End Function
+    Public Function Clipboard() As Microsoft.VisualBasic.MyServices.ClipboardProxy
+        Clipboard = My.Computer.Clipboard
+    End Function
 	
 	'// TWIPSPERPIXELX
 	'// Get the horizontal ratio of twips/pixel.
@@ -1638,14 +1635,13 @@ ERROR_HANDLER:
 	'UPGRADE_NOTE: Choose was upgraded to Choose_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	'UPGRADE_WARNING: ParamArray pChoice was changed from ByRef to ByVal. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="93C6A0DC-8C99-429A-8696-35FC4DCEFCCC"'
 	Public Function Choose_Renamed(ByVal aIndex As Single, ParamArray ByVal pChoice() As Object) As Object
-		'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
-		'UPGRADE_WARNING: Couldn't resolve default property of object Choose_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		Choose_Renamed = System.DBNull.Value
-		If aIndex > 0 And aIndex <= UBound(pChoice) Then
-			'UPGRADE_WARNING: Couldn't resolve default property of object pChoice(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-			Choose_Renamed = pChoice(aIndex - 1)
-		End If
-	End Function
+        'UPGRADE_WARNING: Couldn't resolve default property of object Choose_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+        Choose_Renamed = Nothing
+        If aIndex > 0 And aIndex <= UBound(pChoice) Then
+            'UPGRADE_WARNING: Couldn't resolve default property of object pChoice(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
+            Choose_Renamed = pChoice(aIndex - 1)
+        End If
+    End Function
 	
 	'// IIF
 	'// Returns a different value based on if a statement is true or false.
@@ -1662,12 +1658,11 @@ ERROR_HANDLER:
 	'//  see: https://msdn.microsoft.com/en-us/library/aa445092(v=vs.60).aspx
 	'UPGRADE_NOTE: Partition was upgraded to Partition_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
 	Public Function Partition_Renamed(ByVal aNumber As Integer, ByVal aStart As Integer, ByVal aStop As Integer, ByVal aInterval As Integer) As String
-		'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
-		Partition_Renamed = System.DBNull.Value
-		If aInterval > 0 And aStop > aStart Then
-			Partition_Renamed = Partition(aNumber, aStart, aStop, aInterval)
-		End If
-	End Function
+        Partition_Renamed = String.Empty
+        If aInterval > 0 And aStop > aStart Then
+            Partition_Renamed = Partition(aNumber, aStart, aStop, aInterval)
+        End If
+    End Function
 	
 	'// SWITCH
 	'// Returns the first even item in the parameter list after the odd expression that is true.
@@ -1678,9 +1673,8 @@ ERROR_HANDLER:
 	Public Function Switch_Renamed(ParamArray ByVal pVarExpr() As Object) As Object
 		Dim i As Integer
 		
-		'UPGRADE_WARNING: Use of Null/IsNull() detected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="2EED02CB-5C0E-4DC1-AE94-4FAA3A30F51A"'
 		'UPGRADE_WARNING: Couldn't resolve default property of object Switch_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		Switch_Renamed = System.DBNull.Value
+        Switch_Renamed = Nothing
 		For i = 0 To UBound(pVarExpr) - 1 Step 2
 			'UPGRADE_WARNING: Couldn't resolve default property of object pVarExpr(i). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			If pVarExpr(i) Then

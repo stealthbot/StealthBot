@@ -9,7 +9,7 @@ Module modAPI
 	Public Declare Sub ExitProcess Lib "kernel32" (ByVal uExitCode As Integer)
 	
 	Public Declare Function GetForegroundWindow Lib "user32" () As Integer
-    Public Declare Function EnumDisplayMonitors Lib "user32" (ByVal hDC As Integer, ByRef lprcClip As Integer, ByVal lpfnEnum As Integer, ByRef dwData As Integer) As Integer
+    Public Declare Function EnumDisplayMonitors Lib "user32" (ByVal hDC As Integer, ByRef lprcClip As Integer, ByVal lpfnEnum As MonitorEnumProc_Callback, ByRef dwData As Integer) As Integer
 	
     Public Declare Function SetSockOpt Lib "ws2_32.dll" Alias "setsockopt" (ByVal lSocketHandle As Integer, ByVal lSocketLevel As Integer, ByVal lOptName As Integer, ByRef vOptVal As Integer, ByVal lOptLen As Integer) As Integer
 	Public Declare Function ntohl Lib "ws2_32.dll" (ByVal netlong As Integer) As Integer
@@ -73,7 +73,8 @@ Module modAPI
 	Public Declare Function GetCursorPos Lib "user32" (ByRef lpPoint As POINTAPI) As Integer
 	Public Declare Function SetCursorPos Lib "user32" (ByVal X As Integer, ByVal y As Integer) As Integer
 	
-	Public Declare Function SetWindowLong Lib "user32"  Alias "SetWindowLongA"(ByVal hWnd As Integer, ByVal nIndex As Integer, ByVal dwNewLong As Integer) As Integer
+    Public Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" (ByVal hWnd As Integer, ByVal nIndex As Integer, ByVal dwNewLong As Integer) As Integer
+    Public Declare Function SetWindowProc Lib "user32" Alias "SetWindowLongA" (ByVal hWnd As Integer, ByVal nIndex As Integer, ByVal dwNewLong As WindowProc_Callback) As Integer
 	
 	Declare Function GetWindowLong Lib "user32"  Alias "GetWindowLongA"(ByVal hWnd As Integer, ByVal nIndex As Integer) As Integer
 	

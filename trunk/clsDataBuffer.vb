@@ -41,8 +41,8 @@ Friend Class clsDataBuffer
 	
 	Public Property Data() As String
 		Get
-			DataControl = New String(Chr(0), m_bufsize)
-			CopyMemory(DataControl, m_buf(0), m_bufsize)
+            Data = New String(Chr(0), m_bufsize)
+            CopyMemory(Data, m_buf(0), m_bufsize)
 		End Get
 		Set(ByVal Value As String)
 			ReDim m_buf(Len(Value))

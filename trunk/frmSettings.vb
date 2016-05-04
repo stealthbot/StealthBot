@@ -758,27 +758,27 @@ Friend Class frmSettings
 	
 	Private Sub cmdExport_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdExport.Click
 		'UPGRADE_WARNING: CommonDialog variable was not upgraded Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="671167DC-EA81-475D-B690-7A40C7BF4A23"'
-		With cDLG
-			.FileName = vbNullString
-			.ShowDialog()
-			If .FileName <> vbNullString Then
-				SaveColors(.FileName)
-				MsgBox("ColorList exported.", MsgBoxStyle.OKOnly)
-			End If
-		End With
+        With New SaveFileDialog
+            .FileName = vbNullString
+            .ShowDialog()
+            If .FileName <> vbNullString Then
+                SaveColors(.FileName)
+                MsgBox("ColorList exported.", MsgBoxStyle.OkOnly)
+            End If
+        End With
 	End Sub
 	
 	Private Sub cmdImport_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdImport.Click
 		'UPGRADE_WARNING: CommonDialog variable was not upgraded Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="671167DC-EA81-475D-B690-7A40C7BF4A23"'
-		With cDLG
-			.FileName = vbNullString
-			.ShowDialog()
-			If .FileName <> vbNullString Then
-				GetColorLists((.FileName))
-				cboColorList.Items.Clear()
-				Call frmSettings_Load(Me, New System.EventArgs())
-			End If
-		End With
+        With New OpenFileDialog
+            .FileName = vbNullString
+            .ShowDialog()
+            If .FileName <> vbNullString Then
+                GetColorLists((.FileName))
+                cboColorList.Items.Clear()
+                Call frmSettings_Load(Me, New System.EventArgs())
+            End If
+        End With
 	End Sub
 	
 	Private Sub cmdGetRGB_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdGetRGB.Click
