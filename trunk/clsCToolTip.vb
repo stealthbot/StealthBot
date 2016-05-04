@@ -6,11 +6,10 @@ Friend Class clsCTooltip
 	Private Declare Sub InitCommonControls Lib "comctl32.dll" ()
 	
 	''Windows API Functions
-	'UPGRADE_ISSUE: Declaring a parameter 'As Any' is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="FAE78A8D-8978-4FD4-8208-5B7324A8F795"'
-	Private Declare Function CreateWindowEx Lib "user32"  Alias "CreateWindowExA"(ByVal dwExStyle As Integer, ByVal lpClassName As String, ByVal lpWindowName As String, ByVal dwStyle As Integer, ByVal X As Integer, ByVal Y As Integer, ByVal nWidth As Integer, ByVal nHeight As Integer, ByVal hWndParent As Integer, ByVal hMenu As Integer, ByVal hInstance As Integer, ByRef lpParam As Any) As Integer
-	'UPGRADE_ISSUE: Declaring a parameter 'As Any' is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="FAE78A8D-8978-4FD4-8208-5B7324A8F795"'
-	Private Declare Function SendMessage Lib "user32"  Alias "SendMessageA"(ByVal hWnd As Integer, ByVal wMsg As Integer, ByVal wParam As Integer, ByRef lParam As Any) As Integer
-	Private Declare Function SendMessageLong Lib "user32"  Alias "SendMessageA"(ByVal hWnd As Integer, ByVal wMsg As Integer, ByVal wParam As Integer, ByVal lParam As Integer) As Integer
+    Private Declare Function CreateWindowEx Lib "user32" Alias "CreateWindowExA" (ByVal dwExStyle As Integer, ByVal lpClassName As String, ByVal lpWindowName As String, ByVal dwStyle As Integer, ByVal X As Integer, ByVal Y As Integer, ByVal nWidth As Integer, ByVal nHeight As Integer, ByVal hWndParent As Integer, ByVal hMenu As Integer, ByVal hInstance As Integer, ByRef lpParam As Integer) As Integer
+    Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As Integer, ByVal wParam As Integer, ByRef lParam As String) As Integer
+    Private Declare Function SendMessageLong Lib "user32" Alias "SendMessageA" (ByVal hWnd As Integer, ByVal wMsg As Integer, ByVal wParam As Integer, ByVal lParam As Integer) As Integer
+    Private Declare Function SendMessageInfo Lib "user32" Alias "SendMessageA" (ByVal hWnd As Integer, ByVal wMsg As Integer, ByVal wParam As Integer, ByVal lParam As TOOLINFO) As Integer
 	Private Declare Function DestroyWindow Lib "user32" (ByVal hWnd As Integer) As Integer
 	
 	''Windows API Constants
@@ -181,7 +180,7 @@ Friend Class clsCTooltip
 			ti.lpStr = Value
 			If m_lTTHwnd <> 0 Then
 				'UPGRADE_WARNING: Couldn't resolve default property of object ti. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-				SendMessage(m_lTTHwnd, TTM_UPDATETIPTEXTA, 0, ti)
+                SendMessageInfo(m_lTTHwnd, TTM_UPDATETIPTEXTA, 0, ti)
 			End If
 		End Set
 	End Property
@@ -243,7 +242,7 @@ Friend Class clsCTooltip
 		
 		''add the tooltip structure
 		'UPGRADE_WARNING: Couldn't resolve default property of object ti. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		SendMessage(m_lTTHwnd, TTM_ADDTOOLA, 0, ti)
+        SendMessageInfo(m_lTTHwnd, TTM_ADDTOOLA, 0, ti)
 		
 		''if we want a title or we want an icon
 		If mvarTitle <> vbNullString Or mvarIcon <> ttIconType.TTNoIcon Then

@@ -7,8 +7,8 @@ Friend Class clsOSVersion
 	'  http://vbnet.mvps.org/index.html?code/helpers/iswinversion.htm
 	
 	
-	'UPGRADE_ISSUE: Declaring a parameter 'As Any' is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="FAE78A8D-8978-4FD4-8208-5B7324A8F795"'
-	Private Declare Function GetVersionEx Lib "Kernel32.dll"  Alias "GetVersionExA"(ByRef lpVersionInformation As Any) As Integer
+    Private Declare Function GetVersionEx Lib "Kernel32.dll" Alias "GetVersionExA" (ByRef lpVersionInformation As OSVERSIONINFO) As Integer
+    Private Declare Function GetVersionEx Lib "Kernel32.dll" Alias "GetVersionExA" (ByRef lpVersionInformation As OSVERSIONINFOEX) As Integer
 	
 	Private Const VER_PLATFORM_WIN32_NT As Integer = 2
 	Private Const VER_NT_WORKSTATION As Integer = 1

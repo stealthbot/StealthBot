@@ -23,13 +23,10 @@ Module modMenuObj
 	Public Declare Function GetMenuItemCount Lib "user32" (ByVal hMenu As Integer) As Integer
 	'UPGRADE_WARNING: Structure MENUITEMINFO may require marshalling attributes to be passed as an argument in this Declare statement. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="C429C3A5-5D47-4CD9-8F51-74A1616405DC"'
 	Public Declare Function GetMenuItemInfo Lib "user32"  Alias "GetMenuItemInfoA"(ByVal hMenu As Integer, ByVal uItemID As Integer, ByVal ByPosition As Boolean, ByRef lpMenuItemInfo As MENUITEMINFO) As Integer
-	'UPGRADE_ISSUE: Declaring a parameter 'As Any' is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="FAE78A8D-8978-4FD4-8208-5B7324A8F795"'
-	Public Declare Function AppendMenu Lib "user32"  Alias "AppendMenuA"(ByVal hMenu As Integer, ByVal wFlags As Integer, ByVal wIDNewItem As Integer, ByVal lpNewItem As Any) As Integer
+    Public Declare Function AppendMenu Lib "user32" Alias "AppendMenuA" (ByVal hMenu As Integer, ByVal wFlags As Integer, ByVal wIDNewItem As Integer, ByVal lpNewItem As String) As Integer
 	Public Declare Function CheckMenuItem Lib "user32" (ByVal hMenu As Integer, ByVal wIDCheckItem As Integer, ByVal wCheck As Integer) As Integer
-	'UPGRADE_ISSUE: Declaring a parameter 'As Any' is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="FAE78A8D-8978-4FD4-8208-5B7324A8F795"'
-	Public Declare Function ModifyMenu Lib "user32"  Alias "ModifyMenuA"(ByVal hMenu As Integer, ByVal uPosition As Integer, ByVal uFlags As Integer, ByVal uIDNewItem As Integer, ByVal lpNewItemStr As Any) As Integer
-	'UPGRADE_ISSUE: Declaring a parameter 'As Any' is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="FAE78A8D-8978-4FD4-8208-5B7324A8F795"'
-	Public Declare Function InsertMenu Lib "user32"  Alias "InsertMenuA"(ByVal hMenu As Integer, ByVal nPosition As Integer, ByVal wFlags As Integer, ByVal wIDNewItem As Integer, ByVal lpNewItem As Any) As Integer
+    Public Declare Function ModifyMenu Lib "user32" Alias "ModifyMenuA" (ByVal hMenu As Integer, ByVal uPosition As Integer, ByVal uFlags As Integer, ByVal uIDNewItem As Integer, ByVal lpNewItemStr As String) As Integer
+    Public Declare Function InsertMenu Lib "user32" Alias "InsertMenuA" (ByVal hMenu As Integer, ByVal nPosition As Integer, ByVal wFlags As Integer, ByVal wIDNewItem As Integer, ByVal lpNewItem As String) As Integer
 	Public Declare Function RemoveMenu Lib "user32" (ByVal hMenu As Integer, ByVal nPosition As Integer, ByVal wFlags As Integer) As Integer
 	
 	'Possible Values() for wFlags

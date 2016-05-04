@@ -10,11 +10,8 @@ Module modProxySupport
 	
 	Public Declare Function gethostbyname Lib "wsock32.dll" (ByVal szHost As String) As Integer
 	Public Declare Function inet_ntoa Lib "wsock32.dll" (ByVal inaddr As Integer) As Integer
-	'UPGRADE_ISSUE: Declaring a parameter 'As Any' is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="FAE78A8D-8978-4FD4-8208-5B7324A8F795"'
-	Public Declare Function lstrlen Lib "kernel32.dll"  Alias "lstrlenA"(ByVal lpString As Any) As Integer
-	'UPGRADE_ISSUE: Declaring a parameter 'As Any' is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="FAE78A8D-8978-4FD4-8208-5B7324A8F795"'
-	'UPGRADE_ISSUE: Declaring a parameter 'As Any' is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="FAE78A8D-8978-4FD4-8208-5B7324A8F795"'
-	Public Declare Function lstrcpy Lib "kernel32.dll"  Alias "lstrcpyA"(ByVal lpString1 As Any, ByVal lpString2 As Any) As Integer
+    Public Declare Function lstrlen Lib "kernel32.dll" Alias "lstrlenA" (ByVal lpString As String) As Integer
+    Public Declare Function lstrcpy Lib "kernel32.dll" Alias "lstrcpyA" (ByVal lpString1 As String, ByVal lpString2 As String) As Integer
 	Public Declare Function WSAGetLastError Lib "wsock32.dll" () As Integer
 	Public Declare Function WSACleanup Lib "wsock32.dll" () As Integer
 	
