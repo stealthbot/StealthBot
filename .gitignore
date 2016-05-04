@@ -2,6 +2,8 @@ trunk/Bot.vbw
 trunk/Launcher/Launcher.vbw
 trunk/Plugins/
 trunk/Logs/
+trunk/bin/
+trunk/obj/
 
 *.suo
 *.tmp
