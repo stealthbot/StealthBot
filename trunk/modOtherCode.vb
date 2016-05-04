@@ -1315,7 +1315,7 @@ ERROR_HANDLER:
 			If (VB6.PixelsToTwipsX(.Columns.Item(3).Width) > 0) Then
 				'UPGRADE_WARNING: Lower bound of collection frmChat.lvChannel.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				'UPGRADE_ISSUE: MSComctlLib.ListSubItems method lvChannel.ListItems.Item.ListSubItems.Add was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-				.Items.Item(isPriority).SubItems.Add( ,  ,  , LagIcon)
+                .Items.Item(isPriority).SubItems.Add(Ping)
 			End If
 			
 			If (BotVars.NoColoring = False) Then
@@ -3291,5 +3291,25 @@ ERROR_HANDLER:
     Public Function ArrayContains(Of T)(ByVal aArray() As T, ByVal value As T) As Boolean
         ArrayContains = Array.Exists(aArray, Function(x) x.Equals(value))
     End Function
+
+    Public Class ListViewComparer
+        Implements IComparer
+
+        Private m_column As Integer
+
+        Public Sub New()
+            m_column = 0
+        End Sub
+
+        Public Sub New(ByVal column As Integer)
+            m_column = column
+        End Sub
+
+        Public Function Compare(ByVal obj1 As Object, ByVal obj2 As Object) As Integer Implements IComparer.Compare
+
+            Compare = String.Compare(CType(obj1, ListViewItem).SubItems(m_column).Text, _
+                                     CType(obj2, ListViewItem).SubItems(m_column).Text)
+        End Function
+    End Class
 
 End Module

@@ -947,7 +947,7 @@ ERROR_HANDLER:
 			.InsertDWord(oKey.PublicValue)
 			.InsertDWord(ds.ServerToken)
 			.InsertDWord(ds.ClientToken)
-			.InsertNonNTString(oKey.Hash)
+            .InsertByteArr(oKey.Hash)
 			
             If (Len(Config.CDKeyOwnerName) > 0) Then
                 .InsertNTString((Config.CDKeyOwnerName))
@@ -1545,7 +1545,7 @@ ERROR_HANDLER:
 				.InsertDWord(oKey.ProductValue)
 				.InsertDWord(oKey.PublicValue)
 				.InsertDWord(0)
-				.InsertNonNTString(oKey.Hash)
+                .InsertByteArr(oKey.Hash)
 			Next i
 			
 			.InsertNTString((ds.CRevResult))

@@ -116,23 +116,13 @@ Friend Class frmChat
 		
 		With rtbChat
 			.Font = VB6.FontChangeSize(.Font, 8)
-			'UPGRADE_WARNING: SelTabCount was upgraded to SelectionTabs and has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-			.SelectionTabs = 1
-			'UPGRADE_WARNING: RichTextLib.RichTextBox property rtbChat.SelTabs has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
-			'UPGRADE_WARNING: Couldn't resolve default property of object rtbChat.SelTabs(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			.SelectionTabs(0) = 15 * VB6.TwipsPerPixelX
-			'UPGRADE_WARNING: Couldn't resolve default property of object rtbChat.SelTabs(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			.SelectionHangingIndent = VB6.PixelsToTwipsX(.SelectionTabs(0))
 		End With
 		
 		With rtbWhispers
 			.Font = VB6.FontChangeSize(.Font, 8)
-			'UPGRADE_WARNING: SelTabCount was upgraded to SelectionTabs and has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-			.SelectionTabs = 1
-			'UPGRADE_WARNING: RichTextLib.RichTextBox property rtbWhispers.SelTabs has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
-			'UPGRADE_WARNING: Couldn't resolve default property of object rtbWhispers.SelTabs(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			.SelectionTabs(0) = 15 * VB6.TwipsPerPixelX
-			'UPGRADE_WARNING: Couldn't resolve default property of object rtbWhispers.SelTabs(). Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			.SelectionHangingIndent = VB6.PixelsToTwipsX(.SelectionTabs(0))
 		End With
 		
@@ -1247,8 +1237,8 @@ ERROR_HANDLER:
 		RequestClanMOTD()
 		
 		'frmChat.ClanHandler.RequestClanMotd 1
-		
-		Me.ListviewTabs_Click(0)
+
+        'Me.ListviewTabs_Click(0)
 	End Sub
 	
 	Private Sub ClanHandler_ClanInvitation(ByVal Token As String, ByVal ClanTag As String, ByVal RawClanTag As String, ByVal ClanName As String, ByVal InvitedBy As String, ByVal NewClan As Boolean) Handles ClanHandler.ClanInvitation
@@ -1297,7 +1287,7 @@ ERROR_HANDLER:
 		
 		lblCurrentChannel.Text = GetChannelString()
 		
-		Me.ListviewTabs_Click(0)
+        'Me.ListviewTabs_Click(0)
 	End Sub
 	
 	'UPGRADE_NOTE: Location was upgraded to Location_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
@@ -1674,27 +1664,19 @@ ERROR_HANDLER:
 		
 		If (f Is Nothing) Then
 			With lvFriendList.Items
-				'UPGRADE_WARNING: Lower bound of collection lvFriendList.ListItems.ImageList has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-				'UPGRADE_WARNING: Image property was not upgraded Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="D94970AE-02E7-43BF-93EF-DCFCD10D27B5"'
-				.Add(Username, i)
-				'UPGRADE_WARNING: Lower bound of collection lvFriendList.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-				'UPGRADE_ISSUE: MSComctlLib.ListSubItems method lvFriendList.ListItems.Item.ListSubItems.Add was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-				.Item(.Count).SubItems.Add( ,  ,  , OnlineIcon)
+                .Add(Username, i)
+                .Item(.Count).SubItems.Add(IsOnline)
 			End With
 		Else
-			'UPGRADE_ISSUE: MSComctlLib.ListItem property f.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-			f.SmallIcon = i
-			'UPGRADE_WARNING: Lower bound of collection f.ListSubItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-			'UPGRADE_ISSUE: MSComctlLib.ListSubItem property ListSubItems.Item.ReportIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-			f.SubItems.Item(1).ReportIcon = OnlineIcon
-			
-			'UPGRADE_NOTE: Object f may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6E35BFF6-CD74-4B09-9689-3E1A43DF8969"'
-			f = Nothing
+            f.ImageIndex = i
+            f.SubItems.Item(1).Text = IsOnline
+
+            f = Nothing
 		End If
 		
 		lblCurrentChannel.Text = GetChannelString()
 		
-		Me.ListviewTabs_Click(0)
+        'Me.ListviewTabs_Click(0)
 	End Sub
 	
 	'UPGRADE_NOTE: Location was upgraded to Location_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
@@ -1747,23 +1729,20 @@ ERROR_HANDLER:
 				'UPGRADE_WARNING: Couldn't resolve default property of object g_Friends.Item(FLIndex).LocationID. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 				Select Case .LocationID
 					Case FRL_OFFLINE
-						'UPGRADE_ISSUE: MSComctlLib.ListItem property x.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-						x.SmallIcon = ICUNKNOWN
+                        x.ImageIndex = ICUNKNOWN
 						
-						'UPGRADE_WARNING: Lower bound of collection x.ListSubItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-						'UPGRADE_ISSUE: MSComctlLib.ListSubItem property ListSubItems.Item.ReportIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-						x.SubItems.Item(1).ReportIcon = ICOFFLINE
+                        x.SubItems.Item(1).Text = "False"
 						
 					Case Else
 						'UPGRADE_WARNING: Lower bound of collection x.ListSubItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 						'UPGRADE_ISSUE: MSComctlLib.ListSubItem property ListSubItems.Item.ReportIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-						If x.SubItems.Item(1).ReportIcon = ICOFFLINE Then
-							'Friend is now online - notify user?
-						End If
+                        If x.SubItems.Item(1).Text = "False" Then
+                            'Friend is now online - notify user?
+                        End If
 						
 						'UPGRADE_WARNING: Lower bound of collection x.ListSubItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 						'UPGRADE_ISSUE: MSComctlLib.ListSubItem property ListSubItems.Item.ReportIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-						x.SubItems.Item(1).ReportIcon = ICONLINE
+                        x.SubItems.Item(1).Text = "True"
 						
 						'UPGRADE_WARNING: Couldn't resolve default property of object g_Friends.Item(FLIndex).Game. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 						Select Case .Game
@@ -1783,7 +1762,7 @@ ERROR_HANDLER:
 						End Select
 						
 						'UPGRADE_ISSUE: MSComctlLib.ListItem property x.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-						x.SmallIcon = i
+                        x.ImageIndex = i
 				End Select
 			End With
 			
@@ -1805,8 +1784,8 @@ ERROR_HANDLER:
 		Dim Shift As Short = System.Windows.Forms.Control.ModifierKeys \ &H10000
 		Dim x As Single = VB6.PixelsToTwipsX(eventArgs.X)
 		Dim y As Single = VB6.PixelsToTwipsY(eventArgs.Y)
-		'UPGRADE_ISSUE: Form method frmChat.PopupMenu was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-		PopupMenu(mnuQCTop)
+
+        mnuQCTop.ShowDropDown()
 	End Sub
 	
 	Public Sub ListviewTabs_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles ListviewTabs.SelectedIndexChanged
@@ -2022,8 +2001,7 @@ ERROR_HANDLER:
 			
 			mnuPopup.Tag = lvChannel.FocusedItem.Text 'Record which user is selected at time of right-clicking. - FrOzeN
 			
-			'UPGRADE_ISSUE: Form method frmChat.PopupMenu was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-			PopupMenu(mnuPopup)
+            mnuPopup.ShowDropDown()
 		End If
 	End Sub
 	
@@ -2075,8 +2053,7 @@ ERROR_HANDLER:
 			
 			mnuPopFList.Tag = lvFriendList.FocusedItem.Text 'Record which user is selected at time of right-clicking. - FrOzeN
 			
-			'UPGRADE_ISSUE: Form method frmChat.PopupMenu was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-			PopupMenu(mnuPopFList)
+            mnuPopFList.ShowDropDown()
 		End If
 	End Sub
 	
@@ -2381,7 +2358,7 @@ ERROR_HANDLER:
 				.InsertNTString(GetClanSelectedUser)
 				'UPGRADE_WARNING: Lower bound of collection lvClanList.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				'UPGRADE_ISSUE: MSComctlLib.ListItem property lvClanList.ListItems.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-				.InsertByte(lvClanList.Items.Item(lvClanList.FocusedItem.Index).SmallIcon - 1)
+                .InsertByte(lvClanList.Items.Item(lvClanList.FocusedItem.Index).ImageIndex - 1)
 				.SendPacket(SID_CLANRANKCHANGE)
 			End With
 			
@@ -2448,7 +2425,7 @@ ERROR_HANDLER:
 				.InsertNTString(GetClanSelectedUser)
 				'UPGRADE_WARNING: Lower bound of collection lvClanList.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				'UPGRADE_ISSUE: MSComctlLib.ListItem property lvClanList.ListItems.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-				.InsertByte(lvClanList.Items.Item(lvClanList.FocusedItem.Index).SmallIcon + 1)
+                .InsertByte(lvClanList.Items.Item(lvClanList.FocusedItem.Index).ImageIndex + 1)
 				.SendPacket(SID_CLANRANKCHANGE)
 			End With
 			
@@ -3013,24 +2990,24 @@ ERROR_HANDLER:
 				'UPGRADE_ISSUE: MSComctlLib.ListItem property lvFriendList.ListItems.Item.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
 				'UPGRADE_WARNING: Lower bound of collection lvFriendList.ListItems.ImageList has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				'UPGRADE_WARNING: Image property was not upgraded Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="D94970AE-02E7-43BF-93EF-DCFCD10D27B5"'
-				.Insert(endPos, .Item(startPos).Text, .Item(startPos).SmallIcon)
+                .Insert(endPos, .Item(startPos).Text, .Item(startPos).ImageIndex)
 				'UPGRADE_WARNING: Lower bound of collection lvFriendList.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				'UPGRADE_WARNING: Lower bound of collection lvFriendList.ListItems.Item().ListSubItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				'UPGRADE_ISSUE: MSComctlLib.ListSubItem property lvFriendList.ListItems.Item.ListSubItems.Item.ReportIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
 				'UPGRADE_ISSUE: MSComctlLib.ListSubItems method lvFriendList.ListItems.Item.ListSubItems.Add was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-				.Item(endPos).SubItems.Add( ,  ,  , .Item(startPos + 1).SubItems.Item(1).ReportIcon)
+                .Item(endPos).SubItems.Add(.Item(startPos + 1).SubItems.Item(1).Text)
 				.RemoveAt(startPos + 1)
 			Else
 				'UPGRADE_WARNING: Lower bound of collection lvFriendList.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				'UPGRADE_ISSUE: MSComctlLib.ListItem property lvFriendList.ListItems.Item.Icon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
 				'UPGRADE_WARNING: Lower bound of collection lvFriendList.ListItems.ImageList has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				'UPGRADE_WARNING: SmallIcon parameter was not upgraded Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B392B480-6E26-492E-84C3-16C21D8D0807"'
-				.Insert(endPos + 1, .Item(startPos).Text, .Item(startPos).Icon)
+                .Insert(endPos + 1, .Item(startPos))
 				'UPGRADE_WARNING: Lower bound of collection lvFriendList.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				'UPGRADE_WARNING: Lower bound of collection lvFriendList.ListItems.Item().ListSubItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				'UPGRADE_ISSUE: MSComctlLib.ListSubItem property lvFriendList.ListItems.Item.ListSubItems.Item.ReportIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
 				'UPGRADE_ISSUE: MSComctlLib.ListSubItems method lvFriendList.ListItems.Item.ListSubItems.Add was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-				.Item(endPos + 1).SubItems.Add( ,  ,  , .Item(startPos).SubItems.Item(1).ReportIcon)
+                .Item(endPos + 1).SubItems.Add(.Item(startPos).SubItems.Item(1).Text)
 				.RemoveAt(startPos)
 			End If
 		End With
@@ -4491,14 +4468,13 @@ ERROR_HANDLER:
 		End If
 	End Sub
 	
-	Public Sub SControl_ErrorEvent(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles SControl.ErrorEvent
-		Call modScripting.SC_Error()
-	End Sub
+    Public Sub SControl_ErrorEvent(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles SControl.ErrorEvent
+        Call modScripting.SC_Error()
+    End Sub
 	
 	Private Sub sckBNet_CloseEvent(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles sckBNet.CloseEvent
 		sckBNet.Close()
-		'UPGRADE_NOTE: State was upgraded to CtlState. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'
-		If sckBNLS.CtlState <> 0 Then sckBNLS.Close()
+        If sckBNLS.CtlState <> 0 Then sckBNLS.Close()
 		
 		Call Event_BNetDisconnected()
 		
@@ -6580,19 +6556,17 @@ ERROR_HANDLER:
 				End If
 			End If
 			'UPGRADE_WARNING: Lower bound of collection lvClanList.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-			'UPGRADE_ISSUE: MSComctlLib.ListSubItems method lvClanList.ListItems.ListSubItems.Add was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-			.Items.Item(.Items.Count).SubItems.Add( ,  ,  , Online + 6)
+            .Items.Item(.Items.Count).SubItems.Add(Online + 6)
 			'UPGRADE_WARNING: Lower bound of collection lvClanList.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 			.Items.Item(.Items.Count).SubItems.Add(CStr(visible_rank))
-			'UPGRADE_ISSUE: MSComctlLib.ListView property lvClanList.SortKey was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-			.SortKey = 2
+            .ListViewItemSorter = New modOtherCode.ListViewComparer(2)
 			.Sorting = System.Windows.Forms.SortOrder.Descending
 			.Sort()
 		End With
 		
 		lblCurrentChannel.Text = GetChannelString()
 		
-		Me.ListviewTabs_Click(0)
+        'Me.ListviewTabs_Click(0)
 		
 		RunInAll("Event_ClanInfo", Name_Renamed, Rank, Online)
 		Exit Sub
@@ -6673,8 +6647,7 @@ ERROR_HANDLER:
 			
 			mnuPopClanList.Tag = lvClanList.FocusedItem.Text 'Record which user is selected at time of right-clicking. - FrOzeN
 			
-			'UPGRADE_ISSUE: Form method frmChat.PopupMenu was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-			PopupMenu(mnuPopClanList)
+            mnuPopClanList.ShowDropDown()
 		End If
 	End Sub
 	

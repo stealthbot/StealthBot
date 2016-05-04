@@ -126,8 +126,7 @@ Module modWindow
 					frmChat.Show()
 				Case WM_RBUTTONUP
 					SetForegroundWindow(frmChat.Handle.ToInt32)
-					'UPGRADE_ISSUE: Form method frmChat.PopupMenu was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-					frmChat.PopupMenu(frmChat.mnuTray)
+                    frmChat.mnuTray.ShowDropDown()
 			End Select
 		End If
 		
@@ -170,9 +169,9 @@ Module modWindow
 			'UPGRADE_WARNING: Couldn't resolve default property of object cds. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
 			Call CopyMemory(cds, lParam, Len(cds))
 			If (cds.cbData < UBound(buf)) Then
-				Call CopyMemory(buf(0), cds.lpData, cds.cbData)
-				'UPGRADE_ISSUE: Constant vbUnicode was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="55B59875-9A95-4B71-9D6A-7C294BF7139D"'
-				Data = StrConv(System.Text.UnicodeEncoding.Unicode.GetString(buf), vbUnicode)
+                Call CopyMemory(buf(0), cds.lpData, cds.cbData)
+
+                Data = System.Text.UnicodeEncoding.Unicode.GetString(buf)
 				Data = Left(Data, InStr(1, Data, Chr(0)) - 1)
 				If (StrComp(Data, "-reloadscripts", CompareMethod.Text) = 0) Then
 					SharedScriptSupport.ReloadScript()

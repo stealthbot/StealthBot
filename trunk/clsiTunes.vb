@@ -43,7 +43,7 @@ Friend Class clsiTunes
 		On Error GoTo ERROR_HANDLER
 		
 		'UPGRADE_ISSUE: App property App.OleRequestPendingTimeout was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="076C26E5-B7A9-4E77-B69C-B4448DF39E58"'
-		App.OleRequestPendingTimeout = (30 * 1000)
+        'App.OleRequestPendingTimeout = (30 * 1000)
 		
 		m_iTunesObj = CreateObject("iTunes.Application")
 		

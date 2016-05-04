@@ -71,9 +71,9 @@ Module modCommandsClan
 
                         If (Not liUser Is Nothing) Then
                             'UPGRADE_ISSUE: MSComctlLib.ListItem property liUser.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-                            If (liUser.SmallIcon > 1) Then
+                            If (liUser.ImageIndex > 1) Then
                                 'UPGRADE_ISSUE: MSComctlLib.ListItem property liUser.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-                                Call DemoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.SmallIcon - 1)
+                                Call DemoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.ImageIndex - 1)
                             Else
                                 Command_Renamed.Respond("Error: The specified user is already at the lowest demoteable ranking.")
                             End If
@@ -161,9 +161,9 @@ Module modCommandsClan
 
                         If (Not liUser Is Nothing) Then
                             'UPGRADE_ISSUE: MSComctlLib.ListItem property liUser.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-                            If (liUser.SmallIcon < 3) Then
+                            If (liUser.ImageIndex < 3) Then
                                 'UPGRADE_ISSUE: MSComctlLib.ListItem property liUser.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-                                Call PromoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.SmallIcon + 1)
+                                Call PromoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.ImageIndex + 1)
                             Else
                                 Command_Renamed.Respond("Error: The specified user is already at the highest promotable ranking.")
                             End If

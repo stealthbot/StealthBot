@@ -66,7 +66,6 @@ Module modUTF8
 		Call MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, lstr, Len(lstr), UnicodeBuffer, UnicodeChars)
 		
 		' translate from unicode to ansi
-		'UPGRADE_ISSUE: Constant vbFromUnicode was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="55B59875-9A95-4B71-9D6A-7C294BF7139D"'
-		UTF8Decode = StrConv(UnicodeBuffer, vbFromUnicode)
+        UTF8Decode = System.Text.Encoding.Default.GetString(System.Text.Encoding.Default.GetBytes(UnicodeBuffer))
 	End Function
 End Module

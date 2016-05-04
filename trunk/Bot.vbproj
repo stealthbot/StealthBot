@@ -527,9 +527,6 @@
     <Compile Include="modScripting.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="modSHA1.vb">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="modSystray.vb">
       <SubType>Code</SubType>
     </Compile>

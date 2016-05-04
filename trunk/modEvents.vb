@@ -1231,10 +1231,10 @@ ERROR_HANDLER:
 							' if the icon in the list is not the icon found by stats, update
 							NewIcon = GetSmallIcon(UserObj.Game, UserObj.Flags, UserObj.Stats.IconCode)
 							'UPGRADE_ISSUE: MSComctlLib.ListItem property found.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-							If (found.SmallIcon <> NewIcon) Then
-								'UPGRADE_ISSUE: MSComctlLib.ListItem property found.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-								found.SmallIcon = NewIcon
-							End If
+                            If (found.ImageIndex <> NewIcon) Then
+                                'UPGRADE_ISSUE: MSComctlLib.ListItem property found.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
+                                found.ImageIndex = NewIcon
+                            End If
 						End If
 					End If
 					

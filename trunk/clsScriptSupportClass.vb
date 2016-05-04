@@ -1128,19 +1128,16 @@ Friend Class clsScriptSupportClass
 	'// SHA1
 	'// Returns the result of a standard Sha-1 hash
 	Public Function Sha1(ByRef Data As String, Optional ByVal inHex As Boolean = False) As String
-		Dim a As Integer
-		Dim B As Integer
-		Dim c As Integer
-		Dim d As Integer
-		Dim e As Integer
-		
-		'UPGRADE_ISSUE: Constant vbFromUnicode was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="55B59875-9A95-4B71-9D6A-7C294BF7139D"'
-        Call modSHA1.DefaultSHA1(System.Text.Encoding.Default.GetBytes(Data), a, B, c, d, e)
+        Dim sha As System.Security.Cryptography.SHA1
+        Dim hash() As Byte
+
+        sha = System.Security.Cryptography.SHA1.Create()
+        hash = sha.ComputeHash(System.Text.Encoding.Default.GetBytes(Data))
 		
 		If inHex Then
-			Sha1 = LCase(Hex(a) & Hex(B) & Hex(c) & Hex(d) & Hex(e))
+            Sha1 = BitConverter.ToString(hash, 0)
 		Else
-			Sha1 = LongToStr(a) & LongToStr(B) & LongToStr(c) & LongToStr(d) & LongToStr(e)
+            Sha1 = System.Text.Encoding.Default.GetString(hash)
 		End If
 	End Function
 	

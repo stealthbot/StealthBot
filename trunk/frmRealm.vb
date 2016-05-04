@@ -342,8 +342,7 @@ Friend Class frmRealm
 				
 				mnuPopUpgrade.Visible = CanUpgradeCharacter(m_Selection)
 				
-				'UPGRADE_ISSUE: Form method frmRealm.PopupMenu was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-				PopupMenu(mnuPop)
+                mnuPop.ShowDropDown()
 			End If
 		End If
 	End Sub

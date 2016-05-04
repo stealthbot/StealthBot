@@ -85,11 +85,11 @@ Friend Class frmManageKeys
 		Dim SettingsForm As Object
 		If ((Not (frmChat.SettingsForm Is Nothing)) And (Not (lvKeys.FocusedItem Is Nothing))) Then
 			'UPGRADE_ISSUE: MSComctlLib.ListItem property lvKeys.SelectedItem.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-			If ((lvKeys.FocusedItem.SmallIcon = 6) Or (lvKeys.FocusedItem.SmallIcon = 8)) Then
-				frmChat.SettingsForm.txtExpKey.Text = lvKeys.FocusedItem.Tag
-			Else
-				frmChat.SettingsForm.txtCDKey.Text = lvKeys.FocusedItem.Tag
-			End If
+            If ((lvKeys.FocusedItem.ImageIndex = 6) Or (lvKeys.FocusedItem.ImageIndex = 8)) Then
+                frmChat.SettingsForm.txtExpKey.Text = lvKeys.FocusedItem.Tag
+            Else
+                frmChat.SettingsForm.txtCDKey.Text = lvKeys.FocusedItem.Tag
+            End If
 			
 			Call cmdDone_Click(cmdDone, New System.EventArgs())
 		End If
