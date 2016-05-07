@@ -31,6 +31,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <NoWarn>42016,42017,42018,42019,42032</NoWarn>
     <DebugType>full</DebugType>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
@@ -42,6 +43,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <NoWarn>42016,42017,42018,42019,42032</NoWarn>
     <DebugType>none</DebugType>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic.Compatibility">
