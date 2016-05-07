@@ -43,21 +43,21 @@ Module modDateTime
 		Dim wMilliseconds As Short
 	End Structure
 	
-	Private Structure TIME_ZONE_INFORMATION
-		Dim Bias As Integer
-		<VBFixedArray(31)> Dim StandardName() As Short
-		Dim StandardDate As SYSTEMTIME
-		Dim StandardBias As Integer
-		<VBFixedArray(31)> Dim DaylightName() As Short
-		Dim DaylightDate As SYSTEMTIME
-		Dim DaylightBias As Integer
-		
-		'UPGRADE_TODO: "Initialize" must be called to initialize instances of this structure. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
-		Public Sub Initialize()
-			ReDim StandardName(31)
-			ReDim DaylightName(31)
-		End Sub
-	End Structure
+    Public Structure TIME_ZONE_INFORMATION
+        Dim Bias As Integer
+        <VBFixedArray(31)> Dim StandardName() As Short
+        Dim StandardDate As SYSTEMTIME
+        Dim StandardBias As Integer
+        <VBFixedArray(31)> Dim DaylightName() As Short
+        Dim DaylightDate As SYSTEMTIME
+        Dim DaylightBias As Integer
+
+        'UPGRADE_TODO: "Initialize" must be called to initialize instances of this structure. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="B4BFF9E0-8631-45CF-910E-62AB3970F27B"'
+        Public Sub Initialize()
+            ReDim StandardName(31)
+            ReDim DaylightName(31)
+        End Sub
+    End Structure
 	
 	Public Structure SMPTE
 		'UPGRADE_NOTE: hour was upgraded to hour_Renamed. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A9E4979A-37FA-4718-9994-97DD76ED70A7"'

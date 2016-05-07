@@ -25,8 +25,7 @@ Module modUTF8
 		lstr = str_Renamed
 		
 		' grab Length of string after conversion
-		'UPGRADE_ISSUE: StrPtr function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		UTF8Chars = WideCharToMultiByte(CP_UTF8, 0, StrPtr(lstr), Len(lstr), 0, 0, vbNullString, 0)
+        UTF8Chars = System.Text.Encoding.UTF8.GetByteCount(lstr)
 		
 		If (UTF8Chars = 0) Then
 			Exit Function
@@ -35,10 +34,8 @@ Module modUTF8
 		' initialize buffer
 		ReDim UTF8Buffer(UTF8Chars - 1)
 		
-		' translate from unicode to utf-8
-		'UPGRADE_ISSUE: VarPtr function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		'UPGRADE_ISSUE: StrPtr function is not supported. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="367764E5-F3F8-4E43-AC3E-7FE0B5E074E2"'
-		Call WideCharToMultiByte(CP_UTF8, 0, StrPtr(lstr), Len(lstr), VarPtr(UTF8Buffer(0)), UTF8Chars, vbNullString, 0)
+        ' translate from unicode to utf-8
+        UTF8Buffer = System.Text.Encoding.UTF8.GetBytes(lstr)
 		
 		' return unicode buffer
 		UTF8Encode = VB6.CopyArray(UTF8Buffer)

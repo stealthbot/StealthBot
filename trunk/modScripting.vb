@@ -817,9 +817,9 @@ ERROR_HANDLER:
 ERROR_HANDLER: 
 		
 		'UPGRADE_WARNING: Couldn't resolve default property of object frmChat.SControl.Error. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6A50421D-15FE-4896-8A1B-2EC21E9037B2"'
-		If CBool((frmChat.SControl.Error)) Then
-			Exit Sub
-		End If
+        If frmChat.SControl.Error.Number > 0 Then
+            Exit Sub
+        End If
 		
 		frmChat.AddChat(RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in CallByNameEx().")
 		
@@ -1103,8 +1103,10 @@ ERROR_HANDLER:
 				m_arrObjs(Index).obj.DestroyObjs()
 				
 				'UPGRADE_ISSUE: Unload m_arrObjs().obj was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="875EBAD7-D704-4539-9969-BC7DBDAA62A2"'
-				Unload(m_arrObjs(Index).obj)
-				
+                'Unload(m_arrObjs(Index).obj)
+                m_arrObjs(Index).obj = Nothing
+                Array.Clear(m_arrObjs, Index, 1)
+
 			Case "MENU"
 				' check if there is one menu left and we're destroying it
 				If (ObjCount("Menu", SCModule) = 1) Then

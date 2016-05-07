@@ -488,7 +488,7 @@ Friend Class frmDBManager
 								With lvGroups.Items.Item(j)
 									'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 									'UPGRADE_ISSUE: MSComctlLib.ListItem property lvGroups.ListItems.Ghosted was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-                                    If .Checked And Not .Ghosted Then
+                                    If .Checked And Not False Then
                                         'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
                                         If .ForeColor.Equals(System.Drawing.Color.Yellow) Then
                                             ' place first
@@ -606,9 +606,9 @@ Friend Class frmDBManager
 		Item = lvGroups.FocusedItem
 		
 		'UPGRADE_ISSUE: MSComctlLib.ListItem property Item.Ghosted was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-		If Item.Ghosted Then
-			Exit Sub
-		End If
+        If False Then
+            Exit Sub
+        End If
 		
 		' set primary
 		If Item.Checked Then
@@ -627,12 +627,12 @@ Friend Class frmDBManager
 		Item.Selected = True
 		
 		'UPGRADE_ISSUE: MSComctlLib.ListItem property Item.Ghosted was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-		If Item.Ghosted Then
-			Item.Checked = False
-			'UPGRADE_ISSUE: MSComctlLib.ListItem property Item.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
+        If False Then
+            Item.Checked = False
+            'UPGRADE_ISSUE: MSComctlLib.ListItem property Item.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
             Item.ImageIndex = IIf(m_glistcount = 0, IC_EMPTY, IC_UNCHECKED)
-			Exit Sub
-		End If
+            Exit Sub
+        End If
 		
 		If Item.Checked Then
 			' if checked
@@ -681,18 +681,18 @@ Friend Class frmDBManager
 			With lvGroups.Items.Item(i)
 				'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				'UPGRADE_ISSUE: MSComctlLib.ListItem property lvGroups.ListItems.Ghosted was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-				If .Checked And Not .Ghosted Then
-					'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-					If .ForeColor.equals(System.Drawing.Color.Yellow) Then
-						' place first
-						'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-						NewGroups = .Text & "," & NewGroups
-					Else
-						' append
-						'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-						NewGroups = NewGroups & .Text & ","
-					End If
-				End If
+                If .Checked And Not False Then
+                    'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                    If .ForeColor.Equals(System.Drawing.Color.Yellow) Then
+                        ' place first
+                        'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                        NewGroups = .Text & "," & NewGroups
+                    Else
+                        ' append
+                        'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                        NewGroups = NewGroups & .Text & ","
+                    End If
+                End If
 			End With
 		Next i
 		
@@ -745,11 +745,11 @@ Friend Class frmDBManager
 			
 			If (Not m_gmenutarget Is Nothing) Then
 				'UPGRADE_ISSUE: MSComctlLib.ListItem property m_gmenutarget.Ghosted was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-				If (Not m_gmenutarget.Ghosted) Then
-					mnuSetPrimary.Enabled = (Not m_gmenutarget.ForeColor.equals(System.Drawing.Color.Yellow))
-					
+                If (Not False) Then
+                    mnuSetPrimary.Enabled = (Not m_gmenutarget.ForeColor.Equals(System.Drawing.Color.Yellow))
+
                     mnuContext.ShowDropDown()
-				End If
+                End If
 			End If
 		End If
 	End Sub
@@ -1017,9 +1017,9 @@ Friend Class frmDBManager
 							' move node
 							pos = FindNodeIndex(m_DB(j).Username, "GROUP")
 							
-							If pos > 0 Then
-								trvUsers.nodes(pos).Parent = newNode
-							End If
+                            If pos > 0 Then
+                                trvUsers.Nodes(pos).MoveNode(newNode, vbalTreeViewLib6.ETreeViewRelationshipContants.etvwChild)
+                            End If
 						End If
 						
 						' reset boolean
@@ -1447,7 +1447,7 @@ ERROR_HANDLER:
                     .ImageIndex = IC_UNCHECKED
 					'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 					'UPGRADE_ISSUE: MSComctlLib.ListItem property lvGroups.ListItems.Ghosted was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-					.Ghosted = False
+                    '.Ghosted = False
 					'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 					.ForeColor = System.Drawing.Color.White
 					
@@ -1487,7 +1487,7 @@ ERROR_HANDLER:
                             .ImageIndex = IC_UNCHECKED
 							'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 							'UPGRADE_ISSUE: MSComctlLib.ListItem property lvGroups.ListItems.Ghosted was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-							.Ghosted = True
+                            '.Ghosted = True
 							'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 							.ForeColor = System.Drawing.ColorTranslator.FromOle(&H888888)
 						End If
@@ -1662,7 +1662,7 @@ ERROR_HANDLER:
 				'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems.ImageList has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				'UPGRADE_WARNING: Image property was not upgraded Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="D94970AE-02E7-43BF-93EF-DCFCD10D27B5"'
 				'UPGRADE_ISSUE: MSComctlLib.ListItem property lvGroups.ListItems.Add.Ghosted was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-				.Ghosted = True
+                '.Ghosted = True
 				'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems.ImageList has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				'UPGRADE_WARNING: Image property was not upgraded Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="D94970AE-02E7-43BF-93EF-DCFCD10D27B5"'
 				.ForeColor = System.Drawing.ColorTranslator.FromOle(&H888888)
@@ -1700,7 +1700,7 @@ ERROR_HANDLER:
                 .ImageIndex = IIf(m_glistcount = 0, IC_EMPTY, IC_UNCHECKED)
 				'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				'UPGRADE_ISSUE: MSComctlLib.ListItem property lvGroups.ListItems.Ghosted was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-				.Ghosted = True
+                '.Ghosted = True
 				'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				.ForeColor = System.Drawing.ColorTranslator.FromOle(&H888888)
 			End With
@@ -1734,11 +1734,11 @@ ERROR_HANDLER:
 			With lvGroups.Items
 				'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 				'UPGRADE_ISSUE: MSComctlLib.ListItem property lvGroups.ListItems.Item.Ghosted was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-				If (.Item(i).ForeColor.equals(System.Drawing.Color.Yellow) And Not .Item(i).Ghosted And .Item(i).Checked) Then
-					'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-					GetLVPrimaryGroup = .Item(i)
-					Exit Function
-				End If
+                If (.Item(i).ForeColor.Equals(System.Drawing.Color.Yellow) And Not False And .Item(i).Checked) Then
+                    'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                    GetLVPrimaryGroup = .Item(i)
+                    Exit Function
+                End If
 			End With
 		Next i
 		
@@ -1764,11 +1764,11 @@ ERROR_HANDLER:
                         .ImageIndex = IC_PRIMARY
 						'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
 						'UPGRADE_ISSUE: MSComctlLib.ListItem property lvGroups.ListItems.Item.Ghosted was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-					ElseIf (Not .Ghosted) Then 
-						'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-						.ForeColor = System.Drawing.Color.White
-						'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
-						'UPGRADE_ISSUE: MSComctlLib.ListItem property lvGroups.ListItems.Item.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
+                    ElseIf (Not False) Then
+                        'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                        .ForeColor = System.Drawing.Color.White
+                        'UPGRADE_WARNING: Lower bound of collection lvGroups.ListItems has changed from 1 to 0. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="A3B628A0-A810-4AE2-BFA2-9E7A29EB9AD0"'
+                        'UPGRADE_ISSUE: MSComctlLib.ListItem property lvGroups.ListItems.Item.SmallIcon was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
                         .ImageIndex = IIf(.Checked, IC_CHECKED, IC_UNCHECKED)
 					End If
 				End With

@@ -1711,8 +1711,9 @@
 		Me.mnuListViewButton.SetIndex(_mnuListViewButton_0, CType(0, Short))
 		Me.mnuListViewButton.SetIndex(_mnuListViewButton_1, CType(1, Short))
 		Me.mnuListViewButton.SetIndex(_mnuListViewButton_2, CType(2, Short))
-		Me.mnuPublicChannels.SetIndex(_mnuPublicChannels_0, CType(0, Short))
-		Me.mnuScriptingDash.SetIndex(_mnuScriptingDash_0, CType(0, Short))
+        Me.mnuPublicChannels.SetIndex(_mnuPublicChannels_0, CType(0, Short))
+        'UPGRADE_ISSUE: ToolStripSeparator cannot be converted to ToolStripMenuItem
+        'Me.mnuScriptingDash.SetIndex(_mnuScriptingDash_0, CType(0, Short))
 		Me.sckScript.SetIndex(_sckScript_0, CType(0, Short))
 		Me.tmrScript.SetIndex(_tmrScript_0, CType(0, Short))
 		Me.tmrScriptLong.SetIndex(_tmrScriptLong_0, CType(0, Short))

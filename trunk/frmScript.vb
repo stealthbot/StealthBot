@@ -1,6 +1,8 @@
 Option Strict Off
 Option Explicit On
+
 Imports Microsoft.VisualBasic.PowerPacks
+
 Friend Class frmScript
 	Inherits System.Windows.Forms.Form
 	
@@ -59,7 +61,7 @@ Friend Class frmScript
 		Else
 			ShowInputBox = InputBox(Text_Renamed, Title, Default_Renamed, VB6.TwipsToPixelsX(XPos), VB6.TwipsToPixelsY(YPos))
 		End If
-		
+
 	End Function
 	
 	Public Sub DrawLine(ByVal x1 As Single, ByVal y1 As Single, ByVal x2 As Single, ByVal y2 As Single, Optional ByVal Color As Integer = -1, Optional ByVal DrawRect As Boolean = False, Optional ByVal FillRect As Boolean = False)
@@ -68,27 +70,27 @@ Friend Class frmScript
 			If DrawRect Then
 				If FillRect Then
 					'UPGRADE_ISSUE: Form method frmScript.Line was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-					Me.Line (x1, y1) - (x2, y2), BF
+                    'Me.Line (x1, y1) - (x2, y2), BF
 				Else
 					'UPGRADE_ISSUE: Form method frmScript.Line was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-					Me.Line (x1, y1) - (x2, y2), B
+                    'Me.Line (x1, y1) - (x2, y2), B
 				End If
 			Else
 				'UPGRADE_ISSUE: Form method frmScript.Line was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-				Me.Line (x1, y1) - (x2, y2)
+                'Me.Line (x1, y1) - (x2, y2)
 			End If
 		Else
 			If DrawRect Then
 				If FillRect Then
 					'UPGRADE_ISSUE: Form method frmScript.Line was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-					Me.Line (x1, y1) - (x2, y2), Color, BF
+                    'Me.Line (x1, y1) - (x2, y2), Color, BF
 				Else
 					'UPGRADE_ISSUE: Form method frmScript.Line was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-					Me.Line (x1, y1) - (x2, y2), Color, B
+                    'Me.Line (x1, y1) - (x2, y2), Color, B
 				End If
 			Else
 				'UPGRADE_ISSUE: Form method frmScript.Line was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="CC4C7EC0-C903-48FC-ACCC-81861D12DA4A"'
-				Me.Line (x1, y1) - (x2, y2), Color
+                'Me.Line (x1, y1) - (x2, y2), Color
 			End If
 		End If
 	End Sub
@@ -768,7 +770,7 @@ ERROR_HANDLER:
 			Me.Hide()
 			m_hidden = True
 			'UPGRADE_ISSUE: Event parameter Cancel was not upgraded. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="FB723E3C-1C06-4D2B-B083-E6CD0D334DA8"'
-			Cancel = 1
+            'Cancel = 1
 		End If
 	End Sub
 	

@@ -3891,13 +3891,14 @@ EventExitSub:
 		If (BotVars.NoAutocompletion = False) Then
 			'UPGRADE_WARNING: Controls method Controls.Count has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="6BA9B8D2-2A32-4B6E-8D36-44949974A5B4"'
 			For i = 0 To (Controls.Count() - 1)
-				'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
-				If (TypeOf CType(Controls(i), Object) Is System.Windows.Forms.ListView) Or (TypeOf CType(Controls(i), Object) Is AxMSComctlLib.AxTabStrip) Or (TypeOf CType(Controls(i), Object) Is System.Windows.Forms.RichTextBox) Or (TypeOf CType(Controls(i), Object) Is System.Windows.Forms.TextBox) Then
-					
-					If (CType(Controls(i), Object).Tag <> "False") Then
-						CType(Controls(i), Object).TabStop = True
-					End If
-				End If
+                'UPGRADE_WARNING: TypeOf has a new behavior. Click for more: 'ms-help://MS.VSCC.v90/dv_commoner/local/redirect.htm?keyword="9B7D5ADD-D8FE-4819-A36C-6DEDAF088CC7"'
+                'UPGRADE_ISSUE: TabStrip was replaced with TabControl, this will probably cause some issues.
+                If (TypeOf CType(Controls(i), Object) Is System.Windows.Forms.ListView) Or (TypeOf CType(Controls(i), Object) Is System.Windows.Forms.TabControl) Or (TypeOf CType(Controls(i), Object) Is System.Windows.Forms.RichTextBox) Or (TypeOf CType(Controls(i), Object) Is System.Windows.Forms.TextBox) Then
+
+                    If (CType(Controls(i), Object).Tag <> "False") Then
+                        CType(Controls(i), Object).TabStop = True
+                    End If
+                End If
 			Next i
 		End If
 		
@@ -4467,8 +4468,9 @@ ERROR_HANDLER:
 			eventArgs.Handled = True
 		End If
 	End Sub
-	
-    Public Sub SControl_ErrorEvent(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles SControl.ErrorEvent
+
+    'UPGRADE_ISSUE: SControl no longer has an error event that can be handled this way.
+    Public Sub SControl_ErrorEvent(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) 'Handles SControl.ErrorEvent
         Call modScripting.SC_Error()
     End Sub
 	
