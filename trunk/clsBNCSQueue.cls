@@ -39,7 +39,7 @@ Attribute VB_Exposed = False
 ' PRIVATE VARIABLES
 Option Explicit
 
-Private LastSent As Long
+Private LastSent As Double
 Private Credits As Long
 
 '    /** Note on implementation: This will assume that all previous packets have already been sent.  Don't call this multiple
