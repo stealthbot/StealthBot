@@ -90,9 +90,9 @@ Public Function FullPacket() As Boolean
                 frmChat.AddChat RTBColors.ErrorMessageText, "The following data is being purged:"
                 
                 If L > 0 Then
-                    frmChat.AddChat Space$(1) & DebugOutput(Mid$(strData, 1, L - 1))
+                    frmChat.AddChat RTBColors.ErrorMessageText, Space$(1) & DebugOutput(Mid$(strData, 1, L - 1))
                 Else
-                    frmChat.AddChat Space$(1) & DebugOutput(strData)
+                    frmChat.AddChat RTBColors.ErrorMessageText, Space$(1) & DebugOutput(strData)
                 End If
             End If
             
