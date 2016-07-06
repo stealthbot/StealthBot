@@ -7249,8 +7249,10 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     BotVars.UseProxy = Config.UseProxy
     If BotVars.UseProxy And sckBNet.State = sckConnected Then BotVars.ProxyStatus = psOnline
+    BotVars.ProxyIP = Config.ProxyIP
     BotVars.ProxyPort = Config.ProxyPort
-    BotVars.ProxyIsSocks5 = Config.ProxyType
+    BotVars.ProxyIsSocks5 = CBool(StrComp(Config.ProxyType, "SOCKS5", vbTextCompare) = 0)
+    
     BotVars.NoTray = Not Config.MinimizeToTray
     BotVars.NoAutocompletion = Not Config.NameAutoComplete
     BotVars.NoColoring = Not Config.NameColoring
@@ -7288,8 +7290,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     BotVars.UseGreet = Config.GreetMessage
     BotVars.GreetMsg = Config.GreetMessageText
     BotVars.WhisperGreet = Config.WhisperGreet
-    
-    BotVars.ProxyIP = Config.ProxyIP
     
     BotVars.ChatDelay = Config.ChatDelay
     
