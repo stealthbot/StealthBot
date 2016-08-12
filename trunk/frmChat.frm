@@ -5447,7 +5447,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             With cboSend
                 If (LenB(LastWhisper) > 0) Then
                     If (Len(.Text) >= 2) Then
-                        If StrComp(Left$(.Text, 2), "/r", vbTextCompare) = 0 Then
+                        If StrComp(Split(.Text)(0), "/r", vbTextCompare) = 0 Then
                             .SelStart = 0
                             .SelLength = Len(.Text)
                             .SelText = "/w " & CleanUsername(LastWhisper, True)
@@ -5456,7 +5456,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     End If
                     
                     If (Len(.Text) >= 6) Then
-                        If StrComp(Left$(.Text, 6), "/reply", vbTextCompare) = 0 Then
+                        If StrComp(Split(.Text)(0), "/reply", vbTextCompare) = 0 Then
                             .SelStart = 0
                             .SelLength = Len(.Text)
                             .SelText = "/w " & CleanUsername(LastWhisper, True)
@@ -5467,7 +5467,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 
                 If (LenB(LastWhisperTo) > 0) Then
                     If (Len(.Text) >= 3) Then
-                        If StrComp(Left$(.Text, 3), "/rw", vbTextCompare) = 0 Then
+                        If StrComp(Split(.Text)(0), "/rw", vbTextCompare) = 0 Then
                             .SelStart = 0
                             .SelLength = Len(.Text)
                             
