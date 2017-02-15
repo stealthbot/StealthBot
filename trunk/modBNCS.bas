@@ -1999,13 +1999,19 @@ End Sub
 Public Sub DoChannelJoinProductHome()
     On Error GoTo ERROR_HANDLER:
     
-    ' empty homechannel or
-    ' config override to force joinhome
-    If BotVars.Product = "PX2D" Or BotVars.Product = "VD2D" Then
-        Call FullJoin(BotVars.Product, 5)
+    Dim iJoinType As Integer
+    Dim pi As udtProductInfo
+    
+    pi = GetProductInfo(BotVars.Product)
+    
+    ' D2 uses a different join type
+    If pi.ShortCode = PRODUCT_D2DV Or pi.ShortCode = PRODUCT_D2XP Then
+        iJoinType = 5
     Else
-        Call FullJoin(BotVars.Product, 1)
+        iJoinType = 1
     End If
+    
+    Call FullJoin(pi.ChannelName, iJoinType)
     
     Exit Sub
 ERROR_HANDLER:

@@ -34,6 +34,7 @@ Public Type udtProductInfo
     ShortCode As String
     KeyCount As Integer
     FullName As String
+    ChannelName As String
     BNLS_ID As Long
     LogonSystem As Long
     VersionByte As Long
