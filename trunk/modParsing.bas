@@ -62,11 +62,6 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
         '--------------
         
         Select Case PacketID
-                
-            '###########################################################################
-            Case &H26 'SID_READUSERDATA
-                ProfileParse PacketData
-            
             '###########################################################################
             Case Is >= &H65 'Friends List or Clan-related packet
                 ' Hand the packet off to the appropriate handler
@@ -205,28 +200,65 @@ Public Sub RejoinChannel(Channel As String)
     PBuffer.SendPacket SID_JOINCHANNEL
 End Sub
 
-Public Sub RequestProfile(strUser As String)
-    'on error resume next
-    With PBuffer
-        .InsertDWord 1
-        .InsertDWord 4
-        .InsertDWord GetTickCount()
-        .InsertNTString CleanUsername(ReverseConvertUsernameGateway(strUser))
-        .InsertNTString "Profile\Age"
-        .InsertNTString "Profile\Sex"
-        .InsertNTString "Profile\Location"
-        .InsertNTString "Profile\Description"
-        .SendPacket SID_READUSERDATA
-    End With
+Public Sub RequestProfile(strUser As String, ByVal eType As enuUserDataRequestType, Optional ByRef oCommand As clsCommandObj)
+    Dim aKeys(3) As String
+    
+    aKeys(0) = "Profile\Age"
+    aKeys(1) = "Profile\Sex"
+    aKeys(2) = "Profile\Location"
+    aKeys(3) = "Profile\Description"
+    
+    Call RequestUserData(strUser, aKeys, eType, oCommand)
 End Sub
 
-Public Sub RequestSpecificKey(ByVal sUsername As String, ByVal sKey As String)
+Public Sub RequestUserData(ByVal sUsername As String, ByRef aKeys() As String, Optional ByVal eType As enuUserDataRequestType, Optional ByRef oCommand As clsCommandObj)
+    Dim oRequest As udtUserDataRequest
+    Dim i As Integer
+    Dim bFoundSlot As Boolean
+
+    With oRequest
+        ' Attach handling info
+        .RequestType = eType
+        Set .Command = oCommand
+        .ResponseReceived = False
+    
+        ' Add request data
+        .Account = sUsername
+        .keys = aKeys
+    End With
+    
+    ' Find an open slot in the request list
+    bFoundSlot = False
+    For i = 0 To UBound(UserDataRequests)
+        If UserDataRequests(i).ResponseReceived Then
+            bFoundSlot = True
+            
+            oRequest.RequestID = i
+            UserDataRequests(i) = oRequest
+        End If
+    Next
+    
+    ' If no slot was found, add the request to the end
+    If Not bFoundSlot Then
+        i = UBound(UserDataRequests)
+        oRequest.RequestID = UBound(UserDataRequests) + 1
+        
+        ReDim Preserve UserDataRequests(oRequest.RequestID)
+        UserDataRequests(oRequest.RequestID) = oRequest
+    End If
+
+    ' Build the packet
     With PBuffer
         .InsertDWord 1
-        .InsertDWord 1
-        .InsertDWord GetTickCount()
-        .InsertNTString ReverseConvertUsernameGateway(sUsername)
-        .InsertNTString sKey
+        .InsertDWord UBound(oRequest.keys) + 1
+        .InsertDWord oRequest.RequestID
+        
+        .InsertNTString CleanUsername(ReverseConvertUsernameGateway(oRequest.Account))
+        
+        For i = 0 To UBound(aKeys)
+            .InsertNTString oRequest.keys(i)
+        Next
+
         .SendPacket SID_READUSERDATA
     End With
 End Sub
@@ -887,41 +919,4 @@ Public Function GetColorVal(ByVal d2CC As String) As String
     End Select
 End Function
 
-
-'Originally from DPChat by Zorm - cleaned up and adapted to my needs
-Public Sub ProfileParse(Data As String)
-    On Error Resume Next
-    Dim x As Integer
-    Dim ProfileEnd As String
-    Dim SplitProfile() As String
-    
-    ProfileEnd = Mid(Data, 17, Len(Data))
-    SplitProfile = Split(ProfileEnd, Chr(&H0))
-    
-    If (UBound(SplitProfile) = 4) Then
-    
-        If AwaitingSystemKeys = 1 Then
-            
-            Event_KeyReturn "System\Account Created", SplitProfile(0)
-            Event_KeyReturn "System\Last Logon", SplitProfile(1)
-            Event_KeyReturn "System\Last Logoff", SplitProfile(2)
-            Event_KeyReturn "System\Time Logged", SplitProfile(3)
-            AwaitingSystemKeys = 0
-            
-        Else
-        
-            Event_KeyReturn "Profile\Age", SplitProfile(0)
-            Event_KeyReturn "Profile\Sex", SplitProfile(1)
-            Event_KeyReturn "Profile\Location", SplitProfile(2)
-            Event_KeyReturn "Profile\Description", SplitProfile(3)
-            
-        End If
-    
-    Else
-    
-        ' for SSC.RequestProfileKey()
-        Event_KeyReturn SpecificProfileKey, SplitProfile(0)
-        
-    End If
-End Sub
 

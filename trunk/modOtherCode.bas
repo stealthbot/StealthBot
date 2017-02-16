@@ -1122,22 +1122,14 @@ Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Bool
     CheckGroup = False
 End Function
 
-Public Sub RequestSystemKeys()
-    AwaitingSystemKeys = 1
+Public Sub RequestSystemKeys(Optional eType As enuUserDataRequestType = Internal, Optional oCommand As clsCommandObj)
+    Dim aKeys(3) As String
+    aKeys(0) = "System\Account Created"
+    aKeys(1) = "System\Last Logon"
+    aKeys(2) = "System\Last Logoff"
+    aKeys(3) = "System\Time Logged"
     
-    With PBuffer
-        .InsertDWord &H1
-        .InsertDWord &H4
-        .InsertDWord GetTickCount()
-        .InsertNTString BotVars.Username
-            
-        .InsertNTString "System\Account Created"
-        .InsertNTString "System\Last Logon"
-        .InsertNTString "System\Last Logoff"
-        .InsertNTString "System\Time Logged"
-        
-        .SendPacket SID_READUSERDATA
-    End With
+    RequestUserData BotVars.Username, aKeys, eType, oCommand
 End Sub
 
 '// parses a system time and returns in the format:

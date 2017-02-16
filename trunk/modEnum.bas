@@ -82,6 +82,16 @@ Public Type udtMail
     From    As String * 30
     Message As String * 225
 End Type
+
+Public Type udtUserDataRequest
+    ResponseReceived As Boolean
+    Command As clsCommandObj
+    RequestType As enuUserDataRequestType
+    RequestID As Integer
+    Account As String
+    keys() As String
+    Values() As String
+End Type
    
 Public Type FLASHWINFO
     cbSize      As Long
@@ -167,3 +177,9 @@ Public Enum enuPL_DirectionTypes
     StoC = 2
 End Enum
 
+Public Enum enuUserDataRequestType
+    Internal = 1
+    ProfileWindow = 2
+    ScriptingCall = 3
+    UserCommand = 4
+End Enum

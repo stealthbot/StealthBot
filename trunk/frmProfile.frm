@@ -320,8 +320,7 @@ Public Sub PrepareForProfile(ByVal Username As String, ByVal IsWriting As Boolea
     
     ' if we are writing, request our own profile
     If IsWriting Then
-        ProfileRequest = True
-        RequestProfile GetCurrentUsername
+        RequestProfile GetCurrentUsername, ProfileWindow
     End If
 End Sub
 

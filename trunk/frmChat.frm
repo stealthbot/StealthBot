@@ -1815,6 +1815,7 @@ Private Sub Form_Load()
     ReDim gBans(0)
     ReDim gOutFilters(0)
     ReDim gFilters(0)
+    ReDim UserDataRequests(0)
     
     Call BuildProductInfo
     
@@ -3979,7 +3980,7 @@ End Sub
 Private Sub mnuPopClanProfile_Click()
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    RequestProfile GetClanSelectedUser
+    RequestProfile GetClanSelectedUser, ProfileWindow
     
     frmProfile.PrepareForProfile GetClanSelectedUser, False
 End Sub
@@ -4187,7 +4188,7 @@ Private Sub mnuPopFLProfile_Click()
     If Not PopupMenuFLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
     If Not lvFriendList.SelectedItem Is Nothing Then
-        RequestProfile CleanUsername(lvFriendList.SelectedItem.Text)
+        RequestProfile CleanUsername(lvFriendList.SelectedItem.Text), ProfileWindow
         
         frmProfile.PrepareForProfile CleanUsername(lvFriendList.SelectedItem.Text), False
     End If
@@ -4361,7 +4362,7 @@ Private Sub mnuPopProfile_Click()
     Dim sUser As String
     sUser = StripAccountNumber(CleanUsername(GetSelectedUser))
     
-    RequestProfile sUser
+    RequestProfile sUser, ProfileWindow
     
     frmProfile.PrepareForProfile sUser, False
 End Sub

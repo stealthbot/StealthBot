@@ -431,12 +431,10 @@ End Sub
 '// Gets the profile of a specified user. The profile is returned in three pieces via the _KeyReturn() event.
 '// If Username is null, the bot's current username will be used instead.
 Public Sub GetUserProfile(Optional ByVal Username As String)
-    SuppressProfileOutput = True
-    
     If LenB(Username) > 0 Then
-        Call RequestProfile(Username)
+        Call RequestProfile(Username, ScriptingCall)
     Else
-        Call RequestProfile(GetCurrentUsername)
+        Call RequestProfile(GetCurrentUsername, ScriptingCall)
     End If
 End Sub
 
@@ -819,11 +817,17 @@ End Sub
 '//  ip-ban you for requesting some keys.
 '//  The result will come back to you in an Event_KeyReturn.
 Public Sub RequestProfileKey(ByVal sUsername As String, ByVal sKey As String)
-    SuppressProfileOutput = True
-    
-    SpecificProfileKey = sKey
+    Dim aKeys(0) As String
+    aKeys(0) = sKey
 
-    RequestSpecificKey sUsername, sKey
+    modParsing.RequestUserData sUsername, aKeys, ScriptingCall
+End Sub
+
+'// REQUESTUSERDATA
+'//  Requests several user profile keys. Same as RequestProfileKey but allows
+'//  you to request multiple keys at the same time.
+Public Sub RequestUserData(ByVal sUsername As String, ByRef aKeys() As String)
+    modParsing.RequestUserData sUsername, aKeys, ScriptingCall
 End Sub
 
 

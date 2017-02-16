@@ -148,6 +148,7 @@ On Error GoTo ERROR_HANDLER:
         Case SID_MESSAGEBOX:             Call RECV_SID_MESSAGEBOX(pBuff)             '0x19
         Case SID_LOGONCHALLENGEEX:       Call RECV_SID_LOGONCHALLENGEEX(pBuff)       '0x1D
         Case SID_PING:                   Call RECV_SID_PING(pBuff)                   '0x25
+        Case SID_READUSERDATA:           Call RECV_SID_READUSERDATA(pBuff)           '0x26
         Case SID_LOGONCHALLENGE:         Call RECV_SID_LOGONCHALLENGE(pBuff)         '0x28
         Case SID_GETICONDATA:            'Don't Throw Unknown Error                  '0x2D
         Case SID_CDKEY:                  Call RECV_SID_CDKEY(pBuff)                  '0x30
@@ -786,6 +787,61 @@ On Error GoTo ERROR_HANDLER:
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_PING()", Err.Number, Err.Description, OBJECT_NAME))
+End Sub
+
+'*******************************
+'SID_READUSERDATA (0x26) S->C
+'*******************************
+' (DWORD) Number of accounts
+' (DWORD) Number of keys
+' (DWORD) Request ID
+' (STRING[]) Requested key values
+'*******************************
+Private Sub RECV_SID_READUSERDATA(pBuff As clsDataBuffer)
+    On Error GoTo ERROR_HANDLER:
+    
+    Dim oRequest As udtUserDataRequest
+    Dim i As Integer
+    
+    Dim iNumKeys As Long
+    Dim iRequest As Long
+    Dim aValues() As String
+
+    pBuff.GetDWORD                  ' (DWORD) Number of accounts
+    iNumKeys = pBuff.GetDWORD()     ' (DWORD) Number of keys
+    iRequest = pBuff.GetDWORD()     ' (DWORD) Request ID
+
+    ReDim aValues(iNumKeys - 1)
+    
+    ' Read each of the keys
+    For i = 0 To UBound(aValues)
+        aValues(i) = pBuff.GetString()
+    Next
+    
+    ' Find the request for this ID and hand it off to the event handler
+    i = UBound(UserDataRequests)
+    If i >= iRequest Then
+        oRequest = UserDataRequests(iRequest)
+        oRequest.Values = aValues
+        
+        Event_UserDataReceived oRequest
+        
+        ' Shrink the array if needed
+        If i > 1 Then
+            For i = i To 1 Step -1
+                If UserDataRequests(i).ResponseReceived Then
+                    ReDim Preserve UserDataRequests(i - 1)
+                End If
+            Next
+        End If
+    Else
+        frmChat.AddChat RTBColors.ErrorMessageText, "Notice: Received unsolicited user data."
+    End If
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_READUSERDATA()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 '********************************

@@ -318,208 +318,98 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.Event_JoinedChannel()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
-Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
-    On Error Resume Next
-    
-    Dim ft  As FILETIME
-    Dim st  As SYSTEMTIME
-    Dim s() As String
-    Dim U   As String
-    Dim i   As Integer
-    
-    Static KeysReceived As Integer
-    
-    'MsgBox PPL
+Public Sub Event_UserDataReceived(oRequest As udtUserDataRequest)
+On Error GoTo ERROR_HANDLER:
 
-    ' Some of the oldest code in this project lives right here
-    If SuppressProfileOutput Then
-        
-        ' // We're receiving profile information from a scripter request
-        ' // No need to do anything at all with it except set Suppress = False after
-        ' // the description comes in, and of course hadn it over to the scripters
-        RunInAll "Event_KeyReturn", KeyName, KeyValue
-        
-        ' clean up variables once profile keys are received:
-        Select Case KeyName
-            Case "Profile\Age", "Profile\Sex", "Profile\Location", "Profile\Description"
-                If (StrComp(SpecificProfileKey, KeyName, vbBinaryCompare) = 0) Then
-                    ' SSC.RequestProfileKey() called for one of the profile keys
-                    SuppressProfileOutput = False
-                    SpecificProfileKey = vbNullString
-                Else
-                    ' normal: wait for 4 keys then reset suppress
-                    KeysReceived = KeysReceived + 1
-                    If (KeysReceived >= 4) Then
-                        SuppressProfileOutput = False
-                        KeysReceived = 0
-                    End If
-                End If
-                
-            Case Else
-                ' SSC.RequestProfileKey() called for a different key
-                SuppressProfileOutput = False
-                SpecificProfileKey = vbNullString
-                
-        End Select
+    Dim sKeyShort As String
+    Dim sValue As String
+    Dim aOutput() As String
+    Dim i As Integer
+    Dim j As Integer
+    Dim s As String
+    Dim d As Double
     
-    ElseIf ProfileRequest = True Then
-        
-        'MsgBox "!!"
-        ' writing profile
-        
-        frmProfile.SetKey KeyName, KeyValue
-        
-        RunInAll "Event_KeyReturn", KeyName, KeyValue
-        
-        ' wait for 4 keys then reset request var
-        KeysReceived = KeysReceived + 1
-        If KeysReceived >= 4 Then
-            ProfileRequest = False
-            KeysReceived = 0
-        End If
-        
-    ' Public Profile Listing
-    ElseIf PPL = True Then
+    Dim oFT As FILETIME
+    Dim oST As SYSTEMTIME
     
-        'MsgBox PPLRespondTo
+    Const LONG_MAX_VALUE As Double = 2147483647
+    
+    RunInAll "Event_UserDataReceived", oRequest.Account, oRequest.keys, oRequest.Values
+    
+    frmChat.AddChat RTBColors.InformationText, "Data request returned: " & CStr(oRequest.RequestID)
+    frmChat.AddChat RTBColors.InformationText, "   Source: " & CStr(oRequest.RequestType)
+    frmChat.AddChat RTBColors.InformationText, "   Account: " & oRequest.Account
         
-        If LenB(PPLRespondTo) > 0 Then
-            U = "/w " & PPLRespondTo & " "
-        Else
-            U = vbNullString
-        End If
+    For i = 0 To UBound(oRequest.keys)
+        RunInAll "Event_KeyReturn", oRequest.keys(i), oRequest.Values(i)
         
-        If KeyName = "Profile\Location" Then
-Repeat2:
-            i = InStr(1, KeyValue, Chr(13))
-            
-            If Len(KeyValue) > 90 Then
-                If i <> 0 Then
-                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - i)
-                    KeyValue = Right(KeyValue, Len(KeyValue) - i)
+        frmChat.AddChat RTBColors.InformationText, StringFormat("   Key({0}): {1}", i, oRequest.keys(i))
+        frmChat.AddChat RTBColors.InformationText, StringFormat("   Value({0}): {1}", i, oRequest.Values(i))
+        
+        sKeyShort = Mid(oRequest.keys(i), InStr(1, oRequest.keys(i), "\", vbTextCompare) + 1)
+        sValue = oRequest.Values(i)
+        
+        Select Case oRequest.RequestType
+            Case ProfileWindow
+                frmProfile.SetKey oRequest.keys(i), sValue
+            Case UserCommand, Internal
+                If StrComp(Left(oRequest.keys(i), 7), "System\", vbTextCompare) = 0 Then
+                    j = InStr(1, sValue, Space(1), vbTextCompare)
                     
-                    GoTo Repeat2
+                    If j > 0 Then    ' Probably a FILETIME
+                        ' High part
+                        d = CDbl(Left(sValue, j))
+                        If d > LONG_MAX_VALUE Then  ' Check for overflow
+                            d = LONG_MAX_VALUE - d
+                        End If
+                        oFT.dwHighDateTime = CLng(d)
+                        
+                        ' Low part
+                        d = CDbl(Mid(KillNull(sValue), j + 1))
+                        If d > LONG_MAX_VALUE Then  ' Check for overflow
+                            d = LONG_MAX_VALUE - d
+                        End If
+                        oFT.dwLowDateTime = CLng(d)
+                        
+                        FileTimeToSystemTime oFT, oST
+                        
+                        s = StringFormat("{0}: {1} (Battle.net time)", sKeyShort, SystemTimeToString(oST))
+                    ElseIf StrictIsNumeric(sValue) Then
+                        s = StringFormat("{0}: {1}", sKeyShort, ConvertTime(sValue, 1))
+                    End If
+                    
+                    If oRequest.RequestType = UserCommand Then
+                        oRequest.Command.Respond s
+                    Else
+                        frmChat.AddChat RTBColors.ServerInfoText, s
+                    End If
                 Else
-                    frmChat.AddQ U & "[Location] " & KeyValue
+                    aOutput = Split(sValue, Chr(13))
+                    For j = 0 To UBound(aOutput)
+                        s = StringFormat("[{0}] {1}", sKeyShort, aOutput(j))
+                        
+                        If oRequest.RequestType = UserCommand Then
+                            oRequest.Command.Respond s
+                        Else
+                            frmChat.AddChat RTBColors.ServerInfoText, s
+                        End If
+                    Next
                 End If
-            Else
-                If i <> 0 Then
-                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - i)
-                    KeyValue = Right(KeyValue, Len(KeyValue) - i)
-                    GoTo Repeat2
-                Else
-                    frmChat.AddQ U & "[Location] " & KeyValue
-                End If
-            End If
-            
-        ElseIf KeyName = "Profile\Description" Then
-        
-            Dim x() As String
-            
-            x() = Split(KeyValue, Chr(13))
-            ReDim s(0)
-            
-            For i = LBound(x) To UBound(x)
-                s(0) = x(i)
-                
-                If Len(s(0)) > 200 Then s(0) = Left$(s(0), 200)
-                
-                If i = LBound(x) Then
-                    frmChat.AddQ U & "[Descr] " & s(0)
-                Else
-                    frmChat.AddQ U & "[Descr] " & Right(s(0), Len(s(0)) - 1)
-                End If
-            Next i
-            
-            PPL = False
-            
-            If LenB(PPLRespondTo) > 0 Then
-                PPLRespondTo = vbNullString
-            End If
-            
-        ElseIf KeyName = "Profile\Sex" Then
-Repeat4:
-            If Len(KeyValue) > 90 Then
-                frmChat.AddQ U & "[Sex] " & Left$(KeyValue, 80) & " [more]"
-                KeyValue = Right(KeyValue, Len(KeyValue) - 80)
-                GoTo Repeat4
-            Else
-                frmChat.AddQ U & "[Sex] " & KeyValue
-            End If
-            
-        ElseIf Left$(KeyName, 7) = "System\" Then
-        
-            If InStr(1, KeyValue, " ", vbTextCompare) > 0 Then '// If it's a FILETIME
-            
-                'Dim FT As FILETIME
-                'Dim sT As SYSTEMTIME
-                
-                ft.dwHighDateTime = CLng(Left$(KeyValue, InStr(1, KeyValue, " ", vbTextCompare)))
-                
-                'On Error Resume Next
-                
-                KeyValue = Mid$(KillNull(KeyValue), InStr(1, KeyValue, " ", vbTextCompare) + 1)
-                'keyvalue = Left$(keyvalue, Len(keyvalue) - 1)
-                
-                ft.dwLowDateTime = KeyValue 'CLng(KeyValue & "0")
-                
-                FileTimeToSystemTime ft, st
-
-                With st
-                    frmChat.AddQ U & Right$(KeyName, Len(KeyName) - 7) & ": " & _
-                        SystemTimeToString(st) & " (Battle.net time)"
-                End With
-                
-            Else    '// it's a SECONDS type
-                If StrictIsNumeric(KeyValue) Then
-                    'On Error Resume Next
-                    frmChat.AddQ U & "Time Logged: " & ConvertTime(KeyValue, 1)
-                End If
-            End If
-            
+        End Select
+    Next
+    
+    ' If this request was triggered by a command, send the response.
+    If oRequest.RequestType = UserCommand Then
+        If oRequest.Command.GetResponse().Count = 0 Then
+            oRequest.Command.Respond StringFormat("{0} has not configured a profile.", oRequest.Command.Argument("Username"))
         End If
-        
-    ElseIf Left$(KeyName, 7) = "System\" Then
-
-        'frmchat.addchat RTBColors.ConsoleText, KeyName & ": " & KeyValue
-        
-        If InStr(1, KeyValue, " ", vbTextCompare) > 0 Then '// If it's a FILETIME
-        
-            'Dim FT As FILETIME
-            'Dim sT As SYSTEMTIME
-            
-            ft.dwHighDateTime = CLng(Left$(KeyValue, InStr(1, KeyValue, " ", vbTextCompare)))
-            
-            'On Error Resume Next
-            
-            KeyValue = Mid$(KillNull(KeyValue), InStr(1, KeyValue, " ", vbTextCompare) + 1)
-            'keyvalue = Left$(keyvalue, Len(keyvalue) - 1)
-            
-            ft.dwLowDateTime = KeyValue 'CLng(KeyValue & "0")
-            
-            FileTimeToSystemTime ft, st
-            
-            With st
-                frmChat.AddChat RTBColors.ServerInfoText, Right$(KeyName, Len(KeyName) - 7) & ": " & _
-                        SystemTimeToString(st) & " (Battle.net time)"
-            End With
-            
-        Else    '// it's a SECONDS type
-            If StrictIsNumeric(KeyValue) Then
-                'On Error Resume Next
-                frmChat.AddChat RTBColors.ServerInfoText, "Time Logged: " & ConvertTime(KeyValue, 1)
-            End If
-        End If
-        
-    Else
-        
-        ' viewing profile (or &H26 sent by script and &H26 isn't veto'd in script)
-        
-        frmProfile.SetKey KeyName, KeyValue
-        
-        RunInAll "Event_KeyReturn", KeyName, KeyValue
-        
+        oRequest.Command.SendResponse
     End If
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.Event_UserDataReceived()", Err.Number, Err.description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_LeftChatEnvironment()
@@ -635,7 +525,7 @@ On Error GoTo ERROR_HANDLER:
     
     Set Stats = Nothing
     
-    RequestSystemKeys
+    RequestSystemKeys Internal
     If (LenB(BotVars.Gateway) > 0) Then
         ' PvPGN: we already have our gateway, we're logged on
         SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name

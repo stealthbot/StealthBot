@@ -8,13 +8,7 @@ Public Sub OnAbout(Command As clsCommandObj)
 End Sub
 
 Public Sub OnAccountInfo(Command As clsCommandObj)
-    If ((Not Command.IsLocal) Or Command.PublicOutput) Then
-        PPL = True
-        If ((BotVars.WhisperCmds Or Command.WasWhispered) And (Not Command.IsLocal)) Then
-            PPLRespondTo = Command.Username
-        End If
-    End If
-    RequestSystemKeys
+    RequestSystemKeys UserCommand, Command
 End Sub
 
 Public Sub OnBanCount(Command As clsCommandObj)
@@ -445,16 +439,10 @@ End Sub
 Public Sub OnProfile(Command As clsCommandObj)
     If (Command.IsValid) Then
         If ((Not Command.IsLocal) Or (Command.PublicOutput)) Then
-            PPL = True
-            If ((BotVars.WhisperCmds Or Command.WasWhispered) And (Not Command.IsLocal)) Then
-                PPLRespondTo = Command.Username
-            Else
-                PPLRespondTo = vbNullString
-            End If
-            Call RequestProfile(Command.Argument("Username"))
+            Call RequestProfile(Command.Argument("Username"), UserCommand, Command)
         Else
             frmProfile.PrepareForProfile Command.Argument("Username"), False
-            Call RequestProfile(Command.Argument("Username"))
+            Call RequestProfile(Command.Argument("Username"), ProfileWindow, Command)
         End If
     End If
 End Sub

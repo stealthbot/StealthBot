@@ -41,7 +41,6 @@ Public rtbChatLength As Long
 
 Public g_Connected As Boolean
 Public g_Online As Boolean
-Public AwaitingSystemKeys As Byte
 Public AwaitingSelfRemoval As Byte
 
 Public g_Quotes As New clsQuotesObj
@@ -68,9 +67,9 @@ Public Const ERROR_FINDBNLSSERVER As Integer = 12345
 
 'VARIABLES
 Public CurrentUsername As String
-Public ProfileRequest As Boolean
 Public Protect As Boolean
 Public QC(1 To 9) As String
+Public UserDataRequests() As udtUserDataRequest
 
 Public JoinMessagesOff As Boolean
 Public Filters As Boolean
@@ -82,8 +81,6 @@ Public LastWhisperFromTime As Date
 Public LastWhisperTo As String
 Public Caching As Boolean
 Public Dii As Boolean
-Public PPL As Boolean
-Public PPLRespondTo As String
 Public MyFlags As Long
 Public BanCount As Integer
 Public g_lastQueueUser As String
@@ -99,8 +96,6 @@ Public colProfiles As Collection
 'ARRAYS
 Public Phrases() As String
 Public PhraseBans As Boolean
-Public SuppressProfileOutput As Boolean
-Public SpecificProfileKey As String
 Public Catch() As String
 Public gBans() As udtBanList
 Public gOutFilters() As udtOutFilters
