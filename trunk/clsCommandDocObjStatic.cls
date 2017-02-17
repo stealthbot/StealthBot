@@ -138,7 +138,7 @@ Public Function ValidateXMLFromStrings(ByVal strXML As String, ByVal strXSD As S
 
 ERROR_HANDLER:
     
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObjStatic.ValidateXMLFromStrings().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsCommandDocObjStatic.ValidateXMLFromStrings().")
     ValidateXMLFromStrings = False
     
 End Function

@@ -246,7 +246,7 @@ Public Sub DisplayQueue()
 
 ERROR_HANDLER:
     frmChat.AddChat RTBColors.ErrorMessageText, _
-        "Error (#" & Err.Number & "): " & Err.description & " in clsUserObj::DisplayQueue()."
+        "Error (#" & Err.Number & "): " & Err.Description & " in clsUserObj::DisplayQueue()."
 
     Exit Sub
 End Sub

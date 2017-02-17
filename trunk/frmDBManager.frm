@@ -47,7 +47,7 @@ Begin VB.Form frmDBManager
       Top             =   5378
       Width           =   735
    End
-   Begin MSComctlLib.ImageList icons 
+   Begin MSComctlLib.ImageList Icons 
       Left            =   720
       Top             =   5520
       _ExtentX        =   1005
@@ -226,7 +226,7 @@ Begin VB.Form frmDBManager
          HideSelection   =   -1  'True
          HideColumnHeaders=   -1  'True
          _Version        =   393217
-         SmallIcons      =   "icons"
+         SmallIcons      =   "Icons"
          ForeColor       =   16777215
          BackColor       =   10040064
          Appearance      =   1
@@ -2014,7 +2014,7 @@ End Sub
 'ERROR_HANDLER:
 '    ' potential cycle introduction error
 '    If (Err.Number = 35614) Then
-'        MsgBox Err.description, vbCritical, "Error"
+'        MsgBox Err.Description, vbCritical, "Error"
 '    End If
 '
 '    'Set trvUsers.DropHighlight = Nothing

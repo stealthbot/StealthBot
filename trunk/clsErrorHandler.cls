@@ -28,14 +28,16 @@ Private Sub Class_Initialize()
     miNoProceed = -1
 End Sub
 
-Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSources) As String
+Public Function GetErrorString(ByVal lErrNum As Long, ByVal IsProxy As Boolean, ByVal source As enuPL_ServerTypes) As String
     Dim sServerType As String
     
-    Select Case (Source)
-        Case BNET: sServerType = "Battle.net"
-        Case BNLS: sServerType = "BNLS"
-        Case MCP:  sServerType = "Realm"
+    Select Case (source)
+        Case stBNCS: sServerType = "Battle.net"
+        Case stBNLS: sServerType = "BNLS"
+        Case stMCP:  sServerType = "Diablo II Realm"
     End Select
+    
+    If IsProxy Then sServerType = "proxy"
     
     ExReconTicks = 0
     ExReconMinutes = 0
@@ -44,7 +46,7 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
         Case 10053, 10054
             Count10053 = (Count10053 + 1)
             
-            If (Count10053 = 1) Then
+            If (Count10053 = 1) Or IsProxy Then
                 GetErrorString = "The " & sServerType & _
                     " server has terminated your connection."
                 
@@ -76,10 +78,10 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
         Case 11004, 11001
             Count11004 = Count11004 + 1
             
-            If Count11004 = 1 Then
+            If Count11004 = 1 Or IsProxy Then
                 GetErrorString = "Your computer is unable to contact the " & _
                     sServerType & " server."
-                    
+                
                 miNoProceed = 0
             Else
                 GetErrorString = "Your computer is having DNS resolution issues. No more " & _
@@ -92,42 +94,50 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
         Case 10060
             miNoProceed = 0
             
-            GetErrorString = "The server took too long to respond to your computer. "
+            GetErrorString = "The " & sServerType & " server took too long to respond to your computer. "
             
-            Select Case (Source)
-                Case BNET
-                    GetErrorString = GetErrorString & "Try choosing a different server in the " & _
-                        "Settings dialog. If you are connecting to a gateway address, such as " & _
-                            "ÿcbuseast.battle.netÿcb, try using one of the IP addresses listed below it."
-                Case BNLS
-                    GetErrorString = GetErrorString & "The BNLS server appears to be unreachable " & _
-                        "at this time. Please check back in an hour or two, select a different BNLS " & _
-                            "server, or configure local hashing. (For more information regarding local " & _
-                                "hashing, visit http://www.stealthbot.net.)"
-                Case MCP
-                    GetErrorString = GetErrorString & "The Realm server is not responding. Please " & _
-                        "try connecting again in a couple hours, or disabling Realm logins."
-            End Select
+            If IsProxy Then
+                GetErrorString = GetErrorString & "Please check your proxy configuration."
+            Else
+                Select Case (source)
+                    Case stBNCS
+                        GetErrorString = GetErrorString & "Try choosing a different server in the " & _
+                            "Settings dialog. If you are connecting to a gateway address, such as " & _
+                                "ÿcbuseast.battle.netÿcb, try using one of the IP addresses listed below it."
+                    Case stBNLS
+                        GetErrorString = GetErrorString & "The server appears to be unreachable " & _
+                            "at this time. Please check back in an hour or two, select a different BNLS " & _
+                                "server, or configure local hashing. (For more information regarding local " & _
+                                    "hashing, visit http://www.stealthbot.net.)"
+                    Case stMCP
+                        GetErrorString = GetErrorString & "The server is not responding. Please " & _
+                            "try connecting again in a couple hours, or disabling Diablo II Realms."
+                End Select
+            End If
     
         Case 10061, 10065
             miNoProceed = 0
             
-            GetErrorString = "The server you're connecting to is currently unavailable. "
+            GetErrorString = "The " & sServerType & " server you're connecting to is currently unavailable. "
             
-            Select Case Source
-                Case BNET
-                    GetErrorString = GetErrorString & "Try choosing a different server in the " & _
-                        "Settings dialog. If you are connecting to a gateway address, such as " & _
-                            "ÿcbuseast.battle.netÿcb, try using one of the IP addresses listed below it."
-                Case BNLS
-                    GetErrorString = GetErrorString & "The BNLS server appears to be unavailable at " & _
-                        "this time. The bot will keep trying to connect to it; if you continue to " & _
-                            "receive this error message, wait an hour or so and try again."
-                Case MCP
-                    GetErrorString = GetErrorString & "The Diablo II Realm server is down."
-                    
-                    miNoProceed = 2
-            End Select
+            If IsProxy Then
+                GetErrorString = GetErrorString & "Please check your proxy configuration."
+            Else
+                Select Case source
+                    Case stBNCS
+                        GetErrorString = GetErrorString & "Try choosing a different server in the " & _
+                            "Settings dialog. If you are connecting to a gateway address, such as " & _
+                                "ÿcbuseast.battle.netÿcb, try using one of the IP addresses listed below it."
+                    Case stBNLS
+                        GetErrorString = GetErrorString & "The server appears to be unavailable at " & _
+                            "this time. The bot will keep trying to connect to it; if you continue to " & _
+                                "receive this error message, wait an hour or so and try again."
+                    Case stMCP
+                        GetErrorString = GetErrorString & "The server is down."
+                        
+                        miNoProceed = 2
+                End Select
+            End If
             
         Case Else
             miNoProceed = 0

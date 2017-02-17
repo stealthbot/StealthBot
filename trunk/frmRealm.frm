@@ -789,7 +789,7 @@ Private Sub Form_Unload(Cancel As Integer)
             frmChat.sckMCP.Close
         End If
         
-        SendEnterChatSequence
+        Call SendEnterChatSequence
         frmChat.mnuRealmSwitch.Enabled = True
         m_Unload_SuccessfulLogin = True
         ds.MCPHandler.IsRealmError = False
@@ -1077,7 +1077,7 @@ Public Sub CharCreateResponse(ByVal Success As Boolean, ByVal Message As String)
         
         ' focus on the textbox since the character create failed
         With txtCharName
-            .selStart = 0
+            .SelStart = 0
             .SelLength = Len(.Text)
             On Error Resume Next
             .SetFocus

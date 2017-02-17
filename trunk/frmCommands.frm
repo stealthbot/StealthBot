@@ -463,7 +463,7 @@ Private Sub Form_Load()
     
 ErrorHandler:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, Err.description
+    frmChat.AddChat RTBColors.ErrorMessageText, Err.Description
     Call ResetForm
     '// Disable our buttons
     cmdSave.Enabled = False
@@ -736,7 +736,7 @@ Private Sub trvCommands_SelectedNodeChanged()
     
 ErrorHandler:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, Err.description
+    frmChat.AddChat RTBColors.ErrorMessageText, Err.Description
     Call ResetForm
     '// Disable our buttons
     cmdSave.Enabled = False
@@ -814,7 +814,7 @@ Private Sub SaveForm()
         Case NodeType.nCommand:
             '// saving the command
             With m_Commands
-                .description = txtDescription.Text
+                .Description = txtDescription.Text
                 .SpecialNotes = txtSpecialNotes.Text
                 .RequiredRank = txtRank.Text
                 .RequiredFlags = getFlags()
@@ -832,7 +832,7 @@ Private Sub SaveForm()
             With m_Commands
                 Set parameter = .GetParameterByName(m_SelectedElement.argumentName)
                 With parameter
-                    .description = txtDescription.Text
+                    .Description = txtDescription.Text
                     .SpecialNotes = txtSpecialNotes.Text
                 End With
             End With
@@ -928,7 +928,7 @@ Private Sub PrepareForm(nt As NodeType)
                 '// txtDescription
                 txtDescription.Enabled = True
                 lblDescription.Enabled = True
-                txtDescription.Text = PrepString(m_Commands.description)
+                txtDescription.Text = PrepString(m_Commands.Description)
                 '// txtSpecialNotes
                 txtSpecialNotes.Enabled = True
                 lblSpecialNotes.Enabled = True
@@ -951,7 +951,7 @@ Private Sub PrepareForm(nt As NodeType)
                 '// txtDescription
                 txtDescription.Enabled = True
                 lblDescription.Enabled = True
-                txtDescription.Text = PrepString(parameter.description)
+                txtDescription.Text = PrepString(parameter.Description)
                 '// txtSpecialNotes
                 txtSpecialNotes.Enabled = True
                 lblSpecialNotes.Enabled = True
@@ -1041,7 +1041,7 @@ Private Sub cboFlags_Change()
     If (BotVars.CaseSensitiveFlags = False) Then
         cboFlags.Text = UCase$(cboFlags.Text)
         
-        cboFlags.selStart = Len(cboFlags.Text)
+        cboFlags.SelStart = Len(cboFlags.Text)
     End If
     
 End Sub
@@ -1055,8 +1055,8 @@ Private Sub cboFlags_KeyDown(KeyCode As Integer, Shift As Integer)
         '// Make sure it doesnt have a space
         If InStr(cboFlags.Text, " ") Then
             MsgBox "Flags cannot contain spaces.", vbOKOnly + vbCritical, Me.Caption
-            cboFlags.selStart = 1
-            cboFlags.selLength = Len(cboFlags.Text)
+            cboFlags.SelStart = 1
+            cboFlags.SelLength = Len(cboFlags.Text)
             Exit Sub
         End If
         '// Make sure its not already a flag
@@ -1100,8 +1100,8 @@ Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
         '// Make sure it doesnt have a space
         If InStr(cboAlias.Text, " ") Then
             MsgBox "Aliases cannot contain spaces.", vbOKOnly + vbCritical, Me.Caption
-            cboAlias.selStart = 1
-            cboAlias.selLength = Len(cboAlias.Text)
+            cboAlias.SelStart = 1
+            cboAlias.SelLength = Len(cboAlias.Text)
             Exit Sub
         End If
         '// Make sure its not already an alias

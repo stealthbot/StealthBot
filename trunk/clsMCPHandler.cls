@@ -128,7 +128,7 @@ On Error GoTo ERROR_HANDLER
     Exit Function
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.ChooseRealm()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.ChooseRealm()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 ' call this to handle the completed querying of realm servers
@@ -167,7 +167,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.HandleQueryRealmServersResponse()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.HandleQueryRealmServersResponse()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 ' call this to begin realm connection (logon via BNCS SID_LOGONREALMEX)
@@ -197,7 +197,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RealmServerLogon()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RealmServerLogon()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 ' sets the data to store for the realm server connection
@@ -228,17 +228,14 @@ Public Sub DoRequestCharacters()
 End Sub
 
 ' parses packets as received from sckMCP
-Public Sub ParsePacket(ByVal sData As String)
+Public Sub MCPRecvPacket(ByVal pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
-    Static pBuff As New clsDataBuffer
-    
     Dim PacketID As Byte
+    Dim PacketLen As Long
     
     'MCPRecvPacket = True
     With pBuff
-        .Clear
-        .Data = sData
-        .GetWord
+        PacketLen = .GetWord
         PacketID = .GetByte
     End With
     
@@ -246,12 +243,10 @@ On Error GoTo ERROR_HANDLER:
         frmChat.AddChat COLOR_BLUE, StringFormat("MCP RECV 0x{0}", ZeroOffset(PacketID, 2))
     End If
     
-    CachePacket StoC, stMCP, PacketID, Len(sData), sData
+    Call CachePacket(stMCP, StoC, PacketID, PacketLen, pBuff.GetDataAsByteArr)
+    Call WritePacketData(stMCP, StoC, PacketID, PacketLen, pBuff.GetDataAsByteArr)
     
-    ' Added 2007-06-08 for a packet logging menu feature to aid tech support
-    WritePacketData MCP, StoC, PacketID, Len(sData), sData
-    
-    If (RunInAll("Event_PacketReceived", "MCP", PacketID, Len(sData), sData)) Then
+    If (RunInAll("Event_PacketReceived", "MCP", PacketID, PacketLen, pBuff.Data)) Then
         Exit Sub
     End If
     
@@ -268,7 +263,7 @@ On Error GoTo ERROR_HANDLER:
         Case Else:
             If (MDebug("debug") And (MDebug("all") Or MDebug("unknown"))) Then
                 Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[REALM] Unhandled packet 0x{0}", ZeroOffset(CLng(PacketID), 2)))
-                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[REALM] Packet data: {0}{1}", vbNewLine, DebugOutput(sData)))
+                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[REALM] Packet data: {0}{1}", vbNewLine, DebugOutput(pBuff.Data)))
             End If
     
     End Select
@@ -276,7 +271,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.ParsePacket()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.ParsePacket()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -420,7 +415,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_STARTUP()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_STARTUP()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -487,7 +482,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_CHARCREATE()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_CHARCREATE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -506,7 +501,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_CHARLOGON()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_CHARLOGON()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -527,7 +522,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_CHARDELETE()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_CHARDELETE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -545,7 +540,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_MOTD()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_MOTD()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -564,7 +559,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_CHARUPGRADE()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_CHARUPGRADE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -583,7 +578,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_CHARLIST2()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_CHARLIST2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Property Get UniqueUsername() As String
@@ -703,7 +698,7 @@ Private Sub Event_RealmStartup(ByVal Success As Boolean, ByVal Message As String
             frmRealm.RealmStartupResponse
         End If
         
-        DoRequestCharacters
+        Call DoRequestCharacters
     Else
         frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
         
@@ -711,7 +706,7 @@ Private Sub Event_RealmStartup(ByVal Success As Boolean, ByVal Message As String
             frmRealm.UnloadRealmError
         End If
         
-        SendEnterChatSequence
+        Call SendEnterChatSequence
         frmChat.mnuRealmSwitch.Enabled = True
     End If
 End Sub
@@ -746,7 +741,7 @@ Private Sub Event_CharLogonResponse(ByVal Success As Boolean, ByVal Message As S
         
         SEND_MCP_MOTD
         
-        SendEnterChatSequence
+        Call SendEnterChatSequence
         frmChat.mnuRealmSwitch.Enabled = True
     Else
         frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message

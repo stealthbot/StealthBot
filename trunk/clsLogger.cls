@@ -27,7 +27,7 @@ Private Enum LOG_TYPES
     COMMAND_MSG = &H8
 End Enum
 
-Private m_logsCreated As Collection 
+Private m_logsCreated As Collection
 Private m_logPath     As String     ' the path to the log file
 
 Private Sub Class_Initialize()
@@ -66,7 +66,7 @@ Public Function WriteWarning(ByVal sWarning As String, Optional ByVal source As 
     End If
 End Function
 
-Public Function WriteError(ByVal sError As String, Optional ByVal source As String, Optional TimeDate As Date)    
+Public Function WriteError(ByVal sError As String, Optional ByVal source As String, Optional TimeDate As Date)
     source = LCase$(source)
     
     If (LenB(source) > 0) Then
@@ -131,27 +131,27 @@ End Function
 Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal line As String, Optional TimeDate As Date)
     On Error GoTo ERROR_HANDLER
 
-    Dim f         As Integer 
-    Dim filePath  As String  
+    Dim f         As Integer
+    Dim FilePath  As String
     
     Select Case (ltype)
         Case WARNING_MSG, ERROR_MSG, EVENT_MSG, DEBUG_MSG
-            filePath = (m_logPath & "master.txt")
+            FilePath = (m_logPath & "master.txt")
         
         Case COMMAND_MSG
-            filePath = (m_logPath & "commands.txt")
+            FilePath = (m_logPath & "commands.txt")
                 
         Case CHAT_MSG
-            filePath = (m_logPath & Datestamp() & ".txt")
+            FilePath = (m_logPath & Datestamp() & ".txt")
                 
         Case WHISPER_MSG
-            filePath = (m_logPath & Datestamp() & "-WHISPERS.txt")
+            FilePath = (m_logPath & Datestamp() & "-WHISPERS.txt")
                 
         Case SCK_MSG
-            filePath = (m_logPath & Datestamp() & "-PACKETLOG.txt")                
+            FilePath = (m_logPath & Datestamp() & "-PACKETLOG.txt")
     End Select
     
-    f = OpenLog(ltype, filePath)
+    f = OpenLog(ltype, FilePath)
     
     If (f > 0) Then
         Select Case (ltype)
@@ -168,7 +168,7 @@ Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal line As String, Optio
     
 ERROR_HANDLER:
 
-    MsgBox "Error (#" & Err.Number & "): " & Err.description & " in WriteLine()."
+    MsgBox "Error (#" & Err.Number & "): " & Err.Description & " in WriteLine()."
 End Function
 
 Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Integer
@@ -176,13 +176,13 @@ Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Inte
     
     Static failed_attempts As Integer
     
-    Dim f As Integer 
-    Dim i As Double  
+    Dim f As Integer
+    Dim i As Double
     
     f = FreeFile
     
     If (Dir$(Path) = vbNullString) Then
-        Dim dir_path As String  
+        Dim dir_path As String
 
         dir_path = Mid$(Path, 1, InStrRev(Path, "\"))
     
@@ -204,10 +204,10 @@ Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Inte
             End If
         End If
     Else
-        Dim arr()     As String 
-        Dim str       As String  
+        Dim arr()     As String
+        Dim str       As String
         Dim bln       As Boolean
-        Dim lineCount As Long   
+        Dim lineCount As Long
     
         If (BotVars.MaxLogFileSize) Then
             Open Path For Input As #f
@@ -228,8 +228,8 @@ Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Inte
         End If
     
         If (bln) Then
-            Dim offset As Integer 
-            Dim bytes  As Integer 
+            Dim offset As Integer
+            Dim bytes  As Integer
             
             For i = UBound(arr) To 0 Step -1
                 bytes = (bytes + Len(arr(i)))
@@ -268,13 +268,13 @@ ERROR_HANDLER:
         End If
     
         OpenLog ltype, Path
-    End If    
+    End If
 End Function
 
 Public Sub RemoveLogsCreated()
     On Error Resume Next
 
-    Dim i As Integer 
+    Dim i As Integer
     
     For i = 1 To m_logsCreated.Count
         Kill m_logsCreated(i)

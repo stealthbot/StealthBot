@@ -72,7 +72,7 @@ Public Function DynamicMenus() As Collection
 ERROR_HANDLER:
     
     frmChat.AddChat RTBColors.ErrorMessageText, _
-        "Error (#" & Err.Number & "): " & Err.description & " in modMenuObj.GetMenuByID()."
+        "Error (#" & Err.Number & "): " & Err.Description & " in modMenuObj.GetMenuByID()."
         
     Resume Next
 
@@ -97,7 +97,7 @@ Public Function GetMenuByID(ByVal lng As Long) As Object
 ERROR_HANDLER:
     
     frmChat.AddChat RTBColors.ErrorMessageText, _
-        "Error (#" & Err.Number & "): " & Err.description & " in modMenuObj.GetMenuByID()."
+        "Error (#" & Err.Number & "): " & Err.Description & " in modMenuObj.GetMenuByID()."
         
     Resume Next
 
@@ -156,7 +156,7 @@ Public Sub MenuClick(hWnd As Long, lngMenuCommand As Long)
 ERROR_HANDLER:
     
     frmChat.AddChat RTBColors.ErrorMessageText, _
-        "Error (#" & Err.Number & "): " & Err.description & " in modMenuObj.MenuClick()."
+        "Error (#" & Err.Number & "): " & Err.Description & " in modMenuObj.MenuClick()."
         
     Resume Next
 End Sub

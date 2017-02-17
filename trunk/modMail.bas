@@ -111,7 +111,7 @@ Public Sub OpenMailFile()
     Exit Sub
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in " & _
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in " & _
         "OpenMailFile().")
     
     Exit Sub

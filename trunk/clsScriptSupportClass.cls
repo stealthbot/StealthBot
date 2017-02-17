@@ -1510,7 +1510,7 @@ End Function
 Public Function DataBufferEx() As Object
     Set DataBufferEx = New clsDataBuffer
     
-    DataBufferEx.setCripple
+    DataBufferEx.SetCripple
 End Function
 
 '// RESOLVEHOSTNAME
@@ -1524,10 +1524,43 @@ Public Function ResolveHostName(ByVal strHostName As String, Optional ByRef errC
     ResolveHostName = Result
 End Function
 
+'// HOSTTONETWORKS
+'// Convert a Short (VB6 Integer) to network byte order, often for IP Port values
+Public Function HostToNetworkS(ByVal hostshort As Integer) As Integer
+    HostToNetworkS = htons(hostshort)
+End Function
+
+'// NETWORKTOHOSTS
+'// Convert a Short (VB6 Integer) from network byte order, often for IP Port values
+Public Function NetworkToHostS(ByVal netshort As Integer) As Integer
+    NetworkToHostS = ntohs(netshort)
+End Function
+
+'// ADDRESSTONETWORK
+'// Convert a "#.#.#.#" IP Address to a network-ready value (4-byte VB6 Long value)
+Public Function AddressToNetwork(ByVal IPAddress As String) As Long
+    AddressToNetwork = inet_addr(IPAddress)
+End Function
+
+'// NETWORKTOADDRESS
+'// Convert a network IP Address (4-byte VB6 Long value) to "#.#.#.#" format
+Public Function NetworkToAddress(ByVal inaddr As Long) As String
+    NetworkToAddress = inet_ntoa(inaddr)
+End Function
+
 '// FORCEBNCSPACKETPARSE
 '// Pass a complete Battle.net packet into this and the bot will parse it
 Public Sub ForceBNCSPacketParse(ByVal PacketData As String)
-    Call BNCSParsePacket(PacketData)
+    Dim pBuff As clsDataBuffer
+    
+    Set pBuff = New clsDataBuffer
+    
+    pBuff.Clear
+    pBuff.Data = PacketData
+    
+    Call modBNCS.BNCSRecvPacket(pBuff)
+    
+    Set pBuff = Nothing
 End Sub
 
 '// GETUSERDATABASE

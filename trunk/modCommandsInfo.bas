@@ -559,14 +559,48 @@ End Sub
 Public Sub OnServer(Command As clsCommandObj)
     Dim RemoteHost   As String
     Dim RemoteHostIP As String
+    Dim ProxyVia     As String
+    Dim ProxyHost    As String
+    Dim ProxyHostIP  As String
+    Dim s1           As String
+    Dim s2           As String
+    Dim ProxyPort    As String
     
-    RemoteHost = frmChat.sckBNet.RemoteHost
-    RemoteHostIP = frmChat.sckBNet.RemoteHostIP
-    
-    If (StrComp(RemoteHost, RemoteHostIP, vbBinaryCompare) = 0) Then
-        Command.Respond "I am currently connected to " & RemoteHostIP & "."
+    If frmChat.sckBNet.State <> sckClosed Then
+        If ProxyConnInfo(stBNCS).IsUsingProxy Then
+            RemoteHost = ProxyConnInfo(stBNCS).RemoteHost
+            RemoteHostIP = ProxyConnInfo(stBNCS).RemoteHostIP
+            
+            ProxyHost = frmChat.sckBNet.RemoteHost
+            ProxyHostIP = frmChat.sckBNet.RemoteHostIP
+            ProxyPort = CStr(frmChat.sckBNet.RemotePort)
+            
+            s1 = " ("
+            s2 = ")"
+            If (StrComp(ProxyHost, ProxyHostIP, vbBinaryCompare) = 0) Then
+                ProxyHost = vbNullString
+                s1 = vbNullString
+                s2 = vbNullString
+            End If
+            ProxyVia = StringFormat(" via {0}{1}{2}:{3}{4}", ProxyHost, s1, ProxyHostIP, ProxyPort, s2)
+        Else
+            RemoteHost = frmChat.sckBNet.RemoteHost
+            RemoteHostIP = frmChat.sckBNet.RemoteHostIP
+            
+            ProxyVia = vbNullString
+        End If
+        
+        s1 = " ("
+        s2 = ")"
+        If (StrComp(RemoteHost, RemoteHostIP, vbBinaryCompare) = 0) Then
+            RemoteHost = vbNullString
+            s1 = vbNullString
+            s2 = vbNullString
+        End If
+       
+        Command.Respond StringFormat("I am currently connected to {0}{1}{2}{3}{4}.", RemoteHost, s1, RemoteHostIP, s2, ProxyVia)
     Else
-        Command.Respond "I am currently connected to " & RemoteHost & " (" & RemoteHostIP & ")."
+        Command.Respond "I am not connected to Battle.net."
     End If
 End Sub
 

@@ -232,7 +232,7 @@ ERROR_HANDLER:
         Exit Function
     End If
     
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.IsCommand().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsCommandDocObj.IsCommand().")
 End Function
 
 
@@ -421,7 +421,7 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
     Exit Function
 
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.SplitArguments().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsCommandDocObj.SplitArguments().")
 
     Exit Function
 
@@ -475,7 +475,7 @@ Private Function CreateCommandInstance(ByRef commandString As String, ByVal strU
     Exit Function
 
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.CreateCommandObject().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsCommandDocObj.CreateCommandObject().")
 
     Exit Function
 

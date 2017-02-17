@@ -74,7 +74,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
 ' default (if all else fails) error handler to keep erroneous
 ' commands and/or input formats from killing me
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: #" & Err.Number & ": " & Err.description & _
+    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: #" & Err.Number & ": " & Err.Description & _
         " in modCommandCode.ProcessCommand().")
 
     Set Command = Nothing
@@ -284,7 +284,7 @@ Public Function DBUserToString(ByVal User As String, ByVal dbType As String) As 
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in DBUserToString().")
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in DBUserToString().")
 End Function
 
 Public Function OnRemOld(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -1103,7 +1103,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in DB_remove().")
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in DB_remove().")
     DB_remove = False
 End Function
 
@@ -1150,39 +1150,39 @@ End Function
 
 ' requires public
 Public Function PrepareCheck(ByVal toCheck As String) As String
-    toCheck = Replace(toCheck, "[", "ÿ")
-    toCheck = Replace(toCheck, "]", "ö")
-    toCheck = Replace(toCheck, "~", "Ü")
-    toCheck = Replace(toCheck, "#", "¢")
-    toCheck = Replace(toCheck, "-", "£")
-    toCheck = Replace(toCheck, "&", "¥")
-    toCheck = Replace(toCheck, "@", "¤")
-    toCheck = Replace(toCheck, "{", "ƒ")
-    toCheck = Replace(toCheck, "}", "á")
-    toCheck = Replace(toCheck, "^", "í")
-    toCheck = Replace(toCheck, "`", "ó")
-    toCheck = Replace(toCheck, "_", "ú")
-    toCheck = Replace(toCheck, "+", "ñ")
-    toCheck = Replace(toCheck, "$", "÷")
+    toCheck = Replace(toCheck, "[", ChrW(&HFF))
+    toCheck = Replace(toCheck, "]", ChrW(&HF6))
+    toCheck = Replace(toCheck, "~", ChrW(&HDC))
+    toCheck = Replace(toCheck, "#", ChrW(&HE7))
+    toCheck = Replace(toCheck, "-", ChrW(&HA3))
+    toCheck = Replace(toCheck, "&", ChrW(&HA5))
+    toCheck = Replace(toCheck, "@", ChrW(&HA4))
+    toCheck = Replace(toCheck, "{", ChrW(&H192))
+    toCheck = Replace(toCheck, "}", ChrW(&HE1))
+    toCheck = Replace(toCheck, "^", ChrW(&HED))
+    toCheck = Replace(toCheck, "`", ChrW(&HF3))
+    toCheck = Replace(toCheck, "_", ChrW(&HFA))
+    toCheck = Replace(toCheck, "+", ChrW(&HF1))
+    toCheck = Replace(toCheck, "$", ChrW(&HF7))
     PrepareCheck = LCase$(toCheck)
 End Function
 
 ' requires public
 Public Function ReversePrepareCheck(ByVal toCheck As String) As String
-    toCheck = Replace(toCheck, "ÿ", "[")
-    toCheck = Replace(toCheck, "ö", "]")
-    toCheck = Replace(toCheck, "Ü", "~")
-    toCheck = Replace(toCheck, "¢", "#")
-    toCheck = Replace(toCheck, "£", "-")
-    toCheck = Replace(toCheck, "¥", "&")
-    toCheck = Replace(toCheck, "¤", "@")
-    toCheck = Replace(toCheck, "ƒ", "{")
-    toCheck = Replace(toCheck, "á", "}")
-    toCheck = Replace(toCheck, "í", "^")
-    toCheck = Replace(toCheck, "ó", "`")
-    toCheck = Replace(toCheck, "ú", "_")
-    toCheck = Replace(toCheck, "ñ", "+")
-    toCheck = Replace(toCheck, "÷", "$")
+    toCheck = Replace(toCheck, ChrW(&HFF), "[")
+    toCheck = Replace(toCheck, ChrW(&HF6), "]")
+    toCheck = Replace(toCheck, ChrW(&HDC), "~")
+    toCheck = Replace(toCheck, ChrW(&HE7), "#")
+    toCheck = Replace(toCheck, ChrW(&HA3), "-")
+    toCheck = Replace(toCheck, ChrW(&HA5), "&")
+    toCheck = Replace(toCheck, ChrW(&HA4), "@")
+    toCheck = Replace(toCheck, ChrW(&H192), "{")
+    toCheck = Replace(toCheck, ChrW(&HE1), "}")
+    toCheck = Replace(toCheck, ChrW(&HED), "^")
+    toCheck = Replace(toCheck, ChrW(&HF3), "`")
+    toCheck = Replace(toCheck, ChrW(&HFA), "_")
+    toCheck = Replace(toCheck, ChrW(&HF1), "+")
+    toCheck = Replace(toCheck, ChrW(&HF7), "$")
     ReversePrepareCheck = LCase$(toCheck)
 End Function
 
@@ -1366,7 +1366,7 @@ WriteDatabase_Exit:
 
 WriteDatabase_Error:
 
-    Debug.Print "Error #" & Err.Number & " (" & Err.description & ") in procedure " & _
+    Debug.Print "Error #" & Err.Number & " (" & Err.Description & ") in procedure " & _
         "WriteDatabase of Module modCommandCode"
     
     Resume WriteDatabase_Exit

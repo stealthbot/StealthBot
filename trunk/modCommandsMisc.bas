@@ -70,7 +70,7 @@ ERROR_HANDLER:
         
         If InStr(1, .Error.source, "compilation", vbBinaryCompare) > 0 Then ErrType = "parsing"
         
-        Command.Respond StringFormat("Execution {0} error #{1}: {2}", ErrType, .Error.Number, .Error.description)
+        Command.Respond StringFormat("Execution {0} error #{1}: {2}", ErrType, .Error.Number, .Error.Description)
         
         .Error.Clear
     End With

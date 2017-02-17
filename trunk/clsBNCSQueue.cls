@@ -187,7 +187,7 @@ Public Function BanDelay() As Long
 ' default error handler
 ERROR_HANDLER:
     ' display error message
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in BanDelay().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in BanDelay().")
 
     ' exit procedure
     Exit Function

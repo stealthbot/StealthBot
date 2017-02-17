@@ -65,8 +65,13 @@ Private m_UseBNLSFinder             As Boolean
 Private m_BNLSFinderSource          As String
 Private m_UseProxy                  As Boolean
 Private m_ProxyIP                   As String
-Private m_ProxyPort                 As Integer
+Private m_ProxyPort                 As Long
 Private m_ProxyType                 As String
+Private m_ProxyServerResolve        As Boolean
+Private m_ProxyUsername             As String
+Private m_ProxyPassword             As String
+Private m_ProxyBNLS                 As Boolean
+Private m_ProxyMCP                  As Boolean
 
 '[FEATURES]
 Private m_UseBackupChannel          As Boolean
@@ -368,11 +373,11 @@ Public Property Let ProxyIP(ByVal sValue As String)
     m_ProxyIP = sValue
 End Property
 
-Public Property Get ProxyPort() As Integer
+Public Property Get ProxyPort() As Long
     ProxyPort = m_ProxyPort
 End Property
 
-Public Property Let ProxyPort(ByVal sValue As Integer)
+Public Property Let ProxyPort(ByVal sValue As Long)
     m_ProxyPort = sValue
 End Property
 
@@ -382,6 +387,46 @@ End Property
 
 Public Property Let ProxyType(ByVal sValue As String)
     m_ProxyType = sValue
+End Property
+
+Public Property Get ProxyServerResolve() As Boolean
+    ProxyServerResolve = m_ProxyServerResolve
+End Property
+
+Public Property Let ProxyServerResolve(ByVal sValue As Boolean)
+    m_ProxyServerResolve = sValue
+End Property
+
+Public Property Get ProxyUsername() As String
+    ProxyUsername = m_ProxyUsername
+End Property
+
+Public Property Let ProxyUsername(ByVal sValue As String)
+    m_ProxyUsername = sValue
+End Property
+
+Public Property Get ProxyPassword() As String
+    ProxyPassword = m_ProxyPassword
+End Property
+
+Public Property Let ProxyPassword(ByVal sValue As String)
+    m_ProxyPassword = sValue
+End Property
+
+Public Property Get ProxyBNLS() As Boolean
+    ProxyBNLS = m_ProxyBNLS
+End Property
+
+Public Property Let ProxyBNLS(ByVal sValue As Boolean)
+    m_ProxyBNLS = sValue
+End Property
+
+Public Property Get ProxyMCP() As Boolean
+    ProxyMCP = m_ProxyMCP
+End Property
+
+Public Property Let ProxyMCP(ByVal sValue As Boolean)
+    m_ProxyMCP = sValue
 End Property
 
 
@@ -1647,6 +1692,11 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_CLIENT, "ProxyIP", m_ProxyIP
     WriteSetting SECTION_CLIENT, "ProxyPort", m_ProxyPort
     WriteSetting SECTION_CLIENT, "ProxyType", m_ProxyType
+    WriteSetting SECTION_CLIENT, "ProxyServerResolve", m_ProxyServerResolve
+    WriteSetting SECTION_CLIENT, "ProxyUsername", m_ProxyUsername
+    WriteSetting SECTION_CLIENT, "ProxyPassword", m_ProxyPassword
+    WriteSetting SECTION_CLIENT, "ProxyBNLS", m_ProxyBNLS
+    WriteSetting SECTION_CLIENT, "ProxyMCP", m_ProxyMCP
     
     WriteSetting SECTION_FEATURES, "UseBackupChannel", m_UseBackupChannel
     WriteSetting SECTION_FEATURES, "BackupChannel", m_BackupChannel
@@ -1830,8 +1880,13 @@ Private Sub LoadDefaults()
     m_BNLSFinderSource = vbNullString
     m_UseProxy = False
     m_ProxyIP = "127.0.0.1"
-    m_ProxyPort = 1000
+    m_ProxyPort = 1080
     m_ProxyType = "SOCKS4"
+    m_ProxyServerResolve = False
+    m_ProxyUsername = vbNullString
+    m_ProxyPassword = vbNullString
+    m_ProxyBNLS = False
+    m_ProxyMCP = True
 
     '[Features]
     m_UseBackupChannel = False
@@ -2173,6 +2228,11 @@ Private Sub LoadVersion6Config()
     m_ProxyIP = ReadSetting(SECTION_CLIENT, "ProxyIP", m_ProxyIP)
     m_ProxyPort = ReadSettingL(SECTION_CLIENT, "ProxyPort", m_ProxyPort)
     m_ProxyType = ReadSetting(SECTION_CLIENT, "ProxyType", m_ProxyType)
+    m_ProxyServerResolve = ReadSetting(SECTION_CLIENT, "ProxyServerResolve", m_ProxyServerResolve)
+    m_ProxyUsername = ReadSetting(SECTION_CLIENT, "ProxyUsername", m_ProxyUsername)
+    m_ProxyPassword = ReadSetting(SECTION_CLIENT, "ProxyPassword", m_ProxyPassword)
+    m_ProxyBNLS = ReadSetting(SECTION_CLIENT, "ProxyBNLS", m_ProxyBNLS)
+    m_ProxyMCP = ReadSetting(SECTION_CLIENT, "ProxyMCP", m_ProxyMCP)
 
     m_UseBackupChannel = ReadSettingB(SECTION_FEATURES, "UseBackupChannel", m_UseBackupChannel)
     m_BackupChannel = ReadSetting(SECTION_FEATURES, "BackupChannel", m_BackupChannel)
@@ -2353,7 +2413,7 @@ Private Sub ConformValues()
     If m_ReconnectDelay > 60000 Then m_ReconnectDelay = 60000
     
     If m_PingSpoofing < 0 Or m_PingSpoofing > 2 Then m_PingSpoofing = 0
-    If m_ProxyPort < 0 Or m_ProxyPort > 65535 Then m_ProxyPort = 0
+    If m_ProxyPort < 0 Or m_ProxyPort > 65535 Then m_ProxyPort = 1080
     
     If m_QueueMaxCredits < 0 Then m_QueueMaxCredits = 600
     If m_QueueCostPerPacket < 0 Then m_QueueCostPerPacket = 200

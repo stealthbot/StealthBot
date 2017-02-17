@@ -44,19 +44,19 @@ Private Declare Function kd_val2 Lib "BNCSutil.dll" _
     (ByVal decoder As Long) As Long
     
 Private Declare Function kd_longVal2 Lib "BNCSutil.dll" _
-    (ByVal decoder As Long, ByVal Out As String) As Long
+    (ByVal decoder As Long, ByVal Out As Long) As Long
     
 Private Declare Function kd_calculateHash Lib "BNCSutil.dll" _
     (ByVal decoder As Long, ByVal ClientToken As Long, ByVal ServerToken As Long) As Long
     
 Private Declare Function kd_getHash Lib "BNCSutil.dll" _
-    (ByVal decoder As Long, ByVal Out As String) As Long
+    (ByVal decoder As Long, ByVal Out As Long) As Long
     
 Private Declare Function kd_isValid Lib "BNCSutil.dll" _
     (ByVal decoder As Long) As Long
     
 Private Declare Sub calcHashBuf Lib "BNCSutil.dll" _
-    (ByVal Data As String, ByVal length As Long, ByVal Hash As String)
+    (ByVal Data As Long, ByVal length As Long, ByVal Hash As Long)
 
     
 Private m_ProductLookup As Dictionary
@@ -116,12 +116,16 @@ End Property
 
 ' Returns the key's private value
 Public Property Get PrivateValue() As String
+    Dim arrStr() As Byte
     Dim sBuffer As String
-    sBuffer = String$(kd_val2Length(m_Handle), vbNullChar)
     
-    If (kd_longVal2(m_Handle, sBuffer) <= 0) Then
-        Call CopyMemory(ByVal sBuffer, kd_val2(m_Handle), 4)
+    ReDim arrStr(0 To kd_val2Length(m_Handle) - 1)
+    
+    If (kd_longVal2(m_Handle, VarPtr(arrStr(0))) <= 0) Then
+        Call CopyMemory(arrStr(0), kd_val2(m_Handle), 4)
     End If
+    
+    sBuffer = StrConv(arrStr(), vbUnicode, 1033)
     
     PrivateValue = sBuffer
 End Property
@@ -139,6 +143,8 @@ End Property
 ' Calculates the key's hash
 Public Function CalculateHash(ByVal ClientToken As Long, ByVal ServerToken As Long, Optional ByVal LogonSystem As Long = BNCS_NLS) As Boolean
     Dim HashContents As New clsDataBuffer
+    Dim HashArr(0 To 19) As Byte
+    Dim arrStr() As Byte
     
     ' if private value is 0
     If Not IsValid Then
@@ -163,11 +169,13 @@ Public Function CalculateHash(ByVal ClientToken As Long, ByVal ServerToken As Lo
             If m_HashSize <= 0 Then
                 CalculateHash = False
             Else
-                m_Hash = String$(m_HashSize, vbNullChar)
-                Call kd_getHash(m_Handle, m_Hash)
+                'm_Hash = String$(m_HashSize, vbNullChar)
+                Call kd_getHash(m_Handle, VarPtr(HashArr(0)))
+                m_Hash = StrConv(HashArr(), vbUnicode, 1033)
             End If
         Else
-            Call calcHashBuf(.Data, Len(.Data), m_Hash)
+            arrStr = .GetDataAsByteArr
+            Call calcHashBuf(VarPtr(arrStr(0)), Len(.Data), VarPtr(HashArr(0)))
         End If
     End With
     

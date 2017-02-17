@@ -8,6 +8,26 @@ Public Declare Function GetUserName Lib "advapi32.dll" Alias "GetUserNameA" (ByV
 Private Const MAX_COMPUTERNAME_LENGTH As Long = 31
 Private Const MAX_USERNAME_LENGTH As Long = 256
 
+Public Declare Function gethostbyname Lib "wsock32.dll" (ByVal szHost As String) As Long
+Public Declare Function inet_addr Lib "wsock32.dll" (ByVal cp As String) As Long
+Public Declare Function inet_ntoa Lib "wsock32.dll" (ByVal inaddr As Long) As Long
+Public Declare Function htons Lib "wsock32.dll" (ByVal hostshort As Integer) As Integer
+Public Declare Function ntohl Lib "wsock32.dll" (ByVal netlong As Long) As Long
+Public Declare Function ntohs Lib "wsock32.dll" (ByVal netshort As Long) As Integer
+Public Declare Function lstrlen Lib "Kernel32.dll" Alias "lstrlenA" (ByVal lpString As Any) As Long
+Public Declare Function lstrcpy Lib "Kernel32.dll" Alias "lstrcpyA" (ByVal lpString1 As Any, ByVal lpString2 As Any) As Long
+Public Declare Function SetSockOpt Lib "wsock32.dll" Alias "setsockopt" (ByVal lSocketHandle As Long, ByVal lSocketLevel As Long, ByVal lOptName As Long, vOptVal As Any, ByVal lOptLen As Long) As Long
+Public Declare Function WSAGetLastError Lib "wsock32.dll" () As Long
+Public Declare Function WSACleanup Lib "wsock32.dll" () As Long
+
+Public Type HOSTENT
+    h_name As Long
+    h_aliases As Long
+    h_addrtype As Integer
+    h_length As Integer
+    h_addr_list As Long
+End Type
+
 Public Type COMMAND_DATA
     Name         As String
     params       As String
@@ -37,19 +57,6 @@ Public Function GetComputerUsername() As String
     Else
         GetComputerUsername = vbNullString
     End If
-End Function
- 
-Public Function aton(sIPAddress As String) As Long
-    Dim sIP() As String
-    Dim sValue As String
-    sIP = Split(sIPAddress, ".")
-    If (Not UBound(sIP) = 3) Then Exit Function
-    sValue = StringFormat("{0}{1}{2}{3}", Chr$(sIP(0)), Chr$(sIP(1)), Chr$(sIP(2)), Chr$(sIP(3)))
-    CopyMemory aton, ByVal sValue, 4
-    'aton = Val(sIP(0)) + _
-    '      (Val(sIP(1)) * &H100) + _
-    '      (Val(sIP(2)) * &H10000) + _
-    '      (Val(sIP(3)) * &H1000000)
 End Function
 
 'Read/WriteIni code thanks to ickis
@@ -1920,7 +1927,7 @@ Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     Wend
 End Sub
 
-Public Function isbanned(ByVal sUser As String) As Boolean
+Public Function IsBanned(ByVal sUser As String) As Boolean
     Dim i As Integer
 
     If (InStr(1, sUser, "#", vbBinaryCompare)) Then
@@ -1934,7 +1941,7 @@ Public Function isbanned(ByVal sUser As String) As Boolean
         If (StrComp(sUser, gBans(i).UsernameActual, _
             vbTextCompare) = 0) Then
             
-            isbanned = True
+            IsBanned = True
             
             Exit Function
         End If
@@ -3131,7 +3138,7 @@ Public Function ResolveHost(ByVal strHostName As String) As String
     Dim lServer As Long
     Dim HostInfo As HOSTENT
     Dim ptrIP As Long
-    Dim strIP As String
+    Dim sIP As String
     
     'Do we have an IP address or a hostname?
     If Not IsValidIPAddress(strHostName) Then
@@ -3149,10 +3156,10 @@ Public Function ResolveHost(ByVal strHostName As String) As String
                 CopyMemory ptrIP, ByVal HostInfo.h_addr_list, 4
                 CopyMemory lServer, ByVal ptrIP, 4
                 ptrIP = inet_ntoa(lServer)
-                strIP = Space(lstrlen(ptrIP))
-                lstrcpy strIP, ptrIP
+                sIP = Space$(lstrlen(ptrIP))
+                lstrcpy sIP, ptrIP
                 
-                ResolveHost = strIP
+                ResolveHost = sIP
             Else
                 ResolveHost = vbNullString
                 Exit Function

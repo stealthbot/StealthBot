@@ -38,11 +38,6 @@ Private m_bySpoof                       As Byte
 Private m_bDisableMP3Commands           As Boolean
 Private m_bUseUDP                       As Boolean
 Private m_byFlashOnEvents               As Byte
-Private m_bUseProxy                     As Boolean
-Private m_sProxyIP                      As String
-Private m_lProxyPort                    As Long
-Private m_eProxyStatus                  As enuProxyStatus
-Private m_bProxyIsSocks5                As Boolean
 Private m_lMaxBacklogSize               As Long
 Private m_lMaxLogfileSize               As Long
 Private m_bUseGreet                     As Boolean
@@ -261,44 +256,44 @@ Public Property Let FlashOnEvents(ByVal byFlashOnEvents As Byte)
     m_byFlashOnEvents = byFlashOnEvents
 End Property
 
-Public Property Get UseProxy() As Boolean
-    UseProxy = m_bUseProxy
+Public Property Get UseProxy(Optional ByVal st As enuPL_ServerTypes = stBNCS) As Boolean
+    UseProxy = ProxyConnInfo(st).UseProxy
 End Property
 
-Public Property Let UseProxy(ByVal bUseProxy As Boolean)
-    m_bUseProxy = bUseProxy
+Public Property Let UseProxy(Optional ByVal st As enuPL_ServerTypes = stBNCS, ByVal bUseProxy As Boolean)
+    ProxyConnInfo(st).UseProxy = bUseProxy
 End Property
 
-Public Property Get ProxyPort() As Long
-    ProxyPort = m_lProxyPort
+Public Property Get ProxyStatus(Optional ByVal st As enuPL_ServerTypes = stBNCS) As enuProxyStatus
+    ProxyStatus = ProxyConnInfo(st).Status
 End Property
 
-Public Property Let ProxyPort(ByVal lProxyPort As Long)
-    m_lProxyPort = lProxyPort
+Public Property Get ProxyPort(Optional ByVal st As enuPL_ServerTypes = stBNCS) As Long
+    ProxyPort = ProxyConnInfo(st).ProxyPort
 End Property
 
-Public Property Get ProxyStatus() As enuProxyStatus
-    ProxyStatus = m_eProxyStatus
+Public Property Let ProxyPort(Optional ByVal st As enuPL_ServerTypes = stBNCS, ByVal lPort As Long)
+    ProxyConnInfo(st).ProxyPort = lPort
 End Property
 
-Public Property Let ProxyStatus(ByVal eProxyStatus As enuProxyStatus)
-    m_eProxyStatus = eProxyStatus
+Public Property Get ProxyIP(Optional ByVal st As enuPL_ServerTypes = stBNCS) As String
+    ProxyIP = ProxyConnInfo(st).ProxyIP
 End Property
 
-Public Property Get ProxyIP() As String
-    ProxyIP = m_sProxyIP
+Public Property Let ProxyIP(Optional ByVal st As enuPL_ServerTypes = stBNCS, ByVal sIP As String)
+    ProxyConnInfo(st).ProxyIP = sIP
 End Property
 
-Public Property Let ProxyIP(ByVal sProxyIP As String)
-    m_sProxyIP = sProxyIP
+Public Property Get ProxyIsSocks5(Optional ByVal st As enuPL_ServerTypes = stBNCS) As Boolean
+    ProxyIsSocks5 = CBool(ProxyConnInfo(st).Version = 5)
 End Property
 
-Public Property Get ProxyIsSocks5() As Boolean
-    ProxyIsSocks5 = m_bProxyIsSocks5
-End Property
-
-Public Property Let ProxyIsSocks5(ByVal bProxyIsSocks5 As Boolean)
-    m_bProxyIsSocks5 = bProxyIsSocks5
+Public Property Let ProxyIsSocks5(Optional ByVal st As enuPL_ServerTypes = stBNCS, ByVal bIsSocks5 As Boolean)
+    If bIsSocks5 Then
+        ProxyConnInfo(st).Version = 5
+    Else
+        ProxyConnInfo(st).Version = 4
+    End If
 End Property
 
 Public Property Get MaxBacklogSize() As Long

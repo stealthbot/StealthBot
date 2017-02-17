@@ -102,7 +102,7 @@ Public Property Get source() As Integer
 End Property
 
 
-Public Sub Class_Initialize()    
+Public Sub Class_Initialize()
     '// initialize values
     m_valid = False
     Set m_command_docs = New clsCommandDocObj
@@ -118,16 +118,16 @@ Public Sub Class_Initialize()
     m_splithasrun = False
     m_waswhispered = False
     Set m_response = New Collection
-    Set m_restrictions = New Dictionary    
+    Set m_restrictions = New Dictionary
 End Sub
 
-Public Sub Class_Terminate()    
+Public Sub Class_Terminate()
     '// clean up
     Set m_command_docs = Nothing
-    Set m_arguments = Nothing    
+    Set m_arguments = Nothing
 End Sub
 
-Public Property Get docs() As clsCommandDocObj    
+Public Property Get docs() As clsCommandDocObj
     If m_command_docs Is Nothing Then
         '// this command is nothing, lets create it
         Set m_command_docs = New clsCommandDocObj
@@ -311,7 +311,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: #" & Err.Number & ": " & Err.description & " in clsCommandObj.SplitArguments().")
+    Call frmChat.AddChat(vbRed, "Error: #" & Err.Number & ": " & Err.Description & " in clsCommandObj.SplitArguments().")
 End Sub
 
 Public Function Argument(sName As String) As String
@@ -348,7 +348,7 @@ On Error GoTo ERROR_HANDLER
 
     Exit Function
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: #" & Err.Number & ": " & Err.description & " in clsCommandObj.CheckForAnyFlags().")
+    Call frmChat.AddChat(vbRed, "Error: #" & Err.Number & ": " & Err.Description & " in clsCommandObj.CheckForAnyFlags().")
 End Function
 
 'Adds a line to the response queue
@@ -399,7 +399,7 @@ On Error GoTo ERROR_HANDLER
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: #" & Err.Number & ": " & Err.description & " in clsCommandObj.Respond().")
+    Call frmChat.AddChat(vbRed, "Error: #" & Err.Number & ": " & Err.Description & " in clsCommandObj.Respond().")
 End Function
 
 Private Function CheckMatch(sExpression As String, sData As String, Optional CaseSensitive As Boolean = True) As Boolean
@@ -413,5 +413,5 @@ On Error GoTo ERROR_HANDLER
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in clsCommandObj.CheckMatch()"
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in clsCommandObj.CheckMatch()"
 End Function

@@ -32,19 +32,16 @@ Private Sub Class_Initialize()
     Set g_Friends = New Collection
 End Sub
 
-Public Sub RequestFriendsList(ByRef pBuff As clsDataBuffer)
+Public Sub RequestFriendsList(ByVal pBuff As clsDataBuffer)
     'ResetList
     pBuff.SendPacket SID_FRIENDSLIST
 End Sub
 
-Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
+Public Sub ParsePacket(ByVal PacketID As Long, ByVal pBuff As clsDataBuffer)
     On Error GoTo ERROR_HANDLER
     
-    Dim pBuff As New clsDataBuffer
     Dim flTemp As clsFriendObj
     Dim n As Integer
-    
-    pBuff.Data = Data
 
     Select Case PacketID
         Case SID_FRIENDSLIST
@@ -185,7 +182,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
     Exit Sub
 
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: " & Err.description & " in ParsePacket()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: " & Err.Description & " in ParsePacket()."
 
     Exit Sub
 

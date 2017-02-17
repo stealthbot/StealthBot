@@ -7,101 +7,6 @@ Public Sub SendHeader()
     frmChat.sckBNet.SendData ChrW(1)
 End Sub
 
-Public Sub BNCSParsePacket(ByVal PacketData As String)
-    On Error GoTo ERROR_HANDLER
-
-    Dim pD          As clsDataBuffer ' Packet debuffer object
-    Dim PacketLen   As Long              ' Length of the packet minus the header
-    Dim PacketID    As Byte              ' Battle.net packet ID
-    Dim s           As String            ' Temporary string
-    Dim L           As Long              ' Temporary long
-    Dim s2          As String            ' Temporary string
-    Dim s3          As String            ' Temporary string
-    Dim ClanTag     As String            ' User clan tag
-    Dim Product     As String            ' User product
-    Dim w3icon      As String            ' Warcraft III icon code
-    Dim B           As Boolean           ' Temporary bool
-    Dim sArr()      As String            ' Temp String array
-    Dim veto        As Boolean
-    
-    
-    '--------------
-    '| Initialize |
-    '--------------
-    Set pD = New clsDataBuffer
-    PacketLen = Len(PacketData) - 4
-    
-    '###########################################################################
-    
-    If PacketLen >= 0 Then
-        ' Start packet debuffer
-        pD.Data = Mid$(PacketData, 5)
-        ' Get packet ID
-        PacketID = Asc(Mid$(PacketData, 2, 1))
-        
-        If MDebug("all") Then
-            frmChat.AddChat COLOR_BLUE, "BNET RECV 0x" & ZeroOffset(PacketID, 2)
-        End If
-        
-        CachePacket StoC, stBNCS, PacketID, Len(PacketData), PacketData
-        
-        ' Added 2007-06-08 for a packet logging menu feature to aid tech support
-        WritePacketData stBNCS, StoC, PacketID, PacketLen, PacketData
-                
-        If (RunInAll("Event_PacketReceived", "BNCS", PacketID, Len(PacketData), PacketData)) Then
-            Exit Sub
-        End If
-        
-        'This will be taken out when Warden is moved to a script like I want.
-        If (modWarden.WardenData(WardenInstance, PacketData, False)) Then
-          Exit Sub
-        End If
-        
-        '--------------
-        '| Parse      |
-        '--------------
-        
-        Select Case PacketID
-            '###########################################################################
-            Case Is >= &H65 'Friends List or Clan-related packet
-                ' Hand the packet off to the appropriate handler
-                If PacketID >= &H70 Then
-                    ' added in response to the clan channel takeover exploit
-                    ' discovered 11/7/05
-                    If IsW3 Then
-                        frmChat.ParseClanPacket PacketID, IIf(Len(PacketData) > 4, Mid$(PacketData, 5), vbNullString)
-                    End If
-                Else
-                    If (g_request_receipt) Then
-                        g_request_receipt = False
-                        
-                        If (Caching) Then
-                            frmChat.cacheTimer_Timer
-                        End If
-                        
-                        Exit Sub
-                    End If
-                
-                    frmChat.ParseFriendsPacket PacketID, Mid$(PacketData, 5)
-                End If
-            
-            '###########################################################################
-            Case Else
-                Call modBNCS.BNCSRecvPacket(PacketData)
-            
-        End Select
-    End If
-    
-    Set pD = Nothing
-    
-    Exit Sub
-    
-ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in BNCSParsePacket()."
-    
-    Exit Sub
-End Sub
-
 Public Function StrToHex(ByVal String1 As String, Optional ByVal NoSpaces As Boolean = False) As String
     Dim strTemp As String, strReturn As String, i As Long
     
@@ -759,7 +664,6 @@ Public Function Conv(ByVal RawString As String) As Long
     
     Conv = lReturn
 End Function
-
 
 '// COLORMODIFY - where L is passed as the start position of the text to be checked
 Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)

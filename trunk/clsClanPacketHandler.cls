@@ -54,7 +54,7 @@ Public Event RemovedFromClan(ByVal Status As Byte)
 Public Event ClanMOTD(ByVal cookie As Long, ByVal Message As String)
 
 '10-18-07 - Hdx - Changed to use clsPacketDebuffer
-Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
+Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal inBuf As clsDataBuffer)
     On Error GoTo ERROR_HANDLER
     
     Dim ary() As String
@@ -66,9 +66,6 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
     Dim bTemp As Byte
     Dim bRank As Byte
     Dim bStatus As Byte
-    
-    Dim inBuf As New clsDataBuffer
-    inBuf.Data = Data
     
     Select Case PacketID
     
@@ -185,7 +182,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
 
         Case Else
         
-            RaiseEvent UnknownClanEvent(PacketID, DebugOutput(Data))
+            RaiseEvent UnknownClanEvent(PacketID, inBuf.DebugOutput)
             
     End Select
     inBuf.Clear
@@ -193,11 +190,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: " & Err.description & " in ParseClanPacket()."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: " & Err.Description & " in ParseClanPacket()."
     
     Exit Sub
-
-  'Debug.Print "ParseClanPacket Error: " & Err.Number & ": " & Err.description
-  'Debug.Print DebugOutput(Data)
-  'Err.Clear
 End Sub

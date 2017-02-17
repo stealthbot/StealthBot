@@ -10,17 +10,15 @@ Private Const BNLS_VERSIONCHECKEX2    As Byte = &H1A
 
 Public BNLSAuthorized As Boolean
 
-Public Function BNLSRecvPacket(ByVal sData As String) As Boolean
+Public Function BNLSRecvPacket(ByVal pBuff As clsDataBuffer) As Boolean
 On Error GoTo ERROR_HANDLER:
-    Static pBuff As New clsDataBuffer
-    
     Dim PacketID As Byte
+    Dim PacketLen As Long
     
     BNLSRecvPacket = True
+    
     With pBuff
-        .Clear
-        .Data = sData
-        .GetWord
+        PacketLen = .GetWord
         PacketID = .GetByte
     End With
     
@@ -28,12 +26,10 @@ On Error GoTo ERROR_HANDLER:
         frmChat.AddChat COLOR_BLUE, StringFormat("BNLS RECV 0x{0}", ZeroOffset(PacketID, 2))
     End If
     
-    CachePacket StoC, stBNLS, PacketID, Len(sData), sData
+    Call CachePacket(stBNLS, StoC, PacketID, PacketLen, pBuff.GetDataAsByteArr)
+    Call WritePacketData(stBNLS, StoC, PacketID, PacketLen, pBuff.GetDataAsByteArr)
     
-    ' Added 2007-06-08 for a packet logging menu feature to aid tech support
-    WritePacketData BNLS, StoC, PacketID, Len(sData), sData
-    
-    If (RunInAll("Event_PacketReceived", "BNLS", PacketID, Len(sData), sData)) Then
+    If (RunInAll("Event_PacketReceived", "BNLS", PacketID, PacketLen, pBuff.Data)) Then
         Exit Function
     End If
     
@@ -48,14 +44,14 @@ On Error GoTo ERROR_HANDLER:
             BNLSRecvPacket = False
             If (MDebug("debug") And (MDebug("all") Or MDebug("unknown"))) Then
                 Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNLS] Unhandled packet 0x{0}", ZeroOffset(CLng(PacketID), 2)))
-                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNLS] Packet data: {0}{1}", vbNewLine, DebugOutput(sData)))
+                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNLS] Packet data: {0}{1}", vbNewLine, pBuff.DebugOutput))
             End If
     
     End Select
     
     Exit Function
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNLSRecvPacket()", Err.Number, Err.description, OBJECT_NAME))
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNLSRecvPacket()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 '*******************************
@@ -70,7 +66,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_AUTHORIZE()", Err.Number, Err.description, OBJECT_NAME))
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_AUTHORIZE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -88,7 +84,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_AUTHORIZE()", Err.Number, Err.description, OBJECT_NAME))
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_AUTHORIZE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -101,12 +97,14 @@ On Error GoTo ERROR_HANDLER:
 
     BNLSAuthorized = True
     Call frmChat.Event_BNLSAuthEvent(True)
+    
     Call frmChat.Event_BNetConnecting
+    
     frmChat.sckBNet.Connect
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_AUTHORIZEPROOF()", Err.Number, Err.description, OBJECT_NAME))
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_AUTHORIZEPROOF()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -134,7 +132,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_AUTHORIZEPROOF()", Err.Number, Err.description, OBJECT_NAME))
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_AUTHORIZEPROOF()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '************************************
@@ -174,7 +172,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_REQUESTVERSIONBYTE()", Err.Number, Err.description, OBJECT_NAME))
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_REQUESTVERSIONBYTE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '************************************
@@ -194,7 +192,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_REQUESTVERSIONBYTE()", Err.Number, Err.description, OBJECT_NAME))
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_REQUESTVERSIONBYTE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '************************************
@@ -234,7 +232,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_VERSIONCHECKEX2()", Err.Number, Err.description, OBJECT_NAME))
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_VERSIONCHECKEX2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '************************************
@@ -266,7 +264,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_VERSIONCHECKEX2()", Err.Number, Err.description, OBJECT_NAME))
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_VERSIONCHECKEX2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '===================================================================================================

@@ -77,7 +77,7 @@ Public Function Add(ByVal QuoteStr As String) As Long
 ERROR_HANDLER:
     
     frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.Add()", _
-    Err.Number, Err.description, OBJECT_NAME)
+    Err.Number, Err.Description, OBJECT_NAME)
 End Function
 
 ' call this to reqmove quotes from the collection
@@ -118,7 +118,7 @@ Public Function Remove(ByVal QuoteStr As Variant) As String
     
 ERROR_HANDLER:
     frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.Remove()", _
-    Err.Number, Err.description, OBJECT_NAME)
+    Err.Number, Err.Description, OBJECT_NAME)
 
 End Function
 
@@ -211,7 +211,7 @@ Public Function GetRandomQuote() As String
 
 ERROR_HANDLER:
     frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.GetRandomQuote()", _
-    Err.Number, Err.description, OBJECT_NAME)
+    Err.Number, Err.Description, OBJECT_NAME)
     
 End Function
 
@@ -230,7 +230,7 @@ Private Sub LoadQuotes()
     
 ERROR_HANDLER:
     frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.LoadQuotes()", _
-    Err.Number, Err.description, OBJECT_NAME)
+    Err.Number, Err.Description, OBJECT_NAME)
 End Sub
 
 ' this function will save quotes into quotes.txt when changes are made
@@ -244,7 +244,7 @@ Private Sub SaveQuotes()
     
 ERROR_HANDLER:
     frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.SaveQuotes()", _
-    Err.Number, Err.description, OBJECT_NAME)
+    Err.Number, Err.Description, OBJECT_NAME)
 End Sub
 
 ' this function will save a single quote into quotes.txt on add (instead of saving the whole thing)
@@ -258,6 +258,6 @@ Private Sub AppendQuote(ByVal QuoteStr As String)
     
 ERROR_HANDLER:
     frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.AppendQuotes()", _
-    Err.Number, Err.description, OBJECT_NAME)
+    Err.Number, Err.Description, OBJECT_NAME)
 End Sub
 

@@ -5105,7 +5105,7 @@ ShowCurrentColor_Exit:
 
 ShowCurrentColor_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure ShowCurrentColor of Form frmSettings"
+    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ShowCurrentColor of Form frmSettings"
     Resume ShowCurrentColor_Exit
 End Sub
 
@@ -5825,8 +5825,8 @@ Private Sub ChangeRTBFont(rtb As RichTextBox, ByVal NewFont As String, ByVal New
     Dim tmpBuffer As String
     
     With rtb
-        .selStart = 0
-        .selLength = Len(.Text)
+        .SelStart = 0
+        .SelLength = Len(.Text)
         .SelFontSize = NewSize
         .SelFontName = NewFont
         tmpBuffer = .TextRTF
@@ -5834,7 +5834,7 @@ Private Sub ChangeRTBFont(rtb As RichTextBox, ByVal NewFont As String, ByVal New
         .Font.Name = NewFont
         .Font.Size = NewSize
         .TextRTF = tmpBuffer
-        .selStart = Len(.Text)
+        .SelStart = Len(.Text)
     End With
 End Sub
 

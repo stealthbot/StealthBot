@@ -8,7 +8,7 @@ Option Explicit
 Private Type NMHDR
     hWndFrom As Long
     idFrom   As Long
-    code     As Long
+    Code     As Long
 End Type
 
 Private Type CHARRANGE
@@ -127,7 +127,7 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wPara
     If Msg = WM_NOTIFY Then
         CopyMemory uHead, ByVal lParam, LenB(uHead)
        
-        If (uHead.code = EN_LINK) Then
+        If (uHead.Code = EN_LINK) Then
             CopyMemory eLink, ByVal lParam, LenB(eLink)
        
             With eLink
@@ -144,7 +144,7 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wPara
             End With
             
         ' See if this is the start of a drag.
-        ElseIf uHead.code = LVN_BEGINDRAG Then
+        ElseIf uHead.Code = LVN_BEGINDRAG Then
             ' A drag is beginning. Ignore this event.
             ' Indicate we have handled this.
             NewWindowProc = 1

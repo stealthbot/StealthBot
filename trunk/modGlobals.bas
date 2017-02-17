@@ -26,9 +26,8 @@ Public ProductList(12) As udtProductInfo
 Public g_Queue As New clsQueue
 Public g_OSVersion As New clsOSVersion
 Public SharedScriptSupport As New clsScriptSupportClass
-Public BNCSBuffer As New clsBNCSRecvBuffer
-Public BNLSBuffer As New clsBNLSRecvBuffer
-Public MCPBuffer As New clsBNLSRecvBuffer
+Public ReceiveBuffer(0 To 2) As clsDataBuffer
+Public ProxyConnInfo(0 To 2) As udtProxyConnectionInfo
 Public GErrorHandler As clsErrorHandler
 
 Public ConfigOverride As String

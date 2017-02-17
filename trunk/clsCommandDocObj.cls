@@ -120,7 +120,7 @@ Public Function GetCommandCount(Optional ByVal strScriptOwner As String = vbNull
 
 ERROR_HANDLER:
     Set nodes = Nothing
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.GetCommandCount().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsCommandDocObj.GetCommandCount().")
 
     Exit Function
     
@@ -497,7 +497,7 @@ Public Function CommandsSanityCheck(ByRef doc As DOMDocument60, Optional ByRef c
     
 ERROR_HANDLER:
     
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObjStatic.CommandsSanityCheck().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsCommandDocObjStatic.CommandsSanityCheck().")
 
 End Function
 
@@ -533,7 +533,7 @@ Public Function Save(Optional ByVal writeToFile As Boolean = True) As Boolean
     
 ERROR_HANDLER:
     
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.Save().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsCommandDocObj.Save().")
 
 End Function
 
@@ -579,7 +579,7 @@ Private Sub writeDocToFile(ByVal FilePath As String)
 
 ERROR_HANDLER:
     
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.writeDocToFile().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsCommandDocObj.writeDocToFile().")
 
 End Sub
 
@@ -638,7 +638,7 @@ Private Function getParameters(ByRef commandNode As IXMLDOMNode) As Collection
                 .MatchCaseSensitive = True
             End If
             .MatchError = Trim$(parameter.selectSingleNode("error").Text)
-            .description = Trim$(parameter.selectSingleNode("documentation/description").Text)
+            .Description = Trim$(parameter.selectSingleNode("documentation/description").Text)
             .SpecialNotes = Trim$(parameter.selectSingleNode("documentation/specialnotes").Text)
         End With
         On Error GoTo 0
@@ -786,7 +786,7 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
             
             '// documentation/description
             Set newNode = m_database.createNode("element", "description", vbNullString)
-            newNode.Text = parameter.description
+            newNode.Text = parameter.Description
             argumentNode.selectSingleNode("documentation").appendChild newNode
             
             '// documentation/specialnotes
@@ -1168,7 +1168,7 @@ End Function
 
 
 
-Private Function setDescription(ByRef AnyNode As IXMLDOMNode, ByVal description As String) As String
+Private Function setDescription(ByRef AnyNode As IXMLDOMNode, ByVal Description As String) As String
 
     Dim temp As IXMLDOMNode
     
@@ -1185,7 +1185,7 @@ Private Function setDescription(ByRef AnyNode As IXMLDOMNode, ByVal description 
         Set temp = temp.appendChild(m_database.createNode("element", "description", vbNullString))
     End If
     
-    temp.Text = description
+    temp.Text = Description
     
     'Call Save
 
@@ -1424,13 +1424,13 @@ Public Property Let RequiredFlags(ByVal str As String)
 
 End Property
 
-Public Property Get description() As String
+Public Property Get Description() As String
     
-    description = getDescription(m_command_node)
+    Description = getDescription(m_command_node)
 
 End Property
 
-Public Property Let description(ByVal strDescription As String)
+Public Property Let Description(ByVal strDescription As String)
     
     setDescription m_command_node, strDescription
 

@@ -40,7 +40,7 @@ Private Declare Function extractMPQNumber Lib "BNCSutil.dll" _
 ' [!] You should use checkRevision and getExeInfo (see below) instead of their
 '     _Raw counterparts.
 Private Declare Function checkRevision_Raw Lib "BNCSutil.dll" Alias "checkRevisionFlat" _
-    (ByVal ValueString As String, ByVal File1 As String, ByVal File2 As String, _
+    (ByVal ValueString As Long, ByVal File1 As String, ByVal File2 As String, _
      ByVal File3 As String, ByVal mpqNumber As Long, ByRef Checksum As Long) As Long
 Private Declare Function getExeInfo_Raw Lib "BNCSutil.dll" Alias "getExeInfo" _
     (ByVal FileName As String, ByVal exeInfoString As String, _
@@ -51,9 +51,9 @@ Private Declare Function getExeInfo_Raw Lib "BNCSutil.dll" Alias "getExeInfo" _
 '     _Raw counterparts.  (See below for those functions.)
 Private Declare Sub doubleHashPassword_Raw Lib "BNCSutil.dll" Alias "doubleHashPassword" _
     (ByVal Password As String, ByVal ClientToken As Long, ByVal ServerToken As Long, _
-    ByVal outBuffer As String)
+    ByVal outBuffer As Long)
 Private Declare Sub hashPassword_Raw Lib "BNCSutil.dll" Alias "hashPassword" _
-    (ByVal Password As String, ByVal outBuffer As String)
+    (ByVal Password As String, ByVal outBuffer As Long)
 
 
 ' CD-Key Decoding
@@ -173,15 +173,15 @@ Public Function getExeInfo(EXEFile As String, InfoString As String, Optional ByV
 End Function
 
 'OLS Password Hashing
-Public Function doubleHashPassword(Password As String, ByVal ClientToken&, ByVal ServerToken&) As String
-    Dim Hash As String * 20
-    doubleHashPassword_Raw Password, ClientToken, ServerToken, Hash
-    doubleHashPassword = Hash
+Public Function doubleHashPassword(Password As String, ByVal ClientToken As Long, ByVal ServerToken As Long) As String
+    Dim Hash(19) As Byte
+    Call doubleHashPassword_Raw(Password, ClientToken, ServerToken, VarPtr(Hash(0)))
+    doubleHashPassword = StrConv(Hash(), vbUnicode, 1033)
 End Function
 
 Public Function hashPassword(Password As String) As String
-    Dim Hash As String * 20
-    hashPassword_Raw Password, Hash
-    hashPassword = Hash
+    Dim Hash(19) As Byte
+    Call hashPassword_Raw(Password, VarPtr(Hash(0)))
+    hashPassword = StrConv(Hash(), vbUnicode, 1033)
 End Function
 

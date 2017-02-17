@@ -119,17 +119,12 @@ Public Enum inetQueueModes
     inqGet = 2
 End Enum
 
-Public Enum enuErrorSources
-    BNET = 0
-    BNLS = 1
-    MCP = 2
-End Enum
-
 Public Enum enuProxyStatus
     psNotConnected = 0
-    psConnecting = 1
-    psLoggingIn = 2
-    psOnline = 3
+    psRequestingMethod = 1
+    psLoggingOn = 2
+    psRequestingConn = 3
+    psOnline = 4
 End Enum
 
 Public Enum enuWebProfileTypes
@@ -167,15 +162,35 @@ Public Enum enuDBActions
 End Enum
 
 Public Enum enuPL_ServerTypes
+    stBNCS = 0
     stBNLS = 1
-    stBNCS = 2
-    stMCP = 3
+    stMCP = 2
+    stPROXY = 4
 End Enum
 
 Public Enum enuPL_DirectionTypes
     CtoS = 1
     StoC = 2
 End Enum
+
+Public Type udtProxyConnectionInfo
+    ' config
+    serverType As enuPL_ServerTypes
+    UseProxy As Boolean
+    ProxyIP As String
+    ProxyPort As Long
+    Version As Byte
+    Username As String
+    Password As String
+    
+    ' status
+    IsUsingProxy As Boolean
+    Status As enuProxyStatus
+    RemoteHost As String
+    RemoteHostIP As String
+    RemotePort As Long
+    RemoteResolveHost As Boolean
+End Type
 
 Public Enum enuUserDataRequestType
     Internal = 1

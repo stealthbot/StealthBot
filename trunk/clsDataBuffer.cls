@@ -33,24 +33,60 @@ Private Sub Class_Terminate()
     Clear
 End Sub
 
-Public Sub setCripple()
+Public Sub SetCripple()
     m_cripple = True
 End Sub
 
-Public Function getCripple() As Boolean
-    getCripple = m_cripple
+Public Function GetCripple() As Boolean
+    GetCripple = m_cripple
 End Function
 
 Public Property Let Data(ByVal str As String)
-    ReDim m_buf(0 To Len(str))
-    CopyMemory m_buf(0), ByVal str, Len(str)
-    m_bufsize = Len(str)
+    If LenB(str) = 0 Then
+        Call Clear
+    Else
+        Call SetDataAsByteArr(StrConv(str, vbFromUnicode, 1033))
+    End If
 End Property
 
 Public Property Get Data() As String
-    Data = String(m_bufsize, Chr$(0))
-    CopyMemory ByVal Data, m_buf(0), m_bufsize
+    If m_bufsize = 0 Then
+        Data = vbNullString
+    Else
+        Data = StrConv(GetDataAsByteArr(), vbUnicode, 1033)
+    End If
 End Property
+
+Public Sub SetDataAsByteArr(ByRef buf() As Byte)
+    If UBound(buf) < 0 Then
+        Clear
+        Exit Sub
+    End If
+    
+    ' resize buffer
+    ReDim m_buf(0 To (UBound(buf) + 2))
+
+    ' copy data to buffer
+    CopyMemory m_buf(0), buf(0), (UBound(buf) + 1)
+
+    ' store buffer Length
+    m_bufsize = UBound(buf) + 1
+End Sub
+
+Public Function GetDataAsByteArr() As Byte()
+    Dim buf() As Byte
+    
+    If m_bufsize = 0 Then
+        ReDim GetDataAsByteArr(0)
+        Exit Function
+    End If
+    
+    ReDim buf(0 To (m_bufsize - 1))
+    
+    CopyMemory buf(0), m_buf(0), m_bufsize
+    
+    GetDataAsByteArr = buf
+End Function
 
 Public Function InsertByte(ByVal Data As Byte)
     ' resize buffer
@@ -74,23 +110,26 @@ Public Function InsertByteArr(ByRef Data() As Byte)
     m_bufsize = (m_bufsize + (UBound(Data) + 1))
 End Function
 
-Public Sub GetByteArr(ByRef Data() As Byte, Optional ByVal Length As Integer = -1, Optional Peek As Boolean = False)
-    If (Length = -1) Then
-        Length = m_bufsize
+Public Sub GetByteArr(ByRef Data() As Byte, Optional ByVal length As Integer = -1, Optional Peek As Boolean = False)
+    If (length = -1) Then
+        length = m_bufsize
     End If
     
-    If ((m_bufpos + Length) > m_bufsize) Then
+    If ((m_bufpos + length) > m_bufsize) Then
+        Exit Sub
+    ElseIf ((m_bufpos) = m_bufsize) Then
+        ReDim Data(0)
         Exit Sub
     End If
     
     ' resize buffer
-    ReDim Data(0 To Length)
+    ReDim Data(0 To length - 1)
 
     ' copy data to buffer
-    CopyMemory Data(0), m_buf(m_bufpos), Length
+    CopyMemory Data(0), m_buf(m_bufpos), length
 
     ' store buffer Length
-    If (Not Peek) Then m_bufpos = (m_bufpos + Length)
+    If (Not Peek) Then m_bufpos = (m_bufpos + length)
 End Sub
 
 Public Function GetByte(Optional Peek As Boolean = False) As Byte
@@ -171,14 +210,18 @@ Public Function GetFileTime(Optional Peek As Boolean = False) As Date
 End Function
 
 Public Function InsertNonNTString(ByVal Data As String)
+    Dim arrStr() As Byte
+    
+    arrStr() = StrConv(Data, vbFromUnicode, 1033)
+    
     ' resize buffer
-    ReDim Preserve m_buf(0 To (m_bufsize + Len(Data)))
+    ReDim Preserve m_buf(0 To (m_bufsize + UBound(arrStr) + 1))
     
     ' copy data to buffer
-    CopyMemory m_buf(m_bufsize), ByVal Data, Len(Data)
+    CopyMemory m_buf(m_bufsize), arrStr(0), UBound(arrStr) + 1
     
     ' store buffer Length
-    m_bufsize = (m_bufsize + Len(Data))
+    m_bufsize = (m_bufsize + UBound(arrStr) + 1)
 End Function
 
 Public Function InsertNTString(ByRef Data As String, _
@@ -188,13 +231,13 @@ Public Function InsertNTString(ByRef Data As String, _
     
     Select Case (Encoding)
         Case STRINGENCODING.ANSI
-            arrStr() = StrConv(Data, vbFromUnicode)
+            arrStr() = StrConv(Data, vbFromUnicode, 1033)
             
         Case STRINGENCODING.UTF8
             arrStr() = modUTF8.UTF8Encode(Data)
             
         Case STRINGENCODING.UTF16
-            arrStr() = StrConv(Data, vbUnicode)
+            arrStr() = StrConv(Data, vbUnicode, 1033)
     End Select
     
     ' resize buffer and include terminating null character
@@ -211,6 +254,7 @@ End Function
 
 Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI, Optional Peek As Boolean = False) As String
     Dim i As Integer
+    Dim arrStr() As Byte
 
     For i = m_bufpos To m_bufsize
         If (m_buf(i) = &H0) Then
@@ -218,35 +262,61 @@ Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCO
         End If
     Next i
 
+    ' resize buffer and include terminating null character
+    ReDim arrStr(0 To i - m_bufpos)
+
     If (i < m_bufsize) Then
         GetString = String$(i - m_bufpos, Chr$(0))
             
         ' copy data to buffer
-        CopyMemory ByVal GetString, m_buf(m_bufpos), i - m_bufpos
+        CopyMemory arrStr(0), m_buf(m_bufpos), i - m_bufpos
         
         If (Not Peek) Then m_bufpos = i + 1
     End If
+
+    Select Case (Encoding)
+        Case STRINGENCODING.ANSI, STRINGENCODING.UTF8
+            ' convert from CURRENT CODE PAGE to Unicode (VB6 string)
+            GetString = StrConv(arrStr(), vbUnicode, 1033)
+            GetString = KillNull(GetString)
+
+        'Case STRINGENCODING.UTF8
+            ' decode result as Unicode (encoded in UTF-8)
+            'GetString = UTF8Decode(arrStr())
+
+        Case STRINGENCODING.UTF16
+            ' use Unicode (VB6 string) as-is
+            GetString = arrStr()
+
+    End Select
 End Function
 
-Public Function GetRaw(Optional ByVal Length As Integer = -1, Optional Peek As Boolean = False) As String
-    If (Length = -1) Then
-        Length = m_bufsize - m_bufpos
+Public Function GetRaw(Optional ByVal length As Integer = -1, Optional Peek As Boolean = False) As String
+    Dim arrStr() As Byte
+    
+    If (length = -1) Then
+        length = m_bufsize - m_bufpos
     End If
     
-    If ((m_bufpos + Length) > m_bufsize) Then
+    If ((m_bufpos + length) > m_bufsize) Then
         Exit Function
     End If
 
-    GetRaw = String$(Length, Chr$(0))
-            
+    GetRaw = String$(length, Chr$(0))
+
+    ' resize buffer and include terminating null character
+    ReDim arrStr(0 To length - 1)
+
     ' copy data to buffer
-    CopyMemory ByVal GetRaw, m_buf(m_bufpos), Length
+    CopyMemory arrStr(0), m_buf(m_bufpos), length
     
-    If (Not Peek) Then m_bufpos = m_bufpos + Length
+    GetRaw = StrConv(arrStr(), vbUnicode, 1033)
+    
+    If (Not Peek) Then m_bufpos = m_bufpos + length
 End Function ' end function GetString
 
-Public Property Get Length() As Long
-    Length = m_bufsize
+Public Property Get length() As Long
+    length = m_bufsize
 End Property
 
 Public Property Get Position() As Long
@@ -271,13 +341,12 @@ Public Function Clear()
     m_bufpos = 0
 End Function
 
-Public Function DebugOutput() As String
-    DebugOutput = modWar3Clan.DebugOutput(Data)
+Public Function DebugOutput(Optional ByVal Start As Long = 1, Optional ByVal length As Long = -1) As String
+    DebugOutput = modPacketBuffer.DebugOutput(Data, Start, length)
 End Function
 
 Public Function SendPacketMCP(Optional PacketID As Byte)
     Dim buf()  As Byte
-    Dim strbuf As String
     Dim veto   As Boolean
     
     If (frmChat.sckMCP.State <> sckConnected) Then
@@ -297,21 +366,16 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     If (m_bufsize) Then
         CopyMemory buf(3), m_buf(0), m_bufsize
     End If
-    
-    strbuf = String$(m_bufsize + 3, vbNullChar)
-        
-    CopyMemory ByVal strbuf, buf(0), m_bufsize + 3
 
-    If (Not RunInAll("Event_PacketSent", "MCP", PacketID, m_bufsize + 3, strbuf)) Then
+    If (Not RunInAll("Event_PacketSent", "MCP", PacketID, m_bufsize + 3, Me.Data)) Then
         If (MDebug("all")) Then
             frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & ZeroOffset(PacketID, 2)
         End If
     
-        Send frmChat.sckMCP.SocketHandle, strbuf, m_bufsize + 3, 0
+        frmChat.sckMCP.SendData buf
 
-        CachePacket CtoS, stMCP, PacketID, m_bufsize + 3, strbuf
-    
-        WritePacketData stMCP, CtoS, PacketID, m_bufsize + 3, strbuf
+        Call CachePacket(stMCP, CtoS, PacketID, m_bufsize + 3, buf)
+        Call WritePacketData(stMCP, CtoS, PacketID, m_bufsize + 3, buf)
     End If
     
     ' clear buffer contents
@@ -322,7 +386,6 @@ Public Function SendPacket(Optional PacketID As Byte)
     Dim L      As Long
     Dim buf()  As Byte
     Dim i      As Integer
-    Dim strbuf As String
     Dim veto   As Boolean
     
     If (frmChat.sckBNet.State <> sckConnected) Then
@@ -330,7 +393,7 @@ Public Function SendPacket(Optional PacketID As Byte)
         Exit Function
     End If
     
-    If (getCripple) Then
+    If (GetCripple) Then
         Select Case (PacketID)
             Case SID_CHATCOMMAND, SID_JOINCHANNEL:
                 Clear
@@ -359,24 +422,19 @@ Public Function SendPacket(Optional PacketID As Byte)
         CopyMemory buf(4), m_buf(0), m_bufsize
     End If
     
-    strbuf = String$(m_bufsize + 4, vbNullChar)
-        
-    CopyMemory ByVal strbuf, buf(0), m_bufsize + 4
-    
-    If (Not RunInAll("Event_PacketSent", "BNCS", PacketID, m_bufsize + 4, strbuf)) Then
+    If (Not RunInAll("Event_PacketSent", "BNCS", PacketID, m_bufsize + 4, Me.Data)) Then
     
         If (MDebug("all")) Then
             frmChat.AddChat COLOR_BLUE, "BNET SEND 0x" & ZeroOffset(PacketID, 2)
         End If
-    
-        Send frmChat.sckBNet.SocketHandle, strbuf, m_bufsize + 4, 0
+        
+        frmChat.sckBNet.SendData buf
 
-        CachePacket CtoS, stBNCS, PacketID, m_bufsize + 4, strbuf
-    
-        WritePacketData stBNCS, CtoS, PacketID, m_bufsize + 4, strbuf
+        Call CachePacket(stBNCS, CtoS, PacketID, m_bufsize + 4, buf)
+        Call WritePacketData(stBNCS, CtoS, PacketID, m_bufsize + 4, buf)
     
         'Send Warden Everything thats Sent to Bnet
-        Call modWarden.WardenData(WardenInstance, strbuf, True)
+        Call modWarden.WardenData(WardenInstance, buf, True)
     End If
     ' clear buffer contents
     Clear
@@ -384,7 +442,6 @@ End Function
 
 Public Function vLSendPacket(Optional PacketID As Byte)
     Dim buf()  As Byte
-    Dim strbuf As String
     Dim veto   As Boolean
     
     If (frmChat.sckBNLS.State <> sckConnected) Then
@@ -404,23 +461,124 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     If (m_bufsize) Then
         CopyMemory buf(3), m_buf(0), m_bufsize
     End If
-    
-    strbuf = String$(m_bufsize + 3, vbNullChar)
-        
-    CopyMemory ByVal strbuf, buf(0), m_bufsize + 3
 
-    If (Not RunInAll("Event_PacketSent", "BNLS", PacketID, m_bufsize + 3, strbuf)) Then
+    If (Not RunInAll("Event_PacketSent", "BNLS", PacketID, m_bufsize + 3, Me.Data)) Then
         If (MDebug("all")) Then
             frmChat.AddChat COLOR_BLUE, "BNLS SEND 0x" & ZeroOffset(PacketID, 2)
         End If
     
-        Send frmChat.sckBNLS.SocketHandle, strbuf, m_bufsize + 3, 0
+        frmChat.sckBNLS.SendData buf
 
-        CachePacket CtoS, stBNLS, PacketID, m_bufsize + 3, strbuf
-    
-        WritePacketData stBNLS, CtoS, PacketID, m_bufsize + 3, strbuf
+        Call CachePacket(stBNLS, CtoS, PacketID, m_bufsize + 3, buf)
+        Call WritePacketData(stBNLS, CtoS, PacketID, m_bufsize + 3, buf)
     End If
     
     ' clear buffer contents
     Clear
 End Function
+
+Public Function FindByte(ByVal Value As Integer) As Long
+    Dim i As Integer
+
+    For i = m_bufpos To m_bufsize
+        If (m_buf(i) = Value) Then
+            FindByte = i + 1
+            Exit Function
+        End If
+    Next i
+    
+    FindByte = 0
+End Function
+
+Public Function IsFullPacket(Optional ByVal st As enuPL_ServerTypes = stBNCS) As Boolean
+    Dim lngPacketLen As Long, L As Long
+    
+    IsFullPacket = False
+    
+    If m_bufsize > 0 Then
+        L = FindByte(&HFF)
+        
+        If st <> stBNCS Or L = 1 Then
+            lngPacketLen = GetPacketLength(st)
+            
+            If (lngPacketLen = 0) Then
+                Exit Function
+            End If
+
+            If (m_bufsize >= lngPacketLen) Then
+                If lngPacketLen < 10000 Then
+                    IsFullPacket = True
+                Else
+                    frmChat.AddChat RTBColors.ErrorMessageText, "Error: Packet Length of unusually high Length detected! Packet " & _
+                            "dropped. Buffer content at this time: " & vbCrLf & DebugOutput()
+                            
+                    Call Clear
+                End If
+            End If
+        Else
+            frmChat.AddChat RTBColors.ErrorMessageText, "Error: The front of the buffer is not a valid packet!"
+        
+            If MDebug("showdrops") Then
+                frmChat.AddChat RTBColors.ErrorMessageText, "Error: The front of the buffer is not " & _
+                        "a valid packet!"
+                frmChat.AddChat RTBColors.ErrorMessageText, "The following data is being purged:"
+                
+                If L > 0 Then
+                    frmChat.AddChat RTBColors.ErrorMessageText, Space$(1) & DebugOutput()
+                Else
+                    frmChat.AddChat RTBColors.ErrorMessageText, Space$(1) & DebugOutput()
+                End If
+            End If
+            
+            If L > 0 Then
+                m_bufpos = L
+                Call Clear
+            Else
+                Call Clear
+            End If
+        End If
+    End If
+End Function
+
+Public Function GetPacketLength(Optional ByVal st As enuPL_ServerTypes = stBNCS) As Long
+    Dim Value As Long
+    
+    Select Case st
+        Case stBNCS
+            Value = GetDWORD(True)
+            Value = CLng(Value \ 65536)
+        Case stBNLS, stMCP
+            Value = GetWord(True)
+    End Select
+    
+    GetPacketLength = Value
+End Function
+
+Public Function TakePacket(Optional ByVal st As enuPL_ServerTypes = stBNCS) As clsDataBuffer
+    Dim tmpbuf() As Byte
+    Dim lngPacketLen As Long
+    Dim pBuff As clsDataBuffer
+
+    lngPacketLen = GetPacketLength(st)
+    
+    ' returns new buffer
+    Set TakePacket = New clsDataBuffer
+    
+    ' set buffer to packet portion
+    TakePacket.Clear
+    If lngPacketLen >= 0 Then
+        Call GetByteArr(tmpbuf, lngPacketLen, False)
+        Call TakePacket.SetDataAsByteArr(tmpbuf)
+    End If
+    
+    ' clear or set remaining buffer to remove the read part
+    If m_bufpos = m_bufsize Then
+        Call Clear
+    Else
+        Call GetByteArr(tmpbuf, m_bufsize - m_bufpos, False)
+        Call SetDataAsByteArr(tmpbuf)
+        m_bufpos = 0
+    End If
+End Function
+
+

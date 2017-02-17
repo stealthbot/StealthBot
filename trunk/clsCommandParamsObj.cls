@@ -37,7 +37,7 @@ Private Sub Class_Terminate()
 End Sub
 
 
-Public Function GetRestrictionByName(ByVal sRestrictionName As String) As clsCommandRestrictionObj    
+Public Function GetRestrictionByName(ByVal sRestrictionName As String) As clsCommandRestrictionObj
     Dim r As clsCommandRestrictionObj
     Dim col As Collection
     Dim i As Integer
@@ -50,7 +50,7 @@ Public Function GetRestrictionByName(ByVal sRestrictionName As String) As clsCom
             Set GetRestrictionByName = r
             Exit Function
         End If
-    Next i    
+    Next i
 End Function
 
 Public Property Get Restrictions() As Collection
@@ -85,11 +85,11 @@ Public Property Let Name(str As String)
     m_name = str
 End Property
 
-Public Property Get description() As String
-    description = m_description
+Public Property Get Description() As String
+    Description = m_description
 End Property
 
-Public Property Let description(str As String)
+Public Property Let Description(str As String)
     m_description = str
 End Property
 

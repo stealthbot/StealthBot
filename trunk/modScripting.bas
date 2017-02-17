@@ -176,7 +176,7 @@ Public Sub LoadScripts()
 ERROR_HANDLER:
 
     frmChat.AddChat RTBColors.ErrorMessageText, _
-        "Error (" & Err.Number & "): " & Err.description & " in LoadScripts()."
+        "Error (" & Err.Number & "): " & Err.Description & " in LoadScripts()."
 
 End Sub
 
@@ -781,7 +781,7 @@ ERROR_HANDLER:
         Exit Sub
     End If
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
         " in CallByNameEx()."
         
     Set oTLI = Nothing
@@ -974,7 +974,7 @@ Public Sub DestroyObjs(Optional ByVal SCModule As Object = Nothing)
 ERROR_HANDLER:
     
     frmChat.AddChat RTBColors.ErrorMessageText, _
-        "Error (#" & Err.Number & "): " & Err.description & " in DestroyObjs()."
+        "Error (#" & Err.Number & "): " & Err.Description & " in DestroyObjs()."
         
     Resume Next
     
@@ -1104,7 +1104,7 @@ ERROR_HANDLER:
     End If
 
     frmChat.AddChat RTBColors.ErrorMessageText, _
-        "Error (#" & Err.Number & "): " & Err.description & " in DestroyObj()."
+        "Error (#" & Err.Number & "): " & Err.Description & " in DestroyObj()."
         
     Resume Next
     
@@ -1247,7 +1247,7 @@ Public Function InitMenus()
         
 ERROR_HANDLER:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
         " in InitMenus()."
 
     Err.Clear
@@ -1280,7 +1280,7 @@ Public Function DestroyMenus()
     
 ERROR_HANDLER:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
         " in DestroyMenus()."
 
     Err.Clear
@@ -1415,7 +1415,7 @@ Public Sub SC_Error()
     Dim Name        As String
     Dim ErrType     As String
     Dim Number      As Long
-    Dim description As String
+    Dim Description As String
     Dim line        As Long
     Dim Column      As Long
     Dim source      As String
@@ -1430,7 +1430,7 @@ Public Sub SC_Error()
     
     With m_sc_control
         Number = .Error.Number
-        description = .Error.description
+        Description = .Error.Description
         line = .Error.line
         Column = .Error.Column
         source = .Error.source
@@ -1474,7 +1474,7 @@ Public Sub SC_Error()
                  "True", vbTextCompare) = 0) And _
                  (m_IsEventError = False)) Then
         ' call Event_Error(Number, Description, Line, Column, Text, Source)
-        If (RunInSingle(m_ExecutingMdl, "Event_Error", Number, description, line, Column, Text, source) = True) Then
+        If (RunInSingle(m_ExecutingMdl, "Event_Error", Number, Description, line, Column, Text, source) = True) Then
             ' if vetoed, exit
             Exit Sub
         End If
@@ -1491,7 +1491,7 @@ Public Sub SC_Error()
     If (StrComp(tmp, "False", vbTextCompare) <> 0) Then
         frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Scripting {0} error '{1}' in {2}: (line {3}; column {4})", _
             ErrType, Number, Name, line, Column)
-        frmChat.AddChat RTBColors.ErrorMessageText, description
+        frmChat.AddChat RTBColors.ErrorMessageText, Description
         If LenB(Trim$(Text)) > 0 Then
             frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Offending line: >> {0}", Text)
         End If
@@ -1529,7 +1529,7 @@ Public Function GetScriptModule(Optional ByVal scriptName As String = vbNullStri
 
 ERROR_HANDLER:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
         " in GetScriptModule()."
 
     Err.Clear
@@ -1572,7 +1572,7 @@ Public Function GetModuleID(Optional ByVal scriptName As String = vbNullString) 
 
 ERROR_HANDLER:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
         " in GetModuleID()."
 
     Err.Clear
@@ -1609,7 +1609,7 @@ Public Function GetScriptName(Optional ByVal ModuleID As String = vbNullString) 
 
 ERROR_HANDLER:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
         " in GetScriptName()."
 
     Err.Clear
@@ -1645,7 +1645,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modScripting.AddScriptObserver()"
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.AddScriptObserver()"
 End Sub
 
 'Returns a collection of scripts that the passed script is currently observing, or being observed by
@@ -1675,7 +1675,7 @@ On Error GoTo ERROR_HANDLER
 
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.description & " in modScripting.GetScriptObservers()"
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.GetScriptObservers()"
 End Function
 
 'Adds a Function/Observer pair to the Function Observer collection
@@ -1697,7 +1697,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in modScripting.AddFunctionObservers()", Err.Number, Err.description)
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in modScripting.AddFunctionObservers()", Err.Number, Err.Description)
 End Sub
 
 'Returns a collections of scripts who are observing this event in all scripts.
@@ -1722,7 +1722,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in modScripting.GetFunctionObservers()", Err.Number, Err.description)
+    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in modScripting.GetFunctionObservers()", Err.Number, Err.Description)
 End Function
 
 ' call this during config reload to enable/disable the system
@@ -1767,7 +1767,7 @@ ERROR_HANDLER:
         Exit Sub
     End If
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
         " in SetScriptSystemDisabled()."
 End Sub
 

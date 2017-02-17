@@ -402,7 +402,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.Event_UserDataReceived()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.Event_UserDataReceived()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Sub Event_LeftChatEnvironment()

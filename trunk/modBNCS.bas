@@ -122,57 +122,94 @@ Public Const PLATFORM_OSX     As Long = &H584D4143 'XMAC
 
 Public ds As New clsDataStorage 'Need to rename this -.-
 
-Public Function BNCSRecvPacket(ByVal sData As String) As Boolean
+Public Function BNCSRecvPacket(ByVal pBuff As clsDataBuffer) As Boolean
 On Error GoTo ERROR_HANDLER:
-    Static pBuff As New clsDataBuffer
-    
     Dim PacketID As Byte
+    Dim PacketLen As Long
     
     BNCSRecvPacket = True
     With pBuff
-        .Clear
-        .Data = sData
         .GetByte
         PacketID = .GetByte
-        .GetWord
+        PacketLen = .GetWord
     End With
     
-    Select Case PacketID
-        Case SID_NULL:                   'Don't Throw Unknown Error                  '0x00
-        Case SID_CLIENTID:               'Don't Throw Unknown Error                  '0x05
-        Case SID_STARTVERSIONING:        Call RECV_SID_STARTVERSIONING(pBuff)        '0x06
-        Case SID_REPORTVERSION:          Call RECV_SID_REPORTVERSION(pBuff)          '0x07
-        Case SID_ENTERCHAT:              Call RECV_SID_ENTERCHAT(pBuff)              '0x0A
-        Case SID_GETCHANNELLIST:         Call RECV_SID_GETCHANNELLIST(pBuff)         '0x0B
-        Case SID_CHATEVENT:              Call RECV_SID_CHATEVENT(pBuff)              '0x0F
-        Case SID_MESSAGEBOX:             Call RECV_SID_MESSAGEBOX(pBuff)             '0x19
-        Case SID_LOGONCHALLENGEEX:       Call RECV_SID_LOGONCHALLENGEEX(pBuff)       '0x1D
-        Case SID_PING:                   Call RECV_SID_PING(pBuff)                   '0x25
-        Case SID_READUSERDATA:           Call RECV_SID_READUSERDATA(pBuff)           '0x26
-        Case SID_LOGONCHALLENGE:         Call RECV_SID_LOGONCHALLENGE(pBuff)         '0x28
-        Case SID_GETICONDATA:            'Don't Throw Unknown Error                  '0x2D
-        Case SID_CDKEY:                  Call RECV_SID_CDKEY(pBuff)                  '0x30
-        Case SID_CDKEY2:                 Call RECV_SID_CDKEY2(pBuff)                 '0x36
-        Case SID_LOGONRESPONSE2:         Call RECV_SID_LOGONRESPONSE2(pBuff)         '0x3A
-        Case SID_CREATEACCOUNT2:         Call RECV_SID_CREATEACCOUNT2(pBuff)         '0x3D
-        Case SID_LOGONREALMEX:           Call RECV_SID_LOGONREALMEX(pBuff)           '0x3C
-        Case SID_QUERYREALMS2:           Call RECV_SID_QUERYREALMS2(pBuff)           '0x40
-        Case SID_EXTRAWORK:              'Don't Throw Unknown Error                  '0x4C
-        Case SID_AUTH_INFO:              Call RECV_SID_AUTH_INFO(pBuff)              '0x50
-        Case SID_AUTH_CHECK:             Call RECV_SID_AUTH_CHECK(pBuff)             '0x51
-        Case SID_AUTH_ACCOUNTCREATE:     Call RECV_SID_AUTH_ACCOUNTCREATE(pBuff)     '0x52
-        Case SID_AUTH_ACCOUNTLOGON:      Call RECV_SID_AUTH_ACCOUNTLOGON(pBuff)      '0x53
-        Case SID_AUTH_ACCOUNTLOGONPROOF: Call RECV_SID_AUTH_ACCOUNTLOGONPROOF(pBuff) '0x54
-        Case SID_SETEMAIL:               Call RECV_SID_SETEMAIL(pBuff)               '0x59
+    If pBuff.length >= 0 Then
+        If MDebug("all") Then
+            frmChat.AddChat COLOR_BLUE, "BNET RECV 0x" & ZeroOffset(PacketID, 2)
+        End If
+        
+        Call CachePacket(stBNCS, StoC, PacketID, PacketLen, pBuff.GetDataAsByteArr)
+        Call WritePacketData(stBNCS, StoC, PacketID, PacketLen, pBuff.GetDataAsByteArr)
+                
+        If (RunInAll("Event_PacketReceived", "BNCS", PacketID, PacketLen, pBuff.Data)) Then
+            Exit Function
+        End If
+        
+        'This will be taken out when Warden is moved to a script like I want.
+        If (modWarden.WardenData(WardenInstance, pBuff.GetDataAsByteArr, False)) Then
+            Exit Function
+        End If
     
-        Case Else:
-            BNCSRecvPacket = False
-            If (MDebug("debug") And (MDebug("all") Or MDebug("unknown"))) Then
-                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] Unhandled packet 0x{0}", ZeroOffset(CLng(PacketID), 2)))
-                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] Packet data: {0}{1}", vbNewLine, DebugOutput(sData)))
-            End If
-    
-    End Select
+        Select Case PacketID
+            Case SID_NULL:                   'Don't Throw Unknown Error                  '0x00
+            Case SID_CLIENTID:               'Don't Throw Unknown Error                  '0x05
+            Case SID_STARTVERSIONING:        Call RECV_SID_STARTVERSIONING(pBuff)        '0x06
+            Case SID_REPORTVERSION:          Call RECV_SID_REPORTVERSION(pBuff)          '0x07
+            Case SID_ENTERCHAT:              Call RECV_SID_ENTERCHAT(pBuff)              '0x0A
+            Case SID_GETCHANNELLIST:         Call RECV_SID_GETCHANNELLIST(pBuff)         '0x0B
+            Case SID_CHATEVENT:              Call RECV_SID_CHATEVENT(pBuff)              '0x0F
+            Case SID_MESSAGEBOX:             Call RECV_SID_MESSAGEBOX(pBuff)             '0x19
+            Case SID_LOGONCHALLENGEEX:       Call RECV_SID_LOGONCHALLENGEEX(pBuff)       '0x1D
+            Case SID_PING:                   Call RECV_SID_PING(pBuff)                   '0x25
+            Case SID_READUSERDATA:           Call RECV_SID_READUSERDATA(pBuff)           '0x26
+            Case SID_LOGONCHALLENGE:         Call RECV_SID_LOGONCHALLENGE(pBuff)         '0x28
+            Case SID_GETICONDATA:            'Don't Throw Unknown Error                  '0x2D
+            Case SID_CDKEY:                  Call RECV_SID_CDKEY(pBuff)                  '0x30
+            Case SID_CDKEY2:                 Call RECV_SID_CDKEY2(pBuff)                 '0x36
+            Case SID_LOGONRESPONSE2:         Call RECV_SID_LOGONRESPONSE2(pBuff)         '0x3A
+            Case SID_CREATEACCOUNT2:         Call RECV_SID_CREATEACCOUNT2(pBuff)         '0x3D
+            Case SID_LOGONREALMEX:           Call RECV_SID_LOGONREALMEX(pBuff)           '0x3C
+            Case SID_QUERYREALMS2:           Call RECV_SID_QUERYREALMS2(pBuff)           '0x40
+            Case SID_EXTRAWORK:              'Don't Throw Unknown Error                  '0x4C
+            Case SID_AUTH_INFO:              Call RECV_SID_AUTH_INFO(pBuff)              '0x50
+            Case SID_AUTH_CHECK:             Call RECV_SID_AUTH_CHECK(pBuff)             '0x51
+            Case SID_AUTH_ACCOUNTCREATE:     Call RECV_SID_AUTH_ACCOUNTCREATE(pBuff)     '0x52
+            Case SID_AUTH_ACCOUNTLOGON:      Call RECV_SID_AUTH_ACCOUNTLOGON(pBuff)      '0x53
+            Case SID_AUTH_ACCOUNTLOGONPROOF: Call RECV_SID_AUTH_ACCOUNTLOGONPROOF(pBuff) '0x54
+            Case SID_SETEMAIL:               Call RECV_SID_SETEMAIL(pBuff)               '0x59
+            
+            Case Is >= &H65 'Friends List or Clan-related packet
+                ' Hand the packet off to the appropriate handler
+                If PacketID >= &H70 Then
+                    ' added in response to the clan channel takeover exploit
+                    ' discovered 11/7/05
+                    If IsW3 Then
+                        frmChat.ParseClanPacket PacketID, pBuff
+                    End If
+                Else
+                    If (g_request_receipt) Then
+                        g_request_receipt = False
+                        
+                        If (Caching) Then
+                            frmChat.cacheTimer_Timer
+                        End If
+                        
+                        Exit Function
+                    End If
+                
+                    frmChat.ParseFriendsPacket PacketID, pBuff
+                End If
+        
+            Case Else:
+                BNCSRecvPacket = False
+                If (MDebug("debug") And (MDebug("all") Or MDebug("unknown"))) Then
+                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] Unhandled packet 0x{0}", ZeroOffset(CLng(PacketID), 2)))
+                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] Packet data: {0}{1}", vbNewLine, pBuff.DebugOutput))
+                End If
+        
+        End Select
+    End If
     
     Exit Function
 ERROR_HANDLER:
@@ -562,7 +599,7 @@ On Error GoTo ERROR_HANDLER:
         Case Else:
             If MDebug("debug") Then
                 Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Unhandled SID_CHATEVENT Event: 0x{0}", ZeroOffset(EventID, 8)))
-                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Packet data: {0}{1}", vbNewLine, DebugOutput(pBuff.Data)))
+                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Packet data: {0}{1}", vbNewLine, pBuff.DebugOutput))
             End If
     End Select
     Exit Sub
@@ -855,7 +892,7 @@ Private Sub RECV_SID_READUSERDATA(pBuff As clsDataBuffer)
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_READUSERDATA()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_READUSERDATA()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '********************************
@@ -1062,10 +1099,10 @@ On Error GoTo ERROR_HANDLER:
                     'Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Asking Battle.net for a list of Realm servers...")
                     Call DoQueryRealms
                 Else
-                    SendEnterChatSequence
+                    Call SendEnterChatSequence
                 End If
             Else
-                DoRegisterEmail
+                Call DoRegisterEmail
             End If
             
         Case &H1:  'Nonexistent account.
@@ -1107,7 +1144,7 @@ On Error GoTo ERROR_HANDLER:
     If Not Config.UseLowerCasePassword Then
         sHash = doubleHashPassword(BotVars.Password, ds.ClientToken, ds.ServerToken)
     Else
-        sHash = doubleHashPassword(LCase(BotVars.Password), ds.ClientToken, ds.ServerToken)
+        sHash = doubleHashPassword(LCase$(BotVars.Password), ds.ClientToken, ds.ServerToken)
     End If
     
     With pBuff
@@ -1209,6 +1246,7 @@ On Error GoTo ERROR_HANDLER:
     Dim lError   As Long
     Dim sMCPData As String
     Dim sTitle   As String
+    Dim ptrIP    As Long
     Dim sIP      As String
     Dim lPort    As Long
     Dim sUniq    As String
@@ -1217,9 +1255,10 @@ On Error GoTo ERROR_HANDLER:
     If (Len(pBuff.GetRaw(, True)) > 8) Then
         sMCPData = pBuff.GetRaw(16)
         
-        For x = 1 To 4
-            sIP = StringFormat("{0}{1}{2}", sIP, pBuff.GetByte, IIf(x = 4, vbNullString, "."))
-        Next x
+        ptrIP = inet_ntoa(pBuff.GetDWORD)
+        sIP = Space$(lstrlen(ptrIP))
+        lstrcpy sIP, ptrIP
+        
         lPort = ntohs(pBuff.GetDWORD)
         
         sMCPData = StringFormat("{0}{1}", sMCPData, pBuff.GetRaw(48))
@@ -1231,8 +1270,22 @@ On Error GoTo ERROR_HANDLER:
             Call ds.MCPHandler.SetStartupData(sMCPData, sUniq, sIP, lPort)
             sTitle = ds.MCPHandler.RealmServerTitle(ds.MCPHandler.RealmServerConnected)
             
-            frmChat.AddChat RTBColors.InformationText, StringFormat("[REALM] Connecting to the Diablo II Realm {0} at {1}:{2}...", sTitle, sIP, lPort)
-            frmChat.sckMCP.Connect sIP, lPort
+            If (ProxyConnInfo(stMCP).IsUsingProxy) Then
+                frmChat.AddChat RTBColors.InformationText, "[REALM] [PROXY] Connecting to the SOCKS" & ProxyConnInfo(stMCP).Version & " proxy server at " & ProxyConnInfo(stMCP).ProxyIP & ":" & ProxyConnInfo(stMCP).ProxyPort & "..."
+            Else
+                frmChat.AddChat RTBColors.InformationText, StringFormat("[REALM] Connecting to the Diablo II Realm {0} at {1}:{2}...", sTitle, sIP, lPort)
+            End If
+            
+            With frmChat.sckMCP
+                If (ProxyConnInfo(stMCP).IsUsingProxy) Then
+                    .RemoteHost = ProxyConnInfo(stMCP).ProxyIP
+                    .RemotePort = ProxyConnInfo(stMCP).ProxyPort
+                Else
+                    .RemoteHost = sIP
+                    .RemotePort = lPort
+                End If
+                .Connect
+            End With
         End If
     Else
         pBuff.GetDWORD
@@ -1250,7 +1303,7 @@ On Error GoTo ERROR_HANDLER:
             End If
         End If
         
-        SendEnterChatSequence
+        Call SendEnterChatSequence
         frmChat.mnuRealmSwitch.Enabled = True
     End If
     
@@ -1374,6 +1427,7 @@ End Sub
 '*******************************
 Private Sub RECV_SID_AUTH_INFO(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
+    Dim RemoteHostIP As String
 
     ds.LogonType = pBuff.GetDWORD
     ds.ServerToken = pBuff.GetDWORD
@@ -1403,15 +1457,23 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     If (Len(ds.ServerSig) = 128) Then
-        If (ds.NLS.VerifyServerSignature(frmChat.sckBNet.RemoteHostIP, ds.ServerSig)) Then
-            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Server signature validated!"
+        If (ProxyConnInfo(stBNCS).IsUsingProxy) Then
+            RemoteHostIP = ProxyConnInfo(stBNCS).RemoteHostIP
         Else
-            If (Not BotVars.UseProxy) Then
-                frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Warning, Server signature is invalid, this may not be a valid server."
+            RemoteHostIP = frmChat.sckBNet.RemoteHostIP
+        End If
+        
+        If (StrComp(RemoteHostIP, "0.0.0.255", vbBinaryCompare) = 0) Then
+            frmChat.AddChat RTBColors.InformationText, "[BNCS] Note: a server signature was received but cannot be validated because of the proxy configuration."
+        Else
+            If (ds.NLS.VerifyServerSignature(RemoteHostIP, ds.ServerSig)) Then
+                frmChat.AddChat RTBColors.SuccessText, "[BNCS] Server signature validated!"
+            Else
+                frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Warning: server signature is invalid! This may not be a valid server."
             End If
         End If
     ElseIf (GetProductKey = "W3") Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Warning, Server signature is missing, this may not be a valid server."
+        frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Warning: server signature is missing! This may not be a valid server."
     End If
     
     If (BotVars.BNLS) Then
@@ -1450,7 +1512,7 @@ On Error GoTo ERROR_HANDLER:
     
     Dim pBuff As New clsDataBuffer
     
-    LocalIP = aton(frmChat.sckBNet.LocalIP)
+    LocalIP = inet_addr(frmChat.sckBNet.LocalIP)
 
     Call GetCountryData(CountryAbr, CountryName, vbNull)
     If (Not Len(CountryAbr) = 3) Then CountryAbr = "USA"
@@ -1789,7 +1851,7 @@ On Error GoTo ERROR_HANDLER:
             If (Not ds.NLS.SrpVerifyM2(M2)) Then
                 frmChat.AddChat RTBColors.InformationText, "[BNCS] Warning, The server sent an invalid password proof, it may be a fake server."
             End If
-            SendEnterChatSequence
+            Call SendEnterChatSequence
             
         Case &H2: 'Invalid password
             Call Event_LogonEvent(1)
@@ -1910,7 +1972,7 @@ On Error GoTo ERROR_HANDLER:
         ds.CRevVersion = lVersion
         CompileCheckrevision = True
     Else
-        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Local Hashing Failed")
+        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Local hashing failed.")
         CompileCheckrevision = False
     End If
     Exit Function
@@ -2099,7 +2161,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.DoChannelJoinHome()", Err.Number, Err.description, OBJECT_NAME))
+        StringFormat("Error: #{0}: {1} in {2}.DoChannelJoinHome()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Function CanSpawn(ByVal sProduct As String, ByVal iKeyLength As Integer) As Boolean

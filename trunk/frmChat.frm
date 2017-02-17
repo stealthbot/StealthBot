@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
@@ -1107,7 +1107,7 @@ Begin VB.Form frmChat
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
       OLEDropMode     =   0
-      TextRTF         =   $"frmChat.frx":4BFA8
+      TextRTF         =   $"frmChat.frx":4BFBE
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   9
@@ -1804,7 +1804,7 @@ Private Sub Form_Load()
         .SelTabs(0) = 15 * Screen.TwipsPerPixelX
         .SelHangingIndent = .SelTabs(0)
     End With
-        
+    
     lvChannel.View = lvwReport
     lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
@@ -1874,6 +1874,10 @@ Private Sub Form_Load()
     Set ClanHandler = New clsClanPacketHandler
     Set FriendListHandler = New clsFriendlistHandler
     Set ListToolTip = New clsCTooltip
+    
+    Set ReceiveBuffer(stBNCS) = New clsDataBuffer
+    Set ReceiveBuffer(stBNLS) = New clsDataBuffer
+    Set ReceiveBuffer(stMCP) = New clsDataBuffer
     
     Call ReloadConfig
     
@@ -2272,8 +2276,8 @@ End Sub
 
 'BNLS EVENTS
 Sub Event_BNetConnected()
-    If (BotVars.UseProxy) Then
-        AddChat RTBColors.SuccessText, "[PROXY] Connected!"
+    If (ProxyConnInfo(stBNCS).IsUsingProxy) Then
+        AddChat RTBColors.SuccessText, "[BNCS] [PROXY] Connected!"
     Else
         AddChat RTBColors.SuccessText, "[BNCS] Connected!"
     End If
@@ -2282,8 +2286,8 @@ Sub Event_BNetConnected()
 End Sub
 
 Sub Event_BNetConnecting()
-    If BotVars.UseProxy Then
-        AddChat RTBColors.InformationText, "[PROXY] Connecting to the Battle.net server at " & BotVars.Server & "..."
+    If (ProxyConnInfo(stBNCS).IsUsingProxy) Then
+        AddChat RTBColors.InformationText, "[BNCS] [PROXY] Connecting to the SOCKS" & ProxyConnInfo(stBNCS).Version & " proxy server at " & ProxyConnInfo(stBNCS).ProxyIP & ":" & ProxyConnInfo(stBNCS).ProxyPort & "..."
     Else
         AddChat RTBColors.InformationText, "[BNCS] Connecting to the Battle.net server at " & BotVars.Server & "..."
     End If
@@ -2294,7 +2298,7 @@ Sub Event_BNetDisconnected()
     UpTimer.Interval = 0
     BotVars.JoinWatch = 0
     
-    AddChat RTBColors.ErrorMessageText, IIf(BotVars.UseProxy And BotVars.ProxyStatus <> psOnline, "[PROXY] ", "[BNCS] ") & "Disconnected."
+    AddChat RTBColors.ErrorMessageText, "[BNCS] Disconnected."
     
     DoDisconnect (1)
     
@@ -2306,7 +2310,9 @@ Sub Event_BNetDisconnected()
     
     Call ClearChannel
     
-    UpdateProxyStatus psNotConnected
+    ProxyConnInfo(stBNCS).Status = psNotConnected
+    ProxyConnInfo(stBNLS).Status = psNotConnected
+    ProxyConnInfo(stMCP).Status = psNotConnected
     'AddChat RTBColors.ErrorMessageText, "[BNCS] Attempting to reconnect, please wait..."
     'AddChat RTBColors.SuccessText, "Connection initialized."
     
@@ -2323,9 +2329,10 @@ End Sub
 
 Sub Event_BNetError(ErrorNumber As Integer, Description As String)
     Dim s As String
+    Dim IsProxyConnecting As Boolean
     
-    If BotVars.UseProxy And BotVars.ProxyStatus <> psOnline Then
-        s = "[PROXY] "
+    If ProxyConnInfo(stBNCS).IsUsingProxy And ProxyConnInfo(stBNCS).Status <> psOnline Then
+        s = "[BNCS] [PROXY] "
     Else
         s = "[BNCS] "
     End If
@@ -2364,12 +2371,11 @@ Sub Event_BNetError(ErrorNumber As Integer, Description As String)
     ' NOV 18 04 Change here should fix the attention-grabbing on errors
     'If Me.WindowState <> vbMinimized Then cboSend.SetFocus
     
-    
-    If DisplayError(ErrorNumber, IIf(BotVars.UseProxy And BotVars.ProxyStatus <> psOnline, 2, 1), BNET) = True Then
+    IsProxyConnecting = ProxyConnInfo(stBNCS).IsUsingProxy And ProxyConnInfo(stBNCS).Status <> psOnline
+    If DisplayError(ErrorNumber, IsProxyConnecting, stBNCS) = True Then
         AddChat RTBColors.ErrorMessageText, _
-            IIf(BotVars.UseProxy And BotVars.ProxyStatus <> psOnline, "[PROXY] ", "[BNCS] ") & _
-                "Attempting to reconnect in " & (BotVars.ReconnectDelay / 1000) & _
-                    IIf(((BotVars.ReconnectDelay / 1000) > 1), " seconds", " second") & _
+            "[BNCS] Attempting to reconnect in " & (BotVars.ReconnectDelay / 1000) & _
+                IIf(((BotVars.ReconnectDelay / 1000) > 1), " seconds", " second") & _
                         "..."
         
         UserCancelledConnect = False 'this should fix the beta reconnect problems
@@ -2394,13 +2400,19 @@ Sub Event_BNLSAuthEvent(Success As Boolean)
 End Sub
 
 Sub Event_BNLSConnected()
-    AddChat RTBColors.SuccessText, "[BNLS] Connected!"
-    
-    Call SetNagelStatus(sckBNLS.SocketHandle, False)
+    If (ProxyConnInfo(stBNLS).IsUsingProxy) Then
+        AddChat RTBColors.SuccessText, "[BNLS] [PROXY] Connected!"
+    Else
+        AddChat RTBColors.SuccessText, "[BNLS] Connected!"
+    End If
 End Sub
 
 Sub Event_BNLSConnecting()
-    AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
+    If (ProxyConnInfo(stBNLS).IsUsingProxy) Then
+        AddChat RTBColors.InformationText, "[BNLS] [PROXY] Connecting to the SOCKS" & ProxyConnInfo(stBNLS).Version & " proxy server at " & ProxyConnInfo(stBNLS).ProxyIP & ":" & ProxyConnInfo(stBNLS).ProxyPort & "..."
+    Else
+        AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
+    End If
 End Sub
 
 Sub Event_BNLSDataError(Message As Byte)
@@ -2417,9 +2429,11 @@ Sub Event_BNLSDataError(Message As Byte)
 End Sub
 
 Private Sub Event_BNLSError(ErrorNumber As Integer, Description As String)
-    If Not HandleBnlsError("[BNLS] Error " & ErrorNumber & ": " & Description) Then
+    If ProxyConnInfo(stBNLS).IsUsingProxy And ProxyConnInfo(stBNLS).Status <> psOnline Then
+        DisplayError ErrorNumber, True, stBNLS
+    ElseIf Not HandleBnlsError("[BNLS] Error " & ErrorNumber & ": " & Description) Then
         ' if we aren't using the finder display the error
-        DisplayError ErrorNumber, 0, BNLS
+        DisplayError ErrorNumber, False, stBNLS
     End If
 End Sub
 
@@ -3221,6 +3235,9 @@ Sub Form_Unload(Cancel As Integer)
     Set colLastSeen = Nothing
     Set SharedScriptSupport = Nothing
     Set ds = Nothing
+    Set ReceiveBuffer(stBNCS) = Nothing
+    Set ReceiveBuffer(stBNLS) = Nothing
+    Set ReceiveBuffer(stMCP) = Nothing
     
     'Set dictTimerInterval = Nothing
     'Set dictTimerCount = Nothing
@@ -5230,13 +5247,13 @@ Private Sub sckScript_Connect(Index As Integer)
     RunInSingle obj.SCModule, obj.ObjName & "_Connect"
 End Sub
 
-Private Sub sckScript_ConnectionRequest(Index As Integer, ByVal requestID As Long)
+Private Sub sckScript_ConnectionRequest(Index As Integer, ByVal RequestID As Long)
     On Error Resume Next
 
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Winsock", Index)
-    RunInSingle obj.SCModule, obj.ObjName & "_ConnectionRequest", requestID
+    RunInSingle obj.SCModule, obj.ObjName & "_ConnectionRequest", RequestID
 End Sub
 
 Private Sub sckScript_DataArrival(Index As Integer, ByVal bytesTotal As Long)
@@ -5950,11 +5967,11 @@ Private Sub sckBNet_Connect()
     Call modWarden.WardenCleanup(WardenInstance)
     WardenInstance = modWarden.WardenInitilize(sckBNet.SocketHandle)
     ds.Reset
-        
-    If (Not (BotVars.UseProxy)) Then
-        InitBNetConnection
+    
+    If (ProxyConnInfo(stBNCS).IsUsingProxy) Then
+        modProxySupport.InitProxyConnection sckBNet, ProxyConnInfo(stBNCS), BotVars.Server, 6112
     Else
-        LogonToProxy sckBNet, BotVars.Server, 6112, BotVars.ProxyIsSocks5
+        InitBNetConnection
     End If
     
 End Sub
@@ -6000,37 +6017,68 @@ Private Sub sckMCP_Close()
 End Sub
 
 Private Sub sckMCP_Connect()
-    On Error Resume Next
+    On Error GoTo ERROR_HANDLER
+    
+    Dim sIP   As String
+    Dim lPort As Long
     
     If MDebug("all") Then
         AddChat COLOR_BLUE, "MCP CONNECT"
     End If
     
-    AddChat RTBColors.SuccessText, "[REALM] Connected!"
+    If ProxyConnInfo(stMCP).IsUsingProxy Then
+        AddChat RTBColors.SuccessText, "[REALM] [PROXY] Connected!"
+        
+        sIP = ds.MCPHandler.RealmSelectedServerIP
+        lPort = ds.MCPHandler.RealmSelectedServerPort
+        modProxySupport.InitProxyConnection sckMCP, ProxyConnInfo(stMCP), sIP, lPort
+    Else
+        AddChat RTBColors.SuccessText, "[REALM] Connected!"
+        
+        InitMCPConnection
+    End If
     
+    Exit Sub
+
+ERROR_HANDLER:
+    AddChat RTBColors.ErrorMessageText, _
+        "Error (#" & Err.Number & "): " & Err.Description & " in sckMCP_Connect()."
+
+    Exit Sub
+End Sub
+
+Sub InitMCPConnection()
     'sckMCP.SendData ChrW(1)
     Call Send(sckMCP.SocketHandle, ChrW(1), 1, 0)
     
-    If Not ds.MCPHandler Is Nothing Then
-        ds.MCPHandler.SEND_MCP_STARTUP
-    End If
+    ds.MCPHandler.SEND_MCP_STARTUP
 End Sub
 
 Private Sub sckMCP_DataArrival(ByVal bytesTotal As Long)
     On Error GoTo ERROR_HANDLER
     
-    Dim strTemp As String
+    Dim buf() As Byte
+    Dim pBuff As clsDataBuffer
     
-    sckMCP.GetData strTemp, vbString
-    MCPBuffer.AddData strTemp
+    ' read buffer as Byte()
+    sckMCP.GetData buf(), vbArray + vbByte, bytesTotal
+    ' add data to buffer
+    ReceiveBuffer(stMCP).InsertByteArr buf()
 
-    While MCPBuffer.FullPacket
-        strTemp = MCPBuffer.GetPacket
-        
-        If Not ds.MCPHandler Is Nothing Then
-            Call ds.MCPHandler.ParsePacket(strTemp)
-        End If
-    Wend
+    If ProxyConnInfo(stMCP).IsUsingProxy And ProxyConnInfo(stMCP).Status <> psOnline Then
+        Call modProxySupport.ProxyRecvPacket(sckMCP, ProxyConnInfo(stMCP), ReceiveBuffer(stMCP))
+    Else
+        Do While ReceiveBuffer(stMCP).IsFullPacket(stMCP)
+            ' retrieve MCP packet
+            Set pBuff = ReceiveBuffer(stMCP).TakePacket(stMCP)
+            ' if MCP handler exists, parse
+            If Not ds.MCPHandler Is Nothing Then
+                Call ds.MCPHandler.MCPRecvPacket(pBuff)
+            End If
+            ' clean up
+            Set pBuff = Nothing
+        Loop
+    End If
     
     Exit Sub
 
@@ -6046,7 +6094,9 @@ Private Sub sckMCP_Error(ByVal Number As Integer, Description As String, ByVal s
         ' This message is ignored if we've entered chat
         AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & Number & ": " & Description
         
-        If Not ds.MCPHandler Is Nothing Then
+        If ProxyConnInfo(stMCP).IsUsingProxy And ProxyConnInfo(stMCP).Status <> psOnline Then
+            DisplayError Number, True, stMCP
+        ElseIf Not ds.MCPHandler Is Nothing Then
             If ds.MCPHandler.FormActive Then
                 frmRealm.UnloadRealmError
             End If
@@ -6324,8 +6374,13 @@ Sub ConnectBNLS()
     With sckBNLS
         If .State <> 0 Then .Close
         
-        .RemoteHost = BotVars.BNLSServer
-        .RemotePort = 9367
+        If ProxyConnInfo(stBNLS).IsUsingProxy Then
+            .RemoteHost = ProxyConnInfo(stBNLS).ProxyIP
+            .RemotePort = ProxyConnInfo(stBNLS).ProxyPort
+        Else
+            .RemoteHost = BotVars.BNLSServer
+            .RemotePort = 9367
+        End If
         .Connect
     End With
 End Sub
@@ -6333,6 +6388,7 @@ End Sub
 Sub Connect()
     Dim NotEnoughInfo As Boolean
     Dim MissingInfo As String
+    Dim i As Integer
     
     'g_username = BotVars.Username
     
@@ -6386,6 +6442,18 @@ Sub Connect()
             Exit Sub
         End If
         
+        For i = 0 To 2
+            ProxyConnInfo(i).IsUsingProxy = ProxyConnInfo(i).UseProxy
+            If ProxyConnInfo(i).IsUsingProxy And (ProxyConnInfo(i).ProxyPort = 0 Or LenB(ProxyConnInfo(i).ProxyIP) = 0) Then
+                MsgBox "You have selected to use a proxy for one or more connections, but no proxy is configured. Please set one up in the Advanced " & _
+                    " section of Bot Settings or disable Use Proxy.", vbInformation
+                    
+                Call DoDisconnect(1)
+                
+                Exit Sub
+            End If
+        Next i
+        
         SetTitle "Connecting..."
         
         If ((StrComp(BotVars.Product, "PX2D", vbTextCompare) = 0) Or _
@@ -6416,7 +6484,6 @@ Sub Connect()
             AddChat RTBColors.InformationText, "Connecting your bot..."
         #End If
         
-        
         If BotVars.BNLS Then
             If Len(BotVars.BNLSServer) = 0 Then
                 If BotVars.UseAltBnls Then
@@ -6437,23 +6504,12 @@ Sub Connect()
                 Exit Sub
             End If
     
-            
-            If Not BotVars.UseProxy Then
+            If ProxyConnInfo(stBNCS).IsUsingProxy Then
+                .RemoteHost = ProxyConnInfo(stBNCS).ProxyIP
+                .RemotePort = ProxyConnInfo(stBNCS).ProxyPort
+            Else
                 .RemoteHost = BotVars.Server
                 .RemotePort = 6112
-            Else
-                '// PROXY
-                If BotVars.ProxyPort > 0 And LenB(BotVars.ProxyIP) > 0 Then
-                    .RemoteHost = BotVars.ProxyIP
-                    .RemotePort = BotVars.ProxyPort
-                Else
-                    MsgBox "You have selected to use proxies, but no proxy is configured. Please set one up in the Advanced " & _
-                        " section of Bot Settings.", vbInformation
-                        
-                    DoDisconnect
-                    
-                    Exit Sub
-                End If
             End If
 
             If Not BotVars.BNLS Then .Connect
@@ -6700,7 +6756,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
     Dim Send           As String
     Dim Command        As String
     Dim GTC            As Double
-    Dim Q              As clsQueueOBj
+    Dim Q              As clsQueueObj
     Dim delay          As Long
     Dim Index          As Long
     Dim s              As String      ' temp string for settings
@@ -6894,7 +6950,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             End If
             
             ' create the queue object
-            Set Q = New clsQueueOBj
+            Set Q = New clsQueueObj
             
             With Q
                 .Message = Send
@@ -7247,11 +7303,36 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     mnuFlash.Checked = Config.FlashOnEvents
     
-    BotVars.UseProxy = Config.UseProxy
-    If BotVars.UseProxy And sckBNet.State = sckConnected Then BotVars.ProxyStatus = psOnline
-    BotVars.ProxyIP = Config.ProxyIP
-    BotVars.ProxyPort = Config.ProxyPort
-    BotVars.ProxyIsSocks5 = CBool(StrComp(Config.ProxyType, "SOCKS5", vbTextCompare) = 0)
+    For i = 0 To 2
+        With ProxyConnInfo(i)
+            .serverType = i
+            Select Case i
+                Case stBNCS: .UseProxy = Config.UseProxy
+                Case stBNLS: .UseProxy = Config.UseProxy And Config.ProxyBNLS
+                Case stMCP:  .UseProxy = Config.UseProxy And Config.ProxyMCP
+                Case Else:   .UseProxy = False
+            End Select
+            
+            If .UseProxy Then
+                ' set these values so that next connection attempt uses them--
+                ' they may not be accurate for the current connection so
+                ' use the values on the socket to get current IP/Port
+                .ProxyIP = Config.ProxyIP
+                .ProxyPort = Config.ProxyPort
+                If CBool(StrComp(Config.ProxyType, "SOCKS5", vbTextCompare) = 0) Then
+                    .Version = 5
+                Else
+                    .Version = 4
+                End If
+                .Username = Config.ProxyUsername
+                .Password = Config.ProxyPassword
+                .RemoteResolveHost = Config.ProxyServerResolve
+                
+                ' do not set RemoteIP, RemotePort, RemoteHostName, Status, IsUsingProxy;
+                ' those are set on proxy connect and shouldn't be touched by the config
+            End If
+        End With
+    Next i
     
     BotVars.NoTray = Not Config.MinimizeToTray
     BotVars.NoAutocompletion = Not Config.NameAutoComplete
@@ -7348,18 +7429,21 @@ Private Sub ChangeRTBFont(rtb As RichTextBox, ByVal NewFont As String, ByVal New
 End Sub
 
 'returns OK to Proceed
-Function DisplayError(ByVal ErrorNumber As Integer, bytType As Byte, _
-    ByVal source As enuErrorSources) As Boolean
+Function DisplayError(ByVal ErrorNumber As Integer, ByVal IsProxyConnecting As Boolean, ByVal source As enuPL_ServerTypes) As Boolean
     
     Dim s As String
     
-    s = GErrorHandler.GetErrorString(ErrorNumber, source)
+    s = GErrorHandler.GetErrorString(ErrorNumber, IsProxyConnecting, source)
     
     If (LenB(s) > 0) Then
-        Select Case (bytType)
-            Case 0: s = "[BNLS] " & s
-            Case 1: s = "[BNCS] " & s
-            Case 2: s = "[PROXY] " & s
+        If (IsProxyConnecting) Then
+            s = "[PROXY] " & s
+        End If
+        
+        Select Case (source)
+            Case stBNLS: s = "[BNLS] " & s
+            Case stBNCS: s = "[BNCS] " & s
+            Case stMCP: s = "[REALM] " & s
         End Select
         
         AddChat RTBColors.ErrorMessageText, s
@@ -7437,54 +7521,35 @@ Function OutFilterMsg(ByVal strOut As String) As String
 End Function
 
 Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
-    'On Error GoTo ERROR_HANDLER
-
-    Dim strTemp     As String
-    Dim fTemp       As String
-    Dim BufferLimit As Long
-    Dim interations As Integer
+    On Error GoTo ERROR_HANDLER
     
-    sckBNet.GetData strTemp, vbString
+    Dim buf() As Byte
+    Dim pBuff As clsDataBuffer
     
-'    Debug.Print "--> socket received a packet"
-'    Debug.Print DebugOutput(strTemp)
+    ' read buffer as Byte()
+    sckBNet.GetData buf(), vbArray + vbByte, bytesTotal
+    ' add data to buffer
+    ReceiveBuffer(stBNCS).InsertByteArr buf()
     
-    If Not BotVars.UseProxy Or BotVars.ProxyStatus = psOnline Then
-        'Debug.Print String(50, "-")
-        BNCSBuffer.AddData strTemp
-    
-        While BNCSBuffer.FullPacket And BufferLimit < 20
-            
-            strTemp = BNCSBuffer.GetPacket
-            
-            'BNCSBuffer.WriteLog "Parsing the following packet:", True
-            'BNCSBuffer.WriteLog strTemp
-            
-            Call BNCSParsePacket(strTemp)
-            
-            'interations = (interations + 1)
-           
-            'If (interations >= 2000) Then
-            '    MsgBox "ahhhh!"
-            '
-            '    Exit Sub
-            'End If
-            
-            ' Why do we need this?  Anyway, it's causing topic id #26093
-            ' (The Void issue).
-            'BufferLimit = (BufferLimit + 1) 'DebugOutput Left$(strBuffer, lngLen)
-        Wend
+    If ProxyConnInfo(stBNCS).IsUsingProxy And ProxyConnInfo(stBNCS).Status <> psOnline Then
+        Call modProxySupport.ProxyRecvPacket(sckBNet, ProxyConnInfo(stBNCS), ReceiveBuffer(stBNCS))
     Else
-        'proxy is ON and NOT CONNECTED
-        'parse incoming data
-        ParseProxyPacket strTemp
+        Do While ReceiveBuffer(stBNCS).IsFullPacket(stBNCS)
+            ' retrieve BNLS packet
+            Set pBuff = ReceiveBuffer(stBNCS).TakePacket(stBNCS)
+            ' parse
+            Call modBNCS.BNCSRecvPacket(pBuff)
+            ' clean up
+            Set pBuff = Nothing
+        Loop
     End If
     
     Exit Sub
-    
+
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in sckBNet_DataArrival()."
-    
+    AddChat RTBColors.ErrorMessageText, _
+        "Error (#" & Err.Number & "): " & Err.Description & " in sckBNet_DataArrival()."
+
     Exit Sub
 End Sub
 
@@ -7558,71 +7623,46 @@ Private Sub sckBNLS_Connect()
     
     Call Event_BNLSConnected
     
-    'With PBuffer
-    '    .InsertNTString "stealth"
-    '    .vLSendPacket &HE
-    'End With
-    modBNLS.SEND_BNLS_AUTHORIZE
-    
-    SetNagelStatus sckBNLS.SocketHandle, False
-    
-    'frmChat.sckBNet.Connect 'BNLS is authorized, proceed to initiate BNet connection.
+    If (ProxyConnInfo(stBNLS).IsUsingProxy) Then
+        modProxySupport.InitProxyConnection sckBNLS, ProxyConnInfo(stBNLS), BotVars.BNLSServer, 9367
+    Else
+        Call InitBNLSConnection
+    End If
 End Sub
+
+Sub InitBNLSConnection()
+    Call SetNagelStatus(sckBNLS.SocketHandle, False)
+    
+    modBNLS.SEND_BNLS_AUTHORIZE
+End Sub
+
 
 Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
     On Error GoTo ERROR_HANDLER
+    
+    Dim buf() As Byte
+    Dim pBuff As clsDataBuffer
+    
+    ' read buffer as Byte()
+    sckBNLS.GetData buf(), vbArray + vbByte, bytesTotal
+    ' add data to buffer
+    ReceiveBuffer(stBNLS).InsertByteArr buf()
 
-    Dim strTemp As String
-    
-    sckBNLS.GetData strTemp, vbString
-    
-    If BotVars.UseProxy And (BotVars.ProxyStatus = psConnecting Or BotVars.ProxyStatus = psLoggingIn) Then
-    
-'        Debug.Print "prox input: " & DebugOutput(strTemp)
-    
-        Select Case BotVars.ProxyStatus
-            Case psConnecting
-                'chr(5) or chr(4) depending on version & method
-                'do an instr search to find the method number.
-                'For public proxys you are looking for chr(0)
-                '<macyui>
-                
-                If InStr(1, strTemp, Chr(5)) > 0 Or InStr(1, strTemp, Chr(4)) > 0 Then
-                    If InStr(1, strTemp, Chr(0)) > 0 Then
-                        UpdateProxyStatus psLoggingIn, PROXY_LOGGING_IN
-                        
-                        LogonToProxy sckBNLS, BotVars.BNLSServer, 9367, False
-                    Else
-                        UpdateProxyStatus psNotConnected, PROXY_IS_NOT_PUBLIC
-                        sckBNLS.Close
-                    End If
-                Else
-                    UpdateProxyStatus psNotConnected, PROXY_IS_NOT_PUBLIC
-                    sckBNLS.Close
-                End If
-                
-            Case psLoggingIn
-                'Then when it sends back chr(5) & chr(0) indicating
-                'connection success, login and proceed as usual.
-                
-                If InStr(1, strTemp, Chr(5)) > 0 And InStr(1, strTemp, Chr(0)) > 0 Then
-                    UpdateProxyStatus psOnline, PROXY_LOGIN_SUCCESS
-                Else
-                    UpdateProxyStatus psNotConnected, PROXY_LOGIN_FAILED
-                    sckBNLS.Close
-                End If
-                
-        End Select
+    If ProxyConnInfo(stBNLS).IsUsingProxy And ProxyConnInfo(stBNLS).Status <> psOnline Then
+        Call modProxySupport.ProxyRecvPacket(sckBNLS, ProxyConnInfo(stBNLS), ReceiveBuffer(stBNLS))
     Else
-        BNLSBuffer.AddData strTemp
-            
-        While BNLSBuffer.FullPacket
-            modBNLS.BNLSRecvPacket BNLSBuffer.GetPacket
-        Wend
+        Do While ReceiveBuffer(stBNLS).IsFullPacket(stBNLS)
+            ' retrieve BNLS packet
+            Set pBuff = ReceiveBuffer(stBNLS).TakePacket(stBNLS)
+            ' parse
+            Call modBNLS.BNLSRecvPacket(pBuff)
+            ' clean up
+            Set pBuff = Nothing
+        Loop
     End If
     
     Exit Sub
-    
+
 ERROR_HANDLER:
     AddChat RTBColors.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.Description & " in sckBNLS_DataArrival()."
@@ -8137,14 +8177,16 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         
         DisableListviewTabs
         
-        BotVars.ProxyStatus = psNotConnected
+        ProxyConnInfo(stBNLS).Status = psNotConnected
+        ProxyConnInfo(stBNCS).Status = psNotConnected
+        ProxyConnInfo(stMCP).Status = psNotConnected
         
         Clan.isUsed = False
         lvClanList.ListItems.Clear
         
-        BNLSBuffer.ClearBuffer
-        BNCSBuffer.ClearBuffer
-        MCPBuffer.ClearBuffer
+        ReceiveBuffer(stBNLS).Clear
+        ReceiveBuffer(stBNCS).Clear
+        ReceiveBuffer(stMCP).Clear
         
         g_Connected = False
         g_Online = False
@@ -8196,8 +8238,8 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         Unload frmEMailReg
         
         ' close any pending INet
-        INet.Tag = SB_INET_UNSET
-        INet.Cancel
+        Inet.Tag = SB_INET_UNSET
+        Inet.Cancel
         
         ' reset BNLS finder
         BNLSFinderGotList = False
@@ -8217,12 +8259,12 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-Public Sub ParseFriendsPacket(ByVal PacketID As Long, ByVal Contents As String)
-    FriendListHandler.ParsePacket PacketID, Contents
+Public Sub ParseFriendsPacket(ByVal PacketID As Long, ByVal pBuff As clsDataBuffer)
+    FriendListHandler.ParsePacket PacketID, pBuff
 End Sub
 
-Public Sub ParseClanPacket(ByVal PacketID As Long, ByVal Contents As String)
-    ClanHandler.ParseClanPacket PacketID, Contents
+Public Sub ParseClanPacket(ByVal PacketID As Long, ByVal pBuff As clsDataBuffer)
+    ClanHandler.ParseClanPacket PacketID, pBuff
 End Sub
 
 Public Sub RecordWindowPosition(Optional Maximized As Boolean = False)
