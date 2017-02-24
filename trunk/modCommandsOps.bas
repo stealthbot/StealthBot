@@ -387,7 +387,7 @@ Public Sub OnIPBan(Command As clsCommandObj)
         sTarget = StripInvalidNameChars(Command.Argument("Username"))
         
         If (LenB(sTarget) > 0) Then
-            If (InStr(1, sTarget, "@") > 0) Then sTarget = StripRealm(sTarget)
+            If (InStr(1, sTarget, Config.GatewayDelimiter) > 0) Then sTarget = StripRealm(sTarget)
             
             If (dbAccess.Rank < 101) Then
                 If (GetSafelist(sTarget) Or GetSafelist(Command.Argument("Username"))) Then

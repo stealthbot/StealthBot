@@ -453,7 +453,7 @@ Public Function StripAccountNumber(ByVal Username As String) As String
     
     numpos = InStr(1, Username, "#", vbBinaryCompare)
     If numpos > 0 Then
-        atpos = InStr(numpos, Username, "@", vbBinaryCompare)
+        atpos = InStr(numpos, Username, Config.GatewayDelimiter, vbBinaryCompare)
         If atpos > 0 Then
             StripAccountNumber = Left$(Username, numpos - 1) & Mid$(Username, atpos)
         Else
@@ -465,20 +465,20 @@ Public Function StripAccountNumber(ByVal Username As String) As String
 End Function
 
 Public Function StripRealm(ByVal Username As String) As String
-    If (InStr(1, Username, "@", vbBinaryCompare) > 0) Then
-        Username = Replace(Username, "@USWest", vbNullString, 1)
-        Username = Replace(Username, "@USEast", vbNullString, 1)
-        Username = Replace(Username, "@Asia", vbNullString, 1)
-        Username = Replace(Username, "@Euruope", vbNullString, 1)
-        Username = Replace(Username, "@Beta", vbNullString, 1)
+    If (InStr(1, Username, Config.GatewayDelimiter, vbBinaryCompare) > 0) Then
+        Username = Replace(Username, Config.GatewayDelimiter & "USWest", vbNullString, 1)
+        Username = Replace(Username, Config.GatewayDelimiter & "USEast", vbNullString, 1)
+        Username = Replace(Username, Config.GatewayDelimiter & "Asia", vbNullString, 1)
+        Username = Replace(Username, Config.GatewayDelimiter & "Euruope", vbNullString, 1)
+        Username = Replace(Username, Config.GatewayDelimiter & "Beta", vbNullString, 1)
         
-        Username = Replace(Username, "@Lordaeron", vbNullString, 1)
-        Username = Replace(Username, "@Azeroth", vbNullString, 1)
-        Username = Replace(Username, "@Kalimdor", vbNullString, 1)
-        Username = Replace(Username, "@Northrend", vbNullString, 1)
-        Username = Replace(Username, "@Westfall", vbNullString, 1)
+        Username = Replace(Username, Config.GatewayDelimiter & "Lordaeron", vbNullString, 1)
+        Username = Replace(Username, Config.GatewayDelimiter & "Azeroth", vbNullString, 1)
+        Username = Replace(Username, Config.GatewayDelimiter & "Kalimdor", vbNullString, 1)
+        Username = Replace(Username, Config.GatewayDelimiter & "Northrend", vbNullString, 1)
+        Username = Replace(Username, Config.GatewayDelimiter & "Westfall", vbNullString, 1)
         
-        Username = Replace(Username, "@Blizzard", vbNullString, 1)
+        Username = Replace(Username, Config.GatewayDelimiter & "Blizzard", vbNullString, 1)
     End If
     
     StripRealm = Username
@@ -1601,8 +1601,8 @@ Public Function NameWithoutRealm(ByVal Username As String, Optional ByVal Strict
     If ((IsW3) And (Strict = 0)) Then
         NameWithoutRealm = Username
     Else
-        If (InStr(1, Username, "@", vbBinaryCompare) > 0) Then
-            NameWithoutRealm = Left$(Username, InStr(1, Username, "@") - 1)
+        If (InStr(1, Username, Config.GatewayDelimiter, vbBinaryCompare) > 0) Then
+            NameWithoutRealm = Left$(Username, InStr(1, Username, Config.GatewayDelimiter) - 1)
         Else
             NameWithoutRealm = Username
         End If
@@ -1619,8 +1619,8 @@ Public Function GetW3Realm(Optional ByVal Username As String) As String
     If (LenB(Username) = 0) Then
         GetW3Realm = BotVars.Gateway
     Else
-        If (InStr(1, Username, "@", vbBinaryCompare) > 0) Then
-            GetW3Realm = Mid$(Username, InStr(1, Username, "@", _
+        If (InStr(1, Username, Config.GatewayDelimiter, vbBinaryCompare) > 0) Then
+            GetW3Realm = Mid$(Username, InStr(1, Username, Config.GatewayDelimiter, _
                 vbBinaryCompare) + 1)
         Else
             GetW3Realm = BotVars.Gateway
@@ -1768,10 +1768,10 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
         Dim strGateway As String
         
         Select Case (BotVars.Gateway)
-            Case "Lordaeron": strGateway = "@USWest"
-            Case "Azeroth":   strGateway = "@USEast"
-            Case "Kalimdor":  strGateway = "@Asia"
-            Case "Northrend": strGateway = "@Europe"
+            Case "Lordaeron": strGateway = Config.GatewayDelimiter & "USWest"
+            Case "Azeroth":   strGateway = Config.GatewayDelimiter & "USEast"
+            Case "Kalimdor":  strGateway = Config.GatewayDelimiter & "Asia"
+            Case "Northrend": strGateway = Config.GatewayDelimiter & "Europe"
         End Select
         
         If (InStr(1, tmp, strGateway, vbTextCompare) = 0) Then

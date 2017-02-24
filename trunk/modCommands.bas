@@ -1392,15 +1392,15 @@ Private Function CheckUser(ByVal User As String, Optional ByVal allow_illegal As
         User = Mid$(User, 2)
     End If
     
-    User = Replace(User, "@USWest", vbNullString, 1)
-    User = Replace(User, "@USEast", vbNullString, 1)
-    User = Replace(User, "@Asia", vbNullString, 1)
-    User = Replace(User, "@Europe", vbNullString, 1)
+    User = Replace(User, Config.GatewayDelimiter & "USWest", vbNullString, 1)
+    User = Replace(User, Config.GatewayDelimiter & "USEast", vbNullString, 1)
+    User = Replace(User, Config.GatewayDelimiter & "Asia", vbNullString, 1)
+    User = Replace(User, Config.GatewayDelimiter & "Europe", vbNullString, 1)
     
-    User = Replace(User, "@Lordaeron", vbNullString, 1)
-    User = Replace(User, "@Azeroth", vbNullString, 1)
-    User = Replace(User, "@Kalimdor", vbNullString, 1)
-    User = Replace(User, "@Northrend", vbNullString, 1)
+    User = Replace(User, Config.GatewayDelimiter & "Lordaeron", vbNullString, 1)
+    User = Replace(User, Config.GatewayDelimiter & "Azeroth", vbNullString, 1)
+    User = Replace(User, Config.GatewayDelimiter & "Kalimdor", vbNullString, 1)
+    User = Replace(User, Config.GatewayDelimiter & "Northrend", vbNullString, 1)
     
     If (Len(User) = 0) Then
         invalid = True
@@ -1546,7 +1546,7 @@ Public Function ConvertUsernameGateway(ByVal Username As String, Optional ByVal 
     Next i
     
     ' is user on other namespace?
-    Index = InStr(1, Username, "@" & Gateways(i, IIf(MyGatewayIndex = 0, 1, 0)), vbTextCompare)
+    Index = InStr(1, Username, Config.GatewayDelimiter & Gateways(i, IIf(MyGatewayIndex = 0, 1, 0)), vbTextCompare)
     
     ' store whether user is on other namespace
     ' (whether the other @gateway was found)
@@ -1573,7 +1573,7 @@ Public Function ConvertUsernameGateway(ByVal Username As String, Optional ByVal 
             ConvertUsernameGateway = Left$(Username, Index - 1)
         Else
             ' return username with our namespace
-            ConvertUsernameGateway = Username & "@" & BotVars.Gateway
+            ConvertUsernameGateway = Username & Config.GatewayDelimiter & BotVars.Gateway
         End If
     Else
         ' we are not converting, leave it alone
@@ -1744,7 +1744,7 @@ Public Function ReverseConvertUsernameGateway(ByVal Username As String) As Strin
     Next i
     
     ' is user on this namespace?
-    Index = InStr(1, Username, "@" & MyGateway, vbTextCompare)
+    Index = InStr(1, Username, Config.GatewayDelimiter & MyGateway, vbTextCompare)
     
     ' store whether user is on this namespace
     ' (whether this @gateway was found)
@@ -1771,7 +1771,7 @@ Public Function ReverseConvertUsernameGateway(ByVal Username As String) As Strin
             ReverseConvertUsernameGateway = Left$(Username, Index - 1)
         Else
             ' return username with their namespace
-            ReverseConvertUsernameGateway = Username & "@" & Gateways(i, IIf(MyGatewayIndex = 0, 1, 0))
+            ReverseConvertUsernameGateway = Username & Config.GatewayDelimiter & Gateways(i, IIf(MyGatewayIndex = 0, 1, 0))
         End If
     Else
         ' we are not converting, leave it alone

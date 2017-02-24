@@ -216,6 +216,7 @@ Private m_ProductLanguage           As String
 Private m_ServerCommandList         As String
 Private m_VersionBytes(8)           As Long     'XXVerByte
 Private m_LogonSystems(8)           As Long     'XXLogonSystem
+Private m_GatewayDelimiter          As String
 
 '[DEBUG]
 Private m_DebugWarden               As Boolean
@@ -1470,6 +1471,14 @@ Public Property Let ServerCommandList(ByVal sValue As String)
     m_ServerCommandList = sValue
 End Property
 
+Public Property Get GatewayDelimiter() As String
+    GatewayDelimiter = m_GatewayDelimiter
+End Property
+
+Public Property Let GatewayDelimiter(ByVal sValue As String)
+    m_GatewayDelimiter = sValue
+End Property
+
 
 '-------------------------
 '   SECTION: DEBUG
@@ -1777,6 +1786,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_EMULATION, "PlatformID", m_PlatformID
     WriteSetting SECTION_EMULATION, "ProductLanguage", m_ProductLanguage
     WriteSetting SECTION_EMULATION, "ServerCommandList", m_ServerCommandList
+    WriteSetting SECTION_EMULATION, "GatewayDelimiter", m_GatewayDelimiter
     
     WriteSetting SECTION_DEBUG, "Warden", m_DebugWarden
     
@@ -1969,6 +1979,7 @@ Private Sub LoadDefaults()
     m_PlatformID = "IX86"
     m_ProductLanguage = vbNullString
     m_ServerCommandList = "w %,whisper %,m %,msg %,f m,clan mail,c mail,clan motd,c motd,away,dnd,ban %,kick %,j,join,channel,me,emote"
+    m_GatewayDelimiter = "#"
     
     Dim i As Integer
     For i = LBound(m_ProductKeys) To UBound(m_ProductKeys)
@@ -2301,6 +2312,7 @@ Private Sub LoadVersion6Config()
     m_PlatformID = ReadSetting(SECTION_EMULATION, "PlatformID", m_PlatformID)
     m_ProductLanguage = ReadSetting(SECTION_EMULATION, "ProductLanguage", m_ProductLanguage)
     m_ServerCommandList = ReadSetting(SECTION_EMULATION, "ServerCommandList", m_ServerCommandList)
+    m_GatewayDelimiter = ReadSetting(SECTION_EMULATION, "GatewayDelimiter", m_GatewayDelimiter)
 
     m_DebugWarden = ReadSettingB(SECTION_DEBUG, "Warden", m_DebugWarden)
 

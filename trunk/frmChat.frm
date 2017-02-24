@@ -7778,7 +7778,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
         End If
     End With
     
-    atChar = InStr(1, toMatch, "@", vbBinaryCompare)
+    atChar = InStr(1, toMatch, Config.GatewayDelimiter, vbBinaryCompare)
     
     If (atChar <> 0) Then
         Dim tmp      As String
