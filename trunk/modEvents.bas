@@ -335,16 +335,9 @@ On Error GoTo ERROR_HANDLER:
     Const LONG_MAX_VALUE As Double = 2147483647
     
     RunInAll "Event_UserDataReceived", oRequest.Account, oRequest.keys, oRequest.Values
-    
-    frmChat.AddChat RTBColors.InformationText, "Data request returned: " & CStr(oRequest.RequestID)
-    frmChat.AddChat RTBColors.InformationText, "   Source: " & CStr(oRequest.RequestType)
-    frmChat.AddChat RTBColors.InformationText, "   Account: " & oRequest.Account
         
     For i = 0 To UBound(oRequest.keys)
         RunInAll "Event_KeyReturn", oRequest.keys(i), oRequest.Values(i)
-        
-        frmChat.AddChat RTBColors.InformationText, StringFormat("   Key({0}): {1}", i, oRequest.keys(i))
-        frmChat.AddChat RTBColors.InformationText, StringFormat("   Value({0}): {1}", i, oRequest.Values(i))
         
         sKeyShort = Mid(oRequest.keys(i), InStr(1, oRequest.keys(i), "\", vbTextCompare) + 1)
         sValue = oRequest.Values(i)
@@ -524,6 +517,8 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     Set Stats = Nothing
+    
+    ReDim UserDataRequests(0)
     
     RequestSystemKeys Internal
     If (LenB(BotVars.Gateway) > 0) Then

@@ -1815,7 +1815,6 @@ Private Sub Form_Load()
     ReDim gBans(0)
     ReDim gOutFilters(0)
     ReDim gFilters(0)
-    ReDim UserDataRequests(0)
     
     Call BuildProductInfo
     

@@ -229,18 +229,20 @@ Public Sub RequestUserData(ByVal sUsername As String, ByRef aKeys() As String, O
     
     ' Find an open slot in the request list
     bFoundSlot = False
-    For i = 0 To UBound(UserDataRequests)
-        If UserDataRequests(i).ResponseReceived Then
-            bFoundSlot = True
+    If UBound(UserDataRequests) > 0 Then
+        For i = 1 To UBound(UserDataRequests)
+            If UserDataRequests(i).ResponseReceived Then
+                bFoundSlot = True
             
-            oRequest.RequestID = i
-            UserDataRequests(i) = oRequest
-        End If
-    Next
+                oRequest.RequestID = i
+                UserDataRequests(i) = oRequest
+                Exit For
+            End If
+        Next
+    End If
     
     ' If no slot was found, add the request to the end
     If Not bFoundSlot Then
-        i = UBound(UserDataRequests)
         oRequest.RequestID = UBound(UserDataRequests) + 1
         
         ReDim Preserve UserDataRequests(oRequest.RequestID)

@@ -799,8 +799,7 @@ End Sub
 '*******************************
 Private Sub RECV_SID_READUSERDATA(pBuff As clsDataBuffer)
     On Error GoTo ERROR_HANDLER:
-    
-    Dim oRequest As udtUserDataRequest
+
     Dim i As Integer
     
     Dim iNumKeys As Long
@@ -811,31 +810,46 @@ Private Sub RECV_SID_READUSERDATA(pBuff As clsDataBuffer)
     iNumKeys = pBuff.GetDWORD()     ' (DWORD) Number of keys
     iRequest = pBuff.GetDWORD()     ' (DWORD) Request ID
 
-    ReDim aValues(iNumKeys - 1)
+    If iNumKeys < 1 Then
+        frmChat.AddChat RTBColors.ErrorMessageText, "Notice: Received user data request with no returned keys. Cookie: " & CStr(iRequest)
+    Else
+        ReDim aValues(iNumKeys - 1)
     
-    ' Read each of the keys
-    For i = 0 To UBound(aValues)
-        aValues(i) = pBuff.GetString()
-    Next
+        ' Read each of the keys
+        For i = 0 To UBound(aValues)
+            aValues(i) = pBuff.GetString()
+        Next
+    End If
     
     ' Find the request for this ID and hand it off to the event handler
     i = UBound(UserDataRequests)
     If i >= iRequest Then
-        oRequest = UserDataRequests(iRequest)
-        oRequest.Values = aValues
+    
+        ' Process the request
+        With UserDataRequests(iRequest)
+            If .ResponseReceived Then
+                frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Notice: Received extra data response for user: {0}, # of keys: {1}", .Account, iNumKeys)
+            End If
         
-        Event_UserDataReceived oRequest
+            .ResponseReceived = True            ' Flag this request as received
+            .Values = aValues                   ' Link the values
+        End With
+        
+        ' Raise UserDataReceived event (also raises KeyReturn in scripting)
+        Event_UserDataReceived UserDataRequests(iRequest)
         
         ' Shrink the array if needed
         If i > 1 Then
             For i = i To 1 Step -1
                 If UserDataRequests(i).ResponseReceived Then
                     ReDim Preserve UserDataRequests(i - 1)
+                Else
+                    Exit For
                 End If
             Next
         End If
     Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "Notice: Received unsolicited user data."
+        frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Notice: Received unsolicited user data, # of keys: {0}, Cookie: {1}", iNumKeys, iRequest)
     End If
     
     Exit Sub
