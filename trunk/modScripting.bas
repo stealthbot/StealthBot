@@ -243,7 +243,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal FilePath As St
                                     
                                     ' check if file exists to include
                                     If LenB(Dir$(strFullPath)) = 0 Then
-                                        frmChat.AddChat RTBColors.ErrorMessageText, "Scripting warning: " & Dir$(FilePath) & " is trying to include " & _
+                                        frmChat.AddChat RTBColors.ErrorMessageText, "Scripting warning! " & Dir$(FilePath) & " is trying to include " & _
                                             "a file that does not exist: " & strPath
                                         blnIncIsValid = False
                                     End If
@@ -251,7 +251,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal FilePath As St
                                     ' check if file is already included by this script
                                     For i = 1 To includes.Count
                                         If StrComp(includes(i), strFullPath, vbTextCompare) = 0 Then
-                                            frmChat.AddChat RTBColors.ErrorMessageText, "Scripting warning: " & Dir$(FilePath) & " is trying to include " & _
+                                            frmChat.AddChat RTBColors.ErrorMessageText, "Scripting warning! " & Dir$(FilePath) & " is trying to include " & _
                                                 "a file that has already been included: " & strPath
                                             blnIncIsValid = False
                                         End If

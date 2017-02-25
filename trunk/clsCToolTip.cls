@@ -19,7 +19,7 @@ Option Explicit
 Private Declare Sub InitCommonControls Lib "comctl32.dll" ()
 
 ''Windows API Functions
-Private Declare Function CreateWindowEx Lib "user32" Alias "CreateWindowExA" (ByVal dwExStyle As Long, ByVal lpClassName As String, ByVal lpWindowName As String, ByVal dwStyle As Long, ByVal X As Long, ByVal Y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hWndParent As Long, ByVal hMenu As Long, ByVal hInstance As Long, lpParam As Any) As Long
+Private Declare Function CreateWindowEx Lib "user32" Alias "CreateWindowExA" (ByVal dwExStyle As Long, ByVal lpClassName As String, ByVal lpWindowName As String, ByVal dwStyle As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hWndParent As Long, ByVal hMenu As Long, ByVal hInstance As Long, lpParam As Any) As Long
 Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
 Private Declare Function SendMessageLong Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Private Declare Function DestroyWindow Lib "user32" (ByVal hWnd As Long) As Long
@@ -122,7 +122,7 @@ Public Property Get Centered() As Boolean
    Centered = mvarCentered
 End Property
 
-Public Function Create(ByVal ParentHwnd As Long, X As Long, Y As Long) As Boolean
+Public Function Create(ByVal ParentHwnd As Long, x As Long, y As Long) As Boolean
    Dim lWinStyle As Long
    
    If m_lTTHwnd <> 0 Then

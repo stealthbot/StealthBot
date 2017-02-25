@@ -1914,7 +1914,7 @@ Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
         
         If (iterations > 9000) Then
             If (MDebug("debug")) Then
-                frmChat.AddChat RTBColors.ErrorMessageText, "Warning: Loop size limit exceeded " & _
+                frmChat.AddChat RTBColors.ErrorMessageText, "Warning! Loop size limit exceeded " & _
                     "in UnbanBanlistUser()!"
                 frmChat.AddChat RTBColors.ErrorMessageText, "The banned-user list has been reset.. " & _
                     "hope it works!"

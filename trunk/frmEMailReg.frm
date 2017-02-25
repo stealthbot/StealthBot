@@ -148,13 +148,13 @@ Public Sub DoRegisterEmail(ByVal EMailAction As String, Optional ByVal EMailValu
     Select Case EMailAction
         Case "ASKLATER"
             ' "ASKLATER"/ask later: do nothing here
-            frmChat.AddChat RTBColors.SuccessText, "[EMAIL] E-mail address registration ignored. You may be prompted later."
+            frmChat.AddChat RTBColors.SuccessText, "[BNCS] E-mail address registration ignored. You may be prompted later."
             
             ContinueLogonSequence
             
         Case "NEVERASK"
             ' "NEVERASK"/never ask: register an empty email address
-            frmChat.AddChat RTBColors.SuccessText, "[EMAIL] E-mail address registration declined."
+            frmChat.AddChat RTBColors.SuccessText, "[BNCS] E-mail address registration declined."
         
             modBNCS.SEND_SID_SETEMAIL vbNullString
             
@@ -173,7 +173,7 @@ Public Sub DoRegisterEmail(ByVal EMailAction As String, Optional ByVal EMailValu
                 txtAddress.SetFocus
             Else
                 ' value: send the provided email
-                frmChat.AddChat RTBColors.SuccessText, "[EMAIL] E-mail address registered."
+                frmChat.AddChat RTBColors.SuccessText, "[BNCS] E-mail address registered."
         
                 SEND_SID_SETEMAIL EMailValue
                 

@@ -115,6 +115,15 @@ Public Const BNCS_NLS As Long = 1 'New:    SID_AUTH_*
 Public Const BNCS_OLS As Long = 2 'Old:    SID_CLIENTID2
 Public Const BNCS_LLS As Long = 3 'Legacy: SID_CLIENTID
 
+Public Const BNCSSERVER_XSHA As Long = 0
+Public Const BNCSSERVER_SRP2 As Long = 2
+
+Public Const ACCOUNT_MODE_LOGON  As String = "LOGON"
+Public Const ACCOUNT_MODE_CREAT  As String = "CREATE"
+Public Const ACCOUNT_MODE_CHPWD  As String = "CHANGEPASS"
+Public Const ACCOUNT_MODE_RSPWD  As String = "RESETPASS"
+Public Const ACCOUNT_MODE_CHREG  As String = "CHANGEEMAIL"
+
 Public Const PLATFORM_INTEL   As Long = &H49583836 'IX86
 Public Const PLATFORM_POWERPC As Long = &H504D4143 'PMAC
 Public Const PLATFORM_OSX     As Long = &H584D4143 'XMAC
@@ -177,6 +186,8 @@ On Error GoTo ERROR_HANDLER:
             Case SID_AUTH_ACCOUNTCREATE:     Call RECV_SID_AUTH_ACCOUNTCREATE(pBuff)     '0x52
             Case SID_AUTH_ACCOUNTLOGON:      Call RECV_SID_AUTH_ACCOUNTLOGON(pBuff)      '0x53
             Case SID_AUTH_ACCOUNTLOGONPROOF: Call RECV_SID_AUTH_ACCOUNTLOGONPROOF(pBuff) '0x54
+            Case SID_AUTH_ACCOUNTCHANGE:     Call RECV_SID_AUTH_ACCOUNTCHANGE(pBuff)     '0x55
+            Case SID_AUTH_ACCOUNTCHANGEPROOF:Call RECV_SID_AUTH_ACCOUNTCHANGEPROOF(pBuff)'0x56
             Case SID_SETEMAIL:               Call RECV_SID_SETEMAIL(pBuff)               '0x59
             
             Case Is >= &H65 'Friends List or Clan-related packet
@@ -334,11 +345,11 @@ On Error GoTo ERROR_HANDLER:
     Dim lResult  As Long
     Dim sInfo    As String
     Dim bSuccess As Boolean
-    
+
     lResult = pBuff.GetDWORD
     sInfo = pBuff.GetString
     bSuccess = False
-    
+
     Select Case lResult
         Case 0: Call Event_VersionCheck(1, sInfo) 'Failed Version Check
         Case 1: Call Event_VersionCheck(1, sInfo) 'Old Game Version
@@ -347,10 +358,12 @@ On Error GoTo ERROR_HANDLER:
             'Call Event_VersionCheck(0, sInfo)
         Case 3: Call Event_VersionCheck(1, sInfo) '"Reinstall Required", Invalid version
         Case Else:
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown SID_REPORTVERSION Response: 0x" & ZeroOffset(lResult, 8))
+            frmChat.AddChat RTBColors.ErrorMessageText, "Unknown SID_REPORTVERSION Response: 0x" & ZeroOffset(lResult, 8)
     End Select
 
-    If (frmChat.sckBNet.State = 7 And bSuccess) Then
+    If Config.IgnoreVersionCheck Then bSuccess = True
+
+    If (frmChat.sckBNet.State = sckConnected And bSuccess) Then
         If (GetCDKeyCount > 0) Then
             'Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Sending CDKey information...")
             Select Case GetLogonSystem()
@@ -363,12 +376,14 @@ On Error GoTo ERROR_HANDLER:
             End Select
         Else
             Call Event_VersionCheck(0, sInfo) ' display success here
-            Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Sending login information...")
-            frmChat.tmrAccountLock.Enabled = True
-            SEND_SID_LOGONRESPONSE2
+
+            ds.AccountEntry = True
+            Call DoAccountAction
         End If
+    Else
+        frmChat.DoDisconnect
     End If
-    
+
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
@@ -924,14 +939,13 @@ On Error GoTo ERROR_HANDLER:
     
     lResult = pBuff.GetDWORD
     sInfo = pBuff.GetString
-    
+
     Select Case lResult
         Case 1:
             Call Event_VersionCheck(0, sInfo) ' display success here
-            'frmChat.AddChat RTBColors.SuccessText, "[BNCS] Your CDKey was accepted!"
-            frmChat.AddChat RTBColors.InformationText, "[BNCS] Sending login information..."
-            frmChat.tmrAccountLock.Enabled = True
-            SEND_SID_LOGONRESPONSE2
+
+            ds.AccountEntry = True
+            Call DoAccountAction
             Exit Sub
         Case 2: Call Event_VersionCheck(2, sInfo) 'Invalid CDKey
         Case 3: Call Event_VersionCheck(4, sInfo) 'CDKey is for the wrong product
@@ -939,8 +953,9 @@ On Error GoTo ERROR_HANDLER:
         Case 5: Call Event_VersionCheck(6, sInfo) 'CDKey is In Use
         Case Else: frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Unknown SID_CDKEY Response 0x{0}: {1}", ZeroOffset(lResult, 8), sInfo)
     End Select
-    'CloseAllConnections
-    
+
+    'Call frmChat.DoDisconnect
+
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
@@ -973,7 +988,7 @@ On Error GoTo ERROR_HANDLER:
         If (LenB(Config.CDKeyOwnerName) > 0) Then
             .InsertNTString Config.CDKeyOwnerName
         Else
-            .InsertNTString BotVars.Username
+            .InsertNTString Config.Username
         End If
         .SendPacket SID_CDKEY
     End With
@@ -985,6 +1000,86 @@ On Error GoTo ERROR_HANDLER:
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CDKEY()", Err.Number, Err.Description, OBJECT_NAME))
+End Sub
+
+'**********************************
+'SID_CHANGEPASSWORD (0x31) S->C
+'**********************************
+' (DWORD) Status
+'**********************************
+Private Sub RECV_SID_CHANGEPASSWORD(pBuff As clsDataBuffer)
+On Error GoTo ERROR_HANDLER:
+    
+    Dim lResult As Long
+    
+    lResult = pBuff.GetDWORD
+
+    frmChat.tmrAccountLock.Enabled = False
+
+    Select Case lResult
+        Case &H0:
+            Call Event_LogonEvent(ACCOUNT_MODE_CHPWD, &H0, vbNullString)
+
+            If Config.AutoAccountAction Then
+                Call DoAccountAction(ACCOUNT_MODE_LOGON)
+            Else
+                frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
+            End If
+
+        Case Else
+            Call Event_LogonEvent(ACCOUNT_MODE_CHPWD, lResult + &H3100, vbNullString)
+
+            If Config.ManageOnAccountError Then
+                frmAccountManager.ShowMode ACCOUNT_MODE_CHPWD
+            Else
+                frmChat.DoDisconnect
+            End If
+    End Select
+
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CHANGEPASSWORD()", Err.Number, Err.Description, OBJECT_NAME))
+End Sub
+
+'*******************************
+'SID_CHANGEPASSWORD (0x31) C->S
+'*******************************
+' (DWORD) Client Token
+' (DWORD) Server Token
+' (DWORD) [5] Old Password Hash
+' (DWORD) [5] New Password Hash
+' (STRING) Username
+'*******************************
+Public Sub SEND_SID_CHANGEPASSWORD()
+On Error GoTo ERROR_HANDLER:
+    Dim sHash As String
+    Dim sHash2 As String
+    Dim pBuff As New clsDataBuffer
+
+    If Not Config.UseLowerCasePassword Then
+        sHash = doubleHashPassword(Config.Password, ds.ClientToken, ds.ServerToken)
+        sHash2 = doubleHashPassword(Config.NewPassword, ds.ClientToken, ds.ServerToken)
+    Else
+        sHash = doubleHashPassword(LCase$(Config.Password), ds.ClientToken, ds.ServerToken)
+        sHash2 = doubleHashPassword(LCase$(Config.NewPassword), ds.ClientToken, ds.ServerToken)
+    End If
+
+    With pBuff
+        .InsertDWord ds.ClientToken
+        .InsertDWord ds.ServerToken
+        .InsertNonNTString sHash
+        .InsertNonNTString sHash2
+        .InsertNTString Config.Username
+        .SendPacket SID_CHANGEPASSWORD
+    End With
+
+    Set pBuff = Nothing
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CHANGEPASSWORD()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -1004,10 +1099,9 @@ On Error GoTo ERROR_HANDLER:
     Select Case lResult
         Case 1:
             Call Event_VersionCheck(0, sInfo) ' display success here
-            'frmChat.AddChat RTBColors.SuccessText, "[BNCS] Your CDKey was accepted!"
-            frmChat.AddChat RTBColors.InformationText, "[BNCS] Sending login information..."
-            frmChat.tmrAccountLock.Enabled = True
-            SEND_SID_LOGONRESPONSE2
+
+            ds.AccountEntry = True
+            Call DoAccountAction
             Exit Sub
         Case 2: Call Event_VersionCheck(2, sInfo) 'Invalid CDKey
         Case 3: Call Event_VersionCheck(4, sInfo) 'CDKey is for the wrong product
@@ -1015,7 +1109,8 @@ On Error GoTo ERROR_HANDLER:
         Case 5: Call Event_VersionCheck(6, sInfo) 'CDKey is In Use
         Case Else: frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Unknown SID_CDKEY2 Response 0x{0}: {1}", ZeroOffset(lResult, 8), sInfo)
     End Select
-    'CloseAllConnections
+
+    'Call frmChat.DoDisconnect
     
     Exit Sub
 ERROR_HANDLER:
@@ -1061,14 +1156,14 @@ On Error GoTo ERROR_HANDLER:
         If (LenB(Config.CDKeyOwnerName) > 0) Then
             .InsertNTString Config.CDKeyOwnerName
         Else
-            .InsertNTString BotVars.Username
+            .InsertNTString Config.Username
         End If
         .SendPacket SID_CDKEY2
     End With
-    
+
     Set pBuff = Nothing
     Set oKey = Nothing
-    
+
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
@@ -1089,11 +1184,21 @@ On Error GoTo ERROR_HANDLER:
     
     lResult = pBuff.GetDWORD
     sInfo = pBuff.GetString
-    
+
+    frmChat.tmrAccountLock.Enabled = False
+
     Select Case lResult
-        Case &H0:  'Logon Successful
-            Call Event_LogonEvent(2, sInfo)
-            
+        Case &H0  'Logon Successful
+            Call Event_LogonEvent(ACCOUNT_MODE_LOGON, &H0, sInfo)
+
+            BotVars.Username = Config.Username
+            BotVars.Password = Config.Password
+            ds.AccountEntry = False
+
+            If frmAccountManager.Visible Then
+                frmAccountManager.LeftAccountEntryMode
+            End If
+
             If (Not ds.WaitingForEmail) Then
                 If (Dii And BotVars.UseRealm) Then
                     'Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Asking Battle.net for a list of Realm servers...")
@@ -1104,22 +1209,26 @@ On Error GoTo ERROR_HANDLER:
             Else
                 Call DoRegisterEmail
             End If
-            
-        Case &H1:  'Nonexistent account.
-            Call Event_LogonEvent(0, sInfo)
-            Call Event_LogonEvent(3, sInfo)
-            SEND_SID_CREATEACCOUNT2
-            
-        Case &H2:  'Invalid password.
-            Call Event_LogonEvent(1, sInfo)
-            Call frmChat.DoDisconnect
-            
-        Case &H6:  'Account has been closed (includes a reason)
-            Call Event_LogonEvent(5, sInfo)
-            Call frmChat.DoDisconnect
-                        
-        Case Else:
-            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Unknown response to SID_LOGONRESPONSE2: 0x{0}", ZeroOffset(lResult, 8))
+
+        Case &H1  'Nonexistent account.
+            Call Event_LogonEvent(ACCOUNT_MODE_LOGON, &H1, sInfo)
+
+            If Config.AutoAccountAction Then
+                Call DoAccountAction(ACCOUNT_MODE_CREAT)
+            ElseIf Config.ManageOnAccountError Then
+                frmAccountManager.ShowMode ACCOUNT_MODE_CREAT
+            Else
+                frmChat.DoDisconnect
+            End If
+
+        Case Else
+            Call Event_LogonEvent(ACCOUNT_MODE_LOGON, lResult, sInfo)
+
+            If Config.ManageOnAccountError Then
+                frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
+            Else
+                frmChat.DoDisconnect
+            End If
     End Select
     
     Exit Sub
@@ -1142,16 +1251,16 @@ On Error GoTo ERROR_HANDLER:
     Dim pBuff As New clsDataBuffer
     
     If Not Config.UseLowerCasePassword Then
-        sHash = doubleHashPassword(BotVars.Password, ds.ClientToken, ds.ServerToken)
+        sHash = doubleHashPassword(Config.Password, ds.ClientToken, ds.ServerToken)
     Else
-        sHash = doubleHashPassword(LCase$(BotVars.Password), ds.ClientToken, ds.ServerToken)
+        sHash = doubleHashPassword(LCase$(Config.Password), ds.ClientToken, ds.ServerToken)
     End If
     
     With pBuff
         .InsertDWord ds.ClientToken
         .InsertDWord ds.ServerToken
         .InsertNonNTString sHash
-        .InsertNTString BotVars.Username
+        .InsertNTString Config.Username
         .SendPacket SID_LOGONRESPONSE2
     End With
     Set pBuff = Nothing
@@ -1177,23 +1286,36 @@ On Error GoTo ERROR_HANDLER:
     
     lResult = pBuff.GetDWORD
     sInfo = pBuff.GetString
-    
+
     Select Case lResult
-        Case 0:
-            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Account created successfully!"
-            modBNCS.SEND_SID_LOGONRESPONSE2
+        Case &H0:
+            Call Event_LogonEvent(ACCOUNT_MODE_CREAT, &H0, sInfo)
+
+            If Config.AutoAccountAction Then
+                Call DoAccountAction(ACCOUNT_MODE_LOGON)
+            Else
+                frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
+            End If
+
             Exit Sub
-            
-        Case 2: sOut = "Your desired account name contains invalid characters."
-        Case 3: sOut = "Your desired account name contains a banned word."
-        Case 4: sOut = "Your desired account name already exists."
-        Case 6: sOut = "Your desired account name does not contain enough alphanumeric characters."
-        Case Else: sOut = StringFormat("Unknown response to SID_CREATEACCOUNT2. Result code: 0x{0}", ZeroOffset(lResult, 8))
+
+        Case &H1:  Call Event_LogonEvent(ACCOUNT_MODE_CREAT, &H7, sInfo)
+        Case &H2:  Call Event_LogonEvent(ACCOUNT_MODE_CREAT, &H8, sInfo)
+        Case &H3:  Call Event_LogonEvent(ACCOUNT_MODE_CREAT, &H9, sInfo)
+        Case &H4:  Call Event_LogonEvent(ACCOUNT_MODE_CREAT, &H4, sInfo)
+        Case &H5:  Call Event_LogonEvent(ACCOUNT_MODE_CREAT, &H3D05, sInfo)
+        Case &H6:  Call Event_LogonEvent(ACCOUNT_MODE_CREAT, &HA, sInfo)
+        Case &H7:  Call Event_LogonEvent(ACCOUNT_MODE_CREAT, &HB, sInfo)
+        Case &H8:  Call Event_LogonEvent(ACCOUNT_MODE_CREAT, &HC, sInfo)
+        Case Else: Call Event_LogonEvent(ACCOUNT_MODE_CREAT, lResult, sInfo)
     End Select
-    
-    frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] There was an error in trying to create a new account."
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] {0}", sOut)
-             
+
+    If Config.ManageOnAccountError Then
+        frmAccountManager.ShowMode ACCOUNT_MODE_CREAT
+    Else
+        frmChat.DoDisconnect
+    End If
+
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
@@ -1206,20 +1328,20 @@ End Sub
 ' (DWORD) [5] Password hash
 ' (STRING) Username
 '**************************************
-Private Sub SEND_SID_CREATEACCOUNT2()
+Public Sub SEND_SID_CREATEACCOUNT2()
 On Error GoTo ERROR_HANDLER:
     
     Dim sHash As String
     If Not Config.UseLowerCasePassword Then
-        sHash = hashPassword(BotVars.Password)
+        sHash = hashPassword(Config.Password)
     Else
-        sHash = hashPassword(LCase(BotVars.Password))
+        sHash = hashPassword(LCase(Config.Password))
     End If
     
     Dim pBuff As New clsDataBuffer
     With pBuff
         .InsertNonNTString sHash
-        .InsertNTString BotVars.Username
+        .InsertNTString Config.Username
         .SendPacket SID_CREATEACCOUNT2
     End With
     Set pBuff = Nothing
@@ -1464,16 +1586,16 @@ On Error GoTo ERROR_HANDLER:
         End If
         
         If (StrComp(RemoteHostIP, "0.0.0.255", vbBinaryCompare) = 0) Then
-            frmChat.AddChat RTBColors.InformationText, "[BNCS] Note: a server signature was received but cannot be validated because of the proxy configuration."
+            frmChat.AddChat RTBColors.InformationText, "[BNCS] Note! A server signature was received but cannot be validated because of the proxy configuration."
         Else
             If (ds.NLS.VerifyServerSignature(RemoteHostIP, ds.ServerSig)) Then
                 frmChat.AddChat RTBColors.SuccessText, "[BNCS] Server signature validated!"
             Else
-                frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Warning: server signature is invalid! This may not be a valid server."
+                frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Warning! The server signature is invalid. This may not be a valid server."
             End If
         End If
     ElseIf (GetProductKey = "W3") Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Warning: server signature is missing! This may not be a valid server."
+        frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Warning! The server signature is missing. This may not be a valid server."
     End If
     
     If (BotVars.BNLS) Then
@@ -1565,13 +1687,14 @@ On Error GoTo ERROR_HANDLER:
     
     lResult = pBuff.GetDWORD
     sInfo = pBuff.GetString
+
     bSuccess = False
     
     Select Case lResult
         Case &H0:
-            bSuccess = True
             Call Event_VersionCheck(0, sInfo)
-            
+            bSuccess = True
+
         Case &H100, &H101: Call Event_VersionCheck(1, sInfo) 'Outdated/Invalid Version
         Case &H200: Call Event_VersionCheck(2, sInfo) 'Invalid CDKey
         Case &H201: Call Event_VersionCheck(6, sInfo) 'CDKey is In Use
@@ -1582,22 +1705,17 @@ On Error GoTo ERROR_HANDLER:
         Case &H212: Call Event_VersionCheck(9, sInfo) 'Exp CDKey is Banned
         Case &H213: Call Event_VersionCheck(10, sInfo) 'Exp CDKey is for the wrong product
         Case Else:
-            If Config.IgnoreVersionCheck Then bSuccess = True
             Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(lResult, 8))
     End Select
 
-    If (frmChat.sckBNet.State = 7 And (Not ds.WaitingForEmail) And bSuccess) Then
-        Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Sending login information...")
-        frmChat.tmrAccountLock.Enabled = True
-        
-        If (ds.LogonType = 2) Then
-            ds.NLS.Initialize BotVars.Username, BotVars.Password
-            modBNCS.SEND_SID_AUTH_ACCOUNTLOGON
-        Else
-            modBNCS.SEND_SID_LOGONRESPONSE2
-        End If
+    If Config.IgnoreVersionCheck Then bSuccess = True
+
+    If (frmChat.sckBNet.State = sckConnected And bSuccess) Then
+        ds.AccountEntry = True
+        Call DoAccountAction
+        Exit Sub
     End If
-    
+
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
@@ -1683,7 +1801,7 @@ On Error GoTo ERROR_HANDLER:
         If (LenB(Config.CDKeyOwnerName) > 0) Then
             .InsertNTString Config.CDKeyOwnerName
         Else
-            .InsertNTString BotVars.Username
+            .InsertNTString Config.Username
         End If
         
         .SendPacket SID_AUTH_CHECK
@@ -1709,30 +1827,29 @@ On Error GoTo ERROR_HANDLER:
     Dim lResult As Long
     
     lResult = pBuff.GetDWORD
-    
+
+    ds.NLS.Terminate
+
     Select Case lResult
         Case &H0:
-            Call Event_LogonEvent(4)
-            
-            If frmChat.sckBNet.State = 7 Then
-                Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Sending login information...")
-                SEND_SID_AUTH_ACCOUNTLOGON
-                Exit Sub
+            Call Event_LogonEvent(ACCOUNT_MODE_CREAT, &H0, vbNullString)
+
+            If Config.AutoAccountAction Then
+                Call DoAccountAction(ACCOUNT_MODE_LOGON)
+            Else
+                frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
             End If
-            
-        Case &H4: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed because your name already exists."
-        Case &H7: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed because your name is too short/blank."
-        Case &H8: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed because your name contains an illegal character."
-        Case &H9: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed because your name contains an illegal word."
-        Case &HA: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed because your name contains too few alphanumeric characters."
-        Case &HB: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed because your name contains adjacent punctuation characters."
-        Case &HC: frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Account creation failed because your name contains too many punctuation characters."
+
         Case Else
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Account creation failed for an unknown reason: 0x{0}", ZeroOffset(lResult, 8)))
+            Call Event_LogonEvent(ACCOUNT_MODE_CREAT, lResult, vbNullString)
     End Select
-    
-    Call frmChat.DoDisconnect
-    
+
+    If Config.ManageOnAccountError Then
+        frmAccountManager.ShowMode ACCOUNT_MODE_CREAT
+    Else
+        frmChat.DoDisconnect
+    End If
+
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
@@ -1746,14 +1863,16 @@ End Sub
 ' (BYTE[32]) Verifier (v)
 ' (STRING) Username
 '**********************************
-Private Sub SEND_SID_AUTH_ACCOUNTCREATE()
+Public Sub SEND_SID_AUTH_ACCOUNTCREATE()
 On Error GoTo ERROR_HANDLER:
-    
+
+    Call ds.NLS.Initialize(Config.Username, Config.Password)
+    Call ds.NLS.GenerateSaltAndVerifier(False)
+
     Dim pBuff As New clsDataBuffer
-    ds.NLS.Initialize BotVars.Username, BotVars.Password
     With pBuff
-        .InsertNonNTString ds.NLS.SrpSalt
-        .InsertNonNTString ds.NLS.Srpv
+        .InsertNonNTString ds.NLS.Srp_Salt
+        .InsertNonNTString ds.NLS.Srp_v
         .InsertNTString ds.NLS.Username
         .SendPacket SID_AUTH_ACCOUNTCREATE
     End With
@@ -1776,29 +1895,40 @@ Private Sub RECV_SID_AUTH_ACCOUNTLOGON(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
     
     Dim lResult As Long
-    Dim s       As String
-    Dim B       As String
     
     lResult = pBuff.GetDWORD
-    ds.NLS.SrpSalt = pBuff.GetRaw(32)
-    ds.NLS.SrpB = pBuff.GetRaw(32)
+    ds.NLS.Srp_Salt = pBuff.GetRaw(32)
+    ds.NLS.Srp_B = pBuff.GetRaw(32)
+
+    frmChat.tmrAccountLock.Enabled = False
     
     Select Case lResult
         Case &H0: 'Accepted, requires proof.
             SEND_SID_AUTH_ACCOUNTLOGONPROOF
-                        
+            Exit Sub
+
         Case &H1: 'Account doesn't exist.
-            Call Event_LogonEvent(0)
-            Call Event_LogonEvent(3)
-            Call SEND_SID_AUTH_ACCOUNTCREATE
-                        
-        Case &H5: 'Account requires upgrade, Not possible anymore
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your account needs to be upgraded. This is no longer possible on Battle.net. Choose a different account."
-            
+            Call Event_LogonEvent(ACCOUNT_MODE_LOGON, &H1, vbNullString)
+
+            If Config.AutoAccountAction Then
+                Call DoAccountAction(ACCOUNT_MODE_CREAT)
+            ElseIf Config.ManageOnAccountError Then
+                frmAccountManager.ShowMode ACCOUNT_MODE_CREAT
+            Else
+                frmChat.DoDisconnect
+            End If
+
         Case Else
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] Unknown response to SID_AUTH_ACCOUNTLOGON: 0x{0}", ZeroOffset(lResult, 8)))
-            frmChat.DoDisconnect
+            Call Event_LogonEvent(ACCOUNT_MODE_LOGON, lResult, vbNullString)
+
+            If Config.ManageOnAccountError Then
+                frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
+            Else
+                frmChat.DoDisconnect
+            End If
     End Select
+
+    ds.NLS.Terminate
     
     Exit Sub
 ERROR_HANDLER:
@@ -1809,14 +1939,16 @@ End Sub
 '**********************************
 'SID_AUTH_ACCOUNTLOGON (0x53) C->S
 '**********************************
-' (BYTE[32]) Client Key ('A')
+' (BYTE[32]) Client Key (A)
 ' (STRING) Username
 '**********************************
 Private Sub SEND_SID_AUTH_ACCOUNTLOGON()
 On Error GoTo ERROR_HANDLER:
-    
+
+    Call ds.NLS.Initialize(Config.Username, Config.Password)
+
     Dim pBuff As New clsDataBuffer
-    pBuff.InsertNonNTString ds.NLS.SrpA()
+    pBuff.InsertNonNTString ds.NLS.Srp_A
     pBuff.InsertNTString ds.NLS.Username
     pBuff.SendPacket SID_AUTH_ACCOUNTLOGON
     Set pBuff = Nothing
@@ -1846,27 +1978,51 @@ On Error GoTo ERROR_HANDLER:
     sInfo = pBuff.GetString
     
     Select Case lResult
-        Case &H0: 'Logon successful.
-            Call Event_LogonEvent(2)
+        Case &H0 'Logon successful.
+            Call Event_LogonEvent(ACCOUNT_MODE_LOGON, &H0, sInfo)
+
             If (Not ds.NLS.SrpVerifyM2(M2)) Then
-                frmChat.AddChat RTBColors.InformationText, "[BNCS] Warning, The server sent an invalid password proof, it may be a fake server."
+                frmChat.AddChat RTBColors.InformationText, "[BNCS] Warning! The server sent an invalid password proof. It may be a fake server."
             End If
+
+            BotVars.Username = Config.Username
+            BotVars.Password = Config.Password
+            ds.AccountEntry = False
+
+            If frmAccountManager.Visible Then
+                frmAccountManager.LeftAccountEntryMode
+            End If
+
             Call SendEnterChatSequence
-            
-        Case &H2: 'Invalid password
-            Call Event_LogonEvent(1)
-            Call frmChat.DoDisconnect
-            
-        Case &HE: DoRegisterEmail 'Email registration requried
-        Case &HF: 'Custom message
-            Call Event_LogonEvent(5, sInfo)
-            Call frmChat.DoDisconnect
-            
+
+        Case &HE 'Email registration requried
+            Call Event_LogonEvent(ACCOUNT_MODE_LOGON, &H0, sInfo)
+
+            If (Not ds.NLS.SrpVerifyM2(M2)) Then
+                frmChat.AddChat RTBColors.InformationText, "[BNCS] Warning! The server sent an invalid password proof. It may be a fake server."
+            End If
+
+            BotVars.Username = Config.Username
+            BotVars.Password = Config.Password
+            ds.AccountEntry = False
+
+            If frmAccountManager.Visible Then
+                frmAccountManager.LeftAccountEntryMode
+            End If
+
+            Call DoRegisterEmail
+
         Case Else
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] Unknown response to SID_AUTH_ACCOUNTLOGONPROOF: 0x{0}", ZeroOffset(lResult, 8)))
-            Call frmChat.DoDisconnect
-            
+            Call Event_LogonEvent(ACCOUNT_MODE_LOGON, lResult, sInfo)
+
+            If Config.ManageOnAccountError Then
+                frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
+            Else
+                frmChat.DoDisconnect
+            End If
     End Select
+
+    ds.NLS.Terminate
     
     Exit Sub
 ERROR_HANDLER:
@@ -1884,7 +2040,7 @@ On Error GoTo ERROR_HANDLER:
     
     Dim pBuff As New clsDataBuffer
     With pBuff
-        .InsertNonNTString ds.NLS.SrpM1
+        .InsertNonNTString ds.NLS.Srp_M1
         .SendPacket SID_AUTH_ACCOUNTLOGONPROOF
     End With
     Set pBuff = Nothing
@@ -1893,6 +2049,149 @@ On Error GoTo ERROR_HANDLER:
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTLOGONPROOF()", Err.Number, Err.Description, OBJECT_NAME))
+End Sub
+
+'**********************************
+'SID_AUTH_ACCOUNTCHANGE (0x55) S->C
+'**********************************
+' (DWORD) Status
+' (BYTE[32]) Salt (s)
+' (BYTE[32]) Server Key (B)
+'**********************************
+Private Sub RECV_SID_AUTH_ACCOUNTCHANGE(pBuff As clsDataBuffer)
+On Error GoTo ERROR_HANDLER:
+    
+    Dim lResult As Long
+    
+    lResult = pBuff.GetDWORD
+    ds.NLS.Srp_Salt = pBuff.GetRaw(32)
+    ds.NLS.Srp_B = pBuff.GetRaw(32)
+
+    frmChat.tmrAccountLock.Enabled = False
+
+    Select Case lResult
+        Case &H0:
+            SEND_SID_AUTH_ACCOUNTCHANGEPROOF
+            Exit Sub
+
+        Case Else
+            Call Event_LogonEvent(ACCOUNT_MODE_CHPWD, lResult, vbNullString)
+
+            If Config.ManageOnAccountError Then
+                frmAccountManager.ShowMode ACCOUNT_MODE_CHPWD
+            Else
+                frmChat.DoDisconnect
+            End If
+    End Select
+
+    ds.NLS.Terminate
+
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTCHANGE()", Err.Number, Err.Description, OBJECT_NAME))
+End Sub
+
+'**********************************
+'SID_AUTH_ACCOUNTCHANGE (0x55) C->S
+'**********************************
+' (BYTE[32]) Client Key (A)
+' (STRING) Username
+'**********************************
+Public Sub SEND_SID_AUTH_ACCOUNTCHANGE()
+On Error GoTo ERROR_HANDLER:
+
+    Call ds.NLS.InitializeChange(Config.Username, Config.Password, Config.NewPassword)
+
+    Dim pBuff As New clsDataBuffer
+    pBuff.InsertNonNTString ds.NLS.Srp_A
+    pBuff.InsertNTString ds.NLS.Username
+    pBuff.SendPacket SID_AUTH_ACCOUNTCHANGE
+    Set pBuff = Nothing
+
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTCHANGE()", Err.Number, Err.Description, OBJECT_NAME))
+End Sub
+
+'**********************************
+'SID_AUTH_ACCOUNTCHANGEPROOF (0x56) S->C
+'**********************************
+' (DWORD) Status
+' (BYTE[20]) Server Old Password Proof (M2)
+'**********************************
+Private Sub RECV_SID_AUTH_ACCOUNTCHANGEPROOF(pBuff As clsDataBuffer)
+On Error GoTo ERROR_HANDLER:
+    
+    Dim lResult As Long
+    Dim M2      As String
+    
+    lResult = pBuff.GetDWORD
+    M2 = pBuff.GetRaw(20)
+    
+    Select Case lResult
+        Case &H0 'Change successful.
+            Call Event_LogonEvent(ACCOUNT_MODE_CHPWD, &H0, vbNullString)
+
+            Config.Password = Config.NewPassword
+            Config.NewPassword = vbNullString
+            Config.Save
+
+            If (Not ds.NLS.SrpVerifyM2(M2)) Then
+                frmChat.AddChat RTBColors.InformationText, "[BNCS] Warning! The server sent an invalid password proof. It may be a fake server."
+            End If
+
+            If Config.AutoAccountAction Then
+                Call DoAccountAction(ACCOUNT_MODE_LOGON)
+            Else
+                frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
+            End If
+
+        Case Else
+            Call Event_LogonEvent(ACCOUNT_MODE_CHPWD, lResult, vbNullString)
+
+            If Config.ManageOnAccountError Then
+                frmAccountManager.ShowMode ACCOUNT_MODE_CHPWD
+            Else
+                frmChat.DoDisconnect
+            End If
+
+    End Select
+
+    ds.NLS.Terminate
+
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTCHANGEPROOF()", Err.Number, Err.Description, OBJECT_NAME))
+End Sub
+
+'**********************************
+'SID_AUTH_ACCOUNTCHANGEPROOF (0x56) C->S
+'**********************************
+' (BYTE[20]) Client Password Proof (M1)
+' (BYTE[32]) Salt (s)
+' (BYTE[32]) Verifier (v)
+'**********************************
+Public Sub SEND_SID_AUTH_ACCOUNTCHANGEPROOF()
+On Error GoTo ERROR_HANDLER:
+
+    Call ds.NLS.GenerateSaltAndVerifier(True)
+
+    Dim pBuff As New clsDataBuffer
+    With pBuff
+        .InsertNonNTString ds.NLS.Srp_M1
+        .InsertNonNTString ds.NLS.Srp_New_Salt
+        .InsertNonNTString ds.NLS.Srp_New_v
+        .SendPacket SID_AUTH_ACCOUNTCHANGEPROOF
+    End With
+    Set pBuff = Nothing
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTCHANGEPROOF()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -1935,18 +2234,60 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_SETEMAIL()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
+'**************************************
+'SID_RESETPASSWORD (0x5A) C->S
+'**************************************
+' (STRING) Username
+' (STRING) Email Address
+'**************************************
+Public Sub SEND_SID_RESETPASSWORD()
+On Error GoTo ERROR_HANDLER:
+    
+    Dim pBuff As New clsDataBuffer
+    With pBuff
+        .InsertNTString Config.Username
+        .InsertNTString Config.RegisterEmailDefault
+        .SendPacket SID_RESETPASSWORD
+    End With
+    Set pBuff = Nothing
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_RESETPASSWORD()", Err.Number, Err.Description, OBJECT_NAME))
+End Sub
+
+'**************************************
+'SID_CHANGEEMAIL (0x5B) C->S
+'**************************************
+' (STRING) Username
+' (STRING) Email Address
+' (STRING) New Email Address
+'**************************************
+Public Sub SEND_SID_CHANGEEMAIL()
+On Error GoTo ERROR_HANDLER:
+    
+    Dim pBuff As New clsDataBuffer
+    With pBuff
+        .InsertNTString Config.Username
+        .InsertNTString Config.RegisterEmailDefault
+        .InsertNTString Config.RegisterEmailChange
+        .SendPacket SID_CHANGEEMAIL
+    End With
+    Set pBuff = Nothing
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CHANGEEMAIL()", Err.Number, Err.Description, OBJECT_NAME))
+End Sub
+
 '=======================================================================================================
 'This function will open the form to prompt the user for their email, or if the overrides are set, automatically register an email.
 Private Sub DoRegisterEmail()
 On Error GoTo ERROR_HANDLER:
 
-    Dim EMailValue As String
-    Dim EMailAction As String
-    
-    EMailAction = Config.RegisterEmailAction
-    EMailValue = Config.RegisterEmailDefault
-    
-    Call frmEMailReg.DoRegisterEmail(EMailAction, EMailValue)
+    Call frmEMailReg.DoRegisterEmail(Config.RegisterEmailAction, Config.RegisterEmailDefault)
     
     Exit Sub
 ERROR_HANDLER:
@@ -2162,6 +2503,146 @@ On Error GoTo ERROR_HANDLER:
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.DoChannelJoinHome()", Err.Number, Err.Description, OBJECT_NAME))
+End Sub
+
+Public Sub DoAccountAction(Optional ByVal Mode As String = vbNullString)
+On Error GoTo ERROR_HANDLER:
+
+    ' not able to change account now?
+    If frmChat.sckBNet.State <> sckConnected Or Not ds.AccountEntry Then
+        Exit Sub
+    End If
+
+    ' set mode to config mode if not provided
+    If LenB(Mode) = 0 Then
+        Mode = Config.AccountMode
+    End If
+
+    ' turn off automatic if account manager form is open
+    If frmAccountManager.Visible Then
+        Config.AutoAccountAction = False
+        Config.Save
+    End If
+
+    ' execute action
+    Select Case UCase$(Mode)
+        Case ACCOUNT_MODE_CREAT
+            Call Event_LogonEvent(ACCOUNT_MODE_CREAT, -1&)
+
+            If LenB(Config.Username) = 0 Or LenB(Config.Password) = 0 Then
+                Call Event_LogonEvent(ACCOUNT_MODE_CREAT, -3&)
+
+                If Config.ManageOnAccountError Then
+                    frmAccountManager.ShowMode ACCOUNT_MODE_CREAT
+                Else
+                    frmChat.DoDisconnect
+                End If
+
+                Exit Sub
+            End If
+
+            If (ds.LogonType = BNCSSERVER_SRP2) Then
+                modBNCS.SEND_SID_AUTH_ACCOUNTCREATE
+            Else
+                modBNCS.SEND_SID_CREATEACCOUNT2
+            End If
+
+        Case ACCOUNT_MODE_CHPWD
+            Call Event_LogonEvent(ACCOUNT_MODE_CHPWD, -1&)
+
+            If LenB(Config.Username) = 0 Or LenB(Config.Password) = 0 Or LenB(Config.NewPassword) = 0 Then
+                Call Event_LogonEvent(ACCOUNT_MODE_CHPWD, -3&)
+
+                If Config.ManageOnAccountError Then
+                    frmAccountManager.ShowMode ACCOUNT_MODE_CHPWD
+                Else
+                    frmChat.DoDisconnect
+                End If
+
+                Exit Sub
+            End If
+
+            frmChat.tmrAccountLock.Enabled = True
+            frmChat.tmrAccountLock.Tag = ACCOUNT_MODE_CHPWD
+            If (ds.LogonType = BNCSSERVER_SRP2) Then
+                modBNCS.SEND_SID_AUTH_ACCOUNTCHANGE
+            Else
+                modBNCS.SEND_SID_CHANGEPASSWORD
+            End If
+
+        Case ACCOUNT_MODE_RSPWD
+            If LenB(Config.Username) = 0 Or LenB(Config.RegisterEmailDefault) = 0 Then
+                Call Event_LogonEvent(ACCOUNT_MODE_RSPWD, -3&)
+
+                If Config.ManageOnAccountError Then
+                    frmAccountManager.ShowMode ACCOUNT_MODE_RSPWD
+                Else
+                    frmChat.DoDisconnect
+                End If
+
+                Exit Sub
+            End If
+
+            modBNCS.SEND_SID_RESETPASSWORD
+
+            ' no response! assume success
+            Call Event_LogonEvent(ACCOUNT_MODE_RSPWD, &H0)
+
+            frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
+
+        Case ACCOUNT_MODE_CHREG
+            If LenB(Config.Username) = 0 Or LenB(Config.RegisterEmailDefault) = 0 Or LenB(Config.RegisterEmailChange) = 0 Then
+                Call Event_LogonEvent(ACCOUNT_MODE_CHREG, -3&)
+
+                If Config.ManageOnAccountError Then
+                    frmAccountManager.ShowMode ACCOUNT_MODE_CHREG
+                Else
+                    frmChat.DoDisconnect
+                End If
+
+                Exit Sub
+            End If
+
+            modBNCS.SEND_SID_CHANGEEMAIL
+
+            ' no response! assume success
+            Call Event_LogonEvent(ACCOUNT_MODE_CHREG, &H0)
+
+            Config.RegisterEmailDefault = Config.RegisterEmailChange
+            Config.RegisterEmailChange = vbNullString
+            Config.Save
+
+            frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
+
+        Case Else ' ACCOUNT_MODE_LOGON
+            Call Event_LogonEvent(ACCOUNT_MODE_LOGON, -1&)
+
+            If LenB(Config.Username) = 0 Or LenB(Config.Password) = 0 Then
+                Call Event_LogonEvent(ACCOUNT_MODE_LOGON, -3&)
+
+                If Config.ManageOnAccountError Then
+                    frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
+                Else
+                    frmChat.DoDisconnect
+                End If
+
+                Exit Sub
+            End If
+
+            frmChat.tmrAccountLock.Enabled = True
+            frmChat.tmrAccountLock.Tag = ACCOUNT_MODE_LOGON
+            If (ds.LogonType = BNCSSERVER_SRP2) Then
+                modBNCS.SEND_SID_AUTH_ACCOUNTLOGON
+            Else
+                modBNCS.SEND_SID_LOGONRESPONSE2
+            End If
+
+    End Select
+
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.DoAccountAction()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 Public Function CanSpawn(ByVal sProduct As String, ByVal iKeyLength As Integer) As Boolean

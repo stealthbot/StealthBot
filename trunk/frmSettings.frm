@@ -3514,7 +3514,9 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   315
+         ItemData        =   "frmSettings.frx":0004
          Left            =   1920
+         List            =   "frmSettings.frx":0006
          Style           =   2  'Dropdown List
          TabIndex        =   19
          Top             =   840
@@ -4033,7 +4035,7 @@ Begin VB.Form frmSettings
          Left            =   2040
          TabIndex        =   92
          Text            =   "10000"
-         ToolTipText     =   $"frmSettings.frx":0004
+         ToolTipText     =   $"frmSettings.frx":0008
          Top             =   3960
          Width           =   735
       End
@@ -4066,7 +4068,7 @@ Begin VB.Form frmSettings
       Begin VB.Label lbl5 
          Alignment       =   2  'Center
          BackColor       =   &H00000000&
-         Caption         =   $"frmSettings.frx":00A2
+         Caption         =   $"frmSettings.frx":00A6
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -4804,9 +4806,15 @@ Private Function SaveSettings() As Boolean
     Config.ExpKey = CDKeyReplacements(txtExpKey.Text)
     Config.HomeChannel = txtHomeChan.Text
     Config.Server = cboServer.Text
-    
+
     Config.UseSpawn = CBool(CanSpawn(Config.Game, Len(Config.CDKey)) And CBool(chkSpawn.Value))
     Config.UseD2Realms = CBool(chkUseRealm.Value)
+
+    ' reset these when save & close normal config
+    Config.AccountMode = ACCOUNT_MODE_LOGON
+    Config.AutoAccountAction = True
+    Config.NewPassword = vbNullString
+    Config.RegisterEmailChange = vbNullString
     
     ' Advanced connection settings
     Config.UseBNLS = CBool(cboConnMethod.ListIndex = 0)

@@ -1147,6 +1147,9 @@ Begin VB.Form frmChat
       Begin VB.Menu mnuSepT 
          Caption         =   "-"
       End
+      Begin VB.Menu mnuAccountManager 
+         Caption         =   "&Account Manager..."
+      End
       Begin VB.Menu mnuUsers 
          Caption         =   "&User Database Manager..."
       End
@@ -3255,6 +3258,7 @@ Sub Form_Unload(Cancel As Integer)
     Unload frmDBGameSelection
     Unload frmDBNameEntry
     Unload frmDBManager
+    Unload frmAccountManager
     Unload frmManageKeys
     'Unload frmMonitor
     Unload frmProfile
@@ -3874,6 +3878,10 @@ Private Sub lvClanList_MouseMove(Button As Integer, Shift As Integer, x As Singl
             End If
         End If
     End If
+End Sub
+
+Private Sub mnuAccountManager_Click()
+    frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
 End Sub
 
 Private Sub mnuCatchPhrases_Click()
@@ -5312,15 +5320,17 @@ End Sub
 
 Private Sub tmrAccountLock_Timer()
     tmrAccountLock.Enabled = False
-    
+
     If (Not sckBNet.State = sckConnected) Then 'g_online is set to true AFTER we login... makes this moot, changed to socket being connected.
         Exit Sub
     End If
-    
+
+    Call Event_LogonEvent(tmrAccountLock.Tag, -2&, vbNullString)
+
     AddChat RTBColors.ErrorMessageText, "[BNCS] Your account appears to be locked, likely due to an excessive number of " & _
-        "invalid logins.  Please try connecting again in 15-20 minutes."
-        
-    DoDisconnect
+        "invalid logins.  Please try that account again in 15-20 minutes."
+
+    frmAccountManager.ShowMode tmrAccountLock.Tag
 End Sub
 
 Private Sub tmrScript_Timer(Index As Integer)
@@ -6060,6 +6070,8 @@ Private Sub sckMCP_DataArrival(ByVal bytesTotal As Long)
     Dim buf() As Byte
     Dim pBuff As clsDataBuffer
     
+    If bytesTotal = 0 Then Exit Sub
+    
     ' read buffer as Byte()
     sckMCP.GetData buf(), vbArray + vbByte, bytesTotal
     ' add data to buffer
@@ -6781,7 +6793,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
     
         ' check for tabs and replace with spaces (2005-09-23)
         If (InStr(1, strTmp, Chr$(9), vbBinaryCompare) <> 0) Then
-            strTmp = Replace$(strTmp, Chr$(9), Space(4))
+            strTmp = Replace$(strTmp, Chr$(9), Space$(4))
         End If
         
         ' check for invalid characters in the message
@@ -7526,6 +7538,8 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
     Dim buf() As Byte
     Dim pBuff As clsDataBuffer
     
+    If bytesTotal = 0 Then Exit Sub
+    
     ' read buffer as Byte()
     sckBNet.GetData buf(), vbArray + vbByte, bytesTotal
     ' add data to buffer
@@ -7642,6 +7656,8 @@ Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
     
     Dim buf() As Byte
     Dim pBuff As clsDataBuffer
+    
+    If bytesTotal = 0 Then Exit Sub
     
     ' read buffer as Byte()
     sckBNLS.GetData buf(), vbArray + vbByte, bytesTotal
@@ -8192,6 +8208,11 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         g_Online = False
         ds.EnteredChatFirstTime = False
         ds.ClientToken = 0
+        ds.AccountEntry = False
+
+        If frmAccountManager.Visible Then
+            frmAccountManager.LeftAccountEntryMode
+        End If
         
         Call ClearChannel
         lvClanList.ListItems.Clear

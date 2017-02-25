@@ -657,7 +657,7 @@ Public Function Conv(ByVal RawString As String) As Long
     If Len(RawString) = 4 Then
         Call CopyMemory(lReturn, ByVal RawString, 4)
     Else
-        Debug.Print "---------- WARNING: Invalid string Length in Conv()!"
+        Debug.Print "---------- WARNING! Invalid string Length in Conv()!"
         Debug.Print "---------- Length: " & Len(RawString)
         Debug.Print DebugOutput(RawString)
     End If

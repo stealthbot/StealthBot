@@ -14,21 +14,22 @@ Attribute VB_Exposed = False
 Option Explicit
 Private m_lNLSHandle As Long
 
-Private m_ServerToken     As Long
-Private m_ClientToken     As Long
-Private m_lLogonType      As Long
-Private m_UDPValue        As Long
-Private m_CRevFileTime    As String
-Private m_CRevFileName    As String
-Private m_CRevSeed        As String
-Private m_CRevVersion     As Long
-Private m_CRevChecksum    As Long
-Private m_CRevResult      As String
-Private m_ServerSig       As String
-Private m_EmailRegDelay   As Boolean
-Private m_NLS             As clsNLS
-Private m_MCPHandler      As clsMCPHandler
-Private m_FirstTimeChat   As Boolean
+Private m_ServerToken   As Long
+Private m_ClientToken   As Long
+Private m_lLogonType    As Long
+Private m_UDPValue      As Long
+Private m_CRevFileTime  As String
+Private m_CRevFileName  As String
+Private m_CRevSeed      As String
+Private m_CRevVersion   As Long
+Private m_CRevChecksum  As Long
+Private m_CRevResult    As String
+Private m_ServerSig     As String
+Private m_EmailRegDelay As Boolean
+Private m_NLS           As clsNLS
+Private m_MCPHandler    As clsMCPHandler
+Private m_FirstTimeChat As Boolean
+Private m_AccountEntry  As Boolean
 
 Public Sub List()
     With frmChat
@@ -63,6 +64,7 @@ Public Sub Reset()
     Set m_MCPHandler = Nothing
     Set m_NLS = Nothing
     m_FirstTimeChat = False
+    m_AccountEntry = False
 End Sub
 
 Public Property Get LogonType() As Long
@@ -182,6 +184,13 @@ Public Property Let EnteredChatFirstTime(bData As Boolean)
 End Property
 Public Property Get EnteredChatFirstTime() As Boolean
     EnteredChatFirstTime = m_FirstTimeChat
+End Property
+
+Public Property Let AccountEntry(bData As Boolean)
+    m_AccountEntry = bData
+End Property
+Public Property Get AccountEntry() As Boolean
+    AccountEntry = m_AccountEntry
 End Property
 
 Private Sub Class_Terminate()

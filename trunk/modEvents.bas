@@ -70,7 +70,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         Clan = UserObj.Clan
     Else
         If (g_Channel.IsSilent = False) Then
-            frmChat.AddChat RTBColors.ErrorMessageText, "Warning: There was a flags update received for a user that we do " & _
+            frmChat.AddChat RTBColors.ErrorMessageText, "Warning! There was a flags update received for a user that we do " & _
                     "not have a record for.  This may be indicative of a server split or other technical difficulty."
                     
             Exit Sub
@@ -539,48 +539,107 @@ ERROR_HANDLER:
 End Sub
 
 ' updated 8-10-05 for new logging system
-Public Sub Event_LogonEvent(ByVal Message As Byte, Optional ByVal ExtraInfo As String)
+Public Sub Event_LogonEvent(ByVal Action As String, ByVal Result As Long, Optional ByVal ExtraInfo As String)
 On Error GoTo ERROR_HANDLER:
     Dim lColor       As Long
     Dim sMessage     As String
-    'Dim UseExtraInfo As Boolean
 
-    Select Case (Message)
-        Case 0:
-            lColor = RTBColors.ErrorMessageText
-            
-            sMessage = "Login error - account does not exist."
-            
-        Case 1:
-            lColor = RTBColors.ErrorMessageText
-            
-            sMessage = "Login error - invalid password."
-            
-        Case 2:
+    lColor = RTBColors.ErrorMessageText
+    
+    ' get starting text
+    Select Case UCase$(Action)
+        Case ACCOUNT_MODE_LOGON
+            sMessage = "Logon error - "
+        Case ACCOUNT_MODE_CREAT
+            sMessage = "Account creation error - "
+        Case ACCOUNT_MODE_CHPWD
+            sMessage = "Password change error - "
+    End Select
+    
+    ' choose result code
+    Select Case Result
+        Case &H0
             lColor = RTBColors.SuccessText
-            
-            sMessage = "Logon successful."
-            
-            frmChat.tmrAccountLock.Enabled = False
-            
-        Case 3:
+            ' replace with specific success message
+            Select Case UCase$(Action)
+                Case ACCOUNT_MODE_LOGON
+                    sMessage = "Logon successful."
+                Case ACCOUNT_MODE_CREAT
+                    sMessage = "Account created successfully."
+                Case ACCOUNT_MODE_CHPWD
+                    sMessage = "Account password changed successfully."
+                Case ACCOUNT_MODE_RSPWD
+                    sMessage = "Sent the request to reset password. You will receive an email to continue this process."
+                Case ACCOUNT_MODE_CHREG
+                    sMessage = "Sent the request to change email associated with the account."
+            End Select
+        Case &H1
+            sMessage = sMessage & "account does not exist."
+        Case &H2
+            Select Case UCase$(Action)
+                Case ACCOUNT_MODE_CHPWD
+                    sMessage = sMessage & "invalid old password."
+                Case Else
+                    sMessage = sMessage & "invalid password."
+            End Select
+        Case &H4
+            sMessage = sMessage & "account already exists."
+        Case &H5
+            sMessage = sMessage & "account requires upgrade."
+        Case &H6
+            sMessage = sMessage & "account closed - " & ExtraInfo & "."
+        Case &H7
+            sMessage = sMessage & "name too short."
+        Case &H8
+            sMessage = sMessage & "name contains invalid characters."
+        Case &H9
+            sMessage = sMessage & "name contains banned word."
+        Case &HA
+            sMessage = sMessage & "name contains too few alphanumeric charaters."
+        Case &HB
+            sMessage = sMessage & "name contains adjacent punctuation."
+        Case &HC
+            sMessage = sMessage & "name contains too many punctuation characters."
+        Case &HE
+            sMessage = sMessage & "account email registration."
+        Case &HF
+            sMessage = sMessage & ExtraInfo & "."
+        Case &H3101 ' actually status 0x01 from SID_CHANGEPASSWORD
+            sMessage = sMessage & "account does not exist or invalid old password."
+        Case &H3D05 ' actually status 0x05 from SID_CREATEACCOUNT2
+            sMessage = sMessage & "account is still being created."
+        Case -3& ' parameter empty
+            Select Case UCase$(Action)
+                Case ACCOUNT_MODE_LOGON, ACCOUNT_MODE_CREAT
+                    sMessage = sMessage & "username or password not provided."
+                Case ACCOUNT_MODE_CHPWD
+                    sMessage = sMessage & "new password not provided."
+                Case ACCOUNT_MODE_RSPWD
+                    sMessage = sMessage & "email address not provided."
+                Case ACCOUNT_MODE_CHREG
+                    sMessage = sMessage & "new email address not provided."
+            End Select
+        Case -2& ' time out
+            sMessage = sMessage & "timed out."
+        Case -1& ' attempt
             lColor = RTBColors.InformationText
-            
-            sMessage = "Attempting to create account..."
-            
-        Case 4:
-            lColor = RTBColors.SuccessText
-            
-            sMessage = "Account created successfully."
-            
-        Case 5:
-            sMessage = ExtraInfo
-            
-            lColor = RTBColors.ErrorMessageText
+            ' replace with specific in-progress message
+            Select Case UCase$(Action)
+                Case ACCOUNT_MODE_LOGON
+                    sMessage = "Sending login information..."
+                Case ACCOUNT_MODE_CREAT
+                    sMessage = "Attempting to create account..."
+                Case ACCOUNT_MODE_CHPWD
+                    sMessage = "Attempting to change password..."
+            End Select
+        Case Else
+            sMessage = sMessage & "unknown response code (0x" & Hex(Result) & ": " & ExtraInfo & ")."
     End Select
     
     frmChat.AddChat lColor, "[BNCS] " & sMessage
+
     Exit Sub
+
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_LogonEvent()", Err.Number, Err.Description, OBJECT_NAME))
@@ -1258,7 +1317,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
 
             g_Channel.Users.Add UserObj
         Else
-            frmChat.AddChat RTBColors.ErrorMessageText, "Warning: We have received a join event for a user that we had thought was " & _
+            frmChat.AddChat RTBColors.ErrorMessageText, "Warning! We have received a join event for a user that we had thought was " & _
                     "already present within the channel.  This may be indicative of a server split or other technical difficulty."
             
             Exit Sub
@@ -1480,7 +1539,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         
         g_Channel.Users.Remove UserIndex
     Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "Warning: We have received a leave event for a user that we didn't know " & _
+        frmChat.AddChat RTBColors.ErrorMessageText, "Warning! We have received a leave event for a user that we didn't know " & _
                 "was in the channel.  This may be indicative of a server split or other technical difficulty."
     
         Exit Sub

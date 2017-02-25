@@ -72,6 +72,10 @@ Private m_ProxyUsername             As String
 Private m_ProxyPassword             As String
 Private m_ProxyBNLS                 As Boolean
 Private m_ProxyMCP                  As Boolean
+Private m_AccountMode               As String
+Private m_AutoAccountAction         As Boolean
+Private m_ManageOnAccountError      As Boolean
+Private m_NewPassword               As String
 
 '[FEATURES]
 Private m_UseBackupChannel          As Boolean
@@ -214,6 +218,7 @@ Private m_MaxMessageLength          As Integer
 Private m_AutoCreateChannels        As String
 Private m_RegisterEmailAction       As String
 Private m_RegisterEmailDefault      As String
+Private m_RegisterEmailChange       As String
 Private m_RealmServerPassword       As String
 Private m_ProtocolID                As Long
 Private m_PlatformID                As String
@@ -427,6 +432,38 @@ End Property
 
 Public Property Let ProxyMCP(ByVal sValue As Boolean)
     m_ProxyMCP = sValue
+End Property
+
+Public Property Get AccountMode() As String
+    AccountMode = m_AccountMode
+End Property
+
+Public Property Let AccountMode(ByVal sValue As String)
+    m_AccountMode = sValue
+End Property
+
+Public Property Get AutoAccountAction() As Boolean
+    AutoAccountAction = m_AutoAccountAction
+End Property
+
+Public Property Let AutoAccountAction(ByVal sValue As Boolean)
+    m_AutoAccountAction = sValue
+End Property
+
+Public Property Get ManageOnAccountError() As Boolean
+    ManageOnAccountError = m_ManageOnAccountError
+End Property
+
+Public Property Let ManageOnAccountError(ByVal sValue As Boolean)
+    m_ManageOnAccountError = sValue
+End Property
+
+Public Property Get NewPassword() As String
+    NewPassword = m_NewPassword
+End Property
+
+Public Property Let NewPassword(ByVal sValue As String)
+    m_NewPassword = sValue
 End Property
 
 
@@ -1476,6 +1513,14 @@ Public Property Let RegisterEmailDefault(ByVal sValue As String)
     m_RegisterEmailDefault = sValue
 End Property
 
+Public Property Get RegisterEmailChange() As String
+    RegisterEmailChange = m_RegisterEmailChange
+End Property
+
+Public Property Let RegisterEmailChange(ByVal sValue As String)
+    m_RegisterEmailChange = sValue
+End Property
+
 Public Property Get RealmServerPassword() As String
     RealmServerPassword = m_RealmServerPassword
 End Property
@@ -1697,6 +1742,10 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_CLIENT, "ProxyPassword", m_ProxyPassword
     WriteSetting SECTION_CLIENT, "ProxyBNLS", m_ProxyBNLS
     WriteSetting SECTION_CLIENT, "ProxyMCP", m_ProxyMCP
+    WriteSetting SECTION_CLIENT, "AccountMode", m_AccountMode
+    WriteSetting SECTION_CLIENT, "AutoAccountAction", m_AutoAccountAction
+    WriteSetting SECTION_CLIENT, "ManageOnAccountError", m_ManageOnAccountError
+    WriteSetting SECTION_CLIENT, "NewPassword", m_NewPassword
     
     WriteSetting SECTION_FEATURES, "UseBackupChannel", m_UseBackupChannel
     WriteSetting SECTION_FEATURES, "BackupChannel", m_BackupChannel
@@ -1831,6 +1880,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_EMULATION, "AutoCreateChannels", m_AutoCreateChannels
     WriteSetting SECTION_EMULATION, "RegisterEmailAction", m_RegisterEmailAction
     WriteSetting SECTION_EMULATION, "RegisterEmailDefault", m_RegisterEmailDefault
+    WriteSetting SECTION_EMULATION, "RegisterEmailChange", m_RegisterEmailChange
     WriteSetting SECTION_EMULATION, "RealmServerPassword", m_RealmServerPassword
     WriteSetting SECTION_EMULATION, "ProtocolID", m_ProtocolID
     WriteSetting SECTION_EMULATION, "PlatformID", m_PlatformID
@@ -1887,6 +1937,10 @@ Private Sub LoadDefaults()
     m_ProxyPassword = vbNullString
     m_ProxyBNLS = False
     m_ProxyMCP = True
+    m_AccountMode = "LOGON"
+    m_AutoAccountAction = True
+    m_ManageOnAccountError = True
+    m_NewPassword = vbNullString
 
     '[Features]
     m_UseBackupChannel = False
@@ -2029,6 +2083,7 @@ Private Sub LoadDefaults()
     m_AutoCreateChannels = "ALWAYS"
     m_RegisterEmailAction = "PROMPT"
     m_RegisterEmailDefault = vbNullString
+    m_RegisterEmailChange = vbNullString
     m_RealmServerPassword = "password"
     m_ProtocolID = 0
     m_PlatformID = "IX86"
@@ -2233,6 +2288,10 @@ Private Sub LoadVersion6Config()
     m_ProxyPassword = ReadSetting(SECTION_CLIENT, "ProxyPassword", m_ProxyPassword)
     m_ProxyBNLS = ReadSetting(SECTION_CLIENT, "ProxyBNLS", m_ProxyBNLS)
     m_ProxyMCP = ReadSetting(SECTION_CLIENT, "ProxyMCP", m_ProxyMCP)
+    m_AccountMode = ReadSetting(SECTION_CLIENT, "AccountMode", m_AccountMode)
+    m_AutoAccountAction = ReadSetting(SECTION_CLIENT, "AutoAccountAction", m_AutoAccountAction)
+    m_ManageOnAccountError = ReadSetting(SECTION_CLIENT, "ManageOnAccountError", m_ManageOnAccountError)
+    m_NewPassword = ReadSetting(SECTION_CLIENT, "NewPassword", m_NewPassword)
 
     m_UseBackupChannel = ReadSettingB(SECTION_FEATURES, "UseBackupChannel", m_UseBackupChannel)
     m_BackupChannel = ReadSetting(SECTION_FEATURES, "BackupChannel", m_BackupChannel)
@@ -2367,6 +2426,7 @@ Private Sub LoadVersion6Config()
     m_AutoCreateChannels = ReadSetting(SECTION_EMULATION, "AutoCreateChannels", m_AutoCreateChannels)
     m_RegisterEmailAction = ReadSetting(SECTION_EMULATION, "RegisterEmailAction", m_RegisterEmailAction)
     m_RegisterEmailDefault = ReadSetting(SECTION_EMULATION, "RegisterEmailDefault", m_RegisterEmailDefault)
+    m_RegisterEmailChange = ReadSetting(SECTION_EMULATION, "RegisterEmailChange", m_RegisterEmailChange)
     m_RealmServerPassword = ReadSetting(SECTION_EMULATION, "RealmServerPassword", m_RealmServerPassword)
     m_ProtocolID = ReadSettingL(SECTION_EMULATION, "ProtocolID", m_ProtocolID)
     m_PlatformID = ReadSetting(SECTION_EMULATION, "PlatformID", m_PlatformID)
