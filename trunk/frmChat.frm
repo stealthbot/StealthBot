@@ -914,6 +914,7 @@ Begin VB.Form frmChat
       Tab(2).ControlCount=   0
    End
    Begin VB.Timer tmrIdleTimer 
+      Enabled         =   0   'False
       Interval        =   1000
       Left            =   7200
       Top             =   4560
@@ -2297,7 +2298,7 @@ Sub Event_BNetConnecting()
 End Sub
 
 Sub Event_BNetDisconnected()
-    tmrIdleTimer.Interval = 0
+    tmrIdleTimer.Enabled = False
     UpTimer.Interval = 0
     BotVars.JoinWatch = 0
     
@@ -6135,12 +6136,13 @@ Private Sub tmrIdleTimer_Timer()
 
     ' long-counter
     Static lCounter As Long
-    
+
     lCounter = lCounter + 1
-    
-    If g_Online Then
+    If lCounter >= &H3C000000 Then lCounter = 0
+
+    If sckBNet.State = sckConnected And (g_Online Or ds.AccountEntry) Then
         ' bot idle (30 second interval (x config value), offset 0 seconds)
-        If Config.IdleMessage Then
+        If g_Online And Config.IdleMessage Then
             Dim IdleWait As Long
             
             IdleWait = Config.IdleMessageDelay * 30
@@ -6159,15 +6161,15 @@ Private Sub tmrIdleTimer_Timer()
             End If
         End If
         
-        ' BNCS keepalive... (2 minute interval; offset -15 seconds)
-        If (lCounter Mod 120&) = 105& Then
+        ' BNCS keepalive... (1 minute interval; offset -15 seconds)
+        If (lCounter Mod 60&) = 45& Then
             ' if W3 & in clan, then (10 minute interval; offset -15 seconds from 2nd minute)
-            If IsW3 And Clan.isUsed And (lCounter Mod 600&) = 105& Then
+            If g_Online And IsW3 And Clan.isUsed And (lCounter Mod 600&) = 105& Then
                 ' request clan MOTD instead of NULL
                 'AddQ "CLAN MOTD"
                 RequestClanMOTD
             ' if friend list updates enabled, then (5 minute interval; offset -15 seconds from 4th minute)
-            ElseIf Config.FriendsListTab And (lCounter Mod 300&) = 225& Then
+            ElseIf g_Online And Config.FriendsListTab And (lCounter Mod 300&) = 225& Then
                 ' request friendlist instead of FL
                 'AddQ "FRIENDS"
                 If (lvFriendList.ListItems.Count > 0) Then
@@ -6175,8 +6177,8 @@ Private Sub tmrIdleTimer_Timer()
                 Else
                     PBuffer.SendPacket SID_NULL
                 End If
-            ' else standard null
-            Else
+            ' else standard null (2 minute interval; offset -15 seconds)
+            ElseIf (lCounter Mod 120&) = 45& Then
                 'AddQ "NULL"
                 PBuffer.SendPacket SID_NULL
             End If
@@ -8143,7 +8145,8 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
     
     If (Not (UserCancelledConnect)) Then
         tmrAccountLock.Enabled = False
-    
+        tmrIdleTimer.Enabled = False
+
         SetTitle "Disconnected"
         
         frmChat.UpdateTrayTooltip
@@ -8259,8 +8262,8 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         Unload frmEMailReg
         
         ' close any pending INet
-        Inet.Tag = SB_INET_UNSET
-        Inet.Cancel
+        INet.Tag = SB_INET_UNSET
+        INet.Cancel
         
         ' reset BNLS finder
         BNLSFinderGotList = False

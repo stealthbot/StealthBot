@@ -187,7 +187,7 @@ On Error GoTo ERROR_HANDLER:
             Case SID_AUTH_ACCOUNTLOGON:      Call RECV_SID_AUTH_ACCOUNTLOGON(pBuff)      '0x53
             Case SID_AUTH_ACCOUNTLOGONPROOF: Call RECV_SID_AUTH_ACCOUNTLOGONPROOF(pBuff) '0x54
             Case SID_AUTH_ACCOUNTCHANGE:     Call RECV_SID_AUTH_ACCOUNTCHANGE(pBuff)     '0x55
-            Case SID_AUTH_ACCOUNTCHANGEPROOF:Call RECV_SID_AUTH_ACCOUNTCHANGEPROOF(pBuff)'0x56
+            Case SID_AUTH_ACCOUNTCHANGEPROOF: Call RECV_SID_AUTH_ACCOUNTCHANGEPROOF(pBuff) '0x56
             Case SID_SETEMAIL:               Call RECV_SID_SETEMAIL(pBuff)               '0x59
             
             Case Is >= &H65 'Friends List or Clan-related packet
@@ -378,6 +378,7 @@ On Error GoTo ERROR_HANDLER:
             Call Event_VersionCheck(0, sInfo) ' display success here
 
             ds.AccountEntry = True
+            frmChat.tmrIdleTimer.Enabled = True
             Call DoAccountAction
         End If
     Else
@@ -945,6 +946,7 @@ On Error GoTo ERROR_HANDLER:
             Call Event_VersionCheck(0, sInfo) ' display success here
 
             ds.AccountEntry = True
+            frmChat.tmrIdleTimer.Enabled = True
             Call DoAccountAction
             Exit Sub
         Case 2: Call Event_VersionCheck(2, sInfo) 'Invalid CDKey
@@ -1101,6 +1103,7 @@ On Error GoTo ERROR_HANDLER:
             Call Event_VersionCheck(0, sInfo) ' display success here
 
             ds.AccountEntry = True
+            frmChat.tmrIdleTimer.Enabled = True
             Call DoAccountAction
             Exit Sub
         Case 2: Call Event_VersionCheck(2, sInfo) 'Invalid CDKey
@@ -1712,6 +1715,7 @@ On Error GoTo ERROR_HANDLER:
 
     If (frmChat.sckBNet.State = sckConnected And bSuccess) Then
         ds.AccountEntry = True
+        frmChat.tmrIdleTimer.Enabled = True
         Call DoAccountAction
         Exit Sub
     End If

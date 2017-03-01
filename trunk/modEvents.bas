@@ -495,11 +495,6 @@ On Error GoTo ERROR_HANDLER:
         .tmrAccountLock.Enabled = False
         
         .UpTimer.Interval = 1000
-        
-        '.Timer.Interval = 30000
-        .tmrIdleTimer.Interval = 1000
-    
-        '.tmrClanUpdate.Enabled = True
     End With
     
     If (frmChat.sckBNLS.State <> 0) Then
