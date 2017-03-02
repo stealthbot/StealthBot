@@ -810,7 +810,12 @@ End Sub
 Private Sub RECV_SID_PING(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
 
-    If (BotVars.Spoof = 0 Or g_Online) Then
+    Dim TooRecent As Boolean
+
+    If ds.LastPingResponse + 15000 > uTicks Then TooRecent = True
+    ds.LastPingResponse = uTicks
+
+    If (BotVars.Spoof = 0) Or (frmChat.tmrIdleTimer.Enabled And Not TooRecent) Then
         Call SEND_SID_PING(pBuff.GetDWORD)
     End If
     
@@ -825,7 +830,7 @@ End Sub
 '*******************************
 ' (DWORD) Ping value
 '*******************************
-Private Sub SEND_SID_PING(lPingValue As Long)
+Private Sub SEND_SID_PING(ByVal lPingValue As Long)
 On Error GoTo ERROR_HANDLER:
 
     Dim pBuff As New clsDataBuffer
@@ -1684,7 +1689,7 @@ On Error GoTo ERROR_HANDLER:
     Set pBuff = Nothing
     
     If (BotVars.Spoof = 1) Then
-        Call SEND_SID_PING(pBuff.GetDWORD)
+        Call SEND_SID_PING(0)
     End If
     
     Exit Sub

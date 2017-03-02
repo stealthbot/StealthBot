@@ -449,12 +449,12 @@ Private Sub RECV_MCP_CHARLIST2(pBuff As clsDataBuffer)
         seconds = pBuff.GetDWORD
         CharName = pBuff.GetString
         CharStats = pBuff.GetString
-        
+
         Set CharStatsObj = New clsUserStats
         CharStatsObj.Statstring = BotVars.Product & RealmServerTitle(RealmServerSelectedIndex) & "," & _
                 CharName & "," & CharStats
-        Expiry = DateAdd("s", seconds, "1/1/1970")
-        
+        Expiry = DateAdd("s", seconds, #1/1/1970#)
+
         m_CharacterList.Add Array(CharName, CharStatsObj, Expiry)
     Next i
     

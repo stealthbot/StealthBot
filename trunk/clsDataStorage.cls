@@ -31,6 +31,7 @@ Private m_MCPHandler          As clsMCPHandler
 Private m_FirstTimeChat       As Boolean
 Private m_AccountEntry        As Boolean
 Private m_AccountEntryPending As Boolean
+Private m_LastPingResponse    As Double
 
 Public Sub List()
     With frmChat
@@ -66,6 +67,8 @@ Public Sub Reset()
     Set m_NLS = Nothing
     m_FirstTimeChat = False
     m_AccountEntry = False
+    m_AccountEntryPending = False
+    m_LastPingResponse = 0
 End Sub
 
 Public Property Get LogonType() As Long
@@ -199,6 +202,13 @@ Public Property Let AccountEntryPending(bData As Boolean)
 End Property
 Public Property Get AccountEntryPending() As Boolean
     AccountEntryPending = m_AccountEntryPending
+End Property
+
+Public Property Let LastPingResponse(dData As Double)
+    m_LastPingResponse = dData
+End Property
+Public Property Get LastPingResponse() As Double
+    LastPingResponse = m_LastPingResponse
 End Property
 
 Private Sub Class_Terminate()
