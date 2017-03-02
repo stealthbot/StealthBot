@@ -815,8 +815,16 @@ On Error GoTo ERROR_HANDLER:
     If ds.LastPingResponse + 15000 > uTicks Then TooRecent = True
     ds.LastPingResponse = uTicks
 
-    If (BotVars.Spoof = 0) Or (frmChat.tmrIdleTimer.Enabled And Not TooRecent) Then
-        Call SEND_SID_PING(pBuff.GetDWORD)
+    If (frmChat.tmrIdleTimer.Enabled) Then
+        ' reached account entry/idle timer enabled
+        If (Not TooRecent) Then
+            Call SEND_SID_PING(pBuff.GetDWORD)
+        End If
+    Else
+        ' during initial auth
+        If (BotVars.Spoof = 0) Then
+            Call SEND_SID_PING(pBuff.GetDWORD)
+        End If
     End If
     
     Exit Sub
