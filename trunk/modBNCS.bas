@@ -161,34 +161,35 @@ On Error GoTo ERROR_HANDLER:
         End If
     
         Select Case PacketID
-            Case SID_NULL:                   'Don't Throw Unknown Error                  '0x00
-            Case SID_CLIENTID:               'Don't Throw Unknown Error                  '0x05
-            Case SID_STARTVERSIONING:        Call RECV_SID_STARTVERSIONING(pBuff)        '0x06
-            Case SID_REPORTVERSION:          Call RECV_SID_REPORTVERSION(pBuff)          '0x07
-            Case SID_ENTERCHAT:              Call RECV_SID_ENTERCHAT(pBuff)              '0x0A
-            Case SID_GETCHANNELLIST:         Call RECV_SID_GETCHANNELLIST(pBuff)         '0x0B
-            Case SID_CHATEVENT:              Call RECV_SID_CHATEVENT(pBuff)              '0x0F
-            Case SID_MESSAGEBOX:             Call RECV_SID_MESSAGEBOX(pBuff)             '0x19
-            Case SID_LOGONCHALLENGEEX:       Call RECV_SID_LOGONCHALLENGEEX(pBuff)       '0x1D
-            Case SID_PING:                   Call RECV_SID_PING(pBuff)                   '0x25
-            Case SID_READUSERDATA:           Call RECV_SID_READUSERDATA(pBuff)           '0x26
-            Case SID_LOGONCHALLENGE:         Call RECV_SID_LOGONCHALLENGE(pBuff)         '0x28
-            Case SID_GETICONDATA:            'Don't Throw Unknown Error                  '0x2D
-            Case SID_CDKEY:                  Call RECV_SID_CDKEY(pBuff)                  '0x30
-            Case SID_CDKEY2:                 Call RECV_SID_CDKEY2(pBuff)                 '0x36
-            Case SID_LOGONRESPONSE2:         Call RECV_SID_LOGONRESPONSE2(pBuff)         '0x3A
-            Case SID_CREATEACCOUNT2:         Call RECV_SID_CREATEACCOUNT2(pBuff)         '0x3D
-            Case SID_LOGONREALMEX:           Call RECV_SID_LOGONREALMEX(pBuff)           '0x3C
-            Case SID_QUERYREALMS2:           Call RECV_SID_QUERYREALMS2(pBuff)           '0x40
-            Case SID_EXTRAWORK:              'Don't Throw Unknown Error                  '0x4C
-            Case SID_AUTH_INFO:              Call RECV_SID_AUTH_INFO(pBuff)              '0x50
-            Case SID_AUTH_CHECK:             Call RECV_SID_AUTH_CHECK(pBuff)             '0x51
-            Case SID_AUTH_ACCOUNTCREATE:     Call RECV_SID_AUTH_ACCOUNTCREATE(pBuff)     '0x52
-            Case SID_AUTH_ACCOUNTLOGON:      Call RECV_SID_AUTH_ACCOUNTLOGON(pBuff)      '0x53
-            Case SID_AUTH_ACCOUNTLOGONPROOF: Call RECV_SID_AUTH_ACCOUNTLOGONPROOF(pBuff) '0x54
-            Case SID_AUTH_ACCOUNTCHANGE:     Call RECV_SID_AUTH_ACCOUNTCHANGE(pBuff)     '0x55
+            Case SID_NULL:                    'Don't Throw Unknown Error                   '0x00
+            Case SID_CLIENTID:                'Don't Throw Unknown Error                   '0x05
+            Case SID_STARTVERSIONING:         Call RECV_SID_STARTVERSIONING(pBuff)         '0x06
+            Case SID_REPORTVERSION:           Call RECV_SID_REPORTVERSION(pBuff)           '0x07
+            Case SID_ENTERCHAT:               Call RECV_SID_ENTERCHAT(pBuff)               '0x0A
+            Case SID_GETCHANNELLIST:          Call RECV_SID_GETCHANNELLIST(pBuff)          '0x0B
+            Case SID_CHATEVENT:               Call RECV_SID_CHATEVENT(pBuff)               '0x0F
+            Case SID_MESSAGEBOX:              Call RECV_SID_MESSAGEBOX(pBuff)              '0x19
+            Case SID_LOGONCHALLENGEEX:        Call RECV_SID_LOGONCHALLENGEEX(pBuff)        '0x1D
+            Case SID_PING:                    Call RECV_SID_PING(pBuff)                    '0x25
+            Case SID_READUSERDATA:            Call RECV_SID_READUSERDATA(pBuff)            '0x26
+            Case SID_LOGONCHALLENGE:          Call RECV_SID_LOGONCHALLENGE(pBuff)          '0x28
+            Case SID_GETICONDATA:             'Don't Throw Unknown Error                   '0x2D
+            Case SID_CDKEY:                   Call RECV_SID_CDKEY(pBuff)                   '0x30
+            Case SID_CHANGEPASSWORD:          Call RECV_SID_CHANGEPASSWORD(pBuff)          '0x31
+            Case SID_CDKEY2:                  Call RECV_SID_CDKEY2(pBuff)                  '0x36
+            Case SID_LOGONRESPONSE2:          Call RECV_SID_LOGONRESPONSE2(pBuff)          '0x3A
+            Case SID_CREATEACCOUNT2:          Call RECV_SID_CREATEACCOUNT2(pBuff)          '0x3D
+            Case SID_LOGONREALMEX:            Call RECV_SID_LOGONREALMEX(pBuff)            '0x3C
+            Case SID_QUERYREALMS2:            Call RECV_SID_QUERYREALMS2(pBuff)            '0x40
+            Case SID_EXTRAWORK:               'Don't Throw Unknown Error                   '0x4C
+            Case SID_AUTH_INFO:               Call RECV_SID_AUTH_INFO(pBuff)               '0x50
+            Case SID_AUTH_CHECK:              Call RECV_SID_AUTH_CHECK(pBuff)              '0x51
+            Case SID_AUTH_ACCOUNTCREATE:      Call RECV_SID_AUTH_ACCOUNTCREATE(pBuff)      '0x52
+            Case SID_AUTH_ACCOUNTLOGON:       Call RECV_SID_AUTH_ACCOUNTLOGON(pBuff)       '0x53
+            Case SID_AUTH_ACCOUNTLOGONPROOF:  Call RECV_SID_AUTH_ACCOUNTLOGONPROOF(pBuff)  '0x54
+            Case SID_AUTH_ACCOUNTCHANGE:      Call RECV_SID_AUTH_ACCOUNTCHANGE(pBuff)      '0x55
             Case SID_AUTH_ACCOUNTCHANGEPROOF: Call RECV_SID_AUTH_ACCOUNTCHANGEPROOF(pBuff) '0x56
-            Case SID_SETEMAIL:               Call RECV_SID_SETEMAIL(pBuff)               '0x59
+            Case SID_SETEMAIL:                Call RECV_SID_SETEMAIL(pBuff)                '0x59
             
             Case Is >= &H65 'Friends List or Clan-related packet
                 ' Hand the packet off to the appropriate handler
@@ -378,7 +379,9 @@ On Error GoTo ERROR_HANDLER:
             Call Event_VersionCheck(0, sInfo) ' display success here
 
             ds.AccountEntry = True
+            ds.AccountEntryPending = False
             frmChat.tmrIdleTimer.Enabled = True
+
             Call DoAccountAction
         End If
     Else
@@ -946,8 +949,11 @@ On Error GoTo ERROR_HANDLER:
             Call Event_VersionCheck(0, sInfo) ' display success here
 
             ds.AccountEntry = True
+            ds.AccountEntryPending = False
             frmChat.tmrIdleTimer.Enabled = True
+
             Call DoAccountAction
+
             Exit Sub
         Case 2: Call Event_VersionCheck(2, sInfo) 'Invalid CDKey
         Case 3: Call Event_VersionCheck(4, sInfo) 'CDKey is for the wrong product
@@ -1016,6 +1022,7 @@ On Error GoTo ERROR_HANDLER:
     
     lResult = pBuff.GetDWORD
 
+    ds.AccountEntryPending = False
     frmChat.tmrAccountLock.Enabled = False
 
     Select Case lResult
@@ -1059,6 +1066,8 @@ On Error GoTo ERROR_HANDLER:
     Dim sHash2 As String
     Dim pBuff As New clsDataBuffer
 
+    frmChat.tmrAccountLock.Enabled = True
+    frmChat.tmrAccountLock.Tag = ACCOUNT_MODE_CHPWD
     If Not Config.UseLowerCasePassword Then
         sHash = doubleHashPassword(Config.Password, ds.ClientToken, ds.ServerToken)
         sHash2 = doubleHashPassword(Config.NewPassword, ds.ClientToken, ds.ServerToken)
@@ -1103,8 +1112,11 @@ On Error GoTo ERROR_HANDLER:
             Call Event_VersionCheck(0, sInfo) ' display success here
 
             ds.AccountEntry = True
+            ds.AccountEntryPending = False
             frmChat.tmrIdleTimer.Enabled = True
+
             Call DoAccountAction
+
             Exit Sub
         Case 2: Call Event_VersionCheck(2, sInfo) 'Invalid CDKey
         Case 3: Call Event_VersionCheck(4, sInfo) 'CDKey is for the wrong product
@@ -1188,6 +1200,7 @@ On Error GoTo ERROR_HANDLER:
     lResult = pBuff.GetDWORD
     sInfo = pBuff.GetString
 
+    ds.AccountEntryPending = False
     frmChat.tmrAccountLock.Enabled = False
 
     Select Case lResult
@@ -1252,7 +1265,9 @@ Public Sub SEND_SID_LOGONRESPONSE2()
 On Error GoTo ERROR_HANDLER:
     Dim sHash As String
     Dim pBuff As New clsDataBuffer
-    
+
+    frmChat.tmrAccountLock.Enabled = True
+    frmChat.tmrAccountLock.Tag = ACCOUNT_MODE_LOGON
     If Not Config.UseLowerCasePassword Then
         sHash = doubleHashPassword(Config.Password, ds.ClientToken, ds.ServerToken)
     Else
@@ -1289,6 +1304,8 @@ On Error GoTo ERROR_HANDLER:
     
     lResult = pBuff.GetDWORD
     sInfo = pBuff.GetString
+
+    ds.AccountEntryPending = False
 
     Select Case lResult
         Case &H0:
@@ -1715,8 +1732,11 @@ On Error GoTo ERROR_HANDLER:
 
     If (frmChat.sckBNet.State = sckConnected And bSuccess) Then
         ds.AccountEntry = True
+        ds.AccountEntryPending = False
         frmChat.tmrIdleTimer.Enabled = True
+
         Call DoAccountAction
+
         Exit Sub
     End If
 
@@ -1834,6 +1854,8 @@ On Error GoTo ERROR_HANDLER:
 
     ds.NLS.Terminate
 
+    ds.AccountEntryPending = False
+
     Select Case lResult
         Case &H0:
             Call Event_LogonEvent(ACCOUNT_MODE_CREAT, &H0, vbNullString)
@@ -1903,8 +1925,6 @@ On Error GoTo ERROR_HANDLER:
     lResult = pBuff.GetDWORD
     ds.NLS.Srp_Salt = pBuff.GetRaw(32)
     ds.NLS.Srp_B = pBuff.GetRaw(32)
-
-    frmChat.tmrAccountLock.Enabled = False
     
     Select Case lResult
         Case &H0: 'Accepted, requires proof.
@@ -1912,6 +1932,7 @@ On Error GoTo ERROR_HANDLER:
             Exit Sub
 
         Case &H1: 'Account doesn't exist.
+            ds.AccountEntryPending = False
             Call Event_LogonEvent(ACCOUNT_MODE_LOGON, &H1, vbNullString)
 
             If Config.AutoAccountAction Then
@@ -1923,6 +1944,7 @@ On Error GoTo ERROR_HANDLER:
             End If
 
         Case Else
+            ds.AccountEntryPending = False
             Call Event_LogonEvent(ACCOUNT_MODE_LOGON, lResult, vbNullString)
 
             If Config.ManageOnAccountError Then
@@ -1949,6 +1971,8 @@ End Sub
 Private Sub SEND_SID_AUTH_ACCOUNTLOGON()
 On Error GoTo ERROR_HANDLER:
 
+    frmChat.tmrAccountLock.Enabled = True
+    frmChat.tmrAccountLock.Tag = ACCOUNT_MODE_LOGON
     Call ds.NLS.Initialize(Config.Username, Config.Password)
 
     Dim pBuff As New clsDataBuffer
@@ -1980,7 +2004,10 @@ On Error GoTo ERROR_HANDLER:
     lResult = pBuff.GetDWORD
     M2 = pBuff.GetRaw(20)
     sInfo = pBuff.GetString
-    
+
+    ds.AccountEntryPending = False
+    frmChat.tmrAccountLock.Enabled = False
+
     Select Case lResult
         Case &H0 'Logon successful.
             Call Event_LogonEvent(ACCOUNT_MODE_LOGON, &H0, sInfo)
@@ -2071,14 +2098,13 @@ On Error GoTo ERROR_HANDLER:
     ds.NLS.Srp_Salt = pBuff.GetRaw(32)
     ds.NLS.Srp_B = pBuff.GetRaw(32)
 
-    frmChat.tmrAccountLock.Enabled = False
-
     Select Case lResult
         Case &H0:
             SEND_SID_AUTH_ACCOUNTCHANGEPROOF
             Exit Sub
 
         Case Else
+            ds.AccountEntryPending = False
             Call Event_LogonEvent(ACCOUNT_MODE_CHPWD, lResult, vbNullString)
 
             If Config.ManageOnAccountError Then
@@ -2105,6 +2131,8 @@ End Sub
 Public Sub SEND_SID_AUTH_ACCOUNTCHANGE()
 On Error GoTo ERROR_HANDLER:
 
+    frmChat.tmrAccountLock.Enabled = True
+    frmChat.tmrAccountLock.Tag = ACCOUNT_MODE_CHPWD
     Call ds.NLS.InitializeChange(Config.Username, Config.Password, Config.NewPassword)
 
     Dim pBuff As New clsDataBuffer
@@ -2133,7 +2161,10 @@ On Error GoTo ERROR_HANDLER:
     
     lResult = pBuff.GetDWORD
     M2 = pBuff.GetRaw(20)
-    
+
+    ds.AccountEntryPending = False
+    frmChat.tmrAccountLock.Enabled = False
+
     Select Case lResult
         Case &H0 'Change successful.
             Call Event_LogonEvent(ACCOUNT_MODE_CHPWD, &H0, vbNullString)
@@ -2528,12 +2559,19 @@ On Error GoTo ERROR_HANDLER:
         Config.Save
     End If
 
+    ' check if an action is pending
+    If ds.AccountEntryPending Then
+        Exit Sub
+    End If
+    ds.AccountEntryPending = True
+
     ' execute action
     Select Case UCase$(Mode)
         Case ACCOUNT_MODE_CREAT
             Call Event_LogonEvent(ACCOUNT_MODE_CREAT, -1&)
 
             If LenB(Config.Username) = 0 Or LenB(Config.Password) = 0 Then
+                ds.AccountEntryPending = False
                 Call Event_LogonEvent(ACCOUNT_MODE_CREAT, -3&)
 
                 If Config.ManageOnAccountError Then
@@ -2555,6 +2593,7 @@ On Error GoTo ERROR_HANDLER:
             Call Event_LogonEvent(ACCOUNT_MODE_CHPWD, -1&)
 
             If LenB(Config.Username) = 0 Or LenB(Config.Password) = 0 Or LenB(Config.NewPassword) = 0 Then
+                ds.AccountEntryPending = False
                 Call Event_LogonEvent(ACCOUNT_MODE_CHPWD, -3&)
 
                 If Config.ManageOnAccountError Then
@@ -2566,8 +2605,6 @@ On Error GoTo ERROR_HANDLER:
                 Exit Sub
             End If
 
-            frmChat.tmrAccountLock.Enabled = True
-            frmChat.tmrAccountLock.Tag = ACCOUNT_MODE_CHPWD
             If (ds.LogonType = BNCSSERVER_SRP2) Then
                 modBNCS.SEND_SID_AUTH_ACCOUNTCHANGE
             Else
@@ -2576,6 +2613,7 @@ On Error GoTo ERROR_HANDLER:
 
         Case ACCOUNT_MODE_RSPWD
             If LenB(Config.Username) = 0 Or LenB(Config.RegisterEmailDefault) = 0 Then
+                ds.AccountEntryPending = False
                 Call Event_LogonEvent(ACCOUNT_MODE_RSPWD, -3&)
 
                 If Config.ManageOnAccountError Then
@@ -2590,12 +2628,15 @@ On Error GoTo ERROR_HANDLER:
             modBNCS.SEND_SID_RESETPASSWORD
 
             ' no response! assume success
+            ds.AccountEntryPending = False
+
             Call Event_LogonEvent(ACCOUNT_MODE_RSPWD, &H0)
 
             frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
 
         Case ACCOUNT_MODE_CHREG
             If LenB(Config.Username) = 0 Or LenB(Config.RegisterEmailDefault) = 0 Or LenB(Config.RegisterEmailChange) = 0 Then
+                ds.AccountEntryPending = False
                 Call Event_LogonEvent(ACCOUNT_MODE_CHREG, -3&)
 
                 If Config.ManageOnAccountError Then
@@ -2610,6 +2651,8 @@ On Error GoTo ERROR_HANDLER:
             modBNCS.SEND_SID_CHANGEEMAIL
 
             ' no response! assume success
+            ds.AccountEntryPending = False
+
             Call Event_LogonEvent(ACCOUNT_MODE_CHREG, &H0)
 
             Config.RegisterEmailDefault = Config.RegisterEmailChange
@@ -2622,6 +2665,7 @@ On Error GoTo ERROR_HANDLER:
             Call Event_LogonEvent(ACCOUNT_MODE_LOGON, -1&)
 
             If LenB(Config.Username) = 0 Or LenB(Config.Password) = 0 Then
+                ds.AccountEntryPending = False
                 Call Event_LogonEvent(ACCOUNT_MODE_LOGON, -3&)
 
                 If Config.ManageOnAccountError Then
@@ -2633,8 +2677,6 @@ On Error GoTo ERROR_HANDLER:
                 Exit Sub
             End If
 
-            frmChat.tmrAccountLock.Enabled = True
-            frmChat.tmrAccountLock.Tag = ACCOUNT_MODE_LOGON
             If (ds.LogonType = BNCSSERVER_SRP2) Then
                 modBNCS.SEND_SID_AUTH_ACCOUNTLOGON
             Else

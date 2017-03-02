@@ -5326,6 +5326,7 @@ Private Sub tmrAccountLock_Timer()
         Exit Sub
     End If
 
+    ds.AccountEntryPending = False
     Call Event_LogonEvent(tmrAccountLock.Tag, -2&, vbNullString)
 
     AddChat RTBColors.ErrorMessageText, "[BNCS] Your account appears to be locked, likely due to an excessive number of " & _

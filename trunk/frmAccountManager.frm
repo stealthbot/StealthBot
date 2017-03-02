@@ -395,7 +395,11 @@ Private Sub Form_Load()
 End Sub
 
 Public Sub LeftAccountEntryMode()
-    Call ShowMode(vbNullString)
+    If g_Connected Then
+        Unload Me
+    Else
+        Call ShowMode(vbNullString)
+    End If
 End Sub
 
 Public Sub ShowMode(ByVal Mode As String, Optional ByVal ControlIndex As Integer = 1)
@@ -421,12 +425,15 @@ Public Sub ShowMode(ByVal Mode As String, Optional ByVal ControlIndex As Integer
     If frmChat.sckBNet.State <> sckConnected Then
         lblMode.Caption = "Choose what to do after connecting:"
         btnClose.Caption = "&Close"
+        btnConnect.Caption = "&Save and Connect"
     ElseIf ds.AccountEntry Then
         lblMode.Caption = "Choose what to do:"
         btnClose.Caption = "Dis&connect"
+        btnConnect.Caption = "&Save and Do"
     Else
         lblMode.Caption = "Choose what to do after reconnecting:"
         btnClose.Caption = "&Close"
+        btnConnect.Caption = "&Save and Reconnect"
     End If
 
     On Error Resume Next
