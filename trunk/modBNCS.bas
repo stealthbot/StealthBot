@@ -1449,7 +1449,7 @@ On Error GoTo ERROR_HANDLER:
         Select Case lError
             Case &H80000001: frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] The Diablo II Realm is currently unavailable. Please try again later."
             Case &H80000002: frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Diablo II Realm logon has failed. Please try again later."
-            Case Else:       frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[REALM] Login to the Diablo II Realm has failed for an unknown reason (0x{0}). Please try again later.", ZeroOffset(lError, 8))
+            Case Else:       frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[REALM] Logon to the Diablo II Realm has failed for an unknown reason (0x{0}). Please try again later.", ZeroOffset(lError, 8))
         End Select
         
         If Not ds.MCPHandler Is Nothing Then

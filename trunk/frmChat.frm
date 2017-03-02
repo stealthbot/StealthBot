@@ -3736,7 +3736,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single
                     'ParseStatstring .Statstring, sOutBuf, Clan
             
                     'sTemp = sTemp & vbCrLf
-                    sTemp = sTemp & "Ping at login: " & .Ping & "ms" & vbCrLf
+                    sTemp = sTemp & "Ping at logon: " & .Ping & "ms" & vbCrLf
                     sTemp = sTemp & "Flags: " & FlagDescription(.Flags, True) & vbCrLf
                     sTemp = sTemp & vbCrLf
                     sTemp = sTemp & .Stats.ToString
@@ -5330,7 +5330,7 @@ Private Sub tmrAccountLock_Timer()
     Call Event_LogonEvent(tmrAccountLock.Tag, -2&, vbNullString)
 
     AddChat RTBColors.ErrorMessageText, "[BNCS] Your account appears to be locked, likely due to an excessive number of " & _
-        "invalid logins.  Please try that account again in 15-20 minutes."
+        "invalid logons.  Please try that account again in 15-20 minutes."
 
     frmAccountManager.ShowMode tmrAccountLock.Tag
 End Sub

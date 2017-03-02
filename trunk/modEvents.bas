@@ -621,7 +621,7 @@ On Error GoTo ERROR_HANDLER:
             ' replace with specific in-progress message
             Select Case UCase$(Action)
                 Case ACCOUNT_MODE_LOGON
-                    sMessage = "Sending login information..."
+                    sMessage = "Sending logon information..."
                 Case ACCOUNT_MODE_CREAT
                     sMessage = "Attempting to create account..."
                 Case ACCOUNT_MODE_CHPWD

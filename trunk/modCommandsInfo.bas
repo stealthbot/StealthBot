@@ -409,7 +409,7 @@ Public Sub OnPing(Command As clsCommandObj)
     If (Command.IsValid) Then
         Latency = GetPing(Command.Argument("Username"))
         If (Latency >= -1) Then
-            Command.Respond StringFormat("{0}'s ping at login was {1}ms.", Command.Argument("Username"), Latency)
+            Command.Respond StringFormat("{0}'s ping at logon was {1}ms.", Command.Argument("Username"), Latency)
         Else
             Command.Respond StringFormat("I can not see {0} in the channel.", Command.Argument("Username"))
         End If
@@ -422,14 +422,14 @@ Public Sub OnPingMe(Command As clsCommandObj)
     Dim Latency As Long
     If (Command.IsLocal) Then
         If (g_Online) Then
-            Command.Respond StringFormat("Your ping at login was {0}ms.", GetPing(GetCurrentUsername))
+            Command.Respond StringFormat("Your ping at logon was {0}ms.", GetPing(GetCurrentUsername))
         Else
             Command.Respond "Error: You are not logged on."
         End If
     Else
         Latency = GetPing(Command.Username)
         If (Latency >= -1) Then
-            Command.Respond StringFormat("Your ping at login was {0}ms.", Latency)
+            Command.Respond StringFormat("Your ping at logon was {0}ms.", Latency)
         Else
             Command.Respond "I can not see you in the channel."
         End If

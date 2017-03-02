@@ -225,7 +225,7 @@ Private Sub Form_Load()
     Label1.Caption = "Battle.net would like to know if you want to register an e-mail address " & _
                     "with your account. If you want to do so, type a valid e-mail address in the box " & _
                     "below. If you don't want to register an e-mail address, click ""Never Ask Again""." & _
-                    "To be asked again on your next login, click ""Ask Me Later"". ""OK"" and ""Never Ask Again"" are permanent."
+                    "To be asked again on your next logon, click ""Ask Me Later"". ""OK"" and ""Never Ask Again"" are permanent."
                     
     Label1.Caption = Label1.Caption & vbCrLf & vbCrLf & "Choose an option below to proceed."
     
