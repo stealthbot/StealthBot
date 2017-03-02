@@ -657,45 +657,45 @@ Private Sub Form_Load()
     Dim i As Integer
 
     Me.Icon = frmChat.Icon
-    
+
     ' must have a MCPHandler
     If ds.MCPHandler Is Nothing Then
         Set ds.MCPHandler = New clsMCPHandler
         ds.MCPHandler.IsRealmError = True
         Unload Me
     End If
-    
+
     ' must be on D2
     If (BotVars.Product <> "PX2D" And BotVars.Product <> "VD2D") Then
         ds.MCPHandler.IsRealmError = True
         Unload Me
     End If
-    
+
     ' store if expansion
     m_IsExpansion = (BotVars.Product = "PX2D")
-    
+
     ' this is for deciding whether to enter chat after a form close
     m_Unload_SuccessfulLogin = False
-    
+
     With lblRealm(0) ' detail
         .Caption = "Please wait..."
         .ForeColor = &H888888
     End With
-    
+
     ' subclass for listview...
     #If COMPILE_DEBUG = 0 Then
         HookWindowProc hWnd
         'm_OldWndProc = SetWindowLong(hWnd, GWL_WNDPROC, AddressOf SkipDragLVItem)
     #End If
-    
+
     ' read auto choose settings from handler
     m_Ticks = ds.MCPHandler.AutoChooseWait
     m_Choice = ds.MCPHandler.AutoChooseTarget
     m_Selection = m_Choice
-    
+
     ' UI setup
     Call RealmStartupResponse
-    
+
     ' set up char creation defaults
     chkExpansion.Enabled = m_IsExpansion
     chkExpansion.Value = IIf(m_IsExpansion, 1, 0)
@@ -704,24 +704,25 @@ Private Sub Form_Load()
     optNewCharType(7).Enabled = m_IsExpansion
     optNewCharType(1).Value = True
     Call optNewCharType_Click(1)
-    
+
     ' view existing
     optViewExisting.Value = True
     Call CharListResponse
-    
+
+    ' MCP handler state
+    ds.MCPHandler.FormActive = True
+
     ' setup timer
-    If m_Ticks >= 0 Then
-        tmrLoginTimeout.Enabled = True
-        tmrLoginTimeout_Timer
-        
+    If m_Ticks > 0 Then
         ' hide delete button here as it's been made visible (over seconds remaining in timer)
         ' will be made visible by stopping timer (if character is selected)
         btnUpgrade.Visible = False
         btnDelete.Visible = False
+
+        ' enable the timer and call in last to avoid infinite loops
+        tmrLoginTimeout.Enabled = True
+        tmrLoginTimeout_Timer
     End If
-    
-    ' MCP handler state
-    ds.MCPHandler.FormActive = True
 End Sub
 
 Private Sub Form_Click()
@@ -1307,36 +1308,45 @@ End Sub
 
 Private Sub tmrLoginTimeout_Timer()
     Static indexValid As Integer
-    
+
     indexValid = m_Choice
-    
+
     ' if selecting nothing, find first unexpired account (no choose setting)
     If (indexValid = -1) Then
         Dim i As Integer
         
         For i = 0 To ds.MCPHandler.CharacterCount - 1
-            If Not IsDateExpired(ds.MCPHandler.CharacterExpires(i)) Or Not CanChooseCharacter(indexValid) Then
-                indexValid = i
-                Exit For
+            If CanChooseCharacter(indexValid) Then
+                If Not IsDateExpired(ds.MCPHandler.CharacterExpires(i)) Then
+                    indexValid = i
+                    Exit For
+                End If
             End If
         Next i
     ' if choose setting, then select only if not expired
     Else
-        If IsDateExpired(ds.MCPHandler.CharacterExpires(indexValid)) Or Not CanChooseCharacter(indexValid) Then
+        If Not CanChooseCharacter(indexValid) Then
+            indexValid = -1
+        ElseIf IsDateExpired(ds.MCPHandler.CharacterExpires(indexValid)) Then
             indexValid = -1
         End If
     End If
 
+    ' seconds label (part 2 of timer labels)
+    lblRealm(3).Caption = CStr(m_Ticks)
+    ' seconds cap label (part 2 of timer labels)
+    lblRealm(4).Caption = "second" & IIf(m_Ticks <> 1, "s", vbNullString) & "."
+
     If (indexValid >= 0) Then
         ' warning label (part 1 of timer labels)
         lblRealm(2).Caption = lvwChars.ListItems(indexValid + 1).Text & vbCrLf & " will be chosen automatically in"
-        
+
         'If m_Selection < 0 Then
         '    lvwChars.ListItems.Item(indexValid + 1).Selected = True
         '    Call lvwChars_ItemClick(lvwChars.ListItems.Item(indexValid + 1))
         'End If
-        
-        If m_Ticks <= 1 Then
+
+        If m_Ticks <= 0 Then
             tmrLoginTimeout.Enabled = False
             If Not CanChooseCharacter(indexValid) Then
                 frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] You must use Diablo II: Lord of Destruction to choose that character."
@@ -1348,20 +1358,15 @@ Private Sub tmrLoginTimeout_Timer()
         End If
     Else
         ' warning label
-        lblRealm(2).Caption = "No unexpired characters found! Realm login will be cancelled in"
-        
-        If m_Ticks <= 1 Then
+        lblRealm(2).Caption = "No unexpired characters! Realm logon will be cancelled in"
+
+        If m_Ticks <= 0 Then
             tmrLoginTimeout.Enabled = False
             UnloadNormal
         End If
     End If
 
     m_Ticks = m_Ticks - 1
-    
-    ' seconds label (part 2 of timer labels)
-    lblRealm(3).Caption = CStr(m_Ticks)
-    ' seconds cap label (part 2 of timer labels)
-    lblRealm(4).Caption = "seconds."
 End Sub
 
 Private Function FindCharacter(ByVal sKey As String) As Integer
@@ -1389,17 +1394,23 @@ End Function
 
 Private Function CanUpgradeCharacter(ByVal CharIndex As Integer) As Boolean
     Dim Stats As clsUserStats
-    
+
     Set Stats = ds.MCPHandler.CharacterStats(CharIndex)
-    
+
+    CanUpgradeCharacter = False
+    If Stats Is Nothing Then Exit Function
+
     CanUpgradeCharacter = (Not Stats.IsExpansionCharacter And m_IsExpansion)
 End Function
 
 Private Function CanChooseCharacter(ByVal CharIndex As Integer) As Boolean
     Dim Stats As clsUserStats
-    
+
     Set Stats = ds.MCPHandler.CharacterStats(CharIndex)
-    
+
+    CanChooseCharacter = False
+    If Stats Is Nothing Then Exit Function
+
     ' must be PX2D if isExpansion, otherwise doesn't matter
     CanChooseCharacter = (Stats.IsExpansionCharacter Imp m_IsExpansion)
 End Function
