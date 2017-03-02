@@ -118,11 +118,16 @@ Public Const BNCS_LLS As Long = 3 'Legacy: SID_CLIENTID
 Public Const BNCSSERVER_XSHA As Long = 0
 Public Const BNCSSERVER_SRP2 As Long = 2
 
-Public Const ACCOUNT_MODE_LOGON  As String = "LOGON"
-Public Const ACCOUNT_MODE_CREAT  As String = "CREATE"
-Public Const ACCOUNT_MODE_CHPWD  As String = "CHANGEPASS"
-Public Const ACCOUNT_MODE_RSPWD  As String = "RESETPASS"
-Public Const ACCOUNT_MODE_CHREG  As String = "CHANGEEMAIL"
+Public Const ACCOUNT_MODE_LOGON As String = "LOGON"
+Public Const ACCOUNT_MODE_CREAT As String = "CREATE"
+Public Const ACCOUNT_MODE_CHPWD As String = "CHANGEPASS"
+Public Const ACCOUNT_MODE_RSPWD As String = "RESETPASS"
+Public Const ACCOUNT_MODE_CHREG As String = "CHANGEEMAIL"
+
+Public Const EMAIL_ACT_VALUE    As String = "VALUE"
+Public Const EMAIL_ACT_PROMPT   As String = "PROMPT"
+Public Const EMAIL_ACT_NEVERASK As String = "NEVERASK"
+Public Const EMAIL_ACT_ASKLATER As String = "ASKLATER"
 
 Public Const PLATFORM_INTEL   As Long = &H49583836 'IX86
 Public Const PLATFORM_POWERPC As Long = &H504D4143 'PMAC

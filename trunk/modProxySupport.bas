@@ -13,6 +13,9 @@ Public Const PROXY_REQUEST_ERROR   As Long = &H430
 Public Const PROXY_REQUEST_SUCCESS As Long = &H431
 Public Const PROXY_REQUESTING_CONN As Long = &H432
 
+Public Const PROXY_SETTING_SOCKS5 As String = "SOCKS5"
+Public Const PROXY_SETTING_SOCKS4 As String = "SOCKS4"
+
 Private Const SOCKS4_VER           As Byte = 4
 Private Const SOCKS5_VER           As Byte = 5
 Private Const SOCKS5_VER_USERPASS  As Byte = 1

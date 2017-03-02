@@ -1931,13 +1931,13 @@ Private Sub LoadDefaults()
     m_UseProxy = False
     m_ProxyIP = "127.0.0.1"
     m_ProxyPort = 1080
-    m_ProxyType = "SOCKS4"
+    m_ProxyType = PROXY_SETTING_SOCKS4
     m_ProxyServerResolve = False
     m_ProxyUsername = vbNullString
     m_ProxyPassword = vbNullString
     m_ProxyBNLS = False
     m_ProxyMCP = True
-    m_AccountMode = "LOGON"
+    m_AccountMode = ACCOUNT_MODE_LOGON
     m_AutoAccountAction = True
     m_ManageOnAccountError = True
     m_NewPassword = vbNullString
@@ -2081,7 +2081,7 @@ Private Sub LoadDefaults()
     m_DefaultChannelJoin = False
     m_MaxMessageLength = 223
     m_AutoCreateChannels = "ALWAYS"
-    m_RegisterEmailAction = "PROMPT"
+    m_RegisterEmailAction = EMAIL_ACT_PROMPT
     m_RegisterEmailDefault = vbNullString
     m_RegisterEmailChange = vbNullString
     m_RealmServerPassword = "password"
@@ -2146,7 +2146,7 @@ Private Sub LoadVersion5Config()
     m_QuietTime = ReadSettingB(SECTION_MAIN, "QuietTime", m_QuietTime)
     m_UseProxy = ReadSettingB(SECTION_MAIN, "UseProxy", m_UseProxy)
     m_ProxyPort = ReadSettingL(SECTION_MAIN, "ProxyPort", m_ProxyPort)
-    m_ProxyType = IIf(ReadSettingB(SECTION_MAIN, "ProxyIsSocks5", False), "SOCKS5", "SOCKS4")
+    m_ProxyType = IIf(ReadSettingB(SECTION_MAIN, "ProxyIsSocks5", False), PROXY_SETTING_SOCKS5, PROXY_SETTING_SOCKS4)
     m_UseD2Realms = ReadSettingB(SECTION_MAIN, "UseRealm", m_UseD2Realms)
     m_ProxyIP = ReadSetting(SECTION_MAIN, "ProxyIP", m_ProxyIP)
     m_HideBanMessages = ReadSettingB(SECTION_MAIN, "HideBanMessages", m_HideBanMessages)

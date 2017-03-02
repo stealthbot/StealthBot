@@ -4856,7 +4856,7 @@ Private Function SaveSettings() As Boolean
     Config.UseProxy = CBool(chkUseProxies.Value)
     Config.ProxyPort = StringToNumber(txtProxyPort.Text, Config.ProxyPort)
     Config.ProxyIP = Trim$(txtProxyIP.Text)
-    Config.ProxyType = IIf(CBool(optSocks5.Value), "SOCKS5", "SOCKS4")
+    Config.ProxyType = IIf(CBool(optSocks5.Value), PROXY_SETTING_SOCKS5, PROXY_SETTING_SOCKS4)
     Config.UseUDP = CBool(chkUDP.Value)
 
     Config.ReconnectDelay = StringToNumber(txtReconDelay.Text, Config.ReconnectDelay)
@@ -5467,10 +5467,10 @@ Private Sub InitConnAdvanced()
     txtProxyIP.Text = Config.ProxyIP
     
     Select Case UCase$(Config.ProxyType)
-        Case "SOCKS5":
+        Case PROXY_SETTING_SOCKS5:
             optSocks5.Value = True
             optSocks4.Value = False
-        Case "SOCKS4":
+        Case PROXY_SETTING_SOCKS4:
             optSocks5.Value = False
             optSocks4.Value = True
     End Select

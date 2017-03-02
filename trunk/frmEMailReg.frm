@@ -145,14 +145,14 @@ Private ClosedProperly As Boolean
 ' depending on the "Action", (result of clicking a button in the prompt OR the config values)
 ' will do the specified task, then continue logon sequence
 Public Sub DoRegisterEmail(ByVal EMailAction As String, Optional ByVal EMailValue As String = vbNullString)
-    Select Case EMailAction
-        Case "ASKLATER"
+    Select Case UCase$(EMailAction)
+        Case EMAIL_ACT_ASKLATER
             ' "ASKLATER"/ask later: do nothing here
             frmChat.AddChat RTBColors.SuccessText, "[BNCS] E-mail address registration ignored. You may be prompted later."
             
             ContinueLogonSequence
             
-        Case "NEVERASK"
+        Case EMAIL_ACT_NEVERASK
             ' "NEVERASK"/never ask: register an empty email address
             frmChat.AddChat RTBColors.SuccessText, "[BNCS] E-mail address registration declined."
         
@@ -199,20 +199,20 @@ End Sub
 
 Private Sub cmdGo_Click()
     If LenB(txtAddress.Text) > 0 Then
-        Call DoRegisterEmail("VALUE", txtAddress.Text)
+        Call DoRegisterEmail(EMAIL_ACT_VALUE, txtAddress.Text)
         
         Unload Me
     End If
 End Sub
 
 Private Sub cmdIgnore_Click()
-    Call DoRegisterEmail("NEVERASK")
+    Call DoRegisterEmail(EMAIL_ACT_NEVERASK)
     
     Unload Me
 End Sub
 
 Private Sub cmdAskLater_Click()
-    Call DoRegisterEmail("ASKLATER")
+    Call DoRegisterEmail(EMAIL_ACT_ASKLATER)
     
     Unload Me
 End Sub
@@ -237,7 +237,7 @@ End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     If Not ClosedProperly And g_Online Then
-        Call DoRegisterEmail("ASKLATER")
+        Call DoRegisterEmail(EMAIL_ACT_ASKLATER)
     End If
 End Sub
 
