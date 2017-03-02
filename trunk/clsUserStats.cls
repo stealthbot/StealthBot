@@ -24,7 +24,7 @@ Private m_spawn               As Boolean
 Private m_clan                As String
 Private m_level               As Long
 Private m_character_name      As String
-Private m_character_class_id  As Integer
+Private m_character_class_id  As Long
 Private m_character_flags     As Long
 Private m_acts_completed      As Long
 Private m_character_ladder    As Boolean
@@ -313,11 +313,11 @@ Public Property Let CharacterName(ByVal str As String)
     m_character_name = str
 End Property
 
-Public Property Get CharacterClassID() As Integer
+Public Property Get CharacterClassID() As Long
     CharacterClassID = m_character_class_id
 End Property
 
-Public Property Let CharacterClassID(ByVal i As Integer)
+Public Property Let CharacterClassID(ByVal i As Long)
     m_character_class_id = i
 End Property
 
@@ -848,7 +848,7 @@ End Sub
 
 Private Sub ParseDiabloII()
     Dim Values()   As String
-    Dim charData() As Integer
+    Dim charData() As Byte
     
     ' empty D2 stats is valid ("Open character")
     IsValid = True
@@ -1008,18 +1008,8 @@ Private Function WarCraftIII_ToString() As String
     WarCraftIII_ToString = buf
 End Function
 
-Private Sub MakeArr(ByVal str As String, ByRef arr() As Integer)
-    Dim i As Integer
-    
-    ReDim arr(0)
-    
-    For i = 1 To Len(str)
-        If (i > 1) Then
-            ReDim Preserve arr(0 To i - 1)
-        End If
-        
-        arr(i - 1) = Asc(Mid(str, i, 1))
-    Next i
+Private Sub MakeArr(ByVal str As String, ByRef arr() As Byte)
+    arr() = StrConv(str, vbFromUnicode, 1033)
 End Sub
 
 Private Function MakeRomanNum(ByVal Num As Integer) As String
