@@ -347,22 +347,13 @@ On Error GoTo ERROR_HANDLER:
                 frmProfile.SetKey oRequest.keys(i), sValue
             Case UserCommand, Internal
                 If StrComp(Left(oRequest.keys(i), 7), "System\", vbTextCompare) = 0 Then
-                    j = InStr(1, sValue, Space(1), vbTextCompare)
+                    j = InStr(1, sValue, Space$(1), vbBinaryCompare)
                     
                     If j > 0 Then    ' Probably a FILETIME
-                        ' High part
-                        d = CDbl(Left(sValue, j))
-                        If d > LONG_MAX_VALUE Then  ' Check for overflow
-                            d = LONG_MAX_VALUE - d
-                        End If
-                        oFT.dwHighDateTime = CLng(d)
-                        
-                        ' Low part
-                        d = CDbl(Mid(KillNull(sValue), j + 1))
-                        If d > LONG_MAX_VALUE Then  ' Check for overflow
-                            d = LONG_MAX_VALUE - d
-                        End If
-                        oFT.dwLowDateTime = CLng(d)
+                        With oFT
+                            .dwLowDateTime = UnsignedToLong(CDbl(Mid$(KillNull(sValue), j + 1)))
+                            .dwHighDateTime = UnsignedToLong(CDbl(Left$(sValue, j)))
+                        End With
                         
                         FileTimeToSystemTime oFT, oST
                         

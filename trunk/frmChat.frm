@@ -7334,7 +7334,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                 ' use the values on the socket to get current IP/Port
                 .ProxyIP = Config.ProxyIP
                 .ProxyPort = Config.ProxyPort
-                If CBool(StrComp(Config.ProxyType, "SOCKS5", vbTextCompare) = 0) Then
+                If CBool(StrComp(Config.ProxyType, PROXY_SETTING_SOCKS5, vbTextCompare) = 0) Then
                     .Version = 5
                 Else
                     .Version = 4

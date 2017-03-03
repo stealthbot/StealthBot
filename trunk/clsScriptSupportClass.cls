@@ -997,17 +997,18 @@ End Function
 '// Returns a date/time from two long values, as either "value value" or value, value
 Public Function FileTimeToDate(ByVal strTime As Variant, Optional ByVal HighValue As Long = 0) As Date
     Dim FTime As FILETIME
-    
+    Dim j As Integer
+
     If (HighValue <> 0) Then
         With FTime
             .dwLowDateTime = CLng(Val(strTime))
             .dwHighDateTime = CLng(Val(HighValue))
         End With
     Else
+        j = InStr(1, strTime, Space$(1), vbBinaryCompare)
         With FTime
-            .dwLowDateTime = UnsignedToLong(CDbl(Mid$(strTime, InStr(1, strTime, " ", vbBinaryCompare) + 1)))
-        
-            .dwHighDateTime = UnsignedToLong(CDbl(Left$(strTime, InStr(1, strTime, " ", vbBinaryCompare))))
+            .dwLowDateTime = UnsignedToLong(CDbl(Mid$(strTime, j + 1)))
+            .dwHighDateTime = UnsignedToLong(CDbl(Left$(strTime, j)))
         End With
     End If
     
