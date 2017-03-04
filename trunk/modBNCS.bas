@@ -1870,8 +1870,6 @@ On Error GoTo ERROR_HANDLER:
     
     lResult = pBuff.GetDWORD
 
-    ds.NLS.Terminate
-
     ds.AccountEntryPending = False
 
     Select Case lResult
@@ -1910,17 +1908,22 @@ End Sub
 Public Sub SEND_SID_AUTH_ACCOUNTCREATE()
 On Error GoTo ERROR_HANDLER:
 
-    Call ds.NLS.Initialize(Config.Username, Config.Password)
-    Call ds.NLS.GenerateSaltAndVerifier(False)
+    Dim oNLS As New clsNLS
+
+    Call oNLS.Initialize(Config.Username, Config.Password)
+    Call oNLS.GenerateSaltAndVerifier
 
     Dim pBuff As New clsDataBuffer
     With pBuff
-        .InsertNonNTString ds.NLS.Srp_Salt
-        .InsertNonNTString ds.NLS.Srp_v
-        .InsertNTString ds.NLS.Username
+        .InsertNonNTString oNLS.Srp_Salt
+        .InsertNonNTString oNLS.Srp_v
+        .InsertNTString oNLS.Username
         .SendPacket SID_AUTH_ACCOUNTCREATE
     End With
     Set pBuff = Nothing
+
+    Call oNLS.Terminate
+    Set oNLS = Nothing
     
     Exit Sub
 ERROR_HANDLER:
@@ -1972,7 +1975,7 @@ On Error GoTo ERROR_HANDLER:
             End If
     End Select
 
-    ds.NLS.Terminate
+    Call ds.NLS.Terminate
     
     Exit Sub
 ERROR_HANDLER:
@@ -2071,7 +2074,7 @@ On Error GoTo ERROR_HANDLER:
             End If
     End Select
 
-    ds.NLS.Terminate
+    Call ds.NLS.Terminate
     
     Exit Sub
 ERROR_HANDLER:
@@ -2132,7 +2135,7 @@ On Error GoTo ERROR_HANDLER:
             End If
     End Select
 
-    ds.NLS.Terminate
+    Call ds.NLS.Terminate
 
     Exit Sub
 ERROR_HANDLER:
@@ -2151,7 +2154,7 @@ On Error GoTo ERROR_HANDLER:
 
     frmChat.tmrAccountLock.Enabled = True
     frmChat.tmrAccountLock.Tag = ACCOUNT_MODE_CHPWD
-    Call ds.NLS.InitializeChange(Config.Username, Config.Password, Config.NewPassword)
+    Call ds.NLS.Initialize(Config.Username, Config.Password)
 
     Dim pBuff As New clsDataBuffer
     pBuff.InsertNonNTString ds.NLS.Srp_A
@@ -2212,7 +2215,7 @@ On Error GoTo ERROR_HANDLER:
 
     End Select
 
-    ds.NLS.Terminate
+    Call ds.NLS.Terminate
 
     Exit Sub
 ERROR_HANDLER:
@@ -2230,16 +2233,22 @@ End Sub
 Public Sub SEND_SID_AUTH_ACCOUNTCHANGEPROOF()
 On Error GoTo ERROR_HANDLER:
 
-    Call ds.NLS.GenerateSaltAndVerifier(True)
+    Dim oNLS As New clsNLS
+
+    Call oNLS.Initialize(Config.Username, Config.NewPassword)
+    Call oNLS.GenerateSaltAndVerifier
 
     Dim pBuff As New clsDataBuffer
     With pBuff
         .InsertNonNTString ds.NLS.Srp_M1
-        .InsertNonNTString ds.NLS.Srp_New_Salt
-        .InsertNonNTString ds.NLS.Srp_New_v
+        .InsertNonNTString oNLS.Srp_Salt
+        .InsertNonNTString oNLS.Srp_v
         .SendPacket SID_AUTH_ACCOUNTCHANGEPROOF
     End With
     Set pBuff = Nothing
+
+    Call oNLS.Terminate
+    Set oNLS = Nothing
     
     Exit Sub
 ERROR_HANDLER:

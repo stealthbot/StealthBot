@@ -21,7 +21,7 @@ Option Explicit
 
 ' BNCSutil.dll functions
 Private Declare Function nls_init Lib "BNCSutil.dll" _
-    (ByVal Username As Long, ByVal Password As Long) As Long    ' returns a pointer
+    (ByVal Username As String, ByVal Password As String) As Long    ' returns a pointer
 
 Private Declare Sub nls_free Lib "BNCSutil.dll" _
     (ByVal NLS As Long)
@@ -53,19 +53,15 @@ Private Declare Function nls_account_change_proof Lib "BNCSutil.dll" _
     
 
 Private m_NlsHandle As Long
-Private m_NewNlsHandle As Long
 
 Private m_Salt As String * 32
 Private m_v As String * 32
-Private m_New_Salt As String * 32
-Private m_New_v As String * 32
 Private m_B As String * 32
 
 Private m_Username As String
 Private m_Password As String
-Private m_NewPassword As String
 Private m_Initialized As Boolean
-Private m_CreateReady As Boolean
+Private m_Generated As Boolean
 
 ' make sure all possible handles have been freed
 Private Sub Class_Terminate()
@@ -75,13 +71,8 @@ Private Sub Class_Terminate()
         m_NlsHandle = 0
     End If
 
-    If Not m_NewNlsHandle = 0 Then
-        nls_free m_NewNlsHandle
-        m_NewNlsHandle = 0
-    End If
-
     m_Initialized = False
-    m_CreateReady = False
+    m_Generated = False
 
 End Sub
 
@@ -105,43 +96,13 @@ Public Function Initialize(ByVal Username As String, ByVal Password As String) A
     ' save username and password
     m_Username = Username
     m_Password = Password
-
-    arrU() = StrConv(Username, vbFromUnicode, 1033)
-    arrP() = StrConv(Password, vbFromUnicode, 1033)
-    m_NlsHandle = nls_init(VarPtr(arrU(0)), VarPtr(arrP(0)))
+    m_NlsHandle = nls_init(Username, Password)
 
     ' return true if nls_init succeeded
     If m_NlsHandle <> 0 Then
         Initialize = True
         m_Initialized = True
     End If
-
-End Function
-
-Public Function InitializeChange(ByVal Username As String, ByVal Password As String, ByVal NewPassword As String) As Boolean
-
-    Dim arrU() As Byte
-    Dim arrP() As Byte
-
-    InitializeChange = Initialize(Username, Password)
-
-    If InitializeChange Then
-        m_NewPassword = NewPassword
-
-        arrU() = StrConv(Username, vbFromUnicode, 1033)
-        arrP() = StrConv(NewPassword, vbFromUnicode, 1033)
-        m_NewNlsHandle = nls_init(VarPtr(arrU(0)), VarPtr(arrP(0)))
-
-        ' return true if nls_init succeeded
-        If m_NewNlsHandle <> 0 Then
-            InitializeChange = True
-            m_Initialized = True
-            Exit Function
-        End If
-    End If
-
-    InitializeChange = False
-    m_Initialized = False
 
 End Function
 
@@ -157,15 +118,9 @@ Public Property Get Password() As String
 
 End Property
 
-Public Property Get NewPassword() As String
-
-    NewPassword = m_NewPassword
-
-End Property
-
 Public Property Get GeneratedSaltAndVerifier() As Boolean
 
-    GeneratedSaltAndVerifier = m_CreateReady
+    GeneratedSaltAndVerifier = m_Generated
 
 End Property
 
@@ -191,9 +146,9 @@ End Property
 
 ' store the verifier value
 ' length should be 32 bytes
-Public Property Let Srp_v(ByVal v_Value As String)
+Public Property Let Srp_v(ByVal Value As String)
 
-    m_v = v_Value
+    m_v = Value
 
 End Property
 
@@ -202,39 +157,6 @@ End Property
 Public Property Get Srp_v() As String
 
     Srp_v = m_v
-
-End Property
-
-' store the Salt value
-' store the value when parsing SID_AUTH_ACCOUNTLOGON->C
-' length should be 32 bytes
-Public Property Let Srp_New_Salt(ByVal Salt As String)
-
-    m_New_Salt = Salt
-
-End Property
-
-' gets the stored Salt value
-' this just gets the value you stored (or created in AccountCreate())
-Public Property Get Srp_New_Salt() As String
-
-    Srp_New_Salt = m_New_Salt
-
-End Property
-
-' store the verifier value
-' length should be 32 bytes
-Public Property Let Srp_New_v(ByVal v_Value As String)
-
-    m_New_v = v_Value
-
-End Property
-
-' gets the stored verifier value
-' this just gets the value you stored (or created in AccountCreate())
-Public Property Get Srp_New_v() As String
-
-    Srp_New_v = m_New_v
 
 End Property
 
@@ -364,9 +286,9 @@ End Function
 ' create these values when building SID_AUTH_ACCOUNTCREATE->S or SID_AUTH_CHANGEPROOF->S
 ' Salt length will be 32 bytes
 ' Verifier length will be 32 bytes
-Public Sub GenerateSaltAndVerifier(Optional ByVal IsChangeProof As Boolean = False)
+Public Sub GenerateSaltAndVerifier()
 
-    Dim arrS(0 To 31) As Byte
+    Dim arrSalt(0 To 31) As Byte
     Dim arrV(0 To 31) As Byte
     Dim i As Integer
 
@@ -376,22 +298,15 @@ Public Sub GenerateSaltAndVerifier(Optional ByVal IsChangeProof As Boolean = Fal
 
     Randomize
 
-    For i = LBound(arrS) To UBound(arrS)
-        arrS(i) = CByte(Rnd() * 255)
+    For i = LBound(arrSalt) To UBound(arrSalt)
+        arrSalt(i) = CByte(Rnd() * 255)
     Next i
 
-    If IsChangeProof Then
-        ' use the alternate Salt and v variables so it doesn't affect the old password's check/proof
-        nls_get_v m_NewNlsHandle, VarPtr(arrV(0)), VarPtr(arrS(0))
-        m_New_Salt = StrConv(arrS(), vbUnicode, 1033)
-        m_New_v = StrConv(arrV(), vbUnicode, 1033)
-    Else
-        nls_get_v m_NlsHandle, VarPtr(arrV(0)), VarPtr(arrS(0))
-        m_Salt = StrConv(arrS(), vbUnicode, 1033)
-        m_v = StrConv(arrV(), vbUnicode, 1033)
-    End If
+    nls_get_v m_NlsHandle, VarPtr(arrV(0)), VarPtr(arrSalt(0))
+    m_Salt = StrConv(arrSalt(), vbUnicode, 1033)
+    m_v = StrConv(arrV(), vbUnicode, 1033)
 
-    m_CreateReady = True
+    m_Generated = True
 
 End Sub
 
@@ -403,7 +318,7 @@ End Sub
 Public Sub AccountCreate(ByRef Buffer As Variant)
 
     ' create an s and v
-    Call GenerateSaltAndVerifier(False)
+    Call GenerateSaltAndVerifier
 
     ' insert s
     Buffer.InsertNonNTString m_Salt
@@ -452,22 +367,7 @@ Public Sub AccountLogonProof(ByRef Buffer As Variant, ByVal Salt As String, ByVa
 End Sub
 
 ' populates your databuffer for SID_AUTH_ACCOUNTCHANGE->S
-Public Sub AccountChange(ByRef Buffer As Variant, ByVal NewPassword As String)
-
-    Dim arrU() As Byte
-    Dim arrP() As Byte
-
-    ' store new password
-    m_NewPassword = NewPassword
-
-    ' create the new NLS handle
-    arrU() = StrConv(m_Username, vbFromUnicode, 1033)
-    arrP() = StrConv(m_NewPassword, vbFromUnicode, 1033)
-    m_NewNlsHandle = nls_init(VarPtr(arrU(0)), VarPtr(arrP(0)))
-
-    If m_NewNlsHandle = 0 Then
-        Exit Sub
-    End If
+Public Sub AccountChange(ByRef Buffer As Variant)
 
     ' do the same as SID_AUTH_ACCOUNTLOGON->S
     AccountLogon Buffer
@@ -475,19 +375,25 @@ Public Sub AccountChange(ByRef Buffer As Variant, ByVal NewPassword As String)
 End Sub
 
 ' populates your databuffer for SID_AUTH_ACCOUNTCHANGEPROOF->S
-Public Sub AccountChangeProof(ByRef Buffer As Variant, ByVal Salt As String, ByVal B_Value As String)
+Public Sub AccountChangeProof(ByRef Buffer As Variant, ByVal Salt As String, ByVal B_Value As String, ByVal NewPassword As String)
+
+    Dim oNLS As New clsNLS
+
+    Call oNLS.Initialize(m_Username, NewPassword)
+    ' create an s and v
+    Call oNLS.GenerateSaltAndVerifier
 
     ' do the same as SID_AUTH_ACCOUNTLOGONPROOF->S
     AccountLogonProof Buffer, Salt, B_Value
 
-    ' create an s and v
-    Call GenerateSaltAndVerifier(True)
-
     ' insert s
-    Buffer.InsertNonNTString m_New_Salt
+    Buffer.InsertNonNTString oNLS.Srp_Salt
 
     ' insert v
-    Buffer.InsertNonNTString m_New_v
+    Buffer.InsertNonNTString oNLS.Srp_v
+
+    Call oNLS.Terminate
+    Set oNLS = Nothing
 
 End Sub
 
