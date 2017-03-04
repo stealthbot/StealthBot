@@ -3024,10 +3024,10 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     RunInAll "Event_ClanMemberUpdate", Username, Rank, IsOnline
 End Sub
 
-Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
+Private Sub ClanHandler_ClanMOTD(ByVal Cookie As Long, ByVal Message As String)
     g_Clan.MOTD = Message
     
-    If (cookie = 1) Then
+    If (Cookie = 1) Then
         PassedClanMotdCheck = True
         
         'If (g_Clan.MOTD <> vbNullString) Then

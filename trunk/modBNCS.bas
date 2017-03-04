@@ -815,20 +815,27 @@ End Sub
 Private Sub RECV_SID_PING(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
 
-    Dim TooRecent As Boolean
+    Dim SendResponse As Boolean
+    Dim Cookie As Long
 
-    If ds.LastPingResponse + 15000 > uTicks Then TooRecent = True
-    ds.LastPingResponse = uTicks
+    Cookie = pBuff.GetDWORD
+    
+    SendResponse = False
+    If uTicks >= ds.LastPingResponse + 5000 Then
+        SendResponse = True
+        ds.LastPingResponse = uTicks
+    End If
+    'frmChat.AddChat vbWhite, StringFormat("PING uTicks={0} LPR={1} C={2} SendResponse={3}", uTicks, ds.LastPingResponse, Cookie, SendResponse)
 
     If (frmChat.tmrIdleTimer.Enabled) Then
         ' reached account entry/idle timer enabled
-        If (Not TooRecent) Then
-            Call SEND_SID_PING(pBuff.GetDWORD)
+        If (SendResponse) Then
+            Call SEND_SID_PING(Cookie)
         End If
     Else
         ' during initial auth
         If (BotVars.Spoof = 0) Then
-            Call SEND_SID_PING(pBuff.GetDWORD)
+            Call SEND_SID_PING(Cookie)
         End If
     End If
     
