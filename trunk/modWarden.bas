@@ -212,7 +212,7 @@ Public Function WardenInitilize(ByVal SocketHandle As Long) As Long
     On Error GoTo trap
     Dim INIPath As String
     Dim Instance As Long
-    Dim DebugString As String
+    Dim lDebugValue As Long
   
     Instance = warden_init(SocketHandle)
   
@@ -222,8 +222,8 @@ Public Function WardenInitilize(ByVal SocketHandle As Long) As Long
   
         warden_set_data_file Instance, INIPath, Len(INIPath)
     
-        DebugString = Config.DebugWarden
-        If StrictIsNumeric(DebugString) Then Call warden_config(Instance, CLng(DebugString), 2)
+        lDebugValue = Config.DebugWardenFlags
+        If lDebugValue >= 0 Then Call warden_config(Instance, lDebugValue, 2)
     
         WardenInitilize = Instance
     End If

@@ -229,7 +229,7 @@ Private m_LogonSystems(8)           As Long     'XXLogonSystem
 Private m_GatewayDelimiter          As String
 
 '[DEBUG]
-Private m_DebugWarden               As Boolean
+Private m_DebugWardenFlags          As Long
 
 
 
@@ -1574,12 +1574,12 @@ End Property
 '   SECTION: DEBUG
 '-------------------------
 
-Public Property Get DebugWarden() As Boolean
-    DebugWarden = m_DebugWarden
+Public Property Get DebugWardenFlags() As Long
+    DebugWardenFlags = m_DebugWardenFlags
 End Property
 
-Public Property Let DebugWarden(ByVal sValue As Boolean)
-    m_DebugWarden = sValue
+Public Property Let DebugWardenFlags(ByVal lValue As Long)
+    m_DebugWardenFlags = lValue
 End Property
 
 
@@ -1888,7 +1888,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_EMULATION, "ServerCommandList", m_ServerCommandList
     WriteSetting SECTION_EMULATION, "GatewayDelimiter", m_GatewayDelimiter
     
-    WriteSetting SECTION_DEBUG, "Warden", m_DebugWarden
+    WriteSetting SECTION_DEBUG, "WardenFlags", m_DebugWardenFlags
     
     Dim i As Integer
     For i = LBound(m_ProductKeys) To UBound(m_ProductKeys)
@@ -2098,7 +2098,7 @@ Private Sub LoadDefaults()
     Next
 
     '[Debug]
-    m_DebugWarden = False
+    m_DebugWardenFlags = 0
 End Sub
 
 ' Loads the old (2.7.1) config.
@@ -2434,7 +2434,7 @@ Private Sub LoadVersion6Config()
     m_ServerCommandList = ReadSetting(SECTION_EMULATION, "ServerCommandList", m_ServerCommandList)
     m_GatewayDelimiter = ReadSetting(SECTION_EMULATION, "GatewayDelimiter", m_GatewayDelimiter)
 
-    m_DebugWarden = ReadSettingB(SECTION_DEBUG, "Warden", m_DebugWarden)
+    m_DebugWardenFlags = ReadSettingL(SECTION_DEBUG, "WardenFlags", m_DebugWardenFlags)
 
     
     Dim i As Integer
