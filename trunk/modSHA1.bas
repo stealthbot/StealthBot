@@ -16,64 +16,23 @@ Private Type OneLong
     L As Long
 End Type
 
-'I added this function as a quick solution and better named method to call. The code it uses is still pretty bad. - FrOzeN
-'Public Sub Warden_SHA1(Destination() As Byte, ByRef Source() As Byte)
-Public Function Warden_SHA1(ByVal data As String) As String
-    Dim arrData() As Byte
-    Dim strHash As String, arrHash() As Byte
-    Dim arrRet(20) As Byte
-    
-    arrData = StrConv(data, vbFromUnicode)
-    
-    strHash = SHA1b(data)
-    arrHash = StrConv(strHash, vbFromUnicode)
-    
-    Call CopyMemory(arrRet(0), arrHash(0), 20)
-    Warden_SHA1 = StrConv(arrRet, vbUnicode)
-End Function
+Public Sub DefaultSHA1(ByRef Message() As Byte, ByRef Result() As Byte)
+    Dim h1 As Long, h2 As Long, h3 As Long, h4 As Long, h5 As Long
 
-Private Function SHA1b(ByVal sIn As String) As String
-    Dim bIn() As Byte
-    StrToByteArray sIn, bIn
-    SHA1b = SHAIt(bIn)
-End Function
-
-Private Function SHAIt(Message() As Byte) As String
-    Dim h1 As Long
-    Dim h2 As Long
-    Dim h3 As Long
-    Dim h4 As Long
-    Dim h5 As Long
-    
-    DefaultSHA1 Message, h1, h2, h3, h4, h5
-    SHAIt = LongToStr(h1) & LongToStr(h2) & LongToStr(h3) & LongToStr(h4) & LongToStr(h5)
-End Function
-
-Private Sub StrToByteArray(ByVal sStr As String, ByRef ary() As Byte)
-    ReDim ary(Len(sStr) - 1) As Byte
-    CopyMemory ary(0), ByVal sStr, Len(sStr)
-End Sub
-
-Public Function LongToStr(ByVal lVal As Long) As String
-    Dim s As String
-    s = hex$(lVal)
-    
-    If Len(s) < 8 Then s = String$(8 - Len(s), "0") & s
-    
-    LongToStr = Chr$(Val("&H0" & Mid$(s, 1, 2))) & _
-                Chr$(Val("&H0" & Mid$(s, 3, 2))) & _
-                Chr$(Val("&H0" & Mid$(s, 5, 2))) & _
-                Chr$(Val("&H0" & Mid$(s, 7, 2)))
-End Function
-
-Public Sub DefaultSHA1(Message() As Byte, h1 As Long, h2 As Long, h3 As Long, h4 As Long, h5 As Long)
     Sha1 Message, &H5A827999, &H6ED9EBA1, &H8F1BBCDC, &HCA62C1D6, h1, h2, h3, h4, h5
+
+    ReDim Result(0 To 19)
+    CopyMemory Result(0), h1, 4
+    CopyMemory Result(4), h2, 4
+    CopyMemory Result(8), h3, 4
+    CopyMemory Result(12), h4, 4
+    CopyMemory Result(16), h5, 4
 End Sub
 
 Public Sub Sha1(Message() As Byte, ByVal Key1 As Long, ByVal Key2 As Long, ByVal Key3 As Long, ByVal Key4 As Long, h1 As Long, h2 As Long, h3 As Long, h4 As Long, h5 As Long)
     Dim U As Long, P As Long
     Dim FB As FourBytes, OL As OneLong
-    Dim I As Integer
+    Dim i As Integer
     Dim W(80) As Long
     Dim a As Long, b As Long, c As Long, d As Long, e As Long
     Dim T As Long
@@ -93,41 +52,41 @@ Public Sub Sha1(Message() As Byte, ByVal Key1 As Long, ByVal Key2 As Long, ByVal
     Message(U) = FB.a
     
     While P < U
-        For I = 0 To 15
+        For i = 0 To 15
             FB.d = Message(P)
             FB.c = Message(P + 1)
             FB.b = Message(P + 2)
             FB.a = Message(P + 3)
             LSet OL = FB
-            W(I) = OL.L
+            W(i) = OL.L
             P = P + 4
-        Next I
+        Next i
         
-        For I = 16 To 79
-            W(I) = U32RotateLeft1(W(I - 3) Xor W(I - 8) Xor W(I - 14) Xor W(I - 16))
-        Next I
+        For i = 16 To 79
+            W(i) = U32RotateLeft1(W(i - 3) Xor W(i - 8) Xor W(i - 14) Xor W(i - 16))
+        Next i
         
         a = h1: b = h2: c = h3: d = h4: e = h5
         
-        For I = 0 To 19
-            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(a), e), W(I)), Key1), ((b And c) Or ((Not b) And d)))
+        For i = 0 To 19
+            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(a), e), W(i)), Key1), ((b And c) Or ((Not b) And d)))
             e = d: d = c: c = U32RotateLeft30(b): b = a: a = T
-        Next I
+        Next i
         
-        For I = 20 To 39
-            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(a), e), W(I)), Key2), (b Xor c Xor d))
+        For i = 20 To 39
+            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(a), e), W(i)), Key2), (b Xor c Xor d))
             e = d: d = c: c = U32RotateLeft30(b): b = a: a = T
-        Next I
+        Next i
         
-        For I = 40 To 59
-            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(a), e), W(I)), Key3), ((b And c) Or (b And d) Or (c And d)))
+        For i = 40 To 59
+            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(a), e), W(i)), Key3), ((b And c) Or (b And d) Or (c And d)))
             e = d: d = c: c = U32RotateLeft30(b): b = a: a = T
-        Next I
+        Next i
         
-        For I = 60 To 79
-            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(a), e), W(I)), Key4), (b Xor c Xor d))
+        For i = 60 To 79
+            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(a), e), W(i)), Key4), (b Xor c Xor d))
             e = d: d = c: c = U32RotateLeft30(b): b = a: a = T
-        Next I
+        Next i
         
         h1 = U32Add(h1, a): h2 = U32Add(h2, b): h3 = U32Add(h3, c): h4 = U32Add(h4, d): h5 = U32Add(h5, e)
     Wend

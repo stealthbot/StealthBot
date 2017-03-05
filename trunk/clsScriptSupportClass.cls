@@ -1091,19 +1091,22 @@ End Function
 
 '// SHA1
 '// Returns the result of a standard Sha-1 hash
-Public Function Sha1(ByRef Data As String, Optional ByVal inHex As Boolean = False) As String
-    Dim a As Long
-    Dim B As Long
-    Dim c As Long
-    Dim d As Long
-    Dim e As Long
-    
-    Call modSHA1.DefaultSHA1(StrConv(Data, vbFromUnicode), a, B, c, d, e)
-    
+Public Function Sha1(ByRef Data As String, Optional ByVal inHex As Boolean = False, Optional SPACER As String = vbNullString) As String
+    Dim Message() As Byte
+    Dim Result()  As Byte
+    Dim s         As String
+    Dim i         As Integer
+
+    Message() = StringToByteArr(Data)
+    Call modSHA1.DefaultSHA1(Message, Result)
+
     If inHex Then
-        Sha1 = LCase(Hex(a) & Hex(B) & Hex(c) & Hex(d) & Hex(e))
+        For i = 0 To 19
+            s = StringFormat("{0}{1}{2}", s, IIf(i > 1, SPACER, vbNullString), ZeroOffset(Hex$(Result(i)), 2))
+        Next i
+        Sha1 = s
     Else
-        Sha1 = LongToStr(a) & LongToStr(B) & LongToStr(c) & LongToStr(d) & LongToStr(e)
+        Sha1 = ByteArrToString(Result)
     End If
 End Function
 
@@ -1120,7 +1123,7 @@ Public Function XSHA1(ByRef str As String, Optional ByVal inHex As Boolean = Fal
     
     If inHex Then
         For i = 1 To Len(XSHA1)
-            s = StringFormat("{0}{1}{2}", s, IIf(i > 1, SPACER, vbNullString), ZeroOffset(Asc(Mid(XSHA1, i, 1)), 2))
+            s = StringFormat("{0}{1}{2}", s, IIf(i > 1, SPACER, vbNullString), ZeroOffset(Hex$(Mid$(XSHA1, i, 1)), 2))
         Next
         XSHA1 = s
     End If

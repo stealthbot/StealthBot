@@ -52,8 +52,8 @@ Public Sub InviteToClan(Username As String) '//Works
     End With
 End Sub
 
-Public Sub RequestClanMOTD(Optional ByVal cookie As Long = &H0)
-    PBuffer.InsertDWord cookie
+Public Sub RequestClanMOTD(Optional ByVal Cookie As Long = &H0)
+    PBuffer.InsertDWord Cookie
     PBuffer.SendPacket SID_CLANMOTD
 End Sub
 
