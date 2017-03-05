@@ -58,7 +58,7 @@ Private Declare Function kd_isValid Lib "BNCSutil.dll" _
 Private Declare Sub calcHashBuf Lib "BNCSutil.dll" _
     (ByVal Data As Long, ByVal length As Long, ByVal Hash As Long)
 
-    
+
 Private m_ProductLookup As Dictionary
 
 Private m_Result As Long    ' The result of the decoder initialization
@@ -125,7 +125,7 @@ Public Property Get PrivateValue() As String
         Call CopyMemory(arrStr(0), kd_val2(m_Handle), 4)
     End If
     
-    sBuffer = StrConv(arrStr(), vbUnicode, 1033)
+    sBuffer = ByteArrToString(arrStr())
     
     PrivateValue = sBuffer
 End Property
@@ -171,9 +171,10 @@ Public Function CalculateHash(ByVal ClientToken As Long, ByVal ServerToken As Lo
             Else
                 'm_Hash = String$(m_HashSize, vbNullChar)
                 Call kd_getHash(m_Handle, VarPtr(HashArr(0)))
-                m_Hash = StrConv(HashArr(), vbUnicode, 1033)
+                m_Hash = ByteArrToString(HashArr())
             End If
         Else
+            ' XSHA1 for non-W3 keys
             arrStr = .GetDataAsByteArr
             Call calcHashBuf(VarPtr(arrStr(0)), Len(.Data), VarPtr(HashArr(0)))
         End If

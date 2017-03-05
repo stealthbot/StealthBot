@@ -99,7 +99,7 @@ Public WardenInstance As Long
 '====================================================================================================
 Private Declare Function check_revision Lib "Warden.dll" (ByVal ArchiveTime As Long, ByVal ArchiveName As String, ByVal Seed As Long, ByVal INIFile As String, ByVal INIHeader As String, ByRef Version As Long, ByRef Checksum As Long, ByVal Result As Long) As Long
 Private Declare Function crev_max_result Lib "Warden.dll" () As Long
-Private Declare Function crev_error_description Lib "Warden.dll" (ByVal ErrorCode As Long, ByVal description As String, ByVal Size As Long) As Long
+Private Declare Function crev_error_description Lib "Warden.dll" (ByVal ErrorCode As Long, ByVal Description As String, ByVal Size As Long) As Long
 
 Private Const CREV_SUCCESS             As Long = 0  '//If everything went ok
 Private Const CREV_UNKNOWN_VERSION     As Long = 1  '//Unknown version, Not lockdown, Or Ver
@@ -129,17 +129,16 @@ On Error GoTo trap:
     Dim sFileTime  As String
     
     Warden_CheckRevision = False
-    ReDim arrRes(0 To crev_max_result - 1)
-    arrFT() = StrConv(sArchiveFileTime, vbFromUnicode, 1033)
-    arrSeed() = StrConv(sSeed, vbFromUnicode, 1033)
-    
+
+    ReDim arrRes(0 To crev_max_result)
+    arrFT() = StringToByteArr(sArchiveFileTime)
+    arrSeed() = StringToNTByteArr(sSeed)
+
     lRet = check_revision(VarPtr(arrFT(0)), sArchiveName, VarPtr(arrSeed(0)), _
         GetFilePath(FILE_CREV_INI), sHeader, _
         ltVersion, ltChecksum, VarPtr(arrRes(0)))
-    
-    stResult = StrConv(arrRes(), vbUnicode, 1033)
-    i = InStr(1, stResult, Chr$(0))
-    If (i > 0) Then stResult = Left$(stResult, i - 1)
+
+    stResult = NTByteArrToString(arrRes())
     
     If (Not Len(sArchiveFileTime) = 8) Then sArchiveFileTime = Left$(StringFormat("{0}{1}", sArchiveFileTime, String$(8, Chr$(0))), 8)
     CopyMemory ft, ByVal sArchiveFileTime, 8

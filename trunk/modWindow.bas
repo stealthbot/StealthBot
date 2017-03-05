@@ -159,8 +159,7 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wPara
         Call CopyMemory(cds, ByVal lParam, Len(cds))
         If (cds.cbData < UBound(buf)) Then
             Call CopyMemory(buf(0), ByVal cds.lpData, cds.cbData)
-            Data = StrConv(buf, vbUnicode)
-            Data = Left$(Data, InStr(1, Data, Chr$(0)) - 1)
+            Data = NTByteArrToString(buf)
             If (StrComp(Data, "-reloadscripts", vbTextCompare) = 0) Then
                 SharedScriptSupport.ReloadScript
             End If

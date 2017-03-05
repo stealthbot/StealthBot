@@ -216,14 +216,6 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     Call frmChat.ClearChannel
     
-    If (frmChat.mnuUTF8.Checked) Then
-        ToANSI = UTF8Decode(ChannelName)
-        
-        If (Len(ToANSI) > 0) Then
-            ChannelName = ToANSI
-        End If
-    End If
-    
     ' we want to reset our filter
     ' Values() when we join a new channel
     'BotVars.JoinWatch = 0
@@ -725,14 +717,6 @@ On Error GoTo ERROR_HANDLER:
     End If
     
     Username = ConvertUsername(Username)
-
-    If (frmChat.mnuUTF8.Checked) Then
-        ToANSI = UTF8Decode(Message)
-        
-        If (Len(ToANSI) > 0) Then
-            Message = ToANSI
-        End If
-    End If
     
     If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
         If (PassedClanMotdCheck = False) Then
@@ -983,14 +967,6 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     
     ' convert user name
     Username = UserObj.DisplayName
-    
-    If (frmChat.mnuUTF8.Checked) Then
-        ToANSI = UTF8Decode(Message)
-        
-        If (Len(ToANSI) > 0) Then
-            Message = ToANSI
-        End If
-    End If
     
     If (QueuedEventID = 0) Then
         If (g_Channel.Self.IsOperator) Then
@@ -1628,14 +1604,6 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     ' convert user name
     Username = UserObj.DisplayName
     
-    If (frmChat.mnuUTF8.Checked) Then
-        ToANSI = UTF8Decode(Message)
-        
-        If (Len(ToANSI) > 0) Then
-            Message = ToANSI
-        End If
-    End If
-    
     If (QueuedEventID = 0) Then
         If (g_Channel.Self.IsOperator) Then
             If (GetSafelist(Username) = False) Then
@@ -1868,23 +1836,8 @@ On Error GoTo ERROR_HANDLER:
     'Dim s       As String
     Dim lCarats As Long
     Dim WWIndex As Integer
-    Dim ToANSI  As String
     
     Username = ConvertUsername(Username)
-    
-    ToANSI = UTF8Decode(Message)
-    
-    If (Len(ToANSI) > 0) Then
-        Message = ToANSI
-    End If
-
-    If (frmChat.mnuUTF8.Checked) Then
-        Message = ToANSI
-        
-        If (Message = vbNullString) Then
-            Exit Sub
-        End If
-    End If
     
     If (Catch(0) <> vbNullString) Then
         Call CheckPhrase(Username, Message, CPWHISPER)
@@ -2002,13 +1955,6 @@ End Sub
 Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long)
 On Error GoTo ERROR_HANDLER:
     Dim WWIndex As Integer
-    Dim ToANSI  As String
-    
-    ToANSI = UTF8Decode(Message)
-    
-    If (Len(ToANSI) > 0) Then
-        Message = ToANSI
-    End If
     
     'frmChat.AddChat vbRed, Username
     

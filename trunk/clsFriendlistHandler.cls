@@ -77,7 +77,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByVal pBuff As clsDataBuffer)
                         End If
                         
                         ' Location name
-                        .Location = pBuff.GetString()
+                        .Location = pBuff.GetString(UTF8)
                     End With
                     
                     ' Add to the internal list
@@ -118,7 +118,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByVal pBuff As clsDataBuffer)
                 'End If
                 
                 ' Location name
-                .Location = pBuff.GetString()
+                .Location = pBuff.GetString(UTF8)
                 
                 RaiseEvent FriendUpdate(.DisplayName, n)
             End With
@@ -145,7 +145,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByVal pBuff As clsDataBuffer)
                 End If
                 
                 ' Location name
-                .Location = pBuff.GetString()
+                .Location = pBuff.GetString(UTF8)
 
                 RaiseEvent FriendAdded(.DisplayName, .Game, .LocationID, .Status, .Location)
             End With

@@ -176,12 +176,12 @@ End Function
 Public Function doubleHashPassword(Password As String, ByVal ClientToken As Long, ByVal ServerToken As Long) As String
     Dim Hash(19) As Byte
     Call doubleHashPassword_Raw(Password, ClientToken, ServerToken, VarPtr(Hash(0)))
-    doubleHashPassword = StrConv(Hash(), vbUnicode, 1033)
+    doubleHashPassword = ByteArrToString(Hash())
 End Function
 
 Public Function hashPassword(Password As String) As String
     Dim Hash(19) As Byte
     Call hashPassword_Raw(Password, VarPtr(Hash(0)))
-    hashPassword = StrConv(Hash(), vbUnicode, 1033)
+    hashPassword = ByteArrToString(Hash())
 End Function
 

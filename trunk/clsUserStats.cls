@@ -865,7 +865,7 @@ Private Sub ParseDiabloII()
         CharacterName = Values(1)
         
         If (UBound(Values) >= 2) Then
-            MakeArr Values(2), charData
+            charData() = StringToByteArr(Values(2))
             
             If (UBound(charData) >= 13) Then
                 CharacterClassID = charData(13)
@@ -1007,10 +1007,6 @@ Private Function WarCraftIII_ToString() As String
             
     WarCraftIII_ToString = buf
 End Function
-
-Private Sub MakeArr(ByVal str As String, ByRef arr() As Byte)
-    arr() = StrConv(str, vbFromUnicode, 1033)
-End Sub
 
 Private Function MakeRomanNum(ByVal Num As Integer) As String
     Select Case (Num)

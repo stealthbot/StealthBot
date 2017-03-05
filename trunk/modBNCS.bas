@@ -513,7 +513,7 @@ On Error GoTo ERROR_HANDLER:
     sChannels() = Split(vbNullString)
     
     Do
-        sChannel = pBuff.GetString()
+        sChannel = pBuff.GetString(UTF8)
         
         If LenB(sChannel) > 0 Then
             ReDim Preserve sChannels(UBound(sChannels) + 1)
@@ -589,6 +589,7 @@ On Error GoTo ERROR_HANDLER:
     Dim lPing     As Long
     Dim sUsername As String
     Dim sText     As String
+    Dim Encoding  As STRINGENCODING
     
     Dim sProduct As String
     Dim sParsed  As String
@@ -601,11 +602,21 @@ On Error GoTo ERROR_HANDLER:
     pBuff.GetDWORD                  'IP Address
     pBuff.GetDWORD                  'Account Number
     pBuff.GetDWORD                  'Reg Auth
-    sUsername = pBuff.GetString
-    sText = pBuff.GetString
     
-                
-                
+    Select Case EventID
+        Case ID_JOIN, ID_LEAVE, ID_USER, ID_USERFLAGS: ' user events: always encode statstring ANSI
+            Encoding = ANSI
+        Case Else
+            If (frmChat.mnuUTF8.Checked) Then
+                Encoding = UTF8
+            Else
+                Encoding = ANSI
+            End If
+    End Select
+    
+    sUsername = pBuff.GetString(Encoding)
+    sText = pBuff.GetString(Encoding)
+    
     Select Case EventID
         Case ID_JOIN:        Call Event_UserJoins(sUsername, lFlags, sText, lPing)
         Case ID_LEAVE:       Call Event_UserLeaves(sUsername, lFlags)
@@ -739,7 +750,7 @@ End Sub
 Private Sub RECV_SID_MESSAGEBOX(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
 
-    Call Event_MessageBox(pBuff.GetDWORD, pBuff.GetString, pBuff.GetString)
+    Call Event_MessageBox(pBuff.GetDWORD, pBuff.GetString(UTF8), pBuff.GetString(UTF8))
     
     Exit Sub
 ERROR_HANDLER:
@@ -898,8 +909,8 @@ Private Sub RECV_SID_READUSERDATA(pBuff As clsDataBuffer)
     
         ' Read each of the keys
         For i = 0 To UBound(aValues)
-            aValues(i) = pBuff.GetString()
-        Next
+            aValues(i) = pBuff.GetString(IIf(frmChat.mnuUTF8.Checked, UTF8, ANSI))
+        Next i
     End If
     
     ' Find the request for this ID and hand it off to the event handler
@@ -967,7 +978,7 @@ On Error GoTo ERROR_HANDLER:
     Dim sInfo   As String
     
     lResult = pBuff.GetDWORD
-    sInfo = pBuff.GetString
+    sInfo = pBuff.GetString(UTF8)
 
     Select Case lResult
         Case 1:
@@ -1130,7 +1141,7 @@ On Error GoTo ERROR_HANDLER:
     Dim sInfo   As String
     
     lResult = pBuff.GetDWORD
-    sInfo = pBuff.GetString
+    sInfo = pBuff.GetString(UTF8)
     
     Select Case lResult
         Case 1:
@@ -1223,7 +1234,7 @@ On Error GoTo ERROR_HANDLER:
     Dim sInfo  As String
     
     lResult = pBuff.GetDWORD
-    sInfo = pBuff.GetString
+    sInfo = pBuff.GetString(UTF8)
 
     ds.AccountEntryPending = False
     frmChat.tmrAccountLock.Enabled = False
@@ -1328,7 +1339,7 @@ On Error GoTo ERROR_HANDLER:
     Dim sOut    As String
     
     lResult = pBuff.GetDWORD
-    sInfo = pBuff.GetString
+    sInfo = pBuff.GetString(UTF8)
 
     ds.AccountEntryPending = False
 
@@ -1429,7 +1440,7 @@ On Error GoTo ERROR_HANDLER:
         lPort = ntohs(pBuff.GetDWORD)
         
         sMCPData = StringFormat("{0}{1}", sMCPData, pBuff.GetRaw(48))
-        sUniq = pBuff.GetString
+        sUniq = pBuff.GetString(UTF8)
         
         If (Not frmChat.sckMCP.State = 0) Then frmChat.sckMCP.Close
         
@@ -1538,8 +1549,8 @@ On Error GoTo ERROR_HANDLER:
         For i = 0 To lCount - 1
             pBuff.GetDWORD 'Unknown
             
-            Server(0) = pBuff.GetString
-            Server(1) = pBuff.GetString
+            Server(0) = pBuff.GetString(UTF8)
+            Server(1) = pBuff.GetString(UTF8)
             List(i) = Server()
             
             If (MDebug("debug") And (MDebug("all") Or MDebug("info"))) Then
@@ -1731,7 +1742,7 @@ On Error GoTo ERROR_HANDLER:
     Dim bSuccess As Boolean
     
     lResult = pBuff.GetDWORD
-    sInfo = pBuff.GetString
+    sInfo = pBuff.GetString(UTF8)
 
     bSuccess = False
     
@@ -2031,7 +2042,7 @@ On Error GoTo ERROR_HANDLER:
     
     lResult = pBuff.GetDWORD
     M2 = pBuff.GetRaw(20)
-    sInfo = pBuff.GetString
+    sInfo = pBuff.GetString(UTF8)
 
     ds.AccountEntryPending = False
     frmChat.tmrAccountLock.Enabled = False

@@ -174,7 +174,7 @@ Public Property Get Srp_A() As String
 
     nls_get_A m_NlsHandle, VarPtr(arrA(0))
 
-    Srp_A = StrConv(arrA(), vbUnicode, 1033)
+    Srp_A = ByteArrToString(arrA())
 
 End Property
 
@@ -209,12 +209,12 @@ Public Property Get Srp_M1() As String
         Exit Property
     End If
 
-    arrB() = StrConv(m_B, vbFromUnicode, 1033)
-    arrSalt() = StrConv(m_Salt, vbFromUnicode, 1033)
+    arrB() = StringToByteArr(m_B)
+    arrSalt() = StringToByteArr(m_Salt)
 
     nls_get_M1 m_NlsHandle, VarPtr(arrM1(0)), VarPtr(arrB(0)), VarPtr(arrSalt(0))
 
-    Srp_M1 = StrConv(arrM1(), vbUnicode, 1033)
+    Srp_M1 = ByteArrToString(arrM1())
 
 End Property
 
@@ -231,12 +231,12 @@ Public Property Get Srp_S() As String
         Exit Property
     End If
 
-    arrB() = StrConv(m_B, vbFromUnicode, 1033)
-    arrSalt() = StrConv(m_Salt, vbFromUnicode, 1033)
+    arrB() = StringToByteArr(m_B)
+    arrSalt() = StringToByteArr(m_Salt)
 
     nls_get_S m_NlsHandle, VarPtr(arrS(0)), VarPtr(arrB(0)), VarPtr(arrSalt(0))
 
-    Srp_S = StrConv(arrS(), vbUnicode, 1033)
+    Srp_S = ByteArrToString(arrS())
 
 End Property
 
@@ -252,11 +252,11 @@ Public Property Get Srp_K() As String
         Exit Property
     End If
 
-    arrSalt() = StrConv(m_Salt, vbFromUnicode, 1033)
+    arrSalt() = StringToByteArr(m_Salt)
 
     nls_get_K m_NlsHandle, VarPtr(arrK(0)), VarPtr(arrSalt(0))
 
-    Srp_K = StrConv(arrK(), vbUnicode, 1033)
+    Srp_K = ByteArrToString(arrK())
 
 End Property
 
@@ -274,9 +274,9 @@ Public Function SrpVerifyM2(ByVal M2 As String) As Boolean
         Exit Function
     End If
 
-    arrM2() = StrConv(M2, vbFromUnicode, 1033)
-    arrB() = StrConv(m_B, vbFromUnicode, 1033)
-    arrSalt() = StrConv(m_Salt, vbFromUnicode, 1033)
+    arrM2() = StringToByteArr(M2)
+    arrB() = StringToByteArr(m_B)
+    arrSalt() = StringToByteArr(m_Salt)
 
     SrpVerifyM2 = nls_check_M2(m_NlsHandle, VarPtr(arrM2(0)), VarPtr(arrB(0)), VarPtr(arrSalt(0)))
 
@@ -303,8 +303,9 @@ Public Sub GenerateSaltAndVerifier()
     Next i
 
     nls_get_v m_NlsHandle, VarPtr(arrV(0)), VarPtr(arrSalt(0))
-    m_Salt = StrConv(arrSalt(), vbUnicode, 1033)
-    m_v = StrConv(arrV(), vbUnicode, 1033)
+
+    m_Salt = ByteArrToString(arrSalt())
+    m_v = ByteArrToString(arrV())
 
     m_Generated = True
 
@@ -406,7 +407,7 @@ Public Function VerifyServerSignature(ByVal IPAddress As String, ByVal Signature
     Dim arrSig() As Byte
 
     lngAddr = inet_addr(IPAddress)
-    arrSig() = StrConv(Signature, vbFromUnicode, 1033)
+    arrSig() = StringToByteArr(Signature)
 
     VerifyServerSignature = nls_check_signature(lngAddr, VarPtr(arrSig(0)))
 
