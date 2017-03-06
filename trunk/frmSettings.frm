@@ -793,7 +793,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   3480
          TabIndex        =   208
-         ToolTipText     =   "Enable/disable the splash screen on startup."
+         ToolTipText     =   "Show the StealthBot news in the chat window after startup."
          Top             =   840
          Value           =   1  'Checked
          Width           =   2775
@@ -1071,7 +1071,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   360
          TabIndex        =   31
-         ToolTipText     =   "Enable/disable the splash screen on startup."
+         ToolTipText     =   "Show the splash screen on startup."
          Top             =   840
          Width           =   2775
       End
@@ -3213,7 +3213,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   360
          TabIndex        =   106
-         ToolTipText     =   "Enable/disable checking of the mail.ini file when people join."
+         ToolTipText     =   "Check the mail.ini file when users join."
          Top             =   1560
          Width           =   2415
       End
