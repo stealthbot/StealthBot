@@ -471,7 +471,7 @@ Begin VB.Form frmSettings
       End
       Begin VB.CheckBox chkUseRealm 
          BackColor       =   &H00000000&
-         Caption         =   "Use Diablo II Realms"
+         Caption         =   "Use Diablo II Realm"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -485,6 +485,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   3240
          TabIndex        =   18
+         ToolTipText     =   "Allows you to log on as your Diablo II character as well as enter realm-restricted channels."
          Top             =   3840
          Width           =   1935
       End
@@ -775,6 +776,28 @@ Begin VB.Form frmSettings
       TabIndex        =   120
       Top             =   0
       Width           =   6615
+      Begin VB.CheckBox chkShowNews 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Show StealthBot news on startup"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   3480
+         TabIndex        =   208
+         ToolTipText     =   "Enable/disable the splash screen on startup."
+         Top             =   840
+         Value           =   1  'Checked
+         Width           =   2775
+      End
       Begin VB.CheckBox chkMinimizeOnStartup 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
@@ -790,11 +813,11 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   3720
+         Left            =   360
          TabIndex        =   34
          ToolTipText     =   "Automatically minimize on startup."
          Top             =   1200
-         Width           =   2535
+         Width           =   2775
       End
       Begin VB.CheckBox chkURLDetect 
          Alignment       =   1  'Right Justify
@@ -811,16 +834,16 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   3720
+         Left            =   3480
          TabIndex        =   38
          ToolTipText     =   "Enables automatic URL detection and highlighting in the main chat window."
          Top             =   2040
-         Width           =   2535
+         Width           =   2775
       End
-      Begin VB.CheckBox chkDisablePrefix 
+      Begin VB.CheckBox chkShowPrefixBox 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
-         Caption         =   "Disable prefix box"
+         Caption         =   "Show prefix box"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -834,14 +857,15 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   360
          TabIndex        =   43
-         ToolTipText     =   "Disables the smaller prefix box to the left of the box you type in to send text to Battle.net"
+         ToolTipText     =   "Enables the small prefix box to the left of the send box used to put text before all messages."
          Top             =   3840
+         Value           =   1  'Checked
          Width           =   1815
       End
-      Begin VB.CheckBox chkDisableSuffix 
+      Begin VB.CheckBox chkShowSuffixBox 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
-         Caption         =   "Disable suffix box"
+         Caption         =   "Show suffix box"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -855,8 +879,9 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   360
          TabIndex        =   44
-         ToolTipText     =   "Disables the smaller suffix box to the right of the box you type in to send text to Battle.net"
+         ToolTipText     =   "Enables the small suffix box to the right of the send box used to put text after all messages."
          Top             =   4200
+         Value           =   1  'Checked
          Width           =   1815
       End
       Begin VB.CheckBox chkShowUserGameStatsIcons 
@@ -873,12 +898,12 @@ Begin VB.Form frmSettings
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00FFFFFF&
-         Height          =   375
-         Left            =   3720
+         Height          =   255
+         Left            =   3480
          TabIndex        =   41
          Top             =   2880
          Value           =   1  'Checked
-         Width           =   2535
+         Width           =   2775
       End
       Begin VB.CheckBox chkShowUserFlagsIcons 
          Alignment       =   1  'Right Justify
@@ -895,16 +920,16 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   3720
+         Left            =   3480
          TabIndex        =   42
          Top             =   3240
          Value           =   1  'Checked
-         Width           =   2535
+         Width           =   2775
       End
-      Begin VB.CheckBox chkNoColoring 
+      Begin VB.CheckBox chkListColoring 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
-         Caption         =   "Disable channel list name coloring"
+         Caption         =   "Enable channel list name coloring"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -915,17 +940,18 @@ Begin VB.Form frmSettings
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00FFFFFF&
-         Height          =   255
+         Height          =   375
          Left            =   360
          TabIndex        =   40
          ToolTipText     =   "Name coloring changes the color of people's names in the channel list based on their status or activity."
-         Top             =   3120
-         Width           =   3015
+         Top             =   3000
+         Value           =   1  'Checked
+         Width           =   2775
       End
-      Begin VB.CheckBox chkNoAutocomplete 
+      Begin VB.CheckBox chkNameAutocomplete 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
-         Caption         =   "Disable name autocompletion"
+         Caption         =   "Enable name autocompletion"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -937,16 +963,17 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   3720
+         Left            =   3480
          TabIndex        =   39
-         ToolTipText     =   "Checking this box prevents the highlighted display of suggested usernames as you type in the send box."
+         ToolTipText     =   "Enables the highlighted display of suggested usernames as you type in the send box."
          Top             =   2400
-         Width           =   2535
+         Value           =   1  'Checked
+         Width           =   2775
       End
-      Begin VB.CheckBox chkNoTray 
+      Begin VB.CheckBox chkMinimizeToTray 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
-         Caption         =   "Do not minimize to the System Tray"
+         Caption         =   "Always minimize to System Tray"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -958,11 +985,12 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   360
+         Left            =   3480
          TabIndex        =   32
-         ToolTipText     =   "Disable minimization to the System Tray (only to the Taskbar)."
+         ToolTipText     =   "Always minimize to the System Tray instead of the Taskbar."
          Top             =   1200
-         Width           =   3015
+         Value           =   1  'Checked
+         Width           =   2775
       End
       Begin VB.CheckBox chkFlash 
          Alignment       =   1  'Right Justify
@@ -979,16 +1007,16 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   3720
+         Left            =   360
          TabIndex        =   33
          ToolTipText     =   "Flash the bot window when events occur."
-         Top             =   840
-         Width           =   2535
+         Top             =   2400
+         Width           =   2775
       End
       Begin VB.CheckBox chkUTF8 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
-         Caption         =   "Use UTF-8 encoding/decoding when processing and sending messages"
+         Caption         =   "Use UTF-8 encoding/decoding"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -999,13 +1027,13 @@ Begin VB.Form frmSettings
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00FFFFFF&
-         Height          =   495
+         Height          =   255
          Left            =   360
          TabIndex        =   35
          ToolTipText     =   "Blizzard games encode their messages to UTF-8 format. Enable this setting to properly see special characters sent by these games."
          Top             =   1680
          Value           =   1  'Checked
-         Width           =   3015
+         Width           =   2775
       End
       Begin VB.ComboBox cboTimestamp 
          BackColor       =   &H00993300&
@@ -1045,7 +1073,7 @@ Begin VB.Form frmSettings
          TabIndex        =   31
          ToolTipText     =   "Enable/disable the splash screen on startup."
          Top             =   840
-         Width           =   3015
+         Width           =   2775
       End
       Begin VB.CheckBox chkFilter 
          Alignment       =   1  'Right Justify
@@ -1062,11 +1090,11 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   3720
+         Left            =   3480
          TabIndex        =   37
-         ToolTipText     =   "Enable/disable chat filtering (lowers CPU usage)"
+         ToolTipText     =   "Enable chat filtering (lowers CPU usage)."
          Top             =   1680
-         Width           =   2535
+         Width           =   2775
       End
       Begin VB.CheckBox chkJoinLeaves 
          Alignment       =   1  'Right Justify
@@ -1085,9 +1113,9 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   360
          TabIndex        =   36
-         ToolTipText     =   "Enable/disable Join and Leave messages"
-         Top             =   2280
-         Width           =   3015
+         ToolTipText     =   "Enable Join and Leave messages."
+         Top             =   2040
+         Width           =   2775
       End
       Begin VB.Line Line12 
          BorderColor     =   &H00FFFFFF&
@@ -1100,8 +1128,8 @@ Begin VB.Form frmSettings
          BorderColor     =   &H00FFFFFF&
          X1              =   6240
          X2              =   360
-         Y1              =   3600
-         Y2              =   3600
+         Y1              =   3560
+         Y2              =   3560
       End
       Begin VB.Line Line10 
          BorderColor     =   &H00FFFFFF&
@@ -1119,7 +1147,7 @@ Begin VB.Form frmSettings
       End
       Begin VB.Label Label8 
          BackColor       =   &H00000000&
-         Caption         =   "Timestamp Settings"
+         Caption         =   "Timestamp"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -1135,7 +1163,7 @@ Begin VB.Form frmSettings
          Left            =   2760
          TabIndex        =   156
          Top             =   3840
-         Width           =   1575
+         Width           =   975
       End
       Begin VB.Line Line1 
          BorderColor     =   &H00FFFFFF&
@@ -1846,7 +1874,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   2160
          TabIndex        =   70
-         ToolTipText     =   "Instead of banning idle users, the bot will simply kick them."
+         ToolTipText     =   "Instead of banning users for saying banned phrases, the bot will kick them."
          Top             =   2640
          Width           =   615
       End
@@ -1866,31 +1894,12 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   2160
          TabIndex        =   68
-         ToolTipText     =   "Instead of banning idle users, the bot will simply kick them."
+         ToolTipText     =   "Instead of banning quiet users, the bot will kick them."
          Top             =   2280
          Width           =   615
       End
-      Begin VB.CheckBox chkPingBan 
-         BackColor       =   &H00000000&
-         Caption         =   "PingBan"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   360
-         TabIndex        =   71
-         ToolTipText     =   "Ban unsafelisted users who state banned phrases."
-         Top             =   3120
-         Width           =   975
-      End
       Begin VB.TextBox txtPingLevel 
+         Alignment       =   1  'Right Justify
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
@@ -1907,7 +1916,7 @@ Begin VB.Form frmSettings
          MaxLength       =   25
          TabIndex        =   72
          Top             =   3120
-         Width           =   735
+         Width           =   615
       End
       Begin VB.CheckBox chkBanEvasion 
          BackColor       =   &H00000000&
@@ -1931,7 +1940,7 @@ Begin VB.Form frmSettings
       End
       Begin VB.CheckBox chkIdleKick 
          BackColor       =   &H00000000&
-         Caption         =   "Kick instead of ban"
+         Caption         =   "Kick"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -1945,9 +1954,9 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   4680
          TabIndex        =   76
-         ToolTipText     =   "Instead of banning idle users, the bot will simply kick them."
+         ToolTipText     =   "Instead of banning idle users, the bot will kick them."
          Top             =   720
-         Width           =   1815
+         Width           =   1215
       End
       Begin VB.CheckBox chkPeonbans 
          BackColor       =   &H00000000&
@@ -1982,12 +1991,12 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   285
-         Left            =   3120
+         Left            =   3240
          MaxLength       =   180
          TabIndex        =   88
          Text            =   "You are below the required level for entry."
          Top             =   4305
-         Width           =   3255
+         Width           =   3135
       End
       Begin VB.CheckBox chkCBan 
          BackColor       =   &H00000000&
@@ -2045,7 +2054,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   360
          TabIndex        =   69
-         ToolTipText     =   "Ban unsafelisted users who state banned phrases."
+         ToolTipText     =   "Ban unsafelisted users who say banned phrases."
          Top             =   2640
          Width           =   1695
       End
@@ -2245,11 +2254,12 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   360
          TabIndex        =   65
-         ToolTipText     =   "Kick users who yell (uppercase message longer than 5 letters)"
+         ToolTipText     =   "Kick users who yell (uppercase message longer than 5 letters)."
          Top             =   1440
          Width           =   1935
       End
       Begin VB.TextBox txtBanW3 
+         Alignment       =   1  'Right Justify
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
@@ -2262,7 +2272,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   285
-         Left            =   5640
+         Left            =   5760
          MaxLength       =   25
          TabIndex        =   87
          Top             =   3720
@@ -2289,6 +2299,7 @@ Begin VB.Form frmSettings
          Width           =   1935
       End
       Begin VB.TextBox txtBanD2 
+         Alignment       =   1  'Right Justify
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
@@ -2323,11 +2334,12 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   3240
          TabIndex        =   75
-         ToolTipText     =   "Ban users who have been idle for X seconds."
+         ToolTipText     =   "Ban users who have been idle for the specified number of seconds."
          Top             =   720
          Width           =   1455
       End
       Begin VB.TextBox txtIdleBanDelay 
+         Alignment       =   1  'Right Justify
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
@@ -2346,9 +2358,57 @@ Begin VB.Form frmSettings
          Top             =   1080
          Width           =   615
       End
+      Begin VB.CheckBox chkPingBan 
+         BackColor       =   &H00000000&
+         Caption         =   "PingBan"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   71
+         ToolTipText     =   "Ban unsafelisted users who have a ping, in milliseconds, higher than specified."
+         Top             =   3120
+         Width           =   975
+      End
+      Begin VB.Label lblMod 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00000000&
+         Caption         =   "Above:"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   8
+         Left            =   1320
+         TabIndex        =   209
+         Top             =   3120
+         Width           =   615
+      End
+      Begin VB.Line Line13 
+         BorderColor     =   &H00FFFFFF&
+         X1              =   3000
+         X2              =   3000
+         Y1              =   4560
+         Y2              =   720
+      End
       Begin VB.Label lblMod 
          BackColor       =   &H00000000&
-         Caption         =   "Level:"
+         Caption         =   "ms"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -2361,10 +2421,10 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   7
-         Left            =   1560
+         Left            =   2760
          TabIndex        =   207
          Top             =   3120
-         Width           =   495
+         Width           =   255
       End
       Begin VB.Line Line16 
          BorderColor     =   &H00FFFFFF&
@@ -2387,13 +2447,6 @@ Begin VB.Form frmSettings
          Y1              =   1560
          Y2              =   1560
       End
-      Begin VB.Line Line13 
-         BorderColor     =   &H00FFFFFF&
-         X1              =   3000
-         X2              =   3000
-         Y1              =   4560
-         Y2              =   720
-      End
       Begin VB.Label lblMod 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
@@ -2410,7 +2463,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   0
-         Left            =   3120
+         Left            =   3240
          TabIndex        =   182
          Top             =   4065
          Width           =   1335
@@ -2499,7 +2552,7 @@ Begin VB.Form frmSettings
       Begin VB.Label lblMod 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
-         Caption         =   "Diablo II"
+         Caption         =   "Diablo II:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -2520,7 +2573,7 @@ Begin VB.Form frmSettings
       Begin VB.Label lblMod 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
-         Caption         =   "Warcraft III"
+         Caption         =   "Warcraft III:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -2533,7 +2586,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   6
-         Left            =   4560
+         Left            =   4680
          TabIndex        =   167
          Top             =   3720
          Width           =   975
@@ -2696,15 +2749,44 @@ Begin VB.Form frmSettings
          Width           =   4335
       End
       Begin VB.TextBox txtIdleWait 
-         Alignment       =   2  'Center
+         Alignment       =   1  'Right Justify
          BackColor       =   &H00993300&
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   285
-         Left            =   3000
+         Left            =   2400
          TabIndex        =   98
          Text            =   "6"
          Top             =   1200
          Width           =   495
+      End
+      Begin VB.Label lblIdle 
+         BackColor       =   &H00000000&
+         Caption         =   "minutes"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   4
+         Left            =   3000
+         TabIndex        =   210
+         Top             =   1200
+         Width           =   735
       End
       Begin VB.Line Line5 
          BorderColor     =   &H00FFFFFF&
@@ -2768,7 +2850,7 @@ Begin VB.Form frmSettings
       End
       Begin VB.Label lblIdle 
          BackColor       =   &H00000000&
-         Caption         =   "Delay between messages (minutes)"
+         Caption         =   "Delay between messages:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -2784,7 +2866,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   179
          Top             =   1200
-         Width           =   3015
+         Width           =   1935
       End
       Begin VB.Label lblIdle 
          BackColor       =   &H00000000&
@@ -3028,7 +3110,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   3480
          TabIndex        =   108
-         ToolTipText     =   "Determines whether or not offline friends are hidden from /f list"
+         ToolTipText     =   "Determines whether or not offline friends are hidden from the /f list command."
          Top             =   1200
          Width           =   2415
       End
@@ -3048,7 +3130,7 @@ Begin VB.Form frmSettings
          Left            =   3480
          MaxLength       =   31
          TabIndex        =   110
-         ToolTipText     =   "The channel to go to when kicked. Leave blank to stay in the void."
+         ToolTipText     =   "The channel to go to when kicked. Leave blank to stay in The Void."
          Top             =   3000
          Width           =   2535
       End
@@ -3069,7 +3151,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   360
          TabIndex        =   104
-         ToolTipText     =   "Allow commands such as .next and .back that change your current Winamp song."
+         ToolTipText     =   "Allow commands such as .next and .back that change your current Winamp/iTunes song."
          Top             =   840
          Width           =   2415
       End
@@ -3110,7 +3192,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   360
          TabIndex        =   105
-         ToolTipText     =   "ProfileAmp writes Winamp's currently played song to your profile every 30 seconds"
+         ToolTipText     =   "ProfileAmp writes Winamp's currently played song to your profile every 30 seconds."
          Top             =   1200
          Width           =   2415
       End
@@ -3177,7 +3259,7 @@ Begin VB.Form frmSettings
       End
       Begin VB.Label Label1 
          BackColor       =   &H00000000&
-         Caption         =   "Command trigger"
+         Caption         =   "Command trigger:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -3199,7 +3281,7 @@ Begin VB.Form frmSettings
       Begin VB.Label Label8 
          AutoSize        =   -1  'True
          BackStyle       =   0  'Transparent
-         Caption         =   "Gateway naming convention:"
+         Caption         =   "Gateway naming convention"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -3215,11 +3297,11 @@ Begin VB.Form frmSettings
          Left            =   3480
          TabIndex        =   193
          Top             =   3360
-         Width           =   2100
+         Width           =   2040
       End
       Begin VB.Label Label8 
          BackColor       =   &H00000000&
-         Caption         =   "Backup channel:"
+         Caption         =   "Backup channel"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -3283,6 +3365,46 @@ Begin VB.Form frmSettings
       TabIndex        =   119
       Top             =   0
       Width           =   6615
+      Begin VB.CheckBox chkProxyBNLS 
+         BackColor       =   &H00000000&
+         Caption         =   "Proxy BNLS"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   4560
+         TabIndex        =   212
+         ToolTipText     =   "Routes the BNLS connection through the same proxy."
+         Top             =   4200
+         Width           =   1215
+      End
+      Begin VB.CheckBox chkProxyMCP 
+         BackColor       =   &H00000000&
+         Caption         =   "Proxy Diablo II Realm"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   4560
+         TabIndex        =   211
+         ToolTipText     =   "Routes a Diablo II Realm connection through the same proxy."
+         Top             =   4440
+         Width           =   1935
+      End
       Begin VB.CheckBox chkConnectOnStartup 
          BackColor       =   &H00000000&
          Caption         =   "Connect on startup"
@@ -3297,7 +3419,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   360
+         Left            =   240
          TabIndex        =   21
          ToolTipText     =   "Automatically connect when the bot starts up."
          Top             =   2640
@@ -3336,12 +3458,12 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   315
          ItemData        =   "frmSettings.frx":0000
-         Left            =   2520
+         Left            =   2400
          List            =   "frmSettings.frx":0002
          TabIndex        =   20
          Text            =   "cboBNLSServer"
          Top             =   1200
-         Width           =   3735
+         Width           =   3855
       End
       Begin VB.TextBox txtReconDelay 
          Alignment       =   1  'Right Justify
@@ -3357,7 +3479,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   285
-         Left            =   1680
+         Left            =   1560
          MaxLength       =   15
          TabIndex        =   22
          Text            =   "1000"
@@ -3402,6 +3524,7 @@ Begin VB.Form frmSettings
          Style           =   1  'Graphical
          TabIndex        =   29
          Top             =   3480
+         Value           =   -1  'True
          Width           =   735
       End
       Begin VB.TextBox txtProxyPort 
@@ -3417,11 +3540,11 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   285
-         Left            =   3960
+         Left            =   3720
          MaxLength       =   5
          TabIndex        =   28
          Top             =   4200
-         Width           =   1095
+         Width           =   735
       End
       Begin VB.TextBox txtProxyIP 
          BackColor       =   &H00993300&
@@ -3436,11 +3559,11 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   285
-         Left            =   3960
+         Left            =   3720
          MaxLength       =   15
          TabIndex        =   27
          Top             =   3840
-         Width           =   2175
+         Width           =   2415
       End
       Begin VB.CheckBox chkUseProxies 
          BackColor       =   &H00000000&
@@ -3458,7 +3581,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   3000
          TabIndex        =   26
-         ToolTipText     =   "Routes your Battle.net and/or BNLS connection through a SOCKS4 or 5 proxy."
+         ToolTipText     =   "Routes your Battle.net connection through a SOCKS4 or SOCKS5 proxy."
          Top             =   3480
          Width           =   1215
       End
@@ -3476,10 +3599,10 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   480
+         Left            =   240
          TabIndex        =   25
          ToolTipText     =   "Sets whether or not you have a lag plug when you sign on. If you don't know what this is, leave it off."
-         Top             =   4200
+         Top             =   4320
          Width           =   1215
       End
       Begin VB.ComboBox cboSpoof 
@@ -3495,11 +3618,11 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   315
-         Left            =   360
+         Left            =   240
          Style           =   2  'Dropdown List
          TabIndex        =   24
          Top             =   3840
-         Width           =   2175
+         Width           =   2295
       End
       Begin VB.ComboBox cboConnMethod 
          BackColor       =   &H00993300&
@@ -3612,14 +3735,14 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   11
-         Left            =   2400
+         Left            =   2280
          TabIndex        =   189
          Top             =   3000
          Width           =   255
       End
       Begin VB.Label lbl5 
          BackColor       =   &H00000000&
-         Caption         =   "Reconnect delay"
+         Caption         =   "Reconnect delay:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -3632,15 +3755,15 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   10
-         Left            =   360
+         Left            =   240
          TabIndex        =   188
          Top             =   3000
-         Width           =   1215
+         Width           =   1335
       End
       Begin VB.Label lbl5 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
-         Caption         =   "Port"
+         Caption         =   "Port:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -3656,12 +3779,12 @@ Begin VB.Form frmSettings
          Left            =   3000
          TabIndex        =   184
          Top             =   4200
-         Width           =   855
+         Width           =   615
       End
       Begin VB.Label lbl5 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
-         Caption         =   "IP address"
+         Caption         =   "IP/Host:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -3677,7 +3800,7 @@ Begin VB.Form frmSettings
          Left            =   3000
          TabIndex        =   183
          Top             =   3840
-         Width           =   855
+         Width           =   615
       End
       Begin VB.Line Line4 
          BorderColor     =   &H00FFFFFF&
@@ -3993,7 +4116,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   285
-         Left            =   2040
+         Left            =   2160
          TabIndex        =   93
          Text            =   "0"
          Top             =   4320
@@ -4032,7 +4155,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   285
-         Left            =   2040
+         Left            =   2160
          TabIndex        =   92
          Text            =   "10000"
          ToolTipText     =   $"frmSettings.frx":0008
@@ -4101,14 +4224,14 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   4
-         Left            =   480
+         Left            =   360
          TabIndex        =   202
          Top             =   1440
          Width           =   2535
       End
       Begin VB.Label lbl5 
          BackColor       =   &H00000000&
-         Caption         =   "Maximum logfile size"
+         Caption         =   "Maximum logfile size:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -4141,7 +4264,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   7
-         Left            =   2790
+         Left            =   2880
          TabIndex        =   200
          Top             =   4320
          Width           =   975
@@ -4160,14 +4283,14 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   2790
+         Left            =   2880
          TabIndex        =   199
          Top             =   3960
          Width           =   975
       End
       Begin VB.Label lblBacklog 
          BackColor       =   &H00000000&
-         Caption         =   "Maximum backlog size"
+         Caption         =   "Maximum backlog size:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -4182,7 +4305,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   198
          Top             =   3960
-         Width           =   1575
+         Width           =   1695
       End
       Begin VB.Label Label1 
          BackColor       =   &H00000000&
@@ -4601,6 +4724,7 @@ End Sub
 Private Sub cboConnMethod_Click()
     'Disables the server selection box when hashing is selected
     cboBNLSServer.Enabled = CBool(cboConnMethod.ListIndex = 0)
+    chkProxyBNLS.Enabled = CBool(cboConnMethod.ListIndex = 0) And chkUseProxies.Value
 End Sub
 
 Private Sub cmdCancel_Click()
@@ -4853,32 +4977,35 @@ Private Function SaveSettings() As Boolean
     Config.AutoConnect = CBool(chkConnectOnStartup.Value)
     Config.RegisterEmailDefault = Trim$(txtEmail.Text)
     Config.PingSpoofing = cboSpoof.ListIndex
+    Config.UseUDP = CBool(chkUDP.Value)
     Config.UseProxy = CBool(chkUseProxies.Value)
     Config.ProxyPort = StringToNumber(txtProxyPort.Text, Config.ProxyPort)
     Config.ProxyIP = Trim$(txtProxyIP.Text)
     Config.ProxyType = IIf(CBool(optSocks5.Value), PROXY_SETTING_SOCKS5, PROXY_SETTING_SOCKS4)
-    Config.UseUDP = CBool(chkUDP.Value)
+    Config.ProxyBNLS = CBool(chkProxyBNLS.Value)
+    Config.ProxyMCP = CBool(chkProxyMCP.Value)
 
     Config.ReconnectDelay = StringToNumber(txtReconDelay.Text, Config.ReconnectDelay)
     
     ' General Interface settings
     Config.ShowSplashScreen = CBool(chkSplash.Value)
-    Config.MinimizeToTray = Not CBool(chkNoTray.Value)
-    Config.FlashOnEvents = CBool(chkFlash.Value)
+    Config.DisableNews = Not CBool(chkShowNews.Value)
     Config.MinimizeOnStartup = CBool(chkMinimizeOnStartup.Value)
+    Config.MinimizeToTray = CBool(chkMinimizeToTray.Value)
     
     Config.UseUTF8 = CBool(chkUTF8.Value)
     Config.ShowJoinLeaves = CBool(chkJoinLeaves.Value)
+    Config.FlashOnEvents = CBool(chkFlash.Value)
     Config.ChatFilters = CBool(chkFilter.Value)
     Config.UrlDetection = CBool(chkURLDetect.Value)
-    Config.NameAutoComplete = Not CBool(chkNoAutocomplete.Value)
+    Config.NameAutoComplete = CBool(chkNameAutocomplete.Value)
     
-    Config.NameColoring = Not CBool(chkNoColoring.Value)
+    Config.NameColoring = CBool(chkListColoring.Value)
     Config.ShowStatsIcons = CBool(chkShowUserGameStatsIcons.Value)
     Config.ShowFlagIcons = CBool(chkShowUserFlagsIcons.Value)
     
-    Config.DisablePrefixBox = CBool(chkDisablePrefix.Value)
-    Config.DisableSuffixBox = CBool(chkDisableSuffix.Value)
+    Config.DisablePrefixBox = Not CBool(chkShowPrefixBox.Value)
+    Config.DisableSuffixBox = Not CBool(chkShowSuffixBox.Value)
     Config.TimestampMode = cboTimestamp.ListIndex
     
     ' Font and color
@@ -5149,6 +5276,12 @@ Private Sub chkUseProxies_Click()
     txtProxyPort.Enabled = chkUseProxies.Value
     optSocks4.Enabled = chkUseProxies.Value
     optSocks5.Enabled = chkUseProxies.Value
+    chkProxyBNLS.Enabled = CBool(cboConnMethod.ListIndex = 0) And chkUseProxies.Value
+    chkProxyMCP.Enabled = chkUseRealm.Value And chkUseProxies.Value
+End Sub
+
+Private Sub chkUseRealm_Click()
+    chkProxyMCP.Enabled = chkUseRealm.Value And chkUseProxies.Value
 End Sub
 
 Private Sub chkBackup_Click()
@@ -5475,28 +5608,32 @@ Private Sub InitConnAdvanced()
             optSocks4.Value = True
     End Select
     
+    chkProxyBNLS.Value = Abs(Config.ProxyBNLS)
+    chkProxyMCP.Value = Abs(Config.ProxyMCP)
+    
     ' Adjust "BNLS server" label 2 pixels down
     lbl5(12).Top = lbl5(12).Top + (2 * Screen.TwipsPerPixelY)
 End Sub
 
 Private Sub InitGenInterface()
     chkSplash.Value = Abs(Config.ShowSplashScreen)
-    chkNoTray.Value = Abs(Not Config.MinimizeToTray)
-    chkFlash.Value = Abs(Config.FlashOnEvents)
+    chkShowNews.Value = Abs(Not Config.DisableNews)
     chkMinimizeOnStartup.Value = Abs(Config.MinimizeOnStartup)
+    chkMinimizeToTray.Value = Abs(Config.MinimizeToTray)
     
     chkUTF8.Value = Abs(Config.UseUTF8)
     chkJoinLeaves.Value = Abs(Config.ShowJoinLeaves)
+    chkFlash.Value = Abs(Config.FlashOnEvents)
     chkFilter.Value = Abs(Config.ChatFilters)
     chkURLDetect.Value = Abs(Config.UrlDetection)
-    chkNoAutocomplete.Value = Abs(Not Config.NameAutoComplete)
+    chkNameAutocomplete.Value = Abs(Config.NameAutoComplete)
     
-    chkNoColoring.Value = Abs(Not Config.NameColoring)
+    chkListColoring.Value = Abs(Config.NameColoring)
     chkShowUserGameStatsIcons.Value = Abs(Config.ShowStatsIcons)
     chkShowUserFlagsIcons.Value = Abs(Config.ShowFlagIcons)
     
-    chkDisablePrefix.Value = Abs(Config.DisablePrefixBox)
-    chkDisableSuffix.Value = Abs(Config.DisableSuffixBox)
+    chkShowPrefixBox.Value = Abs(Not Config.DisablePrefixBox)
+    chkShowSuffixBox.Value = Abs(Not Config.DisableSuffixBox)
     cboTimestamp.ListIndex = Config.TimestampMode
 End Sub
 
