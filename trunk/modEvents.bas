@@ -476,8 +476,7 @@ On Error GoTo ERROR_HANDLER:
             RTBColors.InformationText, StringFormat(" using {0}.", Stats.ToString)
             
         .tmrAccountLock.Enabled = False
-        
-        .UpTimer.Interval = 1000
+        .UpTimer.Enabled = True
     End With
     
     If (frmChat.sckBNLS.State <> 0) Then

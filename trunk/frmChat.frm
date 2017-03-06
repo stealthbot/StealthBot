@@ -974,6 +974,8 @@ Begin VB.Form frmChat
       RemotePort      =   6112
    End
    Begin VB.Timer UpTimer 
+      Enabled         =   0   'False
+      Interval        =   1000
       Left            =   6720
       Top             =   4080
    End
@@ -1079,6 +1081,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1104,6 +1107,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2299,7 +2303,7 @@ End Sub
 
 Sub Event_BNetDisconnected()
     tmrIdleTimer.Enabled = False
-    UpTimer.Interval = 0
+    UpTimer.Enabled = False
     BotVars.JoinWatch = 0
     
     AddChat RTBColors.ErrorMessageText, "[BNCS] Disconnected."

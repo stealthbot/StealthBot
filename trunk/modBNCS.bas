@@ -832,11 +832,11 @@ On Error GoTo ERROR_HANDLER:
     Cookie = pBuff.GetDWORD
     
     SendResponse = False
-    If uTicks >= ds.LastPingResponse + 5000 Then
+    If uTicks >= ds.LastPingResponse + 1000 Then
         SendResponse = True
         ds.LastPingResponse = uTicks
     End If
-    'frmChat.AddChat vbWhite, StringFormat("PING uTicks={0} LPR={1} C={2} SendResponse={3}", uTicks, ds.LastPingResponse, Cookie, SendResponse)
+    'frmChat.AddChat vbWhite, StringFormat("PING uTicks={0} LPR={1} C={2} SendResponse={3}", uTicks, ds.LastPingResponse, cookie, SendResponse)
 
     If (frmChat.tmrIdleTimer.Enabled) Then
         ' reached account entry/idle timer enabled
