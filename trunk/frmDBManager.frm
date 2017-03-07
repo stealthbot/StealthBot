@@ -247,6 +247,7 @@ Begin VB.Form frmDBManager
          Width           =   1215
       End
       Begin VB.TextBox txtRank 
+         Alignment       =   1  'Right Justify
          BackColor       =   &H00993300&
          Enabled         =   0   'False
          ForeColor       =   &H00FFFFFF&
@@ -513,7 +514,6 @@ Private Sub Form_Load()
     
     ' this line is gay but for some reason I can't set the ImageList for vbalTV in the designer/VB properties -Ribose
     trvUsers.ImageList = Icons.hImageList
-    'TODO get images, because i broke the imagelist we had... :(
     
     ' has our database been loaded?
     If (DB(0).Username = vbNullString) Then
@@ -533,6 +533,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
     Dim buf  As String
     Dim n    As cTreeViewNode
     Dim i    As Integer
+    Dim tmp  As udtGetAccessResponse
     
     f = FreeFile
 
@@ -543,35 +544,28 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                 Line Input #f, buf
                 
                 If (buf <> vbNullString) Then
-                    If (GetAccess(buf, "USER").Username <> vbNullString) Then
-                        For i = 0 To UBound(m_DB)
-                            If ((StrComp(m_DB(i).Username, buf, vbTextCompare) = 0) And _
-                                (StrComp(m_DB(i).Type, "USER", vbTextCompare) = 0)) Then
+                    If (GetAccess(buf, tmp, "USER", i)) Then
+                        ' do not save to tmp (it's a copy), but use m_DB(i)
+                        With m_DB(i)
+                            .Username = buf
+                            .Type = "USER"
+                            .ModifiedBy = "(console)"
+                            .ModifiedOn = Now
                             
-                                With m_DB(i)
-                                    .Username = buf
-                                    .Type = "USER"
-                                    .ModifiedBy = "(console)"
-                                    .ModifiedOn = Now
-                                    
-                                    If (InStr(1, .Flags, "S", vbBinaryCompare) = 0) Then
-                                        .Flags = .Flags & "S"
-                                    End If
-                                    
-                                    If (Not (trvUsers.SelectedItem Is Nothing)) Then
-                                        If (StrComp(trvUsers.SelectedItem.Tag, "GROUP", vbTextCompare) = 0) Then
-                                            .Groups = .Groups & "," & trvUsers.SelectedItem.Text
-                                        End If
-                                    End If
-                                    
-                                    If (.Groups = vbNullString) Then
-                                        .Groups = "%"
-                                    End If
-                                End With
-                                
-                                Exit For
+                            If (InStr(1, .Flags, "S", vbBinaryCompare) = 0) Then
+                                .Flags = .Flags & "S"
                             End If
-                        Next i
+                            
+                            If (Not (trvUsers.SelectedItem Is Nothing)) Then
+                                If (StrComp(trvUsers.SelectedItem.Tag, "GROUP", vbTextCompare) = 0) Then
+                                    .Groups = .Groups & "," & trvUsers.SelectedItem.Text
+                                End If
+                            End If
+                            
+                            If (.Groups = vbNullString) Then
+                                .Groups = "%"
+                            End If
+                        End With
                     Else
                         ' redefine array to support new entry
                         ReDim Preserve m_DB(UBound(m_DB) + 1)
@@ -621,35 +615,30 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                         User = buf
                     End If
                 
-                    If (GetAccess(User, "USER").Username <> vbNullString) Then
-                        For i = 0 To UBound(m_DB)
-                            If ((StrComp(m_DB(i).Username, User, vbTextCompare) = 0) And _
-                                (StrComp(m_DB(i).Type, "USER", vbTextCompare) = 0)) Then
-                                
-                                With m_DB(i)
-                                    .Username = User
-                                    .Type = "USER"
-                                    .ModifiedBy = "(console)"
-                                    .ModifiedOn = Now
-                                    
-                                    If (InStr(1, .Flags, "B", vbBinaryCompare) = 0) Then
-                                        .Flags = .Flags & "B"
-                                    End If
-                                    
-                                    If (Not (trvUsers.SelectedItem Is Nothing)) Then
-                                        If (StrComp(trvUsers.SelectedItem.Tag, "GROUP", vbTextCompare) = 0) Then
-                                            If (Not IsInGroup(m_DB(i).Groups, trvUsers.SelectedItem.Text)) Then
-                                                .Groups = .Groups & "," & trvUsers.SelectedItem.Text
-                                            End If
-                                        End If
-                                    End If
-                                    
-                                    If (.Groups = vbNullString) Then
-                                        .Groups = "%"
-                                    End If
-                                End With
+                    If (GetAccess(User, tmp, "USER", i)) Then
+                        ' do not save to tmp (it's a copy), but use m_DB(i)
+                        With m_DB(i)
+                            .Username = User
+                            .Type = "USER"
+                            .ModifiedBy = "(console)"
+                            .ModifiedOn = Now
+                            
+                            If (InStr(1, .Flags, "B", vbBinaryCompare) = 0) Then
+                                .Flags = .Flags & "B"
                             End If
-                        Next i
+                            
+                            If (Not (trvUsers.SelectedItem Is Nothing)) Then
+                                If (StrComp(trvUsers.SelectedItem.Tag, "GROUP", vbTextCompare) = 0) Then
+                                    If (Not IsInGroup(m_DB(i).Groups, trvUsers.SelectedItem.Text)) Then
+                                        .Groups = .Groups & "," & trvUsers.SelectedItem.Text
+                                    End If
+                                End If
+                            End If
+                            
+                            If (.Groups = vbNullString) Then
+                                .Groups = "%"
+                            End If
+                        End With
                     Else
                         ' redefine array to support new entry
                         ReDim Preserve m_DB(UBound(m_DB) + 1)
@@ -686,10 +675,10 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
 End Sub
 
 Private Sub btnCreateUser_Click()
-    Dim userCount    As Integer
-    Dim newNode      As cTreeViewNode
-    Dim gAcc         As udtGetAccessResponse
-    Dim Username     As String
+    Dim newNode   As cTreeViewNode
+    Dim Username  As String
+    Dim tmp       As udtGetAccessResponse
+    Dim pos       As Integer
     
     m_entrytype = "USER"
     m_entryname = vbNullString
@@ -700,7 +689,7 @@ Private Sub btnCreateUser_Click()
     
         Username = m_entryname
     
-        If (GetAccess(Username, "USER").Username = vbNullString) Then
+        If (Not GetAccess(Username, tmp, "USER")) Then
             ' redefine array to support new entry
             ReDim Preserve m_DB(UBound(m_DB) + 1)
             
@@ -730,13 +719,19 @@ Private Sub btnCreateUser_Click()
             ' alert user that entry already exists
             MsgBox "There is already an entry of this type matching " & _
                 "the specified name."
+            pos = FindNodeIndex(Username, "USER")
+            If pos > 0 Then
+                trvUsers.Nodes(pos).Selected = True
+            End If
         End If
     End If
 End Sub
 
 Private Sub btnCreateGroup_Click()
-    Dim newNode       As cTreeViewNode
-    Dim GroupName     As String
+    Dim newNode   As cTreeViewNode
+    Dim GroupName As String
+    Dim tmp       As udtGetAccessResponse
+    Dim pos       As Integer
 
     m_entrytype = "GROUP"
     m_entryname = vbNullString
@@ -747,7 +742,7 @@ Private Sub btnCreateGroup_Click()
     
         GroupName = m_entryname
     
-        If (GetAccess(GroupName, "GROUP").Username = vbNullString) Then
+        If (Not GetAccess(GroupName, tmp, "GROUP")) Then
             ReDim Preserve m_DB(UBound(m_DB) + 1)
             
             With m_DB(UBound(m_DB))
@@ -776,13 +771,19 @@ Private Sub btnCreateGroup_Click()
             ' alert user that entry already exists
             MsgBox "There is already an entry of this type matching " & _
                 "the specified name."
+            pos = FindNodeIndex(GroupName, "GROUP")
+            If pos > 0 Then
+                trvUsers.Nodes(pos).Selected = True
+            End If
         End If
     End If
 End Sub
 
 Sub btnCreateClan_Click()
-    Dim newNode       As cTreeViewNode
-    Dim ClanName      As String
+    Dim newNode   As cTreeViewNode
+    Dim ClanName  As String
+    Dim tmp       As udtGetAccessResponse
+    Dim pos       As Integer
     
     m_entrytype = "CLAN"
     m_entryname = vbNullString
@@ -793,7 +794,7 @@ Sub btnCreateClan_Click()
     
         ClanName = m_entryname
     
-        If (GetAccess(ClanName, "CLAN").Username = vbNullString) Then
+        If (Not GetAccess(ClanName, tmp, "CLAN")) Then
             ReDim Preserve m_DB(UBound(m_DB) + 1)
             
             With m_DB(UBound(m_DB))
@@ -820,13 +821,19 @@ Sub btnCreateClan_Click()
             ' alert user that entry already exists
             MsgBox "There is already an entry of this type matching " & _
                 "the specified name."
+            pos = FindNodeIndex(ClanName, "CLAN")
+            If pos > 0 Then
+                trvUsers.Nodes(pos).Selected = True
+            End If
         End If
     End If
 End Sub
         
 Sub btnCreateGame_Click()
-    Dim newNode       As cTreeViewNode
-    Dim GameEntry     As String
+    Dim newNode   As cTreeViewNode
+    Dim GameEntry As String
+    Dim tmp       As udtGetAccessResponse
+    Dim pos       As Integer
     
     m_entryname = vbNullString
     
@@ -836,7 +843,7 @@ Sub btnCreateGame_Click()
     
         GameEntry = m_entryname
         
-        If (GetAccess(GameEntry, "GAME").Username = vbNullString) Then
+        If (Not GetAccess(GameEntry, tmp, "GAME")) Then
             ReDim Preserve m_DB(UBound(m_DB) + 1)
             
             With m_DB(UBound(m_DB))
@@ -863,6 +870,10 @@ Sub btnCreateGame_Click()
             ' alert user that entry already exists
             MsgBox "There is already an entry of this type matching " & _
                 "the specified name."
+            pos = FindNodeIndex(GameEntry, "GAME")
+            If pos > 0 Then
+                trvUsers.Nodes(pos).Selected = True
+            End If
         End If
     End If
 End Sub
@@ -889,7 +900,7 @@ Private Function PlaceNewNode(EntryName As String, EntryType As String, EntryIma
         End If
     End If
     
-    Set PlaceNewNode = trvUsers.nodes.Add(NewParent, etvwChild, EntryType & ": " & EntryName, EntryName, EntryImage, EntryImage)
+    Set PlaceNewNode = trvUsers.Nodes.Add(NewParent, etvwChild, EntryType & ": " & EntryName, EntryName, EntryImage, EntryImage)
                     
     ' set group settings on new database entry
     If (Not PlaceNewNode Is Nothing) Then
@@ -985,18 +996,18 @@ Private Sub btnSaveUser_Click()
                     
                     If (StrComp(OldPGroup, NewPGroup, vbTextCompare) <> 0) Then
                         ' move under new primary
-                        pos = FindNodeIndex(NewPGroup, "GROUP")
+                        Set node = trvUsers.SelectedItem
+                        pos = FindNodeIndex(NewPGroup, "GROUP", node)
                         ' well, does it exist?
                         If (pos > 0) Then
                             ' make node a child of existing group
-                            Set NewParent = trvUsers.nodes(pos)
+                            Set NewParent = trvUsers.Nodes(pos)
                         Else
                             ' put it under DB root
                             Set NewParent = m_root
                         End If
                         
                         ' move node!!
-                        Set node = trvUsers.SelectedItem
                         Call node.MoveNode(NewParent, etvwChild)
                         node.Tag = .Type
                         node.Selected = True
@@ -1294,6 +1305,7 @@ End Sub
 Private Function HandleRenameEvent(Target As cTreeViewNode, NewString As String) As Boolean
     Dim i           As Integer
     Dim WasUpdated  As Boolean
+    Dim tmp         As udtGetAccessResponse
 
     HandleRenameEvent = True
     WasUpdated = False
@@ -1314,7 +1326,7 @@ Private Function HandleRenameEvent(Target As cTreeViewNode, NewString As String)
     For i = LBound(m_DB) To UBound(m_DB)
         If (StrComp(Target.Text, m_DB(i).Username, vbTextCompare) = 0) Then
             If (StrComp(Target.Tag, m_DB(i).Type, vbTextCompare) = 0) Then
-                If LenB(GetAccess(NewString, m_DB(i).Type).Username) > 0 Then
+                If (GetAccess(NewString, tmp, m_DB(i).Type)) Then
                     ' already exists
                     HandleRenameEvent = False
                     Exit Function
@@ -1367,27 +1379,29 @@ Private Sub LoadView()
 
     Dim newNode As cTreeViewNode
 
-    Dim i                   As Integer
-    Dim grp                 As String
-    Dim j                   As Integer
-    Dim pos                 As Integer
-    Dim blnDuplicateFound   As Boolean
-    Dim TypeName            As String
-    Dim TypeImage           As Integer
-    Dim NewParent           As cTreeViewNode
+    Dim i                 As Integer
+    Dim j                 As Integer
+    Dim K                 As Integer
+    Dim grp               As String
+    Dim pos               As Integer
+    Dim bln               As Boolean
+    Dim blnDuplicateFound As Boolean
+    Dim TypeName          As String
+    Dim TypeImage         As Integer
+    Dim NewParent         As cTreeViewNode
 
     ' clear treeview
-    Call trvUsers.nodes.Clear
+    Call trvUsers.Nodes.Clear
     
     ' create root node
-    Set m_root = trvUsers.nodes.Add(, , "Database", "Database", IC_DATABASE, IC_DATABASE)
+    Set m_root = trvUsers.Nodes.Add(, , "Database", "Database", IC_DATABASE, IC_DATABASE)
     ' type DATABASE
     m_root.Tag = "DATABASE"
 
     ' which tab index are we on?
     For i = LBound(m_DB) To UBound(m_DB)
         ' we're handling groups first; is this entry a group?
-        If (StrComp(m_DB(i).Type, "GROUP", vbBinaryCompare) = 0) Then
+        If (StrComp(m_DB(i).Type, "GROUP", vbBinaryCompare) = 0) And (Len(m_DB(i).Username) > 0) Then
             ' is this group a member of other groups?
             If (Len(m_DB(i).Groups) > 0) And (StrComp(m_DB(i).Groups, "%", vbBinaryCompare) <> 0) Then
                 ' get the "primary" group (the first group) to put the node under
@@ -1399,67 +1413,66 @@ Private Sub LoadView()
                 ' well, does it exist?
                 If (pos > 0) Then
                     ' make node a child of existing group
-                    Set NewParent = trvUsers.nodes(pos)
+                    Set NewParent = trvUsers.Nodes(pos)
                 Else
                     ' lets make this guy a parent node for now until we can find
                     ' his real parent.
                     Set NewParent = m_root
                 End If
                 
-                Set newNode = trvUsers.nodes.Add(NewParent, etvwChild, "GROUP: " & m_DB(i).Username, m_DB(i).Username, IC_GROUP, IC_GROUP)
+                Set newNode = trvUsers.Nodes.Add(NewParent, etvwChild, "GROUP: " & m_DB(i).Username, m_DB(i).Username, IC_GROUP, IC_GROUP)
             Else
-                Dim K   As Integer
-                Dim bln As Boolean
-                
                 ' create node
                 Set NewParent = m_root
                 
-                Set newNode = trvUsers.nodes.Add(NewParent, etvwChild, "GROUP: " & m_DB(i).Username, m_DB(i).Username, IC_GROUP, IC_GROUP)
-            
-                ' Okay, is the group a lone ranger?  Or does he have children
-                ' that are already in the list?
-                j = LBound(m_DB)
-                Do
-                    For j = j To (i - 1)
-                        ' we're only concerned with groups, atm.
-                        If (StrComp(m_DB(j).Type, "GROUP", vbBinaryCompare) = 0) Then
-                            ' we only need to check for groups that are members of
-                            ' other groups
-                            If (Len(m_DB(j).Groups) > 0) And (StrComp(m_DB(j).Groups, "%", vbBinaryCompare) <> 0) Then
-                                ' is entry member of multiple groups?
-                                If (InStr(1, m_DB(j).Groups, ",", vbBinaryCompare) <> 0) Then
-                                    ' split up multiple groupings
-                                    grp = Split(m_DB(j).Groups, ",", 2)(0)
-                                Else
-                                    ' no need for special handling...
-                                    grp = m_DB(j).Groups
-                                End If
-                            
-                                ' is the current group a member of our group?
-                                If (StrComp(grp, m_DB(i).Username, vbTextCompare) = 0) Then
-                                    ' indicate that we've found a match
-                                    bln = True
-                                    
-                                    ' break from loop
-                                    Exit For
+                Set newNode = trvUsers.Nodes.Add(NewParent, etvwChild, "GROUP: " & m_DB(i).Username, m_DB(i).Username, IC_GROUP, IC_GROUP)
+                
+                If (Not (newNode Is Nothing)) Then
+                    ' Okay, is the group a lone ranger?  Or does he have children
+                    ' that are already in the list?
+                    j = LBound(m_DB)
+                    Do
+                        For j = j To (i - 1)
+                            ' we're only concerned with groups, atm.
+                            If (StrComp(m_DB(j).Type, "GROUP", vbBinaryCompare) = 0) And (Len(m_DB(j).Username) > 0) Then
+                                ' we only need to check for groups that are members of
+                                ' other groups
+                                If (Len(m_DB(j).Groups) > 0) And (StrComp(m_DB(j).Groups, "%", vbBinaryCompare) <> 0) Then
+                                    ' is entry member of multiple groups?
+                                    If (InStr(1, m_DB(j).Groups, ",", vbBinaryCompare) <> 0) Then
+                                        ' split up multiple groupings
+                                        grp = Split(m_DB(j).Groups, ",", 2)(0)
+                                    Else
+                                        ' no need for special handling...
+                                        grp = m_DB(j).Groups
+                                    End If
+                                
+                                    ' is the current group a member of our group?
+                                    If (StrComp(grp, m_DB(i).Username, vbTextCompare) = 0) Then
+                                        ' indicate that we've found a match
+                                        bln = True
+                                        
+                                        ' break from loop
+                                        Exit For
+                                    End If
                                 End If
                             End If
+                        Next j
+                    
+                        ' is this node a baby's daddy?
+                        If (bln) Then
+                            ' move node
+                            pos = FindNodeIndex(m_DB(j).Username, "GROUP", newNode)
+                            
+                            If pos > 0 Then
+                                Set trvUsers.Nodes(pos).Parent = newNode
+                            End If
                         End If
-                    Next j
-                
-                    ' is this node a baby's daddy?
-                    If (bln) Then
-                        ' move node
-                        pos = FindNodeIndex(m_DB(j).Username, "GROUP")
-                        
-                        If pos > 0 Then
-                            Set trvUsers.nodes(pos).Parent = newNode
-                        End If
-                    End If
-    
-                    ' reset boolean
-                    bln = False
-                Loop Until j = i
+        
+                        ' reset boolean
+                        bln = False
+                    Loop Until j = i
+                End If
             End If
             
             If (Not (newNode Is Nothing)) Then
@@ -1472,7 +1485,7 @@ Private Sub LoadView()
     ' loop through database... this time looking for users, clans, and games (clans and games are "user like" in the tree)
     For i = LBound(m_DB) To UBound(m_DB)
         ' is the entry a user?
-        If (StrComp(m_DB(i).Type, "GROUP", vbTextCompare) <> 0) Then
+        If (StrComp(m_DB(i).Type, "GROUP", vbTextCompare) <> 0) And (Len(m_DB(i).Username) > 0) Then
             ' find the type name, used for the treeview
             If (StrComp(m_DB(i).Type, "USER", vbTextCompare) = 0) Then
                 TypeName = "USER"
@@ -1494,16 +1507,18 @@ Private Sub LoadView()
                 grp = GetPrimaryGroup(m_DB(i).Groups)
             
                 If (grp = vbNullString) Then
-                    pos = False
+                    pos = 0
                 Else
                     ' search for our group
                     pos = FindNodeIndex(grp, "GROUP")
                         
                     ' does our group exist?
                     If (pos > 0) Then
-                        Set NewParent = trvUsers.nodes(pos)
+                        Set NewParent = trvUsers.Nodes(pos)
                     End If
                 End If
+            Else
+                pos = 0
             End If
             
             If (pos <= 0) Then
@@ -1512,7 +1527,7 @@ Private Sub LoadView()
             End If
             
             ' create user node and move into group
-            Set newNode = trvUsers.nodes.Add(NewParent, etvwChild, TypeName & ": " & m_DB(i).Username, m_DB(i).Username, TypeImage, TypeImage)
+            Set newNode = trvUsers.Nodes.Add(NewParent, etvwChild, TypeName & ": " & m_DB(i).Username, m_DB(i).Username, TypeImage, TypeImage)
             
             If (Not (newNode Is Nothing)) Then
                 ' change misc. settings
@@ -1526,7 +1541,7 @@ Private Sub LoadView()
     
     ' does our treeview contain any nodes?
     For i = 1 To trvUsers.NodeCount
-        trvUsers.nodes(i).Expanded = True
+        trvUsers.Nodes(i).Expanded = True
     Next i
     
     Call UpdateGroupList
@@ -1545,6 +1560,7 @@ Private Sub LoadView()
     Exit Sub
     
 ERROR_HANDLER:
+    ' duplicate node
     If (Err.Number = 35602) Then
         DB_remove m_DB(i).Username, m_DB(i).Type
         blnDuplicateFound = True
@@ -1785,10 +1801,12 @@ Private Sub trvUsers_SelectedNodeChanged()
 Static skipupdate As Boolean
     Dim node     As cTreeViewNode
     Dim tmp      As udtGetAccessResponse
-    Dim i        As Integer
     Dim Splt()   As String
     Dim j        As Integer
+    Dim i        As Integer
+    Dim pos      As Integer
     Dim response As VbMsgBoxResult
+    Dim Disable  As Boolean
     
     Set node = trvUsers.SelectedItem
     
@@ -1822,7 +1840,7 @@ Static skipupdate As Boolean
         Exit Sub
     End If
     
-    tmp = GetAccess(node.Text, node.Tag, m_currententry)
+    Call GetAccess(node.Text, tmp, node.Tag, m_currententry)
     
     ' does entry have a rank?
     If (tmp.Rank > 0) Then
@@ -1899,8 +1917,22 @@ Static skipupdate As Boolean
                 End If
                 
                 If (StrComp(tmp.Type, "GROUP", vbTextCompare) = 0) Then
-                    ' don't allow groups to contain themself
+                    Disable = False
+                    
+                    ' don't allow a group to be in itself
                     If (StrComp(tmp.Username, .Text, vbTextCompare) = 0) Then
+                        Disable = True
+                    End If
+                    
+                    ' don't allow a group to be in its children
+                    pos = FindNodeIndex(.Text)
+                    If pos > 0 Then
+                        If node.IsParentOf(trvUsers.Nodes(pos)) Then
+                            Disable = True
+                        End If
+                    End If
+                    
+                    If Disable Then
                         .Checked = False
                         .SmallIcon = IC_UNCHECKED
                         .Ghosted = True
@@ -2076,16 +2108,22 @@ End Sub
 
 Private Sub UpdateInheritCaption(Groups As String)
     Dim grpwlk As udtGetAccessResponse
+    Dim n As Integer
+    Dim s As String
     
-    grpwlk = GetAccessGroupWalk(Groups)
+    s = vbNullString
+    n = GetAccessGroupWalk(Groups, grpwlk)
+    If n <> 1 Then s = "s"
     
     lblInherit.Caption = vbNullString
-    If grpwlk.Rank > 0 And LenB(grpwlk.Flags) > 0 Then
-        lblInherit.Caption = "Inherits rank " & grpwlk.Rank & " and flags " & grpwlk.Flags & " from groups."
-    ElseIf grpwlk.Rank > 0 Then
-        lblInherit.Caption = "Inherits rank " & grpwlk.Rank & " from groups."
-    ElseIf LenB(grpwlk.Flags) > 0 Then
-        lblInherit.Caption = "Inherits flags " & grpwlk.Flags & " from groups."
+    If n > 0 Then
+        If grpwlk.Rank > 0 And LenB(grpwlk.Flags) > 0 Then
+            lblInherit.Caption = StringFormat("Inherits rank {2} and flags {3} from {0} group{1}.", n, s, grpwlk.Rank, grpwlk.Flags)
+        ElseIf grpwlk.Rank > 0 Then
+            lblInherit.Caption = StringFormat("Inherits rank {2} from {0} group{1}.", n, s, grpwlk.Rank)
+        ElseIf LenB(grpwlk.Flags) > 0 Then
+            lblInherit.Caption = StringFormat("Inherits flags {2} from {0} group{1}.", n, s, grpwlk.Flags)
+        End If
     End If
 End Sub
 
@@ -2157,19 +2195,23 @@ Private Sub SetLVPrimaryGroup(ListItem As ListItem)
     End If
 End Sub
 
-Private Function FindNodeIndex(ByVal nodeName As String, Optional Tag As String = vbNullString) As Integer
+Private Function FindNodeIndex(ByVal nodeName As String, Optional ByVal Tag As String = vbNullString, Optional ByVal NotChildOf As cTreeViewNode = Nothing) As Integer
     Dim i As Integer
     
     For i = 1 To trvUsers.NodeCount
-        If (StrComp(trvUsers.nodes(i).Text, nodeName, vbTextCompare) = 0) Then
+        If (StrComp(trvUsers.Nodes(i).Text, nodeName, vbTextCompare) = 0) Then
             If (LenB(Tag) > 0) Then
-                If (StrComp(trvUsers.nodes(i).Tag, Tag, vbTextCompare) = 0) Then
+                If (StrComp(trvUsers.Nodes(i).Tag, Tag, vbTextCompare) = 0) Then
+                    If (Not trvUsers.Nodes(i).IsParentOf(NotChildOf)) Then
+                        FindNodeIndex = i
+                        Exit Function
+                    End If
+                End If
+            Else
+                If (Not trvUsers.Nodes(i).IsParentOf(NotChildOf)) Then
                     FindNodeIndex = i
                     Exit Function
                 End If
-            Else
-                FindNodeIndex = i
-                Exit Function
             End If
         End If
     Next i
@@ -2190,10 +2232,10 @@ Private Sub txtFlags_KeyPress(KeyAscii As Integer)
     If (KeyAscii = 32) Then KeyAscii = 0
     
     ' if key is A-Z, then make uppercase
-    If (InStr(1, AZ, Chr$(KeyAscii), vbTextCompare) > 0) Then
+    If (InStr(1, AZ, ChrW$(KeyAscii), vbTextCompare) > 0) Then
         If (BotVars.CaseSensitiveFlags = False) Then
             If (KeyAscii > 90) Then ' lowercase if greater than "Z"
-                KeyAscii = Asc(UCase(Chr(KeyAscii)))
+                KeyAscii = AscW(UCase$(ChrW$(KeyAscii)))
             End If
         End If
     ' else disallow entering that character (if not a control character)
@@ -2215,7 +2257,7 @@ Private Sub txtRank_KeyPress(KeyAscii As Integer)
     If (KeyAscii = 32) Then KeyAscii = 0
     
     ' if key is not 0-9, disallow entering that character (if not a control character)
-    If (InStr(1, n09, Chr$(KeyAscii), vbTextCompare) = 0 And KeyAscii > 32) Then
+    If (InStr(1, n09, ChrW$(KeyAscii), vbTextCompare) = 0 And KeyAscii > 32) Then
         KeyAscii = 0
     End If
     
@@ -2236,8 +2278,8 @@ Private Sub txtRank_Change()
     Call HandleUnsaved
 End Sub
 
-Private Function GetAccess(ByVal Username As String, Optional dbType As String = _
-    vbNullString, Optional ByRef Index As Integer) As udtGetAccessResponse
+Private Function GetAccess(ByVal Username As String, ByRef Result As udtGetAccessResponse, _
+    Optional ByVal dbType As String = vbNullString, Optional ByRef Index As Integer) As Boolean
     
     Dim i   As Integer
     Dim bln As Boolean
@@ -2257,7 +2299,9 @@ Private Function GetAccess(ByVal Username As String, Optional dbType As String =
             If (bln = True) Then
                 Index = i
                 
-                With GetAccess
+                GetAccess = True
+                
+                With Result
                     .Username = m_DB(i).Username
                     .Rank = m_DB(i).Rank
                     .Flags = m_DB(i).Flags
@@ -2277,19 +2321,19 @@ Private Function GetAccess(ByVal Username As String, Optional dbType As String =
         bln = False
     Next i
 
-    GetAccess.Rank = -1
+    GetAccess = False
 End Function
 
 ' gets combined access of all Groups containing this item
-Private Function GetAccessGroupWalk(Groups As String) As udtGetAccessResponse
-    Dim Splt() As String
-    Dim Group As String
+Private Function GetAccessGroupWalk(ByVal Groups As String, ByRef Result As udtGetAccessResponse) As Integer
+    Dim Splt()    As String
+    Dim Group     As String
     Dim AllGroups As New Collection
-    Dim tmp As udtGetAccessResponse
-    Dim MaxRank As Integer
+    Dim tmp       As udtGetAccessResponse
+    Dim MaxRank   As Integer
     Dim CombFlags As String
-    Dim i As Integer
-    Dim j As Integer
+    Dim i         As Integer
+    Dim j         As Integer
     
     If LenB(Groups) > 0 Then
         Splt() = Split(Groups, ",")
@@ -2304,24 +2348,27 @@ Private Function GetAccessGroupWalk(Groups As String) As udtGetAccessResponse
     
     i = 1
     Do While i <= AllGroups.Count
-        tmp = GetAccess(AllGroups.Item(i), "GROUP")
-        If tmp.Rank > MaxRank Then MaxRank = tmp.Rank
-        CombFlags = CombFlags & tmp.Flags
-        
-        If LenB(tmp.Groups) > 0 And StrComp(tmp.Groups, "%", vbTextCompare) <> 0 Then
-            Splt() = Split(tmp.Groups, ",")
-            For j = LBound(Splt) To UBound(Splt)
-                If (StrComp(Splt(j), "%", vbBinaryCompare) <> 0) Then
-                    On Error GoTo ERROR_HANDLER
-                    Call AllGroups.Add(Splt(j), Splt(j))
-                    On Error GoTo 0
-                End If
-            Next j
+        If GetAccess(AllGroups.Item(i), tmp, "GROUP") Then
+            If tmp.Rank > MaxRank Then MaxRank = tmp.Rank
+            CombFlags = CombFlags & tmp.Flags
+            
+            If LenB(tmp.Groups) > 0 And StrComp(tmp.Groups, "%", vbTextCompare) <> 0 Then
+                Splt() = Split(tmp.Groups, ",")
+                For j = LBound(Splt) To UBound(Splt)
+                    If (StrComp(Splt(j), "%", vbBinaryCompare) <> 0) Then
+                        On Error GoTo ERROR_HANDLER
+                        Call AllGroups.Add(Splt(j), Splt(j))
+                        On Error GoTo 0
+                    End If
+                Next j
+            End If
         End If
         i = i + 1
     Loop
     
-    With GetAccessGroupWalk
+    GetAccessGroupWalk = AllGroups.Count
+    
+    With Result
         .Username = "(all groups)"
         .Rank = MaxRank
         .Flags = CombFlags
