@@ -927,7 +927,7 @@ Private Sub btnSaveUser_Click()
     Dim NewPGroup As String
     Dim pos       As Integer
     Dim NewParent As cTreeViewNode
-    Dim node      As cTreeViewNode
+    Dim Node      As cTreeViewNode
 
     ' if we have no selected user... escape quick!
     If (trvUsers.SelectedItem Is Nothing) Then
@@ -996,8 +996,8 @@ Private Sub btnSaveUser_Click()
                     
                     If (StrComp(OldPGroup, NewPGroup, vbTextCompare) <> 0) Then
                         ' move under new primary
-                        Set node = trvUsers.SelectedItem
-                        pos = FindNodeIndex(NewPGroup, "GROUP", node)
+                        Set Node = trvUsers.SelectedItem
+                        pos = FindNodeIndex(NewPGroup, "GROUP", Node)
                         ' well, does it exist?
                         If (pos > 0) Then
                             ' make node a child of existing group
@@ -1008,9 +1008,9 @@ Private Sub btnSaveUser_Click()
                         End If
                         
                         ' move node!!
-                        Call node.MoveNode(NewParent, etvwChild)
-                        node.Tag = .Type
-                        node.Selected = True
+                        Call Node.MoveNode(NewParent, etvwChild)
+                        Node.Tag = .Type
+                        Node.Selected = True
                     End If
                 End With
                 
@@ -1635,13 +1635,13 @@ Private Sub UnlockGUI()
 End Sub
 
 ' handle node collapse
-Private Sub trvUsers_Collapse(node As cTreeViewNode)
+Private Sub trvUsers_Collapse(Node As cTreeViewNode)
     ' refresh tree view
     Call trvUsers.Refresh
 End Sub
 
 ' handle node expand
-Private Sub trvUsers_Expand(node As cTreeViewNode)
+Private Sub trvUsers_Expand(Node As cTreeViewNode)
     ' refresh tree view
     Call trvUsers.Refresh
 End Sub
@@ -1676,7 +1676,7 @@ End Sub
 '    'frmChat.AddChat vbYellow, "[MOUSE] UP" ' DRAG=" & m_nodedragsrc.Text
 'End Sub
 
-Private Sub trvUsers_NodeRightClick(node As cTreeViewNode)
+Private Sub trvUsers_NodeRightClick(Node As cTreeViewNode)
     mnuRename.Visible = True
     mnuDelete.Visible = True
     mnuSetPrimary.Visible = False
@@ -1686,12 +1686,12 @@ Private Sub trvUsers_NodeRightClick(node As cTreeViewNode)
     
     Set m_menutarget = Nothing
     
-    If (Not (node Is Nothing)) Then
-        If (StrComp(node.Tag, "DATABASE", vbTextCompare) <> 0) Then
-            mnuRename.Enabled = (StrComp(node.Tag, "GROUP", vbTextCompare) = 0)
+    If (Not (Node Is Nothing)) Then
+        If (StrComp(Node.Tag, "DATABASE", vbTextCompare) <> 0) Then
+            mnuRename.Enabled = (StrComp(Node.Tag, "GROUP", vbTextCompare) = 0)
             mnuDelete.Enabled = True
             
-            Set m_menutarget = node
+            Set m_menutarget = Node
         End If
     End If
             
@@ -1799,7 +1799,7 @@ End Sub
 
 Private Sub trvUsers_SelectedNodeChanged()
 Static skipupdate As Boolean
-    Dim node     As cTreeViewNode
+    Dim Node     As cTreeViewNode
     Dim tmp      As udtGetAccessResponse
     Dim Splt()   As String
     Dim j        As Integer
@@ -1808,9 +1808,9 @@ Static skipupdate As Boolean
     Dim response As VbMsgBoxResult
     Dim Disable  As Boolean
     
-    Set node = trvUsers.SelectedItem
+    Set Node = trvUsers.SelectedItem
     
-    If (node Is Nothing) Then
+    If (Node Is Nothing) Then
         Exit Sub
     End If
     
@@ -1830,17 +1830,17 @@ Static skipupdate As Boolean
     
     If skipupdate Then Exit Sub
     
-    Set m_currnode = node
+    Set m_currnode = Node
     
     Call LockGUI
     
-    node.Expanded = True
+    Node.Expanded = True
     
-    If (StrComp(node.Tag, "DATABASE", vbTextCompare) = 0) Then
+    If (StrComp(Node.Tag, "DATABASE", vbTextCompare) = 0) Then
         Exit Sub
     End If
     
-    Call GetAccess(node.Text, tmp, node.Tag, m_currententry)
+    Call GetAccess(Node.Text, tmp, Node.Tag, m_currententry)
     
     ' does entry have a rank?
     If (tmp.Rank > 0) Then
@@ -1927,7 +1927,7 @@ Static skipupdate As Boolean
                     ' don't allow a group to be in its children
                     pos = FindNodeIndex(.Text)
                     If pos > 0 Then
-                        If node.IsParentOf(trvUsers.Nodes(pos)) Then
+                        If Node.IsParentOf(trvUsers.Nodes(pos)) Then
                             Disable = True
                         End If
                     End If
@@ -1949,7 +1949,7 @@ Static skipupdate As Boolean
     
     Call UnlockGUI
     
-    node.Selected = True
+    Node.Selected = True
 
     ' refresh tree view
     Call trvUsers.Refresh
