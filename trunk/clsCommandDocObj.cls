@@ -96,7 +96,7 @@ Public Function GetCommandCount(Optional ByVal strScriptOwner As String = vbNull
 
     On Error GoTo ERROR_HANDLER
     
-    Dim nodes                 As IXMLDOMNodeList
+    Dim Nodes                 As IXMLDOMNodeList
     Dim xpath                 As String
     
     OpenDatabase
@@ -110,16 +110,16 @@ Public Function GetCommandCount(Optional ByVal strScriptOwner As String = vbNull
         xpath = "/commands/command[@owner='" & strScriptOwner & "']"
     End If
     
-    Set nodes = m_database.selectNodes(xpath)
+    Set Nodes = m_database.selectNodes(xpath)
     
-    GetCommandCount = nodes.length
+    GetCommandCount = Nodes.length
     
-    Set nodes = Nothing
+    Set Nodes = Nothing
     
     Exit Function
 
 ERROR_HANDLER:
-    Set nodes = Nothing
+    Set Nodes = Nothing
     Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsCommandDocObj.GetCommandCount().")
 
     Exit Function
@@ -719,7 +719,7 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
     Dim RestrictionNode               As IXMLDOMNode
     
     Dim newNode                       As IXMLDOMNode
-    Dim node                          As IXMLDOMNode
+    Dim Node                          As IXMLDOMNode
     Dim parameter                     As clsCommandParamsObj
     Dim Restriction                   As clsCommandRestrictionObj
     Dim i                             As Integer
@@ -731,9 +731,9 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
     '// get the arguments node
     Set argumentsNode = AnyNode.selectSingleNode("arguments")
     If Not (argumentsNode Is Nothing) Then
-            For Each node In argumentsNode.childNodes
-                argumentsNode.removeChild node
-            Next node
+            For Each Node In argumentsNode.childNodes
+                argumentsNode.removeChild Node
+            Next Node
     End If
     
 
@@ -821,7 +821,7 @@ Private Function setRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef Restriction
     Dim RestrictionNode                  As IXMLDOMNode
     
     Dim newNode                          As IXMLDOMNode
-    Dim node                             As IXMLDOMNode
+    Dim Node                             As IXMLDOMNode
     Dim Restriction                      As clsCommandRestrictionObj
     Dim i                                As Integer
     

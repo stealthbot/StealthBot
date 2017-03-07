@@ -30,26 +30,26 @@ Private Declare Sub nls_get_A Lib "BNCSutil.dll" _
     (ByVal NLS As Long, ByVal Out As Long)
 
 Private Declare Sub nls_get_M1 Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Out As Long, ByVal B As Long, ByVal Salt As Long)
+    (ByVal NLS As Long, ByVal Out As Long, ByVal B_Value As Long, ByVal Salt As Long)
 
 Private Declare Sub nls_get_v Lib "BNCSutil.dll" _
     (ByVal NLS As Long, ByVal Out As Long, ByVal Salt As Long)
 
 Private Declare Function nls_check_M2 Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal M2 As Long, ByVal B As Long, ByVal Salt As Long) As Long
+    (ByVal NLS As Long, ByVal M2 As Long, ByVal B_Value As Long, ByVal Salt As Long) As Long
 
 Private Declare Function nls_check_signature Lib "BNCSutil.dll" _
     (ByVal Address As Long, ByVal Signature As Long) As Long
 
 Private Declare Sub nls_get_S Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Out As Long, ByVal B As Long, ByVal Salt As Long)
+    (ByVal NLS As Long, ByVal Out As Long, ByVal B_Value As Long, ByVal Salt As Long)
 
 Private Declare Sub nls_get_K Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Out As Long, ByVal s As Long)
+    (ByVal NLS As Long, ByVal Out As Long, ByVal Salt As Long)
 
 Private Declare Function nls_account_change_proof Lib "BNCSutil.dll" _
     (ByVal NLS As Long, ByVal Buffer As Long, ByVal NewPassword As Long, _
-    ByVal B As Long, ByVal Salt As Long) As Long 'returns a new NLS pointer for the new password
+    ByVal B_Value As Long, ByVal Salt As Long) As Long 'returns a new NLS pointer for the new password
     
 
 Private m_NlsHandle As Long
