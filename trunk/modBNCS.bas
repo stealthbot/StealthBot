@@ -1446,7 +1446,7 @@ On Error GoTo ERROR_HANDLER:
         
         If Not ds.MCPHandler Is Nothing Then
             Call ds.MCPHandler.SetStartupData(sMCPData, sUniq, sIP, lPort)
-            sTitle = ds.MCPHandler.RealmServerTitle(ds.MCPHandler.RealmServerConnected)
+            sTitle = ds.MCPHandler.RealmServerTitle(ds.MCPHandler.RealmServerSelectedIndex)
             
             If (ProxyConnInfo(stMCP).IsUsingProxy) Then
                 frmChat.AddChat RTBColors.InformationText, "[REALM] [PROXY] Connecting to the SOCKS" & ProxyConnInfo(stMCP).Version & " proxy server at " & ProxyConnInfo(stMCP).ProxyIP & ":" & ProxyConnInfo(stMCP).ProxyPort & "..."

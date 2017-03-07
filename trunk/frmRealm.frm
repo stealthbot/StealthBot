@@ -20,9 +20,8 @@ Begin VB.Form frmRealm
       ForeColor       =   &H00FFFFFF&
       Height          =   315
       Left            =   9480
-      Locked          =   -1  'True
-      TabIndex        =   7
-      Text            =   "Combo1"
+      Style           =   2  'Dropdown List
+      TabIndex        =   5
       Top             =   1560
       Visible         =   0   'False
       Width           =   1335
@@ -32,7 +31,7 @@ Begin VB.Form frmRealm
       Caption         =   "&Disconnect"
       Height          =   300
       Left            =   8040
-      TabIndex        =   2
+      TabIndex        =   1
       Top             =   4320
       Width           =   1455
    End
@@ -41,7 +40,7 @@ Begin VB.Form frmRealm
       Default         =   -1  'True
       Height          =   300
       Left            =   9480
-      TabIndex        =   1
+      TabIndex        =   0
       Top             =   4320
       Width           =   1335
    End
@@ -68,7 +67,7 @@ Begin VB.Form frmRealm
       Height          =   495
       Left            =   9480
       Style           =   1  'Graphical
-      TabIndex        =   6
+      TabIndex        =   4
       Top             =   720
       Width           =   1335
    End
@@ -88,7 +87,7 @@ Begin VB.Form frmRealm
       Height          =   495
       Left            =   9480
       Style           =   1  'Graphical
-      TabIndex        =   5
+      TabIndex        =   3
       Top             =   120
       Value           =   -1  'True
       Width           =   1335
@@ -139,6 +138,24 @@ Begin VB.Form frmRealm
          EndProperty
       EndProperty
    End
+   Begin VB.CommandButton btnUpgrade 
+      Caption         =   "&Upgrade This"
+      Height          =   300
+      Left            =   9480
+      TabIndex        =   6
+      Top             =   2400
+      Visible         =   0   'False
+      Width           =   1335
+   End
+   Begin VB.CommandButton btnDelete 
+      Caption         =   "&Delete This"
+      Height          =   300
+      Left            =   9480
+      TabIndex        =   7
+      Top             =   2760
+      Visible         =   0   'False
+      Width           =   1335
+   End
    Begin VB.Frame fraCreateNew 
       BackColor       =   &H00000000&
       ForeColor       =   &H00FFFFFF&
@@ -160,11 +177,11 @@ Begin VB.Form frmRealm
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   285
-         Left            =   6360
+         Left            =   4800
          MaxLength       =   15
-         TabIndex        =   19
-         Top             =   1920
-         Width           =   2295
+         TabIndex        =   16
+         Top             =   720
+         Width           =   1815
       End
       Begin VB.CheckBox chkLadder 
          BackColor       =   &H00000000&
@@ -180,11 +197,11 @@ Begin VB.Form frmRealm
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Left            =   4560
+         Left            =   4800
          Style           =   1  'Graphical
-         TabIndex        =   18
+         TabIndex        =   19
          Top             =   2280
-         Width           =   1335
+         Width           =   1815
       End
       Begin VB.CheckBox chkHardcore 
          BackColor       =   &H00000000&
@@ -200,11 +217,11 @@ Begin VB.Form frmRealm
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Left            =   4560
+         Left            =   4800
          Style           =   1  'Graphical
-         TabIndex        =   17
+         TabIndex        =   18
          Top             =   1800
-         Width           =   1335
+         Width           =   1815
       End
       Begin VB.CheckBox chkExpansion 
          BackColor       =   &H00000000&
@@ -218,13 +235,13 @@ Begin VB.Form frmRealm
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         ForeColor       =   &H00FFFFFF&
+         ForeColor       =   &H0000FF00&
          Height          =   375
-         Left            =   4560
+         Left            =   4800
          Style           =   1  'Graphical
-         TabIndex        =   16
+         TabIndex        =   17
          Top             =   1320
-         Width           =   1335
+         Width           =   1815
       End
       Begin VB.CommandButton cmdCreate 
          Caption         =   "&Create"
@@ -238,10 +255,10 @@ Begin VB.Form frmRealm
             Strikethrough   =   0   'False
          EndProperty
          Height          =   375
-         Left            =   7200
+         Left            =   4800
          TabIndex        =   20
-         Top             =   2400
-         Width           =   1455
+         Top             =   2760
+         Width           =   1815
       End
       Begin VB.OptionButton optNewCharType 
          BackColor       =   &H00000000&
@@ -255,14 +272,14 @@ Begin VB.Form frmRealm
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         ForeColor       =   &H00FFFFFF&
+         ForeColor       =   &H0000FF00&
          Height          =   255
          Index           =   7
-         Left            =   840
+         Left            =   600
          Style           =   1  'Graphical
          TabIndex        =   15
          Top             =   2880
-         Width           =   1575
+         Width           =   1815
       End
       Begin VB.OptionButton optNewCharType 
          BackColor       =   &H00000000&
@@ -276,14 +293,14 @@ Begin VB.Form frmRealm
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         ForeColor       =   &H00FFFFFF&
+         ForeColor       =   &H0000FF00&
          Height          =   255
          Index           =   6
-         Left            =   840
+         Left            =   600
          Style           =   1  'Graphical
          TabIndex        =   14
          Top             =   2520
-         Width           =   1575
+         Width           =   1815
       End
       Begin VB.OptionButton optNewCharType 
          BackColor       =   &H00000000&
@@ -300,11 +317,11 @@ Begin VB.Form frmRealm
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   5
-         Left            =   840
+         Left            =   600
          Style           =   1  'Graphical
          TabIndex        =   13
          Top             =   2160
-         Width           =   1575
+         Width           =   1815
       End
       Begin VB.OptionButton optNewCharType 
          BackColor       =   &H00000000&
@@ -321,11 +338,11 @@ Begin VB.Form frmRealm
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   4
-         Left            =   840
+         Left            =   600
          Style           =   1  'Graphical
          TabIndex        =   12
          Top             =   1800
-         Width           =   1575
+         Width           =   1815
       End
       Begin VB.OptionButton optNewCharType 
          BackColor       =   &H00000000&
@@ -342,11 +359,11 @@ Begin VB.Form frmRealm
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   3
-         Left            =   840
+         Left            =   600
          Style           =   1  'Graphical
          TabIndex        =   11
          Top             =   1440
-         Width           =   1575
+         Width           =   1815
       End
       Begin VB.OptionButton optNewCharType 
          BackColor       =   &H00000000&
@@ -363,11 +380,11 @@ Begin VB.Form frmRealm
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   2
-         Left            =   840
+         Left            =   600
          Style           =   1  'Graphical
          TabIndex        =   10
          Top             =   1080
-         Width           =   1575
+         Width           =   1815
       End
       Begin VB.OptionButton optNewCharType 
          BackColor       =   &H00000000&
@@ -384,13 +401,53 @@ Begin VB.Form frmRealm
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   1
-         Left            =   840
+         Left            =   600
          Style           =   1  'Graphical
          TabIndex        =   9
          Top             =   720
-         Width           =   1575
+         Width           =   1815
       End
-      Begin VB.Label lblCopy 
+      Begin VB.Label lblRealm 
+         BackColor       =   &H00000000&
+         Caption         =   "Character class"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   9
+         Left            =   600
+         TabIndex        =   30
+         Top             =   480
+         Width           =   1815
+      End
+      Begin VB.Label lblRealm 
+         BackColor       =   &H00000000&
+         Caption         =   "Character options"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   8
+         Left            =   4800
+         TabIndex        =   29
+         Top             =   1080
+         Width           =   1815
+      End
+      Begin VB.Label lblRealm 
          Alignment       =   2  'Center
          BackColor       =   &H00000000&
          Caption         =   "Images (c) Blizzard Entertainment"
@@ -405,14 +462,15 @@ Begin VB.Form frmRealm
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   2280
+         Index           =   7
+         Left            =   2400
          TabIndex        =   26
          Top             =   3600
          Width           =   2535
       End
-      Begin VB.Label lblCharName 
+      Begin VB.Label lblRealm 
          BackColor       =   &H00000000&
-         Caption         =   "Desired character name:"
+         Caption         =   "Character name"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -424,14 +482,15 @@ Begin VB.Form frmRealm
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   6360
+         Index           =   6
+         Left            =   4800
          TabIndex        =   24
-         Top             =   1560
-         Width           =   2175
+         Top             =   480
+         Width           =   1815
       End
       Begin VB.Image imgCharPortrait 
          Height          =   3015
-         Left            =   2760
+         Left            =   2880
          Picture         =   "frmRealm.frx":82CA
          Top             =   480
          Width           =   1545
@@ -440,7 +499,7 @@ Begin VB.Form frmRealm
    Begin MSComctlLib.ListView lvwChars 
       Height          =   4095
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   2
       Top             =   120
       Width           =   9255
       _ExtentX        =   16325
@@ -466,27 +525,9 @@ Begin VB.Form frmRealm
       EndProperty
       NumItems        =   0
    End
-   Begin VB.CommandButton btnUpgrade 
-      Caption         =   "&Upgrade This"
-      Height          =   300
-      Left            =   9480
-      TabIndex        =   4
-      Top             =   2400
-      Visible         =   0   'False
-      Width           =   1335
-   End
-   Begin VB.CommandButton btnDelete 
-      Caption         =   "&Delete This"
-      Height          =   300
-      Left            =   9480
-      TabIndex        =   3
-      Top             =   2760
-      Visible         =   0   'False
-      Width           =   1335
-   End
    Begin VB.Label lblRealm 
       BackColor       =   &H00000000&
-      Caption         =   "Other Realms:"
+      Caption         =   "Other Realms"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -502,7 +543,6 @@ Begin VB.Form frmRealm
       Left            =   9480
       TabIndex        =   28
       Top             =   1320
-      Visible         =   0   'False
       Width           =   1335
    End
    Begin VB.Label lblRealm 
@@ -843,7 +883,7 @@ Private Sub DisableGUI()
 End Sub
 
 ' labels are all in a control array so clicking on any one of them calls this:
-Private Sub label_Click(Index As Integer)
+Private Sub lblRealm_Click(Index As Integer)
     Call StopLoginTimer
 End Sub
 
@@ -967,7 +1007,7 @@ Public Sub RealmStartupResponse()
     RealmIP = ds.MCPHandler.RealmSelectedServerIP
     RealmPort = ds.MCPHandler.RealmSelectedServerPort
     
-    Me.Caption = "Realm " & RealmTitle & " - " & RealmDescr & " (" & RealmIP & ":" & CStr(RealmPort) & ")"
+    Me.Caption = StringFormat("Realm {0} - {1} ({2}:{3})", RealmTitle, RealmDescr, RealmIP, CStr(RealmPort))
     
     ' build "other realm" list
     If ds.MCPHandler.RealmServerCount > 1 Then
@@ -984,11 +1024,11 @@ Public Sub RealmStartupResponse()
         cboOtherRealms.Text = RealmTitle
         
         ' other realms label
-        lblRealm(5).Visible = True
+        lblRealm(5).Caption = "Other Realms"
         cboOtherRealms.Visible = True
     Else
         ' other realms label
-        lblRealm(5).Visible = False
+        lblRealm(5).Caption = "Realm: " & RealmTitle
         cboOtherRealms.Visible = False
     End If
 End Sub
@@ -1288,7 +1328,7 @@ Private Sub optCreateNew_Click()
     fraCreateNew.Visible = True
     lvwChars.Visible = False
     With lblRealm(0) ' detail
-        .Caption = "Character creation."
+        .Caption = "You may create a character."
         .ForeColor = vbYellow
     End With
     ' expires

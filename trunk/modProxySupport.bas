@@ -331,7 +331,7 @@ Private Sub UpdateProxyStatus(ByRef ConnInfo As udtProxyConnectionInfo, ByVal Ne
                 Case stBNLS
                     sOut = "Requesting connection to the BNLS server at " & sHost & "..."
                 Case stMCP
-                    sTitle = ds.MCPHandler.RealmServerTitle(ds.MCPHandler.RealmServerConnected)
+                    sTitle = ds.MCPHandler.RealmServerTitle(ds.MCPHandler.RealmServerSelectedIndex)
                     sOut = StringFormat("Requesting connection to the Diablo II Realm {0} at {1}:{2}...", sTitle, sHost, ConnInfo.RemotePort)
             End Select
             
