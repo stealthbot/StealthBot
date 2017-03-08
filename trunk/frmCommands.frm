@@ -324,7 +324,7 @@ End Type
 Sub ClearTreeViewNodes(ByRef trv As vbalTreeView)
     
     m_ClearingNodes = True
-    trv.nodes.Clear
+    trv.Nodes.Clear
     m_ClearingNodes = False
 
 End Sub
@@ -544,8 +544,8 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString, O
     strScriptOwner = clsCommandObj.CleanXPathVar(strScriptOwner)
 
     '// reset the treeview
-    If trvCommands.nodes.Count > 0 Then
-        trvCommands.nodes(1).Selected = True
+    If trvCommands.Nodes.Count > 0 Then
+        trvCommands.Nodes(1).Selected = True
     End If
     
     Call ClearTreeViewNodes(trvCommands)
@@ -591,7 +591,7 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString, O
             Set xmlCommand = m_Commands.XMLDocument.documentElement.selectSingleNode(xpath)
         
             commandName = xmlCommand.Attributes.getNamedItem("name").Text
-            Set nCommand = trvCommands.nodes.Add(trvCommands.nodes.Parent, etvwChild, commandName, commandName)
+            Set nCommand = trvCommands.Nodes.Add(trvCommands.Nodes.Parent, etvwChild, commandName, commandName)
             
             '// 08/30/2008 JSM - check if this command is the first alphabetically
             If defaultNode Is Nothing Then
@@ -621,13 +621,13 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString, O
                     argumentName = StringFormat("{0} ({1})", argumentName, "String")
                 End If
                 
-                Set nArg = trvCommands.nodes.Add(nCommand, etvwChild, commandName & "." & argumentName, argumentName)
+                Set nArg = trvCommands.Nodes.Add(nCommand, etvwChild, commandName & "." & argumentName, argumentName)
                 
                 Set xmlArgRestricions = xmlArgs(i).selectNodes("restrictions/restriction")
                 
                 For j = 0 To (xmlArgRestricions.length - 1)
                     restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
-                    Set nArgRestriction = trvCommands.nodes.Add(nArg, etvwChild, commandName & "." & argumentName & "." & restrictionName, restrictionName)
+                    Set nArgRestriction = trvCommands.Nodes.Add(nArg, etvwChild, commandName & "." & argumentName & "." & restrictionName, restrictionName)
                 Next j
             Next i
         End If '// Len(commandName) > 0
@@ -697,7 +697,7 @@ Private Sub trvCommands_SelectedNodeChanged()
 
     On Error GoTo ErrorHandler
 
-    Dim node As cTreeViewNode
+    Dim Node As cTreeViewNode
     Dim nt As NodeType
     Dim commandName As String
     Dim argumentName As String
@@ -707,8 +707,8 @@ Private Sub trvCommands_SelectedNodeChanged()
     
     If m_ClearingNodes Then Exit Sub
     
-    Set node = trvCommands.SelectedItem
-    If node Is Nothing Then
+    Set Node = trvCommands.SelectedItem
+    If Node Is Nothing Then
         Call ResetForm
         Exit Sub
     End If
@@ -720,7 +720,7 @@ Private Sub trvCommands_SelectedNodeChanged()
     End If
     
     '// figure out what type of node was clicked on
-    nt = GetNodeInfo(node, commandName, argumentName, restrictionName)
+    nt = GetNodeInfo(Node, commandName, argumentName, restrictionName)
     
     '// Update m_SelectedElement so we know which element we are viewing
     m_SelectedElement.commandName = commandName
@@ -755,11 +755,11 @@ End Sub
 
 '// Checks the hiarchy of the treenodes to determine what type of node it is.
 '// 08/29/2008 JSM - Created
-Private Function GetNodeInfo(node As cTreeViewNode, ByRef commandName As String, ByRef argumentName As String, ByRef restrictionName As String) As NodeType
+Private Function GetNodeInfo(Node As cTreeViewNode, ByRef commandName As String, ByRef argumentName As String, ByRef restrictionName As String) As NodeType
     Dim s() As String
     
-    If LenB(node.Key) > 0 Then
-        s = Split(node.Key, ".")
+    If LenB(Node.Key) > 0 Then
+        s = Split(Node.Key, ".")
         Select Case UBound(s)
             Case 0
                 commandName = s(0)

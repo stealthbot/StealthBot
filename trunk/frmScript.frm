@@ -631,7 +631,7 @@ Public Sub DestroyObj(ByVal ObjName As String)
                 Unload trv(m_arrObjs(Index).obj.Index)
             Else
                 With trv(0)
-                    .nodes.Clear
+                    .Nodes.Clear
                     .Visible = False
                 End With
             End If
@@ -735,7 +735,7 @@ Public Sub ClearObjs()
                 txt(m_arrObjs(i).obj.Index).Text = ""
             
             Case "TREEVIEW"
-                trv(m_arrObjs(i).obj.Index).nodes.Clear
+                trv(m_arrObjs(i).obj.Index).Nodes.Clear
             
         End Select
     Next i
@@ -1965,13 +1965,13 @@ Private Sub trv_Click(Index As Integer)
     RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
 End Sub
 
-Private Sub trv_Collapse(Index As Integer, ByVal node As node)
+Private Sub trv_Collapse(Index As Integer, ByVal Node As Node)
     On Error Resume Next
 
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Collapse", node
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Collapse", Node
     
 End Sub
 
@@ -1984,13 +1984,13 @@ Private Sub trv_DblClick(Index As Integer)
     RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_DblClick"
 End Sub
 
-Private Sub trv_Expand(Index As Integer, ByVal node As node)
+Private Sub trv_Expand(Index As Integer, ByVal Node As Node)
     On Error Resume Next
 
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Expand", node
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Expand", Node
     
 End Sub
 
@@ -2072,23 +2072,23 @@ Private Sub trv_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
     RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
 End Sub
 
-Private Sub trv_NodeCheck(Index As Integer, ByVal node As node)
+Private Sub trv_NodeCheck(Index As Integer, ByVal Node As Node)
     On Error Resume Next
 
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_NodeCheck", node
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_NodeCheck", Node
     
 End Sub
 
-Private Sub trv_NodeClick(Index As Integer, ByVal node As node)
+Private Sub trv_NodeClick(Index As Integer, ByVal Node As Node)
     On Error Resume Next
 
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_NodeClick", node
+    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_NodeClick", Node
     
 End Sub
 

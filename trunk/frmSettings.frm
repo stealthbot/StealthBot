@@ -4448,9 +4448,9 @@ Private Sub Form_Load()
     
     With tvw
         
-        .nodes.Clear
+        .Nodes.Clear
         
-        Set nRoot = .nodes.Add(, etvwFirst, "root", "StealthBot Settings")
+        Set nRoot = .Nodes.Add(, etvwFirst, "root", "StealthBot Settings")
             nRoot.MouseOverForeColor = lMouseOver
         
             Set nTopLevel = nRoot.Children
@@ -4699,7 +4699,7 @@ Sub ShowPanel(ByVal Index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
         Dim i As Integer
         If Index <> 8 Then
             For i = 1 To tvw.NodeCount
-                Set nod = tvw.nodes.Item(i)
+                Set nod = tvw.Nodes.Item(i)
                 If Not nod.Selected And KeyToIndex(nod.Key) = Index Then
                     nod.Selected = True
                     Exit For
@@ -4830,7 +4830,7 @@ End Sub
 '    Call tvw_SelectedNodeChanged
 'End Sub
 '
-'Private Sub tvw_NodeClick(node As vbalTreeViewLib6.cTreeViewNode)
+'Private Sub tvw_NodeClick(Node As vbalTreeViewLib6.cTreeViewNode)
 '    Call tvw_SelectedNodeChanged
 'End Sub
 
