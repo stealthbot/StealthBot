@@ -9,9 +9,11 @@ Public Declare Function FileTimeToSystemTime Lib "Kernel32.dll" (lpFileTime As F
 Public Declare Function SystemTimeToFileTime Lib "Kernel32.dll" (lpSystemTime As SYSTEMTIME, lpFileTime As FILETIME) As Long
 Public Declare Function FileTimeToLocalFileTime Lib "Kernel32.dll" (lpFileTime As FILETIME, lpLocalFileTime As FILETIME) As Long
 Public Declare Function GetTimeZoneInformation Lib "Kernel32.dll" (lpTimeZoneInformation As TIME_ZONE_INFORMATION) As Long
-Public Declare Function timeGetSystemTime Lib "winmm.dll" (lpTime As MMTIME, ByVal uSize As Long) As Long
 Public Declare Function GetTickCount Lib "Kernel32.dll" () As Long
+Public Declare Function GetTickCount64 Lib "Kernel32.dll" () As Currency
 Public Declare Sub GetLocalTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
+
+Public ConnectionTickCount As Currency
 
 Private Const TIME_ZONE_ID_UNKNOWN = 0
 Private Const TIME_ZONE_ID_STANDARD = 1
@@ -41,23 +43,6 @@ Private Type TIME_ZONE_INFORMATION
     DaylightName(0 To 31)  As Integer
     DaylightDate           As SYSTEMTIME
     DaylightBias           As Long
-End Type
-
-Public Type SMPTE
-    hour        As Byte
-    min         As Byte
-    sec         As Byte
-    frame       As Byte
-    fps         As Byte
-    dummy       As Byte
-    pad(2)      As Byte
-End Type
-
-Public Type MMTIME
-    wType       As Long
-    units       As Long
-    smpteVal    As SMPTE
-    songPtrPos  As Long
 End Type
 
 Public Function UtcNow() As Date
@@ -90,7 +75,7 @@ End Function
 
 Public Function SystemTimeToDate(ByRef STime As SYSTEMTIME) As Date
     Dim tempDate As Date
-    Dim tempTime As Date 
+    Dim tempTime As Date
     tempDate = DateSerial(STime.wYear, STime.wMonth, STime.wDay)
     tempTime = TimeSerial(STime.wHour, STime.wMinute, STime.wSecond)
     
@@ -124,7 +109,7 @@ Public Function GetTimeZoneBias() As Long
             
         Case Else
             GetTimeZoneBias = TZinfo.Bias
-    End Select    
+    End Select
 End Function
 
 Public Function GetTimeZoneName() As String
@@ -157,3 +142,91 @@ Public Function GetTimeZoneName() As String
     
     GetTimeZoneName = str
 End Function
+
+Public Function GetTickCountMS() As Currency
+    GetTickCountMS = (GetTickCount64() * 10000)
+End Function
+
+Public Function GetTickCountS() As Long
+    GetTickCountS = CLng(GetTickCount64() * 10)
+End Function
+
+Public Function GetConnectionUptime() As Currency
+    If g_Online Then
+        GetConnectionUptime = GetTickCountMS() - ConnectionTickCount
+    Else
+        GetConnectionUptime = 0@
+    End If
+End Function
+
+'// Converts a millisecond or second time value to humanspeak.. modified to support BNet's Time
+Public Function ConvertTimeInterval(ByVal MS As Currency, Optional ByVal IsSeconds As Boolean = False) As String
+    Dim Seconds  As Currency
+    Dim Minutes  As Currency
+    Dim Hours    As Currency
+    Dim Days     As Currency
+
+    Dim sSeconds As String
+    Dim sMinutes As String
+    Dim sHours   As String
+    Dim sDays    As String
+
+    Dim sPlural  As String
+    Dim sComma   As String
+    Dim sAnd     As String
+
+    If (IsSeconds) Then
+        Seconds = MS
+        MS = MS * 1000
+    Else
+        Seconds = Round(MS / 1000)
+    End If
+
+    Days = Int(Seconds / 86400)
+    Seconds = Seconds Mod 86400
+
+    If Days > 0 Then
+        sPlural = "s"
+        sComma = ", "
+        If Days = 1 Then sPlural = vbNullString
+        If Seconds = 0 Then sComma = vbNullString
+        sDays = StringFormat("{0} day{1}{2}", Days, sPlural, sComma)
+    End If
+
+    Hours = Int(Seconds / 3600)
+    Seconds = Seconds Mod 3600
+
+    If Hours > 0 Then
+        sPlural = "s"
+        sComma = ", "
+        sAnd = "and "
+        If Hours = 1 Then sPlural = vbNullString
+        If Seconds = 0 Then sComma = vbNullString
+        If Seconds <> 0 Or Days = 0 Then sAnd = vbNullString
+        sHours = StringFormat("{3}{0} hour{1}{2}", Hours, sPlural, sComma, sAnd)
+    End If
+
+    Minutes = Int(Seconds / 60)
+    Seconds = Seconds Mod 60
+
+    If Minutes > 0 Then
+        sPlural = "s"
+        sComma = ", "
+        sAnd = "and "
+        If Minutes = 1 Then sPlural = vbNullString
+        If Seconds = 0 Then sComma = vbNullString
+        If Seconds <> 0 Or (Days = 0 And Hours = 0) Then sAnd = vbNullString
+        sMinutes = StringFormat("{3}{0} minute{1}{2}", Minutes, sPlural, sComma, sAnd)
+    End If
+
+    If Seconds > 0 Or MS < 1000 Then
+        sPlural = "s"
+        sAnd = "and "
+        If Seconds = 1 Then sPlural = vbNullString
+        If Days = 0 And Hours = 0 And Minutes = 0 Then sAnd = vbNullString
+        sSeconds = StringFormat("{2}{0} second{1}", Seconds, sPlural, sAnd)
+    End If
+    
+    ConvertTimeInterval = StringFormat("{0}{1}{2}{3}", sDays, sHours, sMinutes, sSeconds)
+End Function
+

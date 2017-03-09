@@ -175,42 +175,6 @@ Public Function GetTimeStamp(Optional DateTime As Date) As String
     End Select
 End Function
 
-'// Converts a millisecond or second time value to humanspeak.. modified to support BNet's Time
-'// Logged report.
-'// Updated 2/11/05 to support timeGetSystemTime() unsigned longs, which in VB are doubles after conversion
-Public Function ConvertTime(ByVal dblMS As Double, Optional seconds As Byte) As String
-    Dim dblSeconds As Double
-    Dim dblDays    As Double
-    Dim dblHours   As Double
-    Dim dblMins    As Double
-    Dim strSeconds As String
-    Dim strDays    As String
-    
-    If (seconds = 0) Then
-        dblSeconds = (dblMS / 1000)
-    Else
-        dblSeconds = dblMS
-    End If
-    
-    dblDays = Int(dblSeconds / 86400)
-    dblSeconds = dblSeconds Mod 86400
-    dblHours = Int(dblSeconds / 3600)
-    dblSeconds = dblSeconds Mod 3600
-    dblMins = Int(dblSeconds / 60)
-    dblSeconds = (dblSeconds Mod 60)
-    
-    If (dblSeconds <> 1) Then
-        strSeconds = "s"
-    End If
-    
-    If (dblDays <> 1) Then
-        strDays = "s"
-    End If
-    
-    ConvertTime = dblDays & " day" & strDays & ", " & dblHours & " hours, " & _
-        dblMins & " minutes and " & dblSeconds & " second" & strSeconds
-End Function
-
 Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Integer) As Long
     Dim Key As String
     
@@ -2248,18 +2212,6 @@ On Error GoTo ERROR_HANDLER:
 ERROR_HANDLER:
     frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.{3}()", Err.Number, Err.Description, "modOtherCode", "AddEnvPath")
     Err.Clear
-End Function
-
-'Returns system uptime in milliseconds
-Public Function GetUptimeMS() As Double
-    Dim mmt   As MMTIME
-    Dim lSize As Long
-    
-    lSize = LenB(mmt)
-    
-    Call timeGetSystemTime(mmt, lSize)
-
-    GetUptimeMS = LongToUnsigned(mmt.units)
 End Function
 
 

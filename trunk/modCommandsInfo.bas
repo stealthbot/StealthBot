@@ -267,7 +267,7 @@ Public Sub OnInfo(Command As clsCommandObj)
                     .DisplayName, ProductCodeToFullName(.Game), _
                     IIf(.IsOperator, "ops, and ", vbNullString), .Ping)
             
-                Command.Respond StringFormat("He/she has been present in the channel for {0}.", ConvertTime(.TimeInChannel(), 1))
+                Command.Respond StringFormat("He/she has been present in the channel for {0}.", ConvertTimeInterval(.TimeInChannel(), True))
             End With
         Else
             Command.Respond "No such user is present."
@@ -660,7 +660,11 @@ Public Sub OnTrigger(Command As clsCommandObj)
 End Sub
 
 Public Sub OnUptime(Command As clsCommandObj)
-    Command.Respond StringFormat("System uptime {0}, connection uptime {1}.", ConvertTime(GetUptimeMS), ConvertTime(uTicks))
+    If g_Online Then
+        Command.Respond StringFormat("System uptime {0}; connection uptime {1}.", ConvertTimeInterval(GetTickCountMS()), ConvertTimeInterval(GetConnectionUptime()))
+    Else
+        Command.Respond StringFormat("System uptime {0}.", ConvertTimeInterval(GetTickCountMS()))
+    End If
 End Sub
 
 Public Sub OnWhere(Command As clsCommandObj)

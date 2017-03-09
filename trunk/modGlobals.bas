@@ -7,7 +7,6 @@ Public CVERSION As String
 Public Config As New clsConfig
 
 'Timer variables
-Public uTicks As Double
 Public ReconnectTimerID As Long
 Public ExReconnectTimerID As Long
 Public SCReloadTimerID As Long

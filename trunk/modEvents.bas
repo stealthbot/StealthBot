@@ -351,7 +351,7 @@ On Error GoTo ERROR_HANDLER:
                         
                         s = StringFormat("{0}: {1} (Battle.net time)", sKeyShort, SystemTimeToString(oST))
                     ElseIf StrictIsNumeric(sValue) Then
-                        s = StringFormat("{0}: {1}", sKeyShort, ConvertTime(sValue, 1))
+                        s = StringFormat("{0}: {1}", sKeyShort, ConvertTimeInterval(sValue, True))
                     End If
                     
                     If oRequest.RequestType = UserCommand Then
@@ -431,6 +431,8 @@ On Error GoTo ERROR_HANDLER:
     Call g_Queue.Clear
     
     g_Online = True
+    
+    ConnectionTickCount = GetTickCountMS()
     
     ' in case this wasn't set before
     ds.EnteredChatFirstTime = True

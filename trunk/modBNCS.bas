@@ -832,9 +832,9 @@ On Error GoTo ERROR_HANDLER:
     Cookie = pBuff.GetDWORD
     
     SendResponse = False
-    If uTicks >= ds.LastPingResponse + 1000 Then
+    If GetTickCountMS() >= ds.LastPingResponse + 1000 Then
         SendResponse = True
-        ds.LastPingResponse = uTicks
+        ds.LastPingResponse = GetTickCountMS()
     End If
     'frmChat.AddChat vbWhite, StringFormat("PING uTicks={0} LPR={1} C={2} SendResponse={3}", uTicks, ds.LastPingResponse, cookie, SendResponse)
 

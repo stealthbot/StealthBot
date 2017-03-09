@@ -31,7 +31,7 @@ Private m_MCPHandler          As clsMCPHandler
 Private m_FirstTimeChat       As Boolean
 Private m_AccountEntry        As Boolean
 Private m_AccountEntryPending As Boolean
-Private m_LastPingResponse    As Double
+Private m_LastPingResponse    As Currency
 
 Public Sub List()
     With frmChat
@@ -89,7 +89,8 @@ Public Property Let ClientToken(lData As Long)
     m_ClientToken = lData
 End Property
 Public Property Get ClientToken() As Long
-    If (m_ClientToken = 0) Then m_ClientToken = GetTickCount
+    ' keep 32-bit GTC as it's used as a cookie and it doesn't matter the value
+    If (m_ClientToken = 0) Then m_ClientToken = GetTickCount()
     ClientToken = m_ClientToken
 End Property
 
@@ -204,10 +205,10 @@ Public Property Get AccountEntryPending() As Boolean
     AccountEntryPending = m_AccountEntryPending
 End Property
 
-Public Property Let LastPingResponse(dData As Double)
+Public Property Let LastPingResponse(dData As Currency)
     m_LastPingResponse = dData
 End Property
-Public Property Get LastPingResponse() As Double
+Public Property Get LastPingResponse() As Currency
     LastPingResponse = m_LastPingResponse
 End Property
 

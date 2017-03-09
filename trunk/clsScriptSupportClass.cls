@@ -386,11 +386,9 @@ End Function
 
 '// GETGTC
 '// Returns the current system uptime in milliseconds as reported by the GetTickCount() API call
-Public Function GetGTC() As Long
-    GetGTC = GetTickCount()
+Public Function GetGTC() As Double
+    GetGTC = CDbl(modDateTime.GetTickCountMS())
 End Function
-
-
 
 '// DOBEEP
 '// Executes a call to the Beep() API function
@@ -1070,13 +1068,25 @@ End Function
 '// GETSYSTEMUPTIME
 '// Returns the amount of time your system has been up
 Public Function GetSystemUptime() As String
-    GetSystemUptime = ConvertTime(GetUptimeMS)
+    GetSystemUptime = ConvertTimeInterval(modDateTime.GetTickCountMS())
 End Function
 
 '// GETCONNECTIONUPTIME
 '// Returns the amount of time your bot has been online
 Public Function GetConnectionUptime() As String
-    GetConnectionUptime = ConvertTime(uTicks)
+    GetConnectionUptime = ConvertTimeInterval(modDateTime.GetConnectionUptime())
+End Function
+
+'// GETSYSTEMUPTIMEMS
+'// Returns the amount of time your system has been up in milliseconds
+Public Function GetSystemUptimeMS() As Double
+    GetSystemUptimeMS = modDateTime.GetTickCountMS()
+End Function
+
+'// GETCONNECTIONUPTIMEMS
+'// Returns the amount of time your bot has been online in milliseconds
+Public Function GetConnectionUptimeMS() As Double
+    GetConnectionUptimeMS = modDateTime.GetConnectionUptime()
 End Function
 
 '// CRC32

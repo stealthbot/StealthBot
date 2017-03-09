@@ -17,7 +17,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private m_event_id    As Long
-Private m_gtc         As Long
+Private m_gtc         As Currency
 Private m_ping        As Long
 Private m_flags       As Long
 Private m_message     As String
@@ -28,7 +28,7 @@ Private m_stat_string As String
 Private m_displayed   As Boolean
 
 Private Sub Class_Initialize()
-    EventTick = GetTickCount()
+    EventTick = GetTickCountMS()
 End Sub
 
 Public Property Get EventID() As Long
@@ -39,12 +39,12 @@ Public Property Let EventID(ByVal lng As Long)
     m_event_id = lng
 End Property
 
-Public Property Let EventTick(ByVal lng As Long)
+Public Property Let EventTick(ByVal lng As Currency)
     m_gtc = lng
 End Property
 
 
-Public Property Get EventTick() As Long
+Public Property Get EventTick() As Currency
     EventTick = m_gtc
 End Property
 

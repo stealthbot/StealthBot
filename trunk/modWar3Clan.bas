@@ -6,7 +6,7 @@ Option Explicit
 Public AwaitingClanList       As Byte
 Public AwaitingClanMembership As Byte
 Public AwaitingClanInfo       As Byte
-Public LastRemoval            As Long
+Public LastRemoval            As Currency
 
 Public Type udtClan
     Token   As String * 4
@@ -111,12 +111,12 @@ Public Function GetRank(ByVal i As Byte) As String
 End Function
 
 Public Function TimeSinceLastRemoval() As Long
-    Dim L As Long
+    Dim L As Currency
     
     If LastRemoval > 0 Then
-        L = GetTickCount
+        L = GetTickCountMS()
         
-        TimeSinceLastRemoval = ((L - LastRemoval) / 1000)
+        TimeSinceLastRemoval = (L - LastRemoval) \ 1000
     Else
         TimeSinceLastRemoval = 30
     End If

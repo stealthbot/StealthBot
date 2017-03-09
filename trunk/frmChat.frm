@@ -2304,6 +2304,7 @@ End Sub
 Sub Event_BNetDisconnected()
     tmrIdleTimer.Enabled = False
     UpTimer.Enabled = False
+    ConnectionTickCount = 0@
     BotVars.JoinWatch = 0
     
     AddChat RTBColors.ErrorMessageText, "[BNCS] Disconnected."
@@ -4052,7 +4053,7 @@ Private Sub mnuPopClanRemove_Click()
                 AwaitingClanInfo = 1
             End With
             
-            LastRemoval = GetTickCount
+            LastRemoval = GetTickCountMS()
         End If
     End If
 End Sub
@@ -6227,14 +6228,14 @@ Private Sub tmrIdleTimer_Timer_IdleMsg()
             Exit Sub
         End If
         
-        IdleMsg = Replace(IdleMsg, "%cpuup", ConvertTime(GetUptimeMS))
+        IdleMsg = Replace(IdleMsg, "%cpuup", ConvertTimeInterval(GetTickCountMS()))
         IdleMsg = Replace(IdleMsg, "%chan", g_Channel.Name)
         IdleMsg = Replace(IdleMsg, "%c", g_Channel.Name)
         IdleMsg = Replace(IdleMsg, "%me", GetCurrentUsername)
         IdleMsg = Replace(IdleMsg, "%v", CVERSION)
         IdleMsg = Replace(IdleMsg, "%ver", CVERSION)
         IdleMsg = Replace(IdleMsg, "%bc", BanCount)
-        IdleMsg = Replace(IdleMsg, "%botup", ConvertTime(uTicks))
+        IdleMsg = Replace(IdleMsg, "%botup", ConvertTimeInterval(GetConnectionUptime()))
         IdleMsg = Replace(IdleMsg, "%mp3", Replace(MediaPlayer.TrackName, "&", "+"))
         IdleMsg = Replace(IdleMsg, "%quote", g_Quotes.GetRandomQuote)
         IdleMsg = Replace(IdleMsg, "%rnd", GetRandomPerson)
@@ -6245,7 +6246,7 @@ Private Sub tmrIdleTimer_Timer_IdleMsg()
         End If
         
     ElseIf IdleType = "uptime" Then
-        IdleMsg = "/me -: System Uptime: " & ConvertTime(GetUptimeMS()) & " :: Connection Uptime: " & ConvertTime(uTicks) & " :: " & CVERSION & " :-"
+        IdleMsg = "/me -: System Uptime: " & ConvertTimeInterval(GetTickCountMS()) & " :: Connection Uptime: " & ConvertTimeInterval(GetConnectionUptime()) & " :: " & CVERSION & " :-"
         
     ElseIf IdleType = "mp3" Then
         Dim WindowTitle As String
@@ -6569,8 +6570,6 @@ Private Sub UpTimer_Timer()
     Dim i         As Integer
     Dim pos       As Integer
     Dim doCheck   As Boolean
-
-    uTicks = (uTicks + 1000)
     
     If (floodCap > 2) Then
         floodCap = floodCap - 3
@@ -8128,7 +8127,7 @@ Sub DoConnect()
         Call DoDisconnect
     End If
     
-    uTicks = 0
+    ConnectionTickCount = 0@
     
     UserCancelledConnect = False
     
@@ -8231,7 +8230,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         Call g_Queue.Clear
     
         BNLSAuthorized = False
-        uTicks = 0
+        ConnectionTickCount = 0@
         
         mnuSepZ.Visible = False
         mnuIgnoreInvites.Visible = False
