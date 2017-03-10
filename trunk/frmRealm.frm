@@ -28,19 +28,19 @@ Begin VB.Form frmRealm
    End
    Begin VB.CommandButton btnDisconnect 
       Cancel          =   -1  'True
-      Caption         =   "&Disconnect"
+      Caption         =   "C&ancel"
       Height          =   300
       Left            =   8040
-      TabIndex        =   1
+      TabIndex        =   29
       Top             =   4320
       Width           =   1455
    End
    Begin VB.CommandButton btnChoose 
-      Caption         =   "&Choose This"
+      Caption         =   "&Logon"
       Default         =   -1  'True
       Height          =   300
       Left            =   9480
-      TabIndex        =   0
+      TabIndex        =   28
       Top             =   4320
       Width           =   1335
    End
@@ -52,28 +52,8 @@ Begin VB.Form frmRealm
    End
    Begin VB.OptionButton optCreateNew 
       BackColor       =   &H00000000&
-      Caption         =   "Create New Character"
+      Caption         =   "Create ne&w character"
       Enabled         =   0   'False
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   495
-      Left            =   9480
-      Style           =   1  'Graphical
-      TabIndex        =   4
-      Top             =   720
-      Width           =   1335
-   End
-   Begin VB.OptionButton optViewExisting 
-      BackColor       =   &H00000000&
-      Caption         =   "View Existing Characters"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -88,6 +68,26 @@ Begin VB.Form frmRealm
       Left            =   9480
       Style           =   1  'Graphical
       TabIndex        =   3
+      Top             =   720
+      Width           =   1335
+   End
+   Begin VB.OptionButton optViewExisting 
+      BackColor       =   &H00000000&
+      Caption         =   "&View existing characters"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   495
+      Left            =   9480
+      Style           =   1  'Graphical
+      TabIndex        =   2
       Top             =   120
       Value           =   -1  'True
       Width           =   1335
@@ -139,19 +139,19 @@ Begin VB.Form frmRealm
       EndProperty
    End
    Begin VB.CommandButton btnUpgrade 
-      Caption         =   "&Upgrade This"
+      Caption         =   "&Upgrade"
       Height          =   300
       Left            =   9480
-      TabIndex        =   6
+      TabIndex        =   9
       Top             =   2400
       Visible         =   0   'False
       Width           =   1335
    End
    Begin VB.CommandButton btnDelete 
-      Caption         =   "&Delete This"
+      Caption         =   "&Delete"
       Height          =   300
       Left            =   9480
-      TabIndex        =   7
+      TabIndex        =   10
       Top             =   2760
       Visible         =   0   'False
       Width           =   1335
@@ -161,7 +161,7 @@ Begin VB.Form frmRealm
       ForeColor       =   &H00FFFFFF&
       Height          =   4095
       Left            =   120
-      TabIndex        =   8
+      TabIndex        =   11
       Top             =   120
       Width           =   9255
       Begin VB.TextBox txtCharName 
@@ -179,7 +179,7 @@ Begin VB.Form frmRealm
          Height          =   285
          Left            =   4800
          MaxLength       =   15
-         TabIndex        =   16
+         TabIndex        =   21
          Top             =   720
          Width           =   1815
       End
@@ -199,7 +199,7 @@ Begin VB.Form frmRealm
          Height          =   375
          Left            =   4800
          Style           =   1  'Graphical
-         TabIndex        =   19
+         TabIndex        =   25
          Top             =   2280
          Width           =   1815
       End
@@ -219,7 +219,7 @@ Begin VB.Form frmRealm
          Height          =   375
          Left            =   4800
          Style           =   1  'Graphical
-         TabIndex        =   18
+         TabIndex        =   24
          Top             =   1800
          Width           =   1815
       End
@@ -239,11 +239,11 @@ Begin VB.Form frmRealm
          Height          =   375
          Left            =   4800
          Style           =   1  'Graphical
-         TabIndex        =   17
+         TabIndex        =   23
          Top             =   1320
          Width           =   1815
       End
-      Begin VB.CommandButton cmdCreate 
+      Begin VB.CommandButton btnCreate 
          Caption         =   "&Create"
          BeginProperty Font 
             Name            =   "Tahoma"
@@ -256,7 +256,7 @@ Begin VB.Form frmRealm
          EndProperty
          Height          =   375
          Left            =   4800
-         TabIndex        =   20
+         TabIndex        =   26
          Top             =   2760
          Width           =   1815
       End
@@ -277,7 +277,7 @@ Begin VB.Form frmRealm
          Index           =   7
          Left            =   600
          Style           =   1  'Graphical
-         TabIndex        =   15
+         TabIndex        =   19
          Top             =   2880
          Width           =   1815
       End
@@ -298,7 +298,7 @@ Begin VB.Form frmRealm
          Index           =   6
          Left            =   600
          Style           =   1  'Graphical
-         TabIndex        =   14
+         TabIndex        =   18
          Top             =   2520
          Width           =   1815
       End
@@ -319,7 +319,7 @@ Begin VB.Form frmRealm
          Index           =   5
          Left            =   600
          Style           =   1  'Graphical
-         TabIndex        =   13
+         TabIndex        =   17
          Top             =   2160
          Width           =   1815
       End
@@ -340,7 +340,7 @@ Begin VB.Form frmRealm
          Index           =   4
          Left            =   600
          Style           =   1  'Graphical
-         TabIndex        =   12
+         TabIndex        =   16
          Top             =   1800
          Width           =   1815
       End
@@ -361,7 +361,7 @@ Begin VB.Form frmRealm
          Index           =   3
          Left            =   600
          Style           =   1  'Graphical
-         TabIndex        =   11
+         TabIndex        =   15
          Top             =   1440
          Width           =   1815
       End
@@ -382,7 +382,7 @@ Begin VB.Form frmRealm
          Index           =   2
          Left            =   600
          Style           =   1  'Graphical
-         TabIndex        =   10
+         TabIndex        =   14
          Top             =   1080
          Width           =   1815
       End
@@ -403,13 +403,13 @@ Begin VB.Form frmRealm
          Index           =   1
          Left            =   600
          Style           =   1  'Graphical
-         TabIndex        =   9
+         TabIndex        =   13
          Top             =   720
          Width           =   1815
       End
       Begin VB.Label lblRealm 
          BackColor       =   &H00000000&
-         Caption         =   "Character class"
+         Caption         =   "C&haracter class"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -423,13 +423,13 @@ Begin VB.Form frmRealm
          Height          =   255
          Index           =   9
          Left            =   600
-         TabIndex        =   30
+         TabIndex        =   12
          Top             =   480
          Width           =   1815
       End
       Begin VB.Label lblRealm 
          BackColor       =   &H00000000&
-         Caption         =   "Character options"
+         Caption         =   "Character &options"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -443,7 +443,7 @@ Begin VB.Form frmRealm
          Height          =   255
          Index           =   8
          Left            =   4800
-         TabIndex        =   29
+         TabIndex        =   22
          Top             =   1080
          Width           =   1815
       End
@@ -464,13 +464,13 @@ Begin VB.Form frmRealm
          Height          =   255
          Index           =   7
          Left            =   2400
-         TabIndex        =   26
+         TabIndex        =   27
          Top             =   3600
          Width           =   2535
       End
       Begin VB.Label lblRealm 
          BackColor       =   &H00000000&
-         Caption         =   "Character name"
+         Caption         =   "Character &name"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -484,7 +484,7 @@ Begin VB.Form frmRealm
          Height          =   255
          Index           =   6
          Left            =   4800
-         TabIndex        =   24
+         TabIndex        =   20
          Top             =   480
          Width           =   1815
       End
@@ -499,7 +499,7 @@ Begin VB.Form frmRealm
    Begin MSComctlLib.ListView lvwChars 
       Height          =   4095
       Left            =   120
-      TabIndex        =   2
+      TabIndex        =   0
       Top             =   120
       Width           =   9255
       _ExtentX        =   16325
@@ -527,7 +527,7 @@ Begin VB.Form frmRealm
    End
    Begin VB.Label lblRealm 
       BackColor       =   &H00000000&
-      Caption         =   "Other Realms"
+      Caption         =   "Other &Realms"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -541,7 +541,7 @@ Begin VB.Form frmRealm
       Height          =   255
       Index           =   5
       Left            =   9480
-      TabIndex        =   28
+      TabIndex        =   4
       Top             =   1320
       Width           =   1335
    End
@@ -562,7 +562,7 @@ Begin VB.Form frmRealm
       Height          =   855
       Index           =   1
       Left            =   9480
-      TabIndex        =   27
+      TabIndex        =   8
       Top             =   3360
       Width           =   1335
    End
@@ -582,7 +582,7 @@ Begin VB.Form frmRealm
       Height          =   255
       Index           =   0
       Left            =   120
-      TabIndex        =   25
+      TabIndex        =   1
       Top             =   4380
       Width           =   7695
    End
@@ -603,7 +603,7 @@ Begin VB.Form frmRealm
       Height          =   255
       Index           =   4
       Left            =   9480
-      TabIndex        =   23
+      TabIndex        =   7
       Top             =   3000
       Width           =   1335
    End
@@ -624,7 +624,7 @@ Begin VB.Form frmRealm
       Height          =   255
       Index           =   3
       Left            =   9480
-      TabIndex        =   22
+      TabIndex        =   30
       Top             =   2640
       Width           =   1335
    End
@@ -645,7 +645,7 @@ Begin VB.Form frmRealm
       Height          =   735
       Index           =   2
       Left            =   9480
-      TabIndex        =   21
+      TabIndex        =   6
       Top             =   1920
       Width           =   1335
    End
@@ -878,7 +878,7 @@ Private Sub DisableGUI()
     btnUpgrade.Visible = False
     cboOtherRealms.Enabled = False
     optCreateNew.Enabled = False
-    cmdCreate.Enabled = False
+    btnCreate.Enabled = False
     lvwChars.ListItems.Clear
 End Sub
 
@@ -945,7 +945,7 @@ Private Sub lvwChars_KeyUp(KeyCode As Integer, Shift As Integer)
     End If
 End Sub
 
-Private Sub cmdCreate_Click()
+Private Sub btnCreate_Click()
     Dim i As Integer
     Dim Flags As Long
     
@@ -1024,7 +1024,7 @@ Public Sub RealmStartupResponse()
         cboOtherRealms.Text = RealmTitle
         
         ' other realms label
-        lblRealm(5).Caption = "Other Realms"
+        lblRealm(5).Caption = "Other &Realms"
         cboOtherRealms.Visible = True
     Else
         ' other realms label
@@ -1055,7 +1055,7 @@ Public Sub CharListResponse()
     
     cboOtherRealms.Enabled = True
     btnDisconnect.Enabled = True
-    cmdCreate.Enabled = True
+    btnCreate.Enabled = True
     btnChoose.Enabled = False
     
     If ds.MCPHandler.RetrievingCharacterList Then
