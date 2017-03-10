@@ -20,7 +20,9 @@ Private m_eventCount      As Integer
 
 Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long, Optional QueuedEventID As Integer = 0)
     
-    On Error GoTo ERROR_HANDLER
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
 
     Dim UserObj         As clsUserObj
     Dim PreviousUserObj As clsUserObj
@@ -199,7 +201,9 @@ ERROR_HANDLER:
 End Sub
 
 Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
-    On Error GoTo ERROR_HANDLER
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
 
     Dim mailCount   As Integer
     Dim ToANSI      As String
@@ -311,7 +315,9 @@ ERROR_HANDLER:
 End Sub
 
 Public Sub Event_UserDataReceived(oRequest As udtUserDataRequest)
-On Error GoTo ERROR_HANDLER:
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
 
     Dim sKeyShort As String
     Dim sValue As String
@@ -389,7 +395,9 @@ ERROR_HANDLER:
 End Sub
 
 Public Sub Event_LeftChatEnvironment()
-    On Error GoTo ERROR_HANDLER:
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
     
     BotVars.LastChannel = g_Channel.Name
     PrepareHomeChannelMenu
@@ -416,7 +424,10 @@ ERROR_HANDLER:
 End Sub
 
 Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountName As String)
-On Error GoTo ERROR_HANDLER:
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
+    
     Dim sChannel   As String
     Dim ShowW3     As Boolean
     Dim ShowD2     As Boolean
@@ -519,7 +530,10 @@ End Sub
 
 ' updated 8-10-05 for new logging system
 Public Sub Event_LogonEvent(ByVal Action As String, ByVal Result As Long, Optional ByVal ExtraInfo As String)
-On Error GoTo ERROR_HANDLER:
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
+    
     Dim lColor       As Long
     Dim sMessage     As String
 
@@ -625,7 +639,10 @@ ERROR_HANDLER:
 End Sub
 
 Public Sub Event_ServerError(ByVal Message As String)
-On Error GoTo ERROR_HANDLER:
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
+    
     frmChat.AddChat RTBColors.ErrorMessageText, Message
     
     RunInAll "Event_ServerError", Message
@@ -636,7 +653,10 @@ ERROR_HANDLER:
 End Sub
 
 Public Sub Event_ChannelJoinError(ByVal EventID As Integer, ByVal ChannelName As String)
-On Error GoTo ERROR_HANDLER:
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
+    
     Dim ChannelJoinError As String
     Dim ChannelJoinButtons As VbMsgBoxStyle
     Dim ChannelJoinResult As VbMsgBoxResult
@@ -699,7 +719,9 @@ ERROR_HANDLER:
 End Sub
 
 Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
-On Error GoTo ERROR_HANDLER:
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
 
     Const MSG_BANNED      As String = " was banned by "
     Const MSG_UNBANNED    As String = " was unbanned by "
@@ -928,7 +950,9 @@ End Sub
 Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
     Optional QueuedEventID As Integer = 0)
     
-    On Error GoTo ERROR_HANDLER
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
         
     Dim UserEvent   As clsUserEventObj
     Dim UserObj     As clsUserObj
@@ -1017,7 +1041,9 @@ ERROR_HANDLER:
 End Sub
 
 Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, ByVal Statstring As String, ByVal Ping As Long, Optional QueuedEventID As Integer = 0)
-    On Error GoTo ERROR_HANDLER
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
 
     Dim UserEvent    As clsUserEventObj
     Dim UserObj      As clsUserObj
@@ -1215,7 +1241,9 @@ End Sub
 
 Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal Statstring As String, ByVal Ping As Long, Optional QueuedEventID As Integer = 0)
                 
-    On Error GoTo ERROR_HANDLER
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
     
     Dim UserObj     As clsUserObj
     Dim UserEvent   As clsUserEventObj
@@ -1459,7 +1487,9 @@ ERROR_HANDLER:
 End Sub
 
 Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
-    On Error GoTo ERROR_HANDLER
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
 
     Dim UserObj   As clsUserObj
     
@@ -1553,7 +1583,9 @@ End Sub
 Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
         ByVal Ping As Long, Optional QueuedEventID As Integer = 0)
     
-    On Error GoTo ERROR_HANDLER
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
     
     Dim UserObj       As clsUserObj
     Dim UserEvent     As clsUserEventObj
@@ -1690,7 +1722,10 @@ ERROR_HANDLER:
 End Sub
 
 Private Function CheckMessage(Username As String, Message As String) As Boolean
-On Error GoTo ERROR_HANDLER:
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
+    
     Dim BanningUser As Boolean
     Dim i           As Integer
     
@@ -1736,7 +1771,10 @@ ERROR_HANDLER:
 End Function
 
 Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
-On Error GoTo ERROR_HANDLER:
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
+    
     Select Case (Message)
         Case 0:
             frmChat.AddChat RTBColors.SuccessText, "[BNCS] Client version accepted!"
@@ -1833,7 +1871,10 @@ ERROR_HANDLER:
 End Sub
 
 Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long)
-On Error GoTo ERROR_HANDLER:
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
+    
     'Dim s       As String
     Dim lCarats As Long
     Dim WWIndex As Integer
@@ -1954,7 +1995,10 @@ End Sub
 
 ' Flags and ping are deliberately not used at this time
 Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long)
-On Error GoTo ERROR_HANDLER:
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
+    
     Dim WWIndex As Integer
     
     'frmChat.AddChat vbRed, Username
@@ -2009,7 +2053,10 @@ End Sub
 
 '11/22/07 - Hdx - Pass the channel listing (0x0B) directly off to scriptors for there needs. (What other use is there?)
 Public Sub Event_ChannelList(sChannels() As String)
-On Error GoTo ERROR_HANDLER:
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
+    
     Dim x As Integer
     Dim sChannel As String
         
@@ -2051,7 +2098,10 @@ ERROR_HANDLER:
 End Function
 
 Public Function CleanUsername(ByVal Username As String, Optional ByVal PrependNamingStar As Boolean = False) As String
-On Error GoTo ERROR_HANDLER:
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
+    
     Dim tmp As String
     Dim pos As Integer
     

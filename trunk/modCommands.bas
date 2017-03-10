@@ -21,7 +21,9 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         Boolean = False, Optional ByVal WasWhispered As Boolean = False, Optional DisplayOutput As Boolean = _
                 True) As Boolean
     
-    On Error GoTo ERROR_HANDLER
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
     
     Dim commands         As Collection
     Dim Command          As clsCommandObj
