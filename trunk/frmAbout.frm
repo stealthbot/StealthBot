@@ -103,7 +103,7 @@ Begin VB.Form frmAbout
    Begin VB.Label lblURL 
       Alignment       =   2  'Center
       BackColor       =   &H00000000&
-      Caption         =   "Send Me E-mail"
+      Caption         =   "Send Me Email"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25

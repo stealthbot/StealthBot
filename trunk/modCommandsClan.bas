@@ -48,7 +48,7 @@ Public Sub OnClan(Command As clsCommandObj)
                     If (LenB(Command.Argument("Message")) = 0) Then
                         Command.Respond "You must specify a message to send."
                     Else
-                        Command.Respond "E-mails have been sent to everyone in the clan who have choosen to receive them."
+                        Command.Respond "Emails have been sent to everyone in the clan who have choosen to receive them."
                         Call frmChat.AddQ("/c mail " & Command.Argument("Message"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
                     End If
                 ElseIf (g_Clan.Self.Rank > 0) Then
