@@ -4713,30 +4713,14 @@ Sub ShowPanel(ByVal Index As enuSettingsPanels, Optional ByVal SavePanel As Bool
             Set nod = Nothing
         End If
 
-        ' set all controls' TabStop property based on whether they are on the visible panel
-        ' in this block, all Error 438 (property doesn't exist) errors are cleared
-        For Each Control In Me.Controls
-            On Error Resume Next
-            If Control.Container Is Nothing Then
-                TabStop = True
-            ElseIf Control.Container Is Me Then
-                TabStop = True
-            ElseIf Control.Container Is fraPanel(Index) Then
-                TabStop = True
+        ' set panel visibility
+        For i = 0 To 8
+            If Index = i Then
+                fraPanel(i).Visible = True
             Else
-                TabStop = False
+                fraPanel(i).Visible = False
             End If
-            If Err.Number = 438 Then
-                Err.Clear
-            Else
-                Control.TabStop = TabStop
-            End If
-            If Err.Number = 438 Then Err.Clear
-            On Error GoTo 0
-        Next Control
-
-        ' bring the panel to the front
-        fraPanel(Index).ZOrder vbBringToFront
+        Next i
 
         ' save the latest panel choice to config
         If SavePanel Then
