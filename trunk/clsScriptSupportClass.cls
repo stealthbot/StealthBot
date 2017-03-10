@@ -1101,41 +1101,45 @@ End Function
 
 '// SHA1
 '// Returns the result of a standard Sha-1 hash
-Public Function Sha1(ByRef Data As String, Optional ByVal inHex As Boolean = False, Optional SPACER As String = vbNullString) As String
+Public Function SHA1(ByRef Data As String, Optional ByVal inHex As Boolean = False, Optional Spacer As String = vbNullString) As String
     Dim Message() As Byte
     Dim Result()  As Byte
     Dim s         As String
     Dim i         As Integer
 
     Message() = StringToByteArr(Data)
-    Call modSHA1.DefaultSHA1(Message, Result)
+    Call modSHA1.CalculateSHA1(Message, Result, shaStandard)
 
     If inHex Then
+        s = vbNullString
         For i = 0 To 19
-            s = StringFormat("{0}{1}{2}", s, IIf(i > 1, SPACER, vbNullString), ZeroOffset(Hex$(Result(i)), 2))
+            s = StringFormat("{0}{1}{2}", s, IIf(i > 0, Spacer, vbNullString), ZeroOffset(Result(i), 2))
         Next i
-        Sha1 = s
+        SHA1 = LCase$(s)
     Else
-        Sha1 = ByteArrToString(Result)
+        SHA1 = ByteArrToString(Result)
     End If
 End Function
 
 '// XSHA1
 '// Returns the result of a non-standard Battle.net "broken" Sha-1 hash
-'// Changed 10/18/2009 - Hdx
-'//    Added Optional Argument "Spacer", This will go between every hex digit, people usually use Space$(1) for nice debugging print
-'//    inHex will now properly pad characters that are < 0x10 with a leading 0, Chr$(6) becomes "06" instead of "6"
-Public Function XSHA1(ByRef str As String, Optional ByVal inHex As Boolean = False, Optional SPACER As String = vbNullString) As String
-    Dim i As Integer
-    Dim s As String
-    
-    XSHA1 = modBNCSutil.hashPassword(str)
-    
+Public Function XSHA1(ByRef Data As String, Optional ByVal inHex As Boolean = False, Optional Spacer As String = vbNullString) As String
+    Dim Message() As Byte
+    Dim Result()  As Byte
+    Dim s         As String
+    Dim i         As Integer
+
+    Message() = StringToByteArr(Data)
+    Call modSHA1.CalculateSHA1(Message, Result, shaBrokenROL)
+
     If inHex Then
-        For i = 1 To Len(XSHA1)
-            s = StringFormat("{0}{1}{2}", s, IIf(i > 1, SPACER, vbNullString), ZeroOffset(Hex$(Mid$(XSHA1, i, 1)), 2))
-        Next
-        XSHA1 = s
+        s = vbNullString
+        For i = 0 To 19
+            s = StringFormat("{0}{1}{2}", s, IIf(i > 0, Spacer, vbNullString), ZeroOffset(Result(i), 2))
+        Next i
+        XSHA1N = LCase$(s)
+    Else
+        XSHA1N = ByteArrToString(Result)
     End If
 End Function
 

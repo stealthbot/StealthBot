@@ -1105,11 +1105,11 @@ On Error GoTo ERROR_HANDLER:
     frmChat.tmrAccountLock.Enabled = True
     frmChat.tmrAccountLock.Tag = ACCOUNT_MODE_CHPWD
     If Not Config.UseLowerCasePassword Then
-        sHash = doubleHashPassword(Config.Password, ds.ClientToken, ds.ServerToken)
-        sHash2 = doubleHashPassword(Config.NewPassword, ds.ClientToken, ds.ServerToken)
+        sHash = DoubleHashPassword(Config.Password, ds.ClientToken, ds.ServerToken)
+        sHash2 = DoubleHashPassword(Config.NewPassword, ds.ClientToken, ds.ServerToken)
     Else
-        sHash = doubleHashPassword(LCase$(Config.Password), ds.ClientToken, ds.ServerToken)
-        sHash2 = doubleHashPassword(LCase$(Config.NewPassword), ds.ClientToken, ds.ServerToken)
+        sHash = DoubleHashPassword(LCase$(Config.Password), ds.ClientToken, ds.ServerToken)
+        sHash2 = DoubleHashPassword(LCase$(Config.NewPassword), ds.ClientToken, ds.ServerToken)
     End If
 
     With pBuff
@@ -1305,9 +1305,9 @@ On Error GoTo ERROR_HANDLER:
     frmChat.tmrAccountLock.Enabled = True
     frmChat.tmrAccountLock.Tag = ACCOUNT_MODE_LOGON
     If Not Config.UseLowerCasePassword Then
-        sHash = doubleHashPassword(Config.Password, ds.ClientToken, ds.ServerToken)
+        sHash = DoubleHashPassword(Config.Password, ds.ClientToken, ds.ServerToken)
     Else
-        sHash = doubleHashPassword(LCase$(Config.Password), ds.ClientToken, ds.ServerToken)
+        sHash = DoubleHashPassword(LCase$(Config.Password), ds.ClientToken, ds.ServerToken)
     End If
     
     With pBuff
@@ -1389,9 +1389,9 @@ On Error GoTo ERROR_HANDLER:
     
     Dim sHash As String
     If Not Config.UseLowerCasePassword Then
-        sHash = hashPassword(Config.Password)
+        sHash = HashPassword(Config.Password)
     Else
-        sHash = hashPassword(LCase(Config.Password))
+        sHash = HashPassword(LCase$(Config.Password))
     End If
     
     Dim pBuff As New clsDataBuffer
@@ -1505,7 +1505,7 @@ On Error GoTo ERROR_HANDLER:
     
     Dim pBuff As New clsDataBuffer
     pBuff.InsertDWord ds.ClientToken
-    pBuff.InsertNonNTString doubleHashPassword(sRealmServerPassword, ds.ClientToken, ds.ServerToken)
+    pBuff.InsertNonNTString DoubleHashPassword(sRealmServerPassword, ds.ClientToken, ds.ServerToken)
     pBuff.InsertNTString sRealmTitle
     pBuff.SendPacket SID_LOGONREALMEX
     Set pBuff = Nothing
@@ -1853,7 +1853,7 @@ On Error GoTo ERROR_HANDLER:
             .InsertDWord oKey.KeyLength
             .InsertDWord oKey.ProductValue
             .InsertDWord oKey.PublicValue
-            .InsertDWord 0
+            .InsertDWord 0&
             .InsertNonNTString oKey.Hash
         Next i
         

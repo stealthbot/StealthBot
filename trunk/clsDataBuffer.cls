@@ -58,7 +58,7 @@ Public Property Get Data() As String
 End Property
 
 Public Sub SetDataAsByteArr(ByRef buf() As Byte)
-    If UBound(buf) < 0 Then
+    If UBound(buf) < LBound(buf) Then
         Clear
         Exit Sub
     End If
@@ -77,7 +77,7 @@ Public Function GetDataAsByteArr() As Byte()
     Dim buf() As Byte
     
     If m_bufsize = 0 Then
-        ReDim GetDataAsByteArr(0)
+        GetDataAsByteArr = vbNullString
         Exit Function
     End If
     
@@ -88,7 +88,7 @@ Public Function GetDataAsByteArr() As Byte()
     GetDataAsByteArr = buf
 End Function
 
-Public Function InsertByte(ByVal Data As Byte)
+Public Sub InsertByte(ByVal Data As Byte)
     ' resize buffer
     ReDim Preserve m_buf(0 To (m_bufsize + 1))
 
@@ -97,9 +97,13 @@ Public Function InsertByte(ByVal Data As Byte)
     
     ' store buffer Length
     m_bufsize = (m_bufsize + 1)
-End Function
+End Sub
 
-Public Function InsertByteArr(ByRef Data() As Byte)
+Public Sub InsertByteArr(ByRef Data() As Byte)
+    If UBound(Data) < LBound(Data) Then
+        Exit Sub
+    End If
+    
     ' resize buffer
     ReDim Preserve m_buf(0 To (m_bufsize + (UBound(Data) + 2)))
 
@@ -108,28 +112,28 @@ Public Function InsertByteArr(ByRef Data() As Byte)
 
     ' store buffer Length
     m_bufsize = (m_bufsize + (UBound(Data) + 1))
-End Function
+End Sub
 
-Public Sub GetByteArr(ByRef Data() As Byte, Optional ByVal length As Integer = -1, Optional Peek As Boolean = False)
-    If (length = -1) Then
-        length = m_bufsize
+Public Sub GetByteArr(ByRef Data() As Byte, Optional ByVal Length As Integer = -1, Optional Peek As Boolean = False)
+    If (Length = -1) Then
+        Length = m_bufsize - m_bufpos
     End If
     
-    If ((m_bufpos + length) > m_bufsize) Then
+    If ((m_bufpos + Length) > m_bufsize) Then
         Exit Sub
     ElseIf ((m_bufpos) = m_bufsize) Then
-        ReDim Data(0)
+        Data = vbNullString
         Exit Sub
     End If
     
     ' resize buffer
-    ReDim Data(0 To length - 1)
+    ReDim Data(0 To Length - 1)
 
     ' copy data to buffer
-    CopyMemory Data(0), m_buf(m_bufpos), length
+    CopyMemory Data(0), m_buf(m_bufpos), Length
 
     ' store buffer Length
-    If (Not Peek) Then m_bufpos = (m_bufpos + length)
+    If (Not Peek) Then m_bufpos = (m_bufpos + Length)
 End Sub
 
 Public Function GetByte(Optional Peek As Boolean = False) As Byte
@@ -164,7 +168,7 @@ Public Function GetWord(Optional Peek As Boolean = False) As Integer
     If (Not Peek) Then m_bufpos = (m_bufpos + 2)
 End Function
 
-Public Function InsertDWord(ByVal Data As Long)
+Public Sub InsertDWord(ByVal Data As Long)
     ' resize data buffer
     ReDim Preserve m_buf(0 To (m_bufsize + 4))
 
@@ -173,7 +177,7 @@ Public Function InsertDWord(ByVal Data As Long)
     
     ' store buffer Length
     m_bufsize = (m_bufsize + 4)
-End Function
+End Sub
 
 Public Function GetDWORD(Optional Peek As Boolean = False) As Long
     If ((m_bufpos + 4) > m_bufsize) Then
@@ -186,9 +190,9 @@ Public Function GetDWORD(Optional Peek As Boolean = False) As Long
     If (Not Peek) Then m_bufpos = (m_bufpos + 4)
 End Function
 
-Public Function InsertBool(ByVal Data As Boolean)
+Public Sub InsertBool(ByVal Data As Boolean)
     InsertDWord Abs(CLng(Data))
-End Function
+End Sub
 
 Public Function GetBool(Optional Peek As Boolean = False) As Boolean
     GetBool = Not CBool(GetDWORD(Peek) = 0)
@@ -209,7 +213,7 @@ Public Function GetFileTime(Optional Peek As Boolean = False) As Date
     GetFileTime = FileTimeToDate(ft)
 End Function
 
-Public Function InsertNonNTString(ByVal Data As String)
+Public Sub InsertNonNTString(ByVal Data As String)
     Dim arrStr() As Byte
     
     arrStr() = StringToByteArr(Data)
@@ -222,9 +226,9 @@ Public Function InsertNonNTString(ByVal Data As String)
     
     ' store buffer Length
     m_bufsize = (m_bufsize + UBound(arrStr) + 1)
-End Function
+End Sub
 
-Public Function InsertNTString(ByRef Data As String, _
+Public Sub InsertNTString(ByRef Data As String, _
     Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI)
     
     Dim arrStr() As Byte
@@ -253,7 +257,7 @@ Public Function InsertNTString(ByRef Data As String, _
 
     ' store buffer Length
     m_bufsize = (m_bufsize + (UBound(arrStr) + 1))
-End Function
+End Sub
 
 Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI, Optional Peek As Boolean = False) As String
     Dim i As Integer
@@ -297,32 +301,32 @@ Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCO
     End Select
 End Function
 
-Public Function GetRaw(Optional ByVal length As Integer = -1, Optional Peek As Boolean = False) As String
+Public Function GetRaw(Optional ByVal Length As Integer = -1, Optional Peek As Boolean = False) As String
     Dim arrStr() As Byte
     
-    If (length = -1) Then
-        length = m_bufsize - m_bufpos
+    If (Length = -1) Then
+        Length = m_bufsize - m_bufpos
     End If
     
-    If ((m_bufpos + length) > m_bufsize) Then
+    If ((m_bufpos + Length) > m_bufsize) Then
         Exit Function
     End If
 
-    GetRaw = String$(length, Chr$(0))
+    GetRaw = String$(Length, Chr$(0))
 
     ' resize buffer
-    ReDim arrStr(0 To length - 1)
+    ReDim arrStr(0 To Length - 1)
 
     ' copy data to buffer
-    CopyMemory arrStr(0), m_buf(m_bufpos), length
+    CopyMemory arrStr(0), m_buf(m_bufpos), Length
     
     GetRaw = ByteArrToString(arrStr())
     
-    If (Not Peek) Then m_bufpos = m_bufpos + length
+    If (Not Peek) Then m_bufpos = m_bufpos + Length
 End Function ' end function GetString
 
-Public Property Get length() As Long
-    length = m_bufsize
+Public Property Get Length() As Long
+    Length = m_bufsize
 End Property
 
 Public Property Get Position() As Long
@@ -347,8 +351,8 @@ Public Function Clear()
     m_bufpos = 0
 End Function
 
-Public Function DebugOutput(Optional ByVal Start As Long = 1, Optional ByVal length As Long = -1) As String
-    DebugOutput = modPacketBuffer.DebugOutput(Data, Start, length)
+Public Function DebugOutput(Optional ByVal Start As Long = 1, Optional ByVal Length As Long = -1) As String
+    DebugOutput = modPacketBuffer.DebugOutput(Data, Start, Length)
 End Function
 
 Public Function SendPacketMCP(Optional PacketID As Byte)

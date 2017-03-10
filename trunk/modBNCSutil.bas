@@ -46,15 +46,6 @@ Private Declare Function getExeInfo_Raw Lib "BNCSutil.dll" Alias "getExeInfo" _
     (ByVal FileName As String, ByVal exeInfoString As String, _
     ByVal infoBufferSize As Long, Version As Long, ByVal Platform As Long) As Long
 
-' Old Logon System
-' [!] You should use doubleHashPassword and hashPassword instead of their
-'     _Raw counterparts.  (See below for those functions.)
-Private Declare Sub doubleHashPassword_Raw Lib "BNCSutil.dll" Alias "doubleHashPassword" _
-    (ByVal Password As String, ByVal ClientToken As Long, ByVal ServerToken As Long, _
-    ByVal outBuffer As Long)
-Private Declare Sub hashPassword_Raw Lib "BNCSutil.dll" Alias "hashPassword" _
-    (ByVal Password As String, ByVal outBuffer As Long)
-
 
 ' CD-Key Decoding
 
@@ -170,18 +161,5 @@ Public Function getExeInfo(EXEFile As String, InfoString As String, Optional ByV
     i = InStr(InfoString, vbNullChar)
     If i = 0 Then Exit Function
     InfoString = Left$(InfoString, i - 1)
-End Function
-
-'OLS Password Hashing
-Public Function doubleHashPassword(Password As String, ByVal ClientToken As Long, ByVal ServerToken As Long) As String
-    Dim Hash(19) As Byte
-    Call doubleHashPassword_Raw(Password, ClientToken, ServerToken, VarPtr(Hash(0)))
-    doubleHashPassword = ByteArrToString(Hash())
-End Function
-
-Public Function hashPassword(Password As String) As String
-    Dim Hash(19) As Byte
-    Call hashPassword_Raw(Password, VarPtr(Hash(0)))
-    hashPassword = ByteArrToString(Hash())
 End Function
 

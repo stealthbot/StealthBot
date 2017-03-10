@@ -198,3 +198,12 @@ Public Enum enuUserDataRequestType
     ScriptingCall = 3
     UserCommand = 4
 End Enum
+
+Public Enum enuSHA1Type
+    ' standard SHA1
+    shaStandard = 0
+    ' standard SHA1 with 5 longs reverse endian (Warden)
+    shaStandardRevEndian = 1
+    ' broken SHA1 (OLS passwords & keys)
+    shaBrokenROL = 2
+End Enum

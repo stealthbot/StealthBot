@@ -46,17 +46,8 @@ Private Declare Function kd_val2 Lib "BNCSutil.dll" _
 Private Declare Function kd_longVal2 Lib "BNCSutil.dll" _
     (ByVal decoder As Long, ByVal Out As Long) As Long
     
-Private Declare Function kd_calculateHash Lib "BNCSutil.dll" _
-    (ByVal decoder As Long, ByVal ClientToken As Long, ByVal ServerToken As Long) As Long
-    
-Private Declare Function kd_getHash Lib "BNCSutil.dll" _
-    (ByVal decoder As Long, ByVal Out As Long) As Long
-    
 Private Declare Function kd_isValid Lib "BNCSutil.dll" _
     (ByVal decoder As Long) As Long
-    
-Private Declare Sub calcHashBuf Lib "BNCSutil.dll" _
-    (ByVal Data As Long, ByVal length As Long, ByVal Hash As Long)
 
 
 Private m_ProductLookup As Dictionary
@@ -64,8 +55,8 @@ Private m_ProductLookup As Dictionary
 Private m_Result As Long    ' The result of the decoder initialization
 Private m_Handle As Long    ' A handle to this decoder
 Private m_Key As String     ' The key supplied during initialization
-Private m_HashSize As Long  ' The size of the returned hash.
-Private m_Hash As String    ' The celculated keyhash
+Private m_HashCalcd As Long ' The size of the returned hash.
+Private m_Hash() As Byte    ' The celculated keyhash
 
 ' Performs initial key analysis
 Public Function Initialize(ByVal strCdKey As String) As Boolean
@@ -85,7 +76,7 @@ Public Function Initialize(ByVal strCdKey As String) As Boolean
         Initialize = False
     End If
 
-    m_HashSize = 0
+    m_HashCalcd = False
     m_Key = strCdKey
 End Function
 
@@ -132,59 +123,53 @@ End Property
 
 ' Returns the calculated hash of the key's product, public, and private values.
 Public Property Get Hash() As String
-    If Not (m_HashSize > 0) Then
+    If (Not m_HashCalcd) Then
         Hash = vbNullString
         Exit Property
     End If
     
-    Hash = m_Hash
+    Hash = ByteArrToString(m_Hash)
 End Property
 
 ' Calculates the key's hash
 Public Function CalculateHash(ByVal ClientToken As Long, ByVal ServerToken As Long, Optional ByVal LogonSystem As Long = BNCS_NLS) As Boolean
-    Dim HashContents As New clsDataBuffer
-    Dim HashArr(0 To 19) As Byte
-    Dim arrStr() As Byte
+On Error GoTo ERROR_HANDLER:
+    Dim Buffer As New clsDataBuffer
     
     ' if private value is 0
     If Not IsValid Then
         CalculateHash = False
+        Exit Function
     End If
     
-    With HashContents
+    With Buffer
         .InsertDWord ClientToken
         .InsertDWord ServerToken
         .InsertDWord ProductValue
         .InsertDWord PublicValue
-        If LogonSystem = BNCS_NLS Then
+        If LogonSystem = BNCS_NLS And KeyLength <> 26 Then
             .InsertDWord 0&
         End If
         .InsertNonNTString PrivateValue
-        m_Hash = String$(20, vbNullChar)
         If KeyLength = 26 Then
-            ' fuck, this shit doesn't even give correct sha1s:
-            'm_Hash = SHA1b(.Data)
-            ' just use standard bncsutil kd_calculatehash
-            m_HashSize = kd_calculateHash(m_Handle, ClientToken, ServerToken)
-            If m_HashSize <= 0 Then
-                CalculateHash = False
-            Else
-                'm_Hash = String$(m_HashSize, vbNullChar)
-                Call kd_getHash(m_Handle, VarPtr(HashArr(0)))
-                m_Hash = ByteArrToString(HashArr())
-            End If
+            ' standard SHA-1
+            Call modSHA1.CalculateSHA1(.GetDataAsByteArr(), m_Hash(), shaStandard)
         Else
-            ' XSHA1 for non-W3 keys
-            arrStr = .GetDataAsByteArr
-            Call calcHashBuf(VarPtr(arrStr(0)), Len(.Data), VarPtr(HashArr(0)))
+            ' XSHA-1 for non-W3 keys
+            Call modSHA1.CalculateSHA1(.GetDataAsByteArr(), m_Hash(), shaBrokenROL)
         End If
     End With
     
-    Set HashContents = Nothing
-    
-    'm_HashSize = kd_calculateHash(m_Handle, ClientToken, ServerToken)
-    m_HashSize = Len(m_Hash)
-    CalculateHash = CBool(Len(m_Hash) = 20)
+    Set Buffer = Nothing
+
+    m_HashCalcd = True
+    CalculateHash = True
+
+    Exit Function
+ERROR_HANDLER:
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error " & Err.Number & " - " & Err.Description & " in clsKeyDecoder.CalculateHash()."
+    CalculateHash = False
+    Exit Function
 End Function
 
 ' Returns the product to use with this key (if known).
@@ -234,7 +219,7 @@ Private Sub Class_Initialize()
     m_Result = -1
     m_Handle = -1
     m_Key = vbNullString
-    m_HashSize = 0
+    m_HashCalcd = 0
     
     'Create product name lookup dictionary
     Set m_ProductLookup = New Dictionary
