@@ -2,35 +2,17 @@ VERSION 5.00
 Begin VB.Form frmEMailReg 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "E-Mail Registration"
-   ClientHeight    =   2640
+   Caption         =   "Email Registration"
+   ClientHeight    =   3120
    ClientLeft      =   105
    ClientTop       =   495
-   ClientWidth     =   6495
+   ClientWidth     =   5280
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   2640
-   ScaleWidth      =   6495
+   ScaleHeight     =   3120
+   ScaleWidth      =   5280
    StartUpPosition =   1  'CenterOwner
-   Begin VB.CommandButton cmdAskLater 
-      Cancel          =   -1  'True
-      Caption         =   "&Ask Me Later"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      Height          =   255
-      Left            =   3480
-      TabIndex        =   5
-      Top             =   2280
-      Width           =   2895
-   End
    Begin VB.CommandButton cmdIgnore 
       Caption         =   "&Never Ask Again"
       BeginProperty Font 
@@ -43,13 +25,31 @@ Begin VB.Form frmEMailReg
          Strikethrough   =   0   'False
       EndProperty
       Height          =   255
-      Left            =   4920
-      TabIndex        =   4
-      Top             =   2040
-      Width           =   1455
+      Left            =   120
+      TabIndex        =   6
+      Top             =   2760
+      Width           =   1695
+   End
+   Begin VB.CommandButton cmdAskLater 
+      Cancel          =   -1  'True
+      Caption         =   "Ask Me &Later"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   1800
+      TabIndex        =   5
+      Top             =   2760
+      Width           =   1695
    End
    Begin VB.CommandButton cmdGo 
-      Caption         =   "&OK"
+      Caption         =   "&Register"
       Default         =   -1  'True
       BeginProperty Font 
          Name            =   "Tahoma"
@@ -62,9 +62,29 @@ Begin VB.Form frmEMailReg
       EndProperty
       Height          =   255
       Left            =   3480
+      TabIndex        =   4
+      Top             =   2760
+      Width           =   1695
+   End
+   Begin VB.CheckBox chkSave 
+      BackColor       =   &H00000000&
+      Caption         =   "&Save for other accounts"
+      BeginProperty Font 
+         Name            =   "Verdana"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   255
+      Left            =   1920
+      MaskColor       =   &H00000000&
       TabIndex        =   3
-      Top             =   2040
-      Width           =   1455
+      Top             =   2400
+      Width           =   3255
    End
    Begin VB.TextBox txtAddress 
       BackColor       =   &H00993300&
@@ -79,40 +99,31 @@ Begin VB.Form frmEMailReg
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   285
-      Left            =   120
+      Left            =   1920
       MaxLength       =   254
       TabIndex        =   2
       Top             =   2040
       Width           =   3255
    End
-   Begin VB.Line Line1 
+   Begin VB.Line Line 
       BorderColor     =   &H00FFFFFF&
       X1              =   120
-      X2              =   6360
+      X2              =   5160
       Y1              =   1920
       Y2              =   1920
    End
-   Begin VB.Label Label2 
-      Alignment       =   2  'Center
+   Begin VB.Label lblAddress 
+      Alignment       =   1  'Right Justify
       BackColor       =   &H00000000&
-      Caption         =   "click here for more information"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
+      Caption         =   "Email &Address:"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   120
       TabIndex        =   1
-      Top             =   1560
-      Width           =   2295
+      Top             =   2040
+      Width           =   1695
    End
-   Begin VB.Label Label1 
+   Begin VB.Label lblInfo 
       BackColor       =   &H00000000&
       BeginProperty Font 
          Name            =   "Tahoma"
@@ -124,11 +135,12 @@ Begin VB.Form frmEMailReg
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   1335
+      Height          =   1815
       Left            =   120
       TabIndex        =   0
       Top             =   120
-      Width           =   6255
+      Width           =   5055
+      WordWrap        =   -1  'True
    End
 End
 Attribute VB_Name = "frmEMailReg"
@@ -192,15 +204,20 @@ Private Sub ContinueLogonSequence()
             Call SendEnterChatSequence
         End If
     End If
-    
+
     ClosedProperly = True
     ds.WaitingForEmail = False
 End Sub
 
 Private Sub cmdGo_Click()
     If LenB(txtAddress.Text) > 0 Then
+        If CBool(chkSave.Value) Then
+            Config.RegisterEmailDefault = txtAddress.Text
+            Config.Save
+        End If
+
         Call DoRegisterEmail(EMAIL_ACT_VALUE, txtAddress.Text)
-        
+
         Unload Me
     End If
 End Sub
@@ -219,19 +236,19 @@ End Sub
 
 Private Sub Form_Load()
     Me.Icon = frmChat.Icon
-    
+
     ClosedProperly = False
-    
-    Label1.Caption = "Battle.net would like to know if you want to register an e-mail address " & _
-                    "with your account. If you want to do so, type a valid e-mail address in the box " & _
-                    "below. If you don't want to register an e-mail address, click ""Never Ask Again""." & _
-                    "To be asked again on your next logon, click ""Ask Me Later"". ""OK"" and ""Never Ask Again"" are permanent."
-                    
-    Label1.Caption = Label1.Caption & vbCrLf & vbCrLf & "Choose an option below to proceed."
-    
-    Label2.Caption = "Click here for more information."
-    
+
+    lblInfo.Caption = "Battle.net would like to register an email address with your account. " & _
+                      "This should enable Battle.net's password recovery features. " & vbNewLine & vbNewLine & _
+                      "If you don't want to register an address, click ""Never Ask Again"". " & _
+                      "To be asked again on your next logon, click ""Ask Me Later"". " & _
+                      "Otherwise, enter an address and click ""Register"". You may check " & _
+                      """Save for other accounts"" before clicking ""Register"" if you want " & _
+                      "StealthBot to save the address in Settings."
+
     txtAddress.Text = vbNullString
+    chkSave.Value = False
     cmdGo.Enabled = False
 End Sub
 
