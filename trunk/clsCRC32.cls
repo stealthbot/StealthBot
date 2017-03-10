@@ -39,13 +39,13 @@ Private Sub InitCRC32()
             If K And 1 Then XorVal = CRC32_POLYNOMIAL Else XorVal = 0
             If K < 0 Then K = ((K And &H7FFFFFFF) \ 2) Or &H40000000 Else K = K \ 2
             K = K Xor XorVal
-        Next
+        Next j
         
         CRC32Table(i) = K
-    Next
+    Next i
 End Sub
 
-Public Function CRC32(ByVal Data As String) As Long
+Public Function CRC32(ByRef Data() As Byte) As Long
     Dim i As Long
     Dim j As Long
     
@@ -53,37 +53,35 @@ Public Function CRC32(ByVal Data As String) As Long
     
     CRC32 = &HFFFFFFFF
     
-    For i = 1 To Len(Data)
-        j = CByte(Asc(Mid(Data, i, 1))) Xor (CRC32 And &HFF&)
-        
-        If (CRC32 < 0) Then
-            CRC32 = ((CRC32 And &H7FFFFFFF) \ &H100&) Or &H800000
-        Else
-            CRC32 = CRC32 \ &H100&
-        End If
+    If UBound(Data) >= LBound(Data) Then
+        For i = LBound(Data) To UBound(Data)
+            j = Data(i) Xor (CRC32 And &HFF&)
             
-        CRC32 = (CRC32 Xor CRC32Table(j))
-    Next
+            If (CRC32 < 0) Then
+                CRC32 = ((CRC32 And &H7FFFFFFF) \ &H100&) Or &H800000
+            Else
+                CRC32 = CRC32 \ &H100&
+            End If
+                
+            CRC32 = (CRC32 Xor CRC32Table(j))
+        Next i
+    End If
     
     CRC32 = (Not (CRC32))
 End Function
 
 Public Function GetFileCRC32(ByVal FilePath As String) As Long
-    Dim str As String
-    Dim tmp As String
-    Dim f   As Integer
+    Dim Data() As Byte
+    Dim f      As Integer
     
     f = FreeFile
     
-    Open FilePath For Input As #f
-        Do While (EOF(f) = False)
-            Line Input #f, tmp
-            
-            str = str & tmp
-        Loop
+    Open FilePath For Binary Access Read As #f
+        ReDim Data(0 To LOF(f) - 1)
+        Get f, , Data
     Close #f
     
-    GetFileCRC32 = CRC32(str)
+    GetFileCRC32 = CRC32(Data)
 End Function
 
 'Modified from code given to me by David Fritts (sneakcharm@yahoo.com)
@@ -91,12 +89,12 @@ Public Function ValidateExecutable() As Boolean
     On Error GoTo ValidateExecutable_Error
     
     'Dim CRC32          As clsCRC32
-    Dim strFilePath    As String
-    Dim intFreeFile    As Integer
-    Dim strBuffer      As String
-    Dim strFileCRC     As String * 8
-    Dim strComputedCRC As String * 8
-    Dim lngComputedCRC As Long
+    Dim strFilePath     As String
+    Dim intFreeFile     As Integer
+    Dim Data()          As Byte
+    Dim FileCRC(0 To 7) As Byte
+    Dim strComputedCRC  As String * 8
+    Dim lngComputedCRC  As Long
 
     'Set CRC32 = New clsCRC32
     
@@ -107,23 +105,29 @@ Public Function ValidateExecutable() As Boolean
     
     'read the sections you want to protect
     Open strFilePath For Binary Access Read As #intFreeFile
-        strBuffer = String$(LOF(intFreeFile) - 8, vbNullChar)
-        
-        Get #intFreeFile, 1, strBuffer
+        If LOF(intFreeFile) > 8 Then
+            ReDim Data(0 To LOF(intFreeFile) - 9)
+            Get #intFreeFile, , Data
+        Else
+            Data = vbNullString
+        End If
     Close #intFreeFile
     
     'Compute the new CRC
-    lngComputedCRC = CRC32(strBuffer)
+    lngComputedCRC = CRC32(Data)
     strComputedCRC = ZeroOffset(lngComputedCRC, 8)
     
     'Read a CRC from ourselves
     intFreeFile = FreeFile
     
-    Open strFilePath For Binary As #intFreeFile
-        Get #intFreeFile, FileLen(strFilePath) - 7, strFileCRC
+    Open strFilePath For Binary Access Read As #intFreeFile
+        If LOF(intFreeFile) > 8 Then
+            Seek #intFreeFile, LOF(intFreeFile) - 8
+            Get #intFreeFile, , FileCRC
+        End If
     Close #intFreeFile
     
-    If (StrComp(strComputedCRC, strFileCRC, vbBinaryCompare) = 0) Then
+    If (StrComp(strComputedCRC, ByteArrToString(FileCRC), vbBinaryCompare) = 0) Then
         ValidateExecutable = True
     Else
         ValidateExecutable = False

@@ -158,12 +158,12 @@ End Sub
 Private Sub Form_Resize()
     On Error Resume Next
     
-    Dim SPACER As Long
-    SPACER = rtbWhispers.Left
+    Dim Spacer As Long
+    Spacer = rtbWhispers.Left
     
     With rtbWhispers
-        .Height = Me.ScaleHeight - txtSend.Height - SPACER - 100
-        .Width = Me.ScaleWidth - (SPACER * 2)
+        .Height = Me.ScaleHeight - txtSend.Height - Spacer - 100
+        .Width = Me.ScaleWidth - (Spacer * 2)
         .Font.Name = frmChat.rtbChat.Font.Name
         .Font.Size = frmChat.rtbChat.Font.Size
         .BackColor = frmChat.rtbChat.BackColor
@@ -302,8 +302,8 @@ Sub AddWhisper(ParamArray saElements() As Variant)
     Dim L As Long
     Dim i As Integer, oldSelStart As Integer, oldSelLength As Integer
     
-    oldSelStart = txtSend.selStart
-    oldSelStart = oldSelStart + txtSend.selLength
+    oldSelStart = txtSend.SelStart
+    oldSelStart = oldSelStart + txtSend.SelLength
     
     If GetForegroundWindow() = Me.hWnd Then
         rtbWhispers.Locked = True
@@ -311,11 +311,11 @@ Sub AddWhisper(ParamArray saElements() As Variant)
     
     If Not BotVars.LockChat Then
         With rtbWhispers
-            .selStart = Len(.Text)
-            .selLength = 0
+            .SelStart = Len(.Text)
+            .SelLength = 0
             .SelColor = RTBColors.TimeStamps
             .SelText = s
-            .selStart = Len(.Text)
+            .SelStart = Len(.Text)
         End With
         
         For i = LBound(saElements) To UBound(saElements) Step 2
@@ -324,20 +324,20 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             
             If Len(saElements(i + 1)) > 0 Then
                 With rtbWhispers
-                    .selStart = Len(.Text)
-                    L = .selStart
-                    .selLength = 0
+                    .SelStart = Len(.Text)
+                    L = .SelStart
+                    .SelLength = 0
                     .SelColor = saElements(i)
                     .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
-                    .selStart = Len(.Text)
+                    .SelStart = Len(.Text)
                 End With
             End If
         Next i
         
         Call ColorModify(rtbWhispers, L)
         
-        txtSend.selStart = oldSelStart
-        txtSend.selLength = oldSelLength
+        txtSend.SelStart = oldSelStart
+        txtSend.SelLength = oldSelLength
     End If
     
 '    If rtbWhispers.Locked Then

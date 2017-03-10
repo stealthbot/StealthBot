@@ -1094,7 +1094,7 @@ End Function
 Public Function CRC32(ByRef str As String) As Long
     Dim clsCRC32 As New clsCRC32
     
-    CRC32 = clsCRC32.CRC32(str)
+    CRC32 = clsCRC32.CRC32(StringToByteArr(str))
     
     Set clsCRC32 = Nothing
 End Function

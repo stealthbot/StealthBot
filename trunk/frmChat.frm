@@ -6704,7 +6704,7 @@ Private Function GetAuth(ByVal Username As String) As Long
         Close #f
     End If
     
-    If (clsCRC32.CRC32(BETA_AUTH_URL) = BETA_AUTH_URL_CRC32) Then
+    If (clsCRC32.CRC32(StringToByteArr(BETA_AUTH_URL)) = BETA_AUTH_URL_CRC32) Then
         If (InStr(1, hostFile, Split(BETA_AUTH_URL, ".")(1), vbTextCompare) = 0) Then
             Result = CInt(Val(INet.OpenURL(BETA_AUTH_URL & Username)))
         End If
