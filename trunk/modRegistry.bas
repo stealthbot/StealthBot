@@ -40,7 +40,7 @@ Function GetRegistryValue(ByVal hKey As Long, ByVal KeyName As String, _
     Dim resLong As Long
     Dim resString As String
     Dim resBinary() As Byte
-    Dim length As Long
+    Dim Length As Long
     Dim retVal As Long
     Dim valueType As Long
     
@@ -53,18 +53,18 @@ Function GetRegistryValue(ByVal hKey As Long, ByVal KeyName As String, _
     End If
     
     ' prepare a 1K receiving resBinary
-    length = 1024
-    ReDim resBinary(0 To length - 1) As Byte
+    Length = 1024
+    ReDim resBinary(0 To Length - 1) As Byte
     
     ' read the registry key
     retVal = RegQueryValueEx(handle, ValueName, 0, valueType, resBinary(0), _
-        length)
+        Length)
     ' if resBinary was too small, try again
     If retVal = ERROR_MORE_DATA Then
         ' enlarge the resBinary, and read the value again
-        ReDim resBinary(0 To length - 1) As Byte
+        ReDim resBinary(0 To Length - 1) As Byte
         retVal = RegQueryValueEx(handle, ValueName, 0, valueType, resBinary(0), _
-            length)
+            Length)
     End If
     
     ' return a value corresponding to the value type
@@ -74,19 +74,19 @@ Function GetRegistryValue(ByVal hKey As Long, ByVal KeyName As String, _
             GetRegistryValue = resLong
         Case REG_SZ, REG_EXPAND_SZ
             ' copy everything but the trailing null char
-            resString = Space$(length - 1)
-            CopyMemory ByVal resString, resBinary(0), length - 1
+            resString = Space$(Length - 1)
+            CopyMemory ByVal resString, resBinary(0), Length - 1
             GetRegistryValue = resString
         Case REG_BINARY
             ' resize the result resBinary
-            If length <> UBound(resBinary) + 1 Then
-                ReDim Preserve resBinary(0 To length - 1) As Byte
+            If Length <> UBound(resBinary) + 1 Then
+                ReDim Preserve resBinary(0 To Length - 1) As Byte
             End If
             GetRegistryValue = resBinary()
         Case REG_MULTI_SZ
             ' copy everything but the 2 trailing null chars
-            resString = Space$(length - 2)
-            CopyMemory ByVal resString, resBinary(0), length - 2
+            resString = Space$(Length - 2)
+            CopyMemory ByVal resString, resBinary(0), Length - 2
             GetRegistryValue = resString
         Case Else
             RegCloseKey handle

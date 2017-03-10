@@ -22,13 +22,13 @@ End Sub
 Public Function Hex(ByVal hexcolor As String) As Long
     Dim r As String * 4
     Dim g As String * 4
-    Dim B As String * 4
+    Dim b As String * 4
     Dim os As Integer
     If Left$(hexcolor, 1) = "#" Then os = 1
     r = "&H" & Mid$(hexcolor, 1 + os, 2)
     g = "&H" & Mid$(hexcolor, 3 + os, 2)
-    B = "&H" & Mid$(hexcolor, 5 + os, 2)
-    Hex = RGB(CInt(r), CInt(g), CInt(B))
+    b = "&H" & Mid$(hexcolor, 5 + os, 2)
+    Hex = RGB(CInt(r), CInt(g), CInt(b))
 End Function
 
 '// shows a list of all the colors in the chat window

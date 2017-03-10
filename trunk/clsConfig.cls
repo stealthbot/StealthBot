@@ -2497,7 +2497,7 @@ End Function
 
 Private Function ReadSetting(ByVal section As String, ByVal Key As String, Optional ByVal DefaultValue As String = vbNullString) As String
     Dim Buffer As String
-    Dim length As Long
+    Dim Length As Long
     
     ' If the config file doesn't exist, return the default.
     If Not FileExists() Then
@@ -2509,8 +2509,8 @@ Private Function ReadSetting(ByVal section As String, ByVal Key As String, Optio
     Buffer = String(255, vbNull)
     
     ' Read the value into the buffer.
-    length = GetPrivateProfileString(section, Key, DefaultValue, Buffer, 255, m_ConfigPath)
-    ReadSetting = Left$(Buffer, length)
+    Length = GetPrivateProfileString(section, Key, DefaultValue, Buffer, 255, m_ConfigPath)
+    ReadSetting = Left$(Buffer, Length)
     
     'MsgBox section & "->" & key & ": [" & CStr(length) & "] " & ReadSetting
 End Function

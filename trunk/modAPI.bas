@@ -99,7 +99,7 @@ Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hWnd _
 Public Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" ( _
     Destination As Any, _
     source As Any, _
-    ByVal length As Long)
+    ByVal Length As Long)
     
 Public Declare Function ShellExecute Lib "shell32" Alias "ShellExecuteA" ( _
     ByVal hWnd As Long, _

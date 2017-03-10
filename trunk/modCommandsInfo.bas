@@ -780,8 +780,8 @@ On Error GoTo ERROR_HANDLER
     
     Set commands = xmlDoc.documentElement.selectNodes(xpath)
 
-    If (commands.length > 0) Then
-        For i = 0 To commands.length - 1
+    If (commands.Length > 0) Then
+        For i = 0 To commands.Length - 1
             If (LenB(Flags) > 0) Then
                 thisCommand = commands(i).parentNode.parentNode.parentNode.Attributes.getNamedItem("name").Text
             Else

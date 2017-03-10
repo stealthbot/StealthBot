@@ -10,7 +10,7 @@ Private Type PACKETCACHEITEM
     Direction As enuPL_DirectionTypes
     PKT_Type  As enuPL_ServerTypes
     ID        As Byte
-    length    As Integer
+    Length    As Integer
     Data()    As Byte
     TimeDate  As Date
 End Type
@@ -24,7 +24,7 @@ End Enum
 Private m_cache()     As PACKETCACHEITEM
 Private m_cache_count As Integer
 
-Public Function CachePacket(ByVal PKT_Type As enuPL_ServerTypes, ByVal Direction As enuPL_DirectionTypes, ByVal ID As Byte, ByVal length As Integer, ByRef Data() As Byte)
+Public Function CachePacket(ByVal PKT_Type As enuPL_ServerTypes, ByVal Direction As enuPL_DirectionTypes, ByVal ID As Byte, ByVal Length As Integer, ByRef Data() As Byte)
 
     Dim pkt As PACKETCACHEITEM
     
@@ -32,7 +32,7 @@ Public Function CachePacket(ByVal PKT_Type As enuPL_ServerTypes, ByVal Direction
         .Direction = Direction
         .PKT_Type = PKT_Type
         .ID = ID
-        .length = length
+        .Length = Length
         .Data = Data
         .TimeDate = Now
     End With
@@ -72,7 +72,7 @@ Public Sub DumpPacketCache()
     For i = 0 To m_cache_count - 1
         pkt = m_cache(i)
         
-        WritePacketData pkt.PKT_Type, pkt.Direction, pkt.ID, pkt.length, pkt.Data, _
+        WritePacketData pkt.PKT_Type, pkt.Direction, pkt.ID, pkt.Length, pkt.Data, _
             pkt.TimeDate
     Next i
     
@@ -145,7 +145,7 @@ Public Function StringToWord(ByVal Data As String) As Long
     StringToWord = Word
 End Function
 
-Public Function DebugOutput(ByVal sIn As String, Optional ByVal Start As Long = 1, Optional ByVal length As Long = -1) As String
+Public Function DebugOutput(ByVal sIn As String, Optional ByVal Start As Long = 1, Optional ByVal Length As Long = -1) As String
 
     Dim x1 As Long, y1 As Long
     Dim iLen As Long, iPos As Long
@@ -159,8 +159,8 @@ Public Function DebugOutput(ByVal sIn As String, Optional ByVal Start As Long = 
     '        Mid(sIn, x1, 1) = Chr(x1 - 1)
     '        Mid(sIn, x1, 1) = Chr(255 * Rnd())
     '    Next x1
-    If length >= 0 Then
-        sIn = Mid$(sIn, Start, length)
+    If Length >= 0 Then
+        sIn = Mid$(sIn, Start, Length)
     Else
         sIn = Mid$(sIn, Start)
     End If
@@ -197,9 +197,9 @@ Public Function DebugOutput(ByVal sIn As String, Optional ByVal Start As Long = 
     DebugOutput = sOut
 End Function
 
-Public Function DebugOutputBuffer(ByRef Data() As Byte, Optional ByVal Start As Long = 0, Optional ByVal length As Long = -1) As String
+Public Function DebugOutputBuffer(ByRef Data() As Byte, Optional ByVal Start As Long = 0, Optional ByVal Length As Long = -1) As String
     Dim sData As String
     sData = StrConv(Data(), vbUnicode, 1033)
-    DebugOutputBuffer = DebugOutput(sData, Start + 1, length)
+    DebugOutputBuffer = DebugOutput(sData, Start + 1, Length)
 End Function
 

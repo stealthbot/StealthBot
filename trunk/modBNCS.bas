@@ -148,7 +148,7 @@ On Error GoTo ERROR_HANDLER:
         PacketLen = .GetWord
     End With
     
-    If pBuff.length >= 0 Then
+    If pBuff.Length >= 0 Then
         If MDebug("all") Then
             frmChat.AddChat COLOR_BLUE, "BNET RECV 0x" & ZeroOffset(PacketID, 2)
         End If

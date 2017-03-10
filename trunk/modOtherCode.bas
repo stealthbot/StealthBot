@@ -37,11 +37,11 @@ End Type
 
 Public Function GetComputerLanName() As String
     Dim buff As String
-    Dim length As Long
+    Dim Length As Long
     buff = String(MAX_COMPUTERNAME_LENGTH + 1, Chr$(0))
-    length = Len(buff)
-    If (GetComputerName(buff, length)) Then
-        GetComputerLanName = Left(buff, length)
+    Length = Len(buff)
+    If (GetComputerName(buff, Length)) Then
+        GetComputerLanName = Left(buff, Length)
     Else
         GetComputerLanName = vbNullString
     End If
@@ -49,10 +49,10 @@ End Function
 
 Public Function GetComputerUsername() As String
     Dim buff As String
-    Dim length As Long
+    Dim Length As Long
     buff = String(MAX_USERNAME_LENGTH + 1, Chr$(0))
-    length = Len(buff)
-    If (GetUserName(buff, length)) Then
+    Length = Len(buff)
+    If (GetUserName(buff, Length)) Then
         GetComputerUsername = KillNull(buff)
     Else
         GetComputerUsername = vbNullString
@@ -2633,7 +2633,7 @@ Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Lon
     Dim lineCount As Long    ' stores line number
     Dim pos       As Long    ' stores position of delimiter
     Dim strTmp    As String  ' stores working copy of StringSplit
-    Dim length    As Long    ' stores Length after LinePostfix
+    Dim Length    As Long    ' stores Length after LinePostfix
     Dim bln       As Boolean ' stores result of delimiter split
     Dim s         As String  ' stores temp string for settings
     
@@ -2686,7 +2686,7 @@ Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Lon
             ' going to postfix it.  Because of this, we're
             ' going to have to calculate the Length after
             ' the postfix has been accounted for.
-            length = (SplitLength - Len(LinePostfix))
+            Length = (SplitLength - Len(LinePostfix))
         
             ' if we're going to be splitting the oversized
             ' message at a specified character, we need to
@@ -2695,7 +2695,7 @@ Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Lon
             If (OversizeDelimiter <> vbNullString) Then
                 ' grab position of delimiter character that is the closest to our
                 ' specified Length
-                pos = InStrRev(strTmp, OversizeDelimiter, length, vbTextCompare)
+                pos = InStrRev(strTmp, OversizeDelimiter, Length, vbTextCompare)
             End If
             
             ' if the delimiter we were looking for was found,
@@ -2703,7 +2703,7 @@ Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Lon
             ' half of the message (this check prevents breaks
             ' in unecessary locations), split the message
             ' accordingly.
-            If ((pos) And (pos >= Round(length / 2))) Then
+            If ((pos) And (pos >= Round(Length / 2))) Then
                 ' truncate message
                 strTmp = Mid$(strTmp, 1, pos)
                 
@@ -2713,7 +2713,7 @@ Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Lon
                 'bln = (Not KeepDelim)
             Else
                 ' truncate message
-                strTmp = Mid$(strTmp, 1, length)
+                strTmp = Mid$(strTmp, 1, Length)
             End If
             
             ' store truncated message in line
@@ -2841,7 +2841,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim intRange       As Long
     Dim blUnlock       As Boolean
     Dim LogThis        As Boolean
-    Dim length         As Long
+    Dim Length         As Long
     Dim Count          As Long
     Dim str            As String
     Dim arrCount       As Long
@@ -2883,11 +2883,11 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             Exit Sub
         End If
         
-        length = _
-            length + Len(KillNull(saElements(i + 2)))
+        Length = _
+            Length + Len(KillNull(saElements(i + 2)))
     Next i
     
-    If (length = 0) Then
+    If (Length = 0) Then
         Exit Sub
     End If
 

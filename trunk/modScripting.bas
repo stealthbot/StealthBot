@@ -1323,9 +1323,9 @@ Public Function GetModuleByName(ByVal scriptName As String) As Module
     Next i
 End Function
 
-Public Sub SetVeto(ByVal B As Boolean)
+Public Sub SetVeto(ByVal b As Boolean)
 
-    VetoNextMessage = B
+    VetoNextMessage = b
     
 End Sub
 
