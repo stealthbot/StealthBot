@@ -5337,7 +5337,7 @@ Private Sub tmrAccountLock_Timer()
     AddChat RTBColors.ErrorMessageText, "[BNCS] Your account appears to be locked, likely due to an excessive number of " & _
         "invalid logons.  Please try that account again in 15-20 minutes."
 
-    frmAccountManager.ShowMode tmrAccountLock.Tag
+    Call DoDisconnect
 End Sub
 
 Private Sub tmrScript_Timer(Index As Integer)
