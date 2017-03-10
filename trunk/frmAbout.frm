@@ -263,17 +263,9 @@ Private Sub Form_Load()
     lblBottom.Caption = "(c)2002-2009 Andy T - all rights reserved." & vbCrLf & "Use of this program is subject to the License Agreement found at http://eula.stealthbot.net."
 End Sub
 
-Private Sub AddLine(ByVal sIn As String)
-    txtDescr.Text = txtDescr.Text & sIn & vbCrLf
-End Sub
-
-Private Sub AddCrLf()
-    txtDescr.Text = txtDescr.Text & vbCrLf
-End Sub
-
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim i As Byte
-    For i = 0 To 3
+    For i = lblURL.LBound To lblURL.UBound
         lblURL(i).ForeColor = vbWhite
     Next i
     lblOK.ForeColor = vbWhite
@@ -286,30 +278,12 @@ End Sub
 
 Private Sub lblOK_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim i As Byte
-    For i = 0 To 3
+    For i = lblURL.LBound To lblURL.UBound
         lblURL(i).ForeColor = vbWhite
     Next i
-    lblOK.ForeColor = vbBlue
-End Sub
+    lblOK.ForeColor = &HFFCC99
 
-Private Sub lblTitle_Click()
-    TitleClicked
-End Sub
-
-Private Sub lblTitle_DblClick()
-    TitleClicked
-End Sub
-
-Sub TitleClicked()
-    lNumClicks = lNumClicks + 1
-    
-    If lNumClicks Mod 14 = 0 Then
-        lblTitle.Caption = " hamtaro rocks :P "
-    ElseIf lNumClicks Mod 7 = 0 Then
-        lblTitle.Caption = "< Think Outside the Bun >"
-    Else
-        lblTitle.Caption = ".: " & CVERSION
-    End If
+    Call SetCursor(LoadCursor(0, IDC_HAND))
 End Sub
 
 Private Sub lblURL_Click(Index As Integer)
@@ -323,15 +297,48 @@ End Sub
 
 Private Sub lblURL_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim i As Byte
-    For i = 0 To 3
-        lblURL(i).ForeColor = vbWhite
+    For i = lblURL.LBound To lblURL.UBound
+        If i = Index Then
+            lblURL(i).ForeColor = &HFFCC99
+        Else
+            lblURL(i).ForeColor = vbWhite
+        End If
     Next i
     lblOK.ForeColor = vbWhite
-    lblURL(Index).ForeColor = vbBlue
+
+    Call SetCursor(LoadCursor(0, IDC_HAND))
 End Sub
 
 Private Sub txtDescr_KeyPress(KeyAscii As Integer)
     If KeyAscii = vbKeyReturn Or KeyAscii = vbKeyEscape Then
         Unload Me
+    End If
+End Sub
+
+Private Sub lblTitle_Click()
+    TitleClicked
+End Sub
+
+Private Sub lblTitle_DblClick()
+    TitleClicked
+End Sub
+
+Private Sub AddLine(ByVal sIn As String)
+    txtDescr.Text = txtDescr.Text & sIn & vbCrLf
+End Sub
+
+Private Sub AddCrLf()
+    txtDescr.Text = txtDescr.Text & vbCrLf
+End Sub
+
+Private Sub TitleClicked()
+    lNumClicks = lNumClicks + 1
+    
+    If lNumClicks Mod 14 = 0 Then
+        lblTitle.Caption = " hamtaro rocks :P "
+    ElseIf lNumClicks Mod 7 = 0 Then
+        lblTitle.Caption = "< Think Outside the Bun >"
+    Else
+        lblTitle.Caption = ".: " & CVERSION
     End If
 End Sub

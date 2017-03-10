@@ -4812,13 +4812,17 @@ Private Sub lblManageKeys_Click()
 End Sub
 
 Sub lblAddCurrentKey_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
-    lblAddCurrentKey.ForeColor = vbBlue
+    lblAddCurrentKey.ForeColor = &HFFCC99
     lblManageKeys.ForeColor = vbWhite
+
+    Call SetCursor(LoadCursor(0, IDC_HAND))
 End Sub
 
 Sub lblManageKeys_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     lblAddCurrentKey.ForeColor = vbWhite
-    lblManageKeys.ForeColor = vbBlue
+    lblManageKeys.ForeColor = &HFFCC99
+
+    Call SetCursor(LoadCursor(0, IDC_HAND))
 End Sub
 
 Sub Form_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)

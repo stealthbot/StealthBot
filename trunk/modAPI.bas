@@ -88,6 +88,11 @@ Public Declare Function FindWindowEx Lib "user32" Alias "FindWindowExA" (ByVal h
 Public Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
 Public Declare Function SetCursorPos Lib "user32" (ByVal x As Long, ByVal y As Long) As Long
 
+Public Declare Function SetCursor Lib "user32" (ByVal hCursor As Long) As Long
+Public Declare Function LoadCursor Lib "user32" Alias "LoadCursorA" (ByVal hInstance As Long, ByVal lpCursorName As Long) As Long
+
+Public Const IDC_HAND = 32649&
+
 Public Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" ( _
     ByVal hWnd As Long, _
     ByVal nIndex As Long, _
@@ -114,34 +119,6 @@ Public Declare Function GetScrollRange Lib "user32" (ByVal hWnd As Long, ByVal n
 Public Declare Function LockWindowUpdate Lib "user32" (ByVal hwndLock As Long) As Long
 
 Public Declare Function SetActiveWindow Lib "user32" (ByVal hWnd As Long) As Long
-
-'Public Declare Sub SRP_Init Lib "SRPx86.dll" Alias "srp_initialize" (ByRef SRP As SRP_TYPE, ByVal Username As String, ByVal Password As String)
-'
-'Public Declare Sub SRP_Done Lib "SRPx86.dll" Alias "srp_destroy" (ByRef SRP As SRP_TYPE)
-'
-'Public Declare Sub get_A Lib "SRPx86.dll" (ByRef SRP As SRP_TYPE, ByRef a() As Byte)
-'Public Declare Sub get_M1 Lib "SRPx86.dll" (ByRef SRP As SRP_TYPE, ByRef s() As Byte, ByRef b() As Byte, ByRef M1() As Byte)
-'Public Declare Sub get_v Lib "SRPx86.dll" (ByRef SRP As SRP_TYPE, ByRef s() As Byte, ByRef v() As Byte)
-'
-'Public Const BIGINT_SIZE As Long = 32
-'Public Const SHA_DIGESTSIZE As Long = 20
-'
-'Public Type MP_DIGIT
-'    digit As Integer  'I'm assuming a 16-bit datatype?
-'End Type
-'
-'Public Type MP_INT
-'    Used As Long
-'    Alloc As Long
-'    Sign As Long
-'    dp As MP_DIGIT
-'End Type
-'
-'Public Type SRP_TYPE
-'    Username As String
-'    Password As String
-'    a As MP_INT
-'End Type
 
 Public Declare Function GetComputerName Lib "kernel32" Alias "GetComputerNameA" (ByVal sBuffer As String, lSize As Long) As Long
 Public Declare Function GetUserName Lib "advapi32.dll" Alias "GetUserNameA" (ByVal lpBuffer As String, nSize As Long) As Long
