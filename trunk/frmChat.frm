@@ -2384,7 +2384,7 @@ Sub Event_BNetError(ErrorNumber As Integer, Description As String)
     If DisplayError(ErrorNumber, IsProxyConnecting, stBNCS) = True Then
         AddChat RTBColors.ErrorMessageText, _
             "[BNCS] Attempting to reconnect in " & (BotVars.ReconnectDelay / 1000) & _
-                IIf(((BotVars.ReconnectDelay / 1000) > 1), " seconds", " second") & _
+                IIf(((BotVars.ReconnectDelay / 1000) <> 1), " seconds", " second") & _
                         "..."
         
         UserCancelledConnect = False 'this should fix the beta reconnect problems
@@ -7075,6 +7075,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     'End If
     
     BotVars.BNLSServer = Config.BNLSServer
+    BotVars.ReconnectDelay = Config.ReconnectDelay
     
     ' Load database and commands
     Call LoadDatabase
