@@ -1137,9 +1137,9 @@ Public Function XSHA1(ByRef Data As String, Optional ByVal inHex As Boolean = Fa
         For i = 0 To 19
             s = StringFormat("{0}{1}{2}", s, IIf(i > 0, Spacer, vbNullString), ZeroOffset(Result(i), 2))
         Next i
-        XSHA1N = LCase$(s)
+        XSHA1 = LCase$(s)
     Else
-        XSHA1N = ByteArrToString(Result)
+        XSHA1 = ByteArrToString(Result)
     End If
 End Function
 
