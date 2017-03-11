@@ -222,7 +222,7 @@ Private Sub LoadQuotes()
     
     m_blnIsLoaded = False
     
-    Set m_Quotes = ListFileLoad(GetFilePath(FILE_QUOTES))
+    Set m_Quotes = ListFileLoad(GetFilePath(FILE_QUOTE_LIST))
     
     m_blnIsLoaded = True
     
@@ -238,7 +238,7 @@ Private Sub SaveQuotes()
 
     On Error GoTo ERROR_HANDLER
 
-    Call ListFileSave(GetFilePath(FILE_QUOTES), m_Quotes)
+    Call ListFileSave(GetFilePath(FILE_QUOTE_LIST), m_Quotes)
     
     Exit Sub
     
@@ -252,7 +252,7 @@ Private Sub AppendQuote(ByVal QuoteStr As String)
 
     On Error GoTo ERROR_HANDLER
 
-    Call ListFileAppendItem(GetFilePath(FILE_QUOTES), QuoteStr)
+    Call ListFileAppendItem(GetFilePath(FILE_QUOTE_LIST), QuoteStr)
     
     Exit Sub
     

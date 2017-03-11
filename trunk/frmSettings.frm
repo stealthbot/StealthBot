@@ -4811,7 +4811,7 @@ Sub lblAddCurrentKey_Click()
     Dim Key2 As String
     
     ' Load the list
-    Set keys = ListFileLoad(GetFilePath("Keys.txt"))
+    Set keys = ListFileLoad(GetFilePath(FILE_KEY_LIST))
     
     Key1 = UCase$(CDKeyReplacements(txtCDKey.Text))
     Key2 = UCase$(CDKeyReplacements(txtExpKey.Text))
@@ -4828,7 +4828,7 @@ Sub lblAddCurrentKey_Click()
     
     ' Save the list
     If LenB(Key1) > 0 Or LenB(Key2) > 0 Then
-        ListFileSave GetFilePath("Keys.txt"), keys
+        ListFileSave GetFilePath(FILE_KEY_LIST), keys
     End If
     
     Set keys = Nothing

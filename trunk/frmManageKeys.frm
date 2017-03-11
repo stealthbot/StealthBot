@@ -161,8 +161,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private Const FILE_KEY_STORAGE As String = "Keys.txt"
-
 Private KeyProducts As Dictionary
 
 Private m_editing As String
@@ -256,8 +254,8 @@ Private Sub cmdEdit_Click()
         With txtActiveKey
             .Text = m_editing
             .SetFocus
-            .selStart = 0
-            .selLength = Len(.Text)
+            .SelStart = 0
+            .SelLength = Len(.Text)
         End With
     End If
 End Sub
@@ -361,7 +359,7 @@ End Function
 Private Sub Local_LoadCDKeys()
     Dim keys As Collection
     Dim sKey As Variant
-    Set keys = ListFileLoad(GetFilePath(FILE_KEY_STORAGE))
+    Set keys = ListFileLoad(GetFilePath(FILE_KEY_LIST))
     
     For Each sKey In keys
         sKey = CStr(Trim(sKey))
@@ -379,7 +377,7 @@ Private Sub Local_WriteCDKeys()
         keys.Add Item.Tag
     Next Item
     
-    ListFileSave GetFilePath(FILE_KEY_STORAGE), keys
+    ListFileSave GetFilePath(FILE_KEY_LIST), keys
     
     Set keys = Nothing
 End Sub
