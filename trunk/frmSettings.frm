@@ -4781,7 +4781,7 @@ Private Sub cmdSaveColor_Click()
 End Sub
 
 Private Sub cmdStepByStep_Click()
-    frmCustomInputBox.Show
+    Call frmCustomInputBox.Show(vbModal, frmSettings)
 End Sub
 
 Private Sub cmdWebsite_Click()
