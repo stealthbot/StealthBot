@@ -73,7 +73,6 @@ Private m_ProxyPassword             As String
 Private m_ProxyBNLS                 As Boolean
 Private m_ProxyMCP                  As Boolean
 Private m_AccountMode               As String
-Private m_AutoAccountAction         As Boolean
 Private m_ManageOnAccountError      As Boolean
 Private m_NewPassword               As String
 
@@ -440,14 +439,6 @@ End Property
 
 Public Property Let AccountMode(ByVal sValue As String)
     m_AccountMode = sValue
-End Property
-
-Public Property Get AutoAccountAction() As Boolean
-    AutoAccountAction = m_AutoAccountAction
-End Property
-
-Public Property Let AutoAccountAction(ByVal sValue As Boolean)
-    m_AutoAccountAction = sValue
 End Property
 
 Public Property Get ManageOnAccountError() As Boolean
@@ -1743,7 +1734,6 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_CLIENT, "ProxyBNLS", m_ProxyBNLS
     WriteSetting SECTION_CLIENT, "ProxyMCP", m_ProxyMCP
     WriteSetting SECTION_CLIENT, "AccountMode", m_AccountMode
-    WriteSetting SECTION_CLIENT, "AutoAccountAction", m_AutoAccountAction
     WriteSetting SECTION_CLIENT, "ManageOnAccountError", m_ManageOnAccountError
     WriteSetting SECTION_CLIENT, "NewPassword", m_NewPassword
     
@@ -1938,7 +1928,6 @@ Private Sub LoadDefaults()
     m_ProxyBNLS = False
     m_ProxyMCP = True
     m_AccountMode = ACCOUNT_MODE_LOGON
-    m_AutoAccountAction = True
     m_ManageOnAccountError = True
     m_NewPassword = vbNullString
 
@@ -2289,7 +2278,6 @@ Private Sub LoadVersion6Config()
     m_ProxyBNLS = ReadSetting(SECTION_CLIENT, "ProxyBNLS", m_ProxyBNLS)
     m_ProxyMCP = ReadSetting(SECTION_CLIENT, "ProxyMCP", m_ProxyMCP)
     m_AccountMode = ReadSetting(SECTION_CLIENT, "AccountMode", m_AccountMode)
-    m_AutoAccountAction = ReadSetting(SECTION_CLIENT, "AutoAccountAction", m_AutoAccountAction)
     m_ManageOnAccountError = ReadSetting(SECTION_CLIENT, "ManageOnAccountError", m_ManageOnAccountError)
     m_NewPassword = ReadSetting(SECTION_CLIENT, "NewPassword", m_NewPassword)
 

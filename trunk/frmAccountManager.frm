@@ -323,7 +323,6 @@ Private Sub SaveFieldsAndConnect()
             Config.RegisterEmailChange = NEmail1
             Config.AccountMode = ACCOUNT_MODE_CHREG
     End Select
-    Config.AutoAccountAction = False
     Config.Save
 
     If (m_FormIsModal) Then
@@ -409,7 +408,6 @@ Private Sub Form_Load()
     Email = Config.RegisterEmailDefault
 
     Select Case UCase$(m_Mode)
-        Case vbNullString:          ' no change
         Case ACCOUNT_MODE_CREAT:    cboMode.ListIndex = M_CREAT
         Case ACCOUNT_MODE_CHPWD:    cboMode.ListIndex = M_CHPWD
         Case ACCOUNT_MODE_RSPWD:    cboMode.ListIndex = M_RSPWD
@@ -452,7 +450,7 @@ Public Sub LeftAccountEntryMode()
     If g_Connected Then
         Unload Me
     Else
-        Call ShowMode(vbNullString)
+        Call ShowMode(Config.AccountMode)
     End If
 End Sub
 

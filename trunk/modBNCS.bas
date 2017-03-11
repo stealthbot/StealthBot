@@ -1065,7 +1065,7 @@ On Error GoTo ERROR_HANDLER:
         Case &H0:
             Call Event_LogonEvent(ACCOUNT_MODE_CHPWD, &H0, vbNullString)
 
-            If Config.AutoAccountAction Then
+            If Not frmAccountManager.Visible Then
                 Call DoAccountAction(ACCOUNT_MODE_LOGON)
             Else
                 frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
@@ -1265,7 +1265,7 @@ On Error GoTo ERROR_HANDLER:
         Case &H1  'Nonexistent account.
             Call Event_LogonEvent(ACCOUNT_MODE_LOGON, &H1, sInfo)
 
-            If Config.AutoAccountAction Then
+            If Not frmAccountManager.Visible Then
                 Call DoAccountAction(ACCOUNT_MODE_CREAT)
             ElseIf Config.ManageOnAccountError Then
                 frmAccountManager.ShowMode ACCOUNT_MODE_CREAT
@@ -1347,7 +1347,7 @@ On Error GoTo ERROR_HANDLER:
         Case &H0:
             Call Event_LogonEvent(ACCOUNT_MODE_CREAT, &H0, sInfo)
 
-            If Config.AutoAccountAction Then
+            If Not frmAccountManager.Visible Then
                 Call DoAccountAction(ACCOUNT_MODE_LOGON)
             Else
                 frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
@@ -1894,7 +1894,7 @@ On Error GoTo ERROR_HANDLER:
         Case &H0:
             Call Event_LogonEvent(ACCOUNT_MODE_CREAT, &H0, vbNullString)
 
-            If Config.AutoAccountAction Then
+            If Not frmAccountManager.Visible Then
                 Call DoAccountAction(ACCOUNT_MODE_LOGON)
             Else
                 frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
@@ -1974,7 +1974,7 @@ On Error GoTo ERROR_HANDLER:
             ds.AccountEntryPending = False
             Call Event_LogonEvent(ACCOUNT_MODE_LOGON, &H1, vbNullString)
 
-            If Config.AutoAccountAction Then
+            If Not frmAccountManager.Visible Then
                 Call DoAccountAction(ACCOUNT_MODE_CREAT)
             ElseIf Config.ManageOnAccountError Then
                 frmAccountManager.ShowMode ACCOUNT_MODE_CREAT
@@ -2216,7 +2216,7 @@ On Error GoTo ERROR_HANDLER:
                 frmChat.AddChat RTBColors.InformationText, "[BNCS] Warning! The server sent an invalid password proof. It may be a fake server."
             End If
 
-            If Config.AutoAccountAction Then
+            If Not frmAccountManager.Visible Then
                 Call DoAccountAction(ACCOUNT_MODE_LOGON)
             Else
                 frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
@@ -2596,12 +2596,6 @@ On Error GoTo ERROR_HANDLER:
     ' set mode to config mode if not provided
     If LenB(Mode) = 0 Then
         Mode = Config.AccountMode
-    End If
-
-    ' turn off automatic if account manager form is open
-    If frmAccountManager.Visible Then
-        Config.AutoAccountAction = False
-        Config.Save
     End If
 
     ' check if an action is pending

@@ -4991,7 +4991,6 @@ Private Function SaveSettings() As Boolean
     Config.UseD2Realms = CBool(chkUseRealm.Value)
 
     ' reset these when save & close normal config
-    Config.AutoAccountAction = True
     Config.NewPassword = vbNullString
     Config.RegisterEmailChange = vbNullString
     
