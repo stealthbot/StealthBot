@@ -29,7 +29,7 @@ Begin VB.Form frmAccountManager
       IMEMode         =   3  'DISABLE
       Left            =   240
       PasswordChar    =   "*"
-      TabIndex        =   4
+      TabIndex        =   10
       Top             =   3000
       Width           =   3255
    End
@@ -38,7 +38,7 @@ Begin VB.Form frmAccountManager
       Default         =   -1  'True
       Height          =   255
       Left            =   1200
-      TabIndex        =   6
+      TabIndex        =   11
       Top             =   3480
       Width           =   2295
    End
@@ -49,7 +49,7 @@ Begin VB.Form frmAccountManager
       IMEMode         =   3  'DISABLE
       Left            =   240
       PasswordChar    =   "*"
-      TabIndex        =   3
+      TabIndex        =   8
       Top             =   2400
       Width           =   3255
    End
@@ -60,7 +60,7 @@ Begin VB.Form frmAccountManager
       IMEMode         =   3  'DISABLE
       Left            =   240
       PasswordChar    =   "*"
-      TabIndex        =   2
+      TabIndex        =   6
       Top             =   1800
       Width           =   3255
    End
@@ -72,7 +72,7 @@ Begin VB.Form frmAccountManager
       Left            =   240
       List            =   "frmAccountManager.frx":0002
       Style           =   2  'Dropdown List
-      TabIndex        =   0
+      TabIndex        =   1
       Top             =   360
       Width           =   3255
    End
@@ -82,7 +82,7 @@ Begin VB.Form frmAccountManager
       Height          =   285
       Left            =   240
       MaxLength       =   15
-      TabIndex        =   1
+      TabIndex        =   4
       Top             =   1200
       Width           =   3255
    End
@@ -91,7 +91,7 @@ Begin VB.Form frmAccountManager
       Caption         =   "&Cancel"
       Height          =   255
       Left            =   240
-      TabIndex        =   5
+      TabIndex        =   12
       Top             =   3480
       Width           =   975
    End
@@ -101,7 +101,7 @@ Begin VB.Form frmAccountManager
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   240
-      TabIndex        =   12
+      TabIndex        =   9
       Top             =   2760
       Width           =   3255
    End
@@ -111,7 +111,7 @@ Begin VB.Form frmAccountManager
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   240
-      TabIndex        =   10
+      TabIndex        =   7
       Top             =   2160
       Width           =   3255
    End
@@ -121,28 +121,28 @@ Begin VB.Form frmAccountManager
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   240
-      TabIndex        =   9
+      TabIndex        =   5
       Top             =   1560
       Width           =   3255
    End
    Begin VB.Label lblUsername 
       BackColor       =   &H00000000&
-      Caption         =   "Username"
+      Caption         =   "&Username"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   240
-      TabIndex        =   8
+      TabIndex        =   3
       Top             =   960
       Width           =   3255
    End
    Begin VB.Label lblMode 
       Alignment       =   2  'Center
       BackColor       =   &H80000007&
-      Caption         =   "Choose what to do after connecting."
+      Caption         =   "C&hoose what to do after connecting."
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   240
-      TabIndex        =   7
+      TabIndex        =   0
       Top             =   120
       Width           =   3255
    End
@@ -151,9 +151,9 @@ Begin VB.Form frmAccountManager
       BackColor       =   &H80000007&
       Caption         =   "Log on to this account:"
       ForeColor       =   &H00FFFFFF&
-      Height          =   735
+      Height          =   255
       Left            =   240
-      TabIndex        =   11
+      TabIndex        =   2
       Top             =   720
       Width           =   3255
    End
@@ -179,6 +179,9 @@ Private NPassword1 As String
 Private NPassword2 As String
 Private NEmail1 As String
 Private NEmail2 As String
+
+Private m_FormIsModal As Boolean
+Private m_Mode As String
 
 Private Sub btnClose_Click()
     Unload Me
@@ -227,60 +230,60 @@ Private Sub SaveFieldsAndConnect()
                 ActionName = "log on"
                 If (LenB(Password) = 0) Then
                     MissingFieldCount = MissingFieldCount + 1
-                    MissingFields = MissingFields & Comma & "Password"
+                    MissingFields = StringFormat("{0}{1}{3}{2}{3}", MissingFields, Comma, "Password", ChrW$(&H22))
                     Comma = ", "
                 End If
             Case M_CREAT
                 ActionName = "create an account"
                 If (LenB(NPassword1) = 0) Then
                     MissingFieldCount = MissingFieldCount + 1
-                    MissingFields = MissingFields & Comma & "Password"
+                    MissingFields = StringFormat("{0}{1}{3}{2}{3}", MissingFields, Comma, "Password", ChrW$(&H22))
                     Comma = ", "
                 End If
                 If (LenB(NPassword2) = 0) Then
                     MissingFieldCount = MissingFieldCount + 1
-                    MissingFields = MissingFields & Comma & "Retype Password"
+                    MissingFields = StringFormat("{0}{1}{3}{2}{3}", MissingFields, Comma, "Verify password", ChrW$(&H22))
                     Comma = ", "
                 End If
             Case M_CHPWD
                 ActionName = "change the password"
                 If (LenB(Password) = 0) Then
                     MissingFieldCount = MissingFieldCount + 1
-                    MissingFields = MissingFields & Comma & "Old Password"
+                    MissingFields = StringFormat("{0}{1}{3}{2}{3}", MissingFields, Comma, "Old password", ChrW$(&H22))
                     Comma = ", "
                 End If
                 If (LenB(NPassword1) = 0) Then
                     MissingFieldCount = MissingFieldCount + 1
-                    MissingFields = MissingFields & Comma & "New Password"
+                    MissingFields = StringFormat("{0}{1}{3}{2}{3}", MissingFields, Comma, "New password", ChrW$(&H22))
                     Comma = ", "
                 End If
                 If (LenB(NPassword2) = 0) Then
                     MissingFieldCount = MissingFieldCount + 1
-                    MissingFields = MissingFields & Comma & "Retype New Password"
+                    MissingFields = StringFormat("{0}{1}{3}{2}{3}", MissingFields, Comma, "Verify new password", ChrW$(&H22))
                     Comma = ", "
                 End If
             Case M_RSPWD
                 ActionName = "reset the password"
                 If (LenB(Password) = 0) Then
                     MissingFieldCount = MissingFieldCount + 1
-                    MissingFields = MissingFields & Comma & "Registered Email"
+                    MissingFields = StringFormat("{0}{1}{3}{2}{3}", MissingFields, Comma, "Registered Email Address", ChrW$(&H22))
                     Comma = ", "
                 End If
             Case M_CHREG
                 ActionName = "change the registered email"
                 If (LenB(Email) = 0) Then
                     MissingFieldCount = MissingFieldCount + 1
-                    MissingFields = MissingFields & Comma & "Old Registered Email"
+                    MissingFields = StringFormat("{0}{1}{3}{2}{3}", MissingFields, Comma, "Old Email Address", ChrW$(&H22))
                     Comma = ", "
                 End If
                 If (LenB(NEmail1) = 0) Then
                     MissingFieldCount = MissingFieldCount + 1
-                    MissingFields = MissingFields & Comma & "New Email"
+                    MissingFields = StringFormat("{0}{1}{3}{2}{3}", MissingFields, Comma, "New Email Address", ChrW$(&H22))
                     Comma = ", "
                 End If
                 If (LenB(NEmail2) = 0) Then
                     MissingFieldCount = MissingFieldCount + 1
-                    MissingFields = MissingFields & Comma & "Retype New Email"
+                    MissingFields = StringFormat("{0}{1}{3}{2}{3}", MissingFields, Comma, "Verify new Email Address", ChrW$(&H22))
                     Comma = ", "
                 End If
         End Select
@@ -322,8 +325,15 @@ Private Sub SaveFieldsAndConnect()
     End Select
     Config.AutoAccountAction = False
     Config.Save
-    
-    If g_Connected And ds.AccountEntry Then
+
+    If (m_FormIsModal) Then
+        If (Not (frmChat.SettingsForm Is Nothing)) Then
+            frmChat.SettingsForm.txtUsername = Username
+            frmChat.SettingsForm.txtPassword = Password
+            frmChat.SettingsForm.txtEmail = Email
+        End If
+        Unload Me
+    ElseIf g_Connected And ds.AccountEntry Then
         Call modBNCS.DoAccountAction
     Else
         Call frmChat.DoConnect
@@ -343,29 +353,29 @@ Private Sub cboMode_Change()
     Select Case cboMode.ListIndex
         Case M_LOGON
             lblModeDetail.Caption = "Log on to this account:"
-            Call SetFieldMode(lblField1, txtField1, True, "Password", "*")
+            Call SetFieldMode(lblField1, txtField1, True, "&Password", "*")
             Call SetFieldMode(lblField2, txtField2, False)
             Call SetFieldMode(lblField3, txtField3, False)
         Case M_CREAT
             lblModeDetail.Caption = "Create this account:"
-            Call SetFieldMode(lblField1, txtField1, True, "Password", "*")
-            Call SetFieldMode(lblField2, txtField2, True, "Retype Password", "*")
+            Call SetFieldMode(lblField1, txtField1, True, "&Password", "*")
+            Call SetFieldMode(lblField2, txtField2, True, "&Verify password", "*")
             Call SetFieldMode(lblField3, txtField3, False)
         Case M_CHPWD
             lblModeDetail.Caption = "Change the password for this account:"
-            Call SetFieldMode(lblField1, txtField1, True, "Old Password", "*")
-            Call SetFieldMode(lblField2, txtField2, True, "New Password", "*")
-            Call SetFieldMode(lblField3, txtField3, True, "Retype New Password", "*")
+            Call SetFieldMode(lblField1, txtField1, True, "&Old password", "*")
+            Call SetFieldMode(lblField2, txtField2, True, "New &password", "*")
+            Call SetFieldMode(lblField3, txtField3, True, "&Verify new password", "*")
         Case M_RSPWD
             lblModeDetail.Caption = "Request a password reset for this account:"
-            Call SetFieldMode(lblField1, txtField1, True, "Registered Email", vbNullString)
+            Call SetFieldMode(lblField1, txtField1, True, "Registered Email &Address", vbNullString)
             Call SetFieldMode(lblField2, txtField2, False)
             Call SetFieldMode(lblField3, txtField3, False)
         Case M_CHREG
             lblModeDetail.Caption = "Change the registered email address:"
-            Call SetFieldMode(lblField1, txtField1, True, "Old Registered Email", vbNullString)
-            Call SetFieldMode(lblField2, txtField2, True, "New Email", vbNullString)
-            Call SetFieldMode(lblField3, txtField3, True, "Retype New Email", vbNullString)
+            Call SetFieldMode(lblField1, txtField1, True, "&Old Email Address", vbNullString)
+            Call SetFieldMode(lblField2, txtField2, True, "New Email &Address", vbNullString)
+            Call SetFieldMode(lblField3, txtField3, True, "&Verify new Email Address", vbNullString)
     End Select
     
     ' fill in fields
@@ -391,27 +401,14 @@ Private Sub Form_Load()
     cboMode.AddItem "Create Account", M_CREAT
     cboMode.AddItem "Change Password", M_CHPWD
     cboMode.AddItem "Reset Password", M_RSPWD
-    cboMode.AddItem "Change Registered Email", M_CHREG
-End Sub
-
-Public Sub LeftAccountEntryMode()
-    If g_Connected Then
-        Unload Me
-    Else
-        Call ShowMode(vbNullString)
-    End If
-End Sub
-
-Public Sub ShowMode(ByVal Mode As String, Optional ByVal ControlIndex As Integer = 1)
-    On Error Resume Next
-    Show
-    On Error GoTo 0
-
+    cboMode.AddItem "Change Registered Email Address", M_CHREG
+    
+    ' load
     Username = Config.Username
     Password = Config.Password
     Email = Config.RegisterEmailDefault
 
-    Select Case UCase$(Mode)
+    Select Case UCase$(m_Mode)
         Case vbNullString:          ' no change
         Case ACCOUNT_MODE_CREAT:    cboMode.ListIndex = M_CREAT
         Case ACCOUNT_MODE_CHPWD:    cboMode.ListIndex = M_CHPWD
@@ -422,32 +419,45 @@ Public Sub ShowMode(ByVal Mode As String, Optional ByVal ControlIndex As Integer
 
     Call cboMode_Change
 
-    If frmChat.sckBNet.State <> sckConnected Then
-        lblMode.Caption = "Choose what to do after connecting:"
+    If (m_FormIsModal) Then
+        lblMode.Caption = "C&hoose what to do after connecting:"
+        btnClose.Caption = "&Close"
+        btnConnect.Caption = "&Save"
+    ElseIf frmChat.sckBNet.State <> sckConnected Then
+        lblMode.Caption = "C&hoose what to do after connecting:"
         btnClose.Caption = "&Close"
         btnConnect.Caption = "&Save and Connect"
     ElseIf ds.AccountEntry Then
-        lblMode.Caption = "Choose what to do:"
+        lblMode.Caption = "C&hoose what to do:"
         btnClose.Caption = "Dis&connect"
         btnConnect.Caption = "&Save and Do"
     Else
-        lblMode.Caption = "Choose what to do after reconnecting:"
+        lblMode.Caption = "C&hoose what to do after reconnecting:"
         btnClose.Caption = "&Close"
         btnConnect.Caption = "&Save and Reconnect"
     End If
+End Sub
 
-    On Error Resume Next
-    Select Case ControlIndex
-        Case 0: cboMode.SetFocus
-        Case 1: txtUsername.SetFocus
-        Case 2: txtField1.SetFocus
-        Case 3: txtField2.SetFocus
-        Case 4: txtField3.SetFocus
-    End Select
+Public Sub ShowMode(ByVal Mode As String, Optional ByVal FormModal As FormShowConstants = vbModeless, Optional ByVal OwnerForm As Form)
+    m_Mode = Mode
+    m_FormIsModal = CBool(FormModal = vbModal)
+    If m_FormIsModal Then
+        Show FormModal, OwnerForm
+    Else
+        Show
+    End If
+End Sub
+
+Public Sub LeftAccountEntryMode()
+    If g_Connected Then
+        Unload Me
+    Else
+        Call ShowMode(vbNullString)
+    End If
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
-    If (frmChat.sckBNet.State = sckConnected) And (ds.AccountEntry) Then
+    If (Not m_FormIsModal) And (frmChat.sckBNet.State = sckConnected) And (ds.AccountEntry) Then
         frmChat.DoDisconnect
     End If
 End Sub
@@ -458,11 +468,7 @@ Private Sub txtField1_Change()
         Case M_RSPWD, M_CHREG:  Email = txtField1.Text
         Case M_CREAT:           NPassword1 = txtField1.Text
     End Select
-    If frmChat.sckBNet.State = sckConnected And ds.AccountEntry Then
-        btnClose.Caption = "Dis&connect"
-    Else
-        btnClose.Caption = "&Cancel"
-    End If
+    Call SetCloseButton
 End Sub
 
 Private Sub txtField2_Change()
@@ -471,11 +477,7 @@ Private Sub txtField2_Change()
         Case M_CREAT:   NPassword2 = txtField2.Text
         Case M_CHREG:   NEmail1 = txtField2.Text
     End Select
-    If frmChat.sckBNet.State = sckConnected And ds.AccountEntry Then
-        btnClose.Caption = "Dis&connect"
-    Else
-        btnClose.Caption = "&Cancel"
-    End If
+    Call SetCloseButton
 End Sub
 
 Private Sub txtField3_Change()
@@ -483,16 +485,16 @@ Private Sub txtField3_Change()
         Case M_CHPWD:   NPassword2 = txtField3.Text
         Case M_CHREG:   NEmail2 = txtField3.Text
     End Select
-    If frmChat.sckBNet.State = sckConnected And ds.AccountEntry Then
-        btnClose.Caption = "Dis&connect"
-    Else
-        btnClose.Caption = "&Cancel"
-    End If
+    Call SetCloseButton
 End Sub
 
 Private Sub txtUsername_Change()
     Username = txtUsername.Text
-    If frmChat.sckBNet.State = sckConnected And ds.AccountEntry Then
+    Call SetCloseButton
+End Sub
+
+Private Sub SetCloseButton()
+    If (Not m_FormIsModal) And (frmChat.sckBNet.State = sckConnected) And (ds.AccountEntry) Then
         btnClose.Caption = "Dis&connect"
     Else
         btnClose.Caption = "&Cancel"
