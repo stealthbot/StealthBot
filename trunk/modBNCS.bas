@@ -1433,9 +1433,7 @@ On Error GoTo ERROR_HANDLER:
     If (Len(pBuff.GetRaw(, True)) > 8) Then
         sMCPData = pBuff.GetRaw(16)
         
-        ptrIP = inet_ntoa(pBuff.GetDWORD)
-        sIP = Space$(lstrlen(ptrIP))
-        lstrcpy sIP, ptrIP
+        sIP = GetAddressFromLong(pBuff.GetDWORD)
         
         lPort = ntohs(pBuff.GetDWORD)
         

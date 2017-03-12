@@ -15,7 +15,6 @@ Public Declare Function htons Lib "wsock32.dll" (ByVal hostshort As Integer) As 
 Public Declare Function ntohl Lib "wsock32.dll" (ByVal netlong As Long) As Long
 Public Declare Function ntohs Lib "wsock32.dll" (ByVal netshort As Long) As Integer
 Public Declare Function lstrlen Lib "Kernel32.dll" Alias "lstrlenA" (ByVal lpString As Any) As Long
-Public Declare Function lstrcpy Lib "Kernel32.dll" Alias "lstrcpyA" (ByVal lpString1 As Any, ByVal lpString2 As Any) As Long
 Public Declare Function SetSockOpt Lib "wsock32.dll" Alias "setsockopt" (ByVal lSocketHandle As Long, ByVal lSocketLevel As Long, ByVal lOptName As Long, vOptVal As Any, ByVal lOptLen As Long) As Long
 Public Declare Function WSAGetLastError Lib "wsock32.dll" () As Long
 Public Declare Function WSACleanup Lib "wsock32.dll" () As Long
@@ -1912,29 +1911,6 @@ Public Function IsBanned(ByVal sUser As String) As Boolean
     Next i
 End Function
 
-Public Function IsValidIPAddress(ByVal sIn As String) As Boolean
-    Dim s() As String
-    Dim i   As Integer
-    
-    IsValidIPAddress = True
-    
-    If (InStr(1, sIn, ".", vbBinaryCompare)) Then
-        s() = Split(sIn, ".")
-        
-        If (UBound(s) = 3) Then
-            For i = 0 To 3
-                If (Not (StrictIsNumeric(s(i)))) Then
-                    IsValidIPAddress = False
-                End If
-            Next i
-        Else
-            IsValidIPAddress = False
-        End If
-    Else
-        IsValidIPAddress = False
-    End If
-End Function
-
 Public Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal IsSelf As Boolean) As Long
     '/* Self */
     If (IsSelf) Then
@@ -3086,6 +3062,20 @@ Public Function IsScrolling(ByRef rtb As RichTextBox) As Long
 
 End Function
 
+Public Function GetAddressFromLong(ByVal lServer As Long) As String
+    Dim ptrIP    As Long
+    Dim Length   As Integer
+    Dim arrStr() As Byte
+
+    ptrIP = inet_ntoa(lServer)
+    Length = lstrlen(ptrIP)
+
+    ReDim arrStr(0 To Length) ' include NT
+    CopyMemory arrStr(0), ByVal ptrIP, Length ' don't copy NT
+
+    GetAddressFromLong = NTByteArrToString(arrStr)
+End Function
+
 Public Function ResolveHost(ByVal strHostName As String) As String
     Dim lServer As Long
     Dim HostInfo As HOSTENT
@@ -3107,10 +3097,7 @@ Public Function ResolveHost(ByVal strHostName As String) As String
             If HostInfo.h_addrtype = 2 Then
                 CopyMemory ptrIP, ByVal HostInfo.h_addr_list, 4
                 CopyMemory lServer, ByVal ptrIP, 4
-                ptrIP = inet_ntoa(lServer)
-                sIP = Space$(lstrlen(ptrIP))
-                lstrcpy sIP, ptrIP
-                
+                sIP = GetAddressFromLong(lServer)
                 ResolveHost = sIP
             Else
                 ResolveHost = vbNullString
@@ -3120,6 +3107,13 @@ Public Function ResolveHost(ByVal strHostName As String) As String
     Else
         ResolveHost = strHostName
     End If
+End Function
+
+Public Function IsValidIPAddress(ByVal sIn As String) As Boolean
+    Dim lIn As Long
+
+    lIn = inet_addr(sIn)
+    IsValidIPAddress = (lIn <> -1)
 End Function
 
 Public Sub CloseAllConnections(Optional ShowMessage As Boolean = True)

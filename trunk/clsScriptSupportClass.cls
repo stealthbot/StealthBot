@@ -1563,7 +1563,7 @@ End Function
 '// NETWORKTOADDRESS
 '// Convert a network IP Address (4-byte VB6 Long value) to "#.#.#.#" format
 Public Function NetworkToAddress(ByVal inaddr As Long) As String
-    NetworkToAddress = inet_ntoa(inaddr)
+    NetworkToAddress = GetAddressFromLong(inaddr)
 End Function
 
 '// FORCEBNCSPACKETPARSE
