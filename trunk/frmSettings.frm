@@ -4734,7 +4734,7 @@ Sub ShowPanel(ByVal Index As enuSettingsPanels, Optional ByVal SavePanel As Bool
         End If
 
         ' set panel visibility
-        For i = 0 To 8
+        For i = fraPanel.LBound To fraPanel.UBound
             If Index = i Then
                 fraPanel(i).Visible = True
             Else
@@ -5144,7 +5144,7 @@ Private Function SaveSettings() As Boolean
     Config.UseBackupChannel = CBool(chkBackup.Value)
     Config.BackupChannel = txtBackupChan.Text
     
-    For i = 0 To 3
+    For i = optNaming.LBound To optNaming.UBound
         If optNaming(i).Value Then Exit For ' i = index of opt checked
     Next i
     If i = 4 Then i = 0 ' if none were checked, then set to default
@@ -5850,7 +5850,7 @@ Private Sub SaveClientBans()
     Clients(W3X) = PRODUCT_W3XP
     Clients(W2) = PRODUCT_W2BN
 
-    For i = 0 To 6
+    For i = chkCBan.LBound To chkCBan.UBound
         If (chkCBan(i).Value = 1) Then
             If (GetAccess(Clients(i), "GAME").Username = _
                 vbNullString) Then

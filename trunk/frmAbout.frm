@@ -32,6 +32,7 @@ Begin VB.Form frmAbout
       ForeColor       =   &H00FFFFFF&
       Height          =   3525
       Left            =   360
+      Locked          =   -1  'True
       MultiLine       =   -1  'True
       ScrollBars      =   2  'Vertical
       TabIndex        =   7
@@ -231,8 +232,6 @@ Private Sub Form_Load()
     lblTitle.ForeColor = vbWhite
     txtDescr.ForeColor = vbWhite
     lblTitle.Caption = ".: " & CVERSION
-    
-    txtDescr.Locked = True
     
     AddLine "The list of current StealthBot project contributors can be found at"
     AddLine "-> http://contributors.stealthbot.net <-"
