@@ -19,7 +19,9 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
     ByVal IsLocal As Boolean, ByVal WasWhispered As Boolean, _
     Optional ByVal strScriptOwner As String = vbNullString) As Collection
     
-    On Error GoTo ERROR_HANDLER
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
     
     Const CMD_DELIMITER As String = "; "
 

@@ -137,7 +137,10 @@ Public Const PLATFORM_OSX     As Long = &H584D4143 'XMAC
 Public ds As New clsDataStorage 'Need to rename this -.-
 
 Public Function BNCSRecvPacket(ByVal pBuff As clsDataBuffer) As Boolean
-On Error GoTo ERROR_HANDLER:
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
+    
     Dim PacketID As Byte
     Dim PacketLen As Long
     
@@ -582,7 +585,9 @@ End Sub
 ' (STRING) Text
 '*******************************
 Private Sub RECV_SID_CHATEVENT(pBuff As clsDataBuffer)
-On Error GoTo ERROR_HANDLER:
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
     
     Dim EventID   As Long
     Dim lFlags    As Long

@@ -7540,7 +7540,9 @@ Function OutFilterMsg(ByVal strOut As String) As String
 End Function
 
 Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
-    On Error GoTo ERROR_HANDLER
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
     
     Dim buf() As Byte
     Dim pBuff As clsDataBuffer
