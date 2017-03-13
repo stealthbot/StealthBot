@@ -373,6 +373,12 @@ Public Sub GetStdDBEntry(ByVal sName As String, ByRef iRank As Integer, ByRef sF
     End With
 End Sub
 
+'// GETDATABASE
+'// Returns the bot's internal access database. The entries in this database can be modified directly.
+Public Function GetDatabase() As clsDatabase
+    Set GetDatabase = Database
+End Function
+
 
 '// PREPARELIKECHECK
 '// Prepares a string for comparison using the Visual Basic LIKE operator
