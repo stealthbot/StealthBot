@@ -247,7 +247,6 @@ Begin VB.Form frmDBManager
          Width           =   1215
       End
       Begin VB.TextBox txtRank 
-         Alignment       =   1  'Right Justify
          BackColor       =   &H00993300&
          Enabled         =   0   'False
          ForeColor       =   &H00FFFFFF&
