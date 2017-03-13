@@ -318,7 +318,7 @@ Public Function GetDBEntry(ByVal sName As String, Optional ByRef iRank As Intege
     Dim i           As Integer          ' counter
     
     ' Retrieve info from the database
-    Set oBase = Database.GetEntry(sName, sType)
+    Set oBase = Database.GetEntry(sName, sEntryType)
     oAccess = Database.GetEntryAccess(oBase)
     
     If oBase Is Nothing Then
@@ -331,6 +331,7 @@ Public Function GetDBEntry(ByVal sName As String, Optional ByRef iRank As Intege
     '   Rank, flags, groups, and ban message are copied from the access object.
     With GetDBEntry
         .Name = oAccess.Username
+        .EntryType = sEntryType
         
         .Rank = oAccess.Rank
         .Flags = oAccess.Flags
@@ -350,6 +351,7 @@ Public Function GetDBEntry(ByVal sName As String, Optional ByRef iRank As Intege
             Set oGroup = GetDBEntry(oAccess.Groups.Item(i), , , DB_TYPE_GROUP)
             If Not (oGroup Is Nothing) Then
                 GetDBEntry.Groups.Add oGroup
+            End If
         Next i
     End If
     
@@ -365,7 +367,7 @@ Public Sub GetStdDBEntry(ByVal sName As String, ByRef iRank As Integer, ByRef sF
     Optional ByRef sEntryType As String = DB_TYPE_USER)
 
     Dim oAccess As udtUserAccess
-    Set oAccess = Database.GetEntryAccess(Database.GetEntry(sName, sEntryType))
+    oAccess = Database.GetEntryAccess(Database.GetEntry(sName, sEntryType))
     
     With oAccess
         iRank = .Rank

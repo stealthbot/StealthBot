@@ -1262,7 +1262,7 @@ Private Function HandleRenameEvent(oTarget As cTreeViewNode, sNewString As Strin
 
     HandleRenameEvent = True
     
-    If (Target Is Nothing) Then
+    If (oTarget Is Nothing) Then
         Exit Function
     End If
     
@@ -1291,7 +1291,7 @@ Private Function HandleRenameEvent(oTarget As cTreeViewNode, sNewString As Strin
     ' If we are renaming a group, update all the members
     If (StrComp(oEntry.EntryType, DB_TYPE_GROUP, vbBinaryCompare) = 0) Then
         For i = 1 To m_DB.Entries.Count
-            With m_Entries.Item(i)
+            With m_DB.Entries.Item(i)
                 If .IsInGroup(oEntry.Name) Then
                     ' Is it the primary?
                     If StrComp(.Groups.Item(1), oEntry.Name, vbTextCompare) = 0 Then
@@ -1301,6 +1301,7 @@ Private Function HandleRenameEvent(oTarget As cTreeViewNode, sNewString As Strin
                         .Groups.Remove oEntry.Name
                         .Groups.Add oEntry.Name, oEntry.Name
                     End If
+                End If
             End With
         Next i
     End If
