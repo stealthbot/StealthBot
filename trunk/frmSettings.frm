@@ -173,17 +173,17 @@ Begin VB.Form frmSettings
          Top             =   960
          Width           =   6015
       End
-      Begin VB.Line Line1 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   0
+         Index           =   31
          X1              =   360
          X2              =   6240
          Y1              =   720
          Y2              =   720
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblHeader 
          BackColor       =   &H00000000&
-         Caption         =   "Welcome to &StealthBot"
+         Caption         =   "Welcome to StealthBot"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   14.25
@@ -626,7 +626,7 @@ Begin VB.Form frmSettings
          Top             =   2040
          Width           =   855
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblBasic 
          BackColor       =   &H00000000&
          Caption         =   "Expansion"
          BeginProperty Font 
@@ -646,38 +646,39 @@ Begin VB.Form frmSettings
          Top             =   1680
          Width           =   735
       End
-      Begin VB.Line Line3 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   2
+         Index           =   4
          X1              =   4680
          X2              =   4800
          Y1              =   2640
          Y2              =   2760
       End
-      Begin VB.Line Line3 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   1
+         Index           =   3
          X1              =   4680
          X2              =   4800
          Y1              =   2280
          Y2              =   2400
       End
-      Begin VB.Line Line3 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   0
+         Index           =   2
          X1              =   4680
          X2              =   4800
          Y1              =   1920
          Y2              =   2040
       End
-      Begin VB.Line Line2 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
+         Index           =   1
          X1              =   3000
          X2              =   3000
          Y1              =   960
          Y2              =   4080
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblBasic 
          BackColor       =   &H00000000&
          Caption         =   "Pro&duct"
          BeginProperty Font 
@@ -697,15 +698,15 @@ Begin VB.Form frmSettings
          Top             =   1560
          Width           =   615
       End
-      Begin VB.Line Line1 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   1
+         Index           =   0
          X1              =   360
          X2              =   6240
          Y1              =   600
          Y2              =   600
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblBasic 
          BackColor       =   &H00000000&
          Caption         =   "Ser&ver"
          BeginProperty Font 
@@ -725,7 +726,7 @@ Begin VB.Form frmSettings
          Top             =   840
          Width           =   495
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblBasic 
          BackColor       =   &H00000000&
          Caption         =   "&Username"
          BeginProperty Font 
@@ -739,13 +740,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   4
+         Index           =   0
          Left            =   240
          TabIndex        =   7
          Top             =   840
          Width           =   735
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblBasic 
          BackColor       =   &H00000000&
          Caption         =   "&Password"
          BeginProperty Font 
@@ -765,7 +766,7 @@ Begin VB.Form frmSettings
          Top             =   1440
          Width           =   735
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblBasic 
          BackColor       =   &H00000000&
          Caption         =   "CD&Key"
          BeginProperty Font 
@@ -785,7 +786,7 @@ Begin VB.Form frmSettings
          Top             =   2040
          Width           =   495
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblBasic 
          BackColor       =   &H00000000&
          Caption         =   "&Home Channel"
          BeginProperty Font 
@@ -805,7 +806,7 @@ Begin VB.Form frmSettings
          Top             =   3240
          Width           =   1095
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblBasic 
          BackColor       =   &H00000000&
          Caption         =   "E&xpansion CDKey"
          BeginProperty Font 
@@ -825,7 +826,7 @@ Begin VB.Form frmSettings
          Top             =   2640
          Width           =   1335
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblHeader 
          BackColor       =   &H00000000&
          Caption         =   "Basic configuration"
          BeginProperty Font 
@@ -839,7 +840,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Index           =   7
+         Index           =   1
          Left            =   360
          TabIndex        =   6
          Top             =   240
@@ -1196,35 +1197,39 @@ Begin VB.Form frmSettings
          Top             =   2040
          Width           =   2775
       End
-      Begin VB.Line Line12 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
+         Index           =   9
          X1              =   2520
          X2              =   2520
          Y1              =   3720
          Y2              =   4680
       End
-      Begin VB.Line Line11 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
+         Index           =   8
          X1              =   6240
          X2              =   360
          Y1              =   3560
          Y2              =   3560
       End
-      Begin VB.Line Line10 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
+         Index           =   7
          X1              =   6240
          X2              =   360
          Y1              =   2760
          Y2              =   2760
       End
-      Begin VB.Line Line9 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
+         Index           =   6
          X1              =   360
          X2              =   6240
          Y1              =   1560
          Y2              =   1560
       End
-      Begin VB.Label Label8 
+      Begin VB.Label lblInterface 
          BackColor       =   &H00000000&
          Caption         =   "&Timestamp"
          BeginProperty Font 
@@ -1238,21 +1243,20 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   8
          Left            =   2760
          TabIndex        =   53
          Top             =   3840
          Width           =   975
       End
-      Begin VB.Line Line1 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   3
+         Index           =   5
          X1              =   360
          X2              =   6240
          Y1              =   600
          Y2              =   600
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblHeader 
          BackColor       =   &H00000000&
          Caption         =   "General interface settings"
          BeginProperty Font 
@@ -1266,7 +1270,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Index           =   12
+         Index           =   2
          Left            =   360
          TabIndex        =   37
          Top             =   240
@@ -1550,7 +1554,7 @@ Begin VB.Form frmSettings
          Width           =   2175
       End
       Begin VB.TextBox txtChanSize 
-         Alignment       =   2  'Center
+         Alignment       =   1  'Right Justify
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
@@ -1570,7 +1574,7 @@ Begin VB.Form frmSettings
          Width           =   615
       End
       Begin VB.TextBox txtChatSize 
-         Alignment       =   2  'Center
+         Alignment       =   1  'Right Justify
          BackColor       =   &H00993300&
          BeginProperty Font 
             Name            =   "Tahoma"
@@ -1622,7 +1626,7 @@ Begin VB.Form frmSettings
          Top             =   2520
          Width           =   2895
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblColor 
          BackColor       =   &H00000000&
          Caption         =   "Color to modify:"
          BeginProperty Font 
@@ -1636,13 +1640,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   14
+         Index           =   0
          Left            =   360
          TabIndex        =   68
          Top             =   1560
          Width           =   1215
       End
-      Begin VB.Label Label3 
+      Begin VB.Label lblColor 
          BackColor       =   &H00000000&
          Caption         =   "New Value:                   Current Value:       Example:"
          BeginProperty Font 
@@ -1656,12 +1660,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
+         Index           =   1
          Left            =   360
          TabIndex        =   70
          Top             =   2280
          Width           =   4335
       End
-      Begin VB.Label Label4 
+      Begin VB.Label lblColor 
          BackColor       =   &H00000000&
          Caption         =   "R:"
          BeginProperty Font 
@@ -1675,12 +1680,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
+         Index           =   3
          Left            =   360
          TabIndex        =   75
          Top             =   3360
          Width           =   135
       End
-      Begin VB.Label Label5 
+      Begin VB.Label lblColor 
          BackColor       =   &H00000000&
          Caption         =   "G:"
          BeginProperty Font 
@@ -1694,12 +1700,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
+         Index           =   4
          Left            =   1320
          TabIndex        =   77
          Top             =   3360
          Width           =   135
       End
-      Begin VB.Label Label6 
+      Begin VB.Label lblColor 
          BackColor       =   &H00000000&
          Caption         =   "B:"
          BeginProperty Font 
@@ -1713,12 +1720,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
+         Index           =   5
          Left            =   2280
          TabIndex        =   79
          Top             =   3360
          Width           =   255
       End
-      Begin VB.Label Label7 
+      Begin VB.Label lblColor 
          BackColor       =   &H00000000&
          Caption         =   "Use HTML hexadecimal colors:"
          BeginProperty Font 
@@ -1732,12 +1740,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
+         Index           =   2
          Left            =   3360
          TabIndex        =   81
          Top             =   3000
          Width           =   2415
       End
-      Begin VB.Label Label8 
+      Begin VB.Label lblColor 
          Alignment       =   2  'Center
          BackColor       =   &H00000000&
          Caption         =   "#"
@@ -1752,35 +1761,15 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   5
+         Index           =   6
          Left            =   3360
          TabIndex        =   82
          Top             =   3240
          Width           =   255
       End
-      Begin VB.Label Label8 
+      Begin VB.Label lblFont 
          BackColor       =   &H00000000&
-         Caption         =   "Size"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Index           =   0
-         Left            =   4200
-         TabIndex        =   60
-         Top             =   840
-         Width           =   375
-      End
-      Begin VB.Label Label8 
-         BackColor       =   &H00000000&
-         Caption         =   "Channel List"
+         Caption         =   "Size:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -1793,15 +1782,14 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   2
-         Left            =   360
-         TabIndex        =   62
-         ToolTipText     =   "Changes the font settings for the channel list."
-         Top             =   1200
-         Width           =   975
+         Left            =   4200
+         TabIndex        =   60
+         Top             =   840
+         Width           =   375
       End
-      Begin VB.Label Label8 
+      Begin VB.Label lblFont 
          BackColor       =   &H00000000&
-         Caption         =   "Chat Window"
+         Caption         =   "Channel &List"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -1813,16 +1801,37 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   7
+         Index           =   3
+         Left            =   360
+         TabIndex        =   62
+         ToolTipText     =   "Changes the font settings for the channel list."
+         Top             =   1200
+         Width           =   975
+      End
+      Begin VB.Label lblFont 
+         BackColor       =   &H00000000&
+         Caption         =   "C&hat Window"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   0
          Left            =   360
          TabIndex        =   57
          ToolTipText     =   "Changes the font setting for the main chat window."
          Top             =   840
          Width           =   975
       End
-      Begin VB.Label Label8 
+      Begin VB.Label lblFont 
          BackColor       =   &H00000000&
-         Caption         =   "Font"
+         Caption         =   "Font:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -1840,9 +1849,9 @@ Begin VB.Form frmSettings
          Top             =   840
          Width           =   495
       End
-      Begin VB.Label Label8 
+      Begin VB.Label lblFont 
          BackColor       =   &H00000000&
-         Caption         =   "Size"
+         Caption         =   "Size:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -1854,15 +1863,15 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   3
+         Index           =   5
          Left            =   4200
          TabIndex        =   65
          Top             =   1200
          Width           =   375
       End
-      Begin VB.Label Label8 
+      Begin VB.Label lblFont 
          BackColor       =   &H00000000&
-         Caption         =   "Font"
+         Caption         =   "Font:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -1880,15 +1889,15 @@ Begin VB.Form frmSettings
          Top             =   1200
          Width           =   495
       End
-      Begin VB.Line Line1 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   4
+         Index           =   10
          X1              =   360
          X2              =   6240
          Y1              =   600
          Y2              =   600
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblHeader 
          BackColor       =   &H00000000&
          Caption         =   "Interface font and color settings"
          BeginProperty Font 
@@ -1902,7 +1911,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Index           =   13
+         Index           =   3
          Left            =   360
          TabIndex        =   56
          Top             =   240
@@ -2472,14 +2481,15 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   8
+         Index           =   0
          Left            =   1320
          TabIndex        =   101
          Top             =   3120
          Width           =   615
       End
-      Begin VB.Line Line13 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
+         Index           =   12
          X1              =   3000
          X2              =   3000
          Y1              =   4560
@@ -2499,28 +2509,31 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   7
+         Index           =   1
          Left            =   2760
          TabIndex        =   103
          Top             =   3120
          Width           =   255
       End
-      Begin VB.Line Line16 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
+         Index           =   13
          X1              =   2880
          X2              =   240
          Y1              =   3600
          Y2              =   3600
       End
-      Begin VB.Line Line15 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
+         Index           =   15
          X1              =   3120
          X2              =   6360
          Y1              =   3000
          Y2              =   3000
       End
-      Begin VB.Line Line14 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
+         Index           =   14
          X1              =   3120
          X2              =   6360
          Y1              =   1560
@@ -2541,7 +2554,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   0
+         Index           =   8
          Left            =   3240
          TabIndex        =   115
          Top             =   4065
@@ -2561,7 +2574,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   2
+         Index           =   3
          Left            =   3600
          TabIndex        =   109
          Top             =   1080
@@ -2581,7 +2594,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   3
+         Index           =   4
          Left            =   3240
          TabIndex        =   111
          Top             =   1680
@@ -2601,7 +2614,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   5
+         Index           =   2
          Left            =   360
          TabIndex        =   105
          ToolTipText     =   "Shorter is better"
@@ -2622,7 +2635,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   1
+         Index           =   5
          Left            =   3240
          TabIndex        =   211
          Top             =   3480
@@ -2643,7 +2656,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   4
+         Index           =   6
          Left            =   3240
          TabIndex        =   212
          Top             =   3720
@@ -2664,21 +2677,21 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   6
+         Index           =   7
          Left            =   4680
          TabIndex        =   113
          Top             =   3720
          Width           =   975
       End
-      Begin VB.Line Line1 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   5
+         Index           =   11
          X1              =   360
          X2              =   6240
          Y1              =   600
          Y2              =   600
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblHeader 
          BackColor       =   &H00000000&
          Caption         =   "General moderation settings"
          BeginProperty Font 
@@ -2692,7 +2705,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Index           =   15
+         Index           =   4
          Left            =   360
          TabIndex        =   91
          Top             =   240
@@ -2725,7 +2738,7 @@ Begin VB.Form frmSettings
          Left            =   5280
          Style           =   1  'Graphical
          TabIndex        =   121
-         Top             =   840
+         Top             =   960
          Value           =   -1  'True
          Width           =   975
       End
@@ -2746,7 +2759,7 @@ Begin VB.Form frmSettings
          Left            =   5280
          Style           =   1  'Graphical
          TabIndex        =   124
-         Top             =   1920
+         Top             =   2040
          Width           =   975
       End
       Begin VB.OptionButton optUptime 
@@ -2766,7 +2779,7 @@ Begin VB.Form frmSettings
          Left            =   5280
          Style           =   1  'Graphical
          TabIndex        =   122
-         Top             =   1200
+         Top             =   1320
          Width           =   975
       End
       Begin VB.OptionButton optMP3 
@@ -2786,7 +2799,7 @@ Begin VB.Form frmSettings
          Left            =   5280
          Style           =   1  'Graphical
          TabIndex        =   123
-         Top             =   1560
+         Top             =   1680
          Width           =   975
       End
       Begin VB.CheckBox chkIdles 
@@ -2861,55 +2874,55 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   4
+         Index           =   2
          Left            =   3000
          TabIndex        =   127
          Top             =   1200
          Width           =   735
       End
-      Begin VB.Line Line5 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   4
+         Index           =   17
          X1              =   3840
-         X2              =   5160
+         X2              =   5280
          Y1              =   1080
          Y2              =   1080
       End
-      Begin VB.Line Line5 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   3
+         Index           =   21
          X1              =   5040
          X2              =   5280
-         Y1              =   2040
-         Y2              =   2040
+         Y1              =   2160
+         Y2              =   2160
       End
-      Begin VB.Line Line5 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   2
+         Index           =   20
          X1              =   5040
          X2              =   5280
-         Y1              =   1680
-         Y2              =   1680
+         Y1              =   1800
+         Y2              =   1800
       End
-      Begin VB.Line Line5 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   1
+         Index           =   19
          X1              =   5040
          X2              =   5280
-         Y1              =   1320
-         Y2              =   1320
+         Y1              =   1440
+         Y2              =   1440
       End
-      Begin VB.Line Line5 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   0
+         Index           =   18
          X1              =   5040
          X2              =   5040
          Y1              =   1080
-         Y2              =   2040
+         Y2              =   2160
       End
       Begin VB.Label lblIdle 
          BackColor       =   &H00000000&
-         Caption         =   "Idle message type"
+         Caption         =   "Idle message type:"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -2921,7 +2934,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   3
+         Index           =   0
          Left            =   3840
          TabIndex        =   120
          Top             =   840
@@ -2941,7 +2954,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   0
+         Index           =   1
          Left            =   360
          TabIndex        =   125
          Top             =   1200
@@ -2961,15 +2974,15 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   1
+         Index           =   3
          Left            =   360
          TabIndex        =   128
          Top             =   1560
          Width           =   1095
       End
-      Begin VB.Line Line1 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   7
+         Index           =   16
          X1              =   360
          X2              =   6240
          Y1              =   600
@@ -2994,7 +3007,7 @@ Begin VB.Form frmSettings
          Top             =   2280
          Width           =   5895
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblHeader 
          BackColor       =   &H00000000&
          Caption         =   "Idle message settings"
          BeginProperty Font 
@@ -3008,7 +3021,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Index           =   17
+         Index           =   5
          Left            =   360
          TabIndex        =   118
          Top             =   240
@@ -3316,7 +3329,7 @@ Begin VB.Form frmSettings
          Top             =   2400
          Width           =   2895
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblMisc 
          BackColor       =   &H00000000&
          Caption         =   "Bot &Owner"
          BeginProperty Font 
@@ -3330,13 +3343,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   19
+         Index           =   0
          Left            =   360
          TabIndex        =   136
          Top             =   3600
          Width           =   1215
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblMisc 
          BackColor       =   &H00000000&
          Caption         =   "Command &trigger:"
          BeginProperty Font 
@@ -3350,14 +3363,14 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   8
+         Index           =   1
          Left            =   480
          TabIndex        =   138
          ToolTipText     =   "The command trigger is used to identify a chat message as a command."
          Top             =   4320
          Width           =   1335
       End
-      Begin VB.Label Label8 
+      Begin VB.Label lblMisc 
          AutoSize        =   -1  'True
          BackStyle       =   0  'Transparent
          Caption         =   "&Gateway naming convention"
@@ -3372,13 +3385,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   195
-         Index           =   6
+         Index           =   3
          Left            =   3480
          TabIndex        =   145
          Top             =   3360
          Width           =   2040
       End
-      Begin VB.Label Label8 
+      Begin VB.Label lblMisc 
          BackColor       =   &H00000000&
          Caption         =   "Backup &channel"
          BeginProperty Font 
@@ -3392,29 +3405,29 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   10
+         Index           =   2
          Left            =   3480
          TabIndex        =   143
          Top             =   2760
          Width           =   2415
       End
-      Begin VB.Line Line1 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   9
+         Index           =   23
          X1              =   3120
          X2              =   3120
          Y1              =   840
          Y2              =   4560
       End
-      Begin VB.Line Line1 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   8
+         Index           =   22
          X1              =   360
          X2              =   6240
          Y1              =   600
          Y2              =   600
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblHeader 
          BackColor       =   &H00000000&
          Caption         =   "Miscellaneous general settings"
          BeginProperty Font 
@@ -3428,7 +3441,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Index           =   18
+         Index           =   6
          Left            =   360
          TabIndex        =   132
          Top             =   240
@@ -3724,14 +3737,15 @@ Begin VB.Form frmSettings
          Top             =   840
          Width           =   4335
       End
-      Begin VB.Line Line7 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
+         Index           =   26
          X1              =   2640
          X2              =   240
          Y1              =   3360
          Y2              =   3360
       End
-      Begin VB.Label lbl5 
+      Begin VB.Label lblConn 
          BackColor       =   &H00000000&
          Caption         =   "(for account registration)"
          BeginProperty Font 
@@ -3745,13 +3759,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   13
+         Index           =   7
          Left            =   4320
          TabIndex        =   167
          Top             =   2640
          Width           =   1815
       End
-      Begin VB.Label lbl5 
+      Begin VB.Label lblConn 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
          Caption         =   "Email &Address"
@@ -3766,20 +3780,21 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   1
+         Index           =   6
          Left            =   3000
          TabIndex        =   166
          Top             =   2640
          Width           =   1095
       End
-      Begin VB.Line Line6 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
+         Index           =   27
          X1              =   2880
          X2              =   6360
          Y1              =   3360
          Y2              =   3360
       End
-      Begin VB.Label lbl5 
+      Begin VB.Label lblConn 
          BackColor       =   &H00000000&
          Caption         =   "&BNLS server, if applicable:"
          BeginProperty Font 
@@ -3793,13 +3808,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   12
+         Index           =   1
          Left            =   360
          TabIndex        =   154
          Top             =   1200
          Width           =   2055
       End
-      Begin VB.Label lbl5 
+      Begin VB.Label lblConn 
          BackColor       =   &H00000000&
          Caption         =   "ms"
          BeginProperty Font 
@@ -3813,13 +3828,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   11
+         Index           =   4
          Left            =   2280
          TabIndex        =   161
          Top             =   3000
          Width           =   255
       End
-      Begin VB.Label lbl5 
+      Begin VB.Label lblConn 
          BackColor       =   &H00000000&
          Caption         =   "&Reconnect delay:"
          BeginProperty Font 
@@ -3833,13 +3848,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   10
+         Index           =   3
          Left            =   240
          TabIndex        =   159
          Top             =   3000
          Width           =   1335
       End
-      Begin VB.Label lbl5 
+      Begin VB.Label lblConn 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
          Caption         =   "Port:"
@@ -3860,7 +3875,7 @@ Begin VB.Form frmSettings
          Top             =   4200
          Width           =   615
       End
-      Begin VB.Label lbl5 
+      Begin VB.Label lblConn 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
          Caption         =   "&IP/Host:"
@@ -3881,14 +3896,15 @@ Begin VB.Form frmSettings
          Top             =   3840
          Width           =   615
       End
-      Begin VB.Line Line4 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
+         Index           =   25
          X1              =   2760
          X2              =   2760
          Y1              =   2520
          Y2              =   4680
       End
-      Begin VB.Label lbl5 
+      Begin VB.Label lblConn 
          BackColor       =   &H00000000&
          Caption         =   "&Ping spoofing"
          BeginProperty Font 
@@ -3902,7 +3918,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   0
+         Index           =   5
          Left            =   240
          TabIndex        =   162
          Top             =   3600
@@ -3928,7 +3944,7 @@ Begin VB.Form frmSettings
          Width           =   6015
          WordWrap        =   -1  'True
       End
-      Begin VB.Label lbl5 
+      Begin VB.Label lblConn 
          BackColor       =   &H00000000&
          Caption         =   "Connection &method:"
          BeginProperty Font 
@@ -3942,13 +3958,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   2
+         Index           =   0
          Left            =   360
          TabIndex        =   152
          Top             =   840
          Width           =   1575
       End
-      Begin VB.Label lbl5 
+      Begin VB.Label lblConn 
          BackColor       =   &H00000000&
          Caption         =   "Local hashing is supported for all game clients. Your current hash file path is:"
          BeginProperty Font 
@@ -3962,21 +3978,21 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   3
+         Index           =   2
          Left            =   360
          TabIndex        =   156
          Top             =   1680
          Width           =   5895
       End
-      Begin VB.Line Line1 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   2
+         Index           =   24
          X1              =   360
          X2              =   6240
          Y1              =   600
          Y2              =   600
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblHeader 
          BackColor       =   &H00000000&
          Caption         =   "Advanced connection settings"
          BeginProperty Font 
@@ -3990,7 +4006,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Index           =   11
+         Index           =   7
          Left            =   360
          TabIndex        =   151
          Top             =   240
@@ -4083,7 +4099,7 @@ Begin VB.Form frmSettings
          Top             =   2280
          Width           =   5892
       End
-      Begin VB.Label lblIdle 
+      Begin VB.Label lblGreet 
          BackColor       =   &H00000000&
          Caption         =   "Greet &message"
          BeginProperty Font 
@@ -4097,21 +4113,20 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   2
          Left            =   360
          TabIndex        =   182
          Top             =   1560
          Width           =   1935
       End
-      Begin VB.Line Line1 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   6
+         Index           =   28
          X1              =   360
          X2              =   6240
          Y1              =   600
          Y2              =   600
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblHeader 
          BackColor       =   &H00000000&
          Caption         =   "Greet message settings"
          BeginProperty Font 
@@ -4125,7 +4140,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Index           =   16
+         Index           =   8
          Left            =   360
          TabIndex        =   179
          Top             =   240
@@ -4241,7 +4256,7 @@ Begin VB.Form frmSettings
          Top             =   3960
          Width           =   735
       End
-      Begin VB.Label lbl9 
+      Begin VB.Label lblLog 
          BackColor       =   &H00000000&
          Caption         =   "Size limits (set 0 for unlimited)"
          BeginProperty Font 
@@ -4255,19 +4270,21 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
+         Index           =   2
          Left            =   360
          TabIndex        =   192
          Top             =   3360
          Width           =   3615
       End
-      Begin VB.Line Line8 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
+         Index           =   30
          X1              =   360
          X2              =   3720
          Y1              =   3720
          Y2              =   3720
       End
-      Begin VB.Label lbl5 
+      Begin VB.Label lblLog 
          Alignment       =   2  'Center
          BackColor       =   &H00000000&
          Caption         =   $"frmSettings.frx":00A6
@@ -4282,13 +4299,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   615
-         Index           =   5
+         Index           =   0
          Left            =   480
          TabIndex        =   187
          Top             =   720
          Width           =   5655
       End
-      Begin VB.Label lbl5 
+      Begin VB.Label lblLog 
          BackColor       =   &H00000000&
          Caption         =   "&Text logging"
          BeginProperty Font 
@@ -4302,13 +4319,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   4
+         Index           =   1
          Left            =   360
          TabIndex        =   188
          Top             =   1440
          Width           =   2535
       End
-      Begin VB.Label lbl5 
+      Begin VB.Label lblLog 
          BackColor       =   &H00000000&
          Caption         =   "&Maximum logfile size:"
          BeginProperty Font 
@@ -4322,13 +4339,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   6
+         Index           =   5
          Left            =   360
          TabIndex        =   196
          Top             =   4320
          Width           =   1575
       End
-      Begin VB.Label lbl5 
+      Begin VB.Label lblLog 
          BackColor       =   &H00000000&
          Caption         =   "  megabytes"
          BeginProperty Font 
@@ -4342,13 +4359,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Index           =   7
+         Index           =   6
          Left            =   2880
          TabIndex        =   198
          Top             =   4320
          Width           =   975
       End
-      Begin VB.Label lblBacklogSize 
+      Begin VB.Label lblLog 
          BackColor       =   &H00000000&
          Caption         =   "  bytes"
          BeginProperty Font 
@@ -4362,12 +4379,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
+         Index           =   4
          Left            =   2880
          TabIndex        =   195
          Top             =   3960
          Width           =   975
       End
-      Begin VB.Label lblBacklog 
+      Begin VB.Label lblLog 
          BackColor       =   &H00000000&
          Caption         =   "Maximum &backlog size:"
          BeginProperty Font 
@@ -4381,12 +4399,13 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
+         Index           =   3
          Left            =   360
          TabIndex        =   193
          Top             =   3960
          Width           =   1695
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblHeader 
          BackColor       =   &H00000000&
          BackStyle       =   0  'Transparent
          Caption         =   "Logging settings"
@@ -4401,15 +4420,15 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Index           =   20
+         Index           =   9
          Left            =   360
          TabIndex        =   186
          Top             =   240
          Width           =   3255
       End
-      Begin VB.Line Line1 
+      Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
-         Index           =   10
+         Index           =   29
          X1              =   360
          X2              =   6240
          Y1              =   600
@@ -5666,7 +5685,7 @@ Private Sub InitConnAdvanced()
     chkProxyMCP.Value = Abs(Config.ProxyMCP)
     
     ' Adjust "BNLS server" label 2 pixels down
-    lbl5(12).Top = lbl5(12).Top + (2 * Screen.TwipsPerPixelY)
+    lblConn(1).Top = lblConn(1).Top + (2 * Screen.TwipsPerPixelY)
 End Sub
 
 Private Sub InitGenInterface()
