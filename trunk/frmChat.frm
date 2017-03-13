@@ -9,8 +9,8 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7965
-   ClientLeft      =   225
-   ClientTop       =   870
+   ClientLeft      =   165
+   ClientTop       =   810
    ClientWidth     =   11400
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -1081,7 +1081,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1107,7 +1106,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1344,6 +1342,7 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuProfile 
          Caption         =   "Edit &Profile..."
+         Enabled         =   0   'False
       End
       Begin VB.Menu mnuFilters 
          Caption         =   "&Edit Chat Filters..."
@@ -1823,6 +1822,7 @@ Private Sub Form_Load()
     ReDim gBans(0)
     ReDim gOutFilters(0)
     ReDim gFilters(0)
+    ReDim UserDataRequests(0)
     
     Call BuildProductInfo
     
@@ -8236,6 +8236,8 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         mnuSepZ.Visible = False
         mnuIgnoreInvites.Visible = False
         mnuRealmSwitch.Visible = False
+        
+        mnuProfile.Enabled = False
         
         BotVars.LastChannel = vbNullString
         PrepareHomeChannelMenu

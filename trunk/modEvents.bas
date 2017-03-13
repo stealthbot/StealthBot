@@ -479,6 +479,7 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
     frmChat.mnuSepZ.Visible = (ShowW3 Or ShowD2)
     frmChat.mnuIgnoreInvites.Visible = ShowW3
     frmChat.mnuRealmSwitch.Visible = ShowD2
+    frmChat.mnuProfile.Enabled = True
 
     SharedScriptSupport.myUsername = GetCurrentUsername
     
@@ -1596,7 +1597,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     Dim strCompare    As String
     Dim i             As Integer
     Dim ColIndex      As Integer
-    Dim B             As Boolean
+    Dim b             As Boolean
     Dim ToANSI        As String
     Dim BanningUser   As Boolean
     Dim UsernameColor As Long
