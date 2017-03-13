@@ -16,52 +16,52 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_type        As String
-Private m_name        As String
-Private m_rank        As Long
-Private m_flags       As String
-Private m_created_on  As Date
-Private m_created_by  As String
-Private m_modified_on As Date
-Private m_modified_by As String
-Private m_groups      As Collection
-Private m_lastseen    As Date
-Private m_ban_message As String
+Private m_Type        As String
+Private m_Name        As String
+Private m_Rank        As Long
+Private m_Flags       As String
+Private m_CreatedOn  As Date
+Private m_CreatedBy  As String
+Private m_ModifiedOn As Date
+Private m_ModifiedBy As String
+Private m_Groups      As Collection
+Private m_LastSeen    As Date
+Private m_BanMessage As String
 
 Private Sub Class_Initialize()
-    Set m_groups = New Collection
+    Set m_Groups = New Collection
 End Sub
 
 Public Property Get EntryType() As String
-    EntryType = m_type
+    EntryType = m_Type
 End Property
 
 Public Property Let EntryType(ByVal strType As String)
-    m_type = strType
+    m_Type = strType
 End Property
 
 Public Property Get Name() As String
-    Name = m_name
+    Name = m_Name
 End Property
 
 Public Property Let Name(ByVal strName As String)
-    m_name = strName
+    m_Name = strName
 End Property
 
 Public Property Get Rank() As Long
-    Rank = m_rank
+    Rank = m_Rank
 End Property
 
 Public Property Let Rank(ByVal lngRank As Long)
-    m_rank = lngRank
+    m_Rank = lngRank
 End Property
 
 Public Property Get Flags() As String
-    Flags = m_flags
+    Flags = m_Flags
 End Property
 
 Public Property Let Flags(ByVal strFlags As String)
-    m_flags = strFlags
+    m_Flags = strFlags
 End Property
 
 Public Function IsInGroup(ByVal GroupName As String) As Boolean
@@ -124,47 +124,47 @@ Public Function HasFlags(ByVal strFlags As String, Optional ByVal CaseSensitive 
 End Function
 
 Public Property Get CreatedOn() As Date
-    CreatedOn = m_created_on
+    CreatedOn = m_CreatedOn
 End Property
 
 Public Property Let CreatedOn(ByRef dCreatedOn As Date)
-    m_created_on = dCreatedOn
+    m_CreatedOn = dCreatedOn
 End Property
 
 Public Property Get CreatedBy() As String
-    CreatedBy = m_created_by
+    CreatedBy = m_CreatedBy
 End Property
 
 Public Property Let CreatedBy(ByVal sCreatedBy As String)
-    m_created_by = sCreatedBy
+    m_CreatedBy = sCreatedBy
 End Property
 
 Public Property Get ModifiedOn() As Date
-    ModifiedOn = m_modified_on
+    ModifiedOn = m_ModifiedOn
 End Property
 
 Public Property Let ModifiedOn(ByRef dModifiedOn As Date)
-    m_modified_on = dModifiedOn
+    m_ModifiedOn = dModifiedOn
 End Property
 
 Public Property Get ModifiedBy() As String
-    ModifiedBy = m_modified_by
+    ModifiedBy = m_ModifiedBy
 End Property
 
 Public Property Let ModifiedBy(ByVal sModifiedBy As String)
-    m_modified_by = sModifiedBy
+    m_ModifiedBy = sModifiedBy
 End Property
 
 Public Property Get LastSeen() As Date
-    LastSeen = m_lastseen
+    LastSeen = m_LastSeen
 End Property
 
 Public Property Let LastSeen(ByRef dLastSeen As Date)
-    m_lastseen = dLastSeen
+    m_LastSeen = dLastSeen
 End Property
 
 Public Property Get Groups() As Collection
-    Set Groups = m_groups
+    Set Groups = m_Groups
 End Property
 
 'What exactly is this function suposto do?
@@ -178,13 +178,13 @@ Public Property Get MembersOf() As Collection
 End Property
 
 Public Property Get BanMessage() As String
-    BanMessage = m_ban_message
+    BanMessage = m_BanMessage
 End Property
 
 Public Property Let BanMessage(ByVal sBanMessage As String)
-  m_ban_message = sBanMessage
+  m_BanMessage = sBanMessage
 End Property
 
 Public Sub AddGroup(ByVal sGroup As String)
-    m_groups.Add sGroup, sGroup
+    m_Groups.Add sGroup, sGroup
 End Sub

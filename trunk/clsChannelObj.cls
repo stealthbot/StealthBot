@@ -24,8 +24,8 @@ Private Const CHAN_SYSTEM     As Long = &H10
 Private Const CHAN_PRODUCT    As Long = &H20
 Private Const CHAN_GLOBAL     As Long = &H1000
 
-Private m_name             As String
-Private m_flags            As Long
+Private m_Name             As String
+Private m_Flags            As Long
 Private m_designated_heir  As String
 Private m_num_joins        As Long
 Private m_num_bans         As Long
@@ -34,7 +34,7 @@ Private m_join_date        As Date
 Private m_users            As Collection
 Private m_banlist          As Collection
 
-Public Property Get SType() As String
+Public Property Get sType() As String
     
     Dim tmp As String
     
@@ -72,7 +72,7 @@ Public Property Get SType() As String
     
     tmp = Mid$(tmp, 1, Len(tmp) - 2)
     
-    SType = tmp
+    sType = tmp
     
 End Property
 
@@ -93,13 +93,13 @@ End Sub
 
 Public Property Get Name() As String
 
-    Name = m_name
+    Name = m_Name
 
 End Property
 
 Public Property Let Name(str As String)
 
-    m_name = str
+    m_Name = str
 
 End Property
 
@@ -117,13 +117,13 @@ End Property
 
 Public Property Get Flags() As Long
 
-    Flags = m_flags
+    Flags = m_Flags
 
 End Property
 
 Public Property Let Flags(ByVal lng As Long)
 
-    m_flags = lng
+    m_Flags = lng
 
 End Property
 
@@ -141,7 +141,7 @@ End Property
 
 Public Property Get IsSilent() As Boolean
 
-    IsSilent = ((m_flags And CHAN_SILENT) = CHAN_SILENT)
+    IsSilent = ((m_Flags And CHAN_SILENT) = CHAN_SILENT)
 
 End Property
 
