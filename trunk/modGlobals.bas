@@ -5,6 +5,7 @@ Option Explicit
 Public CVERSION As String
 
 Public Config As New clsConfig
+Public Database As New clsDatabase
 
 'Timer variables
 Public ReconnectTimerID As Long
@@ -19,7 +20,7 @@ Public cboSendSelLength As Long
 Public LogPacketTraffic As Boolean
 Public cfgVersion As Long
 
-Public VoteInitiator As udtGetAccessResponse
+Public VoteInitiator As udtUserAccess
 Public ProductList(12) As udtProductInfo
 
 Public g_Queue As New clsQueue
@@ -98,7 +99,6 @@ Public Catch() As String
 Public gBans() As udtBanList
 Public gOutFilters() As udtOutFilters
 Public gFilters() As String
-Public DB() As udtDatabase
 
 Public AutoModSafelistValue As Integer
 

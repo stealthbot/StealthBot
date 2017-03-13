@@ -305,73 +305,71 @@ End Function
 
 
 '// GETDBENTRY
-'// Bit of a modification to my existing GetAccess() call to return the data to you effectively.
-'// The scripting control isn't the greatest.
-'// Pass it the username and it will pass you the person's access and flags.
-'// If the name is not in the database, it will return -1 / null flags.
-Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Optional ByRef Flags, _
-    Optional ByRef EntryType As String = "USER") As Object
+'// Returns a dummy database entry object representing the total level of access available to the identified entry.
+'//   If no entry type is specified, the first one with a matching name will be returned and the type argument will be set.
+'//   If the returned entry is for a user, the access will include that provided by context-based sources, like clan and game.
+Public Function GetDBEntry(ByVal sName As String, Optional ByRef iRank As Integer, Optional ByRef sFlags As String, _
+    Optional ByRef sEntryType As String = DB_TYPE_USER) As Object
 
-    Dim temp   As udtGetAccessResponse
-    Dim i      As Integer
-    Dim Splt() As String
+    Dim oBase       As clsDBEntryObj    ' The actual entry the fake one is based off.
+    Dim oGroup      As clsDBEntryObj    ' Temporary object for groups
+    Dim oAccess     As udtUserAccess    ' The cumulative access available to the entry.
     
-    temp = GetCumulativeAccess(Username, EntryType)
+    Dim i           As Integer          ' counter
     
-    With temp
-        Access = .Rank
-        Flags = .Flags
-    End With
+    ' Retrieve info from the database
+    Set oBase = Database.GetEntry(sName, sType)
+    oAccess = Database.GetEntryAccess(oBase)
     
-    Set GetDBEntry = New clsDBEntryObj
+    If oBase Is Nothing Then
+        Set GetDBEntry = New clsDBEntryObj
+    Else
+        Set GetDBEntry = oBase.CreateCopy()
+    End If
     
+    ' Create the dummy return object with metadata values copied from the base.
+    '   Rank, flags, groups, and ban message are copied from the access object.
     With GetDBEntry
-        .EntryType = temp.Type
-        .Name = temp.Username
-        .Rank = temp.Rank
-        .Flags = temp.Flags
-        .CreatedOn = temp.AddedOn
-        .CreatedBy = temp.AddedBy
-        .ModifiedOn = temp.ModifiedOn
-        .ModifiedBy = temp.ModifiedBy
-        .BanMessage = temp.BanMessage
-    End With
-
-    If ((temp.Groups <> vbNullString) And (temp.Groups <> "%")) Then
-        If (InStr(1, temp.Groups, ",", vbBinaryCompare) <> 0) Then
-            Splt() = Split(temp.Groups, ",")
-        Else
-            ReDim Preserve Splt(0)
+        .Name = oAccess.Username
         
-            Splt(0) = temp.Groups
+        .Rank = oAccess.Rank
+        .Flags = oAccess.Flags
+        .BanMessage = oAccess.BanMessage
+        
+        If Not (oBase Is Nothing) Then
+            .CreatedOn = oBase.CreatedOn
+            .CreatedBy = oBase.CreatedBy
+            .ModifiedOn = oBase.ModifiedOn
+            .ModifiedBy = oBase.ModifiedBy
         End If
+    End With
     
-        For i = LBound(Splt) To UBound(Splt)
-            GetDBEntry.Groups.Add GetDBEntry(Splt(i), , , "GROUP")
+    ' Get the respective entry objects from each group this entry is assigned to.
+    If oAccess.Groups.Count > 0 Then
+        For i = 1 To oAccess.Groups.Count
+            Set oGroup = GetDBEntry(oAccess.Groups.Item(i), , , DB_TYPE_GROUP)
+            If Not (oGroup Is Nothing) Then
+                GetDBEntry.Groups.Add oGroup
         Next i
     End If
+    
+    ' Set output parameters
+    iRank = GetDBEntry.Rank
+    sFlags = GetDBEntry.Flags
 End Function
 
 '// GETSTDDBENTRY
-'// Bit of a modification to my existing GetCumulativeAccess() call to return the data to you
-'// effectively.
-'// The difference between GetDBEntry and GetCumulativeDBEntry is that this function will
-'// return the cumulative access of a particular user.  This includes both dynamic and static
-'// group memberships and all wildcard matches.  This function should almost always be used over
-'// GetDBEntry().
-'// The scripting control isn't the greatest.
-'// Pass it the username and it will pass you the person's access and flags.
-'// If the name is not in the database, it will return -1 / null flags.
-Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
-    Optional ByRef EntryType As String = "USER") '// yum, Variants >:\
+'// Gets the base rank and flags from the entry identified by the given name and type.
+'//   These values do not include access derived from group membership.
+Public Sub GetStdDBEntry(ByVal sName As String, ByRef iRank As Integer, ByRef sFlags As String, _
+    Optional ByRef sEntryType As String = DB_TYPE_USER)
 
-    Dim temp As udtGetAccessResponse
+    Dim oAccess As udtUserAccess
+    Set oAccess = Database.GetEntryAccess(Database.GetEntry(sName, sEntryType))
     
-    temp = GetAccess(Username, EntryType)
-    
-    With temp
-        Access = .Rank
-        Flags = .Flags
+    With oAccess
+        iRank = .Rank
+        sFlags = .Flags
     End With
 End Sub
 
@@ -1588,24 +1586,9 @@ Public Function GetUserDatabase() As Collection
     Dim x As Integer
     Dim temp As clsDBEntryObj
     Set GetUserDatabase = New Collection
-    For x = LBound(DB) To UBound(DB)
-        If (Len(DB(x).Username) > 0) Then
-            Set temp = New clsDBEntryObj
-            With temp
-                .Name = DB(x).Username
-                .Rank = DB(x).Rank
-                .CreatedOn = DB(x).AddedOn
-                .CreatedBy = DB(x).AddedBy
-                .BanMessage = DB(x).BanMessage
-                .Flags = DB(x).Flags
-                .AddGroup DB(x).Groups
-                .ModifiedBy = DB(x).ModifiedBy
-                .ModifiedOn = DB(x).ModifiedOn
-                .EntryType = DB(x).Type
-            End With
-            GetUserDatabase.Add temp, DB(x).Username
-            Set temp = Nothing
-        End If
+    
+    For x = 1 To Database.Entries.Count
+        GetUserDatabase.Add Database.Entries.Item(x).CreateCopy()
     Next x
 End Function
 

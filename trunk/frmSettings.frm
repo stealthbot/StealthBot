@@ -5853,13 +5853,18 @@ End Function
 
 ' Returns true if the client is banned
 Private Function IsClientBanned(ByVal sProductCode As String) As Boolean
-    IsClientBanned = (InStr(1, GetAccess(UCase$(sProductCode), "GAME").Flags, "B", _
+    IsClientBanned = (InStr(1, Database.GetAccess(sProductCode, DB_TYPE_GAME).Flags, "B", _
         vbBinaryCompare) > 0)
 End Function
 
 Private Sub SaveClientBans()
-    Dim Clients(6) As String
-    Dim i As Integer, j As Integer
+    Dim Clients(6)  As String
+    Dim i           As Integer          ' counters
+    Dim bChanged    As Boolean          ' TRUE if changes have been made for a single entry
+    Dim bNeedSave   As Boolean          ' TRUE if anyt entry was changed
+    
+    Dim oEntry      As clsDBEntryObj
+    Dim eAction     As enuDBActions
     
     Clients(SC) = PRODUCT_STAR
     Clients(BW) = PRODUCT_SEXP
@@ -5870,107 +5875,77 @@ Private Sub SaveClientBans()
     Clients(W2) = PRODUCT_W2BN
 
     For i = chkCBan.LBound To chkCBan.UBound
+        ' Get the entry
+        Set oEntry = Database.GetEntry(Clients(i), DB_TYPE_GAME)
+        
+        ' Is the ban enabled?
         If (chkCBan(i).Value = 1) Then
-            If (GetAccess(Clients(i), "GAME").Username = _
-                vbNullString) Then
+            ' Is there an existing entry for this game?
+            If oEntry Is Nothing Then
+                ' Nope, create a new one.
+                Set oEntry = Database.CreateNewEntry(Clients(i), , DB_TYPE_GAME)
+                oEntry.Flags = "B"
+                Call Database.AddEntry(oEntry)
                 
-                ' redefine array size
-                ReDim Preserve DB(UBound(DB) + 1)
-                
-                With DB(UBound(DB))
-                    .Username = Clients(i)
-                    .Flags = "B"
-                    .ModifiedBy = "(console)"
-                    .ModifiedOn = Now
-                    .AddedBy = "(console)"
-                    .AddedOn = Now
-                    .Type = "GAME"
-                End With
-                
-                ' commit modifications
-                Call WriteDatabase(GetFilePath(FILE_USERDB))
-                
-                ' log actions
-                If (BotVars.LogDBActions) Then
-                    Call LogDbAction(AddEntry, "console", DB(UBound(DB)).Username, "game", _
-                        DB(UBound(DB)).Rank, DB(UBound(DB)).Flags)
-                End If
+                eAction = AddEntry
+                bChanged = True
             Else
-                For j = LBound(DB) To UBound(DB)
-                    If ((StrComp(DB(j).Username, Clients(i), vbTextCompare) = 0) And _
-                        (StrComp(DB(j).Type, "GAME", vbTextCompare) = 0)) Then
-                        
-                        If (InStr(1, DB(j).Flags, "B", vbBinaryCompare) = 0) Then
-                            With DB(j)
-                                .Username = Clients(i)
-                                .Flags = "B" & .Flags
-                                .ModifiedBy = "(console)"
-                                .ModifiedOn = Now
-                            End With
-                            
-                            ' log actions
-                            If (BotVars.LogDBActions) Then
-                                Call LogDbAction(ModEntry, "console", DB(j).Username, "game", _
-                                    DB(j).Rank, DB(j).Flags)
-                            End If
-                            
-                            ' commit modifications
-                            Call WriteDatabase(GetFilePath(FILE_USERDB))
-                            
-                            ' break loop
-                            Exit For
-                        End If
-                    End If
-                Next j
+                ' Does the entry need the B flag?
+                If Not oEntry.HasFlag("B") Then
+                    oEntry.Flags = oEntry.Flags & "B"
+                    
+                    eAction = ModEntry
+                    bChanged = True
+                End If
             End If
         Else
-            If (GetAccess(Clients(i), "GAME").Username <> _
-                vbNullString) Then
-
-                For j = LBound(DB) To UBound(DB)
-                    If ((StrComp(DB(j).Username, Clients(i), vbTextCompare) = 0) And _
-                        (StrComp(DB(j).Type, "GAME", vbTextCompare) = 0)) Then
+            If Not (oEntry Is Nothing) Then
+                With oEntry
+                
+                    ' Will something be left after we remove this flag?
+                    If Len(.Flags) > 1 Or .Rank > 0 Or .Groups.Count > 0 Then
+                        ' If the entry has the B flag, remove it.
+                        If .HasFlag("B") Then
+                            .Flags = Replace(.Flags, "B", vbNullString)
                         
-                        If ((Len(DB(j).Flags) > 1) Or _
-                            (DB(j).Rank > 0) Or _
-                            (Len(DB(j).Groups) > 1)) Then
-
-                            With DB(j)
-                                .Username = Clients(i)
-                                .Flags = Replace(.Flags, "B", vbNullString)
-                                .ModifiedBy = "(console)"
-                                .ModifiedOn = Now
-                            End With
-                            
-                            ' log actions
-                            If (BotVars.LogDBActions) Then
-                                Call LogDbAction(ModEntry, "console", DB(j).Username, "game", _
-                                    DB(j).Rank, DB(j).Flags)
-                            End If
-                            
-                            ' commit modifications
-                            Call WriteDatabase(GetFilePath(FILE_USERDB))
-                        Else
-                            Call RemoveItem(Clients(i), "users", _
-                                "GAME")
-                                
-                            ' log actions
-                            If (BotVars.LogDBActions) Then
-                                Call LogDbAction(RemEntry, "console", DB(j).Username, "game", _
-                                    DB(j).Rank, DB(j).Flags)
-                            End If
-                            
-                            ' reload database entries
-                            Call LoadDatabase
+                            eAction = ModEntry
+                            bChanged = True
                         End If
-                        
-                        ' break loop
-                        Exit For
+                    Else
+                        ' Remove the entry
+                        Call Database.RemoveEntry(oEntry)
+                        eAction = RemEntry
+                        bChanged = True
                     End If
-                Next j
+                End With
             End If
         End If
+        
+        ' Log this change if it was made.
+        If bChanged Then
+            bNeedSave = True
+            
+            ' Update metadata
+            With oEntry
+                .ModifiedBy = Database.GetConsoleAccess().Username
+                .ModifiedOn = Now()
+            End With
+            
+            ' Log actions
+            If Config.LogDBActions Then
+                Call LogDbAction(eAction, oEntry.ModifiedBy, oEntry.Name, oEntry.EntryType, oEntry.Rank, oEntry.Flags)
+            End If
+        End If
+        
+        ' Reset change tracker
+        bChanged = False
+          
     Next i
+    
+    ' Save the database
+    If bNeedSave Then
+        Call Database.Save
+    End If
 End Sub
 
 Sub SaveFontSettings()

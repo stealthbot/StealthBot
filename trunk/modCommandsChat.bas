@@ -174,10 +174,10 @@ Public Sub OnIgnore(Command As clsCommandObj)
             Command.Respond StringFormat("Ignoring messages from {0}{1}{0}.", Chr$(34), Command.Argument("Username"))
             frmChat.AddQ "/ignore " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE
         Else
-            Dim dbTarget As udtGetAccessResponse
-            Dim dbCaller As udtGetAccessResponse
-            dbTarget = GetCumulativeAccess(Command.Argument("Username"))
-            dbCaller = GetCumulativeAccess(Command.Username)
+            Dim dbTarget As udtUserAccess
+            Dim dbCaller As udtUserAccess
+            dbTarget = Database.GetUserAccess(Command.Argument("Username"))
+            dbCaller = Database.GetUserAccess(Command.Username)
             
             If (dbTarget.Rank > dbCaller.Rank) Then
                 Command.Respond "That user has a higher rank then you."

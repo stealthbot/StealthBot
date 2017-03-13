@@ -116,6 +116,7 @@ Class=clsKeyDecoder; clsKeyDecoder.cls
 Module=modConstants; modConstants.bas
 Class=clsConfig; clsConfig.cls
 Form=frmAccountManager.frm
+Class=clsDatabase; clsDatabase.cls
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""

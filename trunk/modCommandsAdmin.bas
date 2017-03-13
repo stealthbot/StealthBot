@@ -3,65 +3,127 @@ Option Explicit
 'This module will hold all the commands that relate to Andmistering the bot, Changing settings
 'Editing the database, etc..
 
-'This is a stub function for now, it still calls the old uber complicated OnAddOld function, but hey :/
 Public Sub OnAdd(Command As clsCommandObj)
-    Dim dbAccess   As udtGetAccessResponse
-    Dim response() As String
-    Dim i          As Integer
-    ReDim Preserve response(0)
+    Dim sNameToAdd      As String           ' The name of the user being added
+    Dim aOptions()      As String           ' Broken out command options (designated by --)
+    
+    Dim iRank           As Integer          ' The rank being given to the user
+    Dim sFlags          As String           ' Flags being assigned to the user
+    Dim sType           As String           ' The type of entry being added
+    Dim sGroup          As String           ' The current group being processed.
+    Dim sBanMessage     As String           ' The ban message being assigned to this entry.
+    
+    Dim i               As Integer          ' counter
+    Dim x               As Integer          ' position holder
+    Dim aTemp()         As String           ' Array to temporarily hold split
     
     If ((Not Command.IsValid) Or LenB(Trim$(Command.Argument("username"))) = 0) Then
         Command.Respond "You must specify a user to add."
         Exit Sub
     End If
     
-    ' special case: d2 naming conventions
+    ' If using D2 conventions, check for character names.
+    '   If a character name is found and no account with the same name is found, assume the input
+    '   was meant to target the account for the specified character.
     If (BotVars.UseD2Naming) Then
-        Dim Username
-        Username = Command.Argument("Username")
-        If (Len(Username) > 1) Then
-            If (Left$(Username, 1) = "*") Then
-                If (InStr(2, Username, "*") = 0 And InStr(2, Username, "?") = 0) Then
+        Dim bIsCharacter    As Boolean      ' TRUE if the supplied name is a D2 character name.
+        Dim sAccountName    As String       ' The account name of the targeted character.
+        
+        sNameToAdd = Command.Argument("username")
+        If (Len(sNameToAdd) > 1) Then
+            If (Left$(sNameToAdd, 1) = "*") Then
+                If (InStr(2, sNameToAdd, "*") = 0 And InStr(2, sNameToAdd, "?") = 0) Then
                     ' format: *user
                     ' assume user means: user
                     Command.Args = Mid$(Command.Args, 2)
                 End If
             End If
             
-            If (InStr(Username, "*") = 0 And InStr(Username, "?") = 0) Then
+            If (InStr(sNameToAdd, "*") = 0 And InStr(sNameToAdd, "?") = 0) Then
                 ' format: charname
-                Dim User As clsUserObj, IsChar As Boolean, Acct As String
+                
                 For i = 1 To g_Channel.Users.Count
-                    Set User = g_Channel.Users(i)
-                    If (StrComp(User.CharacterName, Username, vbTextCompare) = 0) Then
-                        ' the user provided is a character in the channel
-                        IsChar = True
-                        Acct = User.DisplayName
-                    End If
-                    If (StrComp(User.DisplayName, Username, vbTextCompare) = 0) Then
-                        ' if the user provided is ALSO an accountname, assume account name
-                        IsChar = False
-                        Exit For
-                    End If
+                    With g_Channel.Users(i)
+                        If (StrComp(.CharacterName, sNameToAdd, vbTextCompare) = 0) Then
+                            ' the user provided is a character in the channel
+                            bIsCharacter = True
+                            sAccountName = .DisplayName
+                        End If
+                        If (StrComp(.DisplayName, sNameToAdd, vbTextCompare) = 0) Then
+                            ' if the user provided is ALSO an accountname, assume account name
+                            bIsCharacter = False
+                            Exit For
+                        End If
+                    End With
                 Next i
-                If (IsChar) Then
-                    Command.Args = Replace$(Command.Args, Username, Acct, 1, 1, vbBinaryCompare)
+                If (bIsCharacter) Then
+                    Command.Args = Replace$(Command.Args, sNameToAdd, sAccountName, 1, 1, vbBinaryCompare)
                 End If
             End If
         End If
+    Else
+        sNameToAdd = Command.Argument("username")
     End If
     
-    dbAccess = GetCumulativeAccess(Command.Username)
-    If (Command.IsLocal) Then
-        dbAccess.Rank = 201
-        dbAccess.Flags = "A"
+    ' Set default values
+    iRank = -1
+    sFlags = vbNullString
+    sType = DB_TYPE_USER     ' Default entry type: user
+    sGroup = vbNullString
+    sBanMessage = vbNullString
+
+    ' Check for special parameters
+    x = InStr(1, Command.Args, Space(1) & CMD_PARAM_PREFIX)
+    If x > 0 Then
+        ' Split up the parameters into an array.
+        aOptions = Split(Mid(Command.Args, x), Space(1) & CMD_PARAM_PREFIX)
+    Else
+        ReDim aOptions(0)
+    End If
+        
+    ' Process arguments
+    If Len(Command.Argument("rank")) > 0 Then
+        iRank = Int(Command.Argument("rank"))
     End If
     
-    Call OnAddOld(Command.Username, dbAccess, Command.Args, Command.IsLocal, response())
+    If Len(Command.Argument("attributes")) > 0 Then
+        sFlags = Command.Argument("attributes")
+        
+        ' Make sure this isn't part of the special param system
+        If Left(sFlags, Len(CMD_PARAM_PREFIX)) = CMD_PARAM_PREFIX Then
+            sFlags = vbNullString
+        End If
+    End If
+
+    ' Extra parameters
+    If UBound(aOptions) > 0 Then
+
+        For i = 0 To UBound(aOptions)
+            If Len(aOptions(i)) > 0 Then
+                aTemp = Split(aOptions(i), Space(1), 2)
+            
+                If UBound(aTemp) > 0 Then
+                    ' Check parameter
+                    Select Case UCase(aTemp(0))
+                        Case "TYPE":                ' Defined type (default: user)
+                            sType = UCase(aTemp(1))
+                            
+                        Case "GROUP"
+                            sGroup = Split(aTemp(1), Space(1))(0)
+                            
+                        Case "BANMSG"
+                            sBanMessage = aTemp(1)
+                            
+                    End Select
+                Else
+                    Command.Respond StringFormat("Invalid arguments. No value given for parameter: {0}", aTemp(0))
+                    Exit Sub
+                End If
+            End If
+        Next i
+    End If
     
-    For i = LBound(response) To UBound(response)
-        Command.Respond response(i)
-    Next i
+    Call Database.HandleAddCommand(Command, sNameToAdd, sType, iRank, sFlags, sGroup, sBanMessage)
 End Sub
 
 Public Sub OnClear(Command As clsCommandObj)
@@ -159,29 +221,72 @@ Public Sub OnQuit(Command As clsCommandObj)
     Set frmChat = Nothing
 End Sub
 
-'This is a stub function for now, it still calls the old uber complicated OnRemOld function, but hey :/
 Public Sub OnRem(Command As clsCommandObj)
-    Dim dbAccess   As udtGetAccessResponse
-    Dim response() As String
-    Dim i          As Integer
-    ReDim Preserve response(0)
+    Dim dbCallingUser   As udtUserAccess    ' Access of the requesting user
+    Dim dbCurrentEntry  As clsDBEntryObj    ' Entry being modified
+    Dim dbCurrentAccess As udtUserAccess    ' Cumulative access of the entry bheing modified.
     
+    Dim aOptions()      As String           ' Broken out command options (designated by --)
+    Dim sNameToRemove   As String           ' The name of the entry being removed.
+    Dim sType           As String           ' The type of the entry being removed.
+    
+    Dim aTemp()         As String           ' Temporary array for processing
+    Dim i               As Integer          ' counter
+    Dim x               As Integer          ' position
+
     If (Not Command.IsValid) Then
         Command.Respond "You must specify a user to remove."
         Exit Sub
     End If
     
-    dbAccess = GetCumulativeAccess(Command.Username)
-    If (Command.IsLocal) Then
-        dbAccess.Rank = 201
-        dbAccess.Flags = "A"
+    If Command.IsLocal Then
+        dbCallingUser = Database.GetConsoleAccess()
+    Else
+        dbCallingUser = Database.GetUserAccess(Command.Username)
     End If
     
-    Call OnRemOld(Command.Username, dbAccess, Command.Args, Command.IsLocal, response())
+    sNameToRemove = Command.Argument("username")
+    sType = vbNullString
     
-    For i = LBound(response) To UBound(response)
-        Command.Respond response(i)
-    Next i
+    ' Check for parameters
+    x = InStr(1, Command.Args, CMD_PARAM_PREFIX)
+    If x > 0 Then
+        aOptions = Split(Mid(Command.Args, x), CMD_PARAM_PREFIX)
+        
+        For i = 1 To UBound(aOptions)
+            aTemp = Split(aOptions(i), Space(1), 2)
+            
+            If UBound(aTemp) > 0 Then
+                Select Case UCase(aTemp(0))
+                    Case "TYPE"
+                        sType = UCase(aTemp(1))
+                    Case Else
+                        Command.Respond "The specified parameter is not recognized."
+                        Exit Sub
+                End Select
+            End If
+        Next i
+    End If
+    
+    ' Get the existing entry.
+    Set dbCurrentEntry = Database.GetEntry(sNameToRemove, sType)
+    If dbCurrentEntry Is Nothing Then
+        Command.Respond "The specified entry could not be found."
+        Exit Sub
+    End If
+    
+    dbCurrentAccess = Database.GetEntryAccess(dbCurrentEntry)
+    
+    If ((Not Command.IsLocal) And (Not Database.CanUserModifyEntry(Command.Username, dbCurrentEntry))) Then
+        Command.Respond "You do not have sufficient access to modify that entry."
+        Exit Sub
+    End If
+    
+    Call Database.RemoveEntry(dbCurrentEntry)
+    Call Database.Save
+                
+    Command.Respond StringFormat("{0}{1}{0} has been removed from the database.", Chr(34), dbCurrentEntry.ToString())
+
 End Sub
 
 Public Sub OnSetBnlsServer(Command As clsCommandObj)

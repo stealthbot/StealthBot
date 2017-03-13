@@ -225,15 +225,16 @@ On Error GoTo ERROR_HANDLER
     Dim Restriction As clsCommandRestrictionObj
     Dim sTemp       As String
     Dim sError      As String
-    Dim dbAccess    As udtGetAccessResponse
-    dbAccess = GetCumulativeAccess(Me.Username)
+    Dim dbAccess    As udtUserAccess
+    
+    If IsLocal Then
+        dbAccess = Database.GetConsoleAccess()
+    Else
+        dbAccess = Database.GetUserAccess(Me.Username)
+    End If
+    
     sArgs = Me.Args
     
-    
-    If (IsLocal) Then
-      dbAccess.Rank = 201
-      dbAccess.Flags = "A"
-    End If
     
     If (dbAccess.Rank >= Me.docs.RequiredRank And Me.docs.RequiredRank > -1) Then
         m_hasaccess = True

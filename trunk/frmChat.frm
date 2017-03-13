@@ -3697,7 +3697,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single
     Dim lItemIndex As Long
     Dim sOutBuf As String
     Dim sTemp As String
-    Dim UserAccess As udtGetAccessResponse
+    Dim UserAccess As udtUserAccess
     Dim Clan As String
    
     lvhti.pt.x = x / Screen.TwipsPerPixelX
@@ -4095,12 +4095,12 @@ Private Sub mnuPopClanUserlistWhois_Click()
     
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    Dim temp As udtGetAccessResponse
+    Dim temp As udtUserAccess
     Dim s As String
     
     s = GetClanSelectedUser
     
-    temp = GetAccess(s)
+    temp = Database.GetUserAccess(s)
     
     With RTBColors
         If temp.Rank > -1 Then
@@ -4290,12 +4290,12 @@ Private Sub mnuPopFLUserlistWhois_Click()
     
     If Not PopupMenuFLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    Dim temp As udtGetAccessResponse
+    Dim temp As udtUserAccess
     Dim s As String
     
     s = GetFriendsSelectedUser
     
-    temp = GetAccess(s)
+    temp = Database.GetUserAccess(s)
     
     With RTBColors
         If temp.Rank > -1 Then
@@ -4428,12 +4428,12 @@ Private Sub mnuPopUserlistWhois_Click()
     On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    Dim temp As udtGetAccessResponse
+    Dim temp As udtUserAccess
     Dim s As String
     
     s = GetSelectedUser
     
-    temp = GetAccess(s)
+    temp = Database.GetUserAccess(s)
     
     With RTBColors
         If temp.Rank > -1 Then
@@ -4734,30 +4734,24 @@ End Sub
 
 Private Sub mnuPopSafelist_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
-    
-    Dim gAcc As udtGetAccessResponse
+
     Dim toSafe As String
     
     On Error Resume Next
     
     toSafe = GetSelectedUser
     
-    gAcc.Rank = 1000
-    
     Call ProcessCommand(GetCurrentUsername, "/safeadd " & toSafe, True, False)
 End Sub
 
 Private Sub mnuPopShitlist_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
-    
-    Dim gAcc As udtGetAccessResponse
+
     Dim toBan As String
     
     On Error Resume Next
     
     toBan = GetSelectedUser
-    
-    gAcc.Rank = 1000
     
     Call ProcessCommand(GetCurrentUsername, "/shitadd " & toBan, True, False)
 End Sub
@@ -5449,7 +5443,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     Static ACUserPLen  As Long
     Static ACUserIndex As Integer
     
-    Dim AccessAmount As udtGetAccessResponse
+    Dim AccessAmount As udtUserAccess
     
     Dim Vetoed As Boolean '
     
@@ -7039,7 +7033,7 @@ End Sub
 Sub ReloadConfig(Optional Mode As Byte = 0)
     On Error GoTo ERROR_HANDLER
 
-    Dim default_group_access As udtGetAccessResponse
+    Dim default_group_access As clsDBEntryObj
     Dim s                    As String
     Dim i                    As Integer
     Dim f                    As Integer
@@ -7078,7 +7072,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     BotVars.ReconnectDelay = Config.ReconnectDelay
     
     ' Load database and commands
-    Call LoadDatabase
+    Call Database.Load(GetFilePath(FILE_USERDB))
     Call oCommandGenerator.GenerateCommands
     
     ' Set UI fonts
@@ -7244,38 +7238,11 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     ' Capped at 32767, topic=29986 -Andy
     BotVars.IB_Wait = Config.IdleBanDelay
 
+    ' Set and create special groups
     BotVars.DefaultShitlistGroup = Config.ShitlistGroup
-    If (BotVars.DefaultShitlistGroup <> vbNullString) Then
-        default_group_access = _
-                GetAccess(BotVars.DefaultShitlistGroup, "GROUP")
-        
-        If (default_group_access.Username = vbNullString) Then
-            Call ProcessCommand(GetCurrentUsername, "/add " & BotVars.DefaultShitlistGroup & _
-                    " B --type group --banmsg Shitlisted", True, False, False)
-        End If
-    End If
-    
     BotVars.DefaultTagbansGroup = Config.TagbanGroup
-    If (BotVars.DefaultTagbansGroup <> vbNullString) Then
-        default_group_access = _
-                GetAccess(BotVars.DefaultTagbansGroup, "GROUP")
-        
-        If (default_group_access.Username = vbNullString) Then
-            Call ProcessCommand(CurrentUsername, "/add " & BotVars.DefaultTagbansGroup & _
-                    " B --type group --banmsg Tagbanned", True, False, False)
-        End If
-    End If
-    
     BotVars.DefaultSafelistGroup = Config.SafelistGroup
-    If (BotVars.DefaultSafelistGroup <> vbNullString) Then
-        default_group_access = _
-                GetAccess(BotVars.DefaultSafelistGroup, "GROUP")
-        
-        If (default_group_access.Username = vbNullString) Then
-            Call ProcessCommand(GetCurrentUsername, "/add " & BotVars.DefaultSafelistGroup & _
-                    " S --type group", True, False, False)
-        End If
-    End If
+    Call Database.CreateSpecialGroups
     
     BotVars.DisableMP3Commands = Not Config.Mp3Commands
     

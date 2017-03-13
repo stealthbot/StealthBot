@@ -46,36 +46,18 @@ Public Type udtCustomCommandData
     Action      As String * 500
 End Type
 
-Public Type udtDatabase
-    Username    As String
-    Rank        As Integer
-    Flags       As String
-    AddedBy     As String
-    AddedOn     As Date
-    ModifiedBy  As String
-    ModifiedOn  As Date
-    Type        As String
-    Groups      As String
-    BanMessage  As String
+Public Type udtUserAccess
+    Username        As String
+    Rank            As Integer
+    Flags           As String
+    Groups          As Collection
+    BanMessage      As String
 End Type
 
 'Public Type udtQueue
 '    Message     As String
 '    Priority    As Byte
 'End Type
-
-Public Type udtGetAccessResponse
-    Username    As String
-    Rank        As Integer
-    Flags       As String
-    AddedBy     As String
-    AddedOn     As Date
-    ModifiedBy  As String
-    ModifiedOn  As Date
-    Type        As String
-    Groups      As String
-    BanMessage  As String
-End Type
 
 Public Type udtMail
     To      As String * 30

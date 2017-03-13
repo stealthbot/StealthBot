@@ -71,32 +71,32 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub cmdCancel_Click()
-    frmDBManager.m_entryname = vbNullString
+    frmDBManager.m_EntryName = vbNullString
 
     Unload Me
 End Sub
 
 Private Sub cmdOK_Click()
-    frmDBManager.m_entryname = txtEntry.Text
+    frmDBManager.m_EntryName = txtEntry.Text
     
     Unload Me
 End Sub
 
 Private Sub Form_Load()
-    Me.Caption = StringFormat("New Entry - {0} Name", frmDBManager.m_entrytype)
+    Me.Caption = StringFormat("New Entry - {0} Name", frmDBManager.m_EntryType)
     
     With txtEntry
-        If LenB(frmDBManager.m_entryname) = 0 Then
-            lblEntry.Caption = StringFormat("Choose the name for this new {0} entry.", frmDBManager.m_entrytype)
+        If LenB(frmDBManager.m_EntryName) = 0 Then
+            lblEntry.Caption = StringFormat("Choose the name for this new {0} entry.", frmDBManager.m_EntryType)
             .Text = vbNullString
         Else
-            lblEntry.Caption = StringFormat("Rename this {0} entry.", frmDBManager.m_entrytype)
-            .Text = frmDBManager.m_entryname
-            .selStart = 0
-            .selLength = Len(frmDBManager.m_entryname)
+            lblEntry.Caption = StringFormat("Rename this {0} entry.", frmDBManager.m_EntryType)
+            .Text = frmDBManager.m_EntryName
+            .SelStart = 0
+            .SelLength = Len(frmDBManager.m_EntryName)
         End If
         
-        If StrComp(frmDBManager.m_entrytype, "Clan", vbTextCompare) = 0 Then
+        If StrComp(frmDBManager.m_EntryType, "Clan", vbTextCompare) = 0 Then
             .MaxLength = 4
         Else
             .MaxLength = 30
@@ -129,6 +129,12 @@ Private Function CanSave() As Boolean
         CanSave = CanSave And (InStr(1, .Text, " ", vbBinaryCompare) = 0)
         CanSave = CanSave And (InStr(1, .Text, ",", vbBinaryCompare) = 0)
         CanSave = CanSave And (InStr(1, .Text, Chr$(34), vbBinaryCompare) = 0)
+        
+        ' Groups have slightly stricter names
+        If StrComp(frmDBManager.m_EntryType, DB_TYPE_GROUP, vbBinaryCompare) = 0 Then
+            CanSave = CanSave And (StrComp(Left(.Text, 1), "+", vbBinaryCompare) <> 0)
+            CanSave = CanSave And (StrComp(Left(.Text, 1), "-", vbBinaryCompare) <> 0)
+        End If
     End With
 End Function
 

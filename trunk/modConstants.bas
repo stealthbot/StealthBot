@@ -230,3 +230,10 @@ Public Const LOAD_SAFELIST = 1
 Public Const LOAD_FILTERS = 2
 Public Const LOAD_PHRASES = 3
 Public Const LOAD_DB = 4
+
+Public Const DB_TYPE_USER = "USER"
+Public Const DB_TYPE_GROUP = "GROUP"
+Public Const DB_TYPE_CLAN = "CLAN"
+Public Const DB_TYPE_GAME = "GAME"
+
+Public Const CMD_PARAM_PREFIX = "--"

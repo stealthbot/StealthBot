@@ -56,8 +56,8 @@ Public Sub OnBan(Command As clsCommandObj)
                 If (Command.IsLocal) Then
                     frmChat.AddQ "/ban " & Command.Args
                 Else
-                    Dim dbAccess As udtGetAccessResponse
-                    dbAccess = GetCumulativeAccess(Command.Username)
+                    Dim dbAccess As udtUserAccess
+                    dbAccess = Database.GetUserAccess(Command.Username)
                     
                     Command.Respond Ban(Command.Args, dbAccess.Rank)
                 End If
@@ -73,24 +73,23 @@ Public Sub OnBan(Command As clsCommandObj)
 End Sub
 
 Public Sub OnCAdd(Command As clsCommandObj)
-    Dim sArgs As String
-    If (Command.IsValid) Then
-        If (LenB(Command.Argument("Message")) > 0) Then
-            sArgs = "--banmsg " & Command.Argument("Message")
-        Else
-            sArgs = "--banmsg Client Ban"
-        End If
-        
-        Command.Args = StringFormat("{0} +B --type GAME {1}", Command.Argument("Game"), sArgs)
-        Call OnAdd(Command)
+    If Not Command.IsValid Then
+        Command.Respond "You must specify a game code to ban."
+        Exit Sub
     End If
+
+    Call Database.HandleAddCommand(Command, UCase(Command.Argument("game")), DB_TYPE_GAME, , "+B", , IIf(Len(Command.Argument("message")) = 0, "Client Ban", Command.Argument("message")))
+
 End Sub
 
 Public Sub OnCDel(Command As clsCommandObj)
-    If (Command.IsValid) Then
-        Command.Args = Command.Argument("Game") & " -B --type GAME"
-        Call OnAdd(Command)
+    If Not Command.IsValid Then
+        Command.Respond "You must specify a game code to unban."
+        Exit Sub
     End If
+    
+    Call Database.HandleAddCommand(Command, UCase(Command.Argument("game")), DB_TYPE_GAME, , "-B")
+
 End Sub
 
 Public Sub OnChPw(Command As clsCommandObj)
@@ -367,8 +366,8 @@ Public Sub OnIdleBans(Command As clsCommandObj)
 End Sub
 
 Public Sub OnIPBan(Command As clsCommandObj)
-    Dim dbAccess As udtGetAccessResponse
-    Dim dbTarget As udtGetAccessResponse
+    Dim dbAccess As udtUserAccess
+    Dim dbTarget As udtUserAccess
     Dim sTarget  As String
     
     If (Command.IsValid) Then
@@ -377,11 +376,11 @@ Public Sub OnIPBan(Command As clsCommandObj)
             Command.Respond "The bot does not currently have ops."
             Exit Sub
         End If
-        
-        dbAccess = GetCumulativeAccess(Command.Username)
+
         If (Command.IsLocal) Then
-            dbAccess.Rank = 201
-            dbAccess.Flags = "A"
+            dbAccess = Database.GetConsoleAccess()
+        Else
+            dbAccess = Database.GetUserAccess(Command.Username)
         End If
         
         sTarget = StripInvalidNameChars(Command.Argument("Username"))
@@ -396,11 +395,11 @@ Public Sub OnIPBan(Command As clsCommandObj)
                 End If
             End If
             
-            dbTarget = GetCumulativeAccess(Command.Argument("Username"))
+            dbTarget = Database.GetUserAccess(Command.Argument("Username"))
             
             If ((dbTarget.Rank >= dbAccess.Rank) Or _
                 ((InStr(1, dbTarget.Flags, "A", vbTextCompare) > 0) And (dbAccess.Rank < 101))) Then
-                Command.Respond "Error: You do not have enought access to do that."
+                Command.Respond "Error: You do not have enough access to do that."
             Else
                 Call frmChat.AddQ(StringFormat("/ban {0} {1}", Command.Argument("Username"), Command.Argument("Message")), , Command.Username)
                 Call frmChat.AddQ(StringFormat("/squelch {0}", Command.Argument("Username")), , Command.Username)
@@ -411,7 +410,7 @@ Public Sub OnIPBan(Command As clsCommandObj)
 End Sub
 
 Public Sub OnKick(Command As clsCommandObj)
-    Dim dbAccess As udtGetAccessResponse
+    Dim dbAccess As udtUserAccess
     If (Command.IsValid) Then
         If (g_Channel.Self.IsOperator) Then
             
@@ -421,7 +420,7 @@ Public Sub OnKick(Command As clsCommandObj)
                 If (Command.IsLocal) Then
                     frmChat.AddQ "/kick " & Command.Args
                 Else
-                    dbAccess = GetCumulativeAccess(Command.Username)
+                    dbAccess = Database.GetUserAccess(Command.Username)
                     Command.Respond Ban(Command.Args, dbAccess.Rank, 1)
                 End If
             End If
@@ -755,65 +754,70 @@ Public Sub OnResign(Command As clsCommandObj)
 End Sub
 
 Public Sub OnSafeAdd(Command As clsCommandObj)
-    Dim sArgs As String
-    If (Command.IsValid) Then
-        If (LenB(BotVars.DefaultSafelistGroup) > 0) Then
-            Dim dbAccess As udtGetAccessResponse
-            dbAccess = GetAccess(BotVars.DefaultSafelistGroup, "GROUP")
-            
-            If (LenB(dbAccess.Username) > 0) Then sArgs = "--group " & BotVars.DefaultSafelistGroup
-        End If
-        
-        If (LenB(sArgs) = 0) Then sArgs = "+S"
-        sArgs = StringFormat("{0} {1} --type USER", Command.Argument("Username"), sArgs)
-        
-        Command.Args = sArgs
-        Call OnAdd(Command)
-    Else
-        Command.Respond "Error: You must specify a username."
+    If Not Command.IsValid Then
+        Command.Respond "You must specify a username to add to the safelist."
+        Exit Sub
     End If
+    
+    Dim bGroup  As Boolean      ' Is a safelist group configured?
+    bGroup = False
+    
+    ' Is our safelist a group?
+    If Len(Config.SafelistGroup) > 0 Then
+        bGroup = True
+    End If
+    
+    Call Database.HandleAddCommand(Command, Command.Argument("username"), DB_TYPE_USER, , IIf(bGroup, vbNullString, "+S"), IIf(bGroup, "+" & Config.SafelistGroup, vbNullString))
 End Sub
 
 Public Sub OnSafeDel(Command As clsCommandObj)
-    If (Command.IsValid) Then
-        Command.Args = Command.Argument("Username") & " -S --type USER"
-        Call OnAdd(Command)
-    Else
-        Command.Respond "Error: You must supply a username."
+    If Not Command.IsValid Then
+        Command.Respond "You must supply a name to remove from the safelist."
+        Exit Sub
     End If
+    
+    Dim bGroup As Boolean
+    bGroup = False
+    
+    If Len(Config.SafelistGroup) > 0 Then
+        bGroup = True
+    End If
+
+    Call Database.HandleAddCommand(Command, Command.Argument("username"), DB_TYPE_USER, , IIf(bGroup, vbNullString, "-S"), IIf(bGroup, "-" & Config.SafelistGroup, vbNullString))
+    
 End Sub
 
 Public Sub OnShitAdd(Command As clsCommandObj)
-    Dim sArgs    As String
-    
-    If (Command.IsValid) Then
-        If (LenB(BotVars.DefaultShitlistGroup) > 0) Then
-            Dim dbAccess As udtGetAccessResponse
-            dbAccess = GetAccess(BotVars.DefaultShitlistGroup, "GROUP")
-            If (LenB(dbAccess.Username) > 0) Then
-                sArgs = "--group " & BotVars.DefaultShitlistGroup
-            End If
-        End If
-        
-        If (LenB(sArgs) = 0) Then sArgs = "+B"
-        sArgs = StringFormat("{0} {1} --type USER", Command.Argument("Username"), sArgs)
-        
-        If (LenB(Command.Argument("Message")) > 0) Then
-            sArgs = StringFormat("{0} --banmsg {1}", sArgs, Command.Argument("Message"))
-        End If
-        
-        Command.Args = sArgs
-        Call OnAdd(Command)
+    If Not Command.IsValid Then
+        Command.Respond "You must specify a name to add to the shitlist."
+        Exit Sub
     End If
+ 
+    Dim bGroup  As Boolean
+    bGroup = False
+    
+    ' Is shitlist a group?
+    If Len(Config.ShitlistGroup) > 0 Then
+        bGroup = True
+    End If
+    
+    Call Database.HandleAddCommand(Command, Command.Argument("username"), DB_TYPE_USER, , IIf(bGroup, vbNullString, "+B"), IIf(bGroup, "+" & Config.ShitlistGroup, vbNullString), Command.Argument("message"))
 End Sub
 
 Public Sub OnShitDel(Command As clsCommandObj)
-    If (Command.IsValid) Then
-        Command.Args = Command.Argument("Username") & " -B --type USER"
-        Call OnAdd(Command)
-    Else
-        Command.Respond "Error: You must specify a username."
+    If Not Command.IsValid Then
+        Command.Respond "You must supply a name to remove from the shitlist."
+        Exit Sub
     End If
+    
+    Dim bGroup  As Boolean
+    bGroup = False
+
+    If Len(Config.ShitlistGroup) > 0 Then
+        bGroup = True
+    End If
+    
+    Call Database.HandleAddCommand(Command, Command.Argument("username"), DB_TYPE_USER, , IIf(bGroup, vbNullString, "-B"), IIf(bGroup, "-" & Config.ShitlistGroup, vbNullString))
 End Sub
 
 Public Sub OnSweepBan(Command As clsCommandObj)
@@ -850,82 +854,44 @@ Public Sub OnSweepIgnore(Command As clsCommandObj)
 End Sub
 
 Public Sub OnTagAdd(Command As clsCommandObj)
-    Dim sArgs As String
-    If (Command.IsValid) Then
-        If (LenB(BotVars.DefaultTagbansGroup) > 0) Then
-            Dim dbAccess As udtGetAccessResponse
-            dbAccess = GetAccess(BotVars.DefaultTagbansGroup, "GROUP")
-            
-            If (LenB(dbAccess.Username) > 0) Then
-                sArgs = "--group " & BotVars.DefaultTagbansGroup
-            End If
-        End If
-        
-        If (LenB(sArgs) = 0) Then sArgs = "+B"
-        
-        If (LenB(Command.Argument("Message")) > 0) Then
-            sArgs = StringFormat("{0} --banmsg {1}", sArgs, Command.Argument("Message"))
-        End If
-        
-        If (InStr(Command.Argument("Tag"), "*") = 0) Then
-            sArgs = StringFormat("{0} {1} --type CLAN", Command.Argument("Tag"), sArgs)
-        Else
-            sArgs = StringFormat("{0} {1} --type USER", Command.Argument("Tag"), sArgs)
-        End If
-        
-        Command.Args = sArgs
-        Call OnAdd(Command)
+    If Not Command.IsValid Then
+        Command.Respond "You must specify a tag to ban."
+        Exit Sub
     End If
+    
+    Dim sTag       As String       ' Tag being banned
+    Dim bGroup     As Boolean      ' TRUE if using a tagban group.
+    bGroup = False
+    
+    ' Tags that contain an asterisk (*) are treated as users, otherwise clans.
+    
+    sTag = Command.Argument("tag")
+    
+    ' Is taglist a group?
+    If Len(Config.TagbanGroup) > 0 Then
+        bGroup = True
+    End If
+    
+    Call Database.HandleAddCommand(Command, sTag, IIf(InStr(1, sTag, "*", vbBinaryCompare) = 0, DB_TYPE_CLAN, DB_TYPE_USER), , IIf(bGroup, vbNullString, "+B"), IIf(bGroup, "+" & Config.TagbanGroup, vbNullString), Command.Argument("message"))
 End Sub
 
 Public Sub OnTagDel(Command As clsCommandObj)
-    If (Command.IsValid) Then
-        ' this code is OLD and needs to be redone when OnAddOld() is redone.
-        ' but nobody's going to read this anyway -Ribose
-        Dim dbAccess       As udtGetAccessResponse
-        Dim ResponseTag()  As String
-        Dim ResponseClan() As String
-        Dim i              As Integer
-        ReDim Preserve ResponseTag(0)
-        ReDim Preserve ResponseClan(0)
-        
-        dbAccess = GetCumulativeAccess(Command.Username)
-        If (Command.IsLocal) Then
-            dbAccess.Rank = 201
-            dbAccess.Flags = "A"
-        End If
-        
-        If (InStr(Command.Argument("Tag"), "*") <> 0) Then
-            Command.Args = Command.Argument("Tag") & " -B --Type CLAN"
-        Else
-            Command.Args = StringFormat("{0} -B --Type CLAN", Command.Argument("Tag"))
-        End If
-        
-        Call OnAddOld(Command.Username, dbAccess, Command.Args, Command.IsLocal, ResponseClan())
-        
-        If UBound(ResponseClan) = 0 Then
-            If (StrComp(Left$(ResponseClan(0), 7), "Error: ") = 0) Then
-                If (InStr(Command.Argument("Tag"), "*") <> 0) Then
-                    Command.Args = Command.Argument("Tag") & " -B --Type USER"
-                Else
-                    Command.Args = StringFormat("*{0}* -B --Type USER", Command.Argument("Tag"))
-                End If
-                
-                Call OnAddOld(Command.Username, dbAccess, Command.Args, Command.IsLocal, ResponseTag())
-                
-                For i = LBound(ResponseTag) To UBound(ResponseTag)
-                    Command.Respond ResponseTag(i)
-                Next i
-            Else
-                Command.Respond ResponseClan(i)
-            End If
-        Else
-            ' something went wrong? print all
-            For i = LBound(ResponseClan) To UBound(ResponseClan)
-                Command.Respond ResponseClan(i)
-            Next i
-        End If
+    If Not Command.IsValid Then
+        Command.Respond "You must specify a tag to unban."
+        Exit Sub
     End If
+    
+    Dim sTag    As String
+    Dim bGroup  As Boolean
+    bGroup = False
+    
+    sTag = Command.Argument("tag")
+
+    If Len(Config.TagbanGroup) > 0 Then
+        bGroup = True
+    End If
+    
+    Call Database.HandleAddCommand(Command, sTag, IIf(InStr(1, sTag, "*", vbBinaryCompare) = 0, DB_TYPE_CLAN, DB_TYPE_USER), , IIf(bGroup, vbNullString, "-B"), IIf(bGroup, "-" & Config.TagbanGroup, vbNullString))
 End Sub
 
 Public Sub OnUnBan(Command As clsCommandObj)
@@ -981,13 +947,9 @@ Public Sub OnVoteBan(Command As clsCommandObj)
                 Call Voting(BVT_VOTE_START, BVT_VOTE_BAN, Command.Argument("Username"))
                 VoteDuration = 30
                 If (Command.IsLocal) Then
-                    With VoteInitiator
-                        .Rank = 201
-                        .Flags = "A"
-                        .Username = "(Console)"
-                    End With
+                    VoteInitiator = Database.GetConsoleAccess()
                 Else
-                    VoteInitiator = GetCumulativeAccess(Command.Username)
+                    VoteInitiator = Database.GetUserAccess(Command.Username)
                 End If
             
                 Command.Respond StringFormat("30-second VoteBan vote started. Type YES to ban {0}, NO to acquit him/her.", Command.Argument("Username"))
@@ -1009,13 +971,9 @@ Public Sub OnVoteKick(Command As clsCommandObj)
                 Call Voting(BVT_VOTE_START, BVT_VOTE_KICK, Command.Argument("Username"))
                 VoteDuration = 30
                 If (Command.IsLocal) Then
-                    With VoteInitiator
-                        .Rank = 201
-                        .Flags = "A"
-                        .Username = "(Console)"
-                    End With
+                    VoteInitiator = Database.GetConsoleAccess()
                 Else
-                    VoteInitiator = GetCumulativeAccess(Command.Username)
+                    VoteInitiator = Database.GetUserAccess(Command.Username)
                 End If
             
                 Command.Respond StringFormat("30-second VoteKick vote started. Type YES to kick {0}, NO to acquit him/her.", Command.Argument("Username"))
@@ -1153,3 +1111,4 @@ Public Function WildCardBan(ByVal sMatch As String, ByVal sBanMsg As String, ByV
         End If
     End If
 End Function
+

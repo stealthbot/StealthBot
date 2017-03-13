@@ -208,14 +208,13 @@ Public Sub OnInbox(Command As clsCommandObj)
     Dim Msg      As udtMail
     Dim mcount   As Integer
     Dim Index    As Integer
-    Dim dbAccess As udtGetAccessResponse
+    Dim dbAccess As udtUserAccess
     
     If (Command.IsLocal) Then
         Command.Username = IIf(g_Online, GetCurrentUsername, BotVars.Username)
-        dbAccess.Rank = 201
-        dbAccess.Flags = "A"
+        dbAccess = Database.GetConsoleAccess()
     Else
-        dbAccess = GetCumulativeAccess(Command.Username)
+        dbAccess = Database.GetUserAccess(Command.Username)
     End If
     
     If (GetMailCount(Command.Username) > 0) Then
@@ -282,7 +281,7 @@ Public Sub OnMMail(Command As clsCommandObj)
     Dim Flags    As String
     Dim i        As Integer
     Dim x        As Integer
-    Dim dbAccess As udtGetAccessResponse
+    Dim dbAccess As udtUserAccess
     
     If (Command.IsValid) Then
         If (Command.IsLocal) Then
@@ -295,29 +294,33 @@ Public Sub OnMMail(Command As clsCommandObj)
         If (StrictIsNumeric(Command.Argument("Criteria"))) Then
             Rank = Val(Command.Argument("Criteria"))
             
-            For i = 0 To UBound(DB)
-                If (StrComp(DB(i).Type, "USER", vbTextCompare) = 0) Then
-                    dbAccess = GetCumulativeAccess(DB(i).Username)
-                    If (dbAccess.Rank = Rank) Then
-                        temp.To = DB(i).Username
-                        Call AddMail(temp)
+            For i = 1 To Database.Entries.Count
+                With Database.Entries.Item(i)
+                    If (StrComp(.EntryType, DB_TYPE_USER, vbBinaryCompare) = 0) Then
+                        dbAccess = Database.GetEntryAccess(Database.Entries.Item(i))
+                        If (dbAccess.Rank = Rank) Then
+                            temp.To = .Name
+                            Call AddMail(temp)
+                        End If
                     End If
-                End If
+                End With
             Next i
             Command.Respond StringFormat("Mass mailing to users with rank {0} complete.", Rank)
         Else
             Flags = Command.Argument("Criteria")
-            For i = 0 To UBound(DB)
-                If (StrComp(DB(i).Type, "USER", vbTextCompare) = 0) Then
-                    dbAccess = GetCumulativeAccess(DB(i).Username)
-                    For x = 1 To Len(Flags)
-                        If (InStr(1, dbAccess.Flags, Mid$(Flags, x, 1), IIf(BotVars.CaseSensitiveFlags, vbBinaryCompare, vbTextCompare)) > 0) Then
-                            temp.To = DB(i).Username
-                            Call AddMail(temp)
-                            Exit For
-                        End If
-                    Next x
-                End If
+            For i = 1 To Database.Entries.Count
+                With Database.Entries.Item(i)
+                    If (StrComp(.EntryType, DB_TYPE_USER, vbBinaryCompare) = 0) Then
+                        dbAccess = Database.GetEntryAccess(Database.Entries.Item(i))
+                        For x = 1 To Len(Flags)
+                            If (InStr(1, dbAccess.Flags, Mid$(Flags, x, 1), IIf(BotVars.CaseSensitiveFlags, vbBinaryCompare, vbTextCompare)) > 0) Then
+                                temp.To = .Name
+                                Call AddMail(temp)
+                                Exit For
+                            End If
+                        Next x
+                    End If
+                End With
             Next i
             Command.Respond StringFormat("Mass mailing to users with any of the flags {0} complete.", Flags)
         End If
@@ -418,13 +421,9 @@ Public Sub OnVote(Command As clsCommandObj)
             If ((Duration > 0) And (Duration < 32000)) Then
                 VoteDuration = Duration
                 If (Command.IsLocal) Then
-                    With VoteInitiator
-                        .Rank = 201
-                        .Flags = "A"
-                        .Username = "(Console)"
-                    End With
+                    VoteInitiator = Database.GetConsoleAccess()
                 Else
-                    VoteInitiator = GetCumulativeAccess(Command.Username)
+                    VoteInitiator = Database.GetUserAccess(Command.Username)
                 End If
                 Command.Respond Voting(BVT_VOTE_START, BVT_VOTE_STD, vbNullString)
             Else

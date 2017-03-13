@@ -64,60 +64,56 @@ Public Property Let Flags(ByVal strFlags As String)
     m_Flags = strFlags
 End Property
 
-Public Function IsInGroup(ByVal GroupName As String) As Boolean
-    Dim i   As Integer
-    Dim pos As Integer
+Public Function IsInGroup(ByVal sGroupName As String) As Boolean
+    Dim i           As Integer
+    Dim sCurGroup   As String
+    
+    IsInGroup = False
     
     For i = 1 To Groups.Count
-        pos = InStr(1, Groups(i).Name, Space$(1), vbBinaryCompare)
-        
-        If (pos > 0) Then
-            Groups(i).Name = Mid$(Groups(i).Name, 1, pos - 1)
+        ' Internally all of the group objects are strings,
+        '   but when used in scripting they are instances of clsDBEntryObj.
+        If TypeOf Groups.Item(i) Is clsDBEntryObj Then
+            sCurGroup = Groups.Item(i).Name
+        Else
+            sCurGroup = Split(Groups.Item(i), Space(1))(0)
         End If
-    
-        If (StrComp(GroupName, Groups(i).Name, vbTextCompare) = 0) Then
+        
+        If (StrComp(sGroupName, sCurGroup, vbTextCompare) = 0) Then
             IsInGroup = True
-            
             Exit Function
         End If
     Next i
 End Function
 
-Public Function HasFlag(ByVal strFlag As String, Optional ByVal CaseSensitive As Boolean = True) As Boolean
-    If (CaseSensitive) Then
-        HasFlag = (InStr(1, m_flags, strFlag, vbBinaryCompare) <> 0)
-    Else
-        HasFlag = (InStr(1, m_flags, strFlag, vbTextCompare) <> 0)
-    End If
+Public Function HasFlag(ByVal strFlag As String, Optional ByVal bCaseSensitive As Boolean = True) As Boolean
+    Dim cmCompare As CompareMethod
+    cmCompare = IIf(bCaseSensitive, vbBinaryCompare, vbTextCompare)
+    
+    HasFlag = (InStr(1, m_Flags, strFlag, cmCompare) > 0)
 End Function
 
-Public Function HasAnyFlag(ByVal strFlags As String, Optional ByVal CaseSensitive As Boolean = True) As Boolean
+Public Function HasAnyFlag(ByVal strFlags As String, Optional ByVal bCaseSensitive As Boolean = True) As Boolean
     Dim i As Integer
     
+    HasAnyFlag = False
+    
     For i = 1 To Len(strFlags)
-        If (CaseSensitive) Then
-            HasAnyFlag = (InStr(1, m_flags, Mid$(strFlags, i, 1), vbBinaryCompare) <> 0)
-        Else
-            HasAnyFlag = (InStr(1, m_flags, Mid$(strFlags, i, 1), vbTextCompare) <> 0)
-        End If
-        
-        If (HasAnyFlag) Then
+        If HasFlag(Mid(strFlags, i, 1), bCaseSensitive) Then
+            HasAnyFlag = True
             Exit Function
         End If
     Next i
 End Function
 
-Public Function HasFlags(ByVal strFlags As String, Optional ByVal CaseSensitive As Boolean = True) As Boolean
+Public Function HasFlags(ByVal strFlags As String, Optional ByVal bCaseSensitive As Boolean = True) As Boolean
     Dim i As Integer
     
+    HasFlags = True
+    
     For i = 1 To Len(strFlags)
-        If (CaseSensitive) Then
-            HasFlags = (InStr(1, m_flags, Mid$(strFlags, i, 1), vbBinaryCompare) <> 0)
-        Else
-            HasFlags = (InStr(1, m_flags, Mid$(strFlags, i, 1), vbTextCompare) <> 0)
-        End If
-        
-        If (HasFlags = False) Then
+        If Not HasFlag(Mid(strFlags, i, 1), bCaseSensitive) Then
+            HasFlags = False
             Exit Function
         End If
     Next i
@@ -172,7 +168,7 @@ End Property
 Public Property Get MembersOf() As Collection
     Set MembersOf = New Collection
     
-    If (StrComp(m_type, "Group", vbTextCompare) = 0) Then
+    If (StrComp(m_Type, DB_TYPE_GROUP, vbTextCompare) = 0) Then
         'Do something..
     End If
 End Property
@@ -188,3 +184,52 @@ End Property
 Public Sub AddGroup(ByVal sGroup As String)
     m_Groups.Add sGroup, sGroup
 End Sub
+
+Public Sub ClearGroups()
+     Set m_Groups = New Collection
+End Sub
+
+' Returns a display string describing the entry.
+Public Function ToString() As String
+    ToString = Me.Name
+    
+    If Len(Me.EntryType) > 0 Then
+        If StrComp(Me.EntryType, DB_TYPE_USER, vbTextCompare) <> 0 Then
+            ToString = ToString & " (" & LCase(Me.EntryType) & ")"
+        End If
+    End If
+End Function
+
+' Creates a deep copy of the entry.
+Public Function CreateCopy() As clsDBEntryObj
+    Dim i As Integer
+    
+    Set CreateCopy = New clsDBEntryObj
+    With CreateCopy
+        .Name = Me.Name
+        .Rank = Me.Rank
+        .Flags = Me.Flags
+        .EntryType = Me.EntryType
+        .BanMessage = Me.BanMessage
+        
+        .CreatedBy = Me.CreatedBy
+        .CreatedOn = Me.CreatedOn
+        .ModifiedBy = Me.ModifiedBy
+        .ModifiedOn = Me.ModifiedOn
+        
+        If Me.Groups.Count > 0 Then
+            If TypeOf Me.Groups.Item(1) Is clsDBEntryObj Then
+                For i = 1 To Me.Groups.Count
+                    .Groups.Add Me.Groups.Item(i).CreateCopy(), Me.Groups.Item(i).Name
+                Next i
+            Else
+                For i = 1 To Me.Groups.Count
+                    .Groups.Add Me.Groups.Item(i), Me.Groups.Item(i)
+                Next i
+            End If
+        End If
+        
+        .LastSeen = Me.LastSeen
+    End With
+End Function
+

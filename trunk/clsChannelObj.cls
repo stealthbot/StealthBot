@@ -414,7 +414,7 @@ Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsU
     doCheck = True
 
     If (Self.IsOperator) Then
-        Dim DBEntry  As udtGetAccessResponse
+        Dim DBEntry  As udtUserAccess
         Dim i        As Integer
         Dim Message  As String
         
@@ -422,7 +422,7 @@ Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsU
             Set CurrentUser = Users(GetUserIndex(Username))
         End If
         
-        DBEntry = GetCumulativeAccess(CurrentUser.DisplayName, "USER")
+        DBEntry = Database.GetUserAccess(CurrentUser.DisplayName)
         
         If (DBEntry.Rank < AutoModSafelistValue) Then
             ' Not high enough rank to be safe from auto-mod
@@ -587,7 +587,7 @@ Public Function CheckUsers() As Integer
 
     If (Self.IsOperator) Then
         Dim CurrentUser As clsUserObj
-        Dim DBEntry     As udtGetAccessResponse
+        Dim DBEntry     As udtUserAccess
         Dim i           As Integer
         Dim Message     As String
         Dim doCheck     As Boolean
@@ -603,7 +603,7 @@ Public Function CheckUsers() As Integer
             
                 If (CurrentUser.IsOperator = False) Then
                     DBEntry = _
-                        GetCumulativeAccess(CurrentUser.DisplayName, "USER")
+                        Database.GetUserAccess(CurrentUser.DisplayName)
                 
                     If (InStr(1, DBEntry.Flags, "D", vbBinaryCompare) <> 0) Then
                         If (DBEntry.Rank > HighRank) Then

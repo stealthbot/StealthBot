@@ -77,46 +77,52 @@ Public Sub OnClientBans(Command As clsCommandObj)
 End Sub
 
 Public Sub OnDetail(Command As clsCommandObj)
-    If (Command.IsValid) Then
-        Dim sRetAdd As String, sRetMod As String
-        Dim i As Integer
+    If Not Command.IsValid Then
+        Command.Respond "You must specify the name of an entry."
+        Exit Sub
+    End If
+    
+    Dim sRetAdd As String, sRetMod As String
+    Dim i As Integer
         
-        For i = 0 To UBound(DB)
-            With DB(i)
-                If (StrComp(Command.Argument("Username"), .Username, vbTextCompare) = 0) Then
-                    If ((Not .AddedBy = "%") And (LenB(.AddedBy) > 0)) Then
-                        sRetAdd = StringFormat("{0} was added by {1} on {2}.", .Username, .AddedBy, .AddedOn)
-                    End If
-                    
-                    If ((Not .ModifiedBy = "%") And (LenB(.ModifiedBy) > 0)) Then
-                        If ((Not .AddedOn = .ModifiedOn) Or (Not StrComp(.AddedBy, .ModifiedBy, vbTextCompare) = 0)) Then
-                            sRetMod = StringFormat(" The entry was last modified by {0} on {1}.", .ModifiedBy, .ModifiedOn)
-                        Else
-                            sRetMod = " The entry has not been modified since it was added."
-                        End If
-                    End If
-                    
-                    If ((LenB(sRetAdd) > 0) Or (LenB(sRetMod) > 0)) Then
-                        If (LenB(sRetAdd) > 0) Then
-                            Command.Respond sRetAdd & sRetMod
-                        Else
-                            Command.Respond Trim$(sRetMod)
-                        End If
-                    Else
-                        Command.Respond "No detailed information is available for that user."
-                    End If
-                    
-                    Exit Sub
+    Dim oEntry As clsDBEntryObj
+    Set oEntry = Database.GetEntry(Command.Argument("Username"))
+        
+    If oEntry Is Nothing Then
+        Command.Respond "That entry was not found in the database."
+        Exit Sub
+    Else
+        With oEntry
+            ' Was it created by someone or something?
+            If Len(.CreatedBy) > 0 Then
+                sRetAdd = StringFormat("{0} was added by {1} on {2}.", .Name, .CreatedBy, .CreatedOn)
+            End If
+                
+            ' Has it been modified?
+            If Len(.ModifiedBy) > 0 Then
+                If ((Not .CreatedOn = .ModifiedOn) Or (Not StrComp(.CreatedBy, .ModifiedBy, vbTextCompare) = 0)) Then
+                    sRetMod = StringFormat("The entry was last modified by {0} on {1}.", .ModifiedBy, .ModifiedOn)
+                Else
+                    sRetMod = "The entry has not been modified since it was added."
                 End If
-            End With
-        Next i
-        
-        Command.Respond "That user was not found in the database."
+            End If
+                
+            ' Make the response
+            If ((Len(sRetAdd) > 0) Or (Len(sRetMod) > 0)) Then
+                If Len(sRetAdd) > 0 Then
+                    Command.Respond sRetAdd & Space(1) & sRetMod
+                Else
+                    Command.Respond sRetMod
+                End If
+            Else
+                Command.Respond "No detailed information is available for that user."
+            End If
+        End With
     End If
 End Sub
 
 Public Sub OnFind(Command As clsCommandObj)
-    Dim dbAccess      As udtGetAccessResponse
+    Dim dbAccess      As udtUserAccess
     Dim bufResponse() As String
     Dim strResponse   As Variant
     
@@ -133,18 +139,18 @@ Public Sub OnFind(Command As clsCommandObj)
         If (LenB(Command.Argument("UpperRank")) = 0) Then
             Call SearchDatabase(bufResponse(), , , , , Val(Command.Argument("Username/Rank")))
         Else
-            Dim LowerRank As Integer
-            Dim UpperRank As Integer
+            Dim iLowerRank As Integer
+            Dim iUpperRank As Integer
             
-            LowerRank = Val(Command.Argument("Username/Rank"))
-            UpperRank = Command.Argument("UpperRank")
+            iLowerRank = Val(Command.Argument("Username/Rank"))
+            iUpperRank = Command.Argument("UpperRank")
             
-            If (UpperRank = LowerRank) Then
-                Call SearchDatabase(bufResponse(), , , , , LowerRank)
-            ElseIf (UpperRank > LowerRank) Then
-                Call SearchDatabase(bufResponse(), , , , , LowerRank, UpperRank)
+            If (iUpperRank = iLowerRank) Then
+                Call SearchDatabase(bufResponse(), , , , , iLowerRank)
+            ElseIf (iUpperRank > iLowerRank) Then
+                Call SearchDatabase(bufResponse(), , , , , iLowerRank, iUpperRank)
             Else
-                Call SearchDatabase(bufResponse(), , , , , UpperRank, LowerRank)
+                Call SearchDatabase(bufResponse(), , , , , iUpperRank, iLowerRank)
             End If
         End If
     Else
@@ -373,7 +379,7 @@ End Sub
 
 Public Sub OnOwner(Command As clsCommandObj)
     If (LenB(BotVars.BotOwner)) Then
-        Command.Respond "This bot's owner is " & BotVars.BotOwner & "."
+        Command.Respond "This bot's owner is " & Config.BotOwner & "."
     Else
         Command.Respond "There is no owner currently set."
     End If
@@ -605,20 +611,23 @@ Public Sub OnServer(Command As clsCommandObj)
 End Sub
 
 Public Sub OnShitCheck(Command As clsCommandObj)
-    Dim dbAccess As udtGetAccessResponse
-    Dim compare  As VbCompareMethod
+    Dim dbAccess As udtUserAccess
+    Dim sName    As String
+    
+    sName = Command.Argument("Username")
+    
     If (Command.IsValid) Then
-        dbAccess = GetCumulativeAccess(Command.Argument("Username"))
-        compare = IIf(BotVars.CaseSensitiveFlags, vbBinaryCompare, vbTextCompare)
-        If (Not InStr(1, dbAccess.Flags, "B", compare) = 0) Then
-            If (Not InStr(1, dbAccess.Flags, "S", compare) = 0) Then
-                Command.Respond Command.Argument("Username") & _
-                    "{0} is on the bot's shitlist; also on the safelist and will not be banned."
+        dbAccess = Database.GetUserAccess(sName)
+        If Len(dbAccess.Username) > 0 Then sName = dbAccess.Username
+        
+        If InStr(1, dbAccess.Flags, "B", vbBinaryCompare) > 0 Then
+            If InStr(1, dbAccess.Flags, "S", vbBinaryCompare) > 0 Then
+                Command.Respond sName & " is on the bot's shitlist, but is also on the safelist and will not be banned."
             Else
-                Command.Respond Command.Argument("Username") & " is on the bot's shitlist."
+                Command.Respond sName & " is on the bot's shitlist."
             End If
         Else
-            Command.Respond Command.Argument("Username") & " is not on the bot's shitlist."
+            Command.Respond sName & " is not on the bot's shitlist."
         End If
     End If
 End Sub
@@ -676,7 +685,7 @@ Public Sub OnWhere(Command As clsCommandObj)
 End Sub
 
 Public Sub OnWhoAmI(Command As clsCommandObj)
-    Dim dbAccess As udtGetAccessResponse
+    Dim dbAccess As udtUserAccess
 
     If (Command.IsLocal) Then
         Command.Respond "You are the bot console."
@@ -685,8 +694,10 @@ Public Sub OnWhoAmI(Command As clsCommandObj)
             Call frmChat.AddQ("/whoami", PRIORITY.CONSOLE_MESSAGE)
         End If
     Else
-        dbAccess = GetCumulativeAccess(Command.Username)
-        If (dbAccess.Rank = 1000) Then
+        dbAccess = Database.GetUserAccess(Command.Username)
+        
+        If ((Len(Config.BotOwner) > 0) And (StrComp(dbAccess.Username, Config.BotOwner, vbTextCompare) = 0)) Then
+            ' Special case case for bot owner.
             Command.Respond StringFormat("You are the bot owner, {0}.", Command.Username)
         Else
             If (dbAccess.Rank > 0) Then
@@ -707,25 +718,30 @@ Public Sub OnWhoAmI(Command As clsCommandObj)
 End Sub
 
 Public Sub OnWhoIs(Command As clsCommandObj)
-    Dim dbAccess As udtGetAccessResponse
+    Dim dbAccess    As udtUserAccess
+    Dim sAccessName As String
+    Dim sType       As String
     
     If (Command.IsValid) Then
-        If (Command.IsLocal) Then
+        If (Command.IsLocal And g_Online) Then
             Call frmChat.AddQ("/whois " & Command.Argument("Username"), PRIORITY.CONSOLE_MESSAGE)
         End If
 
-        dbAccess = GetCumulativeAccess(Command.Argument("Username"))
-        
-        If (LenB(dbAccess.Username) > 0) Then
+        ' Check if we know who this is.
+        If Database.HasAccess(Command.Argument("Username"), sType) Then
+            
+            dbAccess = Database.GetAccess(Command.Argument("Username"), sType)
+            sAccessName = Database.GetAccessNameString(dbAccess)
+            
             If (dbAccess.Rank > 0) Then
                 If (LenB(dbAccess.Flags) > 0) Then
-                    Command.Respond dbAccess.Username & " holds rank " & dbAccess.Rank & " and flags " & dbAccess.Flags & "."
+                    Command.Respond sAccessName & " holds rank " & dbAccess.Rank & " and flags " & dbAccess.Flags & "."
                 Else
-                    Command.Respond dbAccess.Username & " holds rank " & dbAccess.Rank & "."
+                    Command.Respond sAccessName & " holds rank " & dbAccess.Rank & "."
                 End If
             Else
-                If (LenB(dbAccess.Flags) > 0) Then
-                    Command.Respond dbAccess.Username & " has flags " & dbAccess.Flags & "."
+                If (Len(dbAccess.Flags) > 0) Then
+                    Command.Respond sAccessName & " has flags " & dbAccess.Flags & "."
                 End If
             End If
         Else
@@ -816,51 +832,51 @@ Public Function GetPing(ByVal Username As String) As Long
     End If
 End Function
 
-Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As String = vbNullString, _
-    Optional ByVal match As String = vbNullString, Optional Group As String = vbNullString, _
-        Optional dbType As String = vbNullString, Optional lowerBound As Integer = -1, _
-            Optional upperBound As Integer = -1, Optional Flags As String = vbNullString)
+Private Sub SearchDatabase(ByRef arrReturn() As String, Optional sName As String = vbNullString, _
+    Optional ByVal sMatch As String = vbNullString, Optional sGroup As String = vbNullString, _
+        Optional dbType As String = vbNullString, Optional iLowerBound As Integer = -1, _
+            Optional iUpperBound As Integer = -1, Optional sFlags As String = vbNullString)
     
     On Error GoTo ERROR_HANDLER
     
-    Dim i        As Integer
-    Dim found    As Integer
-    Dim tmpbuf   As String
+    Dim i       As Integer
+    Dim iFound  As Integer
+    Dim sTemp   As String
+    Dim sTypeID As String
+    
+    Dim dbAccess As udtUserAccess
+    
     ReDim arrReturn(0)
     
-    If (LenB(Username) > 0) Then
-        Dim dbAccess As udtGetAccessResponse
-        dbAccess = GetAccess(Username, dbType)
-        
-        If (Not (dbAccess.Type = "%") And (Not StrComp(dbAccess.Type, "USER", vbTextCompare) = 0)) Then
-            dbAccess.Username = dbAccess.Username & " (" & LCase$(dbAccess.Type) & ")"
-        End If
+    If (LenB(sName) > 0) Then
+        dbAccess = Database.GetAccess(sName, dbType)
+        sTypeID = IIf(StrComp(dbType, DB_TYPE_USER, vbBinaryCompare) = 0, vbNullString, " (" & dbType & ")")
         
         If (dbAccess.Rank > 0) Then
-            tmpbuf = "Found user " & dbAccess.Username & ", who holds rank " & dbAccess.Rank & _
+            sTemp = "Found user " & dbAccess.Username & sTypeID & ", who holds rank " & dbAccess.Rank & _
                 IIf(Len(dbAccess.Flags) > 0, " and flags " & dbAccess.Flags, vbNullString) & "."
         ElseIf (LenB(dbAccess.Flags) > 0) Then
-            tmpbuf = "Found user " & dbAccess.Username & ", with flags " & dbAccess.Flags & "."
+            sTemp = "Found user " & dbAccess.Username & sTypeID & ", with flags " & dbAccess.Flags & "."
         Else
-            tmpbuf = "No such user(s) found."
+            sTemp = "No such user(s) found."
         End If
     Else
-        For i = LBound(DB) To UBound(DB)
+        For i = 1 To Database.Entries.Count
             Dim res        As Boolean
             Dim blnChecked As Boolean
         
-            If (LenB(DB(i).Username) > 0) Then
-                If (LenB(match) > 0) Then
-                    If (Left$(match, 1) = "!") Then
-                        res = (Not (LCase$(PrepareCheck(DB(i).Username)) Like (LCase$(Mid$(match, 2)))))
+            With Database.Entries.Item(i)
+                If (LenB(sMatch) > 0) Then
+                    If (Left$(sMatch, 1) = "!") Then
+                        res = (Not (LCase$(PrepareCheck(.Name)) Like (LCase$(Mid$(sMatch, 2)))))
                     Else
-                        res = (LCase$(PrepareCheck(DB(i).Username)) Like (LCase$(match)))
+                        res = (LCase$(PrepareCheck(.Name)) Like (LCase$(sMatch)))
                     End If
                     blnChecked = True
                 End If
                 
-                If (LenB(Group) > 0) Then
-                    If (StrComp(DB(i).Groups, Group, vbTextCompare) = 0) Then
+                If (LenB(sGroup) > 0) Then
+                    If .IsInGroup(sGroup) Then
                         res = IIf(blnChecked, res, True)
                     Else
                         res = False
@@ -869,7 +885,7 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
                 End If
 
                 If (LenB(dbType) > 0) Then
-                    If (StrComp(DB(i).Type, dbType, vbTextCompare) = 0) Then
+                    If (StrComp(.EntryType, dbType, vbBinaryCompare) = 0) Then
                         res = IIf(blnChecked, res, True)
                     Else
                         res = False
@@ -877,15 +893,15 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
                     blnChecked = True
                 End If
                 
-                If ((lowerBound >= 0) And (upperBound >= 0)) Then
-                    If ((DB(i).Rank >= lowerBound) And (DB(i).Rank <= upperBound)) Then
+                If ((iLowerBound >= 0) And (iUpperBound >= 0)) Then
+                    If ((.Rank >= iLowerBound) And (.Rank <= iUpperBound)) Then
                         res = IIf(blnChecked, res, True)
                     Else
                         res = False
                     End If
                     blnChecked = True
-                ElseIf (lowerBound >= 0) Then
-                    If (DB(i).Rank = lowerBound) Then
+                ElseIf (iLowerBound >= 0) Then
+                    If (.Rank = iLowerBound) Then
                         res = IIf(blnChecked, res, True)
                     Else
                         res = False
@@ -893,16 +909,8 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
                     blnChecked = True
                 End If
                 
-                If (LenB(Flags) > 0) Then
-                    Dim j As Integer
-                
-                    For j = 1 To Len(Flags)
-                        If (InStr(1, DB(i).Flags, Mid$(Flags, j, 1), vbBinaryCompare) = 0) Then
-                            Exit For
-                        End If
-                    Next j
-                    
-                    If (j = (Len(Flags) + 1)) Then
+                If (LenB(sFlags) > 0) Then
+                    If .HasAnyFlag(sFlags) Then
                         res = IIf(blnChecked, res, True)
                     Else
                         res = False
@@ -911,22 +919,22 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional Username As Str
                 End If
                 
                 If (res = True) Then
-                    tmpbuf = tmpbuf & DBUserToString(DB(i).Username, DB(i).Type)
-                    tmpbuf = StringFormat("{0}{1}{2}, ", tmpbuf, _
-                        IIf(DB(i).Rank > 0, "\" & DB(i).Rank, vbNullString), _
-                        IIf(LenB(DB(i).Flags) > 0, "\" & DB(i).Flags, vbNullString))
-                    found = (found + 1)
+                    sTemp = sTemp & .ToString()
+                    sTemp = StringFormat("{0}{1}{2}, ", sTemp, _
+                        IIf(.Rank > 0, "\" & .Rank, vbNullString), _
+                        IIf(LenB(.Flags) > 0, "\" & .Flags, vbNullString))
+                    iFound = (iFound + 1)
                 End If
-            End If
+            End With
             
             res = False
             blnChecked = False
         Next i
 
-        If (found = 0) Then
+        If (iFound = 0) Then
             arrReturn(0) = "No such user(s) found."
         Else
-            Call SplitByLen(Mid$(tmpbuf, 1, Len(tmpbuf) - Len(", ")), 180, arrReturn(), "User(s) found: ", , ", ")
+            Call SplitByLen(Mid$(sTemp, 1, Len(sTemp) - Len(", ")), 180, arrReturn(), "User(s) found: ", , ", ")
         End If
     End If
     
