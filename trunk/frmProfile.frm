@@ -29,14 +29,15 @@ Begin VB.Form frmProfile
       EndProperty
       Height          =   615
       Left            =   120
-      TabIndex        =   3
+      TabIndex        =   10
       Top             =   3720
-      Width           =   855
+      Width           =   975
    End
-   Begin RichTextLib.RichTextBox rtbLocation 
+   Begin RichTextLib.RichTextBox rtbField 
       Height          =   285
+      Index           =   3
       Left            =   1200
-      TabIndex        =   1
+      TabIndex        =   7
       Top             =   1200
       Width           =   6615
       _ExtentX        =   11668
@@ -70,14 +71,15 @@ Begin VB.Form frmProfile
       EndProperty
       Height          =   375
       Left            =   120
-      TabIndex        =   4
+      TabIndex        =   11
       Top             =   3360
-      Width           =   855
+      Width           =   975
    End
-   Begin RichTextLib.RichTextBox rtbProfile 
+   Begin RichTextLib.RichTextBox rtbField 
       Height          =   2775
+      Index           =   4
       Left            =   1200
-      TabIndex        =   2
+      TabIndex        =   9
       Top             =   1560
       Width           =   6615
       _ExtentX        =   11668
@@ -87,7 +89,7 @@ Begin VB.Form frmProfile
       Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
-      TextRTF         =   $"frmProfile.frx":0D45
+      TextRTF         =   $"frmProfile.frx":0D5B
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -98,10 +100,11 @@ Begin VB.Form frmProfile
          Strikethrough   =   0   'False
       EndProperty
    End
-   Begin RichTextLib.RichTextBox rtbSex 
+   Begin RichTextLib.RichTextBox rtbField 
       Height          =   285
+      Index           =   2
       Left            =   1200
-      TabIndex        =   0
+      TabIndex        =   5
       Top             =   840
       Width           =   6615
       _ExtentX        =   11668
@@ -110,7 +113,7 @@ Begin VB.Form frmProfile
       BackColor       =   0
       BorderStyle     =   0
       Enabled         =   -1  'True
-      TextRTF         =   $"frmProfile.frx":0DC0
+      TextRTF         =   $"frmProfile.frx":0DEC
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -121,10 +124,11 @@ Begin VB.Form frmProfile
          Strikethrough   =   0   'False
       EndProperty
    End
-   Begin RichTextLib.RichTextBox rtbAge 
+   Begin RichTextLib.RichTextBox rtbField 
       Height          =   285
+      Index           =   1
       Left            =   1200
-      TabIndex        =   5
+      TabIndex        =   3
       Top             =   480
       Width           =   6615
       _ExtentX        =   11668
@@ -133,7 +137,7 @@ Begin VB.Form frmProfile
       BackColor       =   0
       BorderStyle     =   0
       Enabled         =   -1  'True
-      TextRTF         =   $"frmProfile.frx":0E3B
+      TextRTF         =   $"frmProfile.frx":0E7D
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -144,9 +148,9 @@ Begin VB.Form frmProfile
          Strikethrough   =   0   'False
       EndProperty
    End
-   Begin VB.Label Label5 
+   Begin VB.Label lblField 
       BackColor       =   &H00000000&
-      Caption         =   "Sex"
+      Caption         =   "&Sex:"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -158,8 +162,9 @@ Begin VB.Form frmProfile
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   2
       Left            =   120
-      TabIndex        =   9
+      TabIndex        =   4
       Top             =   840
       Width           =   855
    End
@@ -178,20 +183,13 @@ Begin VB.Form frmProfile
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   1200
-      TabIndex        =   6
+      TabIndex        =   1
       Top             =   120
       Width           =   3015
    End
-   Begin VB.Line Line1 
-      BorderColor     =   &H80000009&
-      X1              =   1080
-      X2              =   1080
-      Y1              =   120
-      Y2              =   4320
-   End
-   Begin VB.Label Label4 
+   Begin VB.Label lblField 
       BackColor       =   &H00000000&
-      Caption         =   "Description"
+      Caption         =   "&Description:"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -203,14 +201,15 @@ Begin VB.Form frmProfile
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   4
       Left            =   120
-      TabIndex        =   11
+      TabIndex        =   8
       Top             =   1560
       Width           =   855
    End
-   Begin VB.Label Label3 
+   Begin VB.Label lblField 
       BackColor       =   &H00000000&
-      Caption         =   "Location"
+      Caption         =   "&Location:"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -222,14 +221,15 @@ Begin VB.Form frmProfile
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   3
       Left            =   120
-      TabIndex        =   10
+      TabIndex        =   6
       Top             =   1200
       Width           =   855
    End
-   Begin VB.Label Label2 
+   Begin VB.Label lblField 
       BackColor       =   &H00000000&
-      Caption         =   "Age"
+      Caption         =   "&Age:"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -241,14 +241,15 @@ Begin VB.Form frmProfile
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   1
       Left            =   120
-      TabIndex        =   8
+      TabIndex        =   2
       Top             =   480
       Width           =   855
    End
-   Begin VB.Label Label1 
+   Begin VB.Label lblField 
       BackColor       =   &H00000000&
-      Caption         =   "Username"
+      Caption         =   "&Username"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -260,8 +261,9 @@ Begin VB.Form frmProfile
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   0
       Left            =   120
-      TabIndex        =   7
+      TabIndex        =   0
       Top             =   120
       Width           =   855
    End
@@ -273,6 +275,11 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Private Const FIELD_AGE As Integer = 1
+Private Const FIELD_SEX As Integer = 2
+Private Const FIELD_LOC As Integer = 3
+Private Const FIELD_PRF As Integer = 4
+
 Private m_IsWriting As Boolean
 
 Private Sub cmdCancel_Click()
@@ -280,7 +287,7 @@ Private Sub cmdCancel_Click()
 End Sub
 
 Private Sub cmdOK_Click()
-    If m_IsWriting Then SetProfile rtbLocation.Text, rtbProfile.Text, rtbSex.Text
+    If m_IsWriting Then Call SetProfile(rtbField(FIELD_LOC).Text, rtbField(FIELD_PRF).Text, rtbField(FIELD_SEX).Text)
     Unload Me
 End Sub
 
@@ -289,11 +296,11 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
+    Dim i As Integer
     lblUsername.Caption = vbNullString
-    rtbAge.Text = vbNullString
-    rtbSex.Text = vbNullString
-    rtbLocation.Text = vbNullString
-    rtbProfile.Text = vbNullString
+    For i = rtbField.LBound To rtbField.UBound
+        rtbField(i).Text = vbNullString
+    Next i
     
     cboSendHadFocus = True
 End Sub
@@ -301,23 +308,27 @@ End Sub
 Public Sub PrepareForProfile(ByVal Username As String, ByVal IsWriting As Boolean)
     ' store for later
     m_IsWriting = IsWriting
-    
+
+    ' correct caps
+    If IsWriting Then Username = GetCurrentUsername
+
     ' set caption
-    Caption = IIf(IsWriting, "Profile Writer - " & GetCurrentUsername, "Profile Viewer - " & Username)
-    
+    Caption = StringFormat("{0}Profile - {1}", IIf(IsWriting, "Edit ", vbNullString), Username)
+
     ' set Username
-    lblUsername.Caption = IIf(IsWriting, GetCurrentUsername, Username)
-    
+    lblUsername.Caption = Username
+
     ' set up command buttons
     cmdCancel.Visible = IsWriting
     cmdOK.Caption = IIf(IsWriting, "&Write", "&Done")
-    
+
     ' set locked based on mode
-    rtbAge.Locked = True 'Not IsWriting - always fixed
-    rtbSex.Locked = Not IsWriting
-    rtbLocation.Locked = Not IsWriting
-    rtbProfile.Locked = Not IsWriting
-    
+    rtbField(FIELD_AGE).Locked = True 'Not IsWriting - always fixed
+    rtbField(FIELD_AGE).TabStop = Not IsWriting
+    rtbField(FIELD_SEX).Locked = Not IsWriting
+    rtbField(FIELD_LOC).Locked = Not IsWriting
+    rtbField(FIELD_PRF).Locked = Not IsWriting
+
     ' if we are writing, request our own profile
     If IsWriting Then
         RequestProfile GetCurrentUsername, ProfileWindow
@@ -325,37 +336,32 @@ Public Sub PrepareForProfile(ByVal Username As String, ByVal IsWriting As Boolea
 End Sub
 
 Public Sub SetKey(ByVal KeyName As String, ByVal KeyValue As String)
-    Dim rtb As RichTextBox
-    
+    Dim Index As Integer
+
     ' make sure shown
     Show
-    
+
     'frmChat.AddChat vbWhite, "[Profile] " & KeyName & " == " & KeyValue
-    
+
     Select Case KeyName
-        Case "Profile\Age"
-            Set rtb = rtbAge
-        Case "Profile\Location"
-            Set rtb = rtbLocation
-        Case "Profile\Description"
-            Set rtb = rtbProfile
-        Case "Profile\Sex"
-            Set rtb = rtbSex
-        Case Else
-            Exit Sub
+        Case "Profile\Age":         Index = 1
+        Case "Profile\Sex":         Index = 2
+        Case "Profile\Location":    Index = 3
+        Case "Profile\Description": Index = 4
+        Case Else:                  Exit Sub
     End Select
-    
-    rtb.Text = vbNullString
-    
-    rtb.selStart = 0
-    rtb.selLength = 0
-    rtb.SelColor = vbWhite
-    rtb.SelText = KeyValue
-    
-    If m_IsWriting = False Then Call ColorModify(rtb, 0)
-    
-    Set rtb = Nothing
-    
+
+    With rtbField(Index)
+        .Text = vbNullString
+
+        .SelStart = 0
+        .SelLength = 0
+        .SelColor = vbWhite
+        .SelText = KeyValue
+
+       If m_IsWriting = False Then Call ColorModify(rtbField(Index), 0)
+    End With
+
     SetFocus
 End Sub
 
@@ -385,98 +391,66 @@ End Sub
 '    Call ColorModify(rtb, L)
 'End Sub
 
-Private Sub rtbAge_KeyDown(KeyCode As Integer, Shift As Integer)
-    HandleColorKeyCodes rtbAge, KeyCode, Shift
-End Sub
-
-Private Sub rtbSex_KeyDown(KeyCode As Integer, Shift As Integer)
-    HandleColorKeyCodes rtbSex, KeyCode, Shift
-End Sub
-
-Private Sub rtbLocation_KeyDown(KeyCode As Integer, Shift As Integer)
-    HandleColorKeyCodes rtbLocation, KeyCode, Shift
-End Sub
-
-Private Sub rtbProfile_KeyDown(KeyCode As Integer, Shift As Integer)
-    HandleColorKeyCodes rtbProfile, KeyCode, Shift
-End Sub
-
-Private Sub HandleColorKeyCodes(rtb As RichTextBox, KeyCode As Integer, Shift As Integer)
-    Const S_CTRL As Integer = 2
-    
-    If (rtb.Locked) Then
+Private Sub rtbField_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+    If (rtbField(Index).Locked) Then
     
         Select Case (KeyCode)
-            Case KEY_ENTER
+            Case vbKeyReturn
                 cmdOK_Click
                 
             Case vbKeyEscape
                 cmdCancel_Click
         
-            Case vbKeyA, vbKeyC, vbKeyX, vbKeyV, KEY_ENTER, vbKeyUp, vbKeyDown, vbKeyLeft, vbKeyRight
+            Case vbKeyA, vbKeyC, vbKeyX, vbKeyV, vbKeyReturn, vbKeyUp, vbKeyDown, vbKeyLeft, vbKeyRight, vbKeyHome, vbKeyEnd, vbKeyPageDown, vbKeyPageUp
                 ' don't disable these
                 
             Case Else
                 ' disable CTRL+L, CTRL+E, CTRL+R, CTRL+I and lots of funny ones
-                If (Shift = S_CTRL) Then KeyCode = 0
+                If (Shift = vbCtrlMask) Then KeyCode = 0
         End Select
         
         Exit Sub
     End If
     
-    If (rtb.SelColor <> vbWhite) Then rtb.SelColor = vbWhite
+    If (rtbField(Index).SelColor <> vbWhite) Then rtbField(Index).SelColor = vbWhite
     
     Select Case (KeyCode)
-        Case KEY_B
-            If (Shift = S_CTRL) Then
-                rtb.SelText = "ÿcb"
+        Case vbKeyB
+            If (Shift = vbCtrlMask) Then
+                rtbField(Index).SelText = "ÿcb"
             End If
             
-        Case KEY_U
-            If (Shift = S_CTRL) Then
-                rtb.SelText = "ÿcu"
+        Case vbKeyU
+            If (Shift = vbCtrlMask) Then
+                rtbField(Index).SelText = "ÿcu"
             End If
             
-        Case KEY_I
-            If (Shift = S_CTRL) Then
-                rtb.SelText = "ÿci"
+        Case vbKeyI
+            If (Shift = vbCtrlMask) Then
+                rtbField(Index).SelText = "ÿci"
             End If
             
-        Case KEY_ENTER
-            If (Shift = S_CTRL) Then
+        Case vbKeyReturn
+            If (Shift = vbCtrlMask) Then
                 cmdOK_Click
             End If
                 
         Case vbKeyEscape
             cmdCancel_Click
             
-        Case vbKeyA, vbKeyC, vbKeyX, vbKeyV, vbKeyUp, vbKeyDown, vbKeyLeft, vbKeyRight
+        Case vbKeyA, vbKeyC, vbKeyX, vbKeyV, vbKeyUp, vbKeyDown, vbKeyLeft, vbKeyRight, vbKeyHome, vbKeyEnd, vbKeyPageDown, vbKeyPageUp
             ' don't disable these
             
         Case Else
             ' disable CTRL+L, CTRL+E, CTRL+R, CTRL+I and lots of funny ones
-            If (Shift = S_CTRL) Then KeyCode = 0
+            If (Shift = vbCtrlMask) Then KeyCode = 0
             
     End Select
 End Sub
 
-Private Sub rtbAge_KeyPress(ascii As Integer)
-    If (ascii = 13) Then
-        ascii = 0
-        rtbSex.SetFocus
-    End If
-End Sub
-
-Private Sub rtbSex_KeyPress(ascii As Integer)
-    If (ascii = 13) Then
-        ascii = 0
-        rtbLocation.SetFocus
-    End If
-End Sub
-
-Private Sub rtbLocation_KeyPress(ascii As Integer)
-    If (ascii = 13) Then
-        ascii = 0
-        rtbProfile.SetFocus
+Private Sub rtbField_KeyPress(Index As Integer, KeyAscii As Integer)
+    If (KeyAscii = vbKeyReturn) And Index < rtbField.UBound Then
+        KeyAscii = 0
+        rtbField(Index + 1).SetFocus
     End If
 End Sub

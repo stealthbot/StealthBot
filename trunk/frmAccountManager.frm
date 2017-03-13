@@ -22,11 +22,12 @@ Begin VB.Form frmAccountManager
    ScaleHeight     =   3990
    ScaleWidth      =   3735
    StartUpPosition =   1  'CenterOwner
-   Begin VB.TextBox txtField3 
+   Begin VB.TextBox txtField 
       BackColor       =   &H00993300&
       ForeColor       =   &H00FFFFFF&
       Height          =   285
       IMEMode         =   3  'DISABLE
+      Index           =   3
       Left            =   240
       PasswordChar    =   "*"
       TabIndex        =   10
@@ -42,22 +43,24 @@ Begin VB.Form frmAccountManager
       Top             =   3480
       Width           =   2295
    End
-   Begin VB.TextBox txtField2 
+   Begin VB.TextBox txtField 
       BackColor       =   &H00993300&
       ForeColor       =   &H00FFFFFF&
       Height          =   285
       IMEMode         =   3  'DISABLE
+      Index           =   2
       Left            =   240
       PasswordChar    =   "*"
       TabIndex        =   8
       Top             =   2400
       Width           =   3255
    End
-   Begin VB.TextBox txtField1 
+   Begin VB.TextBox txtField 
       BackColor       =   &H00993300&
       ForeColor       =   &H00FFFFFF&
       Height          =   285
       IMEMode         =   3  'DISABLE
+      Index           =   1
       Left            =   240
       PasswordChar    =   "*"
       TabIndex        =   6
@@ -76,10 +79,11 @@ Begin VB.Form frmAccountManager
       Top             =   360
       Width           =   3255
    End
-   Begin VB.TextBox txtUsername 
+   Begin VB.TextBox txtField 
       BackColor       =   &H00993300&
       ForeColor       =   &H00FFFFFF&
       Height          =   285
+      Index           =   0
       Left            =   240
       MaxLength       =   15
       TabIndex        =   4
@@ -95,41 +99,45 @@ Begin VB.Form frmAccountManager
       Top             =   3480
       Width           =   975
    End
-   Begin VB.Label lblField3 
+   Begin VB.Label lblField 
       BackColor       =   &H00000000&
       Caption         =   "Field 3"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   3
       Left            =   240
       TabIndex        =   9
       Top             =   2760
       Width           =   3255
    End
-   Begin VB.Label lblField2 
+   Begin VB.Label lblField 
       BackColor       =   &H00000000&
       Caption         =   "Field 2"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   2
       Left            =   240
       TabIndex        =   7
       Top             =   2160
       Width           =   3255
    End
-   Begin VB.Label lblField1 
+   Begin VB.Label lblField 
       BackColor       =   &H00000000&
       Caption         =   "Field 1"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   1
       Left            =   240
       TabIndex        =   5
       Top             =   1560
       Width           =   3255
    End
-   Begin VB.Label lblUsername 
+   Begin VB.Label lblField 
       BackColor       =   &H00000000&
       Caption         =   "&Username"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   0
       Left            =   240
       TabIndex        =   3
       Top             =   960
@@ -193,12 +201,12 @@ End Sub
 
 Private Sub SaveFieldsAndConnect()
     Dim ErrorMsg As String
-    
+    Dim i        As Integer
+
     ' save values
-    txtUsername_Change
-    txtField1_Change
-    txtField2_Change
-    txtField3_Change
+    For i = txtField.LBound To txtField.UBound
+        Call txtField_Change(i)
+    Next i
 
     ' check that the "verify" fields match, if applicable
     Select Case cboMode.ListIndex
@@ -339,12 +347,12 @@ Private Sub SaveFieldsAndConnect()
     End If
 End Sub
 
-Private Sub SetFieldMode(Label As Label, TextBox As TextBox, ByVal Visible As Boolean, _
+Private Sub SetFieldMode(Index As Integer, ByVal Visible As Boolean, _
         Optional ByVal Caption As String = vbNullString, Optional ByVal PasswordChar As String = vbNullString)
-    Label.Visible = Visible
-    Label.Caption = Caption
-    TextBox.Visible = Visible
-    TextBox.PasswordChar = PasswordChar
+    lblField(Index).Visible = Visible
+    lblField(Index).Caption = Caption
+    txtField(Index).Visible = Visible
+    txtField(Index).PasswordChar = PasswordChar
 End Sub
 
 Private Sub cboMode_Change()
@@ -352,40 +360,40 @@ Private Sub cboMode_Change()
     Select Case cboMode.ListIndex
         Case M_LOGON
             lblModeDetail.Caption = "Log on to this account:"
-            Call SetFieldMode(lblField1, txtField1, True, "&Password", "*")
-            Call SetFieldMode(lblField2, txtField2, False)
-            Call SetFieldMode(lblField3, txtField3, False)
+            Call SetFieldMode(1, True, "&Password", "*")
+            Call SetFieldMode(2, False)
+            Call SetFieldMode(3, False)
         Case M_CREAT
             lblModeDetail.Caption = "Create this account:"
-            Call SetFieldMode(lblField1, txtField1, True, "&Password", "*")
-            Call SetFieldMode(lblField2, txtField2, True, "&Verify password", "*")
-            Call SetFieldMode(lblField3, txtField3, False)
+            Call SetFieldMode(1, True, "&Password", "*")
+            Call SetFieldMode(2, True, "&Verify password", "*")
+            Call SetFieldMode(3, False)
         Case M_CHPWD
             lblModeDetail.Caption = "Change the password for this account:"
-            Call SetFieldMode(lblField1, txtField1, True, "&Old password", "*")
-            Call SetFieldMode(lblField2, txtField2, True, "New &password", "*")
-            Call SetFieldMode(lblField3, txtField3, True, "&Verify new password", "*")
+            Call SetFieldMode(1, True, "&Old password", "*")
+            Call SetFieldMode(2, True, "New &password", "*")
+            Call SetFieldMode(3, True, "&Verify new password", "*")
         Case M_RSPWD
             lblModeDetail.Caption = "Request a password reset for this account:"
-            Call SetFieldMode(lblField1, txtField1, True, "Registered Email &Address", vbNullString)
-            Call SetFieldMode(lblField2, txtField2, False)
-            Call SetFieldMode(lblField3, txtField3, False)
+            Call SetFieldMode(1, True, "Registered Email &Address", vbNullString)
+            Call SetFieldMode(2, False)
+            Call SetFieldMode(3, False)
         Case M_CHREG
             lblModeDetail.Caption = "Change the registered email address:"
-            Call SetFieldMode(lblField1, txtField1, True, "&Old Email Address", vbNullString)
-            Call SetFieldMode(lblField2, txtField2, True, "New Email &Address", vbNullString)
-            Call SetFieldMode(lblField3, txtField3, True, "&Verify new Email Address", vbNullString)
+            Call SetFieldMode(1, True, "&Old Email Address", vbNullString)
+            Call SetFieldMode(2, True, "New Email &Address", vbNullString)
+            Call SetFieldMode(3, True, "&Verify new Email Address", vbNullString)
     End Select
     
     ' fill in fields
-    txtUsername.Text = Username
+    txtField(0).Text = Username
     Select Case cboMode.ListIndex
-        Case M_LOGON, M_CHPWD: txtField1.Text = Password
-        Case M_RSPWD, M_CHREG: txtField1.Text = Email
-        Case M_CREAT:          txtField1.Text = vbNullString
+        Case M_LOGON, M_CHPWD: txtField(1).Text = Password
+        Case M_RSPWD, M_CHREG: txtField(1).Text = Email
+        Case M_CREAT:          txtField(1).Text = vbNullString
     End Select
-    txtField2.Text = vbNullString
-    txtField3.Text = vbNullString
+    txtField(2).Text = vbNullString
+    txtField(3).Text = vbNullString
 End Sub
 
 Private Sub cboMode_Click()
@@ -460,38 +468,29 @@ Private Sub Form_Unload(Cancel As Integer)
     End If
 End Sub
 
-Private Sub txtField1_Change()
-    Select Case cboMode.ListIndex
-        Case M_LOGON, M_CHPWD:  Password = txtField1.Text
-        Case M_RSPWD, M_CHREG:  Email = txtField1.Text
-        Case M_CREAT:           NPassword1 = txtField1.Text
+Private Sub txtField_Change(Index As Integer)
+    Select Case Index
+        Case 0
+            Username = txtField(0).Text
+        Case 1
+            Select Case cboMode.ListIndex
+                Case M_LOGON, M_CHPWD:  Password = txtField(1).Text
+                Case M_RSPWD, M_CHREG:  Email = txtField(1).Text
+                Case M_CREAT:           NPassword1 = txtField(1).Text
+            End Select
+        Case 2
+            Select Case cboMode.ListIndex
+                Case M_CHPWD:   NPassword1 = txtField(2).Text
+                Case M_CREAT:   NPassword2 = txtField(2).Text
+                Case M_CHREG:   NEmail1 = txtField(2).Text
+            End Select
+        Case 3
+            Select Case cboMode.ListIndex
+                Case M_CHPWD:   NPassword2 = txtField(3).Text
+                Case M_CHREG:   NEmail2 = txtField(3).Text
+            End Select
     End Select
-    Call SetCloseButton
-End Sub
 
-Private Sub txtField2_Change()
-    Select Case cboMode.ListIndex
-        Case M_CHPWD:   NPassword1 = txtField2.Text
-        Case M_CREAT:   NPassword2 = txtField2.Text
-        Case M_CHREG:   NEmail1 = txtField2.Text
-    End Select
-    Call SetCloseButton
-End Sub
-
-Private Sub txtField3_Change()
-    Select Case cboMode.ListIndex
-        Case M_CHPWD:   NPassword2 = txtField3.Text
-        Case M_CHREG:   NEmail2 = txtField3.Text
-    End Select
-    Call SetCloseButton
-End Sub
-
-Private Sub txtUsername_Change()
-    Username = txtUsername.Text
-    Call SetCloseButton
-End Sub
-
-Private Sub SetCloseButton()
     If (Not m_FormIsModal) And (frmChat.sckBNet.State = sckConnected) And (ds.AccountEntry) Then
         btnClose.Caption = "Dis&connect"
     Else

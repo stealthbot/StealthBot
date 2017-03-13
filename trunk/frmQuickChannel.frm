@@ -3,18 +3,38 @@ Begin VB.Form frmQuickChannel
    BackColor       =   &H80000007&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "QuickChannel Manager"
-   ClientHeight    =   3165
+   ClientHeight    =   3090
    ClientLeft      =   2610
    ClientTop       =   1545
-   ClientWidth     =   4845
+   ClientWidth     =   4035
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   3165
-   ScaleWidth      =   4845
+   ScaleHeight     =   3090
+   ScaleWidth      =   4035
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
+   Begin VB.TextBox Channel 
+      BackColor       =   &H00993300&
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   285
+      Index           =   9
+      Left            =   600
+      MaxLength       =   31
+      TabIndex        =   18
+      Top             =   2400
+      Width           =   3255
+   End
    Begin VB.TextBox Channel 
       BackColor       =   &H00993300&
       BeginProperty Font 
@@ -31,9 +51,9 @@ Begin VB.Form frmQuickChannel
       Index           =   8
       Left            =   600
       MaxLength       =   31
-      TabIndex        =   9
-      Top             =   2400
-      Width           =   4095
+      TabIndex        =   16
+      Top             =   2160
+      Width           =   3255
    End
    Begin VB.TextBox Channel 
       BackColor       =   &H00993300&
@@ -51,9 +71,9 @@ Begin VB.Form frmQuickChannel
       Index           =   7
       Left            =   600
       MaxLength       =   31
-      TabIndex        =   8
-      Top             =   2160
-      Width           =   4095
+      TabIndex        =   14
+      Top             =   1920
+      Width           =   3255
    End
    Begin VB.TextBox Channel 
       BackColor       =   &H00993300&
@@ -71,9 +91,9 @@ Begin VB.Form frmQuickChannel
       Index           =   6
       Left            =   600
       MaxLength       =   31
-      TabIndex        =   7
-      Top             =   1920
-      Width           =   4095
+      TabIndex        =   12
+      Top             =   1680
+      Width           =   3255
    End
    Begin VB.TextBox Channel 
       BackColor       =   &H00993300&
@@ -91,9 +111,9 @@ Begin VB.Form frmQuickChannel
       Index           =   5
       Left            =   600
       MaxLength       =   31
-      TabIndex        =   6
-      Top             =   1680
-      Width           =   4095
+      TabIndex        =   10
+      Top             =   1440
+      Width           =   3255
    End
    Begin VB.TextBox Channel 
       BackColor       =   &H00993300&
@@ -111,9 +131,9 @@ Begin VB.Form frmQuickChannel
       Index           =   4
       Left            =   600
       MaxLength       =   31
-      TabIndex        =   5
-      Top             =   1440
-      Width           =   4095
+      TabIndex        =   8
+      Top             =   1200
+      Width           =   3255
    End
    Begin VB.TextBox Channel 
       BackColor       =   &H00993300&
@@ -131,9 +151,9 @@ Begin VB.Form frmQuickChannel
       Index           =   3
       Left            =   600
       MaxLength       =   31
-      TabIndex        =   4
-      Top             =   1200
-      Width           =   4095
+      TabIndex        =   6
+      Top             =   960
+      Width           =   3255
    End
    Begin VB.TextBox Channel 
       BackColor       =   &H00993300&
@@ -151,9 +171,9 @@ Begin VB.Form frmQuickChannel
       Index           =   2
       Left            =   600
       MaxLength       =   31
-      TabIndex        =   3
-      Top             =   960
-      Width           =   4095
+      TabIndex        =   4
+      Top             =   720
+      Width           =   3255
    End
    Begin VB.TextBox Channel 
       BackColor       =   &H00993300&
@@ -172,28 +192,8 @@ Begin VB.Form frmQuickChannel
       Left            =   600
       MaxLength       =   31
       TabIndex        =   2
-      Top             =   720
-      Width           =   4095
-   End
-   Begin VB.TextBox Channel 
-      BackColor       =   &H00993300&
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   285
-      Index           =   0
-      Left            =   600
-      MaxLength       =   31
-      TabIndex        =   1
       Top             =   480
-      Width           =   4095
+      Width           =   3255
    End
    Begin VB.CommandButton cmdCancel 
       Cancel          =   -1  'True
@@ -208,13 +208,13 @@ Begin VB.Form frmQuickChannel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   255
-      Left            =   3240
-      TabIndex        =   11
+      Left            =   120
+      TabIndex        =   20
       Top             =   2760
       Width           =   1455
    End
    Begin VB.CommandButton cmdDone 
-      Caption         =   "&Done"
+      Caption         =   "&Save"
       Default         =   -1  'True
       BeginProperty Font 
          Name            =   "Tahoma"
@@ -226,84 +226,14 @@ Begin VB.Form frmQuickChannel
          Strikethrough   =   0   'False
       EndProperty
       Height          =   255
-      Left            =   120
-      TabIndex        =   10
+      Left            =   1560
+      TabIndex        =   19
       Top             =   2760
-      Width           =   3135
+      Width           =   2295
    End
-   Begin VB.PictureBox picOptions 
-      BorderStyle     =   0  'None
-      Height          =   3780
-      Index           =   3
-      Left            =   -20000
-      ScaleHeight     =   3780
-      ScaleWidth      =   5685
-      TabIndex        =   13
-      TabStop         =   0   'False
-      Top             =   480
-      Width           =   5685
-      Begin VB.Frame fraSample4 
-         Caption         =   "Sample 4"
-         Height          =   1785
-         Left            =   2100
-         TabIndex        =   16
-         Top             =   840
-         Width           =   2055
-      End
-   End
-   Begin VB.PictureBox picOptions 
-      BorderStyle     =   0  'None
-      Height          =   3780
-      Index           =   2
-      Left            =   -20000
-      ScaleHeight     =   3780
-      ScaleWidth      =   5685
-      TabIndex        =   12
-      TabStop         =   0   'False
-      Top             =   480
-      Width           =   5685
-      Begin VB.Frame fraSample3 
-         Caption         =   "Sample 3"
-         Height          =   1785
-         Left            =   1545
-         TabIndex        =   15
-         Top             =   675
-         Width           =   2055
-      End
-   End
-   Begin VB.PictureBox picOptions 
-      BorderStyle     =   0  'None
-      Height          =   3780
-      Index           =   1
-      Left            =   -20000
-      ScaleHeight     =   3780
-      ScaleWidth      =   5685
-      TabIndex        =   0
-      TabStop         =   0   'False
-      Top             =   480
-      Width           =   5685
-      Begin VB.Frame fraSample2 
-         Caption         =   "Sample 2"
-         Height          =   1785
-         Left            =   645
-         TabIndex        =   14
-         Top             =   300
-         Width           =   2055
-         Begin VB.TextBox txtUsername 
-            BackColor       =   &H00993300&
-            ForeColor       =   &H00FFFFFF&
-            Height          =   285
-            Left            =   0
-            MaxLength       =   15
-            TabIndex        =   17
-            Top             =   0
-            Width           =   1575
-         End
-      End
-   End
-   Begin VB.Label Label10 
+   Begin VB.Label lblChannel 
       BackColor       =   &H00000000&
-      Caption         =   "F9"
+      Caption         =   "F&9:"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -315,14 +245,15 @@ Begin VB.Form frmQuickChannel
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   9
       Left            =   120
-      TabIndex        =   27
+      TabIndex        =   17
       Top             =   2400
       Width           =   375
    End
-   Begin VB.Label Label9 
+   Begin VB.Label lblChannel 
       BackColor       =   &H00000000&
-      Caption         =   "F8"
+      Caption         =   "F&8:"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -334,14 +265,15 @@ Begin VB.Form frmQuickChannel
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   8
       Left            =   120
-      TabIndex        =   26
+      TabIndex        =   15
       Top             =   2160
       Width           =   375
    End
-   Begin VB.Label Label8 
+   Begin VB.Label lblChannel 
       BackColor       =   &H00000000&
-      Caption         =   "F7"
+      Caption         =   "F&7:"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -353,14 +285,15 @@ Begin VB.Form frmQuickChannel
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   7
       Left            =   120
-      TabIndex        =   25
+      TabIndex        =   13
       Top             =   1920
       Width           =   375
    End
-   Begin VB.Label Label7 
+   Begin VB.Label lblChannel 
       BackColor       =   &H00000000&
-      Caption         =   "F6"
+      Caption         =   "F&6:"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -372,14 +305,15 @@ Begin VB.Form frmQuickChannel
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   6
       Left            =   120
-      TabIndex        =   24
+      TabIndex        =   11
       Top             =   1680
       Width           =   375
    End
-   Begin VB.Label Label6 
+   Begin VB.Label lblChannel 
       BackColor       =   &H00000000&
-      Caption         =   "F5"
+      Caption         =   "F&5:"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -391,14 +325,15 @@ Begin VB.Form frmQuickChannel
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   5
       Left            =   120
-      TabIndex        =   23
+      TabIndex        =   9
       Top             =   1440
       Width           =   375
    End
-   Begin VB.Label Label5 
+   Begin VB.Label lblChannel 
       BackColor       =   &H00000000&
-      Caption         =   "F4"
+      Caption         =   "F&4:"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -410,14 +345,15 @@ Begin VB.Form frmQuickChannel
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   4
       Left            =   120
-      TabIndex        =   22
+      TabIndex        =   7
       Top             =   1200
       Width           =   375
    End
-   Begin VB.Label Label4 
+   Begin VB.Label lblChannel 
       BackColor       =   &H00000000&
-      Caption         =   "F3"
+      Caption         =   "F&3:"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -429,14 +365,15 @@ Begin VB.Form frmQuickChannel
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   3
       Left            =   120
-      TabIndex        =   21
+      TabIndex        =   5
       Top             =   960
       Width           =   375
    End
-   Begin VB.Label Label3 
+   Begin VB.Label lblChannel 
       BackColor       =   &H00000000&
-      Caption         =   "F2"
+      Caption         =   "F&2:"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -448,14 +385,15 @@ Begin VB.Form frmQuickChannel
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   2
       Left            =   120
-      TabIndex        =   20
+      TabIndex        =   3
       Top             =   720
       Width           =   375
    End
-   Begin VB.Label Label2 
+   Begin VB.Label lblChannel 
       BackColor       =   &H00000000&
-      Caption         =   "F1  "
+      Caption         =   "F&1:"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -467,14 +405,15 @@ Begin VB.Form frmQuickChannel
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   1
       Left            =   120
-      TabIndex        =   19
+      TabIndex        =   1
       Top             =   480
       Width           =   375
    End
-   Begin VB.Label Label1 
+   Begin VB.Label lblChannel 
       BackColor       =   &H00000000&
-      Caption         =   "Enter the nine channels you would like on your QuickChannel list:"
+      Caption         =   "Set your QuickChannels:"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -486,10 +425,11 @@ Begin VB.Form frmQuickChannel
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
+      Index           =   0
       Left            =   120
-      TabIndex        =   18
+      TabIndex        =   0
       Top             =   120
-      Width           =   4695
+      Width           =   3735
    End
 End
 Attribute VB_Name = "frmQuickChannel"
@@ -507,8 +447,8 @@ Private Sub Form_Load()
     Dim i As Integer
     
     ' bounds of Channel controls
-    For i = 0 To 8
-        Channel(i) = QC(i + 1)
+    For i = Channel.LBound To Channel.UBound
+        Channel(i) = QC(i)
     Next i
 End Sub
 
@@ -529,8 +469,8 @@ Private Sub cmdDone_Click()
     
     'write the qc list
     ' bounds of Channel controls
-    For i = 0 To 8
-        QC(i + 1) = Channel(i).Text
+    For i = Channel.LBound To Channel.UBound
+        QC(i) = Channel(i).Text
     Next i
     
     SaveQuickChannels

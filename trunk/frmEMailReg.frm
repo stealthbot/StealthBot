@@ -70,7 +70,7 @@ Begin VB.Form frmEMailReg
       BackColor       =   &H00000000&
       Caption         =   "&Save for other accounts"
       BeginProperty Font 
-         Name            =   "Verdana"
+         Name            =   "Tahoma"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -116,6 +116,15 @@ Begin VB.Form frmEMailReg
       Alignment       =   1  'Right Justify
       BackColor       =   &H00000000&
       Caption         =   "Email &Address:"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   120

@@ -21,7 +21,14 @@ Begin VB.Form frmSplash
       Left            =   6240
       Top             =   4800
    End
-   Begin VB.Label Label1 
+   Begin VB.Image Logo 
+      Height          =   4500
+      Left            =   120
+      Picture         =   "frmSplash.frx":0000
+      Top             =   120
+      Width           =   6750
+   End
+   Begin VB.Label lblVersion 
       Alignment       =   2  'Center
       BackColor       =   &H00000000&
       BeginProperty Font 
@@ -40,13 +47,6 @@ Begin VB.Form frmSplash
       Top             =   4680
       Width           =   6735
    End
-   Begin VB.Image Logo 
-      Height          =   4500
-      Left            =   120
-      Picture         =   "frmSplash.frx":0000
-      Top             =   120
-      Width           =   6750
-   End
    Begin VB.Image BDay 
       Height          =   4740
       Left            =   1320
@@ -63,11 +63,11 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private lStartTick As Long      ' The tick count when the form was loaded.
+Private lStartTick As Currency  ' The tick count when the form was loaded.
 Private bHasShown As Boolean    ' Set to true after 1 second
 
 ' Number of milliseconds before the form automatically unloads
-Private Const AUTO_UNLOAD_DELAY = 15000
+Private Const AUTO_UNLOAD_DELAY As Currency = 15000
 
 Private Sub Bday_Click()
     frmChat.Show
@@ -83,8 +83,6 @@ Private Sub Image_click()
     frmChat.Show
     Unload Me
 End Sub
-
-
 
 Private Sub IsBirthday(sName As String, iBorn As Integer)
     On Error Resume Next 'this isn't important so screw the errors
@@ -106,7 +104,7 @@ Private Sub IsBirthday(sName As String, iBorn As Integer)
         End If
     End If
     
-    Label1.Caption = "Happy " & iAge & sAppend & " Birthday " & sName & "!!!"
+    lblVersion.Caption = "Happy " & iAge & sAppend & " Birthday " & sName & "!!!"
 End Sub
 
 Private Sub Form_Load()
@@ -124,10 +122,10 @@ Private Sub Form_Load()
       Case "4/22":  IsBirthday "52", 1982
       Case "9/22":  IsBirthday "Eric", 1987
       Case "11/26": IsBirthday "Hdx", 1989
-      Case Else: Label1.Caption = "[ " & CVERSION & " ]"
+      Case Else: lblVersion.Caption = "[ " & CVERSION & " ]"
     End Select
     
-    lStartTick = GetTickCount
+    lStartTick = GetTickCountMS
 End Sub
 
 Private Sub Form_LostFocus()
@@ -145,7 +143,7 @@ End Sub
 Private Sub tmrUnload_Timer()
     On Error GoTo KILL_FORM
     
-    If ((GetTickCount - lStartTick) >= AUTO_UNLOAD_DELAY) Then
+    If ((GetTickCountMS - lStartTick) >= AUTO_UNLOAD_DELAY) Then
         GoTo KILL_FORM
     End If
     bHasShown = True

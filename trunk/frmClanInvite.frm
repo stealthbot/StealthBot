@@ -6,15 +6,16 @@ Begin VB.Form frmClanInvite
    ClientHeight    =   1905
    ClientLeft      =   75
    ClientTop       =   465
-   ClientWidth     =   3255
+   ClientWidth     =   3105
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   1905
-   ScaleWidth      =   3255
+   ScaleWidth      =   3105
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
    Begin VB.CommandButton cmdDecline 
+      Cancel          =   -1  'True
       Caption         =   "&Decline"
       BeginProperty Font 
          Name            =   "Tahoma"
@@ -26,13 +27,14 @@ Begin VB.Form frmClanInvite
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
-      Left            =   1680
-      TabIndex        =   1
+      Left            =   120
+      TabIndex        =   4
       Top             =   1440
-      Width           =   1335
+      Width           =   1455
    End
    Begin VB.CommandButton cmdAccept 
       Caption         =   "&Accept"
+      Default         =   -1  'True
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -43,10 +45,10 @@ Begin VB.Form frmClanInvite
          Strikethrough   =   0   'False
       EndProperty
       Height          =   375
-      Left            =   240
-      TabIndex        =   0
+      Left            =   1560
+      TabIndex        =   3
       Top             =   1440
-      Width           =   1335
+      Width           =   1455
    End
    Begin VB.Label lblUser 
       BackColor       =   &H00000000&
@@ -63,9 +65,9 @@ Begin VB.Form frmClanInvite
       ForeColor       =   &H00FFFFFF&
       Height          =   375
       Left            =   120
-      TabIndex        =   4
+      TabIndex        =   0
       Top             =   120
-      Width           =   3015
+      Width           =   2895
    End
    Begin VB.Label lblClan 
       BackColor       =   &H00000000&
@@ -82,11 +84,11 @@ Begin VB.Form frmClanInvite
       ForeColor       =   &H00FFFFFF&
       Height          =   375
       Left            =   120
-      TabIndex        =   3
+      TabIndex        =   2
       Top             =   960
-      Width           =   3015
+      Width           =   2895
    End
-   Begin VB.Label Label1 
+   Begin VB.Label lblInvite 
       BackColor       =   &H00000000&
       Caption         =   "has invited you to join"
       BeginProperty Font 
@@ -101,9 +103,9 @@ Begin VB.Form frmClanInvite
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   120
-      TabIndex        =   2
+      TabIndex        =   1
       Top             =   600
-      Width           =   3015
+      Width           =   2895
    End
 End
 Attribute VB_Name = "frmClanInvite"

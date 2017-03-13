@@ -17,6 +17,15 @@ Begin VB.Form frmRealm
    Begin VB.ComboBox cboOtherRealms 
       BackColor       =   &H00993300&
       Enabled         =   0   'False
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   315
       Left            =   9480
@@ -29,6 +38,15 @@ Begin VB.Form frmRealm
    Begin VB.CommandButton btnDisconnect 
       Cancel          =   -1  'True
       Caption         =   "C&ancel"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   300
       Left            =   8040
       TabIndex        =   29
@@ -38,6 +56,15 @@ Begin VB.Form frmRealm
    Begin VB.CommandButton btnChoose 
       Caption         =   "&Logon"
       Default         =   -1  'True
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   300
       Left            =   9480
       TabIndex        =   28
@@ -958,7 +985,7 @@ Private Sub btnCreate_Click()
             If chkExpansion.Value = 1 Then Flags = Flags Or &H20
             If chkHardcore.Value = 1 Then Flags = Flags Or &H4
             
-            For i = 1 To 7
+            For i = optNewCharType.LBound To optNewCharType.UBound
                 If optNewCharType(i).Value = True Then
                     m_NewCharacterName = txtCharName.Text
                     
@@ -1292,7 +1319,7 @@ Private Sub optNewCharType_Click(Index As Integer)
     
     imgCharPortrait.Picture = imlChars.ListImages.Item(Index + 1).Picture
     
-    For i = 1 To 7
+    For i = optNewCharType.LBound To optNewCharType.UBound
         If i <> Index Then optNewCharType(i).Value = False
     Next i
 End Sub

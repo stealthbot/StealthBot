@@ -27,7 +27,7 @@ Begin VB.Form frmCustomInputBox
       ForeColor       =   &H00FFFFFF&
       Height          =   315
       Left            =   120
-      TabIndex        =   6
+      TabIndex        =   2
       Text            =   "Choose One"
       Top             =   1560
       Width           =   3975
@@ -46,7 +46,7 @@ Begin VB.Form frmCustomInputBox
       ForeColor       =   &H00FFFFFF&
       Height          =   315
       Left            =   120
-      TabIndex        =   5
+      TabIndex        =   3
       Text            =   "Choose One"
       Top             =   1560
       Width           =   3975
@@ -65,9 +65,9 @@ Begin VB.Form frmCustomInputBox
       EndProperty
       Height          =   255
       Left            =   120
-      TabIndex        =   3
+      TabIndex        =   6
       Top             =   1920
-      Width           =   855
+      Width           =   975
    End
    Begin VB.CommandButton cmdBack 
       Caption         =   "<< &Back"
@@ -81,10 +81,10 @@ Begin VB.Form frmCustomInputBox
          Strikethrough   =   0   'False
       EndProperty
       Height          =   255
-      Left            =   2280
-      TabIndex        =   2
+      Left            =   2160
+      TabIndex        =   5
       Top             =   1920
-      Width           =   855
+      Width           =   975
    End
    Begin VB.CommandButton cmdNext 
       Caption         =   "&Next >>"
@@ -98,10 +98,10 @@ Begin VB.Form frmCustomInputBox
          Strikethrough   =   0   'False
       EndProperty
       Height          =   255
-      Left            =   3240
-      TabIndex        =   1
+      Left            =   3120
+      TabIndex        =   4
       Top             =   1920
-      Width           =   855
+      Width           =   975
    End
    Begin VB.TextBox txtInput 
       BackColor       =   &H00993300&
@@ -117,7 +117,7 @@ Begin VB.Form frmCustomInputBox
       ForeColor       =   &H00FFFFFF&
       Height          =   285
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   1
       Top             =   1560
       Width           =   3975
    End
@@ -136,7 +136,7 @@ Begin VB.Form frmCustomInputBox
       ForeColor       =   &H00FFFFFF&
       Height          =   1455
       Left            =   120
-      TabIndex        =   4
+      TabIndex        =   0
       Top             =   120
       Width           =   3975
    End
@@ -293,7 +293,7 @@ Private Sub cmdNext_Click()
                     Call .optW3XP_Click
             End Select
             
-            .txtCdKey.Text = InputValues(STEP_KEY1)
+            .txtCDKey.Text = InputValues(STEP_KEY1)
             .lblAddCurrentKey_Click
             .txtExpKey.Text = InputValues(STEP_KEY2)
             .txtHomeChan.Text = InputValues(STEP_CHAN)
@@ -385,8 +385,8 @@ Private Sub ShowCurrentPos(Optional ByVal GoingBackwards As Boolean = False)
     On Error Resume Next
     If txtInput.Visible Then
         txtInput.SetFocus
-        txtInput.selStart = 0
-        txtInput.selLength = Len(txtInput.Text)
+        txtInput.SelStart = 0
+        txtInput.SelLength = Len(txtInput.Text)
     End If
     If cboGame.Visible Then cboGame.SetFocus
     If cboServer.Visible Then cboServer.SetFocus
