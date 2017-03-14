@@ -1694,6 +1694,7 @@ Private Sub trvUsers_SelectedNodeChanged()
     oNode.Expanded = True
     
     If (StrComp(oNode.Tag, "DATABASE", vbTextCompare) = 0) Then
+        Set m_CurrentEntry = Nothing
         Exit Sub
     End If
     
