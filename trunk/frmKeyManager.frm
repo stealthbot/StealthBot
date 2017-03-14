@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Begin VB.Form frmManageKeys 
+Begin VB.Form frmKeyManager 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Manage CDKeys"
@@ -35,35 +35,35 @@ Begin VB.Form frmManageKeys
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   8
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":0000
+            Picture         =   "frmKeyManager.frx":0000
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":02C2
+            Picture         =   "frmKeyManager.frx":02C2
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":04EC
+            Picture         =   "frmKeyManager.frx":04EC
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":0726
+            Picture         =   "frmKeyManager.frx":0726
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":0A68
+            Picture         =   "frmKeyManager.frx":0A68
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":0C8E
+            Picture         =   "frmKeyManager.frx":0C8E
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":0FCC
+            Picture         =   "frmKeyManager.frx":0FCC
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmManageKeys.frx":14B6
+            Picture         =   "frmKeyManager.frx":14B6
             Key             =   ""
          EndProperty
       EndProperty
@@ -154,7 +154,7 @@ Begin VB.Form frmManageKeys
       Width           =   3375
    End
 End
-Attribute VB_Name = "frmManageKeys"
+Attribute VB_Name = "frmKeyManager"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
