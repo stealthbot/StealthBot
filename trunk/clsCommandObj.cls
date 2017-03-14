@@ -257,17 +257,20 @@ On Error GoTo ERROR_HANDLER
         
         If (LenB(Param.MatchMessage)) Then
             If (Not CheckMatch(Param.MatchMessage, sTemp, Param.MatchCaseSensitive)) Then
-                If (LenB(Param.MatchError) > 0) And (m_hasaccess) Then
+                If m_hasaccess Then
+                    If LenB(Param.MatchError) > 0 Then
                 
-                    sError = Replace$(Param.MatchError, "%Value", sTemp)
-                    sError = Replace$(sError, "%Rank", dbAccess.Rank)
-                    sError = Replace$(sError, "%Flags", dbAccess.Flags)
+                        sError = Replace$(Param.MatchError, "%Value", sTemp)
+                        sError = Replace$(sError, "%Rank", dbAccess.Rank)
+                        sError = Replace$(sError, "%Flags", dbAccess.Flags)
                     
-                    Respond sError
+                        Respond sError
+                    Else
+                        Respond "That command is restricted."
+                    End If
                     
                     m_splithasrun = True
                     IsValid = False
-                    Exit Sub
                 Else
                     If (LCase$(Param.datatype) = "string") Then
                         sArgs = StringFormat("{0}{1}{0} {2}", Chr$(34), sTemp, sArgs)
@@ -285,15 +288,20 @@ On Error GoTo ERROR_HANDLER
                     'If Rank = -1 It means it's missing, and it MUST have Flags. Or if Rank > User's Access
                     If (Restriction.RequiredRank = -1 Or Restriction.RequiredRank > dbAccess.Rank) Then
                         If (Not CheckForAnyFlags(Restriction.RequiredFlags, dbAccess.Flags)) Then
-                            If (LenB(Restriction.MatchError)) And (m_hasaccess) Then
-                                sError = Replace$(Restriction.MatchError, "%Value", sTemp)
-                                sError = Replace$(sError, "%Rank", dbAccess.Rank)
-                                sError = Replace$(sError, "%Flags", dbAccess.Flags)
+                            If m_hasaccess Then
+                                If LenB(Restriction.MatchError) > 0 Then
+                                    sError = Replace$(Restriction.MatchError, "%Value", sTemp)
+                                    sError = Replace$(sError, "%Rank", dbAccess.Rank)
+                                    sError = Replace$(sError, "%Flags", dbAccess.Flags)
                                 
-                                Respond sError
+                                    Respond sError
+                                Else
+                                    Respond "That command is restricted."
+                                End If
+                                
+                                If (Restriction.Fatal) Then m_hasaccess = False
+                                m_restrictions(Restriction.Name) = False
                             End If
-                            If (Restriction.Fatal) Then m_hasaccess = False
-                            m_restrictions(Restriction.Name) = False
                         End If
                     End If
                 End If
