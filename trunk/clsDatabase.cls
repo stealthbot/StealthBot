@@ -477,21 +477,29 @@ Friend Function GetAccess(ByVal sName As String, Optional ByRef sType As String 
     
     ' Check if we have an entry for the given name and type.
     Set oEntry = GetEntry(sName, sType)
-    If Not (oEntry Is Nothing) Then
-        ' Is it a user? (requires special handling)
+    If (oEntry Is Nothing) Then
+        If ((Len(sType) = 0) Or (StrComp(sType, DB_TYPE_USER, vbBinaryCompare) = 0)) Then
+            bIsUser = True
+        End If
+    Else
+        ' Is the entry for a user?
         If StrComp(oEntry.EntryType, DB_TYPE_USER, vbBinaryCompare) = 0 Then
             bIsUser = True
         End If
     End If
     
-    ' If we couldn't find anyone, assume it's a user.
     ' If we think it's a user, check for contextual access (clan, game)
-    If bIsUser Or (oEntry Is Nothing) Then
+    If bIsUser Then
         sType = DB_TYPE_USER
         GetAccess = GetUserAccess(sName)
     Else
-        sType = oEntry.EntryType
-        GetAccess = GetEntryAccess(oEntry)
+        ' If we have an entry, use that, otherwise return default.
+        If oEntry Is Nothing Then
+            GetAccess = GetDefaultAccessResponse(sName)
+        Else
+            sType = oEntry.EntryType
+            GetAccess = GetEntryAccess(oEntry)
+        End If
     End If
 End Function
 
