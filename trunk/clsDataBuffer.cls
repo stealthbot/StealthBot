@@ -377,7 +377,7 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
         CopyMemory buf(3), m_buf(0), m_bufsize
     End If
 
-    If (Not RunInAll("Event_PacketSent", "MCP", PacketID, m_bufsize + 3, Me.Data)) Then
+    If (Not RunInAll("Event_PacketSent", "MCP", PacketID, m_bufsize + 3, modUTF8.ByteArrToString(buf))) Then
         If (MDebug("all")) Then
             frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & ZeroOffset(PacketID, 2)
         End If
@@ -432,7 +432,7 @@ Public Function SendPacket(Optional PacketID As Byte)
         CopyMemory buf(4), m_buf(0), m_bufsize
     End If
     
-    If (Not RunInAll("Event_PacketSent", "BNCS", PacketID, m_bufsize + 4, Me.Data)) Then
+    If (Not RunInAll("Event_PacketSent", "BNCS", PacketID, m_bufsize + 4, modUTF8.ByteArrToString(buf))) Then
     
         If (MDebug("all")) Then
             frmChat.AddChat COLOR_BLUE, "BNET SEND 0x" & ZeroOffset(PacketID, 2)
@@ -472,7 +472,7 @@ Public Function vLSendPacket(Optional PacketID As Byte)
         CopyMemory buf(3), m_buf(0), m_bufsize
     End If
 
-    If (Not RunInAll("Event_PacketSent", "BNLS", PacketID, m_bufsize + 3, Me.Data)) Then
+    If (Not RunInAll("Event_PacketSent", "BNLS", PacketID, m_bufsize + 3, modUTF8.ByteArrToString(buf))) Then
         If (MDebug("all")) Then
             frmChat.AddChat COLOR_BLUE, "BNLS SEND 0x" & ZeroOffset(PacketID, 2)
         End If
