@@ -643,6 +643,66 @@ Public Sub OnShitList(Command As clsCommandObj)
     Next i
 End Sub
 
+Public Sub OnTagCheck(Command As clsCommandObj)
+    If Not (Command.IsValid) Then
+        Command.Respond "You must specify a username to check."
+        Exit Sub
+    End If
+    
+    Dim i       As Integer
+    Dim sName   As String
+    Dim cGroups As Collection
+    Dim oUser   As clsUserObj
+    Dim oAccess As udtUserAccess
+    
+    sName = Command.Argument("username")
+    Set cGroups = Database.GetDynamicGroups()
+    
+    ' Is the user in the channel?
+    Set oUser = g_Channel.GetUser(sName)
+    If Len(oUser.Name) > 0 Then
+        sName = oUser.Name
+    End If
+    
+    ' Check each dynamic group entry.
+    For i = 1 To cGroups.Count
+        With cGroups.Item(i)
+            ' Is this "group" a user?
+            If StrComp(.EntryType, DB_TYPE_USER, vbBinaryCompare) = 0 Then
+                ' Is there a wildcard in the name?
+                If ((InStr(1, .Name, "*", vbBinaryCompare) > 0) Or (InStr(1, .Name, "?", vbBinaryCompare) > 0)) Then
+                    ' Does it match the name we're looking for?
+                    If LCase(PrepareCheck(sName)) Like LCase(PrepareCheck(.Name)) Then
+                        ' Get the entry's access and check if its banned.
+                        oAccess = Database.GetEntryAccess(cGroups.Item(i))
+                        If InStr(1, oAccess.Flags, "B", vbBinaryCompare) > 0 Then
+                            Command.Respond StringFormat("The user ""{0}"" is tagbanned under the entry: {1}", sName, oAccess.Username)
+                            Exit Sub
+                        End If
+                    End If
+                End If
+                ' Is it a clan?
+            ElseIf StrComp(.EntryType, DB_TYPE_CLAN, vbBinaryCompare) = 0 Then
+                ' Do we have any additional info on this user?
+                If Len(oUser.Name) > 0 Then
+                    If Len(oUser.Clan) > 0 Then
+                        If StrComp(oUser.Clan, .Name, vbTextCompare) = 0 Then
+                            ' Get the entry's access and check if its banned.
+                            oAccess = Database.GetEntryAccess(cGroups.Item(i))
+                            If InStr(1, oAccess.Flags, "B", vbBinaryCompare) > 0 Then
+                                Command.Respond StringFormat("The user ""{0}"" is tagbanned under the entry: {1}", sName, oAccess.Username)
+                                Exit Sub
+                            End If
+                        End If
+                    End If
+                End If
+            End If
+        End With
+    Next i
+    
+    Command.Respond "That user does not match any tagbans."
+End Sub
+
 Public Sub OnTagBans(Command As clsCommandObj)
     Dim bufResponse() As String
     Dim i             As Integer
