@@ -29,7 +29,7 @@ Begin VB.Form frmDBNameEntry
       Height          =   285
       Left            =   240
       MaxLength       =   30
-      TabIndex        =   0
+      TabIndex        =   1
       Top             =   840
       Width           =   3255
    End
@@ -47,7 +47,7 @@ Begin VB.Form frmDBNameEntry
       Default         =   -1  'True
       Height          =   255
       Left            =   2640
-      TabIndex        =   1
+      TabIndex        =   2
       Top             =   1200
       Width           =   855
    End
@@ -58,7 +58,7 @@ Begin VB.Form frmDBNameEntry
       ForeColor       =   &H00FFFFFF&
       Height          =   495
       Left            =   440
-      TabIndex        =   2
+      TabIndex        =   0
       Top             =   120
       Width           =   2775
    End

@@ -32,7 +32,7 @@ Begin VB.Form frmDBManager
       Height          =   375
       Left            =   3240
       Picture         =   "frmDBManager.frx":0000
-      TabIndex        =   23
+      TabIndex        =   5
       ToolTipText     =   "Create Group"
       Top             =   5378
       Width           =   735
@@ -42,7 +42,7 @@ Begin VB.Form frmDBManager
       Height          =   375
       Left            =   2520
       Picture         =   "frmDBManager.frx":0468
-      TabIndex        =   24
+      TabIndex        =   4
       ToolTipText     =   "Create Group"
       Top             =   5378
       Width           =   735
@@ -110,7 +110,7 @@ Begin VB.Form frmDBManager
       Caption         =   "&Group"
       Height          =   375
       Left            =   1800
-      TabIndex        =   2
+      TabIndex        =   3
       ToolTipText     =   "Create Group"
       Top             =   5378
       Width           =   735
@@ -120,7 +120,7 @@ Begin VB.Form frmDBManager
       Height          =   375
       Left            =   120
       MaskColor       =   &H00000000&
-      TabIndex        =   1
+      TabIndex        =   2
       ToolTipText     =   "Create User"
       Top             =   5378
       Width           =   1695
@@ -130,7 +130,7 @@ Begin VB.Form frmDBManager
       Default         =   -1  'True
       Height          =   300
       Left            =   5880
-      TabIndex        =   4
+      TabIndex        =   25
       Top             =   5880
       Width           =   1335
    End
@@ -139,14 +139,14 @@ Begin VB.Form frmDBManager
       Caption         =   "&Cancel"
       Height          =   300
       Left            =   5160
-      TabIndex        =   3
+      TabIndex        =   26
       Top             =   5880
       Width           =   735
    End
    Begin vbalTreeViewLib6.vbalTreeView trvUsers 
       Height          =   4965
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   1
       Top             =   360
       Width           =   3855
       _ExtentX        =   6800
@@ -167,13 +167,13 @@ Begin VB.Form frmDBManager
          Strikethrough   =   0   'False
       EndProperty
    End
-   Begin VB.Frame frmDatabase 
+   Begin VB.Frame fraEntry 
       BackColor       =   &H80000007&
       Caption         =   "Eric[nK]"
       ForeColor       =   &H00FFFFFF&
       Height          =   5655
       Left            =   4200
-      TabIndex        =   5
+      TabIndex        =   6
       Top             =   120
       Width           =   3025
       Begin VB.CommandButton btnSaveUser 
@@ -181,7 +181,7 @@ Begin VB.Form frmDBManager
          Enabled         =   0   'False
          Height          =   300
          Left            =   1920
-         TabIndex        =   8
+         TabIndex        =   22
          Top             =   5040
          Width           =   855
       End
@@ -190,16 +190,16 @@ Begin VB.Form frmDBManager
          Enabled         =   0   'False
          Height          =   300
          Left            =   1080
-         TabIndex        =   9
+         TabIndex        =   23
          Top             =   5040
          Width           =   855
       End
       Begin VB.CommandButton btnRename 
-         Caption         =   "&Rename"
+         Caption         =   "Re&name"
          Enabled         =   0   'False
          Height          =   300
          Left            =   240
-         TabIndex        =   22
+         TabIndex        =   24
          Top             =   5040
          Width           =   855
       End
@@ -242,7 +242,7 @@ Begin VB.Form frmDBManager
          Height          =   285
          Left            =   1560
          MaxLength       =   25
-         TabIndex        =   7
+         TabIndex        =   10
          Top             =   480
          Width           =   1215
       End
@@ -253,7 +253,7 @@ Begin VB.Form frmDBManager
          Height          =   285
          Left            =   240
          MaxLength       =   25
-         TabIndex        =   6
+         TabIndex        =   8
          Top             =   480
          Width           =   1215
       End
@@ -263,17 +263,17 @@ Begin VB.Form frmDBManager
          ForeColor       =   &H00FFFFFF&
          Height          =   495
          Left            =   240
-         TabIndex        =   26
+         TabIndex        =   21
          Top             =   4560
          Width           =   2535
       End
       Begin VB.Label lblBanMessage 
          BackColor       =   &H00000000&
-         Caption         =   "Ban message:"
+         Caption         =   "&Ban message"
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   240
-         TabIndex        =   21
+         TabIndex        =   19
          Top             =   3960
          Width           =   2535
       End
@@ -298,11 +298,11 @@ Begin VB.Form frmDBManager
       End
       Begin VB.Label lblGroups 
          BackColor       =   &H00000000&
-         Caption         =   "Groups:"
+         Caption         =   "Grou&ps"
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   240
-         TabIndex        =   19
+         TabIndex        =   17
          Top             =   2280
          Width           =   2535
       End
@@ -321,7 +321,7 @@ Begin VB.Form frmDBManager
          ForeColor       =   &H00FFFFFF&
          Height          =   135
          Left            =   480
-         TabIndex        =   17
+         TabIndex        =   16
          Top             =   2000
          Width           =   2415
       End
@@ -340,27 +340,27 @@ Begin VB.Form frmDBManager
          ForeColor       =   &H00FFFFFF&
          Height          =   135
          Left            =   480
-         TabIndex        =   16
+         TabIndex        =   13
          Top             =   1300
          Width           =   2415
       End
       Begin VB.Label lblFlags 
          BackColor       =   &H00000000&
-         Caption         =   "Flags:"
+         Caption         =   "&Flags"
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   1560
-         TabIndex        =   11
+         TabIndex        =   9
          Top             =   240
          Width           =   1215
       End
       Begin VB.Label lblRank 
          BackColor       =   &H00000000&
-         Caption         =   "Rank (1 - 200):"
+         Caption         =   "&Rank (1 - 200)"
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   240
-         TabIndex        =   10
+         TabIndex        =   7
          Top             =   240
          Width           =   1215
       End
@@ -398,7 +398,7 @@ Begin VB.Form frmDBManager
          ForeColor       =   &H00FFFFFF&
          Height          =   135
          Left            =   240
-         TabIndex        =   14
+         TabIndex        =   11
          Top             =   900
          Width           =   2535
       End
@@ -417,18 +417,18 @@ Begin VB.Form frmDBManager
          ForeColor       =   &H00FFFFFF&
          Height          =   135
          Left            =   240
-         TabIndex        =   13
+         TabIndex        =   14
          Top             =   1600
          Width           =   2535
       End
    End
    Begin VB.Label lblDB 
       BackColor       =   &H00000000&
-      Caption         =   "User Database"
+      Caption         =   "User &Database"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   120
-      TabIndex        =   25
+      TabIndex        =   0
       Top             =   120
       Width           =   1815
    End
@@ -686,7 +686,7 @@ Private Sub btnCreateUser_Click()
     m_EntryType = DB_TYPE_USER
     m_EntryName = vbNullString
     
-    Call frmDBNameEntry.Show(vbModal, frmDBManager)
+    Call frmDBNameEntry.Show(vbModal, Me)
     
     If (LenB(m_EntryName) > 0) Then
     
@@ -728,7 +728,7 @@ Private Sub btnCreateGroup_Click()
     m_EntryType = DB_TYPE_GROUP
     m_EntryName = vbNullString
     
-    Call frmDBNameEntry.Show(vbModal, frmDBManager)
+    Call frmDBNameEntry.Show(vbModal, Me)
     
     If (LenB(m_EntryName) > 0) Then
     
@@ -771,7 +771,7 @@ Sub btnCreateClan_Click()
     m_EntryType = DB_TYPE_CLAN
     m_EntryName = vbNullString
     
-    Call frmDBNameEntry.Show(vbModal, frmDBManager)
+    Call frmDBNameEntry.Show(vbModal, Me)
     
     If (LenB(m_EntryName) > 0) Then
     
@@ -811,7 +811,7 @@ Sub btnCreateGame_Click()
     
     m_EntryName = vbNullString
     
-    Call frmDBGameSelection.Show(vbModal, frmDBManager)
+    Call frmDBGameSelection.Show(vbModal, Me)
     
     If (LenB(m_EntryName) > 0) Then
     
@@ -975,24 +975,24 @@ Private Sub HandleSaved()
     m_Modified = False
     btnSaveUser.Enabled = False
     If m_CurrentEntry Is Nothing Then
-        frmDatabase.Caption = "Database"
-        frmDBManager.Caption = "Database"
+        fraEntry.Caption = "Database"
+        Me.Caption = "Database"
     Else
-        frmDatabase.Caption = m_CurrentEntry.ToString()
-        frmDBManager.Caption = "Database - " & m_CurrentEntry.ToString()
+        fraEntry.Caption = m_CurrentEntry.ToString()
+        Me.Caption = "Database - " & m_CurrentEntry.ToString()
     End If
 End Sub
 
 Private Sub HandleUnsaved()
     If m_CurrentEntry Is Nothing Then
         m_Modified = False
-        frmDatabase.Caption = "Database"
-        frmDBManager.Caption = "Database"
+        fraEntry.Caption = "Database"
+        Me.Caption = "Database"
     Else
         m_Modified = True
         btnSaveUser.Enabled = True
-        frmDatabase.Caption = m_CurrentEntry.ToString() & "*"
-        frmDBManager.Caption = "Database - " & m_CurrentEntry.ToString() & "*"
+        fraEntry.Caption = m_CurrentEntry.ToString() & "*"
+        Me.Caption = "Database - " & m_CurrentEntry.ToString() & "*"
     End If
 End Sub
 
@@ -1012,7 +1012,7 @@ Private Sub btnSaveForm_Click()
     Call g_Channel.CheckUsers
     
     ' close database form
-    Call Unload(frmDBManager)
+    Call Unload(Me)
 End Sub
 
 Private Sub lvGroups_Click()
@@ -1230,7 +1230,7 @@ Private Sub QueryRenameEvent(Target As cTreeViewNode)
             m_EntryType = Target.Tag
             m_EntryName = Target.Text
             
-            Call frmDBNameEntry.Show(vbModal, frmDBManager)
+            Call frmDBNameEntry.Show(vbModal, Me)
             
             If HandleRenameEvent(Target, m_EntryName) Then
             

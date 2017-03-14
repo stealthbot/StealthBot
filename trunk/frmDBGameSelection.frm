@@ -7,7 +7,7 @@ Begin VB.Form frmDBGameSelection
    ClientHeight    =   3600
    ClientLeft      =   45
    ClientTop       =   315
-   ClientWidth     =   3735
+   ClientWidth     =   3690
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -21,7 +21,7 @@ Begin VB.Form frmDBGameSelection
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   3600
-   ScaleWidth      =   3735
+   ScaleWidth      =   3690
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
    Begin MSComctlLib.ImageList imlIcons 
@@ -93,7 +93,7 @@ Begin VB.Form frmDBGameSelection
    Begin MSComctlLib.ListView lvGames 
       Height          =   2415
       Left            =   240
-      TabIndex        =   0
+      TabIndex        =   1
       Top             =   670
       Width           =   3195
       _ExtentX        =   5636
@@ -120,7 +120,7 @@ Begin VB.Form frmDBGameSelection
       Caption         =   "Cancel"
       Height          =   255
       Left            =   1800
-      TabIndex        =   2
+      TabIndex        =   3
       Top             =   3220
       Width           =   855
    End
@@ -129,7 +129,7 @@ Begin VB.Form frmDBGameSelection
       Default         =   -1  'True
       Height          =   255
       Left            =   2602
-      TabIndex        =   3
+      TabIndex        =   2
       Top             =   3220
       Width           =   855
    End
@@ -140,7 +140,7 @@ Begin VB.Form frmDBGameSelection
       ForeColor       =   &H00FFFFFF&
       Height          =   495
       Left            =   440
-      TabIndex        =   1
+      TabIndex        =   0
       Top             =   120
       Width           =   2775
    End
@@ -153,7 +153,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub cmdCancel_Click()
-    frmDBManager.m_entryname = vbNullString
+    frmDBManager.m_EntryName = vbNullString
 
     Unload Me
 End Sub
@@ -176,7 +176,7 @@ Private Sub cmdOK_Click()
         Case 12: Game = PRODUCT_CHAT
     End Select
 
-    frmDBManager.m_entryname = Game
+    frmDBManager.m_EntryName = Game
     
     Unload Me
 End Sub
