@@ -900,8 +900,8 @@ Public Function FlashWindow() As Boolean
     FlashWindow = FlashWindowEx(pfwi)
 End Function
 
-Public Sub ReadyINet()
-    frmChat.INet.Cancel
+Public Sub ReadyInet()
+    frmChat.Inet.Cancel
 End Sub
 
 Public Function HTMLToRGBColor(ByVal s As String) As Long

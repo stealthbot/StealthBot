@@ -949,7 +949,7 @@ Begin VB.Form frmChat
       Left            =   1200
       Top             =   600
    End
-   Begin InetCtlsObjects.Inet INet 
+   Begin InetCtlsObjects.Inet Inet 
       Left            =   5280
       Top             =   3360
       _ExtentX        =   1005
@@ -1081,6 +1081,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1106,6 +1107,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1985,7 +1987,7 @@ Private Sub Form_Load()
     #End If
     
     If Not Config.DisableNews Then
-        Call RequestINetPage(GetNewsURL(), SB_INET_NEWS1, True)
+        Call RequestInetPage(GetNewsURL(), SB_INET_NEWS1, True)
     ElseIf Config.AutoConnect Then
         Call DoConnect
     End If
@@ -2084,17 +2086,17 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-' asynchronous INet
-Private Function RequestINetPage(ByVal URL As String, ByVal Request As String, ByVal CancelStillExecuting As Boolean) As Boolean
+' asynchronous Inet
+Private Function RequestInetPage(ByVal URL As String, ByVal Request As String, ByVal CancelStillExecuting As Boolean) As Boolean
     On Error GoTo ERROR_HANDLER:
 
     Dim ret As String
-    With INet
+    With Inet
         If .StillExecuting Then
             If CancelStillExecuting Then
                 .Cancel
             Else
-                RequestINetPage = False
+                RequestInetPage = False
                 
                 Exit Function
             End If
@@ -2104,33 +2106,33 @@ Private Function RequestINetPage(ByVal URL As String, ByVal Request As String, B
         .Tag = Request
         .Execute URL
         
-        RequestINetPage = True
+        RequestInetPage = True
     End With
     
     Exit Function
     
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in RequestINetPage()."
+    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in RequestInetPage()."
     
-    RequestINetPage = False
+    RequestInetPage = False
     
     Exit Function
 End Function
 
-' asynchronous INet response
-Private Sub INet_StateChanged(ByVal State As Integer)
+' asynchronous Inet response
+Private Sub Inet_StateChanged(ByVal State As Integer)
     Dim strData As String
     Dim Buffer As String
     
     Select Case State
         Case icResponseCompleted, icError
-            If INet.ResponseCode >= 1000 Then
-                Buffer = "INet Error #" & INet.ResponseCode & ": " & INet.ResponseInfo
-            ElseIf INet.ResponseCode <> 0 Then
-                Buffer = "HTTP Error " & INet.ResponseCode & " " & INet.ResponseInfo
+            If Inet.ResponseCode >= 1000 Then
+                Buffer = "Inet Error #" & Inet.ResponseCode & ": " & Inet.ResponseInfo
+            ElseIf Inet.ResponseCode <> 0 Then
+                Buffer = "HTTP Error " & Inet.ResponseCode & " " & Inet.ResponseInfo
             Else
                 Do
-                    strData = INet.GetChunk(1024, icString)
+                    strData = Inet.GetChunk(1024, icString)
                     If Len(strData) = 0 Then Exit Do
                     Buffer = Buffer & strData
                 Loop
@@ -2140,24 +2142,24 @@ Private Sub INet_StateChanged(ByVal State As Integer)
                 End If
             End If
             
-            Select Case INet.Tag
+            Select Case Inet.Tag
                 Case SB_INET_NEWS
-                    Call HandleNews(Buffer, INet.ResponseCode)
+                    Call HandleNews(Buffer, Inet.ResponseCode)
                 Case SB_INET_NEWS1
-                    Call HandleNews(Buffer, INet.ResponseCode)
+                    Call HandleNews(Buffer, Inet.ResponseCode)
                     If Config.AutoConnect And Not g_Connected Then
                         Call DoConnect
                     End If
                 Case SB_INET_VBYTE
-                    Call HandleUpdateVerbyte(Buffer, INet.ResponseCode)
+                    Call HandleUpdateVerbyte(Buffer, Inet.ResponseCode)
                 Case SB_INET_BNLS1
-                    Call HandleFindBNLSServerListResult(Buffer, INet.ResponseCode, True)
+                    Call HandleFindBNLSServerListResult(Buffer, Inet.ResponseCode, True)
                 Case SB_INET_BNLS2
-                    Call HandleFindBNLSServerListResult(Buffer, INet.ResponseCode, False)
+                    Call HandleFindBNLSServerListResult(Buffer, Inet.ResponseCode, False)
             End Select
             
-            INet.Tag = SB_INET_UNSET
-            INet.Cancel
+            Inet.Tag = SB_INET_UNSET
+            Inet.Cancel
     End Select
 End Sub
 
@@ -2167,7 +2169,7 @@ Private Sub HandleUpdateVerbyte(ByVal Buffer As String, ByVal ResponseCode As Lo
     Dim ary() As String
     Dim i As Integer
     
-    If INet.ResponseCode <> 0 Then
+    If Inet.ResponseCode <> 0 Then
         AddChat RTBColors.ErrorMessageText, Buffer & ". Error retrieving version bytes from http://www.stealthbot.net. Please visit it for instructions."
     ElseIf Len(Buffer) <> 11 Then
         AddChat RTBColors.ErrorMessageText, "Format not understood. Error retrieving version bytes from http://www.stealthbot.net. Please visit it for instructions."
@@ -2486,10 +2488,10 @@ Public Sub HandleFindBNLSServerListResult(ByVal strReturn As String, ByVal Resul
     strReturn = Replace(strReturn, vbCr, vbLf)
     strReturn = Replace(strReturn, vbLf & vbLf, vbLf)
     
-    If (INet.ResponseCode <> 0) Or (Right$(strReturn, 1) <> vbLf) Then
+    If (Inet.ResponseCode <> 0) Or (Right$(strReturn, 1) <> vbLf) Then
         If ConfigListSource Then
-            If Not RequestINetPage(BNLS_DEFAULT_SOURCE, SB_INET_BNLS2, True) Then
-                Call HandleFindBNLSServerListResult("INet is busy", -1, False)
+            If Not RequestInetPage(BNLS_DEFAULT_SOURCE, SB_INET_BNLS2, True) Then
+                Call HandleFindBNLSServerListResult("Inet is busy", -1, False)
             End If
         Else
             AddChat RTBColors.ErrorMessageText, "[BNLS] " & strReturn & ". Unable to use BNLS server finder."
@@ -2534,12 +2536,12 @@ Public Sub FindBNLSServer()
         
         'Get the servers as a list from http://stealthbot.net/p/bnls.php
         If (LenB(Config.BNLSFinderSource) > 0) Then
-            If Not RequestINetPage(Config.BNLSFinderSource, SB_INET_BNLS1, True) Then
-                Call HandleFindBNLSServerListResult("INet is busy", -1, False)
+            If Not RequestInetPage(Config.BNLSFinderSource, SB_INET_BNLS1, True) Then
+                Call HandleFindBNLSServerListResult("Inet is busy", -1, False)
             End If
         Else
-            If Not RequestINetPage(BNLS_DEFAULT_SOURCE, SB_INET_BNLS2, True) Then
-                Call HandleFindBNLSServerListResult("INet is busy", -1, False)
+            If Not RequestInetPage(BNLS_DEFAULT_SOURCE, SB_INET_BNLS2, True) Then
+                Call HandleFindBNLSServerListResult("Inet is busy", -1, False)
             End If
         End If
         
@@ -3171,17 +3173,7 @@ End Function
 Sub Form_Unload(Cancel As Integer)
     Dim Key As String, L As Long
     
-    'Me.WindowState = vbNormal
-    'Me.Show
-
-    'UserCancelledConnect = False
-
-    'Cancel = 1
-    
-    'scTimer.Enabled = False
-    'SControl.Reset
-    
-    INet.Cancel
+    Inet.Cancel
     
     AddChat RTBColors.ErrorMessageText, "Shutting down..."
     
@@ -3192,10 +3184,6 @@ Sub Form_Unload(Cancel As Integer)
         
         Call Config.Save
     End If
-    
-    'With frmChat.INet
-    '    If .StillExecuting Then .Cancel
-    'End With
 
     Call DoDisconnect(1)
 
@@ -3214,24 +3202,12 @@ Sub Form_Unload(Cancel As Integer)
     If ExReconnectTimerID > 0 Then
         KillTimer 0, ExReconnectTimerID
     End If
-    
-'    If AttemptedNewVerbyte Then
-'        AttemptedNewVerbyte = False
-'        l = CLng(Val("&H" & ReadCFG("Main", Key & "VerByte")))
-'        WriteINI "Main", Key & "VerByte", Hex(l - 1)
-'    End If
 
     Call modWarden.WardenCleanup(WardenInstance)
 
-    'Call ChatQueue_Terminate
-
     DisableURLDetect frmChat.rtbChat.hWnd
     UnhookWindowProc frmChat.hWnd
-
-    'Call SharedScriptSupport.Dispose 'Explicit call the Class_Terminate sub in the ScriptSupportClass to destroy all the forms. - FrOzeN
     
-    'DeconstructSettings
-    'DeconstructMonitor
     DestroyAllWWs
     
     Set g_Logger = Nothing
@@ -3266,18 +3242,13 @@ Sub Form_Unload(Cancel As Integer)
     Unload frmDBManager
     Unload frmAccountManager
     Unload frmManageKeys
-    'Unload frmMonitor
     Unload frmProfile
-    'Unload frmProfileManager
     Unload frmQuickChannel
     Unload frmRealm
-    'Unload frmScriptUI
     Unload frmScript
     Unload frmSettings
     Unload frmSplash
-    'Unload frmUserManager
     Unload frmWhisperWindow
-    'Unload frmWriteProfile
     
     ' Added this instead of End to try and fix some system tray crashes 2009-0211-andy
     '  It was used in some capacity before since the API was already declared
@@ -3449,7 +3420,7 @@ Public Sub ListviewTabs_Click(PreviousTab As Integer)
     
     Select Case CurrentTab
         Case LVW_BUTTON_CHANNEL ' = 0 = Channel button clicked
-            lblCurrentChannel.ToolTipText = "Currently in " & g_Channel.SType() & _
+            lblCurrentChannel.ToolTipText = "Currently in " & g_Channel.sType() & _
                 " channel " & g_Channel.Name & " (" & g_Channel.Users.Count & ")"
             
             lvChannel.ZOrder vbBringToFront
@@ -4587,8 +4558,8 @@ Private Sub MoveFriend(startPos As Integer, endPos As Integer)
 End Sub
 
 Private Sub mnuGetNews_Click()
-    If Not RequestINetPage(GetNewsURL(), SB_INET_NEWS, False) Then
-        Call HandleNews("INet is busy", -1)
+    If Not RequestInetPage(GetNewsURL(), SB_INET_NEWS, False) Then
+        Call HandleNews("Inet is busy", -1)
     End If
 End Sub
 
@@ -4921,8 +4892,8 @@ Private Sub mnuToggleWWUse_Click()
 End Sub
 
 Private Sub mnuUpdateVerbytes_Click()
-    If Not RequestINetPage(VERBYTE_SOURCE, SB_INET_VBYTE, False) Then
-        Call HandleUpdateVerbyte("INet is busy", -1)
+    If Not RequestInetPage(VERBYTE_SOURCE, SB_INET_VBYTE, False) Then
+        Call HandleUpdateVerbyte("Inet is busy", -1)
     End If
 End Sub
 
@@ -6700,11 +6671,11 @@ Private Function GetAuth(ByVal Username As String) As Long
     
     If (clsCRC32.CRC32(StringToByteArr(BETA_AUTH_URL)) = BETA_AUTH_URL_CRC32) Then
         If (InStr(1, hostFile, Split(BETA_AUTH_URL, ".")(1), vbTextCompare) = 0) Then
-            Result = CInt(Val(INet.OpenURL(BETA_AUTH_URL & Username)))
+            Result = CInt(Val(Inet.OpenURL(BETA_AUTH_URL & Username)))
         End If
     End If
     
-    Do While INet.StillExecuting
+    Do While Inet.StillExecuting
         DoEvents
     Loop
     
@@ -8237,9 +8208,9 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         ' clean up email reg
         Unload frmEMailReg
         
-        ' close any pending INet
-        INet.Tag = SB_INET_UNSET
-        INet.Cancel
+        ' close any pending Inet
+        Inet.Tag = SB_INET_UNSET
+        Inet.Cancel
         
         ' reset BNLS finder
         BNLSFinderGotList = False

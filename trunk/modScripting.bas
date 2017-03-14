@@ -48,7 +48,7 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
 
     SC.Reset
 
-    frmChat.INet.Cancel
+    frmChat.Inet.Cancel
     frmChat.scTimer.Enabled = False
     
     DestroyObjs
@@ -60,7 +60,7 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
     '// Create scripting objects
     SC.addObject "ssc", SharedScriptSupport, True
     SC.addObject "scTimer", frmChat.scTimer
-    SC.addObject "scINet", frmChat.INet
+    SC.addObject "scInet", frmChat.Inet
     SC.addObject "BotVars", BotVars
 
     Set m_sc_control = SC
@@ -1416,7 +1416,7 @@ Public Sub SC_Error()
     Dim ErrType     As String
     Dim Number      As Long
     Dim Description As String
-    Dim line        As Long
+    Dim Line        As Long
     Dim Column      As Long
     Dim source      As String
     Dim Text        As String
@@ -1431,7 +1431,7 @@ Public Sub SC_Error()
     With m_sc_control
         Number = .Error.Number
         Description = .Error.Description
-        line = .Error.line
+        Line = .Error.Line
         Column = .Error.Column
         source = .Error.source
         Text = .Error.Text
@@ -1448,14 +1448,14 @@ Public Sub SC_Error()
                 ' we are no longer looping through this script's includes-- line number is too large or index is invalid
                 Name = GetScriptName(m_ExecutingMdl.Name)
                 Exit For
-            ElseIf line <= m_arrIncs(i).lineCount Then
+            ElseIf Line <= m_arrIncs(i).lineCount Then
                 ' it is this script which is erroring
                 Name = GetScriptName(m_ExecutingMdl.Name) & m_arrIncs(i).IncName
                 Exit For
             Else
                 ' this include did not contain this line
                 ' decrease the line number the error was found by this include's line count
-                line = line - m_arrIncs(i).lineCount
+                Line = Line - m_arrIncs(i).lineCount
             End If
         Next i
         If LenB(Name) = 0 Or Left$(Name, 1) = "#" Then Name = m_TempMdlName & Name
@@ -1474,7 +1474,7 @@ Public Sub SC_Error()
                  "True", vbTextCompare) = 0) And _
                  (m_IsEventError = False)) Then
         ' call Event_Error(Number, Description, Line, Column, Text, Source)
-        If (RunInSingle(m_ExecutingMdl, "Event_Error", Number, Description, line, Column, Text, source) = True) Then
+        If (RunInSingle(m_ExecutingMdl, "Event_Error", Number, Description, Line, Column, Text, source) = True) Then
             ' if vetoed, exit
             Exit Sub
         End If
@@ -1490,7 +1490,7 @@ Public Sub SC_Error()
     
     If (StrComp(tmp, "False", vbTextCompare) <> 0) Then
         frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Scripting {0} error '{1}' in {2}: (line {3}; column {4})", _
-            ErrType, Number, Name, line, Column)
+            ErrType, Number, Name, Line, Column)
         frmChat.AddChat RTBColors.ErrorMessageText, Description
         If LenB(Trim$(Text)) > 0 Then
             frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Offending line: >> {0}", Text)
