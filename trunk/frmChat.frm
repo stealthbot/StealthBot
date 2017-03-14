@@ -3231,7 +3231,7 @@ Sub Form_Unload(Cancel As Integer)
     ' Updated to match current form list 2009-02-09 Andy
     Unload frmAbout
     Unload frmCatch
-    Unload frmCommands
+    Unload frmCommandManager
     Unload frmClanInvite
     Unload frmCustomInputBox
     Unload frmDBType
@@ -3241,7 +3241,7 @@ Sub Form_Unload(Cancel As Integer)
     Unload frmDBNameEntry
     Unload frmDBManager
     Unload frmAccountManager
-    Unload frmManageKeys
+    Unload frmKeyManager
     Unload frmProfile
     Unload frmQuickChannel
     Unload frmRealm
@@ -4494,8 +4494,7 @@ Private Sub mnuCustomChannels_Click(Index As Integer)
 End Sub
 
 Private Sub mnuCommandManager_Click()
-    'frmCommands.Show vbModal, Me
-    frmCommands.Show vbModeless
+    frmCommandManager.Show
 End Sub
 
 Private Sub mnuConnect2_Click()

@@ -4858,7 +4858,7 @@ Private Sub lblManageKeys_Click()
         Call lblAddCurrentKey_Click
     End If
 
-    Call frmManageKeys.Show(vbModal, frmSettings)
+    Call frmKeyManager.Show(vbModal, frmSettings)
 End Sub
 
 Sub lblAccountManage_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)

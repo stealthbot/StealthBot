@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.1#0"; "vbalTreeView6.ocx"
-Begin VB.Form frmCommands 
+Begin VB.Form frmCommandManager 
    BackColor       =   &H00000000&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Command Manager"
@@ -17,7 +17,7 @@ Begin VB.Form frmCommands
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
-   Icon            =   "frmCommands.frx":0000
+   Icon            =   "frmCommandManager.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
@@ -293,7 +293,7 @@ Begin VB.Form frmCommands
       Width           =   990
    End
 End
-Attribute VB_Name = "frmCommands"
+Attribute VB_Name = "frmCommandManager"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
@@ -415,7 +415,7 @@ Private Sub cmdDeleteCommand_Click()
     
     scriptIndex = cboCommandGroup.ListIndex
 
-    If vbYes <> MsgBox(StringFormat("Are you sure you want to delete the {0} command for the {1} script?", m_SelectedElement.commandName, scriptName), vbYesNo + vbQuestion, frmCommands.Caption) Then
+    If vbYes <> MsgBox(StringFormat("Are you sure you want to delete the {0} command for the {1} script?", m_SelectedElement.commandName, scriptName), vbYesNo + vbQuestion, Me.Caption) Then
         Exit Sub
     End If
     
