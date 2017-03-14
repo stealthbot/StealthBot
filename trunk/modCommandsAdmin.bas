@@ -282,6 +282,14 @@ Public Sub OnRem(Command As clsCommandObj)
         Exit Sub
     End If
     
+    If StrComp(dbCurrentEntry.EntryType, DB_TYPE_GROUP, vbBinaryCompare) = 0 Then
+        If InStr(1, Command.Args, Space(1) & CMD_PARAM_PREFIX & "type " & DB_TYPE_GROUP, vbTextCompare) = 0 Then
+            Command.Respond "An entry with that name was found, but it is a group, and removing it could have unforeseen consequences. " & _
+                "If you are sure you want to remove it, you need to explicitly specify the type using '--type group'."
+            Exit Sub
+        End If
+    End If
+    
     Call Database.RemoveEntry(dbCurrentEntry)
     Call Database.Save
                 
