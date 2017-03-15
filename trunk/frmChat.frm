@@ -6074,7 +6074,7 @@ End Sub
 
 ' centralized "idle" events:
 ' IDLE MESSAGE (.5*IDLEMESSAGEDELAY minutes - user setting)
-' PROFILE AMP (1 minute - useful minimum song length)
+' PROFILE AMP (30 seconds)
 ' BNCS.SID_NULL (2 minutes - keep alive)
 ' BNCS.SID_CLANMOTD (10 minutes - may change)
 ' BNCS.SID_FRIENDSLIST (5 minutes - for D1,W2,D2 [no update], SC,W3 [bug in SID_FRIENDSUPDATE])
@@ -6083,6 +6083,7 @@ Private Sub tmrIdleTimer_Timer()
 
     ' long-counter
     Static lCounter As Long
+    Dim pBuf As clsDataBuffer
 
     lCounter = lCounter + 1
     If lCounter >= &H3C000000 Then lCounter = 0
@@ -6099,36 +6100,38 @@ Private Sub tmrIdleTimer_Timer()
                 Call tmrIdleTimer_Timer_IdleMsg
             End If
         End If
-        
-        ' bot ProfileAmp (1 minute interval, offset 5 seconds)
+
+        ' bot ProfileAmp (30 second interval, offset 5 seconds)
         If g_Online And Config.ProfileAmp Then
-            If (lCounter Mod 60) = 5 Then
+            If (lCounter Mod 30&) = 5& Then
                 'AddQ "PROFILE AMP"
                 Call UpdateProfile
             End If
         End If
-        
+
         ' BNCS keepalive... (1 minute interval; offset -15 seconds)
-        If (lCounter Mod 60&) = 45& Then
-            ' if W3 & in clan, then (10 minute interval; offset -15 seconds from 2nd minute)
-            If g_Online And IsW3 And Clan.isUsed And (lCounter Mod 600&) = 105& Then
-                ' request clan MOTD instead of NULL
-                'AddQ "CLAN MOTD"
-                RequestClanMOTD
-            ' if friend list updates enabled, then (5 minute interval; offset -15 seconds from 4th minute)
-            ElseIf g_Online And Config.FriendsListTab And (lCounter Mod 300&) = 225& Then
-                ' request friendlist instead of FL
-                'AddQ "FRIENDS"
-                If (lvFriendList.ListItems.Count > 0) Then
-                    Call FriendListHandler.RequestFriendsList(PBuffer)
-                Else
-                    PBuffer.SendPacket SID_NULL
-                End If
-            ' else standard null (2 minute interval; offset -15 seconds)
-            ElseIf (lCounter Mod 120&) = 45& Then
-                'AddQ "NULL"
-                PBuffer.SendPacket SID_NULL
+        ' if W3 & in clan, then (10 minute interval; offset -15 seconds from 2nd minute)
+        If g_Online And IsW3 And Clan.IsUsed And (lCounter Mod 600&) = 105& Then
+            ' request clan MOTD instead of NULL
+            'AddQ "CLAN MOTD"
+            Call modWar3Clan.RequestClanMOTD
+        ' if friend list updates enabled, then (5 minute interval; offset -15 seconds from 4th minute)
+        ElseIf g_Online And Config.FriendsListTab And (lCounter Mod 300&) = 225& Then
+            ' request friendlist instead of FL
+            'AddQ "FRIENDS"
+            If (lvFriendList.ListItems.Count > 0) Then
+                Call FriendListHandler.RequestFriendsList
+            Else
+                Set pBuf = New clsDataBuffer
+                pBuf.SendPacket SID_NULL
+                Set pBuf = Nothing
             End If
+        ' else standard null (2 minute interval; offset -15 seconds)
+        ElseIf (lCounter Mod 120&) = 45& Then
+            'AddQ "NULL"
+            Set pBuf = New clsDataBuffer
+            pBuf.SendPacket SID_NULL
+            Set pBuf = Nothing
         End If
     End If
     
