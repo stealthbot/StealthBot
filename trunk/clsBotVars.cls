@@ -256,39 +256,39 @@ Public Property Let FlashOnEvents(ByVal byFlashOnEvents As Byte)
     m_byFlashOnEvents = byFlashOnEvents
 End Property
 
-Public Property Get UseProxy(Optional ByVal st As enuPL_ServerTypes = stBNCS) As Boolean
+Public Property Get UseProxy(Optional ByVal st As enuServerTypes = stBNCS) As Boolean
     UseProxy = ProxyConnInfo(st).UseProxy
 End Property
 
-Public Property Let UseProxy(Optional ByVal st As enuPL_ServerTypes = stBNCS, ByVal bUseProxy As Boolean)
+Public Property Let UseProxy(Optional ByVal st As enuServerTypes = stBNCS, ByVal bUseProxy As Boolean)
     ProxyConnInfo(st).UseProxy = bUseProxy
 End Property
 
-Public Property Get ProxyStatus(Optional ByVal st As enuPL_ServerTypes = stBNCS) As enuProxyStatus
+Public Property Get ProxyStatus(Optional ByVal st As enuServerTypes = stBNCS) As enuProxyStatus
     ProxyStatus = ProxyConnInfo(st).Status
 End Property
 
-Public Property Get ProxyPort(Optional ByVal st As enuPL_ServerTypes = stBNCS) As Long
+Public Property Get ProxyPort(Optional ByVal st As enuServerTypes = stBNCS) As Long
     ProxyPort = ProxyConnInfo(st).ProxyPort
 End Property
 
-Public Property Let ProxyPort(Optional ByVal st As enuPL_ServerTypes = stBNCS, ByVal lPort As Long)
+Public Property Let ProxyPort(Optional ByVal st As enuServerTypes = stBNCS, ByVal lPort As Long)
     ProxyConnInfo(st).ProxyPort = lPort
 End Property
 
-Public Property Get ProxyIP(Optional ByVal st As enuPL_ServerTypes = stBNCS) As String
+Public Property Get ProxyIP(Optional ByVal st As enuServerTypes = stBNCS) As String
     ProxyIP = ProxyConnInfo(st).ProxyIP
 End Property
 
-Public Property Let ProxyIP(Optional ByVal st As enuPL_ServerTypes = stBNCS, ByVal sIP As String)
+Public Property Let ProxyIP(Optional ByVal st As enuServerTypes = stBNCS, ByVal sIP As String)
     ProxyConnInfo(st).ProxyIP = sIP
 End Property
 
-Public Property Get ProxyIsSocks5(Optional ByVal st As enuPL_ServerTypes = stBNCS) As Boolean
+Public Property Get ProxyIsSocks5(Optional ByVal st As enuServerTypes = stBNCS) As Boolean
     ProxyIsSocks5 = CBool(ProxyConnInfo(st).Version = 5)
 End Property
 
-Public Property Let ProxyIsSocks5(Optional ByVal st As enuPL_ServerTypes = stBNCS, ByVal bIsSocks5 As Boolean)
+Public Property Let ProxyIsSocks5(Optional ByVal st As enuServerTypes = stBNCS, ByVal bIsSocks5 As Boolean)
     If bIsSocks5 Then
         ProxyConnInfo(st).Version = 5
     Else

@@ -28,10 +28,10 @@ Private Sub Class_Initialize()
     miNoProceed = -1
 End Sub
 
-Public Function GetErrorString(ByVal lErrNum As Long, ByVal IsProxy As Boolean, ByVal source As enuPL_ServerTypes) As String
+Public Function GetErrorString(ByVal lErrNum As Long, ByVal IsProxy As Boolean, ByVal Source As enuServerTypes) As String
     Dim sServerType As String
     
-    Select Case (source)
+    Select Case (Source)
         Case stBNCS: sServerType = "Battle.net"
         Case stBNLS: sServerType = "BNLS"
         Case stMCP:  sServerType = "Diablo II Realm"
@@ -99,7 +99,7 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal IsProxy As Boolean, 
             If IsProxy Then
                 GetErrorString = GetErrorString & "Please check your proxy configuration."
             Else
-                Select Case (source)
+                Select Case (Source)
                     Case stBNCS
                         GetErrorString = GetErrorString & "Try choosing a different server in the " & _
                             "Settings dialog. If you are connecting to a gateway address, such as " & _
@@ -123,7 +123,7 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal IsProxy As Boolean, 
             If IsProxy Then
                 GetErrorString = GetErrorString & "Please check your proxy configuration."
             Else
-                Select Case source
+                Select Case Source
                     Case stBNCS
                         GetErrorString = GetErrorString & "Try choosing a different server in the " & _
                             "Settings dialog. If you are connecting to a gateway address, such as " & _

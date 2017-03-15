@@ -6,12 +6,32 @@ Option Explicit
 
 Private Const MAX_PACKET_CACHE_SIZE = 100
 
+Public Enum enuServerTypes
+    stBNCS = 0
+    stBNLS = 1
+    stMCP = 2
+    stBNFTP = 3
+    stPROXY = 4
+End Enum
+
+Public Enum enuPacketHeaderTypes
+    phtNONE = 0
+    phtBNCS = 4
+    phtMCP = 3
+End Enum
+
+Public Enum enuDirectionTypes
+    CtoS = 1
+    StoC = 2
+End Enum
+
 Private Type PACKETCACHEITEM
-    Direction As enuPL_DirectionTypes
-    PKT_Type  As enuPL_ServerTypes
-    ID        As Byte
-    Length    As Integer
     Data()    As Byte
+    PktLen    As Long
+    HasPktID  As Boolean
+    PktID     As Byte
+    PktType   As enuServerTypes
+    Direction As enuDirectionTypes
     TimeDate  As Date
 End Type
 
@@ -24,36 +44,52 @@ End Enum
 Private m_cache()     As PACKETCACHEITEM
 Private m_cache_count As Integer
 
-Public Function CachePacket(ByVal PKT_Type As enuPL_ServerTypes, ByVal Direction As enuPL_DirectionTypes, ByVal ID As Byte, ByVal Length As Integer, ByRef Data() As Byte)
+Private Function MakePacket(ByRef Data() As Byte, ByVal PktLen As Long, _
+        ByVal HasPktID As Boolean, ByVal PktID As Byte, ByVal PktType As enuServerTypes, ByVal Direction As enuDirectionTypes, _
+        Optional ByVal TimeDate As Date) As PACKETCACHEITEM
+    If IsMissing(TimeDate) Then TimeDate = Now
 
-    Dim pkt As PACKETCACHEITEM
-    
-    With pkt
-        .Direction = Direction
-        .PKT_Type = PKT_Type
-        .ID = ID
-        .Length = Length
+    With MakePacket
         .Data = Data
-        .TimeDate = Now
+        .PktLen = PktLen
+        .HasPktID = HasPktID
+        .PktID = PktID
+        .PktType = PktType
+        .Direction = Direction
+        .TimeDate = TimeDate
     End With
-    
-    If (m_cache_count + 1 >= MAX_PACKET_CACHE_SIZE) Then
+
+End Function
+
+Private Function NamePacketType(ByVal PktType As enuServerTypes) As String
+    Select Case PktType
+        Case stBNCS:  NamePacketType = "BNCS"
+        Case stBNLS:  NamePacketType = "BNLS"
+        Case stMCP:   NamePacketType = "MCP"
+        Case stBNFTP: NamePacketType = "BNFTP"
+        Case stPROXY: NamePacketType = "PROXY"
+    End Select
+End Function
+
+Private Function CachePacket(ByRef Pkt As PACKETCACHEITEM)
+
+    If (m_cache_count + 1 > MAX_PACKET_CACHE_SIZE) Then
         Dim i As Integer
-        
-        For i = 0 To m_cache_count - 1
+
+        For i = 0 To m_cache_count - 2
             m_cache(i) = m_cache(i + 1)
         Next i
-        
-        m_cache(m_cache_count) = pkt
+
+        m_cache(m_cache_count) = Pkt
     Else
         If (m_cache_count = 0) Then
             ReDim m_cache(0)
         Else
             ReDim Preserve m_cache(0 To m_cache_count + 1)
         End If
-        
-        m_cache(m_cache_count) = pkt
-        
+
+        m_cache(m_cache_count) = Pkt
+
         m_cache_count = m_cache_count + 1
     End If
 
@@ -61,7 +97,7 @@ End Function
 
 Public Sub DumpPacketCache()
     
-    Dim pkt     As PACKETCACHEITEM
+    Dim Pkt     As PACKETCACHEITEM
     Dim i       As Integer
     Dim Traffic As Boolean
     
@@ -70,10 +106,9 @@ Public Sub DumpPacketCache()
     LogPacketTraffic = True
     
     For i = 0 To m_cache_count - 1
-        pkt = m_cache(i)
+        Pkt = m_cache(i)
         
-        WritePacketData pkt.PKT_Type, pkt.Direction, pkt.ID, pkt.Length, pkt.Data, _
-            pkt.TimeDate
+        Call WritePacketData(Pkt)
     Next i
     
     LogPacketTraffic = Traffic
@@ -81,38 +116,33 @@ Public Sub DumpPacketCache()
 End Sub
 
 ' Written 2007-06-08 to produce packet logs or do other things
-Public Sub WritePacketData(ByVal PKT_Type As enuPL_ServerTypes, ByVal Direction As enuPL_DirectionTypes, ByVal PacketID As Long, ByVal PacketLen As Long, ByRef PacketBuffer() As Byte, Optional ByVal TimeDate As Date)
+Private Sub WritePacketData(ByRef Pkt As PACKETCACHEITEM)
 
-    Dim sServerType As String
     Dim sDir        As String
     Dim sPacketID   As String
     Dim sPacketLen  As String
+    Dim sID         As String
     Dim str         As String
-
-    Select Case (PKT_Type)
-        Case stBNCS:  sServerType = "BNCS"
-        Case stBNLS:  sServerType = "BNLS"
-        Case stMCP:   sServerType = "REALM"
-        Case stPROXY: sServerType = "PROXY"
-    End Select
     
-    Select Case Direction
+    sID = NamePacketType(Pkt.PktType)
+    
+    Select Case Pkt.Direction
         Case CtoS: sDir = "C -> S"
         Case StoC: sDir = "S -> C"
     End Select
     
     sPacketID = vbNullString
-    If PKT_Type <> stPROXY Then
-        sPacketID = StringFormat("ID 0x{0} -- ", ZeroOffset(PacketID, 2))
+    If Pkt.HasPktID Then
+        sPacketID = StringFormat("ID 0x{0} -- ", ZeroOffset(Pkt.PktID, 2))
     End If
     
-    sPacketLen = StringFormat("Length {0} b", PacketLen)
+    sPacketLen = StringFormat("Length {0} b", Pkt.PktLen)
     
     str = StringFormat("{0} {1} -- {2}{3}{4}{5}{6}", _
-            sServerType, sDir, sPacketID, sPacketLen, vbNewLine, _
-            DebugOutputBuffer(PacketBuffer), vbNewLine)
+            sID, sDir, sPacketID, sPacketLen, vbNewLine, _
+            DebugOutput(Pkt.Data), vbNewLine)
     
-    g_Logger.WriteSckData str, TimeDate
+    g_Logger.WriteSckData str, Pkt.TimeDate
 End Sub
 
 Public Function DWordToString(ByVal Data As Long) As String
@@ -145,13 +175,26 @@ Public Function StringToWord(ByVal Data As String) As Long
     StringToWord = Word
 End Function
 
-Public Function DebugOutput(ByVal sIn As String, Optional ByVal Start As Long = 1, Optional ByVal Length As Long = -1) As String
+Public Function DebugOutput(ByVal Data As Variant, Optional ByVal Start As Long = 0, Optional ByVal Length As Long = -1) As String
 
+    Dim Buffer() As Byte
     Dim x1 As Long, y1 As Long
     Dim iLen As Long, iPos As Long
-    Dim sB As String, st As String, c As String
+    Dim sHex As String, sRaw As String, c As Byte
     Dim sOut As String
     Dim offset As Long, sOffset As String
+    Dim Brk As Integer
+
+    If VarType(Data) = vbString Then
+        Buffer = StringToByteArr(Data)
+    ElseIf VarType(Data) = vbArray + vbByte Then
+        Buffer = Data
+    Else
+        Exit Function
+    End If
+
+    If LBound(Buffer) > UBound(Buffer) Then Exit Function
+
     'build random string to display
     '    y1 = 256
     '    sIn = String(y1, 0)
@@ -159,37 +202,40 @@ Public Function DebugOutput(ByVal sIn As String, Optional ByVal Start As Long = 
     '        Mid(sIn, x1, 1) = Chr(x1 - 1)
     '        Mid(sIn, x1, 1) = Chr(255 * Rnd())
     '    Next x1
-    If Length >= 0 Then
-        sIn = Mid$(sIn, Start, Length)
-    Else
-        sIn = Mid$(sIn, Start)
-    End If
-    
-    iLen = Len(sIn)
+    iLen = UBound(Buffer) + 1 - Start
 
-    If iLen = 0 Then Exit Function
+    If Length >= 0 Then
+        iLen = IIf(Length > iLen - Start, iLen - Start, Length)
+    Else
+        iLen = iLen - Start
+    End If
+    If iLen <= 0 Then Exit Function
+
     sOut = vbNullString
     offset = 0
 
     For x1 = 0 To ((iLen - 1) \ 16)
-        sOffset = Right$("0000" & Hex$(offset), 4)
-        sB = String$(48, " ")
-        st = "................"
+        sOffset = ZeroOffset(offset, 4)
+        sHex = String$(49, " ")
+        sRaw = "........ ........"
         For y1 = 1 To 16
             iPos = 16 * x1 + y1
-            If iPos > iLen Then Exit For
+            Brk = Abs(CInt(y1 > 8))
+            If iPos > iLen Then
+                Mid$(sRaw, y1 + Brk) = String$(17 - y1 - Brk + 1, " ")
+                Exit For
+            End If
 
-            c = Mid$(sIn, iPos, 1)
-            Mid$(sB, 3 * (y1 - 1) + 1, 2) = Right$("00" & Hex$(Asc(c)), 2) & " "
-            Select Case Asc(c)
-                Case 0, 9, 10, 13
+            c = Buffer(iPos - 1 + Start)
+            Mid$(sHex, 3 * (y1 - 1) + 1 + Brk, 2) = ZeroOffset(c, 2) & " "
+            Select Case c
+                Case Is < 32, Is >= 127
                 Case Else
-                    Mid$(st, y1, 1) = c
+                    Mid$(sRaw, y1 + Brk, 1) = ChrW$(c)
             End Select
         Next y1
         If LenB(sOut) > 0 Then sOut = sOut & vbCrLf
-        sOut = sOut & sOffset & ":  "
-        sOut = sOut & sB & "  " & st
+        sOut = StringFormat("{0}{1}: {2} |{3}|", sOut, sOffset, sHex, sRaw)
         offset = offset + 16
     Next x1
 
@@ -197,9 +243,132 @@ Public Function DebugOutput(ByVal sIn As String, Optional ByVal Start As Long = 
     DebugOutput = sOut
 End Function
 
-Public Function DebugOutputBuffer(ByRef Data() As Byte, Optional ByVal Start As Long = 0, Optional ByVal Length As Long = -1) As String
-    Dim sData As String
-    sData = StrConv(Data(), vbUnicode, 1033)
-    DebugOutputBuffer = DebugOutput(sData, Start + 1, Length)
+' SendData() function, returns true if not vetoed and there was data to send; handles saving/logging
+' arguments:
+' Data(): buffer
+' DataLen: length of Data
+' HasPktID: whether a PktID parameter should be shown in packet logs
+' PktID: the packet ID value
+' SocketType: which socket to send on (if not valid or not connected, send fails)
+' PacketType: value sent to NamePacketType() shown in packet logs
+' HeaderType: what kind of header to prepend
+Public Function SendData(ByRef Data() As Byte, ByVal DataLen As Long, _
+        ByVal HasPktID As Boolean, Optional ByVal PktID As Byte, Optional ByRef Socket As Winsock, _
+        Optional ByVal PktType As enuServerTypes, Optional ByVal HeaderType As enuPacketHeaderTypes) As Boolean
+    Dim buf()    As Byte
+    Dim HLen     As Byte
+    Dim PktLen   As Long
+    Dim sID      As String
+    Dim sData    As String
+    Dim Pkt      As PACKETCACHEITEM
+
+    SendData = False
+
+    If Socket Is Nothing Then Exit Function
+
+    HLen = CByte(HeaderType)
+    sID = NamePacketType(PktType)
+
+    If (Socket.State <> sckConnected) Then
+        ' not connected
+        Exit Function
+    End If
+
+    PktLen = DataLen + HLen
+
+    If PktLen <= 0 Then
+        ' no data
+        Exit Function
+    End If
+
+    ' resize temporary data buffer
+    ReDim buf(PktLen - 1)
+
+    ' copy packet data Length to temporary buffer
+    Select Case HeaderType
+        Case phtBNCS:
+            buf(0) = &HFF                 ' (BYTE) 0xFF
+            buf(1) = PktID                ' (BYTE) ID
+            CopyMemory buf(2), PktLen, 2  ' (WORD) Length
+        Case phtMCP
+            CopyMemory buf(0), PktLen, 2  ' (WORD) Length
+            buf(2) = PktID                ' (BYTE) ID
+        Case Else
+            ' nop
+    End Select
+
+    ' copy data from buffer to temporary buffer
+    If (DataLen > 0) Then
+        CopyMemory buf(HLen), Data(0), DataLen
+    End If
+
+    sData = ByteArrToString(buf)
+
+    SendData = Not RunInAll("Event_PacketSent", sID, PktID, PktLen, sData)
+    If SendData Then
+        If (MDebug("all")) Then
+            frmChat.AddChat COLOR_BLUE, StringFormat("{0} RECV 0x{1}", sID, ZeroOffset(PktID, 2))
+        End If
+
+        Socket.SendData buf
+
+        ' only log if sent
+        Pkt = MakePacket(buf, PktLen, HasPktID, PktID, PktType, CtoS)
+        Call CachePacket(Pkt)
+        Call WritePacketData(Pkt)
+
+        If Socket Is frmChat.sckBNet Then
+            'Send Warden Everything thats Sent to Bnet
+            Call modWarden.WardenData(WardenInstance, buf, True)
+        End If
+    End If
 End Function
 
+' HandleRecvData() function, returns true if not vetoed and there was data to recv; handles saving/logging
+' arguments:
+' Data(): buffer
+' DataLen: length of Data
+' HasPktID: whether a PktID parameter should be shown in packet logs
+' PktID: the packet ID value
+' PacketType: value sent to NamePacketType() shown in packet logs
+' HeaderType: what kind of header this packet has
+' ScriptSource: True if this was the result of SSC.ForcePacketParse()
+Public Function HandleRecvData(ByRef Data() As Byte, ByVal DataLen As Long, ByVal HasPktID As Boolean, ByVal PktID As Byte, _
+        Optional ByVal PktType As enuServerTypes, Optional ByVal HeaderType As enuPacketHeaderTypes, Optional ByVal ScriptSource As Boolean = False) As Boolean
+    Dim buf() As Byte
+    Dim sID   As String
+    Dim sData As String
+    Dim Pkt   As PACKETCACHEITEM
+
+    HandleRecvData = False
+
+    If DataLen = 0 Then Exit Function
+    If LBound(Data) > UBound(Data) Then Exit Function
+
+    ReDim buf(0 To DataLen - 1)
+    CopyMemory buf(0), Data(0), DataLen
+
+    sID = NamePacketType(PktType)
+    If (MDebug("all")) Then
+        frmChat.AddChat COLOR_BLUE, StringFormat("{0} RECV 0x{1}", sID, ZeroOffset(PktID, 2))
+    End If
+
+    sData = ByteArrToString(buf)
+
+    If ScriptSource Then
+        ' source is SSC.ForcePacketParse(), packet is going to be parsed as-is
+        HandleRecvData = True
+    Else
+        ' source is socket, log then SSC event for vetoes
+        Pkt = MakePacket(buf, DataLen, HasPktID, PktID, PktType, StoC)
+        Call CachePacket(Pkt)
+        Call WritePacketData(Pkt)
+
+        HandleRecvData = Not RunInAll("Event_PacketReceived", sID, PktID, DataLen, sData)
+    End If
+
+    If HandleRecvData Then
+        ' packet is going to be parsed
+        Call RunInAll("Event_PacketParsed", sID, PktID, DataLen, sData)
+    End If
+End Function

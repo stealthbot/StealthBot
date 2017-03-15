@@ -136,38 +136,22 @@ Public Const PLATFORM_OSX     As Long = &H584D4143 'XMAC
 
 Public ds As New clsDataStorage 'Need to rename this -.-
 
-Public Function BNCSRecvPacket(ByVal pBuff As clsDataBuffer) As Boolean
+Public Function BNCSRecvPacket(ByVal pBuff As clsDataBuffer, Optional ByVal ScriptSource As Boolean = False) As Boolean
     #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
-    
+
     Dim PacketID As Byte
     Dim PacketLen As Long
-    
+
     BNCSRecvPacket = True
-    With pBuff
-        .GetByte
-        PacketID = .GetByte
-        PacketLen = .GetWord
-    End With
-    
-    If pBuff.Length >= 0 Then
-        If MDebug("all") Then
-            frmChat.AddChat COLOR_BLUE, "BNET RECV 0x" & ZeroOffset(PacketID, 2)
-        End If
-        
-        Call CachePacket(stBNCS, StoC, PacketID, PacketLen, pBuff.GetDataAsByteArr)
-        Call WritePacketData(stBNCS, StoC, PacketID, PacketLen, pBuff.GetDataAsByteArr)
-                
-        If (RunInAll("Event_PacketReceived", "BNCS", PacketID, PacketLen, pBuff.Data)) Then
-            Exit Function
-        End If
-        
+
+    If pBuff.HandleRecvData(PacketID, PacketLen, stBNCS, phtBNCS, ScriptSource) Then
         'This will be taken out when Warden is moved to a script like I want.
         If (modWarden.WardenData(WardenInstance, pBuff.GetDataAsByteArr, False)) Then
             Exit Function
         End If
-    
+
         Select Case PacketID
             Case SID_NULL:                    'Don't Throw Unknown Error                   '0x00
             Case SID_CLIENTID:                'Don't Throw Unknown Error                   '0x05

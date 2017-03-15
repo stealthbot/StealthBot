@@ -10,44 +10,30 @@ Private Const BNLS_VERSIONCHECKEX2    As Byte = &H1A
 
 Public BNLSAuthorized As Boolean
 
-Public Function BNLSRecvPacket(ByVal pBuff As clsDataBuffer) As Boolean
+Public Function BNLSRecvPacket(ByVal pBuff As clsDataBuffer, Optional ByVal ScriptSource As Boolean = False) As Boolean
 On Error GoTo ERROR_HANDLER:
     Dim PacketID As Byte
     Dim PacketLen As Long
-    
+
     BNLSRecvPacket = True
-    
-    With pBuff
-        PacketLen = .GetWord
-        PacketID = .GetByte
-    End With
-    
-    If (MDebug("all")) Then
-        frmChat.AddChat COLOR_BLUE, StringFormat("BNLS RECV 0x{0}", ZeroOffset(PacketID, 2))
-    End If
-    
-    Call CachePacket(stBNLS, StoC, PacketID, PacketLen, pBuff.GetDataAsByteArr)
-    Call WritePacketData(stBNLS, StoC, PacketID, PacketLen, pBuff.GetDataAsByteArr)
-    
-    If (RunInAll("Event_PacketReceived", "BNLS", PacketID, PacketLen, pBuff.Data)) Then
-        Exit Function
-    End If
-    
-    Select Case PacketID
+
+    If pBuff.HandleRecvData(PacketID, PacketLen, stBNLS, phtMCP, ScriptSource) Then
+        Select Case PacketID
+            
+            Case BNLS_AUTHORIZE:          Call RECV_BNLS_AUTHORIZE(pBuff)
+            Case BNLS_AUTHORIZEPROOF:     Call RECV_BNLS_AUTHORIZEPROOF(pBuff)
+            Case BNLS_REQUESTVERSIONBYTE: Call RECV_BNLS_REQUESTVERSIONBYTE(pBuff)
+            Case BNLS_VERSIONCHECKEX2:    Call RECV_BNLS_VERSIONCHECKEX2(pBuff)
+            
+            Case Else:
+                BNLSRecvPacket = False
+                If (MDebug("debug") And (MDebug("all") Or MDebug("unknown"))) Then
+                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNLS] Unhandled packet 0x{0}", ZeroOffset(CLng(PacketID), 2)))
+                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNLS] Packet data: {0}{1}", vbNewLine, pBuff.DebugOutput))
+                End If
         
-        Case BNLS_AUTHORIZE:          Call RECV_BNLS_AUTHORIZE(pBuff)
-        Case BNLS_AUTHORIZEPROOF:     Call RECV_BNLS_AUTHORIZEPROOF(pBuff)
-        Case BNLS_REQUESTVERSIONBYTE: Call RECV_BNLS_REQUESTVERSIONBYTE(pBuff)
-        Case BNLS_VERSIONCHECKEX2:    Call RECV_BNLS_VERSIONCHECKEX2(pBuff)
-        
-        Case Else:
-            BNLSRecvPacket = False
-            If (MDebug("debug") And (MDebug("all") Or MDebug("unknown"))) Then
-                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNLS] Unhandled packet 0x{0}", ZeroOffset(CLng(PacketID), 2)))
-                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNLS] Packet data: {0}{1}", vbNewLine, pBuff.DebugOutput))
-            End If
-    
-    End Select
+        End Select
+    End If
     
     Exit Function
 ERROR_HANDLER:

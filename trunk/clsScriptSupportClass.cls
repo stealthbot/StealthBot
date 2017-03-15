@@ -1575,15 +1575,29 @@ End Function
 '// FORCEBNCSPACKETPARSE
 '// Pass a complete Battle.net packet into this and the bot will parse it
 Public Sub ForceBNCSPacketParse(ByVal PacketData As String)
+    Call SSC.ForcePacketParse(PacketData, "BNCS")
+End Sub
+
+'// FORCEPACKETPARSE
+'// Pass a complete packet (Battle.net, BNLS, MCP) into this and the bot will parse it
+'// Supported protocols: "BNCS", "BNLS", "MCP"
+Public Sub ForcePacketParse(ByVal PacketData As String, ByVal Protocol As String)
     Dim pBuff As clsDataBuffer
-    
+
     Set pBuff = New clsDataBuffer
-    
+
     pBuff.Clear
     pBuff.Data = PacketData
-    
-    Call modBNCS.BNCSRecvPacket(pBuff)
-    
+
+    Select Case Protocol
+        Case "BNCS": Call modBNCS.BNCSRecvPacket(pBuff, True)
+        Case "BNLS": Call modBNLS.BNLSRecvPacket(pBuff, True)
+        Case "MCP":
+            If Not ds.MCPHandler Is Nothing Then
+                Call ds.MCPHandler.MCPRecvPacket(pBuff, True)
+            End If
+    End Select
+
     Set pBuff = Nothing
 End Sub
 

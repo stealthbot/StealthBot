@@ -351,140 +351,67 @@ Public Function Clear()
     m_bufpos = 0
 End Function
 
-Public Function DebugOutput(Optional ByVal Start As Long = 1, Optional ByVal Length As Long = -1) As String
+Public Function DebugOutput(Optional ByVal Start As Long = 0, Optional ByVal Length As Long = -1) As String
+    If Length < 0 Or Length + Start > m_bufsize Then Length = m_bufsize - Start
     DebugOutput = modPacketBuffer.DebugOutput(Data, Start, Length)
 End Function
 
-Public Function SendPacketMCP(Optional PacketID As Byte)
-    Dim buf()  As Byte
-    Dim veto   As Boolean
-    
-    If (frmChat.sckMCP.State <> sckConnected) Then
-        Clear
-        Exit Function
-    End If
-    
-    ' resize temporary data buffer
-    ReDim buf(m_bufsize + 2)
+Public Function SendData(ByRef Socket As Winsock, Optional ByVal PacketID As Byte, Optional ByVal ServerType As enuServerTypes = stBNCS, Optional ByVal HeaderType As enuPacketHeaderTypes = phtBNCS) As Boolean
+    If (Socket Is frmChat.sckBNet) Then
+        ' catch packets being sent with their header
+        If HeaderType = phtNONE And m_bufsize >= 4 Then PacketID = m_buf(1)
 
-     ' copy packet data Length to temporary buffer
-    CopyMemory buf(0), m_bufsize + 3, 2
-    
-    buf(2) = PacketID ' packet identification number
-
-    ' copy data from buffer to temporary buffer
-    If (m_bufsize) Then
-        CopyMemory buf(3), m_buf(0), m_bufsize
-    End If
-
-    If (Not RunInAll("Event_PacketSent", "MCP", PacketID, m_bufsize + 3, modUTF8.ByteArrToString(buf))) Then
-        If (MDebug("all")) Then
-            frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & ZeroOffset(PacketID, 2)
+        ' scripts can't send these via the DataBuffer
+        If GetCripple Then
+            Select Case (PacketID)
+                Case SID_CHATCOMMAND, SID_JOINCHANNEL:
+                    Clear
+                    Exit Function
+            End Select
         End If
-    
-        frmChat.sckMCP.SendData buf
 
-        Call CachePacket(stMCP, CtoS, PacketID, m_bufsize + 3, buf)
-        Call WritePacketData(stMCP, CtoS, PacketID, m_bufsize + 3, buf)
+        ' These two packets cause the client to leave chat, and do not have any responses.
+        '  (SID_NOTIFYJOIN is not valid unless it's at least 10 bytes long)
+        If (PacketID = SID_LEAVECHAT Or (PacketID = SID_NOTIFYJOIN And m_bufsize >= 10)) Then
+            ' there's no response to this one!
+            Call Event_LeftChatEnvironment
+        End If
     End If
-    
-    ' clear buffer contents
+
+    SendData = modPacketBuffer.SendData(m_buf, m_bufsize, Not IsMissing(PacketID), PacketID, Socket, ServerType, HeaderType)
     Clear
 End Function
 
-Public Function SendPacket(Optional PacketID As Byte)
-    Dim L      As Long
-    Dim buf()  As Byte
-    Dim i      As Integer
-    Dim veto   As Boolean
-    
-    If (frmChat.sckBNet.State <> sckConnected) Then
-        Clear
-        Exit Function
-    End If
-    
-    If (GetCripple) Then
-        Select Case (PacketID)
-            Case SID_CHATCOMMAND, SID_JOINCHANNEL:
-                Clear
-                Exit Function
-        End Select
-    End If
-    
-    ' These two packets cause the client to leave chat, and do not have any responses.
-    '  (SID_NOTIFYJOIN is not valid unless it's at least 10 bytes long)
-    If (PacketID = SID_LEAVECHAT Or (PacketID = SID_NOTIFYJOIN And m_bufsize >= 10)) Then
-        ' there's no response to this one!
-        Call Event_LeftChatEnvironment
-    End If
-    
-    ' resize temporary data buffer
-    ReDim buf(m_bufsize + 3)
-    
-    buf(0) = &HFF     ' header
-    buf(1) = PacketID ' packet identification number
-    
-    ' copy packet data Length to temporary buffer
-    CopyMemory buf(2), m_bufsize + 4, 2
-    
-    ' copy data from buffer to temporary buffer
-    If (m_bufsize) Then
-        CopyMemory buf(4), m_buf(0), m_bufsize
-    End If
-    
-    If (Not RunInAll("Event_PacketSent", "BNCS", PacketID, m_bufsize + 4, modUTF8.ByteArrToString(buf))) Then
-    
-        If (MDebug("all")) Then
-            frmChat.AddChat COLOR_BLUE, "BNET SEND 0x" & ZeroOffset(PacketID, 2)
-        End If
-        
-        frmChat.sckBNet.SendData buf
-
-        Call CachePacket(stBNCS, CtoS, PacketID, m_bufsize + 4, buf)
-        Call WritePacketData(stBNCS, CtoS, PacketID, m_bufsize + 4, buf)
-    
-        'Send Warden Everything thats Sent to Bnet
-        Call modWarden.WardenData(WardenInstance, buf, True)
-    End If
-    ' clear buffer contents
-    Clear
+Public Function SendPacketMCP(Optional ByVal PacketID As Byte) As Boolean
+    SendPacketMCP = Me.SendData(frmChat.sckMCP, PacketID, stMCP, phtMCP)
 End Function
 
-Public Function vLSendPacket(Optional PacketID As Byte)
-    Dim buf()  As Byte
-    Dim veto   As Boolean
-    
-    If (frmChat.sckBNLS.State <> sckConnected) Then
-        Clear
-        Exit Function
-    End If
-    
-    ' resize temporary data buffer
-    ReDim buf(m_bufsize + 2)
+Public Function SendPacket(Optional ByVal PacketID As Byte) As Boolean
+    SendPacket = Me.SendData(frmChat.sckBNet, PacketID, stBNCS, phtBNCS)
+End Function
 
-    ' copy packet data Length to temporary buffer
-    CopyMemory buf(0), m_bufsize + 3, 2
+Public Function vLSendPacket(Optional ByVal PacketID As Byte) As Boolean
+    vLSendPacket = Me.SendData(frmChat.sckBNLS, PacketID, stBNLS, phtMCP)
+End Function
 
-    buf(2) = PacketID ' packet identification number
-    
-    ' copy data from buffer to temporary buffer
-    If (m_bufsize) Then
-        CopyMemory buf(3), m_buf(0), m_bufsize
-    End If
+Public Function HandleRecvData(Optional ByRef PacketID As Byte, Optional ByRef PacketLength As Long, Optional ByVal ServerType As enuServerTypes = stBNCS, Optional ByVal HeaderType As enuPacketHeaderTypes = phtBNCS, Optional ByVal ScriptSource As Boolean = False) As Boolean
+    Dim HasPacketID As Boolean
 
-    If (Not RunInAll("Event_PacketSent", "BNLS", PacketID, m_bufsize + 3, modUTF8.ByteArrToString(buf))) Then
-        If (MDebug("all")) Then
-            frmChat.AddChat COLOR_BLUE, "BNLS SEND 0x" & ZeroOffset(PacketID, 2)
-        End If
-    
-        frmChat.sckBNLS.SendData buf
+    Select Case HeaderType
+        Case phtBNCS:
+            Me.GetByte
+            PacketID = Me.GetByte
+            PacketLength = Me.GetWord
+            HasPacketID = True
+        Case phtMCP:
+            PacketLength = Me.GetWord
+            PacketID = Me.GetByte
+            HasPacketID = True
+        Case Else:
+            HasPacketID = False
+    End Select
 
-        Call CachePacket(stBNLS, CtoS, PacketID, m_bufsize + 3, buf)
-        Call WritePacketData(stBNLS, CtoS, PacketID, m_bufsize + 3, buf)
-    End If
-    
-    ' clear buffer contents
-    Clear
+    HandleRecvData = modPacketBuffer.HandleRecvData(m_buf, m_bufsize, HasPacketID, PacketID, ServerType, HeaderType, ScriptSource)
 End Function
 
 Public Function FindByte(ByVal Value As Integer) As Long
@@ -500,7 +427,7 @@ Public Function FindByte(ByVal Value As Integer) As Long
     FindByte = 0
 End Function
 
-Public Function IsFullPacket(Optional ByVal st As enuPL_ServerTypes = stBNCS) As Boolean
+Public Function IsFullPacket(Optional ByVal st As enuServerTypes = stBNCS) As Boolean
     Dim lngPacketLen As Long, L As Long
     
     IsFullPacket = False
@@ -550,7 +477,7 @@ Public Function IsFullPacket(Optional ByVal st As enuPL_ServerTypes = stBNCS) As
     End If
 End Function
 
-Public Function GetPacketLength(Optional ByVal st As enuPL_ServerTypes = stBNCS) As Long
+Public Function GetPacketLength(Optional ByVal st As enuServerTypes = stBNCS) As Long
     Dim Value As Long
     
     Select Case st
@@ -564,7 +491,7 @@ Public Function GetPacketLength(Optional ByVal st As enuPL_ServerTypes = stBNCS)
     GetPacketLength = Value
 End Function
 
-Public Function TakePacket(Optional ByVal st As enuPL_ServerTypes = stBNCS) As clsDataBuffer
+Public Function TakePacket(Optional ByVal st As enuServerTypes = stBNCS) As clsDataBuffer
     Dim tmpbuf() As Byte
     Dim lngPacketLen As Long
     Dim pBuff As clsDataBuffer

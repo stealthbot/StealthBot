@@ -5247,13 +5247,13 @@ Private Sub sckScript_Close(Index As Integer)
     RunInSingle obj.SCModule, obj.ObjName & "_Close"
 End Sub
 
-Private Sub sckScript_Error(Index As Integer, ByVal Number As Integer, Description As String, ByVal sCode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckScript_Error(Index As Integer, ByVal Number As Integer, Description As String, ByVal sCode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     On Error Resume Next
 
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Winsock", Index)
-    RunInSingle obj.SCModule, obj.ObjName & "_Error", Number, Description, sCode, source, HelpFile, HelpContext, CancelDisplay
+    RunInSingle obj.SCModule, obj.ObjName & "_Error", Number, Description, sCode, Source, HelpFile, HelpContext, CancelDisplay
 End Sub
 
 Private Sub itcScript_StateChanged(Index As Integer, ByVal State As Integer)
@@ -5960,7 +5960,7 @@ Sub InitBNetConnection()
     End If
 End Sub
 
-Private Sub sckBNet_Error(ByVal Number As Integer, Description As String, ByVal sCode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckBNet_Error(ByVal Number As Integer, Description As String, ByVal sCode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     Call Event_BNetError(Number, Description)
 End Sub
 
@@ -6049,7 +6049,7 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-Private Sub sckMCP_Error(ByVal Number As Integer, Description As String, ByVal sCode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckMCP_Error(ByVal Number As Integer, Description As String, ByVal sCode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     If Not g_Online Then
         ' This message is ignored if we've entered chat
         AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & Number & ": " & Description
@@ -7241,7 +7241,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     For i = 0 To 2
         With ProxyConnInfo(i)
-            .serverType = i
+            .ServerType = i
             Select Case i
                 Case stBNCS: .UseProxy = Config.UseProxy
                 Case stBNLS: .UseProxy = Config.UseProxy And Config.ProxyBNLS
@@ -7365,18 +7365,18 @@ Private Sub ChangeRTBFont(rtb As RichTextBox, ByVal NewFont As String, ByVal New
 End Sub
 
 'returns OK to Proceed
-Function DisplayError(ByVal ErrorNumber As Integer, ByVal IsProxyConnecting As Boolean, ByVal source As enuPL_ServerTypes) As Boolean
+Function DisplayError(ByVal ErrorNumber As Integer, ByVal IsProxyConnecting As Boolean, ByVal Source As enuServerTypes) As Boolean
     
     Dim s As String
     
-    s = GErrorHandler.GetErrorString(ErrorNumber, IsProxyConnecting, source)
+    s = GErrorHandler.GetErrorString(ErrorNumber, IsProxyConnecting, Source)
     
     If (LenB(s) > 0) Then
         If (IsProxyConnecting) Then
             s = "[PROXY] " & s
         End If
         
-        Select Case (source)
+        Select Case (Source)
             Case stBNLS: s = "[BNLS] " & s
             Case stBNCS: s = "[BNCS] " & s
             Case stMCP: s = "[REALM] " & s
@@ -7612,7 +7612,7 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-Private Sub sckBNLS_Error(ByVal Number As Integer, Description As String, ByVal sCode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckBNLS_Error(ByVal Number As Integer, Description As String, ByVal sCode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     Call Event_BNLSError(Number, Description)
 End Sub
 

@@ -228,51 +228,39 @@ Public Sub DoRequestCharacters()
 End Sub
 
 ' parses packets as received from sckMCP
-Public Sub MCPRecvPacket(ByVal pBuff As clsDataBuffer)
+Public Function MCPRecvPacket(ByVal pBuff As clsDataBuffer, Optional ByVal ScriptSource As Boolean = False) As Boolean
 On Error GoTo ERROR_HANDLER:
     Dim PacketID As Byte
     Dim PacketLen As Long
-    
-    'MCPRecvPacket = True
-    With pBuff
-        PacketLen = .GetWord
-        PacketID = .GetByte
-    End With
-    
-    If (MDebug("all")) Then
-        frmChat.AddChat COLOR_BLUE, StringFormat("MCP RECV 0x{0}", ZeroOffset(PacketID, 2))
+
+    MCPRecvPacket = True
+
+    If pBuff.HandleRecvData(PacketID, PacketLen, stMCP, phtMCP, ScriptSource) Then
+        Select Case PacketID
+            
+            Case MCP_STARTUP:       Call RECV_MCP_STARTUP(pBuff)
+            Case MCP_CHARCREATE:    Call RECV_MCP_CHARCREATE(pBuff)
+            Case MCP_CHARLOGON:     Call RECV_MCP_CHARLOGON(pBuff)
+            Case MCP_CHARDELETE:    Call RECV_MCP_CHARDELETE(pBuff)
+            Case MCP_MOTD:          Call RECV_MCP_MOTD(pBuff)
+            Case MCP_CHARLIST2:     Call RECV_MCP_CHARLIST2(pBuff)
+            Case MCP_CHARUPGRADE:   Call RECV_MCP_CHARUPDGRADE(pBuff)
+            
+            Case Else:
+                MCPRecvPacket = False
+                If (MDebug("debug") And (MDebug("all") Or MDebug("unknown"))) Then
+                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[REALM] Unhandled packet 0x{0}", ZeroOffset(CLng(PacketID), 2)))
+                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[REALM] Packet data: {0}{1}", vbNewLine, pBuff.DebugOutput))
+                End If
+        
+        End Select
     End If
     
-    Call CachePacket(stMCP, StoC, PacketID, PacketLen, pBuff.GetDataAsByteArr)
-    Call WritePacketData(stMCP, StoC, PacketID, PacketLen, pBuff.GetDataAsByteArr)
-    
-    If (RunInAll("Event_PacketReceived", "MCP", PacketID, PacketLen, pBuff.Data)) Then
-        Exit Sub
-    End If
-    
-    Select Case PacketID
-        
-        Case MCP_STARTUP:       Call RECV_MCP_STARTUP(pBuff)
-        Case MCP_CHARCREATE:    Call RECV_MCP_CHARCREATE(pBuff)
-        Case MCP_CHARLOGON:     Call RECV_MCP_CHARLOGON(pBuff)
-        Case MCP_CHARDELETE:    Call RECV_MCP_CHARDELETE(pBuff)
-        Case MCP_MOTD:          Call RECV_MCP_MOTD(pBuff)
-        Case MCP_CHARLIST2:     Call RECV_MCP_CHARLIST2(pBuff)
-        Case MCP_CHARUPGRADE:   Call RECV_MCP_CHARUPDGRADE(pBuff)
-        
-        Case Else:
-            If (MDebug("debug") And (MDebug("all") Or MDebug("unknown"))) Then
-                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[REALM] Unhandled packet 0x{0}", ZeroOffset(CLng(PacketID), 2)))
-                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[REALM] Packet data: {0}{1}", vbNewLine, DebugOutput(pBuff.Data)))
-            End If
-    
-    End Select
-    
-    Exit Sub
+    Exit Function
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.ParsePacket()", Err.Number, Err.Description, OBJECT_NAME))
-End Sub
+End Function
 
 '*******************************
 'MCP_STARTUP (0x01) S->C

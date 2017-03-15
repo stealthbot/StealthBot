@@ -269,7 +269,7 @@ Public Function WardenData(Instance As Long, Data() As Byte, Send As Boolean) As
             frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?unknown&id=0x" & ZeroOffset(Asc(Left$(Data, 1)), 2) & " ."
             
             If (MDebug("warden")) Then
-                frmChat.AddChat RTBColors.InformationText, "[Warden] Packet Data:" & vbNewLine & DebugOutputBuffer(Data, 3, -1)
+                frmChat.AddChat RTBColors.InformationText, "[Warden] Packet Data:" & vbNewLine & DebugOutput(Data, 3, -1)
             End If
         
         Case WARDEN_RAW_FAILURE: '//The module was not able to handle the packet itself (most likely 0x05)
@@ -277,7 +277,7 @@ Public Function WardenData(Instance As Long, Data() As Byte, Send As Boolean) As
             frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?handlefailed ."
             
             If (MDebug("warden")) Then
-                frmChat.AddChat RTBColors.InformationText, "[Warden] Packet Data:" & vbNewLine & DebugOutputBuffer(Data, 3, -1)
+                frmChat.AddChat RTBColors.InformationText, "[Warden] Packet Data:" & vbNewLine & DebugOutput(Data, 3, -1)
             End If
             
         Case WARDEN_PACKET_FAILURE: '//Something went HORRIBLY wrong in warden_packet, should NEVER happen.
@@ -285,7 +285,7 @@ Public Function WardenData(Instance As Long, Data() As Byte, Send As Boolean) As
             frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] For information on this, please visit http://www.stealthbot.net/sb/issues/warden/?horrible ."
             
             If (MDebug("warden")) Then
-                frmChat.AddChat RTBColors.InformationText, "[Warden] Packet Data:" & vbNewLine & DebugOutputBuffer(Data, 3, -1)
+                frmChat.AddChat RTBColors.InformationText, "[Warden] Packet Data:" & vbNewLine & DebugOutput(Data, 3, -1)
             End If
             
         Case WARDEN_INIT_FAILURE: '//Calling Init() in the module failed
@@ -316,7 +316,7 @@ Public Function WardenData(Instance As Long, Data() As Byte, Send As Boolean) As
              & "http://www.stealthbot.net/sb/issues/warden/?unknownCheatCheck ."
             
             If (MDebug("warden")) Then
-                frmChat.AddChat RTBColors.InformationText, "[Warden] Packet Data: " & vbNewLine & DebugOutputBuffer(Data, 3, -1)
+                frmChat.AddChat RTBColors.InformationText, "[Warden] Packet Data: " & vbNewLine & DebugOutput(Data, 3, -1)
             End If
             
         Case WARDEN_CHECK_TO_MANY_LIBS: '//There were more then 4 libraries in a single 0x02 packet [this is eww yes, but I'll figure out a beter way later]
@@ -325,7 +325,7 @@ Public Function WardenData(Instance As Long, Data() As Byte, Send As Boolean) As
              & "http://www.stealthbot.net/sb/issues/warden/?toomanylibs ."
              
             If (MDebug("warden")) Then
-                frmChat.AddChat RTBColors.InformationText, "[Warden] Packet Data: " & vbNewLine & DebugOutputBuffer(Data, 3, -1)
+                frmChat.AddChat RTBColors.InformationText, "[Warden] Packet Data: " & vbNewLine & DebugOutput(Data, 3, -1)
             End If
         
         Case WARDEN_MEM_UNKNOWN_PRODUCT: '//The product from 0x50 != WC3, SC, or D2
@@ -340,7 +340,7 @@ Public Function WardenData(Instance As Long, Data() As Byte, Send As Boolean) As
              & "http://www.stealthbot.net/sb/issues/warden/?unknownSegment ."
             
             If (MDebug("warden")) Then
-                frmChat.AddChat RTBColors.InformationText, "[Warden] Packet Data: " & vbNewLine & DebugOutputBuffer(Data, 4, -1)
+                frmChat.AddChat RTBColors.InformationText, "[Warden] Packet Data: " & vbNewLine & DebugOutput(Data, 4, -1)
             End If
             
         Case WARDEN_INVALID_INSTANCE: '//The instance passed to this function was invalid

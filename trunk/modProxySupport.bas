@@ -81,7 +81,7 @@ Public Sub InitProxyConnection(ByVal ds As Winsock, ByRef ConnInfo As udtProxyCo
 End Sub
 
 Public Sub ProxyRequestSuccess(ByRef ConnInfo As udtProxyConnectionInfo)
-    Select Case ConnInfo.serverType
+    Select Case ConnInfo.ServerType
         Case stBNCS
             frmChat.InitBNetConnection
         Case stBNLS
@@ -188,96 +188,92 @@ Public Sub SEND_SOCKS5_CONN(ByVal ds As Winsock, ByVal IP As String, ByVal Port 
 End Sub
 
 Private Sub ProxySendPacket(ByVal ds As Winsock, ByVal pBuff As clsDataBuffer)
-    ds.SendData pBuff.GetDataAsByteArr
-    
-    Call CachePacket(stPROXY, CtoS, 0, pBuff.Length, pBuff.GetDataAsByteArr)
-    Call WritePacketData(stPROXY, CtoS, 0, pBuff.Length, pBuff.GetDataAsByteArr)
+    Call pBuff.SendData(ds, , stPROXY, phtNONE)
 End Sub
 
-Public Sub ProxyRecvPacket(ByVal ds As Winsock, ByRef ConnInfo As udtProxyConnectionInfo, ByVal pBuff As clsDataBuffer)
+Public Sub ProxyRecvPacket(ByVal ds As Winsock, ByRef ConnInfo As udtProxyConnectionInfo, ByVal pBuff As clsDataBuffer, Optional ByVal ScriptSource As Boolean = False)
     Dim Status    As Byte
     Dim Method    As Byte
     Dim AddrType  As Byte
     Dim DomainLen As Byte
     
-    Call CachePacket(stPROXY, StoC, 0, pBuff.Length, pBuff.GetDataAsByteArr)
-    Call WritePacketData(stPROXY, StoC, 0, pBuff.Length, pBuff.GetDataAsByteArr)
-    
-    If ConnInfo.Version = 5 Then
-        ' three possible packets: method, logon, and request
-        Select Case ConnInfo.Status
-            Case psRequestingMethod
-                pBuff.GetByte          ' (BYTE) server version (5)
-                Method = pBuff.GetByte ' (BYTE) method
-                Select Case Method
-                    Case SOCKS5_MET_ANON ' 0
-                        UpdateProxyStatus ConnInfo, psRequestingConn, PROXY_REQUESTING_CONN
-                        SEND_SOCKS5_CONN ds, ConnInfo.RemoteHostIP, ConnInfo.RemotePort, ConnInfo.RemoteHost
-                        
-                    Case SOCKS5_MET_USERPASS ' 2
-                        If LenB(ConnInfo.Username) > 0 Or LenB(ConnInfo.Password) > 0 Then
-                            UpdateProxyStatus ConnInfo, psLoggingOn, PROXY_LOGGING_ON
-                            SEND_SOCKS5_LOGON ds, ConnInfo.Username, ConnInfo.Password
-                        Else
+    If pBuff.HandleRecvData(, , stPROXY, phtNONE, ScriptSource) Then
+        If ConnInfo.Version = 5 Then
+            ' three possible packets: method, logon, and request
+            Select Case ConnInfo.Status
+                Case psRequestingMethod
+                    pBuff.GetByte          ' (BYTE) server version (5)
+                    Method = pBuff.GetByte ' (BYTE) method
+                    Select Case Method
+                        Case SOCKS5_MET_ANON ' 0
+                            UpdateProxyStatus ConnInfo, psRequestingConn, PROXY_REQUESTING_CONN
+                            SEND_SOCKS5_CONN ds, ConnInfo.RemoteHostIP, ConnInfo.RemotePort, ConnInfo.RemoteHost
+                            
+                        Case SOCKS5_MET_USERPASS ' 2
+                            If LenB(ConnInfo.Username) > 0 Or LenB(ConnInfo.Password) > 0 Then
+                                UpdateProxyStatus ConnInfo, psLoggingOn, PROXY_LOGGING_ON
+                                SEND_SOCKS5_LOGON ds, ConnInfo.Username, ConnInfo.Password
+                            Else
+                                UpdateProxyStatus ConnInfo, psNotConnected, PROXY_METHOD_ERROR, Method
+                                frmChat.DoDisconnect
+                            End If
+                            
+                        Case Else
                             UpdateProxyStatus ConnInfo, psNotConnected, PROXY_METHOD_ERROR, Method
                             frmChat.DoDisconnect
-                        End If
-                        
-                    Case Else
-                        UpdateProxyStatus ConnInfo, psNotConnected, PROXY_METHOD_ERROR, Method
+                    End Select
+                    
+                Case psLoggingOn
+                    pBuff.GetByte          ' (BYTE) u/p version (1)
+                    Status = pBuff.GetByte ' (BYTE) status
+                    If Status = SOCKS5_REQ_SUCCESS Then
+                        UpdateProxyStatus ConnInfo, psRequestingConn, PROXY_LOGON_SUCCESS
+                        UpdateProxyStatus ConnInfo, psRequestingConn, PROXY_REQUESTING_CONN
+                        SEND_SOCKS5_CONN ds, ConnInfo.RemoteHostIP, ConnInfo.RemotePort, ConnInfo.RemoteHost
+                    Else
+                        UpdateProxyStatus ConnInfo, psNotConnected, PROXY_LOGON_ERROR, Status
                         frmChat.DoDisconnect
-                End Select
-                
-            Case psLoggingOn
-                pBuff.GetByte          ' (BYTE) u/p version (1)
-                Status = pBuff.GetByte ' (BYTE) status
-                If Status = SOCKS5_REQ_SUCCESS Then
-                    UpdateProxyStatus ConnInfo, psRequestingConn, PROXY_LOGON_SUCCESS
-                    UpdateProxyStatus ConnInfo, psRequestingConn, PROXY_REQUESTING_CONN
-                    SEND_SOCKS5_CONN ds, ConnInfo.RemoteHostIP, ConnInfo.RemotePort, ConnInfo.RemoteHost
-                Else
-                    UpdateProxyStatus ConnInfo, psNotConnected, PROXY_LOGON_ERROR, Status
-                    frmChat.DoDisconnect
-                End If
-                
-            Case psRequestingConn
-                pBuff.GetByte            ' (BYTE) server version (5)
-                Status = pBuff.GetByte   ' (BYTE) status
-                pBuff.GetByte            ' (BYTE) null
-                AddrType = pBuff.GetByte ' (BYTE) address type
-                Select Case AddrType
-                    Case SOCKS5_ADDR_IPV4
-                        pBuff.GetDWORD
-                    Case SOCKS5_ADDR_DOMAIN
-                        DomainLen = pBuff.GetByte
-                        Call pBuff.GetRaw(DomainLen)
-                    Case SOCKS5_ADDR_IPV6
-                        Call pBuff.GetRaw(16)
-                End Select
-                pBuff.GetWord
-        
-                If Status = SOCKS5_REQ_SUCCESS Then
-                    UpdateProxyStatus ConnInfo, psOnline, PROXY_REQUEST_SUCCESS
-                    ProxyRequestSuccess ConnInfo
-                Else
-                    UpdateProxyStatus ConnInfo, psNotConnected, PROXY_REQUEST_ERROR, Status
-                    frmChat.DoDisconnect
-                End If
-                
-        End Select
-    Else
-        ' only possible packet is the response to the proxy request...
-        pBuff.GetByte          ' (BYTE) null
-        Status = pBuff.GetByte ' (BYTE) status
-        pBuff.GetWord          ' (WORD) port [unused]
-        pBuff.GetDWORD         ' (DWORD) ip (unused)
-        
-        If Status = SOCKS4_REQ_SUCCESS Then
-            UpdateProxyStatus ConnInfo, psOnline, PROXY_REQUEST_SUCCESS
-            ProxyRequestSuccess ConnInfo
+                    End If
+                    
+                Case psRequestingConn
+                    pBuff.GetByte            ' (BYTE) server version (5)
+                    Status = pBuff.GetByte   ' (BYTE) status
+                    pBuff.GetByte            ' (BYTE) null
+                    AddrType = pBuff.GetByte ' (BYTE) address type
+                    Select Case AddrType
+                        Case SOCKS5_ADDR_IPV4
+                            pBuff.GetDWORD
+                        Case SOCKS5_ADDR_DOMAIN
+                            DomainLen = pBuff.GetByte
+                            Call pBuff.GetRaw(DomainLen)
+                        Case SOCKS5_ADDR_IPV6
+                            Call pBuff.GetRaw(16)
+                    End Select
+                    pBuff.GetWord
+            
+                    If Status = SOCKS5_REQ_SUCCESS Then
+                        UpdateProxyStatus ConnInfo, psOnline, PROXY_REQUEST_SUCCESS
+                        ProxyRequestSuccess ConnInfo
+                    Else
+                        UpdateProxyStatus ConnInfo, psNotConnected, PROXY_REQUEST_ERROR, Status
+                        frmChat.DoDisconnect
+                    End If
+                    
+            End Select
         Else
-            UpdateProxyStatus ConnInfo, psNotConnected, PROXY_REQUEST_ERROR, Status
-            frmChat.DoDisconnect
+            ' only possible packet is the response to the proxy request...
+            pBuff.GetByte          ' (BYTE) null
+            Status = pBuff.GetByte ' (BYTE) status
+            pBuff.GetWord          ' (WORD) port [unused]
+            pBuff.GetDWORD         ' (DWORD) ip (unused)
+            
+            If Status = SOCKS4_REQ_SUCCESS Then
+                UpdateProxyStatus ConnInfo, psOnline, PROXY_REQUEST_SUCCESS
+                ProxyRequestSuccess ConnInfo
+            Else
+                UpdateProxyStatus ConnInfo, psNotConnected, PROXY_REQUEST_ERROR, Status
+                frmChat.DoDisconnect
+            End If
         End If
     End If
     
@@ -325,7 +321,7 @@ Private Sub UpdateProxyStatus(ByRef ConnInfo As udtProxyConnectionInfo, ByVal Ne
             lColor = RTBColors.InformationText
             sHost = ConnInfo.RemoteHost
             If LenB(sHost) = 0 Then sHost = ConnInfo.RemoteHostIP
-            Select Case ConnInfo.serverType
+            Select Case ConnInfo.ServerType
                 Case stBNCS
                     sOut = "Requesting connection to the Battle.net server at " & sHost & "..."
                 Case stBNLS
@@ -388,7 +384,7 @@ Private Sub UpdateProxyStatus(ByRef ConnInfo As udtProxyConnectionInfo, ByVal Ne
     End Select
     
     If LenB(sOut) > 0 Then
-        Select Case ConnInfo.serverType
+        Select Case ConnInfo.ServerType
             Case stBNCS: frmChat.AddChat lColor, "[BNCS] [PROXY] " & sOut
             Case stBNLS: frmChat.AddChat lColor, "[BNLS] [PROXY] " & sOut
             Case stMCP:  frmChat.AddChat lColor, "[REALM] [PROXY] " & sOut

@@ -143,21 +143,9 @@ Public Enum enuDBActions
     ModEntry = 3
 End Enum
 
-Public Enum enuPL_ServerTypes
-    stBNCS = 0
-    stBNLS = 1
-    stMCP = 2
-    stPROXY = 4
-End Enum
-
-Public Enum enuPL_DirectionTypes
-    CtoS = 1
-    StoC = 2
-End Enum
-
 Public Type udtProxyConnectionInfo
     ' config
-    serverType As enuPL_ServerTypes
+    ServerType As enuServerTypes
     UseProxy As Boolean
     ProxyIP As String
     ProxyPort As Long
