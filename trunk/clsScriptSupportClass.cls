@@ -1575,7 +1575,7 @@ End Function
 '// FORCEBNCSPACKETPARSE
 '// Pass a complete Battle.net packet into this and the bot will parse it
 Public Sub ForceBNCSPacketParse(ByVal PacketData As String)
-    Call SSC.ForcePacketParse(PacketData, "BNCS")
+    Call ForcePacketParse(PacketData, "BNCS")
 End Sub
 
 '// FORCEPACKETPARSE
