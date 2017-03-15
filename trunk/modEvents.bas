@@ -256,7 +256,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     If (Len(g_Clan.Name) > 0) Then
         If (StrComp(g_Channel.Name, "Clan " & g_Clan.Name, vbTextCompare) = 0) Then
-            RequestClanMOTD 1
+            Call modWar3Clan.RequestClanMOTD
         End If
     End If
 
@@ -504,7 +504,7 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
     End If
     
     If Config.FriendsListTab Then
-        Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
+        Call frmChat.FriendListHandler.RequestFriendsList
     End If
     
     Set Stats = Nothing
@@ -802,7 +802,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             
             If Config.FriendsListTab Then
                 If Not frmChat.FriendListHandler.SupportsFriendPackets(Config.Game) Then
-                    Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
+                    Call frmChat.FriendListHandler.RequestFriendsList
                 End If
             End If
         End If

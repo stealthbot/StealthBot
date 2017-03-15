@@ -116,43 +116,21 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub cmdAccept_Click()
+    Call modWar3Clan.InvitationResponse(ClanResponseAccept, Clan.Token, Clan.DWName, Clan.Creator, Clan.IsNew)
+    Clan.IsNew = False
+
     frmChat.AddChat RTBColors.SuccessText, "[CLAN] Invitation accepted."
-    
-    With PBuffer
-        .InsertNonNTString Clan.Token
-        .InsertNonNTString Clan.DWName
-        .InsertNTString Clan.Creator
-        .InsertByte &H6
-    
-        If Clan.isNew = 1 Then
-            .SendPacket SID_CLANCREATIONINVITATION
-            Clan.isNew = 0
-        Else
-            .SendPacket SID_CLANINVITATIONRESPONSE
-        End If
-    End With
     AwaitingClanMembership = 1
-    
+
     Unload Me
 End Sub
 
 Sub cmdDecline_Click()
+    Call modWar3Clan.InvitationResponse(ClanResponseDecline, Clan.Token, Clan.DWName, Clan.Creator, Clan.IsNew)
+    Clan.IsNew = False
+
     frmChat.AddChat RTBColors.ErrorMessageText, "[CLAN] Invitation declined."
-    
-    With PBuffer
-        .InsertNonNTString Clan.Token
-        .InsertNonNTString Clan.DWName
-        .InsertNTString Clan.Creator
-        .InsertByte &H4
-    
-        If Clan.isNew = 1 Then
-            .SendPacket SID_CLANCREATIONINVITATION
-            Clan.isNew = 0
-        Else
-            .SendPacket SID_CLANINVITATIONRESPONSE
-        End If
-    End With
-    
+
     Unload Me
 End Sub
 

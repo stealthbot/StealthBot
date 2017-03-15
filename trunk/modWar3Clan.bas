@@ -5,18 +5,33 @@ Option Explicit
 'Public sDebugBuf As String
 Public AwaitingClanList       As Byte
 Public AwaitingClanMembership As Byte
-Public AwaitingClanInfo       As Byte
 Public LastRemoval            As Currency
 
 Public Type udtClan
-    Token   As String * 4
+    Token   As Long
     Creator As String
     DWName  As String * 4
     Name    As String
     MyRank  As Byte
-    isNew   As Byte
-    isUsed  As Boolean
+    IsNew   As Boolean
+    IsUsed  As Boolean
 End Type
+
+Public Enum enuClanResponseValue
+    ClanResponseSuccess = 0
+    ClanResponseNameInUse = 1
+    ClanResponseTooSoon = 2
+    ClanResponseNotEnoughMembers = 3
+    ClanResponseDecline = 4
+    ClanResponseUnavailable = 5
+    ClanResponseAccept = 6
+    ClanResponseNotAuthorized = 7
+    ClanResponseNotAllowed = 8
+    ClanResponseIsFull = 9
+    ClanResponseBadTag = 10
+    ClanResponseBadName = 11
+    ClanResponseUserNotFound = 12
+End Enum
 
 Public Clan As udtClan
 
@@ -26,77 +41,132 @@ Public Function IsW3() As Boolean
 
 End Function
 
-Public Sub RequestClanList()
+Public Sub RequestClanList(Optional ByVal Cookie As Long = &H1)
+    Dim pBuf As clsDataBuffer
+
     AwaitingClanList = 1
-    
+
     g_Clan.Clear
     frmChat.lvClanList.ListItems.Clear
-    
-    PBuffer.InsertDWord &H1
-    PBuffer.SendPacket SID_CLANMEMBERLIST
+
+    Set pBuf = New clsDataBuffer
+    With pBuf
+        .InsertDWord Cookie
+        .SendPacket SID_CLANMEMBERLIST
+    End With
+    Set pBuf = Nothing
 End Sub
 
-Public Sub DisbandClan()
-    With PBuffer
-        .InsertDWord &H1
+Public Sub DisbandClan(Optional ByVal Cookie As Long = &H1)
+    Dim pBuf As clsDataBuffer
+
+    Set pBuf = New clsDataBuffer
+    With pBuf
+        .InsertDWord Cookie
         .SendPacket SID_CLANDISBAND
     End With
+    Set pBuf = Nothing
 End Sub
 
-Public Sub InviteToClan(Username As String) '//Works
+Public Sub InviteToClan(ByVal Username As String, Optional ByVal Cookie As Long = &H1) '//Works
+    Dim pBuf As clsDataBuffer
+
     If (LenB(Username) = 0) Then Exit Sub
-    With PBuffer
-        .InsertDWord &H1
+
+    Set pBuf = New clsDataBuffer
+    With pBuf
+        .InsertDWord Cookie
         .InsertNTString Username
         .SendPacket SID_CLANINVITATION
     End With
+    Set pBuf = Nothing
 End Sub
 
-Public Sub RequestClanMOTD(Optional ByVal Cookie As Long = &H0)
-    PBuffer.InsertDWord Cookie
-    PBuffer.SendPacket SID_CLANMOTD
+Public Sub InvitationResponse(ByVal Response As enuClanResponseValue, Optional ByVal Token As Long, Optional ByVal DWName As String, Optional ByVal Creator As String, Optional ByVal IsNew As Boolean = False)
+    Dim pBuf As clsDataBuffer
+
+    If IsMissing(Token) Then Token = Clan.Token
+    If IsMissing(DWName) Then DWName = Clan.DWName
+    If IsMissing(Creator) Then Creator = Clan.Creator
+    
+    Set pBuf = New clsDataBuffer
+    With pBuf
+        .InsertDWord Token
+        .InsertNonNTString DWName
+        .InsertNTString Creator
+        .InsertByte Response
+        
+        If IsNew Then
+            .SendPacket SID_CLANCREATIONINVITATION
+        Else
+            .SendPacket SID_CLANINVITATIONRESPONSE
+        End If
+    End With
+    Set pBuf = Nothing
 End Sub
 
-Public Sub SetClanMOTD(Message As String) '//Works
-    With PBuffer
-        .InsertDWord &H0
+Public Sub RequestClanMOTD(Optional ByVal Cookie As Long = &H1)
+    Dim pBuf As clsDataBuffer
+
+    Set pBuf = New clsDataBuffer
+    With pBuf
+        .InsertDWord Cookie
+        .SendPacket SID_CLANMOTD
+    End With
+    Set pBuf = Nothing
+End Sub
+
+Public Sub SetClanMOTD(ByVal Message As String, Optional ByVal Cookie As Long = &H1) '//Works
+    Dim pBuf As clsDataBuffer
+    Set pBuf = New clsDataBuffer
+    With pBuf
+        .InsertDWord Cookie
         .InsertNTString Message
         .SendPacket SID_CLANSETMOTD
     End With
+    Set pBuf = Nothing
 End Sub
 
-Public Sub PromoteMember(Username As String, Rank As Integer)
-    With PBuffer
-        .InsertDWord &H3
+Public Sub PromoteMember(ByVal Username As String, ByVal Rank As Integer)
+    Call ChangeRankMember(Username, Rank, &H3)
+End Sub
+
+Public Sub DemoteMember(ByVal Username As String, ByVal Rank As Integer)
+    Call ChangeRankMember(Username, Rank, &H1)
+End Sub
+
+Public Sub ChangeRankMember(ByVal Username As String, ByVal Rank As Integer, ByVal Cookie As Long)
+    Dim pBuf As clsDataBuffer
+    Set pBuf = New clsDataBuffer
+    With pBuf
+        .InsertDWord Cookie
         .InsertNTString Username
         .InsertByte Rank
         .SendPacket SID_CLANRANKCHANGE
     End With
+    Set pBuf = Nothing
 End Sub
 
-Public Sub DemoteMember(Username As String, Rank As Integer)
-    With PBuffer
-        .InsertDWord &H1
-        .InsertNTString Username
-        .InsertByte Rank
-        .SendPacket SID_CLANRANKCHANGE
-    End With
-End Sub
-
-Public Sub RemoveMember(Username As String)
-    With PBuffer
-        .InsertDWord &H1
+Public Sub RemoveMember(ByVal Username As String, Optional ByVal Cookie As Long = &H1)
+    Dim pBuf As clsDataBuffer
+    Set pBuf = New clsDataBuffer
+    With pBuf
+        .InsertDWord Cookie
         .InsertNTString Username
         .SendPacket SID_CLANREMOVEMEMBER
     End With
+    Set pBuf = Nothing
 End Sub
 
-Public Sub MakeMemberChieftain(Username As String)
-    With PBuffer
-        .InsertDWord &H1
+Public Sub MakeMemberChieftain(ByVal Username As String, Optional ByVal Cookie As Long = &H1)
+    Dim pBuf As clsDataBuffer
+    Set pBuf = New clsDataBuffer
+    With pBuf
+        .InsertDWord Cookie
         .InsertNTString Username
         .SendPacket SID_CLANMAKECHIEFTAIN
     End With
+    Set pBuf = Nothing
 End Sub
 
 Public Function GetRank(ByVal i As Byte) As String

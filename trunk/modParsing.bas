@@ -69,13 +69,18 @@ Public Sub NullTruncString(ByRef Text As String)
 End Sub
 
 Public Sub FullJoin(Channel As String, Optional ByVal i As Long = -1)
-    If i >= 0 Then
-        PBuffer.InsertDWord CLng(i)
-    Else
-        PBuffer.InsertDWord &H2
-    End If
-    PBuffer.InsertNTString Channel
-    PBuffer.SendPacket SID_JOINCHANNEL
+    Dim pBuf As clsDataBuffer
+    Set pBuf = New clsDataBuffer
+    With pBuf
+        If i >= 0 Then
+            .InsertDWord CLng(i)
+        Else
+            .InsertDWord &H2
+        End If
+        .InsertNTString Channel
+        .SendPacket SID_JOINCHANNEL
+    End With
+    Set pBuf = Nothing
 End Sub
 
 Public Function HexToStr(ByVal Hex1 As String) As String
@@ -90,10 +95,16 @@ End Function
 
 Public Sub RejoinChannel(Channel As String)
     'on error resume next
-    PBuffer.SendPacket SID_LEAVECHAT
-    PBuffer.InsertDWord &H2
-    PBuffer.InsertNTString Channel
-    PBuffer.SendPacket SID_JOINCHANNEL
+    Dim pBuf As clsDataBuffer
+    Set pBuf = New clsDataBuffer
+    With pBuf
+        .SendPacket SID_LEAVECHAT
+        .Clear
+        .InsertDWord &H2
+        .InsertNTString Channel
+        .SendPacket SID_JOINCHANNEL
+    End With
+    Set pBuf = Nothing
 End Sub
 
 Public Sub RequestProfile(strUser As String, ByVal eType As enuUserDataRequestType, Optional ByRef oCommand As clsCommandObj)
@@ -111,6 +122,7 @@ Public Sub RequestUserData(ByVal sUsername As String, ByRef aKeys() As String, O
     Dim oRequest As udtUserDataRequest
     Dim i As Integer
     Dim bFoundSlot As Boolean
+    Dim pBuf As clsDataBuffer
 
     With oRequest
         ' Attach handling info
@@ -146,7 +158,8 @@ Public Sub RequestUserData(ByVal sUsername As String, ByRef aKeys() As String, O
     End If
 
     ' Build the packet
-    With PBuffer
+    Set pBuf = New clsDataBuffer
+    With pBuf
         .InsertDWord 1
         .InsertDWord UBound(oRequest.keys) + 1
         .InsertDWord oRequest.RequestID
@@ -159,6 +172,7 @@ Public Sub RequestUserData(ByVal sUsername As String, ByRef aKeys() As String, O
 
         .SendPacket SID_READUSERDATA
     End With
+    Set pBuf = Nothing
 End Sub
 
 Public Sub SetProfile(ByVal Location As String, ByVal Description As String, Optional ByVal Sex As String = vbNullString)
@@ -166,6 +180,7 @@ Public Sub SetProfile(ByVal Location As String, ByVal Description As String, Opt
     Const MAX_DESCR As Long = 510
     Const MAX_SEX As Long = 200
     Const MAX_LOC As Long = 200
+    Dim pBuf As clsDataBuffer
     
     '// Sanity checks
     If Len(Description) > MAX_DESCR Then
@@ -179,9 +194,9 @@ Public Sub SetProfile(ByVal Location As String, ByVal Description As String, Opt
     If Len(Location) > MAX_LOC Then
         Location = Left$(Location, MAX_LOC)
     End If
-    
-    
-    With PBuffer
+
+    Set pBuf = New clsDataBuffer
+    With pBuf
         .InsertDWord &H1                    '// #accounts
         .InsertDWord 3                      '// #keys
         
@@ -197,6 +212,7 @@ Public Sub SetProfile(ByVal Location As String, ByVal Description As String, Opt
         
         .SendPacket SID_WRITEUSERDATA
     End With
+    Set pBuf = Nothing
 End Sub
 
 '// Extended version of this function for scripting use
@@ -214,6 +230,7 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
     Dim nKeys As Integer, i As Integer
     Dim pKeys(1 To 3) As String
     Dim pData(1 To 3) As String
+    Dim pBuf As clsDataBuffer
     
     If (LenB(Location) > 0) Then
         If (Len(Location) > MAX_LOC) Then
@@ -237,7 +254,8 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
     End If
         
     If nKeys > 0 Then
-        With PBuffer
+        Set pBuf = New clsDataBuffer
+        With pBuf
             .InsertDWord &H1                    '// #accounts
             .InsertDWord nKeys                  '// #keys
             .InsertNTString CurrentUsername     '// account to update
@@ -253,6 +271,7 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
             
             .SendPacket SID_WRITEUSERDATA
         End With
+        Set pBuf = Nothing
     End If
 End Sub
 

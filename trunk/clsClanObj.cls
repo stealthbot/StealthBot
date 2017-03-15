@@ -63,7 +63,7 @@ Public Property Get Members() As Collection
 End Property
 
 Public Property Get Chieftain() As clsClanMemberObj
-    Dim i As Integer 
+    Dim i As Integer
     Set Chieftain = New clsClanMemberObj
     
     For i = 1 To Members.Count
@@ -113,7 +113,7 @@ Public Function GetMember(ByVal Username As String) As Object
 End Function
 
 Public Function GetUser(ByVal Username As String) As Object
-    Dim Index As Integer 
+    Dim Index As Integer
     
     If (StrictIsNumeric(Username)) Then
         Index = CInt(Val(Username))
@@ -151,7 +151,7 @@ Public Function GetMemberEx(ByVal Username As String) As Object
 End Function
 
 Public Function GetUserEx(ByVal Username As String) As Object
-    Dim Index As Integer 
+    Dim Index As Integer
     
     If (StrictIsNumeric(Username)) Then
         Index = CInt(Val(Username))
@@ -171,7 +171,7 @@ Public Function GetMemberIndexEx(ByVal Username As String) As Integer
 End Function
 
 Public Function GetUserIndexEx(ByVal Username As String) As Integer
-    Dim i As Integer 
+    Dim i As Integer
     
     For i = 1 To Members.Count
         If (StrComp(Members(i).Name, Username, vbTextCompare) = 0) Then
@@ -184,20 +184,20 @@ Public Function GetUserIndexEx(ByVal Username As String) As Integer
     GetUserIndexEx = 0
 End Function
 
-Public Sub Clear()    
+Public Sub Clear()
     Set m_members = New Collection
 End Sub
 
-Public Sub Disband()
-    Call DisbandClan
+Public Sub Disband(Optional ByVal Cookie As Long = &H1)
+    Call modWar3Clan.DisbandClan(Cookie)
 End Sub
 
-Public Sub SetMOTD(ByVal MOTD As String)
-    Call modWar3Clan.SetClanMOTD(MOTD)
+Public Sub SetMOTD(ByVal MOTD As String, Optional ByVal Cookie As Long = &H1)
+    Call modWar3Clan.SetClanMOTD(MOTD, Cookie)
 End Sub
 
 Public Function Clone() As Object
-    Dim i As Integer 
+    Dim i As Integer
     Set Clone = New clsClanObj
     
     Clone.Name = Name

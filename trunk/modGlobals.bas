@@ -106,7 +106,6 @@ Public ExReconTicks As Long
 Public ExReconMinutes As Long
 
 Public VoteDuration As Integer
-Public PBuffer As New clsDataBuffer
 Public ListToolTip As clsCTooltip
 
 

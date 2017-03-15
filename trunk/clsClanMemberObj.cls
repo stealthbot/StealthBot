@@ -75,25 +75,25 @@ Public Property Let Location(ByVal str As String)
 End Property
 
 Public Sub MakeChieftain()
-    Call MakeMemberChieftain(m_name)
+    Call modWar3Clan.MakeMemberChieftain(m_name)
 End Sub
 
 Public Sub Promote(Optional ByVal Rank As Integer = -1)
     If ((Rank > -1) And (Rank <= m_rank)) Then
         Exit Sub
     End If
-    Call PromoteMember(m_name, IIf(Rank > -1, Rank, m_rank + 1))
+    Call modWar3Clan.PromoteMember(m_name, IIf(Rank > -1, Rank, m_rank + 1))
 End Sub
 
 Public Sub Demote(Optional ByVal Rank As Integer = -1)
     If ((Rank > -1) And (Rank >= m_rank)) Then
         Exit Sub
     End If
-    Call DemoteMember(m_name, IIf(Rank > -1, Rank, m_rank - 1))
+    Call modWar3Clan.DemoteMember(m_name, IIf(Rank > -1, Rank, m_rank - 1))
 End Sub
 
 Public Sub KickOut()
-    Call RemoveMember(m_name)
+    Call modWar3Clan.RemoveMember(m_name)
 End Sub
 
 Public Function Clone() As Object

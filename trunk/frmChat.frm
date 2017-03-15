@@ -2850,7 +2850,7 @@ Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
         If (AwaitingSelfRemoval = 0) Then
             Set g_Clan = New clsClanObj
         
-            Clan.isUsed = False
+            Clan.IsUsed = False
         
             ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
             lvClanList.ListItems.Clear
@@ -2868,16 +2868,13 @@ Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
     End If
 End Sub
 
-Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
+Private Sub ClanHandler_MyRankChange(ByVal OldRank As Byte, ByVal NewRank As Byte, ByVal Initiator As String)
     If (g_Clan.Self.Rank < NewRank) Then
-        AddChat RTBColors.SuccessText, "[CLAN] You have been promoted. Your new rank is ", _
-                RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
-    ElseIf (g_Clan.Self.Rank > NewRank) Then
-        AddChat RTBColors.SuccessText, "[CLAN] You have been demoted. Your new rank is ", _
+        AddChat RTBColors.SuccessText, "[CLAN] You have been promoted by " & Initiator & ". Your new rank is ", _
                 RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
     Else
-        AddChat RTBColors.SuccessText, "[CLAN] Your new rank is ", RTBColors.InformationText, _
-                GetRank(NewRank), RTBColors.SuccessText, "."
+        AddChat RTBColors.SuccessText, "[CLAN] You have been demoted by " & Initiator & ". Your new rank is ", _
+                RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
     End If
 
     g_Clan.Self.Rank = NewRank
@@ -2894,7 +2891,7 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
         .Name = ClanTag
         .DWName = RawClanTag
         .MyRank = Rank
-        .isUsed = True
+        .IsUsed = True
     End With
     
     With g_Clan
@@ -2921,26 +2918,28 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
         RunInAll "Event_BotClanInfo", ClanTag, Rank
     End If
     
-    RequestClanList
-    RequestClanMOTD
+    Call modWar3Clan.RequestClanList
+    Call modWar3Clan.RequestClanMOTD
     
     'frmChat.ClanHandler.RequestClanMotd 1
     
     frmChat.ListviewTabs_Click 0
 End Sub
 
-Private Sub ClanHandler_ClanInvitation(ByVal Token As String, ByVal ClanTag As String, ByVal RawClanTag As String, ByVal ClanName As String, ByVal InvitedBy As String, ByVal NewClan As Boolean)
+Private Sub ClanHandler_ClanInvitation(ByVal Token As Long, ByVal ClanTag As String, ByVal RawClanTag As String, ByVal ClanName As String, ByVal InvitedBy As String, ByVal NewClan As Boolean)
     If Not mnuIgnoreInvites.Checked And IsW3 Then
-        Clan.Token = Token
-        Clan.DWName = RawClanTag
-        Clan.Creator = InvitedBy
-        Clan.Name = ClanName
-        If NewClan Then Clan.isNew = 1
-        
+        With Clan
+            .Token = Token
+            .DWName = RawClanTag
+            .Creator = InvitedBy
+            .Name = ClanName
+            .IsNew = NewClan
+        End With
+
         With RTBColors
             AddChat .SuccessText, "[CLAN] ", .InformationText, ConvertUsername(InvitedBy), .SuccessText, " has invited you to join a clan: ", .InformationText, ClanName, .SuccessText, " [", .InformationText, ClanTag, .SuccessText, "]"
         End With
-        
+
         frmClanInvite.Show
     End If
     
@@ -2979,13 +2978,16 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
 End Sub
 
 Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
-    Dim x   As ListItem
-    Dim pos As Integer
+    Dim x       As ListItem
+    Dim pos     As Integer
+    Dim OldRank As Byte
     
     pos = g_Clan.GetUserIndexEx(Username)
     
     If (pos > 0) Then
         With g_Clan.Members(pos)
+            OldRank = .Rank
+            
             .Name = Username
             .Rank = Rank
             .Status = IsOnline
@@ -3004,20 +3006,23 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
         End With
         
         g_Clan.Members.Add ClanMember
+        
+        ' we didn't have a record of this user, assume this isn't a rank change...
+        OldRank = Rank
     End If
     
     Username = ConvertUsername(Username)
     
     Set x = lvClanList.FindItem(Username)
 
-    If StrComp(Username, CurrentUsername, vbTextCompare) = 0 Then
-        g_Clan.Self.Rank = IIf(Rank = 0, Rank + 1, Rank)
-        AwaitingClanInfo = 1
+    If StrComp(Username, StripAccountNumber(GetCurrentUsername()), vbTextCompare) = 0 Then
+        g_Clan.Self.Rank = Rank
     End If
     
-    If AwaitingClanInfo = 1 Then
-        AwaitingClanInfo = 0
-        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(Rank) & "."
+    If Rank <> OldRank Then
+        With RTBColors
+            AddChat .SuccessText, "[CLAN] Member update: ", .InformationText, Username, .SuccessText, " is now a ", .InformationText, GetRank(Rank), .SuccessText, "."
+        End With
     End If
     
     If Not (x Is Nothing) Then
@@ -3047,8 +3052,8 @@ Private Sub ClanHandler_ClanMOTD(ByVal Cookie As Long, ByVal Message As String)
     RunInAll "Event_ClanMOTD", Message
 End Sub
 
-Private Sub ClanHandler_DemoteUserReply(ByVal Success As Boolean)
-    If Success Then
+Private Sub ClanHandler_DemoteUserReply(ByVal Result As Byte)
+    If Result = ClanResponseSuccess Then
         AddChat RTBColors.SuccessText, "[CLAN] User demoted successfully."
     Else
         AddChat RTBColors.ErrorMessageText, "[CLAN] User demotion failed."
@@ -3056,14 +3061,14 @@ Private Sub ClanHandler_DemoteUserReply(ByVal Success As Boolean)
     
     lblCurrentChannel.Caption = GetChannelString
     
-    RunInAll "Event_ClanDemoteUserReply", Success
+    RunInAll "Event_ClanDemoteUserReply", (Result = ClanResponseSuccess)
 End Sub
 
-Private Sub ClanHandler_DisbandClanReply(ByVal Success As Boolean)
+Private Sub ClanHandler_DisbandClanReply(ByVal Result As Byte)
     If MDebug("debug") Then
-        AddChat RTBColors.ConsoleText, "DisbandClanReply: " & Success
+        AddChat RTBColors.ConsoleText, "DisbandClanReply: " & Result
     End If
-    RunInAll "Event_ClanDisbandReply", Success
+    RunInAll "Event_ClanDisbandReply", (Result = ClanResponseSuccess)
 End Sub
 
 Private Sub ClanHandler_InviteUserReply(ByVal Status As Byte)
@@ -3082,15 +3087,15 @@ Private Sub ClanHandler_InviteUserReply(ByVal Status As Byte)
     RunInAll "Event_ClanInviteUserReply", Status
 End Sub
 
-Private Sub ClanHandler_PromoteUserReply(ByVal Success As Boolean)
-    If Success Then
+Private Sub ClanHandler_PromoteUserReply(ByVal Result As Byte)
+    If Result = ClanResponseSuccess Then
         AddChat RTBColors.SuccessText, "[CLAN] User promoted successfully."
     Else
         AddChat RTBColors.ErrorMessageText, "[CLAN] User promotion failed."
     End If
     
     lblCurrentChannel.Caption = GetChannelString
-    RunInAll "Event_ClanPromoteUserReply", Success
+    RunInAll "Event_ClanPromoteUserReply", (Result = ClanResponseSuccess)
 End Sub
 
 Private Sub ClanHandler_RemoveUserReply(ByVal Result As Byte)
@@ -3107,7 +3112,7 @@ Private Sub ClanHandler_RemoveUserReply(ByVal Result As Byte)
         Case 0
             If AwaitingSelfRemoval = 1 Then
                 AwaitingSelfRemoval = 0
-                Clan.isUsed = False
+                Clan.IsUsed = False
                 
                 ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
                 lvClanList.ListItems.Clear
@@ -3121,7 +3126,7 @@ Private Sub ClanHandler_RemoveUserReply(ByVal Result As Byte)
             Else
                 AddChat RTBColors.SuccessText, "[CLAN] User removed successfully."
                 
-                RequestClanList
+                Call modWar3Clan.RequestClanList
             End If
             
         Case 2
@@ -3335,7 +3340,7 @@ Private Sub FriendListHandler_FriendListEntry(ByVal Username As String, ByVal Pr
 End Sub
 
 Private Sub FriendListHandler_FriendMoved()
-    Call FriendListHandler.RequestFriendsList(PBuffer)
+    Call FriendListHandler.RequestFriendsList
 End Sub
 
 Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
@@ -3921,60 +3926,43 @@ Private Sub mnuPopClanCopy_Click()
 End Sub
 
 Private Sub mnuPopClanDemote_Click()
+    Dim Rank As Byte
+
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
-    
+
     If MsgBox("Are you sure you want to demote " & GetClanSelectedUser & "?", vbYesNo, "StealthBot") = vbYes Then
-        
-        With PBuffer
-            .InsertDWord &H1
-            .InsertNTString GetClanSelectedUser
-            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon - 1
-            .SendPacket SID_CLANRANKCHANGE
-        End With
-        
-        AwaitingClanInfo = 1
-        
+        Rank = lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon - 1
+        Call modWar3Clan.DemoteMember(GetClanSelectedUser, Rank)
     End If
 End Sub
 
 Private Sub mnuPopClanDisband_Click()
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
-    
+
     If MsgBox("Are you sure you want to disband this clan?", vbYesNo Or vbCritical, "StealthBot") = vbYes Then
-        With PBuffer
-            .InsertDWord &H1    '//cookie
-            .SendPacket SID_CLANDISBAND
-        End With
-        
+        Call modWar3Clan.DisbandClan
+
         AwaitingSelfRemoval = 1
     End If
 End Sub
 
 Private Sub mnuPopClanLeave_Click()
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
-    
+
     If MsgBox("Are you sure you want to leave the clan?", vbYesNo, "StealthBot") = vbYes Then
-        With PBuffer
-            .InsertDWord &H1    '//cookie
-            .InsertNTString GetCurrentUsername
-            .SendPacket SID_CLANREMOVEMEMBER
-        End With
+        Call modWar3Clan.RemoveMember(GetCurrentUsername)
 
         AwaitingSelfRemoval = 1
     End If
 End Sub
 
 Private Sub mnuPopClanMakeChief_Click()
+    Dim pBuf As clsDataBuffer
+
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
-    
+
     If MsgBox("Are you sure you want to make " & GetClanSelectedUser & " the new Chieftain?", vbYesNo Or vbCritical, "StealthBot") = vbYes Then
-        With PBuffer
-            .InsertDWord &H1    '//cookie
-            .InsertNTString GetClanSelectedUser
-            .SendPacket SID_CLANMAKECHIEFTAIN
-        End With
-        
-        AwaitingClanInfo = 1
+        Call modWar3Clan.MakeMemberChieftain(GetClanSelectedUser)
     End If
 End Sub
 
@@ -3987,23 +3975,19 @@ Private Sub mnuPopClanProfile_Click()
 End Sub
 
 Private Sub mnuPopClanPromote_Click()
+    Dim Rank As Byte
+
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
-    
+
     If MsgBox("Are you sure you want to promote " & GetClanSelectedUser & "?", vbYesNo, "StealthBot") = vbYes Then
-        With PBuffer
-            .InsertDWord &H3
-            .InsertNTString GetClanSelectedUser
-            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon + 1
-            .SendPacket SID_CLANRANKCHANGE
-        End With
-        
-        AwaitingClanInfo = 1
+        Rank = lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon + 1
+        Call modWar3Clan.PromoteMember(GetClanSelectedUser, Rank)
     End If
 End Sub
 
 Private Sub mnuPopClanRemove_Click()
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
-    
+
     Dim L As Long
     L = TimeSinceLastRemoval
 
@@ -4013,17 +3997,10 @@ Private Sub mnuPopClanRemove_Click()
     Else
         If MsgBox("Are you sure you want to remove this user from the clan?", vbExclamation + vbYesNo, _
                 "StealthBot") = vbYes Then
-                
-            With PBuffer
-                If lvClanList.SelectedItem.Index > 0 Then
-                    .InsertDWord 1 'lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon
-                    .InsertNTString GetClanSelectedUser
-                    .SendPacket SID_CLANREMOVEMEMBER
-                End If
-                
-                AwaitingClanInfo = 1
-            End With
-            
+            If lvClanList.SelectedItem.Index > 0 Then
+                Call modWar3Clan.RemoveMember(GetClanSelectedUser)
+            End If
+
             LastRemoval = GetTickCountMS()
         End If
     End If
@@ -4179,7 +4156,7 @@ Private Sub mnuPopFLInvite_Click()
     
     If LenB(sPlayer) > 0 Then
         If g_Clan.Self.Rank >= 3 Then
-            InviteToClan (ReverseConvertUsernameGateway(sPlayer))
+            Call modWar3Clan.InviteToClan(ReverseConvertUsernameGateway(sPlayer))
             AddChat RTBColors.InformationText, "[CLAN] Invitation sent to " & GetFriendsSelectedUser & ", awaiting reply."
         End If
     End If
@@ -4211,7 +4188,7 @@ End Sub
 
 Private Sub mnuPopFLRefresh_Click()
     lvFriendList.ListItems.Clear
-    Call FriendListHandler.RequestFriendsList(PBuffer)
+    Call FriendListHandler.RequestFriendsList
 End Sub
 
 Private Sub mnuPopFLRemove_Click()
@@ -4351,7 +4328,7 @@ Private Sub mnuPopInvite_Click()
     
     If LenB(sPlayer) > 0 Then
         If g_Clan.Self.Rank >= 3 Then
-            InviteToClan (ReverseConvertUsernameGateway(sPlayer))
+            Call modWar3Clan.InviteToClan(ReverseConvertUsernameGateway(sPlayer))
             AddChat RTBColors.InformationText, "[CLAN] Invitation sent to " & GetSelectedUser & ", awaiting reply."
         End If
     End If
@@ -7932,7 +7909,7 @@ Sub InitListviewTabs()
     Dim toSet As Boolean
 
     If IsW3() Then
-        If Clan.isUsed Then
+        If Clan.IsUsed Then
             toSet = True
         Else
             toSet = False
@@ -7957,7 +7934,7 @@ On Error GoTo ERROR_HANDLER:
     
     visible_rank = Rank
     
-    If (visible_rank = 0) Then visible_rank = 1
+    If (visible_rank = 0) Then visible_rank = 1 ' peon probation rank -> normal peon icon
     If (visible_rank > 4) Then visible_rank = 5 '// handle bad ranks
     
     '// add user
@@ -8144,7 +8121,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         ProxyConnInfo(stBNCS).Status = psNotConnected
         ProxyConnInfo(stMCP).Status = psNotConnected
         
-        Clan.isUsed = False
+        Clan.IsUsed = False
         lvClanList.ListItems.Clear
         
         ReceiveBuffer(stBNLS).Clear

@@ -32,9 +32,11 @@ Private Sub Class_Initialize()
     Set g_Friends = New Collection
 End Sub
 
-Public Sub RequestFriendsList(ByVal pBuff As clsDataBuffer)
-    'ResetList
-    pBuff.SendPacket SID_FRIENDSLIST
+Public Sub RequestFriendsList()
+    Dim pBuf As clsDataBuffer
+    Set pBuf = New clsDataBuffer
+    pBuf.SendPacket SID_FRIENDSLIST
+    Set pBuf = Nothing
 End Sub
 
 Public Sub ParsePacket(ByVal PacketID As Long, ByVal pBuff As clsDataBuffer)

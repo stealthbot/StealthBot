@@ -68,7 +68,7 @@ Public Sub OnDemote(Command As clsCommandObj)
     
                     If (Not liUser Is Nothing) Then
                         If (liUser.SmallIcon > 1) Then
-                            Call DemoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.SmallIcon - 1)
+                            Call modWar3Clan.DemoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.SmallIcon - 1)
                         Else
                             Command.Respond "Error: The specified user is already at the lowest demoteable ranking."
                         End If
@@ -89,7 +89,7 @@ Public Sub OnDisbandClan(Command As clsCommandObj)
     If (IsW3) Then
         If (LenB(g_Clan.Self.Name) > 0) Then
             If (g_Clan.Self.Rank >= 4) Then
-                Call DisbandClan
+                Call modWar3Clan.DisbandClan
             Else
                 Command.Respond "Error: The bot must be a chieftain to execute this command."
             End If
@@ -108,7 +108,7 @@ Public Sub OnInvite(Command As clsCommandObj)
     If (IsW3) Then
         If (g_Clan.Self.Rank >= 3) Then
             If (Command.IsValid Or LenB(Command.Argument("Username")) = 0) Then
-                Call InviteToClan(Command.Argument("Username"))
+                Call modWar3Clan.InviteToClan(Command.Argument("Username"))
                 Command.Respond Command.Argument("Username") & ": Clan invitation sent."
             Else
                 Command.Respond "Error: You must specify a username to invite."
@@ -123,7 +123,7 @@ Public Sub OnMakeChieftain(Command As clsCommandObj)
     If (IsW3) Then
         If (g_Clan.Self.Rank >= 4) Then
             If (Command.IsValid) Then
-                Call MakeMemberChieftain(ReverseConvertUsernameGateway(Command.Argument("Username")))
+                Call modWar3Clan.MakeMemberChieftain(ReverseConvertUsernameGateway(Command.Argument("Username")))
             Else
                 Command.Respond "Error: You must specify a username to promote."
             End If
@@ -151,7 +151,7 @@ Public Sub OnPromote(Command As clsCommandObj)
     
                     If (Not liUser Is Nothing) Then
                         If (liUser.SmallIcon < 3) Then
-                            Call PromoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.SmallIcon + 1)
+                            Call modWar3Clan.PromoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.SmallIcon + 1)
                         Else
                             Command.Respond "Error: The specified user is already at the highest promotable ranking."
                         End If

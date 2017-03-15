@@ -456,11 +456,13 @@ End Function
 
 Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNullString, Optional ByVal _
     ID As Double = 0)
-    
+    Dim pBuf As clsDataBuffer
+
     On Error GoTo ERROR_HANDLER
 
     If (frmChat.sckBNet.State = 7) Then
-        With PBuffer
+        Set pBuf = New clsDataBuffer
+        With pBuf
             If (frmChat.mnuUTF8.Checked) Then
                 .InsertNTString Message, UTF8
             Else
@@ -468,15 +470,15 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
             End If
 
             .SendPacket SID_CHATCOMMAND
-        End With
-        
-        If (Tag = "request_receipt") Then
-            g_request_receipt = True
-        
-            With PBuffer
+            .Clear
+
+            If (Tag = "request_receipt") Then
+                g_request_receipt = True
+
                 .SendPacket SID_FRIENDSLIST
-            End With
-        End If
+            End If
+        End With
+        Set pBuf = Nothing
     End If
     
     If (Left$(Message, 1) <> "/") Then
@@ -2625,10 +2627,10 @@ Public Function ResolveHost(ByVal strHostName As String) As String
 End Function
 
 Public Function IsValidIPAddress(ByVal sIn As String) As Boolean
-    Dim lIn As Long
+    Dim cp As Long
 
-    lIn = inet_addr(sIn)
-    IsValidIPAddress = (lIn <> -1)
+    cp = inet_addr(sIn)
+    IsValidIPAddress = (cp <> -1)
 End Function
 
 Public Sub CloseAllConnections(Optional ShowMessage As Boolean = True)

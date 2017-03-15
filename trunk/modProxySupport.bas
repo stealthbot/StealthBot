@@ -190,8 +190,8 @@ End Sub
 Private Sub ProxySendPacket(ByVal ds As Winsock, ByVal pBuff As clsDataBuffer)
     ds.SendData pBuff.GetDataAsByteArr
     
-    Call CachePacket(stPROXY, CtoS, 0, pBuff.length, pBuff.GetDataAsByteArr)
-    Call WritePacketData(stPROXY, CtoS, 0, pBuff.length, pBuff.GetDataAsByteArr)
+    Call CachePacket(stPROXY, CtoS, 0, pBuff.Length, pBuff.GetDataAsByteArr)
+    Call WritePacketData(stPROXY, CtoS, 0, pBuff.Length, pBuff.GetDataAsByteArr)
 End Sub
 
 Public Sub ProxyRecvPacket(ByVal ds As Winsock, ByRef ConnInfo As udtProxyConnectionInfo, ByVal pBuff As clsDataBuffer)
@@ -200,8 +200,8 @@ Public Sub ProxyRecvPacket(ByVal ds As Winsock, ByRef ConnInfo As udtProxyConnec
     Dim AddrType  As Byte
     Dim DomainLen As Byte
     
-    Call CachePacket(stPROXY, StoC, 0, pBuff.length, pBuff.GetDataAsByteArr)
-    Call WritePacketData(stPROXY, StoC, 0, pBuff.length, pBuff.GetDataAsByteArr)
+    Call CachePacket(stPROXY, StoC, 0, pBuff.Length, pBuff.GetDataAsByteArr)
+    Call WritePacketData(stPROXY, StoC, 0, pBuff.Length, pBuff.GetDataAsByteArr)
     
     If ConnInfo.Version = 5 Then
         ' three possible packets: method, logon, and request
