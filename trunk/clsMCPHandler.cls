@@ -57,6 +57,7 @@ Private m_AutoChooseWait As Long
 Private m_AutoChooseTarget As Integer
 Private m_RetrievingCharacterList As Boolean
 Private m_RealmServerConnected As Boolean
+Private m_RequestPending As Boolean
 
 Private Sub Class_Terminate()
     Set m_RealmServerList = Nothing
@@ -212,19 +213,20 @@ End Sub
 ' gets the realm password (overridable)
 Private Function GetRealmPassword() As String
     Dim RealmPassword As String
-    
+
     RealmPassword = Config.RealmServerPassword
-    
+
     If (LenB(RealmPassword) = 0) Then RealmPassword = REALM_PASSWORD
-    
+
     GetRealmPassword = RealmPassword
 End Function
 
 ' sends a request for the character list
 Public Sub DoRequestCharacters()
-     m_RetrievingCharacterList = True
-     
-     SEND_MCP_CHARLIST2
+    If m_RetrievingCharacterList Then Exit Sub
+    m_RetrievingCharacterList = True
+
+    SEND_MCP_CHARLIST2
 End Sub
 
 ' parses packets as received from sckMCP
@@ -481,11 +483,14 @@ End Sub
 Public Sub SEND_MCP_CHARLOGON(ByVal CharName As String)
 On Error GoTo ERROR_HANDLER
 
+    If m_RequestPending Then Exit Sub
+    m_RequestPending = True
+
     Dim pBuff As New clsDataBuffer
     pBuff.InsertNTString CharName
     pBuff.SendPacketMCP MCP_CHARLOGON
     Set pBuff = Nothing
-    
+
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
@@ -501,12 +506,15 @@ End Sub
 Public Sub SEND_MCP_CHARDELETE(ByVal CharName As String, Optional ByVal Flags As Integer = &H0)
 On Error GoTo ERROR_HANDLER
 
+    If m_RequestPending Then Exit Sub
+    m_RequestPending = True
+
     Dim pBuff As New clsDataBuffer
     pBuff.InsertWord Flags
     pBuff.InsertNTString CharName
     pBuff.SendPacketMCP MCP_CHARDELETE
     Set pBuff = Nothing
-    
+
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
@@ -524,7 +532,7 @@ On Error GoTo ERROR_HANDLER
     Dim pBuff As New clsDataBuffer
     pBuff.SendPacketMCP MCP_MOTD
     Set pBuff = Nothing
-    
+
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
@@ -539,11 +547,14 @@ End Sub
 Public Sub SEND_MCP_CHARUPGRADE(ByVal CharName As String)
 On Error GoTo ERROR_HANDLER
 
+    If m_RequestPending Then Exit Sub
+    m_RequestPending = True
+
     Dim pBuff As New clsDataBuffer
     pBuff.InsertNTString CharName
     pBuff.SendPacketMCP MCP_CHARUPGRADE
     Set pBuff = Nothing
-    
+
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
@@ -562,7 +573,7 @@ On Error GoTo ERROR_HANDLER
     pBuff.InsertDWord NumCharacters
     pBuff.SendPacketMCP MCP_CHARLIST2
     Set pBuff = Nothing
-    
+
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
@@ -583,7 +594,7 @@ End Property
 
 Public Property Get RealmServerTitle(ByVal RealmIndex As Integer) As String
     Dim Server() As String
-    
+
     If RealmIndex >= 0 And RealmIndex < m_RealmServerList.Count Then
         Server = m_RealmServerList.Item(RealmIndex + 1)
         RealmServerTitle = Server(0)
@@ -594,7 +605,7 @@ End Property
 
 Public Property Get RealmServerDescription(ByVal RealmIndex As Integer) As String
     Dim Server() As String
-    
+
     If RealmIndex >= 0 And RealmIndex < m_RealmServerList.Count Then
         Server = m_RealmServerList.Item(RealmIndex + 1)
         RealmServerDescription = Server(1)
@@ -617,7 +628,7 @@ End Property
 
 Public Property Get CharacterName(ByVal Index As Integer) As String
     Dim Character() As Variant
-    
+
     If Index >= 0 And Index < m_CharacterList.Count Then
         Character = m_CharacterList.Item(Index + 1)
         CharacterName = CStr(Character(0))
@@ -628,7 +639,7 @@ End Property
 
 Public Property Get CharacterStats(ByVal Index As Integer) As clsUserStats
     Dim Character() As Variant
-    
+
     If Index >= 0 And Index < m_CharacterList.Count Then
         Character = m_CharacterList.Item(Index + 1)
         Set CharacterStats = Character(1)
@@ -700,6 +711,8 @@ Private Sub Event_RealmStartup(ByVal Success As Boolean, ByVal Message As String
 End Sub
 
 Private Sub Event_CharCreateResponse(ByVal Success As Boolean, ByVal Message As String)
+    m_RequestPending = False
+
     If Success Then
         frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
     Else
@@ -712,6 +725,8 @@ Private Sub Event_CharCreateResponse(ByVal Success As Boolean, ByVal Message As 
 End Sub
 
 Private Sub Event_CharDeleteResponse(ByVal Success As Boolean, ByVal Message As String)
+    m_RequestPending = False
+
     If Success Then
         frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
     Else
@@ -724,6 +739,8 @@ Private Sub Event_CharDeleteResponse(ByVal Success As Boolean, ByVal Message As 
 End Sub
 
 Private Sub Event_CharLogonResponse(ByVal Success As Boolean, ByVal Message As String)
+    m_RequestPending = False
+
     If Success Then
         frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
         
@@ -753,6 +770,8 @@ Private Sub Event_RealmMOTD(ByVal Message As String)
 End Sub
 
 Private Sub Event_CharUpgradeResponse(ByVal Success As Boolean, ByVal Message As String)
+    m_RequestPending = False
+
     If Success Then
         frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
     Else
