@@ -1081,7 +1081,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1107,7 +1106,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1155,7 +1153,7 @@ Begin VB.Form frmChat
       Begin VB.Menu mnuAccountManager 
          Caption         =   "&Account Manager..."
       End
-      Begin VB.Menu mnuUsers 
+      Begin VB.Menu mnuUserDBManager 
          Caption         =   "&User Database Manager..."
       End
       Begin VB.Menu mnuCommandManager 
@@ -1165,25 +1163,23 @@ Begin VB.Form frmChat
          Caption         =   "&Script Settings Manager..."
          Visible         =   0   'False
       End
-      Begin VB.Menu mnuSepTabcd 
-         Caption         =   "-"
-      End
-      Begin VB.Menu mnuGetNews 
-         Caption         =   "Get &News and Check for Updates"
-      End
-      Begin VB.Menu mnuUpdateVerbytes 
-         Caption         =   "Update &Version Bytes"
+      Begin VB.Menu mnuKeyManager 
+         Caption         =   "CD-&Key Manager..."
+         Visible         =   0   'False
       End
       Begin VB.Menu mnuSepZ 
          Caption         =   "-"
-         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuProfile 
+         Caption         =   "Edit &Profile..."
+         Enabled         =   0   'False
       End
       Begin VB.Menu mnuRealmSwitch 
          Caption         =   "Switch &Realm Character..."
          Visible         =   0   'False
       End
-      Begin VB.Menu mnuIgnoreInvites 
-         Caption         =   "&Ignore Clan Invitations"
+      Begin VB.Menu mnuClanCreate 
+         Caption         =   "Create C&lan..."
          Visible         =   0   'False
       End
       Begin VB.Menu mnuSep1 
@@ -1274,9 +1270,6 @@ Begin VB.Form frmChat
       Begin VB.Menu mnuSep5 
          Caption         =   "-"
       End
-      Begin VB.Menu mnuEditCaught 
-         Caption         =   "View Caught P&hrases..."
-      End
       Begin VB.Menu mnuFiles 
          Caption         =   "View &Files"
          Begin VB.Menu mnuOpenBotFolder 
@@ -1291,6 +1284,12 @@ Begin VB.Form frmChat
          Begin VB.Menu mnuWhisperCleared 
             Caption         =   "&Whisper Window Text Log"
          End
+         Begin VB.Menu mnuSepB 
+            Caption         =   "-"
+         End
+         Begin VB.Menu mnuEditCaught 
+            Caption         =   "Caught &Phrases"
+         End
       End
       Begin VB.Menu mnuSettingsRepair 
          Caption         =   "&Tools"
@@ -1300,6 +1299,9 @@ Begin VB.Form frmChat
          End
          Begin VB.Menu mnuRepairDataFiles 
             Caption         =   "Delete &Data Files"
+         End
+         Begin VB.Menu mnuUpdateVerbytes 
+            Caption         =   "&Update Version Bytes"
          End
          Begin VB.Menu mnuRepairVerbytes 
             Caption         =   "Restore Default &Version Bytes"
@@ -1342,12 +1344,8 @@ Begin VB.Form frmChat
       Begin VB.Menu mnuSep4 
          Caption         =   "-"
       End
-      Begin VB.Menu mnuProfile 
-         Caption         =   "Edit &Profile..."
-         Enabled         =   0   'False
-      End
       Begin VB.Menu mnuFilters 
-         Caption         =   "&Edit Chat Filters..."
+         Caption         =   "Edit Chat &Filters..."
       End
       Begin VB.Menu mnuCatchPhrases 
          Caption         =   "Edit &Catch Phrases..."
@@ -1519,6 +1517,9 @@ Begin VB.Form frmChat
       NegotiatePosition=   3  'Right
       Begin VB.Menu mnuAbout 
          Caption         =   "&About..."
+      End
+      Begin VB.Menu mnuGetNews 
+         Caption         =   "Get &News and Check for Updates"
       End
       Begin VB.Menu mnuHelpReadme 
          Caption         =   "&Wiki"
@@ -1959,6 +1960,9 @@ Private Sub Form_Load()
     cboSend.SetFocus
     
     LoadQuickChannels
+    PrepareHomeChannelMenu
+    PreparePublicChannelMenu
+    
     InitScriptControl SControl
     
     On Error Resume Next
@@ -2927,7 +2931,7 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
 End Sub
 
 Private Sub ClanHandler_ClanInvitation(ByVal Token As Long, ByVal ClanTag As String, ByVal RawClanTag As String, ByVal ClanName As String, ByVal InvitedBy As String, ByVal NewClan As Boolean)
-    If Not mnuIgnoreInvites.Checked And IsW3 Then
+    If Not Config.IgnoreClanInvites And IsW3 Then
         With Clan
             .Token = Token
             .DWName = RawClanTag
@@ -4560,17 +4564,6 @@ Private Sub mnuHideWhispersInrtbChat_Click()
     Call Config.Save
 End Sub
 
-Private Sub mnuIgnoreInvites_Click()
-    If mnuIgnoreInvites.Checked Then
-        mnuIgnoreInvites.Checked = False
-    Else
-        mnuIgnoreInvites.Checked = True
-    End If
-    
-    Config.IgnoreClanInvites = CBool(mnuIgnoreInvites.Checked)
-    Call Config.Save
-End Sub
-
 Private Sub mnuLog0_Click()
     BotVars.Logging = 2
     Config.LoggingMode = BotVars.Logging
@@ -5180,7 +5173,7 @@ Private Sub mnuToggle_Click()
     Call Config.Save
 End Sub
 
-Private Sub mnuUsers_Click()
+Private Sub mnuUserDBManager_Click()
     frmDBManager.Show
 End Sub
 
@@ -7215,7 +7208,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     mnuToggleShowOutgoing.Checked = Config.ShowOutgoingWhispers
     mnuHideWhispersInrtbChat.Checked = Config.HideWhispersInMain
-    mnuIgnoreInvites.Checked = Config.IgnoreClanInvites
     
     'LoadSafelist
     LoadArray LOAD_PHRASES, Phrases()
@@ -8152,11 +8144,9 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Boolean = False, Optional ByVal Lea
         BNLSAuthorized = False
         ConnectionTickCount = 0@
         
-        mnuSepZ.Visible = False
-        mnuIgnoreInvites.Visible = False
-        mnuRealmSwitch.Visible = False
-        
         mnuProfile.Enabled = False
+        mnuClanCreate.Visible = False
+        mnuRealmSwitch.Visible = False
         
         BotVars.LastChannel = vbNullString
         PrepareHomeChannelMenu

@@ -476,10 +476,9 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
     ' setup Bot menu game-specific features
     ShowW3 = (StrComp(Stats.Game, PRODUCT_WAR3, vbBinaryCompare) = 0) Or (StrComp(Stats.Game, PRODUCT_W3XP, vbBinaryCompare) = 0)
     ShowD2 = (StrComp(Stats.Game, PRODUCT_D2DV, vbBinaryCompare) = 0) Or (StrComp(Stats.Game, PRODUCT_D2XP, vbBinaryCompare) = 0)
-    frmChat.mnuSepZ.Visible = (ShowW3 Or ShowD2)
-    frmChat.mnuIgnoreInvites.Visible = ShowW3
-    frmChat.mnuRealmSwitch.Visible = ShowD2
     frmChat.mnuProfile.Enabled = True
+    'frmChat.mnuClanCreate.Visible = ShowW3
+    frmChat.mnuRealmSwitch.Visible = ShowD2
 
     SharedScriptSupport.myUsername = GetCurrentUsername
     

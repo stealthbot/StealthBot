@@ -153,13 +153,13 @@ Public Sub PrepareHomeChannelMenu()
     Dim ShowHome As Boolean
     Dim ShowLast As Boolean
 
-    ShowHome = (LenB(Config.HomeChannel) > 0 And StrComp(Config.HomeChannel, g_Channel.Name, vbTextCompare) <> 0)
+    ShowHome = (g_Online And LenB(Config.HomeChannel) > 0 And StrComp(Config.HomeChannel, g_Channel.Name, vbTextCompare) <> 0)
     With frmChat.mnuHomeChannel
         .Caption = MakeChannelMenuItemSafe(Config.HomeChannel, True) & " (&Home Channel)"
         .Visible = ShowHome
     End With
 
-    ShowLast = (LenB(BotVars.LastChannel) > 0 And StrComp(BotVars.LastChannel, g_Channel.Name, vbTextCompare) <> 0)
+    ShowLast = (g_Online And LenB(BotVars.LastChannel) > 0 And StrComp(BotVars.LastChannel, g_Channel.Name, vbTextCompare) <> 0)
     With frmChat.mnuLastChannel
         .Caption = MakeChannelMenuItemSafe(BotVars.LastChannel, True) & " (&Previous Channel)"
         .Visible = ShowLast
