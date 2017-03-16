@@ -11,7 +11,7 @@ Private Declare Function RegQueryValueEx Lib "advapi32.dll" Alias _
     ByVal lpReserved As Long, lpType As Long, lpData As Any, _
     lpcbData As Long) As Long
 Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (dest As _
-    Any, source As Any, ByVal numBytes As Long)
+    Any, Source As Any, ByVal numBytes As Long)
 
 Const KEY_READ = &H20019  ' ((READ_CONTROL Or KEY_QUERY_VALUE Or
                           ' KEY_ENUMERATE_SUB_KEYS Or KEY_NOTIFY) And (Not

@@ -493,7 +493,7 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
         .UpTimer.Enabled = True
     End With
     
-    If (frmChat.sckBNLS.State <> 0) Then
+    If (frmChat.sckBNLS.State <> sckClosed) Then
         frmChat.sckBNLS.Close
     End If
     

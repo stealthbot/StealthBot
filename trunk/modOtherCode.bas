@@ -371,12 +371,12 @@ End Function
 '// EXAMPLE
 '// StringFormat("This is an {1} of its {0}.", Array("use", "example")) '// OUTPUT: This is an example of its use.
 '// 08/29/2008 JSM - Created
-Public Function StringFormatA(source As String, params() As Variant) As String
+Public Function StringFormatA(Source As String, params() As Variant) As String
     
     On Error GoTo ERROR_HANDLER:
 
     Dim retVal As String, i As Integer
-    retVal = source
+    retVal = Source
     For i = LBound(params) To UBound(params)
         retVal = Replace(retVal, "{" & i & "}", CStr(params(i)))
     Next
@@ -396,12 +396,12 @@ End Function
 '// EXAMPLE
 '// StringFormat("This is an {1} of its {0}.", "use", "example") '// OUTPUT: This is an example of its use.
 '// 08/14/2009 JSM - Created
-Public Function StringFormat(source As String, ParamArray params() As Variant)
+Public Function StringFormat(Source As String, ParamArray params() As Variant)
 
     On Error GoTo ERROR_HANDLER:
 
     Dim retVal As String, i As Integer
-    retVal = source
+    retVal = Source
     For i = LBound(params) To UBound(params)
         retVal = Replace(retVal, "{" & i & "}", CStr(params(i)))
     Next

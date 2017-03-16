@@ -56,31 +56,31 @@ Public Property Let LogPath(ByVal Value As String)
     End If
 End Property
 
-Public Function WriteWarning(ByVal sWarning As String, Optional ByVal source As String, Optional TimeDate As Date)
-    source = LCase$(source)
+Public Function WriteWarning(ByVal sWarning As String, Optional ByVal Source As String, Optional TimeDate As Date)
+    Source = LCase$(Source)
 
-    If (LenB(source) > 0) Then
-        WriteLine WARNING_MSG, "warning " & source & " " & sWarning, TimeDate
+    If (LenB(Source) > 0) Then
+        WriteLine WARNING_MSG, "warning " & Source & " " & sWarning, TimeDate
     Else
         WriteLine WARNING_MSG, "warning " & sWarning, TimeDate
     End If
 End Function
 
-Public Function WriteError(ByVal sError As String, Optional ByVal source As String, Optional TimeDate As Date)
-    source = LCase$(source)
+Public Function WriteError(ByVal sError As String, Optional ByVal Source As String, Optional TimeDate As Date)
+    Source = LCase$(Source)
     
-    If (LenB(source) > 0) Then
-        WriteLine ERROR_MSG, "error " & source & " " & sError, TimeDate
+    If (LenB(Source) > 0) Then
+        WriteLine ERROR_MSG, "error " & Source & " " & sError, TimeDate
     Else
         WriteLine ERROR_MSG, "error " & sError, TimeDate
     End If
 End Function
 
-Public Function WriteEvent(ByVal sTitle As String, ByVal sEvent As String, Optional ByVal source As String, Optional TimeDate As Date)
-    source = LCase$(source)
+Public Function WriteEvent(ByVal sTitle As String, ByVal sEvent As String, Optional ByVal Source As String, Optional TimeDate As Date)
+    Source = LCase$(Source)
     
-    If (LenB(source) > 0) Then
-        WriteLine EVENT_MSG, "event " & sTitle & " " & source & " " & sEvent, TimeDate
+    If (LenB(Source) > 0) Then
+        WriteLine EVENT_MSG, "event " & sTitle & " " & Source & " " & sEvent, TimeDate
     Else
         WriteLine EVENT_MSG, "event " & sTitle & " " & sEvent, TimeDate
     End If
@@ -98,12 +98,12 @@ Public Function WriteDatabase(ByVal sEvent As String, Optional TimeDate As Date)
     End If
 End Function
 
-Public Function WriteDebug(ByVal sDebugMessage As String, Optional ByVal source As String, Optional TimeDate As Date)
-    source = LCase$(source)
+Public Function WriteDebug(ByVal sDebugMessage As String, Optional ByVal Source As String, Optional TimeDate As Date)
+    Source = LCase$(Source)
     
     If (isDebug) Then
-        If (LenB(source) > 0) Then
-            WriteLine DEBUG_MSG, "debug " & source & " " & sDebugMessage, TimeDate
+        If (LenB(Source) > 0) Then
+            WriteLine DEBUG_MSG, "debug " & Source & " " & sDebugMessage, TimeDate
         Else
             WriteLine DEBUG_MSG, "debug " & sDebugMessage, TimeDate
         End If
@@ -128,7 +128,7 @@ Public Function WriteSckData(ByVal sMessage As String, Optional TimeDate As Date
     End If
 End Function
 
-Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal line As String, Optional TimeDate As Date)
+Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal Line As String, Optional TimeDate As Date)
     On Error GoTo ERROR_HANDLER
 
     Dim f         As Integer
@@ -156,9 +156,9 @@ Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal line As String, Optio
     If (f > 0) Then
         Select Case (ltype)
             Case CHAT_MSG, WHISPER_MSG, SCK_MSG
-                Print #f, "[" & Timestamp(TimeDate) & "] " & line
+                Print #f, "[" & Timestamp(TimeDate) & "] " & Line
             Case Else
-                Print #f, "[" & Datestamp(TimeDate) & " " & Timestamp(TimeDate) & "] " & line
+                Print #f, "[" & Datestamp(TimeDate) & " " & Timestamp(TimeDate) & "] " & Line
         End Select
         
         Close #f

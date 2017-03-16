@@ -37,13 +37,13 @@ Public Declare Function ShowScrollBar Lib "user32" (ByVal hWnd As Long, ByVal wB
 Public Declare Function Send Lib "ws2_32.dll" Alias "send" _
    (ByVal s As Long, _
     ByVal buf As String, _
-    ByVal datalen As Long, _
+    ByVal DataLen As Long, _
     ByVal Flags As Long) As Long
     
 Public Declare Function SendBytes Lib "ws2_32.dll" Alias "send" _
    (ByVal s As Long, _
     ByRef buf() As Byte, _
-    ByVal datalen As Long, _
+    ByVal DataLen As Long, _
     ByVal Flags As Long) As Long
     
 Public Declare Function DeleteURLCacheEntry Lib "Wininet.dll" _
@@ -103,7 +103,7 @@ Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hWnd _
     
 Public Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" ( _
     Destination As Any, _
-    source As Any, _
+    Source As Any, _
     ByVal Length As Long)
     
 Public Declare Function ShellExecute Lib "shell32" Alias "ShellExecuteA" ( _

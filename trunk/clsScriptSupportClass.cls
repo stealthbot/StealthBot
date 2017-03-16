@@ -972,10 +972,10 @@ End Sub
 '// STRINGFORMAT
 '// Replaces {#} parameters in source with the elements passed after it.
 '// EX: StringFormat("Hello {1}, your ping is {2}ms", Username, Ping)
-Public Function StringFormat(source As String, ParamArray params() As Variant) As String
+Public Function StringFormat(Source As String, ParamArray params() As Variant) As String
     Dim arr() As Variant
     arr() = params
-    StringFormat = modOtherCode.StringFormatA(source, arr)
+    StringFormat = modOtherCode.StringFormatA(Source, arr)
 End Function
 
 
