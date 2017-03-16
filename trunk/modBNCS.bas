@@ -1427,7 +1427,7 @@ On Error GoTo ERROR_HANDLER:
         sMCPData = StringFormat("{0}{1}", sMCPData, pBuff.GetRaw(48))
         sUniq = pBuff.GetString(UTF8)
         
-        If (Not frmChat.sckMCP.State = 0) Then frmChat.sckMCP.Close
+        If (Not frmChat.sckMCP.State = sckClosed) Then frmChat.sckMCP.Close
         
         If Not ds.MCPHandler Is Nothing Then
             Call ds.MCPHandler.SetStartupData(sMCPData, sUniq, sIP, lPort)

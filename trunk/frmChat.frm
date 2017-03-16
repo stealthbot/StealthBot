@@ -2311,7 +2311,7 @@ Sub Event_BNetDisconnected()
     
     AddChat RTBColors.ErrorMessageText, "[BNCS] Disconnected."
     
-    DoDisconnect (1)
+    Call DoDisconnect(True)
     
     SetTitle "Disconnected"
     
@@ -2327,8 +2327,8 @@ Sub Event_BNetDisconnected()
     'AddChat RTBColors.ErrorMessageText, "[BNCS] Attempting to reconnect, please wait..."
     'AddChat RTBColors.SuccessText, "Connection initialized."
     
-    If sckBNet.State <> 0 Then sckBNet.Close
-    If sckBNLS.State <> 0 Then sckBNLS.Close
+    If sckBNet.State <> sckClosed Then sckBNet.Close
+    If sckBNLS.State <> sckClosed Then sckBNLS.Close
     
     BNLSAuthorized = False
     
@@ -2351,15 +2351,15 @@ Sub Event_BNetError(ErrorNumber As Integer, Description As String)
     AddChat RTBColors.ErrorMessageText, s & ErrorNumber & " -- " & Description
     AddChat RTBColors.ErrorMessageText, s & "Disconnected."
     
-    If (sckBNet.State <> 0) Then
+    If (sckBNet.State <> sckClosed) Then
         Call sckBNet.Close
     End If
     
-    If (sckBNLS.State <> 0) Then
+    If (sckBNLS.State <> sckClosed) Then
         Call sckBNLS.Close
     End If
     
-    If (sckMCP.State <> 0) Then
+    If (sckMCP.State <> sckClosed) Then
         Call sckMCP.Close
     End If
     
@@ -5905,7 +5905,7 @@ End Sub
 
 Private Sub sckBNet_Close()
     sckBNet.Close
-    If sckBNLS.State <> 0 Then sckBNLS.Close
+    If sckBNLS.State <> sckClosed Then sckBNLS.Close
     
     Call Event_BNetDisconnected
     
@@ -6220,7 +6220,7 @@ Private Sub tmrIdleTimer_Timer_IdleMsg()
         IdleMsg = "/me -- " & CVERSION
     End If
     
-    If sckBNet.State = 7 Then
+    If sckBNet.State = sckConnected Then
         If InStr(1, IdleMsg, "& ", vbTextCompare) And IdleType = "msg" Then
             s = Split(IdleMsg, "& ")
             
@@ -6336,7 +6336,7 @@ Sub ConnectBNLS()
     Call Event_BNLSConnecting
     
     With sckBNLS
-        If .State <> 0 Then .Close
+        If .State <> sckClosed Then .Close
         
         If ProxyConnInfo(stBNLS).IsUsingProxy Then
             .RemoteHost = ProxyConnInfo(stBNLS).ProxyIP
@@ -6356,7 +6356,7 @@ Sub Connect()
     
     'g_username = BotVars.Username
     
-    If sckBNet.State = 0 And sckBNLS.State = 0 Then
+    If sckBNet.State = sckClosed And sckBNLS.State = sckClosed Then
     
         'Vars
         NotEnoughInfo = False
@@ -6463,7 +6463,7 @@ Sub Connect()
         End If
         
         With sckBNet
-            If .State <> 0 Then
+            If .State <> sckClosed Then
                 AddChat RTBColors.ErrorMessageText, "Already connected."
                 Exit Sub
             End If
@@ -8062,7 +8062,7 @@ Sub DoConnect()
     'End If
 End Sub
 
-Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAlone As Boolean = False)
+Sub DoDisconnect(Optional ByVal DoNotShow As Boolean = False, Optional ByVal LeaveUCCAlone As Boolean = False)
     On Error GoTo ERROR_HANDLER
 
     Dim i As Integer
@@ -8075,7 +8075,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         
         frmChat.UpdateTrayTooltip
         
-        Call CloseAllConnections(DoNotShow = 0)
+        Call CloseAllConnections(Not DoNotShow)
         
         Set g_Channel = Nothing
         Set g_Clan = Nothing

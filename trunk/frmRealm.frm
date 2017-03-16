@@ -853,7 +853,7 @@ Private Sub Form_Unload(Cancel As Integer)
     If ((Not (m_Unload_SuccessfulLogin)) Or (ds.MCPHandler.IsRealmError)) Then
         frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Logon cancelled."
         
-        If frmChat.sckMCP.State <> 0 Then
+        If frmChat.sckMCP.State <> sckClosed Then
             frmChat.sckMCP.Close
         End If
         
@@ -884,7 +884,7 @@ Private Sub cboOtherRealms_Click()
         DisableGUI
         
         ' close connection and switch realms
-        If frmChat.sckMCP.State <> 0 Then
+        If frmChat.sckMCP.State <> sckClosed Then
             frmChat.sckMCP.Close
         End If
         

@@ -460,7 +460,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
 
     On Error GoTo ERROR_HANDLER
 
-    If (frmChat.sckBNet.State = 7) Then
+    If (frmChat.sckBNet.State = sckConnected) Then
         Set pBuf = New clsDataBuffer
         With pBuf
             If (frmChat.mnuUTF8.Checked) Then
@@ -2634,9 +2634,9 @@ Public Function IsValidIPAddress(ByVal sIn As String) As Boolean
 End Function
 
 Public Sub CloseAllConnections(Optional ShowMessage As Boolean = True)
-    If (frmChat.sckBNLS.State <> 0) Then: frmChat.sckBNLS.Close
-    If (frmChat.sckBNet.State <> 0) Then: frmChat.sckBNet.Close
-    If (frmChat.sckMCP.State <> 0) Then: frmChat.sckMCP.Close
+    If (frmChat.sckBNLS.State <> sckClosed) Then: frmChat.sckBNLS.Close
+    If (frmChat.sckBNet.State <> sckClosed) Then: frmChat.sckBNet.Close
+    If (frmChat.sckMCP.State <> sckClosed) Then: frmChat.sckMCP.Close
     
     If (ShowMessage) Then
         frmChat.AddChat RTBColors.ErrorMessageText, "All connections closed."
