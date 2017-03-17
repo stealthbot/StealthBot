@@ -115,6 +115,10 @@ Public Const BNCS_NLS As Long = 1 'New:    SID_AUTH_*
 Public Const BNCS_OLS As Long = 2 'Old:    SID_CLIENTID2
 Public Const BNCS_LLS As Long = 3 'Legacy: SID_CLIENTID
 
+Public Const BNCS_PROTOCOL_BNCS  As Byte = 1
+Public Const BNCS_PROTOCOL_BNFTP As Byte = 2
+Public Const BNCS_PROTOCOL_CHAT  As Byte = 3
+
 Public Const BNCSSERVER_XSHA As Long = 0
 Public Const BNCSSERVER_SRP2 As Long = 2
 
@@ -141,15 +145,23 @@ Public Function BNCSRecvPacket(ByVal pBuff As clsDataBuffer, Optional ByVal Scri
         On Error GoTo ERROR_HANDLER
     #End If
 
-    Dim PacketID As Byte
+    Dim PacketID  As Byte
     Dim PacketLen As Long
+    Dim Position  As Long
+    Dim buf()     As Byte
 
     BNCSRecvPacket = True
 
     If pBuff.HandleRecvData(PacketID, PacketLen, stBNCS, phtBNCS, ScriptSource) Then
         'This will be taken out when Warden is moved to a script like I want.
-        If (modWarden.WardenData(WardenInstance, pBuff.GetDataAsByteArr, False)) Then
-            Exit Function
+        If PacketLen > 4 Then
+            Position = pBuff.Position
+            ReDim buf(0 To PacketLen - 5)
+            Call pBuff.GetByteArr(buf)
+            pBuff.Position = Position
+            If (modWarden.WardenData(WardenInstance, buf, False, PacketID, PacketLen - 4)) Then
+                Exit Function
+            End If
         End If
 
         Select Case PacketID

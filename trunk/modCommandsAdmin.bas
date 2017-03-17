@@ -170,7 +170,9 @@ Public Sub OnDisable(Command As clsCommandObj)
 End Sub
 
 Public Sub OnDump(Command As clsCommandObj)
-    Call DumpPacketCache
+    Dim Count As Integer
+    Count = DumpPacketCache
+    Command.Respond StringFormat("Dumped the last {0} packets to today's packet log.", Count)
 End Sub
 
 Public Sub OnEnable(Command As clsCommandObj)

@@ -71,7 +71,7 @@ Private Function NamePacketType(ByVal PktType As enuServerTypes) As String
     End Select
 End Function
 
-Private Function CachePacket(ByRef Pkt As PACKETCACHEITEM)
+Private Sub CachePacket(ByRef Pkt As PACKETCACHEITEM)
 
     If (m_cache_count + 1 > MAX_PACKET_CACHE_SIZE) Then
         Dim i As Integer
@@ -80,7 +80,7 @@ Private Function CachePacket(ByRef Pkt As PACKETCACHEITEM)
             m_cache(i) = m_cache(i + 1)
         Next i
 
-        m_cache(m_cache_count) = Pkt
+        m_cache(m_cache_count - 1) = Pkt
     Else
         If (m_cache_count = 0) Then
             ReDim m_cache(0)
@@ -93,27 +93,29 @@ Private Function CachePacket(ByRef Pkt As PACKETCACHEITEM)
         m_cache_count = m_cache_count + 1
     End If
 
-End Function
+End Sub
 
-Public Sub DumpPacketCache()
-    
+Public Function DumpPacketCache() As Integer
+
     Dim Pkt     As PACKETCACHEITEM
     Dim i       As Integer
     Dim Traffic As Boolean
-    
+
     Traffic = LogPacketTraffic
-    
+
     LogPacketTraffic = True
-    
+
     For i = 0 To m_cache_count - 1
         Pkt = m_cache(i)
-        
+
         Call WritePacketData(Pkt)
     Next i
-    
+
     LogPacketTraffic = Traffic
-    
-End Sub
+
+    DumpPacketCache = m_cache_count
+
+End Function
 
 ' Written 2007-06-08 to produce packet logs or do other things
 Private Sub WritePacketData(ByRef Pkt As PACKETCACHEITEM)
@@ -316,11 +318,6 @@ Public Function SendData(ByRef Data() As Byte, ByVal DataLen As Long, _
         Pkt = MakePacket(buf, PktLen, HasPktID, PktID, PktType, CtoS)
         Call CachePacket(Pkt)
         Call WritePacketData(Pkt)
-
-        If Socket Is frmChat.sckBNet Then
-            'Send Warden Everything thats Sent to Bnet
-            Call modWarden.WardenData(WardenInstance, buf, True)
-        End If
     End If
 End Function
 

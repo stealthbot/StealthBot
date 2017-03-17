@@ -379,6 +379,14 @@ Public Function SendData(ByRef Socket As Winsock, Optional ByVal PacketID As Byt
     End If
 
     SendData = modPacketBuffer.SendData(m_buf, m_bufsize, Not IsMissing(PacketID), PacketID, Socket, ServerType, HeaderType)
+
+    If (Socket Is frmChat.sckBNet) Then
+        If m_bufsize > 0 Then
+            'Send Warden Everything thats Sent to Bnet
+            Call modWarden.WardenData(WardenInstance, m_buf, True, PacketID, m_bufsize)
+        End If
+    End If
+
     Clear
 End Function
 

@@ -5928,16 +5928,19 @@ Private Sub sckBNet_Connect()
 End Sub
 
 Sub InitBNetConnection()
+    Dim buf(0) As Byte
+    buf(0) = BNCS_PROTOCOL_BNCS
+
     g_Connected = True
-    
-    'sckBNet.SendData ChrW(1)
-    Call Send(sckBNet.SocketHandle, ChrW(1), 1, 0)
-    
+
+    Call modPacketBuffer.SendData(buf, 1, False, , sckBNet, stBNCS, phtNONE)
+
     If BotVars.BNLS Then
         modBNLS.SEND_BNLS_REQUESTVERSIONBYTE
     Else
         Select Case modBNCS.GetLogonSystem()
-            Case modBNCS.BNCS_NLS: Call modBNCS.SEND_SID_AUTH_INFO
+            Case modBNCS.BNCS_NLS:
+                modBNCS.SEND_SID_AUTH_INFO
             Case modBNCS.BNCS_OLS:
                 modBNCS.SEND_SID_CLIENTID2
                 modBNCS.SEND_SID_LOCALEINFO
@@ -5999,9 +6002,13 @@ ERROR_HANDLER:
 End Sub
 
 Sub InitMCPConnection()
-    'sckMCP.SendData ChrW(1)
-    Call Send(sckMCP.SocketHandle, ChrW(1), 1, 0)
-    
+    Dim buf(0) As Byte
+    buf(0) = BNCS_PROTOCOL_BNCS
+
+    g_Connected = True
+
+    Call modPacketBuffer.SendData(buf, 1, False, , sckMCP, stMCP, phtNONE)
+
     ds.MCPHandler.SEND_MCP_STARTUP
 End Sub
 
