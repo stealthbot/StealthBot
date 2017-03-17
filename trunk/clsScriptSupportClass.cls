@@ -692,7 +692,7 @@ End Sub
 
 '// PRINTURLTOFILE
 '// Mirror function for the Windows API URLDownloadToFile() function
-'// Currently you are restricted to placing files in the StealthBot install directory only
+'// Currently you are restricted to placing files in the active profile directory only
 Public Sub PrintURLToFile(ByVal sFileName As String, ByVal sURL As String)
     sFileName = StringFormat("{0}\{1}", CurDir$(), sFileName)
     
