@@ -17,27 +17,27 @@ Attribute VB_Exposed = False
 Option Explicit
 
 
-Private m_flags            As Long
-Private m_ping             As Long
-Private m_actual_name      As String
-Private m_character_name   As String
-Private m_clan             As String
-Private m_clan_rank        As Integer
-Private m_join_date        As Date
-Private m_last_speak_date  As Date
-Private m_stats_string     As String
-Private m_Game             As String
-Private m_total_bans       As Long
-Private m_total_kicks      As Long
-Private m_operator_date    As Date
-Private m_queue            As Collection
-Private m_passed_chan_auth As Boolean
-Private m_stats            As clsUserStats
-Private m_pending_ban      As Boolean
+Private m_Flags             As Long             ' users BNET flags
+Private m_Ping              As Long
+Private m_ActualName        As String           ' unmodified name as provided by the server
+Private m_CharacterName     As String           ' D2 character name
+Private m_Clan              As String           ' W3 clan tag
+Private m_JoinDate          As Date             ' date-time joined the channel
+Private m_LastSpeakDate     As Date             ' time last seen talking
+Private m_StatString        As String
+Private m_Game              As String           ' product code (WAR3, D2DV, STAR, etc)
+Private m_Queue             As Collection       ' queue'd chat events
+Private m_PassedChannelAuth As Boolean
+Private m_StatsObj          As clsUserStats
+Private m_PendingBan        As Boolean
+
+Private m_CleanName         As String
+Private m_DisplayName       As String           ' name displayed according to conventions
+Private m_FullName          As String           ' full name including gateway
 
 Private Sub Class_Initialize()
-    Set m_queue = New Collection
-    Set m_stats = New clsUserStats
+    Set m_Queue = New Collection
+    Set m_StatsObj = New clsUserStats
     
     LastTalkTime = UtcNow
     JoinTime = UtcNow
@@ -46,36 +46,74 @@ End Sub
 Private Sub Class_Terminate()
     ClearQueue
 
-    Set m_queue = Nothing
-    Set m_stats = Nothing
+    Set m_Queue = Nothing
+    Set m_StatsObj = Nothing
 End Sub
 
+
 Public Property Get Name() As String
-    Name = modEvents.CleanUsername(m_actual_name)
+    Name = m_CleanName
 End Property
 
-Public Property Let Name(ByVal str As String)
-    m_actual_name = str
+Public Property Let Name(ByVal sValue As String)
+    ' Only update if value has actually changed.
+    If StrComp(m_ActualName, sValue, vbBinaryCompare) = 0 Then
+        Exit Property
+    End If
+    
+    m_ActualName = sValue
+    
+    ' Update derived names
+    m_CleanName = modEvents.CleanUsername(m_ActualName)
+    m_DisplayName = ConvertUsername(m_ActualName)
+    m_FullName = ConvertUsername(m_ActualName, 3)       ' 3 = show all gateways
 End Property
 
-Public Property Get CharacterName() As String
-    CharacterName = m_character_name
+Public Property Get DisplayName() As String
+    DisplayName = m_DisplayName
 End Property
 
-Public Property Let CharacterName(ByVal str As String)
-    m_character_name = str
+Public Property Get FullName() As String
+    FullName = m_FullName
 End Property
+
+
+Public Property Get Flags() As Long
+    Flags = m_Flags
+End Property
+
+Public Property Let Flags(ByVal lValue As Long)
+    m_Flags = lValue
+End Property
+
+
+Public Property Get Ping() As Long
+    Ping = m_Ping
+End Property
+
+Public Property Let Ping(ByVal lValue As Long)
+    m_Ping = lValue
+End Property
+
+
+Public Property Get StatString() As String
+    StatString = m_StatString
+End Property
+
+Public Property Let StatString(ByVal sValue As String)
+    m_StatString = sValue
+    
+    m_StatsObj.StatString = m_StatString
+End Property
+
+
+Public Property Get Stats() As clsUserStats
+    Set Stats = m_StatsObj
+End Property
+
 
 Public Property Get Game() As String
-    Game = m_stats.Game
-End Property
-
-Public Property Get PendingBan() As Boolean
-    PendingBan = m_pending_ban
-End Property
-
-Public Property Let PendingBan(ByVal bln As Boolean)
-    m_pending_ban = bln
+    Game = m_StatsObj.Game
 End Property
 
 Public Property Get IsUsingDII() As Boolean
@@ -86,86 +124,76 @@ Public Property Get IsUsingWarIII() As Boolean
     IsUsingWarIII = ((Game = PRODUCT_WAR3) Or (Game = PRODUCT_W3XP))
 End Property
 
-Public Property Get Statstring() As String
-    Statstring = m_stats_string
-End Property
-
-Public Property Let Statstring(ByVal str As String)
-    m_stats_string = str
-    
-    m_stats.Statstring = m_stats_string
-End Property
 
 Public Property Get Clan() As String
-    Clan = m_stats.Clan
+    Clan = m_StatsObj.Clan
 End Property
 
-Public Property Get DisplayName() As String
-    DisplayName = ConvertUsername(m_actual_name)
+
+
+Public Property Get CharacterName() As String
+    CharacterName = m_CharacterName
 End Property
 
-' Converts the username to always contain the gateway
-'  3 = gateway convention: show all
-Public Property Get FullName() As String
-    FullName = ConvertUsername(m_actual_name, 3)
+Public Property Let CharacterName(ByVal sValue As String)
+    m_CharacterName = sValue
 End Property
 
-Public Property Get Flags() As Long
-    Flags = m_flags
-End Property
 
-Public Property Let Flags(ByVal lng As Long)
-    m_flags = lng
-End Property
 
 Public Property Get PassedChannelAuth() As Boolean
-    PassedChannelAuth = m_passed_chan_auth
+    PassedChannelAuth = m_PassedChannelAuth
 End Property
 
 Public Property Let PassedChannelAuth(ByVal bln As Boolean)
-    m_passed_chan_auth = bln
+    m_PassedChannelAuth = bln
 End Property
 
+
+Public Property Get PendingBan() As Boolean
+    PendingBan = m_PendingBan
+End Property
+
+Public Property Let PendingBan(ByVal bValue As Boolean)
+    m_PendingBan = bValue
+End Property
+
+
 Public Property Get IsBnetAdmin() As Boolean
-    IsBnetAdmin = ((m_flags And USER_SYSOP&) = USER_SYSOP&)
+    IsBnetAdmin = ((m_Flags And USER_SYSOP&) = USER_SYSOP&)
 End Property
 
 Public Property Get IsBlizzRep() As Boolean
-    IsBlizzRep = ((m_flags And USER_BLIZZREP&) = USER_BLIZZREP&)
+    IsBlizzRep = ((m_Flags And USER_BLIZZREP&) = USER_BLIZZREP&)
 End Property
 
 Public Property Get IsOperator() As Boolean
-    IsOperator = (((m_flags And USER_CHANNELOP&) = USER_CHANNELOP&) Or _
+    IsOperator = (((m_Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Or _
                    IsBlizzRep() Or IsBnetAdmin())
 End Property
 
 Public Property Get IsSquelched() As Boolean
-    IsSquelched = ((m_flags And USER_SQUELCHED&) = USER_SQUELCHED&)
+    IsSquelched = ((m_Flags And USER_SQUELCHED&) = USER_SQUELCHED&)
 End Property
 
-Public Property Get Ping() As Long
-    Ping = m_ping
-End Property
 
-Public Property Let Ping(ByVal lng As Long)
-    m_ping = lng
-End Property
-
-Public Property Let LastTalkTime(ByVal TDate As Date)
-    m_last_speak_date = TDate
+Public Property Let LastTalkTime(ByVal dtValue As Date)
+    m_LastSpeakDate = dtValue
 End Property
 
 Public Property Get LastTalkTime() As Date
-    LastTalkTime = m_last_speak_date
+    LastTalkTime = m_LastSpeakDate
 End Property
 
-Public Property Let JoinTime(ByVal JDate As Date)
-    m_join_date = JDate
+
+Public Property Let JoinTime(ByVal dtValue As Date)
+    m_JoinDate = dtValue
 End Property
 
 Public Property Get JoinTime() As Date
-    JoinTime = m_join_date
+    JoinTime = m_JoinDate
 End Property
+
 
 Public Function TimeSinceTalk() As Double
     On Error GoTo ERROR_HANDLER
@@ -189,20 +217,9 @@ ERROR_HANDLER:
     Exit Function
 End Function
 
-Public Sub ClearQueue()
-    Dim i As Integer
-    
-    For i = Queue.Count To 1 Step -1
-        Queue.Remove i
-    Next i
-End Sub
 
 Public Property Get Queue() As Collection
-    Set Queue = m_queue
-End Property
-
-Public Property Get Stats() As clsUserStats
-    Set Stats = m_stats
+    Set Queue = m_Queue
 End Property
 
 Public Sub DisplayQueue()
@@ -224,10 +241,10 @@ Public Sub DisplayQueue()
     
         Select Case (CurrentEvent.EventID)
             Case ID_USER
-                Call Event_UserInChannel(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, j)
+                Call Event_UserInChannel(Name, CurrentEvent.Flags, CurrentEvent.StatString, CurrentEvent.Ping, j)
                     
             Case ID_JOIN
-                Call Event_UserJoins(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, j)
+                Call Event_UserJoins(Name, CurrentEvent.Flags, CurrentEvent.StatString, CurrentEvent.Ping, j)
             
             Case ID_TALK
                 Call Event_UserTalk(Name, CurrentEvent.Flags, CurrentEvent.Message, CurrentEvent.Ping, j)
@@ -236,7 +253,7 @@ Public Sub DisplayQueue()
                 Call Event_UserEmote(Name, CurrentEvent.Flags, CurrentEvent.Message, j)
             
             Case ID_USERFLAGS
-                Call Event_FlagsUpdate(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, j)
+                Call Event_FlagsUpdate(Name, CurrentEvent.Flags, CurrentEvent.StatString, CurrentEvent.Ping, j)
         End Select
     Next j
     
@@ -251,6 +268,15 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
+Public Sub ClearQueue()
+    Dim i As Integer
+    
+    For i = Queue.Count To 1 Step -1
+        Queue.Remove i
+    Next i
+End Sub
+
+
 Public Function Clone() As Object
     Dim i As Integer
 
@@ -264,7 +290,7 @@ Public Function Clone() As Object
     Clone.LastTalkTime = LastTalkTime
     Clone.PassedChannelAuth = PassedChannelAuth
     Clone.PendingBan = PendingBan
-    Clone.Statstring = Statstring
+    Clone.StatString = StatString
     
     For i = 1 To Queue.Count
         Clone.Queue.Add Queue(i).Clone()
