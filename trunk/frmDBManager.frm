@@ -10,7 +10,7 @@ Begin VB.Form frmDBManager
    ClientHeight    =   6255
    ClientLeft      =   45
    ClientTop       =   435
-   ClientWidth     =   7320
+   ClientWidth     =   7605
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -24,26 +24,26 @@ Begin VB.Form frmDBManager
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   6255
-   ScaleWidth      =   7320
+   ScaleWidth      =   7605
    StartUpPosition =   1  'CenterOwner
    WhatsThisHelp   =   -1  'True
-   Begin VB.CommandButton btnCreateGame 
+   Begin VB.CommandButton cmdCreateGame 
       Caption         =   "Ga&me"
       Height          =   375
       Left            =   3240
       Picture         =   "frmDBManager.frx":0000
       TabIndex        =   5
-      ToolTipText     =   "Create Group"
+      ToolTipText     =   "Create game entry. Dynamically matches a user's current product."
       Top             =   5378
       Width           =   735
    End
-   Begin VB.CommandButton btnCreateClan 
+   Begin VB.CommandButton cmdCreateClan 
       Caption         =   "C&lan"
       Height          =   375
       Left            =   2520
       Picture         =   "frmDBManager.frx":0468
       TabIndex        =   4
-      ToolTipText     =   "Create Group"
+      ToolTipText     =   "Create WarCraft III Clan tag entry. Dynamically matches a user's clan tag."
       Top             =   5378
       Width           =   735
    End
@@ -106,39 +106,39 @@ Begin VB.Form frmDBManager
       _Version        =   393216
       Filter          =   "*.txt"
    End
-   Begin VB.CommandButton btnCreateGroup 
+   Begin VB.CommandButton cmdCreateGroup 
       Caption         =   "&Group"
       Height          =   375
       Left            =   1800
       TabIndex        =   3
-      ToolTipText     =   "Create Group"
+      ToolTipText     =   "Create group of entries."
       Top             =   5378
       Width           =   735
    End
-   Begin VB.CommandButton btnCreateUser 
+   Begin VB.CommandButton cmdCreateUser 
       Caption         =   "Create &User..."
       Height          =   375
       Left            =   120
       MaskColor       =   &H00000000&
       TabIndex        =   2
-      ToolTipText     =   "Create User"
+      ToolTipText     =   "Create user entry. Matches a user by exact name, or include ""*""s to match multiple users."
       Top             =   5378
       Width           =   1695
    End
-   Begin VB.CommandButton btnSaveForm 
+   Begin VB.CommandButton cmdSaveForm 
       Caption         =   "Apply and Cl&ose"
       Default         =   -1  'True
       Height          =   300
-      Left            =   5880
+      Left            =   6120
       TabIndex        =   25
       Top             =   5880
       Width           =   1335
    End
-   Begin VB.CommandButton btnCancel 
+   Begin VB.CommandButton cmdCancel 
       Cancel          =   -1  'True
       Caption         =   "&Cancel"
       Height          =   300
-      Left            =   5160
+      Left            =   5400
       TabIndex        =   26
       Top             =   5880
       Width           =   735
@@ -175,33 +175,42 @@ Begin VB.Form frmDBManager
       Left            =   4200
       TabIndex        =   6
       Top             =   120
-      Width           =   3025
-      Begin VB.CommandButton btnSaveUser 
+      Width           =   3255
+      Begin VB.CommandButton cmdSaveUser 
          Caption         =   "&Save"
          Enabled         =   0   'False
          Height          =   300
-         Left            =   1920
+         Left            =   2400
          TabIndex        =   22
-         Top             =   5040
-         Width           =   855
+         Top             =   5160
+         Width           =   615
       End
-      Begin VB.CommandButton btnDelete 
+      Begin VB.CommandButton cmdDiscardUser 
+         Caption         =   "D&iscard"
+         Enabled         =   0   'False
+         Height          =   300
+         Left            =   1680
+         TabIndex        =   27
+         Top             =   5160
+         Width           =   735
+      End
+      Begin VB.CommandButton cmdDeleteUser 
          Caption         =   "&Delete"
          Enabled         =   0   'False
          Height          =   300
-         Left            =   1080
+         Left            =   960
          TabIndex        =   23
-         Top             =   5040
-         Width           =   855
+         Top             =   5160
+         Width           =   615
       End
-      Begin VB.CommandButton btnRename 
+      Begin VB.CommandButton cmdRenameUser 
          Caption         =   "Re&name"
          Enabled         =   0   'False
          Height          =   300
          Left            =   240
          TabIndex        =   24
-         Top             =   5040
-         Width           =   855
+         Top             =   5160
+         Width           =   735
       End
       Begin VB.TextBox txtBanMessage 
          BackColor       =   &H00993300&
@@ -210,15 +219,15 @@ Begin VB.Form frmDBManager
          Left            =   240
          TabIndex        =   20
          Top             =   4200
-         Width           =   2535
+         Width           =   2775
       End
       Begin MSComctlLib.ListView lvGroups 
          Height          =   1320
          Left            =   240
          TabIndex        =   18
          Top             =   2520
-         Width           =   2535
-         _ExtentX        =   4471
+         Width           =   2775
+         _ExtentX        =   4895
          _ExtentY        =   2328
          View            =   1
          LabelEdit       =   1
@@ -240,11 +249,11 @@ Begin VB.Form frmDBManager
          Enabled         =   0   'False
          ForeColor       =   &H00FFFFFF&
          Height          =   285
-         Left            =   1560
+         Left            =   1680
          MaxLength       =   25
          TabIndex        =   10
          Top             =   480
-         Width           =   1215
+         Width           =   1335
       End
       Begin VB.TextBox txtRank 
          BackColor       =   &H00993300&
@@ -255,7 +264,7 @@ Begin VB.Form frmDBManager
          MaxLength       =   25
          TabIndex        =   8
          Top             =   480
-         Width           =   1215
+         Width           =   1335
       End
       Begin VB.Label lblInherit 
          BackColor       =   &H00000000&
@@ -265,7 +274,7 @@ Begin VB.Form frmDBManager
          Left            =   240
          TabIndex        =   21
          Top             =   4560
-         Width           =   2535
+         Width           =   2775
       End
       Begin VB.Label lblBanMessage 
          BackColor       =   &H00000000&
@@ -275,7 +284,7 @@ Begin VB.Form frmDBManager
          Left            =   240
          TabIndex        =   19
          Top             =   3960
-         Width           =   2535
+         Width           =   2775
       End
       Begin VB.Label lblModifiedOn 
          BackColor       =   &H00000000&
@@ -294,7 +303,7 @@ Begin VB.Form frmDBManager
          Left            =   360
          TabIndex        =   15
          Top             =   1800
-         Width           =   2415
+         Width           =   2655
       End
       Begin VB.Label lblGroups 
          BackColor       =   &H00000000&
@@ -304,7 +313,7 @@ Begin VB.Form frmDBManager
          Left            =   240
          TabIndex        =   17
          Top             =   2280
-         Width           =   2535
+         Width           =   2775
       End
       Begin VB.Label lblModifiedBy 
          BackColor       =   &H00000000&
@@ -322,8 +331,8 @@ Begin VB.Form frmDBManager
          Height          =   135
          Left            =   480
          TabIndex        =   16
-         Top             =   2000
-         Width           =   2415
+         Top             =   1995
+         Width           =   2535
       End
       Begin VB.Label lblCreatedBy 
          BackColor       =   &H00000000&
@@ -349,20 +358,20 @@ Begin VB.Form frmDBManager
          Caption         =   "&Flags"
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   1560
+         Left            =   1680
          TabIndex        =   9
          Top             =   240
-         Width           =   1215
+         Width           =   1335
       End
       Begin VB.Label lblRank 
          BackColor       =   &H00000000&
-         Caption         =   "&Rank (1 - 200)"
+         Caption         =   "&Rank (1-200)"
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   240
          TabIndex        =   7
          Top             =   240
-         Width           =   1215
+         Width           =   1335
       End
       Begin VB.Label lblCreatedOn 
          BackColor       =   &H00000000&
@@ -380,8 +389,8 @@ Begin VB.Form frmDBManager
          Height          =   135
          Left            =   360
          TabIndex        =   12
-         Top             =   1100
-         Width           =   2415
+         Top             =   1095
+         Width           =   2655
       End
       Begin VB.Label lblCreated 
          BackColor       =   &H00000000&
@@ -400,7 +409,7 @@ Begin VB.Form frmDBManager
          Left            =   240
          TabIndex        =   11
          Top             =   900
-         Width           =   2535
+         Width           =   2775
       End
       Begin VB.Label lblLastMod 
          BackColor       =   &H00000000&
@@ -418,8 +427,8 @@ Begin VB.Form frmDBManager
          Height          =   135
          Left            =   240
          TabIndex        =   14
-         Top             =   1600
-         Width           =   2535
+         Top             =   1605
+         Width           =   2775
       End
    End
    Begin VB.Label lblDB 
@@ -487,10 +496,10 @@ Private Const IC_GROUP     As Integer = 6
 Private Const IC_CLAN      As Integer = 7
 Private Const IC_GAME      As Integer = 8
 
-' temporary DB working copy (TODO: USE Collection OF clsDBEntryObj!!)
-Private m_DB           As New clsDatabase
+' temporary DB working copy
+Private m_DB           As clsDatabase
 ' current entry index
-Private m_CurrentEntry As New clsDBEntryObj
+Private m_CurrentEntry As clsDBEntryObj
 ' current entry node
 Private m_CurrNode     As cTreeViewNode
 ' is this entry modified
@@ -677,7 +686,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
 '    LoadView
 End Sub
 
-Private Sub btnCreateUser_Click()
+Private Sub cmdCreateUser_Click()
     Dim oNewNode     As cTreeViewNode
     Dim sName       As String
     Dim iPos        As Integer
@@ -719,7 +728,7 @@ Private Sub btnCreateUser_Click()
     End If
 End Sub
 
-Private Sub btnCreateGroup_Click()
+Private Sub cmdCreateGroup_Click()
     Dim oNewNode    As cTreeViewNode
     Dim sGroup      As String
     Dim iPos         As Integer
@@ -762,7 +771,7 @@ Private Sub btnCreateGroup_Click()
     End If
 End Sub
 
-Sub btnCreateClan_Click()
+Private Sub cmdCreateClan_Click()
     Dim oNewNode    As cTreeViewNode
     Dim sClan       As String
     Dim iPos        As Integer
@@ -803,7 +812,7 @@ Sub btnCreateClan_Click()
     End If
 End Sub
         
-Sub btnCreateGame_Click()
+Private Sub cmdCreateGame_Click()
     Dim oNewNode    As cTreeViewNode
     Dim sGame       As String
     Dim iPos        As Integer
@@ -876,13 +885,18 @@ Private Function PlaceNewNode(oEntry As clsDBEntryObj, iEntryImage As Integer) A
     End If
 End Function
 
-Private Sub btnCancel_Click()
+Private Sub cmdCancel_Click()
     m_Modified = False
     
     Unload Me
 End Sub
 
-Private Sub btnSaveUser_Click()
+Private Sub cmdDiscardUser_Click()
+    m_Modified = False
+    Call trvUsers_SelectedNodeChanged
+End Sub
+
+Private Sub cmdSaveUser_Click()
     Dim i               As Integer
     Dim sOldPrimary     As String
     Dim iPos            As Integer
@@ -973,7 +987,8 @@ End Sub
 
 Private Sub HandleSaved()
     m_Modified = False
-    btnSaveUser.Enabled = False
+    cmdSaveUser.Enabled = False
+    cmdDiscardUser.Enabled = False
     If m_CurrentEntry Is Nothing Then
         fraEntry.Caption = "Database"
         Me.Caption = "Database"
@@ -990,16 +1005,17 @@ Private Sub HandleUnsaved()
         Me.Caption = "Database"
     Else
         m_Modified = True
-        btnSaveUser.Enabled = True
+        cmdSaveUser.Enabled = True
+        cmdDiscardUser.Enabled = True
         fraEntry.Caption = m_CurrentEntry.ToString() & "*"
         Me.Caption = "Database - " & m_CurrentEntry.ToString() & "*"
     End If
 End Sub
 
-Private Sub btnSaveForm_Click()
+Private Sub cmdSaveForm_Click()
     ' save this user first
     If m_Modified Then
-        btnSaveUser_Click
+        cmdSaveUser_Click
     End If
     
     ' write temporary database to disk
@@ -1157,7 +1173,7 @@ Private Sub mnuDelete_Click()
     End If
 End Sub
 
-Private Sub btnDelete_Click()
+Private Sub cmdDeleteUser_Click()
     If (Not (trvUsers.SelectedItem Is Nothing)) Then
         Call HandleDeleteEvent(trvUsers.SelectedItem)
     End If
@@ -1167,7 +1183,7 @@ Private Sub mnuRename_Click()
     Call QueryRenameEvent(m_MenuTarget)
 End Sub
 
-Private Sub btnRename_Click()
+Private Sub cmdRenameUser_Click()
     Call QueryRenameEvent(trvUsers.SelectedItem)
 End Sub
 
@@ -1465,8 +1481,8 @@ Private Sub LockGUI()
     lblInherit.Caption = vbNullString
     
     ' disable entry buttons
-    btnRename.Enabled = False
-    btnDelete.Enabled = False
+    cmdRenameUser.Enabled = False
+    cmdDeleteUser.Enabled = False
 End Sub
 
 Private Sub UnlockGUI()
@@ -1482,8 +1498,8 @@ Private Sub UnlockGUI()
     txtBanMessage.Enabled = True
     
     ' enable entry rename/delete buttons
-    btnRename.Enabled = (StrComp(trvUsers.SelectedItem.Tag, DB_TYPE_GROUP, vbTextCompare) = 0)
-    btnDelete.Enabled = True
+    cmdRenameUser.Enabled = (StrComp(trvUsers.SelectedItem.Tag, DB_TYPE_GROUP, vbTextCompare) = 0)
+    cmdDeleteUser.Enabled = True
     
     ' enable group lists
     'lvGroups.Enabled = True
@@ -2037,24 +2053,22 @@ Private Sub txtBanMessage_Change()
 End Sub
 
 Private Sub txtFlags_KeyPress(KeyAscii As Integer)
-    
     Const AZ As String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
     ' disallow entering space
-    If (KeyAscii = 32) Then KeyAscii = 0
+    If (KeyAscii = vbKeySpace) Then KeyAscii = 0
     
     ' if key is A-Z, then make uppercase
     If (InStr(1, AZ, ChrW$(KeyAscii), vbTextCompare) > 0) Then
         If (BotVars.CaseSensitiveFlags = False) Then
-            If (KeyAscii > 90) Then ' lowercase if greater than "Z"
+            If (KeyAscii > vbKeyZ) Then ' lowercase if greater than "Z"
                 KeyAscii = AscW(UCase$(ChrW$(KeyAscii)))
             End If
         End If
     ' else disallow entering that character (if not a control character)
-    ElseIf (KeyAscii > 32) Then
+    ElseIf (KeyAscii > vbKeySpace) Then
         KeyAscii = 0
     End If
-    
 End Sub
 
 Private Sub txtFlags_Change()
@@ -2066,13 +2080,12 @@ Private Sub txtRank_KeyPress(KeyAscii As Integer)
     Const n09 As String = "0123456789"
     
     ' disallow entering space
-    If (KeyAscii = 32) Then KeyAscii = 0
+    If (KeyAscii = vbKeySpace) Then KeyAscii = 0
     
     ' if key is not 0-9, disallow entering that character (if not a control character)
     If (InStr(1, n09, ChrW$(KeyAscii), vbTextCompare) = 0 And KeyAscii > 32) Then
         KeyAscii = 0
     End If
-    
 End Sub
 
 Private Sub txtRank_Change()
