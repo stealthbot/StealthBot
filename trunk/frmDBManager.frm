@@ -516,6 +516,8 @@ Private m_GListCount   As Integer
 Private m_GListSel     As ListItem
 ' target for group list right-click menu
 Private m_GMenuTarget  As ListItem
+' whether the menu may be opening (button is right-click and item is target) - if so, don't check/uncheck
+Private m_GOpeningMenu As Boolean
 ' GUI is clearing and form items shouldn't change the header
 Private m_ClearingUI   As Boolean
 
@@ -910,12 +912,12 @@ Private Sub cmdSaveUser_Click()
     If (trvUsers.SelectedItem Is Nothing) Then
         Exit Sub
     End If
-    
+
     ' can't "save" the "Database"/root node
     If (StrComp(trvUsers.SelectedItem.Tag, "DATABASE", vbTextCompare) = 0) Then
         Exit Sub
     End If
-    
+
     ' disable entry save command
     Call HandleSaved
 
@@ -924,21 +926,23 @@ Private Sub cmdSaveUser_Click()
 
     ' modifiy user data
     With oEntry
-        If Len(txtRank.Text) > 0 And StrictIsNumeric(txtRank.Text) Then
-            .Rank = Int(txtRank.Text)
+        If StrictIsNumeric(txtRank.Text) Then
+            .Rank = CInt(txtRank.Text)
+        Else
+            .Rank = 0
         End If
         .Flags = txtFlags.Text
         .ModifiedBy = m_DB.GetConsoleAccess().Username
         .ModifiedOn = Now()
         .BanMessage = txtBanMessage.Text
-                    
+
         ' get old primary group
         If .Groups.Count = 0 Then
             sOldPrimary = vbNullString
         Else
             sOldPrimary = .Groups.Item(1)
         End If
-                    
+
         ' build collection of new groups
         Call .ClearGroups
         If m_GListCount > 0 Then
@@ -955,10 +959,10 @@ Private Sub cmdSaveUser_Click()
                 End With
             Next i
         End If
-                    
+
         Set oNode = trvUsers.SelectedItem
         Set oNewParent = Nothing
-        
+
         ' now to check if we need to move this node!
         ' did the "primary" group change?
         If .Groups.Count = 0 Then
@@ -968,7 +972,7 @@ Private Sub cmdSaveUser_Click()
             If (StrComp(sOldPrimary, .Groups.Item(1), vbTextCompare) <> 0) Then
                 ' move under new primary
                 iPos = FindNodeIndex(.Groups.Item(1), DB_TYPE_GROUP, oNode)
-            
+
                 ' well, does it exist?
                 If (iPos > 0) Then
                     ' make node a child of existing group
@@ -976,7 +980,7 @@ Private Sub cmdSaveUser_Click()
                 End If
             End If
         End If
-        
+
         If Not (oNewParent Is Nothing) Then
             ' move node!!
             Call oNode.MoveNode(oNewParent, etvwChild)
@@ -984,7 +988,7 @@ Private Sub cmdSaveUser_Click()
             oNode.Selected = True
         End If
     End With
-                
+
 End Sub
 
 Private Sub HandleSaved()
@@ -1035,15 +1039,6 @@ Private Sub cmdSaveForm_Click()
     
     ' close database form
     Call Unload(Me)
-End Sub
-
-Private Sub lvGroups_Click()
-    Set m_GListSel = lvGroups.SelectedItem
-    
-    If Not m_GListSel Is Nothing Then
-        m_GListSel.Checked = Not m_GListSel.Checked
-        Call lvGroups_ItemCheck(m_GListSel)
-    End If
 End Sub
 
 Private Sub lvGroups_DblClick()
@@ -1132,6 +1127,17 @@ Private Sub lvGroups_ItemCheck(ByVal Item As ListItem)
     Call HandleUnsaved
 End Sub
 
+Private Sub lvGroups_ItemClick(ByVal Item As MSComctlLib.ListItem)
+    If Not m_GOpeningMenu Then
+        Set m_GListSel = Item
+        
+        If Not m_GListSel Is Nothing Then
+            m_GListSel.Checked = Not m_GListSel.Checked
+            Call lvGroups_ItemCheck(m_GListSel)
+        End If
+    End If
+End Sub
+
 Private Sub lvGroups_KeyPress(KeyAscii As Integer)
     If m_GListSel <> lvGroups.SelectedItem Then
         Set m_GListSel = lvGroups.SelectedItem
@@ -1141,6 +1147,20 @@ Private Sub lvGroups_KeyPress(KeyAscii As Integer)
         If Not m_GListSel Is Nothing Then
             m_GListSel.Checked = Not m_GListSel.Checked
             Call lvGroups_ItemCheck(m_GListSel)
+        End If
+    End If
+End Sub
+
+Private Sub lvGroups_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+    Set m_GMenuTarget = Nothing
+    
+    If (Button = vbRightButton) Then
+        Set m_GMenuTarget = lvGroups.HitTest(x, y)
+        
+        If (Not m_GMenuTarget Is Nothing) Then
+            If (Not m_GMenuTarget.Ghosted) Then
+                m_GOpeningMenu = True
+            End If
         End If
     End If
 End Sub
@@ -1160,8 +1180,9 @@ Private Sub lvGroups_MouseUp(Button As Integer, Shift As Integer, x As Single, y
         If (Not m_GMenuTarget Is Nothing) Then
             If (Not m_GMenuTarget.Ghosted) Then
                 mnuSetPrimary.Enabled = (m_GMenuTarget.ForeColor <> vbYellow)
-            
+                
                 Call Me.PopupMenu(mnuContext)
+                m_GOpeningMenu = False
             End If
         End If
     End If
@@ -2065,16 +2086,16 @@ Private Function FindNodeIndex(ByVal nodeName As String, Optional ByVal Tag As S
         If (StrComp(trvUsers.Nodes(i).Text, nodeName, vbTextCompare) = 0) Then
             If (LenB(Tag) > 0) Then
                 If (StrComp(trvUsers.Nodes(i).Tag, Tag, vbTextCompare) = 0) Then
-                    If (Not trvUsers.Nodes(i).IsParentOf(NotChildOf)) Then
+                    'If (Not trvUsers.Nodes(i).IsParentOf(NotChildOf)) Then
                         FindNodeIndex = i
                         Exit Function
-                    End If
+                    'End If
                 End If
             Else
-                If (Not trvUsers.Nodes(i).IsParentOf(NotChildOf)) Then
+                'If (Not trvUsers.Nodes(i).IsParentOf(NotChildOf)) Then
                     FindNodeIndex = i
                     Exit Function
-                End If
+                'End If
             End If
         End If
     Next i
@@ -2126,7 +2147,7 @@ End Sub
 Private Sub txtRank_Change()
     Dim SelStart As Long
     
-    If (Val(txtRank.Text) > 200) Then
+    If (CInt(txtRank.Text) > 200) Then
         With txtRank
             SelStart = .SelStart
             .Text = "200"
