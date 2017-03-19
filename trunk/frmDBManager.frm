@@ -723,7 +723,7 @@ Private Sub cmdCreateUser_Click()
             End If
         Else
             ' alert user that entry already exists
-            MsgBox "There is already a user with that name in the database."
+            MsgBox "There is already a user with that name in the database.", vbOKOnly Or vbCritical, "User Database Manager - Create User Entry Error"
             iPos = FindNodeIndex(sName, DB_TYPE_USER)
             If iPos > 0 Then
                 trvUsers.Nodes(iPos).Selected = True
@@ -735,7 +735,7 @@ End Sub
 Private Sub cmdCreateGroup_Click()
     Dim oNewNode    As cTreeViewNode
     Dim sGroup      As String
-    Dim iPos         As Integer
+    Dim iPos        As Integer
     Dim oEntry      As clsDBEntryObj
 
     m_EntryType = DB_TYPE_GROUP
@@ -766,7 +766,7 @@ Private Sub cmdCreateGroup_Click()
             End If
         Else
             ' alert user that entry already exists
-            MsgBox "There is already a group with this name in the database."
+            MsgBox "There is already a group with this name in the database.", vbOKOnly Or vbCritical, "User Database Manager - Create Group Entry Error"
             iPos = FindNodeIndex(sGroup, DB_TYPE_GROUP)
             If iPos > 0 Then
                 trvUsers.Nodes(iPos).Selected = True
@@ -807,7 +807,7 @@ Private Sub cmdCreateClan_Click()
             End If
         Else
             ' alert user that entry already exists
-            MsgBox "The specified clan is already in the database."
+            MsgBox "The specified clan is already in the database.", vbOKOnly Or vbCritical, "User Database Manager - Create Clan Entry Error"
             iPos = FindNodeIndex(sClan, DB_TYPE_CLAN)
             If iPos > 0 Then
                 trvUsers.Nodes(iPos).Selected = True
@@ -847,7 +847,7 @@ Private Sub cmdCreateGame_Click()
             End If
         Else
             ' alert user that entry already exists
-            MsgBox "The specified game is already in the database."
+            MsgBox "The specified game is already in the database.", vbOKOnly Or vbCritical, "User Database Manager - Create Game Entry Error"
             iPos = FindNodeIndex(sGame, DB_TYPE_GAME)
             If iPos > 0 Then
                 trvUsers.Nodes(iPos).Selected = True
@@ -909,12 +909,14 @@ Private Sub cmdSaveUser_Click()
     Dim oEntry          As clsDBEntryObj
 
     ' if we have no selected user... escape quick!
-    If (trvUsers.SelectedItem Is Nothing) Then
+    If (m_CurrNode Is Nothing) Then
         Exit Sub
     End If
 
+    Set oNode = m_CurrNode
+
     ' can't "save" the "Database"/root node
-    If (StrComp(trvUsers.SelectedItem.Tag, "DATABASE", vbTextCompare) = 0) Then
+    If (StrComp(oNode.Tag, "DATABASE", vbTextCompare) = 0) Then
         Exit Sub
     End If
 
@@ -922,7 +924,7 @@ Private Sub cmdSaveUser_Click()
     Call HandleSaved
 
     ' get the selected user from database
-    Set oEntry = m_DB.GetEntry(trvUsers.SelectedItem.Text, trvUsers.SelectedItem.Tag)
+    Set oEntry = m_DB.GetEntry(oNode.Text, oNode.Tag)
 
     ' modifiy user data
     With oEntry
@@ -960,7 +962,6 @@ Private Sub cmdSaveUser_Click()
             Next i
         End If
 
-        Set oNode = trvUsers.SelectedItem
         Set oNewParent = Nothing
 
         ' now to check if we need to move this node!
@@ -1241,7 +1242,7 @@ Private Sub HandleDeleteEvent(oTarget As cTreeViewNode)
     bIsGroup = (StrComp(oTarget.Tag, DB_TYPE_GROUP, vbTextCompare) = 0)
     If (bIsGroup) Then
         rResponse = MsgBox("Are you sure you wish to delete this group? This " & _
-            "may have unforeseen consequences.", vbYesNo Or vbInformation, "Database - Confirm Delete")
+            "may have unforeseen consequences.", vbYesNo Or vbQuestion, "User Database Manager - Confirm Delete")
     End If
     
     ' If it's not a group or they said yes, go ahead and delete it.
@@ -1293,7 +1294,7 @@ Private Sub QueryRenameEvent(Target As cTreeViewNode)
             Else
                 ' alert user that entry already exists
                 MsgBox "There is already an entry of this type matching " & _
-                    "the specified name."
+                    "the specified name.", vbOKOnly Or vbCritical, "User Database Manager - Rename Error"
             End If
         End If
     End If
@@ -1733,7 +1734,7 @@ Private Sub trvUsers_SelectedNodeChanged()
     Dim oNode       As cTreeViewNode
     Dim i, j        As Integer
     Dim iPos        As Integer
-    Dim rResponse   As VbMsgBoxResult
+    Dim sMessage    As String
     Dim bDisable    As Boolean
     Dim oEntry      As clsDBEntryObj
     
@@ -1745,16 +1746,20 @@ Private Sub trvUsers_SelectedNodeChanged()
     
     If m_Modified And Not bSkipUpdate And (Not (m_CurrNode Is Nothing)) Then
         ' check if we should allow this node change? (is Unsaved?)
-        rResponse = MsgBox("Are you sure you wish to discard changes to the " & _
-            m_CurrNode.Text & " (" & UCase$(m_CurrNode.Tag) & ") database entry?", _
-            vbYesNo Or vbInformation, "Database - Confirm Discard Changes")
-        
-        If rResponse = vbNo Then
-            bSkipUpdate = True
-            m_CurrNode.Selected = True
-            bSkipUpdate = False
-            Exit Sub
-        End If
+        sMessage = StringFormat("You have not saved your changes to {0} ({1}). " & _
+            "Do you want to save them now?", m_CurrNode.Text, m_CurrNode.Tag)
+
+        Select Case MsgBox(sMessage, vbQuestion Or vbYesNoCancel, "User Database Manager - Save")
+            Case vbYes:
+                Call cmdSaveUser_Click
+            Case vbNo:
+                ' continue
+            Case vbCancel:
+                bSkipUpdate = True
+                m_CurrNode.Selected = True
+                bSkipUpdate = False
+                Exit Sub
+        End Select
     End If
     
     If bSkipUpdate Then Exit Sub
@@ -1765,7 +1770,7 @@ Private Sub trvUsers_SelectedNodeChanged()
     
     oNode.Expanded = True
     
-    If (StrComp(oNode.Tag, "DATABASE", vbTextCompare) = 0) Then
+    If (StrComp(oNode.Tag, "DATABASE", vbTextCompare) = 0) Or Len(oNode.Text) = 0 Or Len(oNode.Tag) = 0 Then
         Set m_CurrentEntry = Nothing
         Exit Sub
     End If
@@ -2147,12 +2152,14 @@ End Sub
 Private Sub txtRank_Change()
     Dim SelStart As Long
     
-    If (CInt(txtRank.Text) > 200) Then
-        With txtRank
-            SelStart = .SelStart
-            .Text = "200"
-            .SelStart = SelStart
-        End With
+    If (StrictIsNumeric(txtRank.Text)) Then
+        If (CInt(txtRank.Text) > 200) Then
+            With txtRank
+                SelStart = .SelStart
+                .Text = "200"
+                .SelStart = SelStart
+            End With
+        End If
     End If
 
     ' enable entry save button
