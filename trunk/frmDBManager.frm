@@ -250,7 +250,7 @@ Begin VB.Form frmDBManager
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   1680
-         MaxLength       =   25
+         MaxLength       =   50
          TabIndex        =   10
          Top             =   480
          Width           =   1335
@@ -261,7 +261,7 @@ Begin VB.Form frmDBManager
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   240
-         MaxLength       =   25
+         MaxLength       =   4
          TabIndex        =   8
          Top             =   480
          Width           =   1335
@@ -411,7 +411,7 @@ Begin VB.Form frmDBManager
          Top             =   900
          Width           =   2775
       End
-      Begin VB.Label lblLastMod 
+      Begin VB.Label lblModified 
          BackColor       =   &H00000000&
          Caption         =   "Last modified on:"
          BeginProperty Font 
@@ -516,6 +516,8 @@ Private m_GListCount   As Integer
 Private m_GListSel     As ListItem
 ' target for group list right-click menu
 Private m_GMenuTarget  As ListItem
+' GUI is clearing and form items shouldn't change the header
+Private m_ClearingUI   As Boolean
 
 Private Sub Form_Load()
 
@@ -986,29 +988,33 @@ Private Sub cmdSaveUser_Click()
 End Sub
 
 Private Sub HandleSaved()
-    m_Modified = False
-    cmdSaveUser.Enabled = False
-    cmdDiscardUser.Enabled = False
-    If m_CurrentEntry Is Nothing Then
-        fraEntry.Caption = "Database"
-        Me.Caption = "Database"
-    Else
-        fraEntry.Caption = m_CurrentEntry.ToString()
-        Me.Caption = "Database - " & m_CurrentEntry.ToString()
+    If Not m_ClearingUI Then
+        m_Modified = False
+        cmdSaveUser.Enabled = False
+        cmdDiscardUser.Enabled = False
+        If m_CurrentEntry Is Nothing Then
+            fraEntry.Caption = vbNullString
+            Me.Caption = "User Database Manager"
+        Else
+            fraEntry.Caption = m_CurrentEntry.ToString()
+            Me.Caption = "User Database Manager - " & m_CurrentEntry.ToString()
+        End If
     End If
 End Sub
 
 Private Sub HandleUnsaved()
-    If m_CurrentEntry Is Nothing Then
-        m_Modified = False
-        fraEntry.Caption = "Database"
-        Me.Caption = "Database"
-    Else
-        m_Modified = True
-        cmdSaveUser.Enabled = True
-        cmdDiscardUser.Enabled = True
-        fraEntry.Caption = m_CurrentEntry.ToString() & "*"
-        Me.Caption = "Database - " & m_CurrentEntry.ToString() & "*"
+    If Not m_ClearingUI Then
+        If m_CurrentEntry Is Nothing Then
+            m_Modified = False
+            fraEntry.Caption = vbNullString
+            Me.Caption = "User Database Manager *"
+        Else
+            m_Modified = True
+            cmdSaveUser.Enabled = True
+            cmdDiscardUser.Enabled = True
+            fraEntry.Caption = m_CurrentEntry.ToString() & " *"
+            Me.Caption = "User Database Manager - " & m_CurrentEntry.ToString() & " *"
+        End If
     End If
 End Sub
 
@@ -1348,7 +1354,10 @@ Private Sub LoadView()
     m_Root.Tag = "DATABASE"
     
     ' If the database is empty, exit early
-    If m_DB.Entries.Count = 0 Then Exit Sub
+    If m_DB.Entries.Count = 0 Then
+        Call UpdateGroupList
+        Exit Sub
+    End If
 
     ' Get all groups from the database
     For i = 1 To m_DB.Entries.Count
@@ -1438,71 +1447,97 @@ Private Sub LoadView()
     Next i
     
     Call UpdateGroupList
-    
-    If trvUsers.NodeCount = 0 Then
-        Call LockGUI
-    End If
 End Sub
 
 Private Sub LockGUI()
     Dim i As Integer
-    
+
+    m_ClearingUI = True
+
     ' set our default frame caption
     Set m_CurrentEntry = Nothing
     Call HandleSaved
 
     ' disable & clear rank
+    lblRank.Enabled = False
     txtRank.Enabled = False
     txtRank.Text = vbNullString
-    
+
     ' disable & clear flags
+    lblFlags.Enabled = False
     txtFlags.Enabled = False
     txtFlags.Text = vbNullString
-    
+
     ' loop through listbox and clear selected items
     Call ClearGroupListChecks
-    
+
     ' disable group lists
+    lblGroups.Enabled = False
     'lvGroups.Enabled = False
-    
+
     ' disable & clear ban message
+    lblBanMessage.Enabled = False
     txtBanMessage.Enabled = False
     txtBanMessage.Text = vbNullString
-    
-    ' reset created on & modified on labels
+
+    ' reset created & modified labels
+    lblCreated.Enabled = False
+    lblCreatedOn.Enabled = False
     lblCreatedOn.Caption = "(not applicable)"
-    lblModifiedOn.Caption = "(not applicable)"
-    
-    ' reset created by & modified by labels
+    lblCreatedBy.Enabled = False
     lblCreatedBy.Caption = vbNullString
+    lblModified.Enabled = False
+    lblModifiedOn.Enabled = False
+    lblModifiedOn.Caption = "(not applicable)"
+    lblModifiedBy.Enabled = False
     lblModifiedBy.Caption = vbNullString
-    
+
     ' reset inherits caption
     lblInherit.Caption = vbNullString
-    
+
     ' disable entry buttons
     cmdRenameUser.Enabled = False
     cmdDeleteUser.Enabled = False
+
+    m_ClearingUI = False
+
+    HandleSaved
 End Sub
 
 Private Sub UnlockGUI()
     Dim i As Integer
 
+    m_ClearingUI = True
+
     ' enable rank field
+    lblRank.Enabled = True
     txtRank.Enabled = True
 
     ' enable flags field
+    lblFlags.Enabled = True
     txtFlags.Enabled = True
     
     ' enable ban message field
+    lblBanMessage.Enabled = True
     txtBanMessage.Enabled = True
+    
+    ' enable labels
+    lblCreated.Enabled = True
+    lblCreatedOn.Enabled = True
+    lblCreatedBy.Enabled = True
+    lblModified.Enabled = True
+    lblModifiedOn.Enabled = True
+    lblModifiedBy.Enabled = True
     
     ' enable entry rename/delete buttons
     cmdRenameUser.Enabled = (StrComp(trvUsers.SelectedItem.Tag, DB_TYPE_GROUP, vbTextCompare) = 0)
     cmdDeleteUser.Enabled = True
     
     ' enable group lists
+    lblGroups.Enabled = True
     'lvGroups.Enabled = True
+
+    m_ClearingUI = False
     
     ' make sure save button and caption is up to date
     HandleSaved
@@ -2053,8 +2088,6 @@ Private Sub txtBanMessage_Change()
 End Sub
 
 Private Sub txtFlags_KeyPress(KeyAscii As Integer)
-    Const AZ As String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    
     ' disallow entering space
     If (KeyAscii = vbKeySpace) Then KeyAscii = 0
     
@@ -2064,6 +2097,10 @@ Private Sub txtFlags_KeyPress(KeyAscii As Integer)
             If (KeyAscii > vbKeyZ) Then ' lowercase if greater than "Z"
                 KeyAscii = AscW(UCase$(ChrW$(KeyAscii)))
             End If
+        End If
+        ' disallow repeating a flag already present
+        If (InStr(1, txtFlags.Text, ChrW$(KeyAscii), vbBinaryCompare) > 0) Then
+            KeyAscii = 0
         End If
     ' else disallow entering that character (if not a control character)
     ElseIf (KeyAscii > vbKeySpace) Then
@@ -2077,13 +2114,11 @@ Private Sub txtFlags_Change()
 End Sub
 
 Private Sub txtRank_KeyPress(KeyAscii As Integer)
-    Const n09 As String = "0123456789"
-    
     ' disallow entering space
     If (KeyAscii = vbKeySpace) Then KeyAscii = 0
     
     ' if key is not 0-9, disallow entering that character (if not a control character)
-    If (InStr(1, n09, ChrW$(KeyAscii), vbTextCompare) = 0 And KeyAscii > 32) Then
+    If (InStr(1, Num09, ChrW$(KeyAscii), vbTextCompare) = 0 And KeyAscii > 32) Then
         KeyAscii = 0
     End If
 End Sub

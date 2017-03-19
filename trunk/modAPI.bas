@@ -4,6 +4,27 @@ Option Explicit
 'modAPI - project StealthBot
 'February 2004 - Stealth [stealth at stealthbot dot net]
 
+Public Declare Function GetEnvironmentVariable Lib "kernel32" Alias "GetEnvironmentVariableA" (ByVal lpName As String, ByVal lpBuffer As String, ByVal nSize As Long) As Long
+Public Declare Function SetEnvironmentVariable Lib "kernel32" Alias "SetEnvironmentVariableA" (ByVal lpName As String, ByVal lpValue As String) As Long
+
+Public Declare Function gethostbyname Lib "wsock32.dll" (ByVal szHost As String) As Long
+Public Declare Function inet_addr Lib "wsock32.dll" (ByVal cp As String) As Long
+Public Declare Function inet_ntoa Lib "wsock32.dll" (ByVal inaddr As Long) As Long
+Public Declare Function htons Lib "wsock32.dll" (ByVal hostshort As Integer) As Integer
+Public Declare Function ntohl Lib "wsock32.dll" (ByVal netlong As Long) As Long
+Public Declare Function ntohs Lib "wsock32.dll" (ByVal netshort As Long) As Integer
+Public Declare Function lstrlen Lib "Kernel32.dll" Alias "lstrlenA" (ByVal lpString As Any) As Long
+Public Declare Function SetSockOpt Lib "wsock32.dll" Alias "setsockopt" (ByVal lSocketHandle As Long, ByVal lSocketLevel As Long, ByVal lOptName As Long, vOptVal As Any, ByVal lOptLen As Long) As Long
+Public Declare Function WSAGetLastError Lib "wsock32.dll" () As Long
+Public Declare Function WSACleanup Lib "wsock32.dll" () As Long
+
+Public Type HOSTENT
+    h_name As Long
+    h_aliases As Long
+    h_addrtype As Integer
+    h_length As Integer
+    h_addr_list As Long
+End Type
 
 Public Declare Sub ExitProcess Lib "kernel32" (ByVal uExitCode As Long)
 
@@ -122,8 +143,11 @@ Public Declare Function SetActiveWindow Lib "user32" (ByVal hWnd As Long) As Lon
 
 Public Declare Function GetComputerName Lib "kernel32" Alias "GetComputerNameA" (ByVal sBuffer As String, lSize As Long) As Long
 Public Declare Function GetUserName Lib "advapi32.dll" Alias "GetUserNameA" (ByVal lpBuffer As String, nSize As Long) As Long
+
+Private Const MAX_COMPUTERNAME_LENGTH As Long = 31
+Private Const MAX_USERNAME_LENGTH As Long = 256
+
 Public Declare Function GetSystemDefaultLCID Lib "kernel32" () As Long
-Public Declare Function GetFocus Lib "User" () As Integer
 
 Public Const LOCALE_SABBREVCTRYNAME As Long = &H7
 Public Const LOCALE_SENGCOUNTRY     As Long = &H1002
@@ -148,4 +172,82 @@ Public Function malloc(ByVal dwSize As Long) As Long
     lngHandle = GlobalAlloc(0, dwSize + 4)
     malloc = GlobalLock(lngHandle) + 4
     Call CopyMemory(ByVal malloc - 4, lngHandle, 4)
+End Function
+
+Public Function GetComputerLanName() As String
+    Dim buff As String
+    Dim Length As Long
+    buff = String(MAX_COMPUTERNAME_LENGTH + 1, Chr$(0))
+    Length = Len(buff)
+    If (GetComputerName(buff, Length)) Then
+        GetComputerLanName = Left(buff, Length)
+    Else
+        GetComputerLanName = vbNullString
+    End If
+End Function
+
+Public Function GetComputerUsername() As String
+    Dim buff As String
+    Dim Length As Long
+    buff = String(MAX_USERNAME_LENGTH + 1, Chr$(0))
+    Length = Len(buff)
+    If (GetUserName(buff, Length)) Then
+        GetComputerUsername = KillNull(buff)
+    Else
+        GetComputerUsername = vbNullString
+    End If
+End Function
+
+Public Function GetAddressFromLong(ByVal lServer As Long) As String
+    Dim ptrIP    As Long
+    Dim Length   As Integer
+    Dim arrStr() As Byte
+
+    ptrIP = inet_ntoa(lServer)
+    Length = lstrlen(ptrIP)
+
+    ReDim arrStr(0 To Length) ' include NT
+    CopyMemory arrStr(0), ByVal ptrIP, Length ' don't copy NT
+
+    GetAddressFromLong = NTByteArrToString(arrStr)
+End Function
+
+Public Function ResolveHost(ByVal strHostName As String) As String
+    Dim lServer As Long
+    Dim HostInfo As HOSTENT
+    Dim ptrIP As Long
+    Dim sIP As String
+    
+    'Do we have an IP address or a hostname?
+    If Not IsValidIPAddress(strHostName) Then
+        'Resolve the IP.
+        lServer = gethostbyname(strHostName)
+
+        If lServer = 0 Then
+            ResolveHost = vbNullString
+            Exit Function
+        Else
+            'Copy data to HOSTENT struct.
+            CopyMemory HostInfo, ByVal lServer, Len(HostInfo)
+            
+            If HostInfo.h_addrtype = 2 Then
+                CopyMemory ptrIP, ByVal HostInfo.h_addr_list, 4
+                CopyMemory lServer, ByVal ptrIP, 4
+                sIP = GetAddressFromLong(lServer)
+                ResolveHost = sIP
+            Else
+                ResolveHost = vbNullString
+                Exit Function
+            End If
+        End If
+    Else
+        ResolveHost = strHostName
+    End If
+End Function
+
+Public Function IsValidIPAddress(ByVal sIn As String) As Boolean
+    Dim cp As Long
+
+    cp = inet_addr(sIn)
+    IsValidIPAddress = (cp <> -1)
 End Function

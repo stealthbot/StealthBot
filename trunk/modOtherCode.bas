@@ -1,62 +1,9 @@
 Attribute VB_Name = "modOtherCode"
 Option Explicit
 Private Const OBJECT_NAME As String = "modOtherCode"
-Private Declare Function GetEnvironmentVariable Lib "kernel32" Alias "GetEnvironmentVariableA" (ByVal lpName As String, ByVal lpBuffer As String, ByVal nSize As Long) As Long
-Private Declare Function SetEnvironmentVariable Lib "kernel32" Alias "SetEnvironmentVariableA" (ByVal lpName As String, ByVal lpValue As String) As Long
-Public Declare Function GetComputerName Lib "kernel32" Alias "GetComputerNameA" (ByVal sBuffer As String, lSize As Long) As Long
-Public Declare Function GetUserName Lib "advapi32.dll" Alias "GetUserNameA" (ByVal lpBuffer As String, nSize As Long) As Long
-Private Const MAX_COMPUTERNAME_LENGTH As Long = 31
-Private Const MAX_USERNAME_LENGTH As Long = 256
 
-Public Declare Function gethostbyname Lib "wsock32.dll" (ByVal szHost As String) As Long
-Public Declare Function inet_addr Lib "wsock32.dll" (ByVal cp As String) As Long
-Public Declare Function inet_ntoa Lib "wsock32.dll" (ByVal inaddr As Long) As Long
-Public Declare Function htons Lib "wsock32.dll" (ByVal hostshort As Integer) As Integer
-Public Declare Function ntohl Lib "wsock32.dll" (ByVal netlong As Long) As Long
-Public Declare Function ntohs Lib "wsock32.dll" (ByVal netshort As Long) As Integer
-Public Declare Function lstrlen Lib "Kernel32.dll" Alias "lstrlenA" (ByVal lpString As Any) As Long
-Public Declare Function SetSockOpt Lib "wsock32.dll" Alias "setsockopt" (ByVal lSocketHandle As Long, ByVal lSocketLevel As Long, ByVal lOptName As Long, vOptVal As Any, ByVal lOptLen As Long) As Long
-Public Declare Function WSAGetLastError Lib "wsock32.dll" () As Long
-Public Declare Function WSACleanup Lib "wsock32.dll" () As Long
-
-Public Type HOSTENT
-    h_name As Long
-    h_aliases As Long
-    h_addrtype As Integer
-    h_length As Integer
-    h_addr_list As Long
-End Type
-
-Public Type COMMAND_DATA
-    Name         As String
-    params       As String
-    local        As Boolean
-    PublicOutput As Boolean
-End Type
-
-Public Function GetComputerLanName() As String
-    Dim buff As String
-    Dim Length As Long
-    buff = String(MAX_COMPUTERNAME_LENGTH + 1, Chr$(0))
-    Length = Len(buff)
-    If (GetComputerName(buff, Length)) Then
-        GetComputerLanName = Left(buff, Length)
-    Else
-        GetComputerLanName = vbNullString
-    End If
-End Function
-
-Public Function GetComputerUsername() As String
-    Dim buff As String
-    Dim Length As Long
-    buff = String(MAX_USERNAME_LENGTH + 1, Chr$(0))
-    Length = Len(buff)
-    If (GetUserName(buff, Length)) Then
-        GetComputerUsername = KillNull(buff)
-    Else
-        GetComputerUsername = vbNullString
-    End If
-End Function
+Public Const AZ As String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+Public Const Num09 As String = "0123456789"
 
 'Read/WriteIni code thanks to ickis
 Public Sub WriteINI(ByVal wiSection$, ByVal wiKey As String, ByVal wiValue As String, Optional ByVal wiFile As String = "x")
@@ -120,30 +67,23 @@ Public Function ReadINI$(ByVal riSection$, ByVal riKey$, ByVal riFile$)
     End If
 End Function
 
-'// http://www.vbforums.com/showpost.php?p=2909245&postcount=3
-Public Sub BubbleSort1(ByRef pvarArray As Variant)
-    Dim i As Long
-    Dim iMin As Long
-    Dim iMax As Long
+'// http://www.vbforums.com/showpost.php?p=2909252
+Public Sub InsertionSort(ByRef pvarArray As Variant)
+    Dim i       As Long
+    Dim j       As Long
+    Dim iMin    As Long
+    Dim iMax    As Long
     Dim varSwap As Variant
-    Dim blnSwapped As Boolean
-    
-    iMin = LBound(pvarArray)
-    iMax = UBound(pvarArray) - 1
-    
-    Do
-        blnSwapped = False
-        For i = iMin To iMax
-            If pvarArray(i) > pvarArray(i + 1) Then
-                varSwap = pvarArray(i)
-                pvarArray(i) = pvarArray(i + 1)
-                pvarArray(i + 1) = varSwap
-                blnSwapped = True
-            End If
-        Next
-    iMax = iMax - 1
-    Loop Until Not blnSwapped
-    
+
+    iMin = LBound(pvarArray) + 1
+    iMax = UBound(pvarArray)
+    For i = iMin To iMax
+        varSwap = pvarArray(i)
+        For j = i To iMin Step -1
+            If varSwap < pvarArray(j - 1) Then pvarArray(j) = pvarArray(j - 1) Else Exit For
+        Next j
+        pvarArray(j) = varSwap
+    Next i
 End Sub
 
 
@@ -2251,69 +2191,6 @@ Public Function UsernameRegex(ByVal Username As String, ByVal sPattern As String
     UsernameRegex = (prepName Like prepPatt)
 End Function
 
-Public Function convertAlias(ByVal cmdName As String) As String
-    On Error GoTo ERROR_HANDLER
-
-    Dim commandDoc As New clsCommandDocObj
-
-
-    If (Len(cmdName) > 0) Then
-        Dim commands As DOMDocument60
-        Dim Alias    As IXMLDOMNode
-        
-        Set commands = commandDoc.XMLDocument
-        
-        'If (Dir$(sCommandsPath) = vbNullString) Then
-        '    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
-        '        "working directory.")
-        '
-        '    Exit Function
-        'End If
-        '
-        'Call commands.Load(sCommandsPath)
-        
-        If (InStr(1, cmdName, "'", vbBinaryCompare) > 0) Then
-            Set commandDoc = Nothing
-            Exit Function
-        End If
-    
-        cmdName = Replace(cmdName, "\", "\\")
-        cmdName = Replace(cmdName, "'", "&apos;")
-
-        '// 09/03/2008 JSM - Modified code to use the <aliases> element
-        Set Alias = _
-            commands.documentElement.selectSingleNode( _
-                "./command/aliases/alias[translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase$(cmdName) & "']")
-        
-        'Set Alias = _
-        '    commands.documentElement.selectSingleNode( _
-        '        "./command/aliases/alias[contains(text(), '" & cmdName & "')]")
-
-        If (Not (Alias Is Nothing)) Then
-            '// 09/03/2008 JSM - Modified code to use the <aliases> element
-            convertAlias = _
-                Alias.parentNode.parentNode.Attributes.getNamedItem("name").Text
-            
-            Exit Function
-        End If
-    End If
-    
-    convertAlias = cmdName
-    Set commandDoc = Nothing
-
-    Exit Function
-    
-ERROR_HANDLER:
-
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Error: XML Database Processor has encountered an error " & _
-        "during alias lookup.")
-        
-    convertAlias = cmdName
-
-    Exit Function
-    
-End Function
-
 ' Fixed font issue when an element was only 1 character long -Pyro (9/28/08)
 ' Fixed issue with displaying null text.
 
@@ -2463,7 +2340,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         End With
 
         For i = LBound(saElements) To UBound(saElements) Step 3
-            If (InStr(1, saElements(i + 2), Chr(0), vbBinaryCompare) > 0) Then
+            If (InStr(1, saElements(i + 2), vbNullChar, vbBinaryCompare) > 0) Then
                 KillNull saElements(i + 2)
             End If
         
@@ -2577,60 +2454,6 @@ Public Function IsScrolling(ByRef rtb As RichTextBox) As Long
         
     End If
 
-End Function
-
-Public Function GetAddressFromLong(ByVal lServer As Long) As String
-    Dim ptrIP    As Long
-    Dim Length   As Integer
-    Dim arrStr() As Byte
-
-    ptrIP = inet_ntoa(lServer)
-    Length = lstrlen(ptrIP)
-
-    ReDim arrStr(0 To Length) ' include NT
-    CopyMemory arrStr(0), ByVal ptrIP, Length ' don't copy NT
-
-    GetAddressFromLong = NTByteArrToString(arrStr)
-End Function
-
-Public Function ResolveHost(ByVal strHostName As String) As String
-    Dim lServer As Long
-    Dim HostInfo As HOSTENT
-    Dim ptrIP As Long
-    Dim sIP As String
-    
-    'Do we have an IP address or a hostname?
-    If Not IsValidIPAddress(strHostName) Then
-        'Resolve the IP.
-        lServer = gethostbyname(strHostName)
-
-        If lServer = 0 Then
-            ResolveHost = vbNullString
-            Exit Function
-        Else
-            'Copy data to HOSTENT struct.
-            CopyMemory HostInfo, ByVal lServer, Len(HostInfo)
-            
-            If HostInfo.h_addrtype = 2 Then
-                CopyMemory ptrIP, ByVal HostInfo.h_addr_list, 4
-                CopyMemory lServer, ByVal ptrIP, 4
-                sIP = GetAddressFromLong(lServer)
-                ResolveHost = sIP
-            Else
-                ResolveHost = vbNullString
-                Exit Function
-            End If
-        End If
-    Else
-        ResolveHost = strHostName
-    End If
-End Function
-
-Public Function IsValidIPAddress(ByVal sIn As String) As Boolean
-    Dim cp As Long
-
-    cp = inet_addr(sIn)
-    IsValidIPAddress = (cp <> -1)
 End Function
 
 Public Sub CloseAllConnections(Optional ShowMessage As Boolean = True)

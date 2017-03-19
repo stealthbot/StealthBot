@@ -571,7 +571,7 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString, O
     Next xmlCommand
     
     '// sort the command names
-    Call BubbleSort1(commandNameArray)
+    Call InsertionSort(CommandNameArray)
 
     '// loop through the sorted array and select the commands
     For x = LBound(commandNameArray) To UBound(commandNameArray)
