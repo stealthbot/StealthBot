@@ -821,9 +821,7 @@ On Error GoTo ERROR_HANDLER
     Dim lastCommand As String
     Dim thisCommand As String
     Dim xFunction   As String
-    Dim AZ          As String
     Dim Flag        As String
-    AZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     
     'If (LenB(Dir$(GetFilePath(FILE_COMMANDS))) = 0) Then
     '    Command.Respond "Error: The XML database could not be found in the working directory."

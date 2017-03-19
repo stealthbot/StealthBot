@@ -62,7 +62,7 @@ Public Sub NullTruncString(ByRef Text As String)
 'on error resume next
     Dim i As Integer
     
-    i = InStr(Text, Chr(0))
+    i = InStr(Text, vbNullChar)
     If i = 0 Then Exit Sub
     
     Text = Left$(Text, i - 1)

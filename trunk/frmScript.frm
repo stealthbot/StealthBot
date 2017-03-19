@@ -125,6 +125,7 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
+      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -220,28 +221,32 @@ Private m_arrObjs() As modScripting.scObj
 Private m_objCount  As Integer
 Private m_hidden    As Boolean
 
-Public Function setName(ByVal str As String)
+Public Function SetName(ByVal str As String)
 
     If (m_name = vbNullString) Then
         m_name = str
     End If
+
 End Function
 
-Public Function getName() As String
+Public Function GetName() As String
 
-    getName = m_name
+    GetName = m_name
+
 End Function
 
-Public Function setSCModule(ByRef SCModule As Module)
+Public Function SetSCModule(ByRef SCModule As Module)
 
     If (m_sc_module Is Nothing) Then
         Set m_sc_module = SCModule
     End If
+
 End Function
 
 Public Function GetScriptModule() As Module
 
     Set GetScriptModule = m_sc_module
+
 End Function
 
 '// 6/22/2009 JSM - Adding wrapper function for MsgBox inside VB6 rather than
@@ -251,6 +256,7 @@ Public Function ShowMsgBox(ByVal Text As String, Optional ByVal opts As VbMsgBox
         Optional ByVal Title As String = vbNullString) As VbMsgBoxResult
 
     ShowMsgBox = MsgBox(Text, opts, Title)
+
 End Function
 
 ' wrapper function for InputBox, too!
@@ -294,6 +300,7 @@ Public Sub DrawLine(ByVal x1 As Single, ByVal y1 As Single, ByVal x2 As Single, 
             Line (x1, y1)-(x2, y2), Color
         End If
     End If
+
 End Sub
 
 'Public Function Objects(objIndex As Integer) As scObj
@@ -402,7 +409,7 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
         Case "MENU"
             Set obj.obj = New clsMenuObj
             
-            obj.obj.Name = getName() & "_" & ObjName
+            obj.obj.Name = GetName() & "_" & ObjName
             
             obj.obj.Parent = Me
             

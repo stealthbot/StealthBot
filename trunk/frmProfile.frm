@@ -45,6 +45,7 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
+      Enabled         =   -1  'True
       TextRTF         =   $"frmProfile.frx":0CCA
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -85,6 +86,7 @@ Begin VB.Form frmProfile
       _ExtentY        =   4895
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmProfile.frx":0D5B
@@ -110,6 +112,7 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
+      Enabled         =   -1  'True
       TextRTF         =   $"frmProfile.frx":0DEC
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -133,6 +136,7 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
+      Enabled         =   -1  'True
       TextRTF         =   $"frmProfile.frx":0E7D
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -369,7 +373,7 @@ End Sub
 '    Dim I As Integer
 '
 '    For I = LBound(saElements) To UBound(saElements) Step 2
-'        If InStr(1, saElements(I), Chr(0), vbBinaryCompare) > 0 Then _
+'        If InStr(1, saElements(I), vbNullChar, vbBinaryCompare) > 0 Then _
 '            KillNull saElements(I)
 '
 '        If Len(saElements(I + 1)) > 0 Then

@@ -906,8 +906,8 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
         Case "FORM"
             Set obj.obj = New frmScript
             
-            obj.obj.setName ObjName
-            obj.obj.setSCModule SCModule
+            obj.obj.SetName ObjName
+            obj.obj.SetSCModule SCModule
             
             HookWindowProc obj.obj.hWnd
             
@@ -1195,7 +1195,7 @@ Public Function InitMenus()
         Set tmp = New clsMenuObj
     
         ' root menu, give name, hwnd, and caption
-        tmp.Name = Chr$(0) & Name & Chr$(0) & "ROOT"
+        tmp.Name = vbNullChar & Name & vbNullChar & "ROOT"
         tmp.hWnd = GetSubMenu(GetMenu(frmChat.hWnd), 5)
         tmp.Caption = Name
             
@@ -1206,7 +1206,7 @@ Public Function InitMenus()
         Set tmp = New clsMenuObj
     
         ' enable/disable menu, give name, parent, and caption
-        tmp.Name = Chr$(0) & Name & Chr$(0) & "ENABLE|DISABLE"
+        tmp.Name = vbNullChar & Name & vbNullChar & "ENABLE|DISABLE"
         tmp.Parent = DynamicMenus("mnu" & Name)
         tmp.Caption = "Enabled"
         
@@ -1223,7 +1223,7 @@ Public Function InitMenus()
         Set tmp = New clsMenuObj
     
         ' view script menu item, give name, parent, and caption
-        tmp.Name = Chr$(0) & Name & Chr$(0) & "VIEW_SCRIPT"
+        tmp.Name = vbNullChar & Name & vbNullChar & "VIEW_SCRIPT"
         tmp.Parent = DynamicMenus("mnu" & Name)
         tmp.Caption = "View Script"
         
@@ -1234,7 +1234,7 @@ Public Function InitMenus()
         Set tmp = New clsMenuObj
         
         ' dash, give name, parent, caption, and hide it
-        tmp.Name = Chr$(0) & Name & Chr$(0) & "DASH"
+        tmp.Name = vbNullChar & Name & vbNullChar & "DASH"
         tmp.Parent = DynamicMenus("mnu" & Name)
         tmp.Caption = "-"
         tmp.Visible = False
@@ -1267,7 +1267,7 @@ Public Function DestroyMenus()
     For i = DynamicMenus.Count To 1 Step -1
         
         If (Len(DynamicMenus(i).Name) > 0) Then
-            If (Left$(DynamicMenus(i).Name, 1) = Chr$(0)) Then
+            If (Left$(DynamicMenus(i).Name, 1) = vbNullChar) Then
                 DynamicMenus(i).Class_Terminate
 
                 DynamicMenus.Remove i
@@ -1418,7 +1418,7 @@ Public Sub SC_Error()
     Dim Description As String
     Dim Line        As Long
     Dim Column      As Long
-    Dim source      As String
+    Dim Source      As String
     Dim Text        As String
     Dim IncIndex    As Integer
     Dim i           As Integer
@@ -1433,7 +1433,7 @@ Public Sub SC_Error()
         Description = .Error.Description
         Line = .Error.Line
         Column = .Error.Column
-        source = .Error.source
+        Source = .Error.Source
         Text = .Error.Text
     End With
     
@@ -1465,7 +1465,7 @@ Public Sub SC_Error()
     ErrType = "runtime"
     
     ' check if its a parsing error
-    If InStr(1, source, "compilation", vbBinaryCompare) > 0 Then
+    If InStr(1, Source, "compilation", vbBinaryCompare) > 0 Then
         ErrType = "parsing"
     End If
     
@@ -1474,7 +1474,7 @@ Public Sub SC_Error()
                  "True", vbTextCompare) = 0) And _
                  (m_IsEventError = False)) Then
         ' call Event_Error(Number, Description, Line, Column, Text, Source)
-        If (RunInSingle(m_ExecutingMdl, "Event_Error", Number, Description, Line, Column, Text, source) = True) Then
+        If (RunInSingle(m_ExecutingMdl, "Event_Error", Number, Description, Line, Column, Text, Source) = True) Then
             ' if vetoed, exit
             Exit Sub
         End If
@@ -1641,7 +1641,7 @@ On Error GoTo ERROR_HANDLER
     Next i
     Set observed = Nothing
     
-    m_ScriptObservers.Add ModuleName & Chr$(0) & sTargetScript
+    m_ScriptObservers.Add ModuleName & vbNullChar & sTargetScript
     
     Exit Sub
 ERROR_HANDLER:
@@ -1660,7 +1660,7 @@ On Error GoTo ERROR_HANDLER
     Set GetScriptObservers = New Collection
 
     For i = 1 To m_ScriptObservers.Count
-        If (InStr(m_ScriptObservers.Item(i), Chr$(0))) Then
+        If (InStr(m_ScriptObservers.Item(i), vbNullChar)) Then
             sObserver = Split(m_ScriptObservers.Item(i), Chr$(0))(0)
             sObservie = Split(m_ScriptObservers.Item(i), Chr$(0))(1)
             

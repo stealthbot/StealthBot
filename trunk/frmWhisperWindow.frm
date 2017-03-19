@@ -38,6 +38,7 @@ Begin VB.Form frmWhisperWindow
       _ExtentY        =   4683
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmWhisperWindow.frx":0000
@@ -318,7 +319,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
         End With
         
         For i = LBound(saElements) To UBound(saElements) Step 2
-            If InStr(1, saElements(i), Chr(0), vbBinaryCompare) > 0 Then _
+            If InStr(1, saElements(i), vbNullChar, vbBinaryCompare) > 0 Then _
                 KillNull saElements(i)
             
             If Len(saElements(i + 1)) > 0 Then
