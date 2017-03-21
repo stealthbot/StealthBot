@@ -4637,26 +4637,27 @@ Private Sub Form_Load()
         .ListIndex = 0
     End With
     
-    lblGreetVars.Caption = "Greet Message Variables: (Suggest more! email stealth@stealthbot.net) " & vbNewLine & _
-        "%c = Current channel" & vbNewLine & _
-        "%0 = Username of the person who joins" & vbNewLine & _
-        "%1 = Bot's current username" & vbNewLine & _
-        "%p = Ping of user who joins" & vbNewLine & _
-        "%v = The bot's current version" & vbNewLine & _
-        "%a = Database access of the person who joins" & vbNewLine & _
-        "%f = Database flags of the person who joins" & vbNewLine & _
-        "%t = Current time" & vbNewLine & _
-        "%d = Current date"
+    lblGreetVars.Caption = "Greet message variables:" & vbNewLine & _
+        "%c or %chan = Current channel" & vbNewLine & _
+        "%0 or %user = Username of the person who joins" & vbNewLine & _
+        "%1 or %me = Bot's current username" & vbNewLine & _
+        "%p or %ping = Ping of the person who joins" & vbNewLine & _
+        "%v or %ver = The bot's current version" & vbNewLine & _
+        "%a or %r = Database access / %f = Database flags of the person who joins" & vbNewLine & _
+        "%m or %mail = Number of unread messages for the person who joins" & vbNewLine & _
+        "%bc = Mumber of people the bot has banned" & vbNewLine & _
+        "%t = Current time / %d = Current date"
 
-    lblIdleVars.Caption = "Idle message variables: (Suggest more! email stealth@stealthbot.net) " & vbNewLine & _
-        "%c = Current channel" & vbNewLine & _
-        "%me = Current username" & vbNewLine & _
-        "%v = Bot version" & vbNewLine & _
-        "%botup = Bot uptime" & vbNewLine & _
-        "%cpuup = System uptime" & vbNewLine & _
+    lblIdleVars.Caption = "Idle message variables:" & vbNewLine & _
+        "%c or %chan = Current channel" & vbNewLine & _
+        "%1 or %me = Current username" & vbNewLine & _
+        "%v or %ver = Bot version" & vbNewLine & _
+        "%botup = Bot uptime / %cpuup = System uptime" & vbNewLine & _
         "%mp3 = Current MP3" & vbNewLine & _
         "%quote = Random quote" & vbNewLine & _
-        "%rnd = Random person in the channel" & vbNewLine
+        "%rnd = Random person in the channel" & vbNewLine & _
+        "%bc = Mumber of people the bot has banned" & vbNewLine & _
+        "%t = Current time / %d = Current date"
     
     '##########################################
     'COLOR STUFF

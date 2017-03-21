@@ -1761,30 +1761,61 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phr
 End Sub
 
 
-Public Function DoReplacements(ByVal s As String, Optional Username As String, _
-    Optional Ping As Long) As String
+Public Function DoReplacements(ByVal s As String, Optional ByVal Username As String, _
+    Optional ByVal Ping As Long) As String
 
     Dim gAcc As udtUserAccess
-    
-    gAcc = Database.GetUserAccess(Username)
+    Dim Rank As Integer
 
-    s = Replace(s, "%0", Username, 1)
-    s = Replace(s, "%1", GetCurrentUsername, 1)
-    s = Replace(s, "%c", g_Channel.Name, 1)
-    s = Replace(s, "%bc", BanCount, 1)
-    
-    If (Ping > -2) Then
-        s = Replace(s, "%p", Ping, 1)
+    s = Replace(s, "%ver", CVERSION)
+    s = Replace(s, "%v", CVERSION)
+    s = Replace(s, "%botup", ConvertTimeInterval(GetConnectionUptime()))
+    s = Replace(s, "%cpuup", ConvertTimeInterval(GetTickCountMS()))
+    s = Replace(s, "%chan", g_Channel.Name)
+    s = Replace(s, "%c", g_Channel.Name)
+    s = Replace(s, "%me", GetCurrentUsername)
+    s = Replace(s, "%1", GetCurrentUsername)
+    s = Replace(s, "%rnd", GetRandomUserInChannel)
+    s = Replace(s, "%bc", BanCount)
+    s = Replace(s, "%mp3", Replace(MediaPlayer.TrackName, "&", "+"))
+    s = Replace(s, "%quote", g_Quotes.GetRandomQuote)
+    s = Replace(s, "%t", FormatDateTime(Now, vbLongTime))
+    s = Replace(s, "%d", FormatDateTime(Now, vbShortDate))
+
+    If Not IsMissing(Username) Then
+        gAcc = Database.GetUserAccess(Username)
+        Rank = 0
+        If gAcc.Rank > 0 Then Rank = gAcc.Rank
+
+        s = Replace(s, "%user", Username)
+        s = Replace(s, "%u", Username)
+        s = Replace(s, "%0", Username)
+        If Not IsMissing(Ping) And Ping > -2 Then
+            s = Replace(s, "%p", Ping)
+        End If
+        s = Replace(s, "%a", Rank)
+        s = Replace(s, "%rank", Rank)
+        s = Replace(s, "%r", Rank)
+        s = Replace(s, "%flags", gAcc.Flags)
+        s = Replace(s, "%flag", gAcc.Flags)
+        s = Replace(s, "%f", gAcc.Flags)
+        s = Replace(s, "%mail", GetMailCount(Username))
+        s = Replace(s, "%m", GetMailCount(Username))
     End If
-    
-    s = Replace(s, "%v", CVERSION, 1)
-    s = Replace(s, "%a", IIf(gAcc.Rank >= 0, gAcc.Rank, "0"), 1)
-    s = Replace(s, "%f", IIf(gAcc.Flags <> vbNullString, gAcc.Flags, "<none>"), 1)
-    s = Replace(s, "%t", Time$, 1)
-    s = Replace(s, "%d", Date, 1)
-    s = Replace(s, "%m", GetMailCount(Username), 1)
-    
+
     DoReplacements = s
+End Function
+
+Public Function GetRandomUserInChannel() As String
+    Dim i As Integer
+    
+    If (g_Channel.Users.Count > 0) Then
+        Randomize
+        
+        i = Int(g_Channel.Users.Count * Rnd + 1)
+
+        GetRandomUserInChannel = g_Channel.Users(i).DisplayName
+    End If
 End Function
 
 Public Function ListFileLoad(ByVal sPath As String, Optional ByVal MaxItems As Integer = -1) As Collection

@@ -6174,18 +6174,7 @@ Private Sub tmrIdleTimer_Timer_IdleMsg()
             Exit Sub
         End If
         
-        IdleMsg = Replace(IdleMsg, "%cpuup", ConvertTimeInterval(GetTickCountMS()))
-        IdleMsg = Replace(IdleMsg, "%chan", g_Channel.Name)
-        IdleMsg = Replace(IdleMsg, "%c", g_Channel.Name)
-        IdleMsg = Replace(IdleMsg, "%me", GetCurrentUsername)
-        IdleMsg = Replace(IdleMsg, "%v", CVERSION)
-        IdleMsg = Replace(IdleMsg, "%ver", CVERSION)
-        IdleMsg = Replace(IdleMsg, "%bc", BanCount)
-        IdleMsg = Replace(IdleMsg, "%botup", ConvertTimeInterval(GetConnectionUptime()))
-        IdleMsg = Replace(IdleMsg, "%mp3", Replace(MediaPlayer.TrackName, "&", "+"))
-        IdleMsg = Replace(IdleMsg, "%quote", g_Quotes.GetRandomQuote)
-        IdleMsg = Replace(IdleMsg, "%rnd", GetRandomPerson)
-        IdleMsg = Replace(IdleMsg, "%t", Time$)
+        IdleMsg = DoReplacements(IdleMsg)
         
         If (IdleMsg = vbNullString) Then
             IsError = True
@@ -7681,18 +7670,6 @@ Function GetFriendsSelectedUser() As String
     End If
     
     GetFriendsSelectedUser = CleanUsername(ReverseConvertUsernameGateway(lvFriendList.SelectedItem.Text))
-End Function
-
-Function GetRandomPerson() As String
-    Dim i As Integer
-    
-    If (g_Channel.Users.Count > 0) Then
-        Randomize
-        
-        i = Int(g_Channel.Users.Count * Rnd + 1)
-
-        GetRandomPerson = g_Channel.Users(i).DisplayName
-    End If
 End Function
 
 Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) As String
