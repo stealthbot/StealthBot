@@ -27,6 +27,7 @@ Private m_data_type      As String
 Private m_matchmessage   As String
 Private m_casesensitive  As Boolean
 Private m_error          As String
+Private m_rserror        As String
 
 Private Sub Class_Initialize()
     Set m_restrictions = New Collection
@@ -61,12 +62,12 @@ Public Property Let Restrictions(col As Collection)
     Set m_restrictions = col
 End Property
 
-Public Property Get datatype() As String
-    datatype = m_data_type
+Public Property Get DataType() As String
+    DataType = m_data_type
 End Property
 
-Public Property Let datatype(strType As String)
-    Select Case LCase(strType)
+Public Property Let DataType(strType As String)
+    Select Case LCase$(strType)
         Case "string"
         Case "number", "numeric"
         Case "word"
@@ -125,6 +126,14 @@ Public Property Let MatchError(str As String)
     m_error = str
 End Property
 
+Public Property Get RestrictionsSharedError() As String
+    RestrictionsSharedError = m_rserror
+End Property
+
+Public Property Let RestrictionsSharedError(str As String)
+    m_rserror = str
+End Property
+
 Public Property Get MatchCaseSensitive() As Boolean
     MatchCaseSensitive = m_casesensitive
 End Property
@@ -132,6 +141,22 @@ End Property
 Public Property Let MatchCaseSensitive(bln As Boolean)
     m_casesensitive = bln
 End Property
+
+Public Function ToString(Optional ByVal ShowLong As Boolean = False) As String
+Attribute ToString.VB_UserMemId = 0
+
+    Dim BracketS As String, BracketE As String
+    BracketS = "<": BracketE = ">"
+    If Me.IsOptional Then
+        BracketS = "[": BracketE = "]"
+    End If
+    If ShowLong Then
+        ToString = StringFormat("{0} ({1} {2})", Me.Name, IIf(Me.IsOptional, "optional", "required"), LCase$(Me.DataType))
+    Else
+        ToString = StringFormat("{0}{1}{2}{3}", BracketS, Me.Name, BracketE, IIf(LCase$(Me.DataType) = "string", "*", vbNullString))
+    End If
+
+End Function
 
 'Public Property Get Pattern() As String
 '    Pattern = m_data_pattern

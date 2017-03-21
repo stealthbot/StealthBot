@@ -17,43 +17,90 @@ Option Explicit
 
 '// 06/24/09 Hdx - Created
 'This will return a Collection that has all of the CommandsDoc objects for all of the commands from the selected file
-Public Function GetCommands(Optional ByVal scriptName As String = vbNullString) As Collection
-    
-    Dim AZ As String
-    Dim xpath As String
-    Dim doc As New DOMDocument60
-    Dim commandNodes As IXMLDOMNodeList
-    Dim commandNode As IXMLDOMNode
-    
-    AZ = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    
+Public Function GetCommands(Optional ByVal ScriptName As String = vbNullString, Optional ByVal Database As DOMDocument60 = Nothing) As Collection
+On Error GoTo ERROR_HANDLER
+
+    Dim xpath        As String
+    Dim CommandNodes As IXMLDOMNodeList
+    Dim CommandNode  As IXMLDOMNode
+
     Set GetCommands = New Collection
-  
-    doc.Load GetFilePath(FILE_COMMANDS)
-    
-    scriptName = clsCommandObj.CleanXPathVar(scriptName)
-    
-    If scriptName = vbNullString Then
-         xpath = StringFormat("./commands/command[not(@owner) and (not(@enabled) or @enable = 1)]", _
-            UCase$(AZ), LCase$(AZ), LCase$(scriptName))
-    ElseIf scriptName = Chr$(0) Then
-        xpath = StringFormat("./commands/command[translate(@owner, '{0}', '{1}')='{2}' and (not(@enabled) or @enable = 1)]", _
-            UCase$(AZ), LCase$(AZ), LCase$(scriptName))
-    Else
-        xpath = StringFormat("./commands/command[translate(@owner, '{0}', '{1}')='{2}']", _
-            UCase$(AZ), LCase$(AZ), LCase$(scriptName))
+
+    If Database Is Nothing Then
+        Set Database = New DOMDocument60
+        Database.Load GetFilePath(FILE_COMMANDS)
     End If
-        
-    Set commandNodes = doc.selectNodes(xpath)
-    
-    For Each commandNode In commandNodes
-      GetCommands.Add commandNode.Attributes.getNamedItem("name").nodeValue
-    Next commandNode
-    
-    Set commandNode = Nothing
-    Set commandNodes = Nothing
-    Set doc = Nothing
-    
+
+    ScriptName = clsCommandObj.CleanXPathVar(ScriptName)
+
+    If ScriptName = vbNullString Then
+        xpath = "/commands/command[not(@owner)]"
+    ElseIf ScriptName = vbNullChar Then
+        xpath = "/commands/command"
+    Else
+        xpath = StringFormat("/commands/command[translate(@owner, '{0}', '{1}')='{2}']", _
+                UCase$(AZ), LCase$(AZ), LCase$(ScriptName))
+    End If
+
+    Set CommandNodes = Database.selectNodes(xpath)
+
+    For Each CommandNode In CommandNodes
+        GetCommands.Add CommandNode.Attributes.getNamedItem("name").nodeValue
+    Next CommandNode
+
+    Set CommandNode = Nothing
+    Set CommandNodes = Nothing
+    Set Database = Nothing
+
+    Exit Function
+
+ERROR_HANDLER:
+    Set CommandNode = Nothing
+    Set CommandNodes = Nothing
+    Set Database = Nothing
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsCommandDocObj.GetCommands().")
+    Exit Function
+
+End Function
+
+Public Function GetCommandCount(Optional ByVal strScriptOwner As String = vbNullString, Optional ByVal Database As DOMDocument60 = Nothing) As Integer
+On Error GoTo ERROR_HANDLER
+
+    Dim xpath        As String
+    Dim CommandNodes As IXMLDOMNodeList
+
+    If Database Is Nothing Then
+        Set Database = New DOMDocument60
+        Database.Load GetFilePath(FILE_COMMANDS)
+    End If
+
+    strScriptOwner = clsCommandObj.CleanXPathVar(strScriptOwner)
+
+    '// create xpath expression based on strScriptOwner
+    If strScriptOwner = vbNullString Then
+        xpath = "/commands/command[not(@owner)]"
+    ElseIf strScriptOwner = vbNullChar Then
+        xpath = "/commands/command"
+    Else
+        xpath = StringFormat("/commands/command[translate(@owner, '{0}', '{1}')='{2}']", _
+                UCase$(AZ), LCase$(AZ), LCase$(strScriptOwner))
+    End If
+
+    Set CommandNodes = Database.selectNodes(xpath)
+
+    GetCommandCount = CommandNodes.Length
+
+    Set CommandNodes = Nothing
+    Set Database = Nothing
+
+    Exit Function
+
+ERROR_HANDLER:
+    Set CommandNodes = Nothing
+    Set Database = Nothing
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsCommandDocObj.GetCommandCount().")
+    Exit Function
+
 End Function
 
 
@@ -131,7 +178,7 @@ Public Function ValidateXMLFromStrings(ByVal strXML As String, ByVal strXSD As S
     ' any good?
     ValidateXMLFromStrings = (objErr.ErrorCode = 0)
     If objErr.ErrorCode <> 0 Then
-        Err.Raise 1, "ValidateXML", "Error (#" & objErr.ErrorCode & ") on Line " & objErr.line & ": " & objErr.Reason
+        Err.Raise 1, "ValidateXML", "Error (#" & objErr.ErrorCode & ") on Line " & objErr.Line & ": " & objErr.Reason
     End If
     
     Exit Function

@@ -1081,6 +1081,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1106,6 +1107,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2609,7 +2611,7 @@ Sub Form_Resize()
     
     If Me.WindowState = vbMinimized Then
         If Not BotVars.NoTray Then
-            #If Not COMPILE_DEBUG = 1 Then
+            #If (COMPILE_DEBUG <> 1) Then
                 Me.Hide
                 
                 With nid
@@ -3264,7 +3266,7 @@ Sub Form_Unload(Cancel As Integer)
     '   in modAPI...
     ' added preprocessor check; the bot was ending the VB6 IDE's process too! - ribose
     ' if it was compiled with the debugger, we don't allow minimizing to tray anyway
-    #If Not COMPILE_DEBUG = 1 Then
+    #If (COMPILE_DEBUG <> 1) Then
         Call ExitProcess(0)
     #Else
         End

@@ -89,14 +89,14 @@ Public Property Let WasWhispered(bValue As Boolean)
     m_waswhispered = bValue
 End Property
 
-Public Property Get source() As Integer
+Public Property Get Source() As Integer
     If m_local = True Then
-        source = 4
+        Source = 4
     Else
         If m_waswhispered = True Then
-            source = 3
+            Source = 3
         Else
-            source = 1
+            Source = 1
         End If
     End If
 End Property
@@ -131,7 +131,7 @@ Public Property Get docs() As clsCommandDocObj
     If m_command_docs Is Nothing Then
         '// this command is nothing, lets create it
         Set m_command_docs = New clsCommandDocObj
-        Call m_command_docs.OpenCommand(m_name, Chr$(0))
+        Call m_command_docs.OpenCommand(m_name, vbNullChar)
         Set docs = m_command_docs
     Else
         '// this command already has a value, lets make sure its still valid
@@ -248,7 +248,7 @@ On Error GoTo ERROR_HANDLER
     
     For Each Param In Me.docs.Parameters
     
-        Select Case LCase(Param.datatype)
+        Select Case LCase$(Param.DataType)
             Case "word":    sTemp = StripWord(sArgs)
             Case "numeric": sTemp = StripNumeric(sArgs)
             Case "number":  sTemp = StripNumeric(sArgs)
@@ -259,11 +259,10 @@ On Error GoTo ERROR_HANDLER
             If (Not CheckMatch(Param.MatchMessage, sTemp, Param.MatchCaseSensitive)) Then
                 If m_hasaccess Then
                     If LenB(Param.MatchError) > 0 Then
-                
                         sError = Replace$(Param.MatchError, "%Value", sTemp)
                         sError = Replace$(sError, "%Rank", dbAccess.Rank)
                         sError = Replace$(sError, "%Flags", dbAccess.Flags)
-                    
+
                         Respond sError
                     Else
                         Respond "That command is restricted."
@@ -272,7 +271,7 @@ On Error GoTo ERROR_HANDLER
                     m_splithasrun = True
                     IsValid = False
                 Else
-                    If (LCase$(Param.datatype) = "string") Then
+                    If (LCase$(Param.DataType) = "string") Then
                         sArgs = StringFormat("{0}{1}{0} {2}", Chr$(34), sTemp, sArgs)
                     Else
                         sArgs = StringFormat("{0} {1}", sTemp, sArgs)
@@ -293,7 +292,13 @@ On Error GoTo ERROR_HANDLER
                                     sError = Replace$(Restriction.MatchError, "%Value", sTemp)
                                     sError = Replace$(sError, "%Rank", dbAccess.Rank)
                                     sError = Replace$(sError, "%Flags", dbAccess.Flags)
-                                
+
+                                    Respond sError
+                                ElseIf LenB(Param.RestrictionsSharedError) > 0 Then
+                                    sError = Replace$(Param.RestrictionsSharedError, "%Value", sTemp)
+                                    sError = Replace$(sError, "%Rank", dbAccess.Rank)
+                                    sError = Replace$(sError, "%Flags", dbAccess.Flags)
+
                                     Respond sError
                                 Else
                                     Respond "That command is restricted."

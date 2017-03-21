@@ -198,18 +198,18 @@ Public Sub OnHelp(Command As clsCommandObj)
     strCommand = IIf(Command.IsValid, Command.Argument("Command"), "help")
     strScript = IIf(LenB(Command.Argument("ScriptOwner")) > 0, Command.Argument("ScriptOwner"), Chr$(0))
     
-    Set docs = OpenCommand(strCommand, strScript)
+    Set docs = OpenCommand(strCommand, strScript, False)
     If (LenB(docs.Name) = 0) Then
         Command.Respond "Sorry, but no related documentation could be found."
     Else
-        If (docs.aliases.Count > 1) Then
-            Command.Respond StringFormat("[{0} (Aliases: {4})]: {1} (Syntax: {2}). {3}", _
+        If (docs.Aliases.Count > 1) Then
+            Command.Respond StringFormat("[{0} (aliases: {4})]: {1} [syntax: {2}] {3}", _
             docs.Name, docs.Description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort, docs.AliasString)
-        ElseIf (docs.aliases.Count = 1) Then
-            Command.Respond StringFormat("[{0} (Alias: {4})]: {1} (Syntax: {2}). {3}", _
+        ElseIf (docs.Aliases.Count = 1) Then
+            Command.Respond StringFormat("[{0} (alias: {4})]: {1} [syntax: {2}] {3}", _
             docs.Name, docs.Description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort, docs.AliasString)
         Else
-            Command.Respond StringFormat("[{0}]: {1} (Syntax: {2}). {3}", _
+            Command.Respond StringFormat("[{0}]: {1} [syntax: {2}] {3}", _
             docs.Name, docs.Description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort)
         End If
     End If

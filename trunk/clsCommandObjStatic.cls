@@ -216,12 +216,10 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         Set Command = CreateCommandInstance(commandString, strUsername, strScriptOwner)
         If Not (Command Is Nothing) Then
             '// we only want to add the command if it is enabled
-            If Command.docs.IsEnabled = True Then
-                Command.PublicOutput = PublicOutput
-                Command.IsLocal = IsLocal
-                Command.WasWhispered = WasWhispered
-                IsCommand.Add Command
-            End If
+            Command.PublicOutput = PublicOutput
+            Command.IsLocal = IsLocal
+            Command.WasWhispered = WasWhispered
+            IsCommand.Add Command
         End If
     Next
     
@@ -253,12 +251,12 @@ Private Function SplitCompleteCommandString(ByVal completeCommandString As Strin
     Set SplitCompleteCommandString = New Collection
     
     '// use "; " as a delimiter for commands. Allows for /; to escape a command split
-    completeCommandString = Replace(completeCommandString, "\;", Chr(0))
+    completeCommandString = Replace(completeCommandString, "\;", vbNullChar)
     commandStrings = Split(completeCommandString, "; ")
     For i = LBound(commandStrings) To UBound(commandStrings)
         '// make sure these some actual text for this command, otherwise skip it
         If Len(commandStrings(i)) > 0 Then
-            SplitCompleteCommandString.Add Replace(commandStrings(i), Chr(0), ";")
+            SplitCompleteCommandString.Add Replace(commandStrings(i), vbNullChar, ";")
         End If
     Next i
 
@@ -294,7 +292,7 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
     '// it to the collection, and then return
     If InStr(1, strArgString, " ") < 1 Then
     
-        Word = StripQuotes(Replace(strArgString, "\""", Chr(0)))
+        Word = StripQuotes(Replace(strArgString, "\""", vbNullChar))
         If InStr(1, Word, """") > 0 Then
             '// this is bad... words cannot contain unescaped "
             'Err.Raise -1, 0&, ""Words cannot contain unescaped """. Args =: " & strArgString
@@ -303,7 +301,7 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
             Exit Function
         End If
         
-        Word = Replace(Word, Chr(0), """")
+        Word = Replace(Word, vbNullChar, """")
     
         SplitArguments.Add Word
         Exit Function
@@ -318,7 +316,7 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
     For i = LBound(tmp) To UBound(tmp)
         Word = tmp(i)
         '// allow for escaping quotes
-        Word = Replace(Word, "\""", Chr(0))
+        Word = Replace(Word, "\""", vbNullChar)
         
         '// if the length is 2 or more then then l and r should be the first and last character
         If Len(Word) > 1 Then
@@ -358,7 +356,7 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
                 Exit Function
             End If
             
-            Word = Replace(Word, Chr(0), """")
+            Word = Replace(Word, vbNullChar, """")
         
         ElseIf (L = """") And (insideArg = False) Then
         
@@ -371,7 +369,7 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
         
             '// we are, lets end the multiword, add it to the collect, and reset our vars
             multiword = multiword & Word
-            SplitArguments.Add Replace(StripQuotes(multiword), Chr(0), """")
+            SplitArguments.Add Replace(StripQuotes(multiword), vbNullChar, """")
             insideArg = False
             multiword = ""
             
@@ -395,7 +393,7 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
             
             '// if there is no text and not inside a word, then we should ignore it
             If Len(Word) > 0 Then
-                SplitArguments.Add Replace(StripQuotes(Word), Chr(0), """")
+                SplitArguments.Add Replace(StripQuotes(Word), vbNullChar, """")
                 insideArg = False
                 multiword = ""
             End If
@@ -447,18 +445,18 @@ Private Function CreateCommandInstance(ByRef commandString As String, ByVal strU
     Dim doc As New clsCommandDocObj
     Dim cmd As clsCommandObj
     
-    Dim commandName As String
+    Dim CommandName As String
     Dim commandArgs As String
     Dim tmp() As String
     
     '// separate the command's name and args from the command string
     tmp = Split(commandString, " ", 2)
-    commandName = tmp(0)
+    CommandName = tmp(0)
     If UBound(tmp) = 1 Then
         commandArgs = tmp(1)
     End If
     
-    If (Not doc.OpenCommand(commandName, strScriptOwner)) Then
+    If (Not doc.OpenCommand(CommandName, strScriptOwner, True)) Then
         Exit Function
     End If
     
@@ -523,6 +521,31 @@ Public Function CleanXPathVar(ByVal str As String) As String
     str = Replace$(str, "\", "\\")
     str = Replace$(str, "'", "&apos;")
     CleanXPathVar = str
+End Function
+
+Public Function GetCommandXPath(ByVal strCommand As String, Optional ByVal strScriptOwner As String = vbNullString, Optional ByVal EnabledOnly As Boolean = False) As String
+    Dim EnabledCheck As String
+
+    strCommand = clsCommandObj.CleanXPathVar(strCommand)
+    strScriptOwner = clsCommandObj.CleanXPathVar(strScriptOwner)
+
+    If EnabledOnly Then
+        EnabledCheck = " and (not(@enabled) or @enabled='1')"
+    Else
+        EnabledCheck = vbNullString
+    End If
+
+    If strScriptOwner = vbNullString Then
+        GetCommandXPath = StringFormat("/commands/command[translate(@name, '{0}', '{1}')='{2}' and not(@owner){3}]", _
+                UCase$(AZ), LCase$(AZ), LCase$(strCommand), EnabledCheck)
+    ElseIf strScriptOwner = vbNullChar Then
+        GetCommandXPath = StringFormat("/commands/command[translate(@name, '{0}', '{1}')='{2}'{3}]", _
+                UCase$(AZ), LCase$(AZ), LCase$(strCommand), EnabledCheck)
+    Else
+        GetCommandXPath = StringFormat("/commands/command[translate(@name, '{0}', '{1}')='{2}' and translate(@owner, '{0}', '{1}')='{3}'{4}]", _
+                UCase$(AZ), LCase$(AZ), LCase$(strCommand), LCase$(strScriptOwner), EnabledCheck)
+    End If
+
 End Function
 
 'Function to check if command names are valid

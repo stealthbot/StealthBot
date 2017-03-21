@@ -22,14 +22,14 @@ Attribute VB_Name = "modCommandDocsObj"
 
 Option Explicit
 
-Public Function OpenCommand(ByVal strCommand As String, Optional strScriptOwner As String = vbNullString) As clsCommandDocObj
+Public Function OpenCommand(ByVal strCommand As String, Optional strScriptOwner As String = vbNullString, Optional ByVal EnabledOnly As Boolean = True) As clsCommandDocObj
     Set OpenCommand = New clsCommandDocObj
     If (InStr(1, strCommand, "'", vbBinaryCompare) > 0) Then
         Exit Function
     End If
     strCommand = Replace(strCommand, "\", "\\")
     OpenCommand.OpenDatabase
-    OpenCommand.OpenCommand strCommand, strScriptOwner
+    OpenCommand.OpenCommand strCommand, strScriptOwner, EnabledOnly
 End Function
 
 '// 06/13/2009 JSM - Created

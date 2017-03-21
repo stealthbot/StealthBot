@@ -21,6 +21,7 @@
         <xsd:element name="restrictions" minOccurs="0" maxOccurs="1">
           <xsd:complexType>
             <xsd:sequence>
+              <xsd:element name="shared-error" minOccurs="0" maxOccurs="1" />
               <xsd:element name="restriction" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                   <xsd:sequence>

@@ -590,6 +590,7 @@ Public Property Let Realm(ByVal str As String)
 End Property
 
 Public Property Get ToString() As String
+Attribute ToString.VB_UserMemId = 0
     Dim buf As String
     
     buf = GetProductInfo(Game).FullName

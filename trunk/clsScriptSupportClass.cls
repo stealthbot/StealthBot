@@ -1377,7 +1377,7 @@ Public Function OpenCommand(ByVal CommandName As String, ByVal ScriptName As Str
     
     Set Command = New clsCommandDocObj
     
-    If Command.OpenCommand(commandName, scriptName) Then
+    If Command.OpenCommand(CommandName, ScriptName, False) Then
         Set OpenCommand = Command
     End If
     

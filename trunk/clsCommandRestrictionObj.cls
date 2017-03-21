@@ -22,6 +22,8 @@ Private m_req_flags      As String
 Private m_matchmessage   As String
 Private m_casesensitive  As Boolean
 Private m_error          As String
+Private m_description    As String
+Private m_special_notes  As String
 Private m_fatal          As Boolean
 
 Public Property Get Name() As String
@@ -72,6 +74,22 @@ Public Property Let MatchCaseSensitive(bln As Boolean)
     m_casesensitive = bln
 End Property
 
+Public Property Get Description() As String
+    Description = m_description
+End Property
+
+Public Property Let Description(str As String)
+    m_description = str
+End Property
+
+Public Property Get SpecialNotes() As String
+    SpecialNotes = m_special_notes
+End Property
+
+Public Property Let SpecialNotes(str As String)
+    m_special_notes = str
+End Property
+
 Public Property Let Fatal(bFatal As Boolean)
     m_fatal = bFatal
 End Property
@@ -79,3 +97,8 @@ End Property
 Public Property Get Fatal() As Boolean
     Fatal = m_fatal
 End Property
+
+Public Function ToString() As String
+Attribute ToString.VB_UserMemId = 0
+    ToString = "Restriction: " & Name
+End Function

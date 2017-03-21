@@ -1,13 +1,14 @@
 VERSION 5.00
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.1#0"; "vbalTreeView6.ocx"
 Begin VB.Form frmCommandManager 
    BackColor       =   &H00000000&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Command Manager"
-   ClientHeight    =   7185
+   ClientHeight    =   6255
    ClientLeft      =   45
    ClientTop       =   435
-   ClientWidth     =   9330
+   ClientWidth     =   9645
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -21,57 +22,36 @@ Begin VB.Form frmCommandManager
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   7185
-   ScaleWidth      =   9330
+   ScaleHeight     =   6255
+   ScaleWidth      =   9645
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
-   Begin VB.Frame Frame1 
-      BackColor       =   &H00000000&
-      Caption         =   "Command Syntax"
-      ForeColor       =   &H00FFFFFF&
-      Height          =   975
-      Left            =   120
-      TabIndex        =   22
-      Top             =   6120
-      Width           =   9135
-      Begin VB.Label lblRequirements 
-         BackStyle       =   0  'Transparent
-         Caption         =   "Command Requirements"
-         ForeColor       =   &H00FFFFFF&
-         Height          =   420
-         Left            =   240
-         TabIndex        =   24
-         Top             =   435
-         Width           =   8655
-      End
-      Begin VB.Label lblSyntax 
-         BackStyle       =   0  'Transparent
-         Caption         =   "Command Syntax"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00808000&
-         Height          =   255
-         Left            =   260
-         TabIndex        =   23
-         Top             =   240
-         Width           =   8655
-      End
+   Begin VB.CommandButton cmdCancel 
+      Cancel          =   -1  'True
+      Caption         =   "&Cancel"
+      Height          =   300
+      Left            =   7440
+      TabIndex        =   30
+      Top             =   5880
+      Width           =   735
+   End
+   Begin VB.CommandButton cmdSaveForm 
+      Caption         =   "Apply and Cl&ose"
+      Default         =   -1  'True
+      Height          =   300
+      Left            =   8160
+      TabIndex        =   29
+      Top             =   5880
+      Width           =   1335
    End
    Begin vbalTreeViewLib6.vbalTreeView trvCommands 
-      Height          =   5175
+      Height          =   4965
       Left            =   120
-      TabIndex        =   1
+      TabIndex        =   2
       Top             =   840
       Width           =   3855
       _ExtentX        =   6800
-      _ExtentY        =   9128
+      _ExtentY        =   8758
       BackColor       =   10040064
       ForeColor       =   16777215
       LineStyle       =   0
@@ -101,194 +81,303 @@ Begin VB.Form frmCommandManager
       Height          =   360
       Left            =   120
       Style           =   2  'Dropdown List
-      TabIndex        =   0
+      TabIndex        =   1
       Top             =   360
       Width           =   3855
    End
    Begin VB.Frame fraCommand 
       BackColor       =   &H00000000&
+      Caption         =   "command"
       ForeColor       =   &H00FFFFFF&
-      Height          =   5895
+      Height          =   5655
       Left            =   4200
-      TabIndex        =   12
+      TabIndex        =   3
       Top             =   120
-      Width           =   5055
-      Begin VB.CommandButton cmdDeleteCommand 
-         Caption         =   "&Delete Command"
-         Height          =   300
-         Left            =   3480
-         TabIndex        =   14
-         Top             =   5400
-         Width           =   1455
+      Width           =   5295
+      Begin VB.CheckBox chkMatchFatal 
+         BackColor       =   &H00000000&
+         Caption         =   "Fatal on restricted"
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   240
+         TabIndex        =   20
+         ToolTipText     =   "If enabled, parameters that fail this restriction do not get executed."
+         Top             =   4800
+         Visible         =   0   'False
+         Width           =   1935
       End
-      Begin VB.CommandButton cmdFlagRemove 
-         Caption         =   "-"
-         Height          =   315
-         Left            =   4680
-         TabIndex        =   8
-         Top             =   600
-         Width           =   270
+      Begin VB.CheckBox chkMatchErrorGlobal 
+         BackColor       =   &H00000000&
+         Caption         =   "Error message global for this parameter"
+         ForeColor       =   &H00FFFFFF&
+         Height          =   375
+         Left            =   240
+         TabIndex        =   19
+         ToolTipText     =   "Enable this to make the above error message apply to all restrictions under this parameter."
+         Top             =   4320
+         Visible         =   0   'False
+         Width           =   1935
       End
-      Begin VB.CommandButton cmdAliasAdd 
-         Caption         =   "+"
-         Height          =   315
-         Left            =   2900
-         TabIndex        =   4
-         Top             =   600
-         Width           =   270
+      Begin VB.TextBox txtMatchError 
+         BackColor       =   &H00993300&
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   240
+         MaxLength       =   200
+         TabIndex        =   18
+         ToolTipText     =   "Leave blank for no error."
+         Top             =   3960
+         Width           =   1935
       End
-      Begin VB.CommandButton cmdDiscard 
-         Caption         =   "Di&scard Changes"
-         Height          =   300
-         Left            =   1860
-         TabIndex        =   13
-         Top             =   5400
-         Width           =   1455
+      Begin VB.CheckBox chkMatchCase 
+         BackColor       =   &H00000000&
+         Caption         =   "Case sensitive"
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   240
+         TabIndex        =   16
+         Top             =   3480
+         Visible         =   0   'False
+         Width           =   1935
       End
-      Begin VB.CommandButton cmdSave 
-         Caption         =   "&Save Changes"
-         Height          =   300
+      Begin VB.TextBox txtMatch 
+         BackColor       =   &H00993300&
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
          Left            =   240
          TabIndex        =   15
-         Top             =   5400
-         Width           =   1455
+         ToolTipText     =   "Leave blank to match any parameter."
+         Top             =   3120
+         Width           =   1935
       End
-      Begin VB.ComboBox cboFlags 
+      Begin VB.CommandButton cmdAddAlias 
+         Caption         =   "Add"
+         Enabled         =   0   'False
+         Height          =   300
+         Left            =   1560
+         TabIndex        =   12
+         Top             =   4440
+         Width           =   615
+      End
+      Begin VB.TextBox txtAddAlias 
          BackColor       =   &H00993300&
          ForeColor       =   &H00FFFFFF&
-         Height          =   315
-         Left            =   3600
-         TabIndex        =   6
-         Top             =   600
-         Width           =   700
+         Height          =   285
+         Left            =   240
+         MaxLength       =   50
+         TabIndex        =   11
+         Top             =   4440
+         Width           =   1335
       End
-      Begin VB.ComboBox cboAlias 
-         BackColor       =   &H00993300&
-         ForeColor       =   &H00FFFFFF&
-         Height          =   315
-         Left            =   1605
-         TabIndex        =   3
-         Top             =   600
-         Width           =   1245
+      Begin VB.CommandButton cmdSaveCommand 
+         Caption         =   "&Save"
+         Enabled         =   0   'False
+         Height          =   300
+         Left            =   3840
+         TabIndex        =   26
+         Top             =   5160
+         Width           =   1215
+      End
+      Begin VB.CommandButton cmdDiscardCommand 
+         Caption         =   "D&iscard"
+         Height          =   300
+         Left            =   2640
+         TabIndex        =   27
+         Top             =   5160
+         Width           =   1215
+      End
+      Begin VB.CommandButton cmdDeleteCommand 
+         Caption         =   "&Delete"
+         Height          =   300
+         Left            =   240
+         TabIndex        =   28
+         Top             =   5160
+         Width           =   1215
       End
       Begin VB.TextBox txtRank 
          BackColor       =   &H00993300&
          ForeColor       =   &H00FFFFFF&
-         Height          =   307
-         Left            =   240
-         MaxLength       =   25
-         TabIndex        =   2
-         Top             =   608
-         Width           =   1215
+         Height          =   285
+         Left            =   2280
+         MaxLength       =   4
+         TabIndex        =   22
+         Top             =   3120
+         Width           =   1335
+      End
+      Begin VB.TextBox txtFlags 
+         BackColor       =   &H00993300&
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   3720
+         MaxLength       =   50
+         TabIndex        =   24
+         Top             =   3120
+         Width           =   1335
       End
       Begin VB.CheckBox chkDisable 
          BackColor       =   &H00000000&
          Caption         =   "Disable"
          ForeColor       =   &H00FFFFFF&
-         Height          =   495
+         Height          =   255
          Left            =   240
-         TabIndex        =   11
-         Top             =   4920
+         TabIndex        =   13
+         Top             =   4800
          Visible         =   0   'False
-         Width           =   4695
+         Width           =   4815
       End
       Begin VB.TextBox txtDescription 
          BackColor       =   &H00993300&
          ForeColor       =   &H00FFFFFF&
-         Height          =   1575
+         Height          =   855
          Left            =   240
          MultiLine       =   -1  'True
-         ScrollBars      =   2  'Vertical
-         TabIndex        =   9
-         Top             =   1200
-         Width           =   4695
+         TabIndex        =   6
+         Top             =   720
+         Width           =   4815
       End
       Begin VB.TextBox txtSpecialNotes 
          BackColor       =   &H00993300&
          ForeColor       =   &H00FFFFFF&
-         Height          =   1695
+         Height          =   855
          Left            =   240
          MultiLine       =   -1  'True
-         ScrollBars      =   2  'Vertical
+         TabIndex        =   8
+         Top             =   1920
+         Width           =   4815
+      End
+      Begin MSComctlLib.ListView lvAliases 
+         Height          =   1305
+         Left            =   240
          TabIndex        =   10
          Top             =   3120
-         Width           =   4695
+         Width           =   1935
+         _ExtentX        =   3413
+         _ExtentY        =   2302
+         View            =   3
+         Arrange         =   2
+         LabelEdit       =   1
+         LabelWrap       =   -1  'True
+         HideSelection   =   -1  'True
+         HideColumnHeaders=   -1  'True
+         FullRowSelect   =   -1  'True
+         _Version        =   393217
+         SmallIcons      =   "Icons"
+         ForeColor       =   16777215
+         BackColor       =   10040064
+         Appearance      =   1
+         NumItems        =   1
+         BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+            Object.Width           =   2646
+         EndProperty
       End
-      Begin VB.CommandButton cmdFlagAdd 
-         Caption         =   "+"
-         Height          =   315
-         Left            =   4380
-         TabIndex        =   7
-         Top             =   600
-         Width           =   270
-      End
-      Begin VB.CommandButton cmdAliasRemove 
-         Caption         =   "-"
-         Height          =   315
-         Left            =   3210
-         TabIndex        =   5
-         Top             =   600
-         Width           =   270
-      End
-      Begin VB.Label lblAlias 
+      Begin VB.Label lblMatchError 
          BackStyle       =   0  'Transparent
-         Caption         =   "Custom aliases:"
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   1605
-         TabIndex        =   20
-         Top             =   360
-         Width           =   1215
-      End
-      Begin VB.Label lblRank 
-         BackStyle       =   0  'Transparent
-         Caption         =   "Rank (1 - 200):"
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   240
-         TabIndex        =   19
-         Top             =   360
-         Width           =   1215
-      End
-      Begin VB.Label lblFlags 
-         BackStyle       =   0  'Transparent
-         Caption         =   "Flags:"
-         ForeColor       =   &H00FFFFFF&
-         Height          =   255
-         Left            =   3600
-         TabIndex        =   18
-         Top             =   360
-         Width           =   975
-      End
-      Begin VB.Label lblDescription 
-         BackStyle       =   0  'Transparent
-         Caption         =   "Description:"
+         Caption         =   "&Error on no match"
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   240
          TabIndex        =   17
-         Top             =   960
-         Width           =   2175
+         Top             =   3720
+         Width           =   1935
       End
-      Begin VB.Label lblSpecialNotes 
+      Begin VB.Label lblMatch 
          BackStyle       =   0  'Transparent
-         Caption         =   "Special notes:"
+         Caption         =   "&Match message"
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   240
-         TabIndex        =   16
+         TabIndex        =   14
          Top             =   2880
-         Width           =   2175
+         Width           =   1935
+      End
+      Begin VB.Label lblRequirements 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Command Requirements"
+         ForeColor       =   &H00FFFFFF&
+         Height          =   1260
+         Left            =   2280
+         TabIndex        =   25
+         Top             =   3480
+         Width           =   2775
+      End
+      Begin VB.Label lblSyntax 
+         BackStyle       =   0  'Transparent
+         Caption         =   ".find <username/rank> [upperrank]"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00808000&
+         Height          =   255
+         Left            =   240
+         TabIndex        =   4
+         Top             =   240
+         Width           =   4800
+      End
+      Begin VB.Label lblAlias 
+         BackStyle       =   0  'Transparent
+         Caption         =   "&Aliases"
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   240
+         TabIndex        =   9
+         Top             =   2880
+         Width           =   1935
+      End
+      Begin VB.Label lblRank 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Req &Rank (1-200)"
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   2280
+         TabIndex        =   21
+         Top             =   2880
+         Width           =   1335
+      End
+      Begin VB.Label lblFlags 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Req &Flags"
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   3720
+         TabIndex        =   23
+         Top             =   2880
+         Width           =   1335
+      End
+      Begin VB.Label lblDescription 
+         BackStyle       =   0  'Transparent
+         Caption         =   "D&escription"
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   240
+         TabIndex        =   5
+         Top             =   480
+         Width           =   4815
+      End
+      Begin VB.Label lblSpecialNotes 
+         BackStyle       =   0  'Transparent
+         Caption         =   "S&pecial notes"
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   240
+         TabIndex        =   7
+         Top             =   1680
+         Width           =   4815
       End
    End
    Begin VB.Label lblCommandList 
       AutoSize        =   -1  'True
       BackStyle       =   0  'Transparent
-      Caption         =   "Command List"
+      Caption         =   "Command &List"
       ForeColor       =   &H00FFFFFF&
       Height          =   195
       Left            =   150
-      TabIndex        =   21
+      TabIndex        =   0
       Top             =   165
       Width           =   990
    End
@@ -300,174 +389,195 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private m_Commands As clsCommandDocObj
-'Private m_CommandsDoc As DOMDocument60
-Private m_SelectedElement As SelectedElement
-Private m_ClearingNodes As Boolean
-
 '// Enums
 Private Enum NodeType
     nCommand = 0
-    nArgument = 1
+    nParameter = 1
     nRestriction = 2
 End Enum
+
+Private Type CommandGroup
+    ScriptName As String
+    CommandCount As Integer
+End Type
 
 '// Stores information about the selected node in the treeview
 Private Type SelectedElement
     TheNodeType As NodeType
     IsDirty As Boolean
-    commandName As String
-    argumentName As String
-    restrictionName As String
+    CommandName As String
+    ParameterName As String
+    RestrictionName As String
+    CommandGroup As CommandGroup
 End Type
 
-Sub ClearTreeViewNodes(ByRef trv As vbalTreeView)
-    
+Private m_Commands As clsCommandDocObj
+Private m_CommandGroups() As CommandGroup
+Private m_SelectedElement As SelectedElement
+Private m_DocumentCopy As DOMDocument60
+Private m_ClearingNodes As Boolean
+Private m_PopulatingGroupList As Boolean
+Private m_ResettingForm As Boolean
+
+Private Sub ClearTreeViewNodes(ByRef trv As vbalTreeView)
+
     m_ClearingNodes = True
     trv.Nodes.Clear
     m_ClearingNodes = False
 
 End Sub
 
-
 Private Sub cboCommandGroup_Click()
-
-    If PromptToSaveChanges() = True Then
-        
-        Call ResetForm
-        Call PopulateTreeView(getScriptOwner())
-        
-        '// getScriptOwner() contains this logic already
-        'If cboCommandGroup.ListIndex = 0 Then
-        '    Call PopulateTreeView
-        'Else
-        '    Call PopulateTreeView(getScriptOwner())
-        'End If
+    If Not m_PopulatingGroupList Then
+        m_SelectedElement.CommandGroup = m_CommandGroups(cboCommandGroup.ListIndex)
+        If PromptToSaveChanges() = True Then
+            Call ResetCommandForm
+            Call PopulateTreeView(GetScriptOwner())
+        End If
     End If
-    
 End Sub
 
-Private Sub cmdFlagAdd_Click()
+Private Sub cmdAddAlias_Click()
+    Dim Exists  As Boolean
+    Dim Alias   As String
+    Dim Command As String
+    Dim Other   As String
+    Dim Script  As String
+    Dim i       As Integer
 
-    cboFlags.AddItem cboFlags.Text
-    cboFlags.Text = ""
-    Call FormIsDirty
+    Exists = False
+    Command = m_Commands.Name
+    Script = m_SelectedElement.CommandGroup.ScriptName
+    Alias = LCase$(txtAddAlias.Text)
 
-End Sub
-
-
-Private Sub cmdFlagRemove_Click()
-
-    Dim i As Integer
-    
-    For i = 0 To cboFlags.ListCount - 1
-        If (StrComp(cboFlags.Text, cboFlags.List(i), vbBinaryCompare) = 0) Then
-            cboFlags.RemoveItem i
+    '// Make sure its not already an alias
+    For i = 1 To lvAliases.ListItems.Count
+        If StrComp(lvAliases.ListItems.Item(i), Alias, vbTextCompare) = 0 Then
+            Exists = True
+            Other = m_SelectedElement.CommandName
             Exit For
         End If
     Next i
-    
-    cboFlags.Text = ""
-    Call FormIsDirty
 
-End Sub
-
-Private Sub cmdAliasAdd_Click()
-
-    cboAlias.AddItem cboAlias.Text
-    cboAlias.Text = ""
-    Call FormIsDirty
-
-End Sub
-
-Private Sub cmdAliasRemove_Click()
-
-    Dim i As Integer
-    
-    For i = 0 To cboAlias.ListCount - 1
-        If (StrComp(cboAlias.Text, cboAlias.List(i), vbTextCompare) = 0) Then
-            cboAlias.RemoveItem i
-            Exit For
+    If Not Exists Then
+        '// temporarily save the current OpenCommand
+        Call m_Commands.Save(False)
+        '// didn't find a match in our current alias list, look in whole document for enabled commands
+        If (m_Commands.OpenCommand(Alias, vbNullChar, True, m_DocumentCopy)) Then
+            If (StrComp(m_Commands.Name, Command, vbTextCompare) <> 0) And (StrComp(m_Commands.Owner, Script, vbTextCompare) <> 0) Then
+                '// found a command with this alias as it's name or aliases, that isn't the current command (was checked above with active list)?
+                Exists = True
+                Other = m_Commands.Name
+                Script = m_Commands.Owner
+            End If
         End If
-    Next i
-    
-    cboAlias.Text = ""
-    Call FormIsDirty
+        '// reset OpenCommand to current
+        Call m_Commands.OpenCommand(m_SelectedElement.CommandName, GetScriptOwner(), False, m_DocumentCopy)
+    End If
 
+    If Exists Then
+        If Len(Script) > 0 Then Script = " for the " & Script & " script"
+        Call MsgBox(StringFormat("That alias already exists as a name of the {0} command{1}.", Other, Script), vbOKOnly Or vbCritical, "Command Manager - Add Alias Error")
+    Else
+        '// If we made it this far, it should be safe to add it to the list
+        lvAliases.ListItems.Add , , txtAddAlias.Text
+        txtAddAlias.Text = vbNullString
+        Call FormIsDirty
+    End If
 End Sub
 
+Private Sub lvAliases_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode = vbKeyDelete Then
+        If lvAliases.ListItems.Count > 0 And Not lvAliases.SelectedItem Is Nothing Then
+            Call lvAliases.ListItems.Remove(lvAliases.SelectedItem.Index)
+            Call FormIsDirty
+        End If
+        KeyCode = 0
+    End If
+End Sub
 
 '// 08/30/2008 JSM - Created
-Private Sub cmdDiscard_Click()
+Private Sub cmdDiscardCommand_Click()
 
-    Call PrepareForm(m_SelectedElement.TheNodeType)
-    
+    Call PrepareCommandForm
+
 End Sub
-
-
 
 Private Sub cmdDeleteCommand_Click()
-    
-    Dim scriptName As String
-    Dim scriptIndex As Integer
 
-    scriptName = Mid$(cboCommandGroup.Text, 1, InStr(1, cboCommandGroup.Text, "(") - 2)
-    
-    scriptIndex = cboCommandGroup.ListIndex
+    Dim ScriptName  As String
+    Dim ScriptIndex As Integer
+    Dim i           As Integer
 
-    If vbYes <> MsgBox(StringFormat("Are you sure you want to delete the {0} command for the {1} script?", m_SelectedElement.commandName, scriptName), vbYesNo + vbQuestion, Me.Caption) Then
+    ScriptName = GetScriptOwner()
+    ScriptIndex = cboCommandGroup.ListIndex - 1
+    
+    ' don't allow internal commands to be deleted
+    If ScriptIndex < 0 Then Exit Sub
+
+    If vbYes <> MsgBox(StringFormat("Are you sure you want to delete the {0} command for the {1} script?", m_SelectedElement.CommandName, ScriptName), vbYesNo Or vbQuestion, "Command Manager - Confirm Delete") Then
         Exit Sub
     End If
-    
-    Call m_Commands.OpenCommand(m_SelectedElement.commandName, scriptName)
-    Call m_Commands.Delete
-    
+
+    Call m_Commands.OpenCommand(m_SelectedElement.CommandName, ScriptName, False, m_DocumentCopy)
+    Call m_Commands.Delete(False)
+
     m_SelectedElement.IsDirty = False
-    
+
+    ' regenerate script list (scripts with no commands are hidden)
     Call PopulateOwnerComboBox
-    Call ResetForm
-    Call PopulateTreeView(scriptName, scriptIndex)
+
+    ' if we're deleting a command, combo box could change!
+    ' set index to initial script name (or fall back to previously selected index - 1, set above)
+    For i = LBound(m_CommandGroups) To UBound(m_CommandGroups)
+        If m_CommandGroups(i).ScriptName = ScriptName Then
+            ScriptIndex = i
+            Exit For
+        End If
+    Next i
+    ' make sure index is in bounds
+    If ScriptIndex > UBound(m_CommandGroups) Then ScriptIndex = UBound(m_CommandGroups)
+    If ScriptIndex < LBound(m_CommandGroups) Then ScriptIndex = LBound(m_CommandGroups)
+
+    ' save selected group
+    m_SelectedElement.CommandGroup = m_CommandGroups(ScriptIndex)
+
+    ' repopulate tree
+    Call ResetCommandForm
+    Call PopulateTreeView(GetScriptOwner(), ScriptIndex)
 
 End Sub
 
 
 '// 08/30/2008 JSM - Created
-Private Sub cmdSave_Click()
-    Call SaveForm
+Private Sub cmdSaveCommand_Click()
+    Call SaveCommandForm
 End Sub
 
 Private Sub Form_Load()
 
-    On Error GoTo ErrorHandler
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
 
     Dim colErrorList As Collection
 
     '// Load commands.xml
     Set m_Commands = New clsCommandDocObj
+    Set m_DocumentCopy = New DOMDocument60
+    Call m_Commands.XMLDocument.Save(m_DocumentCopy)
     
-    'If Not clsCommandDocObj.ValidateXMLFromFiles(App.Path & "\commands.xml", App.Path & "\commands.xsd") Then
-    '    Exit Sub
-    'End If
-    
-    'Call m_CommandsDoc.Load(App.Path & "\commands.xml")
-    
-    'If Not clsCommandDocObj.CommandsSanityCheck(m_CommandsDoc) Then
-    '    Exit Sub
-    'End If
-    
-    Call ResetForm
     Call PopulateOwnerComboBox
+    Call ResetCommandForm
     Call PopulateTreeView
     
     Exit Sub
     
-ErrorHandler:
+ERROR_HANDLER:
+    frmChat.AddChat RTBColors.ErrorMessageText, _
+        "Error (#" & Err.Number & "): " & Err.Description & " in frmCommandManager.Form_Load()."
 
-    frmChat.AddChat RTBColors.ErrorMessageText, Err.Description
-    Call ResetForm
-    '// Disable our buttons
-    cmdSave.Enabled = False
-    cmdDiscard.Enabled = False
+    Call ResetCommandForm
     Exit Sub
     
 End Sub
@@ -478,49 +588,67 @@ End Sub
 
 
 Private Sub PopulateOwnerComboBox()
-    
-    On Error Resume Next
 
-    Dim i   As Integer
-    Dim str As String
-    Dim commandCount As Integer
-    Dim scriptName As String
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
 
+    Dim i            As Integer
+    Dim str          As String
+    Dim CommandGroup As CommandGroup
+    Dim ScriptCount  As Integer
+
+    m_PopulatingGroupList = True
     cboCommandGroup.Clear
-    
-    '// get the script name and number of commands
-    scriptName = "Internal Bot Commands"
-    commandCount = m_Commands.GetCommandCount()
 
-    '// add the item
-    cboCommandGroup.AddItem StringFormat("{0} ({1})", scriptName, commandCount)
-    
+    '// get the script name and number of commands
+    CommandGroup.ScriptName = vbNullString
+    CommandGroup.CommandCount = clsCommandDocObj.GetCommandCount(, m_DocumentCopy)
+
+    ReDim m_CommandGroups(0)
+    m_CommandGroups(0) = CommandGroup
+    cboCommandGroup.AddItem StringFormat("Internal Bot Commands ({1})", CommandGroup.ScriptName, CommandGroup.CommandCount)
+
+    ScriptCount = 0
     For i = 2 To frmChat.SControl.Modules.Count
-        scriptName = modScripting.GetScriptName(CStr(i))
-        str = SharedScriptSupport.GetSettingsEntry("Public", scriptName)
+        CommandGroup.ScriptName = modScripting.GetScriptName(CStr(i))
+        str = SharedScriptSupport.GetSettingsEntry("Public", CommandGroup.ScriptName)
         
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
             '// get the script name and number of commands
-            commandCount = m_Commands.GetCommandCount(scriptName)
+            CommandGroup.CommandCount = clsCommandDocObj.GetCommandCount(CommandGroup.ScriptName, m_DocumentCopy)
             '// only add the commands if there is at least 1 command to show
-            If commandCount > 0 Then
+            If CommandGroup.CommandCount > 0 Then
                 '// add the item
-                cboCommandGroup.AddItem StringFormat("{0} ({1})", scriptName, commandCount)
+                ScriptCount = ScriptCount + 1
+                ReDim Preserve m_CommandGroups(ScriptCount)
+                m_CommandGroups(ScriptCount) = CommandGroup
+                cboCommandGroup.AddItem StringFormat("{0} ({1})", CommandGroup.ScriptName, CommandGroup.CommandCount)
             End If
         End If
     Next i
     cboCommandGroup.ListIndex = 0
-    
+    m_PopulatingGroupList = False
+
+    Exit Sub
+
+ERROR_HANDLER:
+    frmChat.AddChat RTBColors.ErrorMessageText, _
+        "Error (#" & Err.Number & "): " & Err.Description & " in frmCommandManager.PopulateOwnerComboBox()."
+
+    Call ResetCommandForm
+    Exit Sub
+
 End Sub
 
 Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString, Optional intScriptIndex As Integer = -1)
-    
-    Dim commandNodes      As IXMLDOMNodeList
-    Dim totalCommands     As Integer
-    Dim commandNameArray() As Variant
-    
+
+    Dim CommandNames      As Collection
+    Dim TotalCommands     As Integer
+    Dim CommandNameArray() As Variant
+
     Dim xpath             As String
-    
+
     Dim xmlCommand        As IXMLDOMNode
     Dim xmlArgs           As IXMLDOMNodeList
     Dim xmlArgRestricions As IXMLDOMNodeList
@@ -528,119 +656,101 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString, O
     Dim nCommand          As cTreeViewNode
     Dim nArg              As cTreeViewNode
     Dim nArgRestriction   As cTreeViewNode
-    
-    Dim commandName       As String
-    Dim argumentName      As String
-    Dim restrictionName   As String
-    
+
+    Dim CommandName       As String
+    Dim ParameterName     As String
+    Dim RestrictionName   As String
+
     '// 08/30/2008 JSM - used to get the first command alphabetically
-    Dim defaultNode       As cTreeViewNode
-    
+    Dim DefaultNode       As cTreeViewNode
+
     '// Counters
     Dim j                 As Integer
     Dim i                 As Integer
     Dim x                 As Integer
-    
-    strScriptOwner = clsCommandObj.CleanXPathVar(strScriptOwner)
 
     '// reset the treeview
     If trvCommands.Nodes.Count > 0 Then
         trvCommands.Nodes(1).Selected = True
     End If
-    
+
     Call ClearTreeViewNodes(trvCommands)
-    
-    '// create xpath expression based on strScriptOwner
-    If LenB(strScriptOwner) = 0 Then
-        xpath = "/commands/command[not(@owner)]"
-        'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
-    Else
-        xpath = StringFormat("/commands/command[@owner='{0}']", strScriptOwner)
-        'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
-    End If
-    
+
     '// get a list of all the commands
-    Set commandNodes = m_Commands.XMLDocument.documentElement.selectNodes(xpath)
-    ReDim commandNameArray(commandNodes.length)
-    
+    Set CommandNames = clsCommandDocObj.GetCommands(strScriptOwner, m_DocumentCopy)
+
+    If CommandNames.Count = 0 Then Exit Sub
+
+    ReDim CommandNameArray(CommandNames.Count - 1)
+
     '// read them 1 at a time and add them to an array
-    x = 0
-    For Each xmlCommand In m_Commands.XMLDocument.documentElement.selectNodes(xpath)
-        commandNameArray(x) = xmlCommand.Attributes.getNamedItem("name").Text
-        x = x + 1
-    Next xmlCommand
-    
+    For x = 1 To CommandNames.Count
+        CommandNameArray(x - 1) = CommandNames.Item(x)
+    Next x
+
     '// sort the command names
     Call InsertionSort(CommandNameArray)
 
     '// loop through the sorted array and select the commands
-    For x = LBound(commandNameArray) To UBound(commandNameArray)
-        
-        commandName = commandNameArray(x)
-        commandName = clsCommandObj.CleanXPathVar(commandName)
-        If LenB(commandName) > 0 Then
-            '// create xpath expression based on strScriptOwner
-            If LenB(strScriptOwner) = 0 Then
-                xpath = StringFormat("/commands/command[@name='{0}' and not(@owner)]", commandName)
-                'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
-            Else
-                xpath = StringFormat("/commands/command[@name='{0}' and @owner='{1}']", commandName, strScriptOwner)
-                'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
-            End If
-    
-            Set xmlCommand = m_Commands.XMLDocument.documentElement.selectSingleNode(xpath)
-        
-            commandName = xmlCommand.Attributes.getNamedItem("name").Text
-            Set nCommand = trvCommands.Nodes.Add(trvCommands.Nodes.Parent, etvwChild, commandName, commandName)
-            
+    For x = LBound(CommandNameArray) To UBound(CommandNameArray)
+
+        CommandName = CommandNameArray(x)
+        If LenB(CommandName) > 0 Then
+            '// create xpath expression
+            xpath = clsCommandObj.GetCommandXPath(CommandName, strScriptOwner, False)
+
+            Set xmlCommand = m_DocumentCopy.documentElement.selectSingleNode(xpath)
+
+            Set nCommand = trvCommands.Nodes.Add(trvCommands.Nodes.Parent, etvwChild, CommandName, CommandName)
+
             '// 08/30/2008 JSM - check if this command is the first alphabetically
-            If defaultNode Is Nothing Then
-                Set defaultNode = nCommand
+            If DefaultNode Is Nothing Then
+                Set DefaultNode = nCommand
             Else
-                If StrComp(defaultNode.Text, nCommand.Text) > 0 Then
-                    Set defaultNode = nCommand
+                If StrComp(DefaultNode.Text, nCommand.Text) > 0 Then
+                    Set DefaultNode = nCommand
                 End If
             End If
-            
+
             Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
             '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
             '//                  something, even if nothing matches the XPath expression.
-            For i = 0 To (xmlArgs.length - 1)
-            
-                argumentName = xmlArgs(i).Attributes.getNamedItem("name").Text
+            For i = 0 To (xmlArgs.Length - 1)
+
+                ParameterName = xmlArgs(i).Attributes.getNamedItem("name").Text
                 If (Not xmlArgs(i).Attributes.getNamedItem("optional") Is Nothing) Then
                     If (xmlArgs(i).Attributes.getNamedItem("optional").Text = "1") Then
-                        argumentName = StringFormat("[{0}]", argumentName)
+                        ParameterName = StringFormat("[{0}]", ParameterName)
                     End If
                 End If
-                
+
                 '// Add the datatype to the argument name
                 If (Not xmlArgs(i).Attributes.getNamedItem("type") Is Nothing) Then
-                    argumentName = StringFormat("{0} ({1})", argumentName, xmlArgs(i).Attributes.getNamedItem("type").Text)
+                    ParameterName = StringFormat("{0} ({1})", ParameterName, LCase$(xmlArgs(i).Attributes.getNamedItem("type").Text))
                 Else
-                    argumentName = StringFormat("{0} ({1})", argumentName, "String")
+                    ParameterName = StringFormat("{0} ({1})", ParameterName, "string")
                 End If
-                
-                Set nArg = trvCommands.Nodes.Add(nCommand, etvwChild, commandName & "." & argumentName, argumentName)
-                
+
+                Set nArg = trvCommands.Nodes.Add(nCommand, etvwChild, CommandName & "." & ParameterName, ParameterName)
+
                 Set xmlArgRestricions = xmlArgs(i).selectNodes("restrictions/restriction")
-                
-                For j = 0 To (xmlArgRestricions.length - 1)
-                    restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
-                    Set nArgRestriction = trvCommands.Nodes.Add(nArg, etvwChild, commandName & "." & argumentName & "." & restrictionName, restrictionName)
+
+                For j = 0 To (xmlArgRestricions.Length - 1)
+                    RestrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
+                    Set nArgRestriction = trvCommands.Nodes.Add(nArg, etvwChild, CommandName & "." & ParameterName & "." & RestrictionName, RestrictionName)
                 Next j
             Next i
         End If '// Len(commandName) > 0
     Next x
-    
+
     '// 08/30/2008 JSM - click the first command alphabetically
     ' fixed to work with SelectedNodeChanged() -Ribose/2009-08-10
-    If Not (defaultNode Is Nothing) Then
-        defaultNode.Selected = True
+    If Not (DefaultNode Is Nothing) Then
+        DefaultNode.Selected = True
     Else
         trvCommands_SelectedNodeChanged
     End If
-    
+
     If (intScriptIndex >= 0) Then
         cboCommandGroup.ListIndex = intScriptIndex
     End If
@@ -664,17 +774,17 @@ Private Function PromptToSaveChanges() As Boolean
         '// Get the message for the prompt
         Select Case .TheNodeType
             Case NodeType.nCommand
-                sMessage = StringFormat("You have not saved your changes to {0}. Do you want to save them now?", .commandName, .argumentName, .restrictionName)
-            Case NodeType.nArgument
-                sMessage = StringFormat("You have not saved your changes to {1}. Do you want to save them now?", .commandName, .argumentName, .restrictionName)
+                sMessage = StringFormat("You have not saved your changes to {0}. Do you want to save them now?", .CommandName, .ParameterName, .RestrictionName)
+            Case NodeType.nParameter
+                sMessage = StringFormat("You have not saved your changes to {1}. Do you want to save them now?", .CommandName, .ParameterName, .RestrictionName)
             Case NodeType.nRestriction
-                sMessage = StringFormat("You have not saved your changes to {2}. Do you want to save them now?", .commandName, .argumentName, .restrictionName)
+                sMessage = StringFormat("You have not saved your changes to {2}. Do you want to save them now?", .CommandName, .ParameterName, .RestrictionName)
         End Select
         
         '// Get the user response
-        Select Case MsgBox(sMessage, vbQuestion + vbYesNoCancel, Me.Caption)
+        Select Case MsgBox(sMessage, vbQuestion Or vbYesNoCancel, "Command Manager - Save")
             Case vbYes:
-                Call SaveForm
+                Call SaveCommandForm
                 PromptToSaveChanges = True
                 Exit Function
             Case vbNo:
@@ -695,119 +805,115 @@ End Function
 ' if no node is selected (such as none existing), now disables all fields -Ribose/2009-08-10
 Private Sub trvCommands_SelectedNodeChanged()
 
-    On Error GoTo ErrorHandler
+    #If (COMPILE_DEBUG <> 1) Then
+        On Error GoTo ERROR_HANDLER
+    #End If
 
     Dim Node As cTreeViewNode
     Dim nt As NodeType
-    Dim commandName As String
-    Dim argumentName As String
-    Dim restrictionName As String
-    
+    Dim CommandName As String
+    Dim ParameterName As String
+    Dim RestrictionName As String
+
     Dim xpath As String
-    
+
     If m_ClearingNodes Then Exit Sub
-    
+
     Set Node = trvCommands.SelectedItem
     If Node Is Nothing Then
-        Call ResetForm
+        Call ResetCommandForm
         Exit Sub
     End If
-    
+
     '// This function will prompt the user to save changes if necessary. If the
     '// return value is false, then the use clicked cancel so we should gtfo of here.
     If PromptToSaveChanges() = False Then
         Exit Sub
     End If
-    
-    '// figure out what type of node was clicked on
-    nt = GetNodeInfo(Node, commandName, argumentName, restrictionName)
-    
-    '// Update m_SelectedElement so we know which element we are viewing
-    m_SelectedElement.commandName = commandName
-    m_SelectedElement.argumentName = argumentName
-    m_SelectedElement.restrictionName = restrictionName
-    
-    '// load the command and set up the form
-    Call m_Commands.OpenCommand(commandName, IIf(cboCommandGroup.ListIndex = 0, vbNullString, cboCommandGroup.Text))
-    Call ResetForm
-    Call PrepareForm(nt)
-    
-    Exit Sub
-    
-ErrorHandler:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, Err.Description
-    Call ResetForm
-    '// Disable our buttons
-    cmdSave.Enabled = False
-    cmdDiscard.Enabled = False
+    '// figure out what type of node was clicked on
+    nt = GetNodeInfo(Node, CommandName, ParameterName, RestrictionName)
+
+    '// Update m_SelectedElement so we know which element we are viewing
+    With m_SelectedElement
+        .IsDirty = False
+        .TheNodeType = nt
+        .CommandName = CommandName
+        .ParameterName = ParameterName
+        .RestrictionName = RestrictionName
+        .CommandGroup = m_CommandGroups(cboCommandGroup.ListIndex)
+    End With
+
+    '// load the command and set up the form
+    Call m_Commands.OpenCommand(CommandName, GetScriptName(), False, m_DocumentCopy)
+    Call ResetCommandForm
+    Call PrepareCommandForm
+
     Exit Sub
-    
+
+ERROR_HANDLER:
+    frmChat.AddChat RTBColors.ErrorMessageText, _
+        "Error (#" & Err.Number & "): " & Err.Description & " in frmCommandManager.trvCommands_SelectedNodeChanged()."
+
+    Call ResetCommandForm
+    Exit Sub
+
 End Sub
 
 '// Call this sub whenever the form controls have been changed
 '// 08/30/2008 JSM - Created
 Private Sub FormIsDirty()
-    m_SelectedElement.IsDirty = True
-    cmdSave.Enabled = True
-    cmdDiscard.Enabled = True
+    If Not m_ResettingForm Then
+        m_SelectedElement.IsDirty = True
+        cmdSaveCommand.Enabled = True
+        cmdDiscardCommand.Enabled = True
+        fraCommand.Caption = GetCaptionString
+        Me.Caption = "Command Manager - " & fraCommand.Caption
+    End If
 End Sub
 
 '// Checks the hiarchy of the treenodes to determine what type of node it is.
 '// 08/29/2008 JSM - Created
-Private Function GetNodeInfo(Node As cTreeViewNode, ByRef commandName As String, ByRef argumentName As String, ByRef restrictionName As String) As NodeType
+Private Function GetNodeInfo(Node As cTreeViewNode, ByRef CommandName As String, ByRef ParameterName As String, ByRef RestrictionName As String) As NodeType
     Dim s() As String
     
     If LenB(Node.Key) > 0 Then
         s = Split(Node.Key, ".")
         Select Case UBound(s)
             Case 0
-                commandName = s(0)
-                argumentName = vbNullString
-                restrictionName = vbNullString
+                CommandName = s(0)
+                ParameterName = vbNullString
+                RestrictionName = vbNullString
                 GetNodeInfo = nCommand
             Case 1
-                commandName = s(0)
-                argumentName = s(1)
-                restrictionName = vbNullString
-                GetNodeInfo = nArgument
+                CommandName = s(0)
+                ParameterName = s(1)
+                RestrictionName = vbNullString
+                GetNodeInfo = nParameter
             Case 2
-                commandName = s(0)
-                argumentName = s(1)
-                restrictionName = s(2)
+                CommandName = s(0)
+                ParameterName = s(1)
+                RestrictionName = s(2)
                 GetNodeInfo = nRestriction
         End Select
         '// strip the [ ] around optional parameters
-        If Left$(argumentName, 1) = "[" Then
-            argumentName = Mid$(argumentName, 2, InStr(1, argumentName, "]") - 2)
+        If Left$(ParameterName, 1) = "[" Then
+            ParameterName = Mid$(ParameterName, 2, InStr(1, ParameterName, "]") - 2)
         End If
-        If (InStr(1, argumentName, "(") >= 0 And Right$(argumentName, 1) = ")") Then
-            argumentName = Mid$(argumentName, 1, InStr(1, argumentName, "(") - 2)
+        If (InStr(1, ParameterName, "(") >= 0 And Right$(ParameterName, 1) = ")") Then
+            ParameterName = Mid$(ParameterName, 1, InStr(1, ParameterName, "(") - 2)
         End If
     End If
-End Function
-
-Private Function getFlags()
-
-    Dim i As Integer
-    Dim sTmp As String
-
-    sTmp = ""
-    For i = 0 To cboFlags.ListCount - 1
-        sTmp = sTmp & cboFlags.List(i)
-    Next i
-    getFlags = sTmp
-
 End Function
 
 
 '// Saves the selected treeview node in the commands.xml
 '// 08/30/2008 JSM - Created
-Private Sub SaveForm()
-    
-    Dim parameter As clsCommandParamsObj
+Private Sub SaveCommandForm()
+
+    Dim Parameter As clsCommandParamsObj
     Dim Restriction As clsCommandRestrictionObj
-    
+
     Dim i
 
     Select Case m_SelectedElement.TheNodeType
@@ -816,46 +922,67 @@ Private Sub SaveForm()
             With m_Commands
                 .Description = txtDescription.Text
                 .SpecialNotes = txtSpecialNotes.Text
-                .RequiredRank = txtRank.Text
-                .RequiredFlags = getFlags()
-                While .aliases.Count <> 0
-                    .aliases.Remove 1
+                If StrictIsNumeric(txtRank.Text) Then
+                    .RequiredRank = CInt(txtRank.Text)
+                Else
+                    .RequiredRank = -1
+                End If
+                .RequiredFlags = txtFlags.Text
+                While .Aliases.Count <> 0
+                    .Aliases.Remove 1
                 Wend
-                For i = 0 To cboAlias.ListCount - 1
-                    .aliases.Add cboAlias.List(i)
+                For i = 1 To lvAliases.ListItems.Count
+                    .Aliases.Add lvAliases.ListItems.Item(i)
                 Next i
                 .IsEnabled = Not CBool(chkDisable.Value)
             End With
-       
-        Case NodeType.nArgument
+
+        Case NodeType.nParameter
             '// saving the parameter
             With m_Commands
-                Set parameter = .GetParameterByName(m_SelectedElement.argumentName)
-                With parameter
+                Set Parameter = .GetParameterByName(m_SelectedElement.ParameterName)
+                With Parameter
                     .Description = txtDescription.Text
                     .SpecialNotes = txtSpecialNotes.Text
+                    .MatchMessage = txtMatch.Text
+                    .MatchCaseSensitive = CBool(chkMatchCase.Value)
+                    .MatchError = txtMatchError.Text
                 End With
             End With
-            
+
         Case NodeType.nRestriction
             '// saving the restriction
             With m_Commands
-                Set parameter = m_Commands.GetParameterByName(m_SelectedElement.argumentName)
-                With parameter
-                    Set Restriction = parameter.GetRestrictionByName(m_SelectedElement.restrictionName)
+                Set Parameter = m_Commands.GetParameterByName(m_SelectedElement.ParameterName)
+                With Parameter
+                    Set Restriction = Parameter.GetRestrictionByName(m_SelectedElement.RestrictionName)
                     With Restriction
-                        .RequiredRank = txtRank.Text
-                        .RequiredFlags = getFlags()
+                        .Description = txtDescription.Text
+                        .SpecialNotes = txtSpecialNotes.Text
+                        If StrictIsNumeric(txtRank.Text) Then
+                            .RequiredRank = CInt(txtRank.Text)
+                        Else
+                            .RequiredRank = -1
+                        End If
+                        .RequiredFlags = txtFlags.Text
+                        .MatchMessage = txtMatch.Text
+                        .MatchCaseSensitive = CBool(chkMatchCase.Value)
+                        If chkMatchErrorGlobal.Value <> vbUnchecked Then
+                            Parameter.RestrictionsSharedError = txtMatchError.Text
+                        Else
+                            .MatchError = txtMatchError.Text
+                        End If
+                        .Fatal = CBool(chkMatchFatal.Value)
                     End With
                 End With
             End With
-    
+
     End Select
-    
-    Call m_Commands.Save
-    Call ResetForm
-    Call PrepareForm(m_SelectedElement.TheNodeType)
-    
+
+    Call m_Commands.Save(False)
+    Call ResetCommandForm
+    Call PrepareCommandForm
+
 End Sub
 
 Private Function PrepString(ByVal str As String)
@@ -866,65 +993,56 @@ Private Function PrepString(ByVal str As String)
     PrepString = retVal
 End Function
 
-Function getScriptOwner() As String
-    
-    '// return vbNullstring if internal commands is selected, otherwise the script name
-    If cboCommandGroup.ListIndex = 0 Then
-        getScriptOwner = vbNullString
-    Else
-        getScriptOwner = Mid$(cboCommandGroup.Text, 1, InStr(1, cboCommandGroup.Text, "(") - 2)
-    End If
-    
+Private Function GetScriptOwner() As String
+    GetScriptOwner = m_SelectedElement.CommandGroup.ScriptName
 End Function
-
-
 
 '// When a node in the treeview is clicked, it should locate the XML element that was
 '// used to create the node and call this method to populate appropriate form controls.
 '// 08/29/2008 JSM - Created
-Private Sub PrepareForm(nt As NodeType)
-    
-    Dim parameter As clsCommandParamsObj
+Private Sub PrepareCommandForm()
+
+    Dim Parameter As clsCommandParamsObj
     Dim Restriction As clsCommandRestrictionObj
-    
+
     Dim requirements As String
     Dim sItem As String
     Dim i As Integer
-    
+
+    m_ResettingForm = True
+
     With m_SelectedElement
 
-        Call m_Commands.OpenCommand(.commandName, getScriptOwner())
-        
+        Call m_Commands.OpenCommand(.CommandName, GetScriptOwner(), False, m_DocumentCopy)
+
         '// lblSyntax
         lblSyntax.Caption = m_Commands.SyntaxString
         '// lblRequirements
         lblRequirements.Caption = m_Commands.RequirementsString
-    
-        Select Case nt
+
+        Select Case .TheNodeType
             Case NodeType.nCommand
                 '// txtRank
                 txtRank.Enabled = True
                 lblRank.Enabled = True
-                txtRank.Text = m_Commands.RequiredRank
-                '// cboAlias
-                cboAlias.Enabled = True
-                lblAlias.Enabled = True
-                cmdAliasAdd.Enabled = True
-                cmdAliasRemove.Enabled = True
-                For i = 1 To m_Commands.aliases.Count
-                    cboAlias.AddItem m_Commands.aliases(i)
-                Next i
-                '// cboFlags
-                cboFlags.Enabled = True
-                lblFlags.Enabled = True
-                cmdFlagAdd.Enabled = True
-                cmdFlagRemove.Enabled = True
-                For i = 1 To Len(m_Commands.RequiredFlags)
-                    cboFlags.AddItem Mid$(m_Commands.RequiredFlags, i, 1)
-                Next i
-                If (cboFlags.ListCount) Then
-                    cboFlags.Text = cboFlags.List(0)
+                If m_Commands.RequiredRank < 0 Then
+                    txtRank.Text = vbNullString
+                Else
+                    txtRank.Text = CStr(m_Commands.RequiredRank)
                 End If
+                '// txtFlags
+                txtFlags.Enabled = True
+                lblFlags.Enabled = True
+                txtFlags.Text = m_Commands.RequiredFlags
+                '// lvAliases
+                lvAliases.Visible = True
+                lblAlias.Visible = True
+                txtAddAlias.Visible = True
+                cmdAddAlias.Visible = True
+                lvAliases.ListItems.Clear
+                For i = 1 To m_Commands.Aliases.Count
+                    lvAliases.ListItems.Add , , m_Commands.Aliases(i)
+                Next i
                 '// txtDescription
                 txtDescription.Enabled = True
                 lblDescription.Enabled = True
@@ -936,219 +1054,304 @@ Private Sub PrepareForm(nt As NodeType)
                 '// chkDisable
                 chkDisable.Enabled = True
                 chkDisable.Visible = True
-                chkDisable.Value = IIf(m_Commands.IsEnabled, vbUnchecked, vbChecked)
-                '// custom captions
-                fraCommand.Caption = StringFormat("{0}", .commandName, .argumentName, .restrictionName)
-                chkDisable.Caption = StringFormat("Disable {0} command", .commandName, .argumentName, .restrictionName)
+                chkDisable.Value = Abs(CInt(Not m_Commands.IsEnabled))
+                chkDisable.Caption = StringFormat("Disable {0} command", .CommandName)
                 '// only allow deleting script commands
-                If cboCommandGroup.ListIndex > 0 Then
-                    cmdDeleteCommand.Enabled = True
-                End If
-                
-            Case NodeType.nArgument
-                Set parameter = m_Commands.GetParameterByName(.argumentName)
-            
+                cmdDeleteCommand.Visible = True
+                cmdDeleteCommand.Enabled = (cboCommandGroup.ListIndex > 0)
+
+            Case NodeType.nParameter
+                Set Parameter = m_Commands.GetParameterByName(.ParameterName)
+
                 '// txtDescription
                 txtDescription.Enabled = True
                 lblDescription.Enabled = True
-                txtDescription.Text = PrepString(parameter.Description)
+                txtDescription.Text = PrepString(Parameter.Description)
                 '// txtSpecialNotes
                 txtSpecialNotes.Enabled = True
                 lblSpecialNotes.Enabled = True
-                txtSpecialNotes.Text = PrepString(parameter.SpecialNotes)
+                txtSpecialNotes.Text = PrepString(Parameter.SpecialNotes)
+                '// txtMatch
+                txtMatch.Visible = True
+                lblMatch.Visible = True
+                txtMatch.Text = Parameter.MatchMessage
+                lblMatch.Caption = "Parameter must &match"
+                '// chkMatchCase
+                chkMatchCase.Visible = True
+                chkMatchCase.Value = Abs(CInt(Parameter.MatchCaseSensitive))
+                '// txtMatchError
+                txtMatchError.Visible = True
+                lblMatchError.Visible = True
+                txtMatchError.Text = Parameter.MatchError
+                lblMatchError.Caption = "&Error on no match"
                 '// custom captions
-                fraCommand.Caption = StringFormat("{0} => {1}{3}", .commandName, .argumentName, .restrictionName, IIf(parameter.IsOptional, " - Optional", ""))
-                chkDisable.Caption = StringFormat("Disable {1} argument", .commandName, .argumentName, .restrictionName)
-                
+                lblRequirements.Caption = StringFormat("Rank and flags requirements do not apply to individual parameters.{1}{0}", lblRequirements.Caption, vbNewLine)
+                cmdDeleteCommand.Visible = False
+
             Case NodeType.nRestriction
-            
-                Set parameter = m_Commands.GetParameterByName(.argumentName)
-                Set Restriction = parameter.GetRestrictionByName(.restrictionName)
-            
+
+                Set Parameter = m_Commands.GetParameterByName(.ParameterName)
+                Set Restriction = Parameter.GetRestrictionByName(.RestrictionName)
+
+                '// txtDescription
+                txtDescription.Enabled = True
+                lblDescription.Enabled = True
+                txtDescription.Text = PrepString(Restriction.Description)
+                '// txtSpecialNotes
+                txtSpecialNotes.Enabled = True
+                lblSpecialNotes.Enabled = True
+                txtSpecialNotes.Text = PrepString(Restriction.SpecialNotes)
+                '// txtMatch
+                txtMatch.Visible = True
+                lblMatch.Visible = True
+                txtMatch.Text = Restriction.MatchMessage
+                lblMatch.Caption = "Restrict if &matches"
+                '// chkMatchCase
+                chkMatchCase.Visible = True
+                chkMatchCase.Value = Abs(CInt(Restriction.MatchCaseSensitive))
+                '// chkMatchErrorGlobal
+                chkMatchErrorGlobal.Visible = True
+                chkMatchErrorGlobal.Value = vbUnchecked
+                '// txtMatchError
+                txtMatchError.Visible = True
+                lblMatchError.Visible = True
+                txtMatchError.Text = Restriction.MatchError
+                If LenB(Restriction.MatchError) = 0 And LenB(Parameter.RestrictionsSharedError) > 0 Then
+                    txtMatchError.Text = Parameter.RestrictionsSharedError
+                    chkMatchErrorGlobal.Value = vbChecked
+                End If
+                lblMatchError.Caption = "&Error on restricted"
+                '// chkMatchFatal
+                chkMatchFatal.Visible = True
+                chkMatchFatal.Value = Abs(CInt(Restriction.Fatal))
                 '// txtRank
                 txtRank.Enabled = True
                 lblRank.Enabled = True
-                txtRank.Text = Restriction.RequiredRank
-                '// cboFlags
-                cboFlags.Enabled = True
-                lblFlags.Enabled = True
-                For i = 1 To Len(Restriction.RequiredFlags)
-                    cboFlags.AddItem Mid$(Restriction.RequiredFlags, i, 1)
-                Next i
-                If (cboFlags.ListCount) Then
-                    cboFlags.Text = cboFlags.List(0)
+                If Restriction.RequiredRank < 0 Then
+                    txtRank.Text = vbNullString
+                Else
+                    txtRank.Text = CStr(Restriction.RequiredRank)
                 End If
+                '// txtFlags
+                txtFlags.Enabled = True
+                lblFlags.Enabled = True
+                txtFlags.Text = Restriction.RequiredFlags
                 '// special captions
-                fraCommand.Caption = StringFormat("{0} => {1}{3} => {2}", .commandName, .argumentName, .restrictionName, IIf(parameter.IsOptional, " - Optional", ""))
-                chkDisable.Caption = StringFormat("Disable {2} restriction", .commandName, .argumentName, .restrictionName)
+                lblRequirements.Caption = StringFormat("This is the rank and flags required to bypass this restriction.{1}{0}", lblRequirements.Caption, vbNewLine)
+                cmdDeleteCommand.Visible = False
         End Select
     End With
-    
-    '// Update m_SelectedElement so we know which element we are viewing
-    m_SelectedElement.TheNodeType = nt
-    m_SelectedElement.IsDirty = False
-    
+
     '// Disable our buttons
-    cmdSave.Enabled = False
-    cmdDiscard.Enabled = False
+    cmdSaveCommand.Enabled = False
+    cmdDiscardCommand.Enabled = False
+
+    fraCommand.Caption = GetCaptionString()
+    Me.Caption = "Command Manager - " & fraCommand.Caption
+
+    m_ResettingForm = False
 
 End Sub
+
+Private Function GetCaptionString() As String
+    Dim Parameter As clsCommandParamsObj
+    Dim Restriction As clsCommandRestrictionObj
+
+    With m_SelectedElement
+        Select Case .TheNodeType
+            Case nCommand
+                GetCaptionString = m_Commands.ToString
+            Case nParameter
+                Set Parameter = m_Commands.GetParameterByName(.ParameterName)
+                GetCaptionString = StringFormat("{0} -> {1}", m_Commands.ToString, Parameter.ToString(True))
+            Case nRestriction
+                Set Parameter = m_Commands.GetParameterByName(.ParameterName)
+                Set Restriction = Parameter.GetRestrictionByName(.RestrictionName)
+                GetCaptionString = StringFormat("{0} -> {1} -> {2}", m_Commands.ToString, Parameter.ToString(True), Restriction.ToString)
+        End Select
+        If .IsDirty Then GetCaptionString = GetCaptionString & " *"
+    End With
+End Function
 
 '// Clears and disables all edit controls. Treeview is left intact
 '// 08/29/2008 JSM - Created
-Private Sub ResetForm()
-    
+Private Sub ResetCommandForm()
+
+    m_ResettingForm = True
+
     txtRank.Text = vbNullString
-    cboAlias.Clear
-    cboFlags.Clear
+    lvAliases.ListItems.Clear
+    txtAddAlias.Text = vbNullString
+    txtFlags.Text = vbNullString
     txtDescription.Text = vbNullString
     txtSpecialNotes.Text = vbNullString
     fraCommand.Caption = vbNullString
-    chkDisable.Value = 0
-    
-    txtRank.Enabled = False
-    cboAlias.Enabled = False
-    cboFlags.Enabled = False
-    txtDescription.Enabled = False
-    txtSpecialNotes.Enabled = False
-    chkDisable.Enabled = False
-    
+    chkDisable.Value = vbUnchecked
+
+    lblAlias.Visible = False
+    lvAliases.Visible = False
+    txtAddAlias.Visible = False
+    cmdAddAlias.Visible = False
+    chkDisable.Visible = False
+
+    lblMatch.Visible = False
+    lblMatchError.Visible = False
+    txtMatch.Visible = False
+    txtMatchError.Visible = False
+    chkMatchCase.Visible = False
+    chkMatchErrorGlobal.Visible = False
+    chkMatchFatal.Visible = False
+
     lblRank.Enabled = False
-    lblAlias.Enabled = False
     lblFlags.Enabled = False
+    txtRank.Enabled = False
+    txtFlags.Enabled = False
+
     lblDescription.Enabled = False
     lblSpecialNotes.Enabled = False
-    
-    cmdAliasAdd.Enabled = False
-    cmdAliasRemove.Enabled = False
-    cmdFlagAdd.Enabled = False
-    cmdFlagRemove.Enabled = False
-    
-    chkDisable.Visible = False
-    
+    txtDescription.Enabled = False
+    txtSpecialNotes.Enabled = False
+
     m_SelectedElement.IsDirty = False
-    cmdSave.Enabled = False
-    cmdDiscard.Enabled = False
-    cmdDeleteCommand.Enabled = False
-    
+    cmdSaveCommand.Enabled = False
+    cmdDiscardCommand.Enabled = False
+    cmdDeleteCommand.Visible = False
+
     lblSyntax.Caption = vbNullString
     lblSyntax.ForeColor = RTBColors.ConsoleText
-    
+
+    fraCommand.Caption = vbNullString
+    Me.Caption = "Command Manager"
+
+    m_ResettingForm = False
+
 End Sub
 
-Private Sub cboFlags_Change()
-
-    If (BotVars.CaseSensitiveFlags = False) Then
-        cboFlags.Text = UCase$(cboFlags.Text)
-        
-        cboFlags.SelStart = Len(cboFlags.Text)
-    End If
-    
+Private Sub txtAddAlias_KeyPress(KeyAscii As Integer)
+    ' disallow entering space
+    If (KeyAscii = vbKeySpace) Then KeyAscii = 0
 End Sub
 
-'// 08/29/2008 JSM - Created
-Private Sub cboFlags_KeyDown(KeyCode As Integer, Shift As Integer)
+Private Sub txtAddAlias_KeyDown(KeyCode As Integer, Shift As Integer)
     Dim i As Integer
-    
-    '// Enter
-    If KeyCode = 13 Then
-        '// Make sure it doesnt have a space
-        If InStr(cboFlags.Text, " ") Then
-            MsgBox "Flags cannot contain spaces.", vbOKOnly + vbCritical, Me.Caption
-            cboFlags.SelStart = 1
-            cboFlags.SelLength = Len(cboFlags.Text)
-            Exit Sub
-        End If
-        '// Make sure its not already a flag
-        For i = 0 To cboFlags.ListCount - 1
-            If cboFlags.List(i) = cboFlags.Text Then
-                cboFlags.Text = ""
-                Exit Sub
-            End If
-        Next i
-        
-        '// If we made it this far, it should be safe to add it to the list
-        cboFlags.AddItem cboFlags.Text
-        cboFlags.Text = ""
-        Call FormIsDirty
-    End If
 
     '// Delete
-    If KeyCode = 46 Then
-        For i = 0 To cboFlags.ListCount - 1
+    If KeyCode = vbKeyDelete Then
+        If txtAddAlias.SelStart + 1 = Len(txtAddAlias.Text) Then
             '// If the current text is already in the list, lets delete it. Otherwise,
             '// this code should behave like a normal delete keypress.
-            If cboFlags.List(i) = cboFlags.Text Then
-                cboFlags.RemoveItem i
-                cboFlags.Text = ""
-                Call FormIsDirty
-                Exit Sub
-            End If
-        Next i
-    End If
-    
-    
-End Sub
-
-
-'// 08/29/2008 JSM - Created
-Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
-    Dim i As Integer
-    
-    '// Enter
-    If KeyCode = 13 Then
-        '// Make sure it doesnt have a space
-        If InStr(cboAlias.Text, " ") Then
-            MsgBox "Aliases cannot contain spaces.", vbOKOnly + vbCritical, Me.Caption
-            cboAlias.SelStart = 1
-            cboAlias.SelLength = Len(cboAlias.Text)
-            Exit Sub
+            For i = 1 To lvAliases.ListItems.Count
+                If StrComp(lvAliases.ListItems.Item(i), txtAddAlias.Text, vbTextCompare) = 0 Then
+                    lvAliases.ListItems.Remove i
+                    txtAddAlias.Text = vbNullString
+                    KeyCode = 0
+                    Call FormIsDirty
+                    Exit Sub
+                End If
+            Next i
         End If
-        '// Make sure its not already an alias
-        For i = 0 To cboAlias.ListCount - 1
-            If cboAlias.List(i) = cboAlias.Text Then
-                cboAlias.Text = ""
-                Exit Sub
-            End If
-        Next i
-            
-        '// TODO: Make sure its not an alias for another command. Must loop through the
-        '// m_CommandsDoc elements to get all aliases and make sure its unique. This logic
-        '// should probably be in its own function.
-        
-        '// If we made it this far, it should be safe to add it to the list
-        cboAlias.AddItem cboAlias.Text
-        cboAlias.Text = ""
-        Call FormIsDirty
     End If
-    
-    '// Delete
-    If KeyCode = 46 Then
-        For i = 0 To cboAlias.ListCount - 1
-            '// If the current text is already in the list, lets delete it. Otherwise,
-            '// this code should behave like a normal delete keypress.
-            If cboAlias.List(i) = cboAlias.Text Then
-                cboAlias.RemoveItem i
-                cboAlias.Text = ""
-                Call FormIsDirty
-                Exit Sub
-            End If
-        Next i
-    End If
-    
 End Sub
 
 '// Must mark the element as dirty when these change
-Private Sub txtRank_Change()
+Private Sub txtFlags_KeyPress(KeyAscii As Integer)
+    ' disallow entering space
+    If (KeyAscii = vbKeySpace) Then KeyAscii = 0
+    
+    ' if key is A-Z, then make uppercase
+    If (InStr(1, AZ, ChrW$(KeyAscii), vbTextCompare) > 0) Then
+        If (BotVars.CaseSensitiveFlags = False) Then
+            If (KeyAscii > vbKeyZ) Then ' lowercase if greater than "Z"
+                KeyAscii = AscW(UCase$(ChrW$(KeyAscii)))
+            End If
+        End If
+        ' disallow repeating a flag already present
+        If (InStr(1, txtFlags.Text, ChrW$(KeyAscii), vbBinaryCompare) > 0) Then
+            KeyAscii = 0
+        End If
+    ' else disallow entering that character (if not a control character)
+    ElseIf (KeyAscii > vbKeySpace) Then
+        KeyAscii = 0
+    End If
+End Sub
+
+Private Sub txtFlags_Change()
+    ' enable entry save button
     Call FormIsDirty
 End Sub
+
+Private Sub txtRank_KeyPress(KeyAscii As Integer)
+    ' disallow entering space
+    If (KeyAscii = vbKeySpace) Then KeyAscii = 0
+    
+    ' if key is not 0-9, disallow entering that character (if not a control character)
+    If (InStr(1, Num09, ChrW$(KeyAscii), vbTextCompare) = 0 And KeyAscii > vbKeySpace) Then
+        KeyAscii = 0
+    End If
+End Sub
+
+Private Sub txtRank_Change()
+    Dim SelStart As Long
+
+    If StrictIsNumeric(txtRank.Text) Then
+        If (CInt(txtRank.Text) > 200) Then
+            With txtRank
+                SelStart = .SelStart
+                .Text = "200"
+                .SelStart = SelStart
+            End With
+        End If
+    End If
+
+    ' enable entry save button
+    Call FormIsDirty
+End Sub
+
 Private Sub txtDescription_Change()
     Call FormIsDirty
 End Sub
+
 Private Sub txtSpecialNotes_Change()
     Call FormIsDirty
 End Sub
+
 Private Sub chkDisable_Click()
     Call FormIsDirty
 End Sub
 
+Private Sub txtMatch_Change()
+    Call FormIsDirty
+End Sub
+
+Private Sub txtMatchError_Change()
+    Call FormIsDirty
+End Sub
+
+Private Sub chkMatchCase_Click()
+    Call FormIsDirty
+End Sub
+
+Private Sub chkMatchErrorGlobal_Click()
+    Call FormIsDirty
+End Sub
+
+Private Sub chkMatchFatal_Click()
+    Call FormIsDirty
+End Sub
+
+Private Sub cmdCancel_Click()
+    Unload Me
+End Sub
+
+Private Sub cmdSaveForm_Click()
+    ' if the current focus is on the Add Alias textbox and user hits enter, they mean to add an alias...
+    If (Len(txtAddAlias.Text) > 0) And (Me.ActiveControl Is txtAddAlias) Then
+        Call cmdAddAlias_Click
+        Exit Sub
+    End If
+
+    Call SaveCommandForm
+    Call m_DocumentCopy.Save(m_Commands.XMLDocument)
+    Call m_Commands.Save(True)
+    Unload Me
+End Sub

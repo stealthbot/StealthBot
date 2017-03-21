@@ -17,9 +17,9 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private m_Type        As String
-Private m_Name        As String
-Private m_Rank        As Long
-Private m_Flags       As String
+Private m_name        As String
+Private m_rank        As Long
+Private m_flags       As String
 Private m_CreatedOn  As Date
 Private m_CreatedBy  As String
 Private m_ModifiedOn As Date
@@ -41,27 +41,27 @@ Public Property Let EntryType(ByVal strType As String)
 End Property
 
 Public Property Get Name() As String
-    Name = m_Name
+    Name = m_name
 End Property
 
 Public Property Let Name(ByVal strName As String)
-    m_Name = strName
+    m_name = strName
 End Property
 
 Public Property Get Rank() As Long
-    Rank = m_Rank
+    Rank = m_rank
 End Property
 
 Public Property Let Rank(ByVal lngRank As Long)
-    m_Rank = lngRank
+    m_rank = lngRank
 End Property
 
 Public Property Get Flags() As String
-    Flags = m_Flags
+    Flags = m_flags
 End Property
 
 Public Property Let Flags(ByVal strFlags As String)
-    m_Flags = strFlags
+    m_flags = strFlags
 End Property
 
 Public Function IsInGroup(ByVal sGroupName As String) As Boolean
@@ -90,7 +90,7 @@ Public Function HasFlag(ByVal strFlag As String, Optional ByVal bCaseSensitive A
     Dim cmCompare As CompareMethod
     cmCompare = IIf(bCaseSensitive, vbBinaryCompare, vbTextCompare)
     
-    HasFlag = (InStr(1, m_Flags, strFlag, cmCompare) > 0)
+    HasFlag = (InStr(1, m_flags, strFlag, cmCompare) > 0)
 End Function
 
 Public Function HasAnyFlag(ByVal strFlags As String, Optional ByVal bCaseSensitive As Boolean = True) As Boolean
@@ -191,6 +191,7 @@ End Sub
 
 ' Returns a display string describing the entry.
 Public Function ToString() As String
+Attribute ToString.VB_UserMemId = 0
     ToString = Me.Name
     
     If Len(Me.EntryType) > 0 Then
