@@ -152,7 +152,6 @@ Begin VB.Form frmCommandManager
       End
       Begin VB.CommandButton cmdAddAlias 
          Caption         =   "Add"
-         Enabled         =   0   'False
          Height          =   300
          Left            =   1560
          TabIndex        =   12
