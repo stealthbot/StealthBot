@@ -436,9 +436,9 @@ End Sub
 '// If Username is null, the bot's current username will be used instead.
 Public Sub GetUserProfile(Optional ByVal Username As String)
     If LenB(Username) > 0 Then
-        Call RequestProfile(Username, ScriptingCall)
+        Call RequestProfile(Username, reqScriptingCall)
     Else
-        Call RequestProfile(GetCurrentUsername, ScriptingCall)
+        Call RequestProfile(GetCurrentUsername, reqScriptingCall)
     End If
 End Sub
 
@@ -824,14 +824,14 @@ Public Sub RequestProfileKey(ByVal sUsername As String, ByVal sKey As String)
     Dim aKeys(0) As String
     aKeys(0) = sKey
 
-    modParsing.RequestUserData sUsername, aKeys, ScriptingCall
+    modParsing.RequestUserData sUsername, aKeys, reqScriptingCall
 End Sub
 
 '// REQUESTUSERDATA
 '//  Requests several user profile keys. Same as RequestProfileKey but allows
 '//  you to request multiple keys at the same time.
 Public Sub RequestUserData(ByVal sUsername As String, ByRef aKeys() As String)
-    modParsing.RequestUserData sUsername, aKeys, ScriptingCall
+    modParsing.RequestUserData sUsername, aKeys, reqScriptingCall
 End Sub
 
 

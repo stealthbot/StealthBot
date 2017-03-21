@@ -34,7 +34,6 @@ Module=modEnum; modEnum.bas
 Module=modNews; modNews.bas
 Module=modProxySupport; modProxySupport.bas
 Module=modUTF8; modUTF8.bas
-Module=modWar3Clan; modWar3Clan.bas
 Class=clsCTooltip; clsCToolTip.cls
 Class=clsFriendObj; clsFriendObj.cls
 Class=clsFriendlistHandler; clsFriendlistHandler.cls

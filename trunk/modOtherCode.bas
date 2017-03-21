@@ -243,7 +243,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
                 End If
             End If
         Else
-            Ban = "The bot does not have ops."
+            Ban = "Error: The bot does not have ops."
         End If
     End If
     
@@ -549,13 +549,13 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.Voting()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
-Public Sub RequestSystemKeys(Optional eType As enuUserDataRequestType = Internal, Optional oCommand As clsCommandObj)
+Public Sub RequestSystemKeys(Optional ByVal eType As enuServerRequestHandlerType = reqInternal, Optional oCommand As clsCommandObj)
     Dim aKeys(3) As String
     aKeys(0) = "System\Account Created"
     aKeys(1) = "System\Last Logon"
     aKeys(2) = "System\Last Logoff"
     aKeys(3) = "System\Time Logged"
-    
+
     RequestUserData BotVars.Username, aKeys, eType, oCommand
 End Sub
 
@@ -1025,7 +1025,7 @@ Public Sub SetTitle(ByVal sTitle As String)
 End Sub
 
 Public Function NameWithoutRealm(ByVal Username As String, Optional ByVal Strict As Byte = 0) As String
-    If ((IsW3) And (Strict = 0)) Then
+    If ((frmChat.ClanHandler.IsW3) And (Strict = 0)) Then
         NameWithoutRealm = Username
     Else
         If (InStr(1, Username, Config.GatewayDelimiter, vbBinaryCompare) > 0) Then
@@ -1824,7 +1824,9 @@ Public Function ListFileLoad(ByVal sPath As String, Optional ByVal MaxItems As I
     Dim f As Integer
     Dim i As Integer
     Dim s As String
-    Dim List As New Collection
+    Dim List As Collection
+    
+    Set List = New Collection
     
     If (LenB(Dir$(sPath)) > 0) Then
         f = FreeFile

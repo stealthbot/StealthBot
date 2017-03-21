@@ -40,14 +40,13 @@ Public rtbChatLength As Long
 
 Public g_Connected As Boolean
 Public g_Online As Boolean
-Public AwaitingSelfRemoval As Byte
 
 Public g_Quotes As New clsQuotesObj
-Public g_Channel As New clsChannelObj
 Public g_Logger As New clsLogger
-Public g_Clan As New clsClanObj
-Public g_Friends As New Collection
 Public g_BNCSQueue As New clsBNCSQueue
+Public g_Channel As clsChannelObj
+Public g_Friends As Collection
+Public g_Clan As clsClanObj
 
 Public UserCancelledConnect As Boolean
 
@@ -68,7 +67,7 @@ Public Const ERROR_FINDBNLSSERVER As Integer = 12345
 Public CurrentUsername As String
 Public Protect As Boolean
 Public QC(1 To 9) As String
-Public UserDataRequests() As udtUserDataRequest
+Public ServerRequests() As udtServerRequest
 
 Public JoinMessagesOff As Boolean
 Public Filters As Boolean
@@ -83,7 +82,6 @@ Public Dii As Boolean
 Public MyFlags As Long
 Public BanCount As Integer
 Public g_lastQueueUser As String
-Public PassedClanMotdCheck As Boolean
 Public g_request_receipt As Boolean
 
 Public WatchUser As String

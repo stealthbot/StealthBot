@@ -253,12 +253,6 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     PrepareQuickChannelMenu
     
     SharedScriptSupport.MyChannel = ChannelName
-    
-    If (Len(g_Clan.Name) > 0) Then
-        If (StrComp(g_Channel.Name, "Clan " & g_Clan.Name, vbTextCompare) = 0) Then
-            Call modWar3Clan.RequestClanMOTD
-        End If
-    End If
 
     frmChat.AddChat RTBColors.JoinedChannelText, "-- Joined channel: ", _
         RTBColors.JoinedChannelName, ChannelName, RTBColors.JoinedChannelText, " --"
@@ -314,7 +308,7 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.Event_JoinedChannel()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
-Public Sub Event_UserDataReceived(oRequest As udtUserDataRequest)
+Public Sub Event_UserDataReceived(ByRef oRequest As udtServerRequest, ByVal sUsername As String, ByRef Keys() As String, ByRef Values() As String)
     #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
@@ -326,41 +320,41 @@ Public Sub Event_UserDataReceived(oRequest As udtUserDataRequest)
     Dim j As Integer
     Dim s As String
     Dim d As Double
-    
+
     Dim oFT As FILETIME
     Dim oST As SYSTEMTIME
-    
+
     Const LONG_MAX_VALUE As Double = 2147483647
-    
-    RunInAll "Event_UserDataReceived", oRequest.Account, oRequest.keys, oRequest.Values
-        
-    For i = 0 To UBound(oRequest.keys)
-        RunInAll "Event_KeyReturn", oRequest.keys(i), oRequest.Values(i)
-        
-        sKeyShort = Mid(oRequest.keys(i), InStr(1, oRequest.keys(i), "\", vbTextCompare) + 1)
-        sValue = oRequest.Values(i)
-        
-        Select Case oRequest.RequestType
-            Case ProfileWindow
-                frmProfile.SetKey oRequest.keys(i), sValue
-            Case UserCommand, Internal
-                If StrComp(Left(oRequest.keys(i), 7), "System\", vbTextCompare) = 0 Then
+
+    RunInAll "Event_UserDataReceived", oRequest.Tag, Keys, Values
+
+    For i = LBound(Keys) To UBound(Keys)
+        RunInAll "Event_KeyReturn", Keys(i), Values(i)
+
+        sKeyShort = Mid$(Keys(i), InStr(1, Keys(i), "\", vbTextCompare) + 1)
+        sValue = Values(i)
+
+        Select Case oRequest.HandlerType
+            Case reqUserInterface
+                frmProfile.SetKey Keys(i), sValue
+            Case reqUserCommand, reqInternal
+                If StrComp(Left$(Keys(i), 7), "System\", vbTextCompare) = 0 Then
                     j = InStr(1, sValue, Space$(1), vbBinaryCompare)
-                    
+
                     If j > 0 Then    ' Probably a FILETIME
                         With oFT
                             .dwLowDateTime = UnsignedToLong(CDbl(Mid$(KillNull(sValue), j + 1)))
                             .dwHighDateTime = UnsignedToLong(CDbl(Left$(sValue, j)))
                         End With
-                        
+
                         FileTimeToSystemTime oFT, oST
-                        
+
                         s = StringFormat("{0}: {1} (Battle.net time)", sKeyShort, SystemTimeToString(oST))
                     ElseIf StrictIsNumeric(sValue) Then
                         s = StringFormat("{0}: {1}", sKeyShort, ConvertTimeInterval(sValue, True))
                     End If
-                    
-                    If oRequest.RequestType = UserCommand Then
+
+                    If oRequest.HandlerType = reqUserCommand Then
                         oRequest.Command.Respond s
                     Else
                         frmChat.AddChat RTBColors.ServerInfoText, s
@@ -369,8 +363,8 @@ Public Sub Event_UserDataReceived(oRequest As udtUserDataRequest)
                     aOutput = Split(sValue, Chr(13))
                     For j = 0 To UBound(aOutput)
                         s = StringFormat("[{0}] {1}", sKeyShort, aOutput(j))
-                        
-                        If oRequest.RequestType = UserCommand Then
+
+                        If oRequest.HandlerType = reqUserCommand Then
                             oRequest.Command.Respond s
                         Else
                             frmChat.AddChat RTBColors.ServerInfoText, s
@@ -381,9 +375,9 @@ Public Sub Event_UserDataReceived(oRequest As udtUserDataRequest)
     Next
     
     ' If this request was triggered by a command, send the response.
-    If oRequest.RequestType = UserCommand Then
+    If oRequest.HandlerType = reqUserCommand Then
         If oRequest.Command.GetResponse().Count = 0 Then
-            oRequest.Command.Respond StringFormat("{0} has not configured a profile.", oRequest.Command.Argument("Username"))
+            oRequest.Command.Respond StringFormat("{0} has not configured a profile.", sUsername)
         End If
         oRequest.Command.SendResponse
     End If
@@ -428,10 +422,10 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
         On Error GoTo ERROR_HANDLER
     #End If
     
-    Dim sChannel   As String
-    Dim ShowW3     As Boolean
-    Dim ShowD2     As Boolean
-    Dim Stats As New clsUserStats
+    Dim sChannel As String
+    Dim ShowW3   As Boolean
+    Dim ShowD2   As Boolean
+    Dim Stats    As clsUserStats
 
     LastWhisper = vbNullString
 
@@ -441,6 +435,13 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
     
     Call g_Queue.Clear
     
+    Set g_Channel = New clsChannelObj
+    Set g_Friends = New Collection
+    ' reset Clan if we didn't just receive a SID_CLANINFO
+    If Not g_Clan.InClan Then
+        Set g_Clan = New clsClanObj
+    End If
+    
     g_Online = True
     
     ConnectionTickCount = GetTickCountMS()
@@ -448,6 +449,7 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
     ' in case this wasn't set before
     ds.EnteredChatFirstTime = True
     
+    Set Stats = New clsUserStats
     Stats.Statstring = Statstring
     
     CurrentUsername = KillNull(Username)
@@ -508,9 +510,7 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
     
     Set Stats = Nothing
     
-    ReDim UserDataRequests(0)
-    
-    RequestSystemKeys Internal
+    RequestSystemKeys reqInternal
     If (LenB(BotVars.Gateway) > 0) Then
         ' PvPGN: we already have our gateway, we're logged on
         SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
@@ -740,12 +740,14 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     End If
     
     Username = ConvertUsername(Username)
-    
-    If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
-        If (PassedClanMotdCheck = False) Then
-            Call frmChat.AddChat(RTBColors.ServerInfoText, Message)
 
-            Exit Sub
+    If g_Clan.InClan Then
+        If (StrComp(g_Channel.Name, "Clan " & g_Clan.Name, vbTextCompare) = 0) Then
+            If (g_Clan.PendingClanMOTD) Then
+                Call frmChat.AddChat(RTBColors.ServerInfoText, Message)
+                g_Clan.PendingClanMOTD = False
+                Exit Sub
+            End If
         End If
     End If
     

@@ -31,7 +31,7 @@ Public Sub OnClan(Command As clsCommandObj)
                     Command.Respond "Error: The bot must be in a clan channel to change the clan privacy status."
                 End If
             Case "motd"
-                If (IsW3) Then
+                If (g_Clan.InClan) Then
                     If (g_Clan.Self.Rank > 2) Then
                         If (LenB(Command.Argument("Message")) = 0) Then
                             Command.Respond "You must specify a message to set."
@@ -42,17 +42,23 @@ Public Sub OnClan(Command As clsCommandObj)
                     ElseIf (g_Clan.Self.Rank > 0) Then
                         Command.Respond "Error: The bot must be a shaman or chieftain in its clan to set the MOTD"
                     End If
+                Else
+                    Command.Respond "Error: The bot must be a member of a clan."
                 End If
             Case "mail"
-                If (g_Clan.Self.Rank > 2) Then
-                    If (LenB(Command.Argument("Message")) = 0) Then
-                        Command.Respond "You must specify a message to send."
-                    Else
-                        Command.Respond "Emails have been sent to everyone in the clan who have choosen to receive them."
-                        Call frmChat.AddQ("/c mail " & Command.Argument("Message"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+                If (g_Clan.InClan) Then
+                    If (g_Clan.Self.Rank > 2) Then
+                        If (LenB(Command.Argument("Message")) = 0) Then
+                            Command.Respond "You must specify a message to send."
+                        Else
+                            Command.Respond "Emails have been sent to everyone in the clan who have choosen to receive them."
+                            Call frmChat.AddQ("/c mail " & Command.Argument("Message"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+                        End If
+                    ElseIf (g_Clan.Self.Rank > 0) Then
+                        Command.Respond "Error: The bot must be a shaman or chieftain in its clan to send Clan mail."
                     End If
-                ElseIf (g_Clan.Self.Rank > 0) Then
-                    Command.Respond "Error: The bot must be a shaman or chieftain in its clan to send Clan mail."
+                Else
+                    Command.Respond "Error: The bot must be a member of a clan."
                 End If
         End Select
     End If
@@ -60,7 +66,7 @@ End Sub
 
 Public Sub OnDemote(Command As clsCommandObj)
     If (Command.IsValid) Then
-        If (IsW3) Then
+        If (g_Clan.InClan) Then
             If (LenB(g_Clan.Self.Name) > 0) Then
                 If (g_Clan.Self.Rank > 2) Then
                     Dim liUser As ListItem
@@ -68,7 +74,7 @@ Public Sub OnDemote(Command As clsCommandObj)
     
                     If (Not liUser Is Nothing) Then
                         If (liUser.SmallIcon > 1) Then
-                            Call modWar3Clan.DemoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.SmallIcon - 1)
+                            Call frmChat.ClanHandler.DemoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.SmallIcon - 1, reqUserCommand, Command)
                         Else
                             Command.Respond "Error: The specified user is already at the lowest demoteable ranking."
                         End If
@@ -81,21 +87,25 @@ Public Sub OnDemote(Command As clsCommandObj)
             Else
                 Command.Respond "Error: The bot must be a member of a clan."
             End If
+        Else
+            Command.Respond "Error: The bot must be a member of a clan."
         End If
     End If
 End Sub
 
 Public Sub OnDisbandClan(Command As clsCommandObj)
-    If (IsW3) Then
+    If (g_Clan.InClan) Then
         If (LenB(g_Clan.Self.Name) > 0) Then
-            If (g_Clan.Self.Rank >= 4) Then
-                Call modWar3Clan.DisbandClan
+            If (g_Clan.Self.Rank >= clrankChieftain) Then
+                Call frmChat.ClanHandler.DisbandClan(reqUserCommand, Command)
             Else
-                Command.Respond "Error: The bot must be a chieftain to execute this command."
+                Command.Respond "Error: The bot must be the chieftain in its clan to use this command."
             End If
         Else
             Command.Respond "Error: The bot must be a member of a clan."
         End If
+    Else
+        Command.Respond "Error: The bot must be a member of a clan."
     End If
 End Sub
 
@@ -104,11 +114,10 @@ Public Sub OnInvite(Command As clsCommandObj)
     ' clan that the bot is currently either a Shaman or Chieftain of.  This
     ' command will only work if the bot is logged on using WarCraft III, and
     ' is either a Shaman, or a Chieftain of the clan in question.
-    
-    If (IsW3) Then
-        If (g_Clan.Self.Rank >= 3) Then
+    If (g_Clan.InClan) Then
+        If (g_Clan.Self.Rank >= clrankShaman) Then
             If (Command.IsValid Or LenB(Command.Argument("Username")) = 0) Then
-                Call modWar3Clan.InviteToClan(Command.Argument("Username"))
+                Call frmChat.ClanHandler.InviteToClan(Command.Argument("Username"), reqUserCommand, Command)
                 Command.Respond Command.Argument("Username") & ": Clan invitation sent."
             Else
                 Command.Respond "Error: You must specify a username to invite."
@@ -116,26 +125,34 @@ Public Sub OnInvite(Command As clsCommandObj)
         Else
             Command.Respond "Error: The bot must be a shaman or chieftain in its clan to invite users."
         End If
+    Else
+        Command.Respond "Error: The bot must be a member of a clan."
     End If
 End Sub
 
 Public Sub OnMakeChieftain(Command As clsCommandObj)
-    If (IsW3) Then
-        If (g_Clan.Self.Rank >= 4) Then
+    If (g_Clan.InClan) Then
+        If (g_Clan.Self.Rank >= clrankChieftain) Then
             If (Command.IsValid) Then
-                Call modWar3Clan.MakeMemberChieftain(ReverseConvertUsernameGateway(Command.Argument("Username")))
+                Call frmChat.ClanHandler.MakeMemberChieftain(ReverseConvertUsernameGateway(Command.Argument("Username")), reqUserCommand, Command)
             Else
                 Command.Respond "Error: You must specify a username to promote."
             End If
         Else
             Command.Respond "Error: The bot must be the chieftain in its clan to use this command."
         End If
+    Else
+        Command.Respond "Error: The bot must be a member of a clan."
     End If
 End Sub
 
 Public Sub OnMOTD(Command As clsCommandObj)
-    If (LenB(g_Clan.Self.Name) > 0) Then
-        Command.Respond StringFormat("Clan {0}'s MOTD: {1}", g_Clan.Name, g_Clan.MOTD)
+    If (g_Clan.InClan) Then
+        If (LenB(g_Clan.Self.Name) > 0) Then
+            Command.Respond StringFormat("Clan {0}'s MOTD: {1}", g_Clan.Name, g_Clan.MOTD)
+        Else
+            Command.Respond "Error: The bot must be a member of a clan."
+        End If
     Else
         Command.Respond "Error: The bot must be a member of a clan."
     End If
@@ -143,7 +160,7 @@ End Sub
 
 Public Sub OnPromote(Command As clsCommandObj)
     If (Command.IsValid) Then
-        If (IsW3) Then
+        If (g_Clan.InClan) Then
             If (LenB(g_Clan.Self.Name) > 0) Then
                 If (g_Clan.Self.Rank > 2) Then
                     Dim liUser As ListItem
@@ -151,7 +168,7 @@ Public Sub OnPromote(Command As clsCommandObj)
     
                     If (Not liUser Is Nothing) Then
                         If (liUser.SmallIcon < 3) Then
-                            Call modWar3Clan.PromoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.SmallIcon + 1)
+                            Call frmChat.ClanHandler.PromoteMember(ReverseConvertUsernameGateway(liUser.Text), liUser.SmallIcon + 1, reqUserCommand, Command)
                         Else
                             Command.Respond "Error: The specified user is already at the highest promotable ranking."
                         End If
@@ -164,6 +181,8 @@ Public Sub OnPromote(Command As clsCommandObj)
             Else
                 Command.Respond "Error: The bot must be a member of a clan."
             End If
+        Else
+            Command.Respond "Error: The bot must be a member of a clan."
         End If
     End If
 End Sub
@@ -175,16 +194,19 @@ Public Sub OnSetMOTD(Command As clsCommandObj)
     ' and is either a Shaman or a Chieftain of the clan in question.
     
     If (Command.IsValid) Then
-        If (IsW3) Then
+        If (g_Clan.InClan) Then
             If (g_Clan.Self.Rank > 2) Then
                 Command.Respond "The clan MOTD has been set to: " & Command.Argument("Message")
                 Call frmChat.AddQ("/c motd " & Command.Argument("Message"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+                Call frmChat.ClanHandler.RequestClanMOTD(reqInternal)
             ElseIf (g_Clan.Self.Rank > 0) Then
-                Command.Respond "Error: The bot must be a shaman or chieftain in its clan to set the MOTD"
+                Command.Respond "Error: The bot must be a shaman or chieftain in its clan to set the MOTD."
             End If
+        Else
+            Command.Respond "Error: The bot must be a member of a clan."
         End If
     Else
-        Command.Respond "You must specify a message to set."
+        Command.Respond "Error: You must specify a message to set."
     End If
 End Sub
 

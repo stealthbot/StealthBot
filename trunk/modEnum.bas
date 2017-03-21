@@ -65,15 +65,58 @@ Public Type udtMail
     Message As String * 225
 End Type
 
-Public Type udtUserDataRequest
-    ResponseReceived As Boolean
-    Command As clsCommandObj
-    RequestType As enuUserDataRequestType
-    RequestID As Integer
-    Account As String
-    keys() As String
-    Values() As String
+Public Type udtProxyConnectionInfo
+    ' config
+    ServerType As enuServerTypes
+    UseProxy As Boolean
+    ProxyIP As String
+    ProxyPort As Long
+    Version As Byte
+    Username As String
+    Password As String
+    
+    ' status
+    IsUsingProxy As Boolean
+    Status As enuProxyStatus
+    RemoteHost As String
+    RemoteHostIP As String
+    RemotePort As Long
+    RemoteResolveHost As Boolean
 End Type
+
+Public Type udtServerRequest
+    ResponseReceived As Boolean
+    HandlerType As enuServerRequestHandlerType
+    Command As clsCommandObj
+    PacketID As Byte
+    PacketCommand As Byte
+    Cookie As Long
+    Tag As Variant
+End Type
+
+Public Enum enuClanResponseValue
+    clresSuccess = 0
+    clresNameInUse = 1
+    clresTooSoon = 2
+    clresNotEnoughMembers = 3
+    clresDecline = 4
+    clresUnavailable = 5
+    clresAccept = 6
+    clresNotAuthorized = 7
+    clresNotAllowed = 8
+    clresIsFull = 9
+    clresBadTag = 10
+    clresBadName = 11
+    clresUserNotFound = 12
+End Enum
+
+Public Enum enuClanRank
+    clrankRecruit = 0
+    clrankPeon = 1
+    clrankGrunt = 2
+    clrankShaman = 3
+    clrankChieftain = 4
+End Enum
    
 Public Type FLASHWINFO
     cbSize      As Long
@@ -89,10 +132,10 @@ Public Type POINTAPI
 End Type
 
 Public Type LVHITTESTINFO
-   pt As POINTAPI
-   Flags As Long
-   iItem As Long
-   iSubItem As Long
+    pt As POINTAPI
+    Flags As Long
+    iItem As Long
+    iSubItem As Long
 End Type
 
 Public Enum inetQueueModes
@@ -143,30 +186,11 @@ Public Enum enuDBActions
     ModEntry = 3
 End Enum
 
-Public Type udtProxyConnectionInfo
-    ' config
-    ServerType As enuServerTypes
-    UseProxy As Boolean
-    ProxyIP As String
-    ProxyPort As Long
-    Version As Byte
-    Username As String
-    Password As String
-    
-    ' status
-    IsUsingProxy As Boolean
-    Status As enuProxyStatus
-    RemoteHost As String
-    RemoteHostIP As String
-    RemotePort As Long
-    RemoteResolveHost As Boolean
-End Type
-
-Public Enum enuUserDataRequestType
-    Internal = 1
-    ProfileWindow = 2
-    ScriptingCall = 3
-    UserCommand = 4
+Public Enum enuServerRequestHandlerType
+    reqInternal = 1
+    reqUserInterface = 2
+    reqScriptingCall = 3
+    reqUserCommand = 4
 End Enum
 
 Public Enum enuSHA1Type

@@ -596,10 +596,12 @@ Public Function ConvertUsernameD2(ByVal Username As String, Optional ByVal RealU
             Name = Mid$(Username, Index + 1)
             
             ' get D2 character title, if available
-            Set UserObj = g_Channel.GetUserEx(RealUsername)
-            Title = UserObj.Stats.CharacterTitle
-            If (LenB(Title) > 0) Then Title = Title & " "
-            Set UserObj = Nothing
+            If Not g_Channel Is Nothing Then
+                Set UserObj = g_Channel.GetUserEx(RealUsername)
+                Title = UserObj.Stats.CharacterTitle
+                If (LenB(Title) > 0) Then Title = Title & " "
+                Set UserObj = Nothing
+            End If
             
             ' return formatted name
             ConvertUsernameD2 = StringFormat(strFormat, Title, Char, Name)
@@ -621,11 +623,13 @@ Public Function ConvertUsernameD2(ByVal Username As String, Optional ByVal RealU
                 Name = Username
                 
                 ' get D2 character name and title, if available
-                Set UserObj = g_Channel.GetUserEx(RealUsername)
-                Title = UserObj.Stats.CharacterTitle
-                If (LenB(Title) > 0) Then Title = Title & " "
-                Char = UserObj.Stats.CharacterName
-                Set UserObj = Nothing
+                If Not g_Channel Is Nothing Then
+                    Set UserObj = g_Channel.GetUserEx(RealUsername)
+                    Title = UserObj.Stats.CharacterTitle
+                    If (LenB(Title) > 0) Then Title = Title & " "
+                    Char = UserObj.Stats.CharacterName
+                    Set UserObj = Nothing
+                End If
                 
                 ' if character name found
                 If (LenB(Char) = 0) Then

@@ -178,7 +178,7 @@ Public Property Get BanMessage() As String
 End Property
 
 Public Property Let BanMessage(ByVal sBanMessage As String)
-  m_BanMessage = sBanMessage
+    m_BanMessage = sBanMessage
 End Property
 
 Public Sub AddGroup(ByVal sGroup As String)
@@ -186,7 +186,7 @@ Public Sub AddGroup(ByVal sGroup As String)
 End Sub
 
 Public Sub ClearGroups()
-     Set m_Groups = New Collection
+    Set m_Groups = New Collection
 End Sub
 
 ' Returns a display string describing the entry.

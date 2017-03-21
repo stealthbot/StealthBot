@@ -154,6 +154,15 @@ Public Const FRS_MUTUAL& = &H1
 Public Const FRS_DND& = &H2
 Public Const FRS_AWAY& = &H4
 
+'Clan list constants
+Public Const IC_CLAN_PEON = 1
+Public Const IC_CLAN_GRUNT = 2
+Public Const IC_CLAN_SHAMAN = 3
+Public Const IC_CLAN_CHIEFTAIN = 4
+Public Const IC_CLAN_UNKNOWN = 5
+Public Const IC_CLAN_STATUS_OFFLINE = 6
+Public Const IC_CLAN_STATUS_ONLINE = 7
+
 'FlashWindow constants
 Public Const FLASHW_CAPTION = 1
 Public Const FLASHW_TRAY = 2

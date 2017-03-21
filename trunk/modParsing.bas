@@ -107,68 +107,54 @@ Public Sub RejoinChannel(Channel As String)
     Set pBuf = Nothing
 End Sub
 
-Public Sub RequestProfile(strUser As String, ByVal eType As enuUserDataRequestType, Optional ByRef oCommand As clsCommandObj)
+Public Sub RequestProfile(ByVal strUser As String, ByVal eType As enuServerRequestHandlerType, Optional ByRef oCommand As clsCommandObj)
     Dim aKeys(3) As String
     
     aKeys(0) = "Profile\Age"
     aKeys(1) = "Profile\Sex"
     aKeys(2) = "Profile\Location"
     aKeys(3) = "Profile\Description"
-    
+
     Call RequestUserData(strUser, aKeys, eType, oCommand)
 End Sub
 
-Public Sub RequestUserData(ByVal sUsername As String, ByRef aKeys() As String, Optional ByVal eType As enuUserDataRequestType, Optional ByRef oCommand As clsCommandObj)
-    Dim oRequest As udtUserDataRequest
-    Dim i As Integer
-    Dim bFoundSlot As Boolean
-    Dim pBuf As clsDataBuffer
+Public Sub RequestUserData(ByVal sUsername As String, ByRef aKeys() As String, ByVal HandlerType As enuServerRequestHandlerType, Optional ByRef oCommand As clsCommandObj)
+    Dim oRequest As udtServerRequest
+    Dim pBuf     As clsDataBuffer
+    Dim vArray() As String
+    Dim i        As Integer
 
     With oRequest
         ' Attach handling info
-        .RequestType = eType
-        Set .Command = oCommand
         .ResponseReceived = False
-    
+        .HandlerType = HandlerType
+        Set .Command = oCommand
+        .PacketID = SID_READUSERDATA
+        .PacketCommand = 0
+
         ' Add request data
-        .Account = sUsername
-        .keys = aKeys
+        ReDim vArray(0 To UBound(aKeys) + 1)
+        vArray(0) = sUsername
+        For i = 0 To UBound(aKeys)
+            vArray(i + 1) = aKeys(i)
+        Next i
+        .Tag = CVar(vArray)
     End With
     
-    ' Find an open slot in the request list
-    bFoundSlot = False
-    If UBound(UserDataRequests) > 0 Then
-        For i = 1 To UBound(UserDataRequests)
-            If UserDataRequests(i).ResponseReceived Then
-                bFoundSlot = True
-            
-                oRequest.RequestID = i
-                UserDataRequests(i) = oRequest
-                Exit For
-            End If
-        Next
-    End If
-    
-    ' If no slot was found, add the request to the end
-    If Not bFoundSlot Then
-        oRequest.RequestID = UBound(UserDataRequests) + 1
-        
-        ReDim Preserve UserDataRequests(oRequest.RequestID)
-        UserDataRequests(oRequest.RequestID) = oRequest
-    End If
+    Call SaveServerRequest(oRequest)
 
     ' Build the packet
     Set pBuf = New clsDataBuffer
     With pBuf
         .InsertDWord 1
-        .InsertDWord UBound(oRequest.keys) + 1
-        .InsertDWord oRequest.RequestID
-        
-        .InsertNTString CleanUsername(ReverseConvertUsernameGateway(oRequest.Account))
-        
-        For i = 0 To UBound(aKeys)
-            .InsertNTString oRequest.keys(i)
-        Next
+        .InsertDWord UBound(vArray)
+        .InsertDWord oRequest.Cookie
+
+        .InsertNTString CleanUsername(ReverseConvertUsernameGateway(sUsername))
+
+        For i = 1 To UBound(vArray)
+            .InsertNTString vArray(i)
+        Next i
 
         .SendPacket SID_READUSERDATA
     End With
@@ -275,18 +261,101 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
     End If
 End Sub
 
-Public Function Conv(ByVal RawString As String) As Long
-    Dim lReturn As Long
-    
-    If Len(RawString) = 4 Then
-        Call CopyMemory(lReturn, ByVal RawString, 4)
-    Else
-        Debug.Print "---------- WARNING! Invalid string Length in Conv()!"
-        Debug.Print "---------- Length: " & Len(RawString)
-        Debug.Print DebugOutput(RawString)
+Public Function SaveServerRequest(ByRef oRequest As udtServerRequest) As Long
+    Dim i          As Integer
+    Dim bFoundSlot As Boolean
+
+    ' Find an open slot in the request list
+    bFoundSlot = False
+    If UBound(ServerRequests) > LBound(ServerRequests) Then
+        For i = 1 To UBound(ServerRequests)
+            If ServerRequests(i).ResponseReceived Then
+                bFoundSlot = True
+                oRequest.Cookie = i
+                ServerRequests(i) = oRequest
+                Exit For
+            End If
+        Next
     End If
-    
-    Conv = lReturn
+
+    ' If no slot was found, add the request to the end
+    If Not bFoundSlot Then
+        oRequest.Cookie = UBound(ServerRequests) + 1
+        ReDim Preserve ServerRequests(oRequest.Cookie)
+        ServerRequests(oRequest.Cookie) = oRequest
+    End If
+
+    'frmChat.AddChat vbWhite, StringFormat("Saved request (0x{0}/0x{1}): 0x{2}", ZeroOffset(oRequest.PacketID, 2), ZeroOffset(oRequest.PacketCommand, 2), ZeroOffset(oRequest.Cookie, 4))
+    SaveServerRequest = oRequest.Cookie
+End Function
+
+Public Function FindServerRequest(ByRef oRequest As udtServerRequest, ByVal Cookie As Long, Optional ByVal PacketID As Byte = 0, Optional ByVal PacketCommand As Byte, Optional ByVal ResponseReceived As Boolean = True) As Boolean
+    Dim i As Integer
+
+    FindServerRequest = False
+
+    ' we can search for any server request by cookie or by packet ID, but not by any of both
+    If Cookie < LBound(ServerRequests) And PacketID = 0 Then
+        Exit Function
+    End If
+
+    ' Find the request for this ID and hand it off to the event handler
+    ' pass in Cookie = -1 or Cookie = 0 to find the first un-received request with that packet ID
+    ' (i.e. with ResponseReceived = False to "peek" at a pending request)
+    If Cookie <= 0 Then
+        For i = 1 To UBound(ServerRequests)
+            With ServerRequests(i)
+                If Not .ResponseReceived And .PacketID = PacketID And .PacketCommand = PacketCommand Then
+                    Cookie = i
+                    Exit For
+                End If
+            End With
+        Next i
+        ' not found
+        If Cookie <= 0 Then Exit Function
+    End If
+
+    If Cookie <= UBound(ServerRequests) Then
+        ' Process the request
+        With ServerRequests(Cookie)
+            If PacketID > 0 Then
+                If .PacketID <> PacketID Or .PacketCommand <> PacketCommand Then
+                    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error: Received data response for a different packet: 0x{0}/0x{1} instead of 0x{2}/0x{3}", ZeroOffset(PacketID, 2), ZeroOffset(PacketCommand, 2), ZeroOffset(.PacketID, 2), ZeroOffset(.PacketCommand, 2))
+                    Exit Function
+                End If
+            End If
+
+            If .ResponseReceived Then
+                frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Notice: Received extra data response for packet: 0x{0}/0x{1}", ZeroOffset(PacketID, 2), ZeroOffset(PacketCommand, 2))
+            End If
+
+            .ResponseReceived = ResponseReceived
+            'If ResponseReceived Then
+            '    frmChat.AddChat vbWhite, StringFormat("Found request (0x{0}/0x{1}): 0x{2}", ZeroOffset(.PacketID, 2), ZeroOffset(.PacketCommand, 2), ZeroOffset(.Cookie, 4))
+            'End If
+
+            oRequest.ResponseReceived = ResponseReceived
+            oRequest.HandlerType = .HandlerType
+            Set oRequest.Command = .Command
+            oRequest.PacketID = .PacketID
+            oRequest.PacketCommand = .PacketCommand
+            oRequest.Cookie = .Cookie
+            oRequest.Tag = .Tag
+        End With
+
+        FindServerRequest = True
+
+        ' Shrink the array if we are able (remove all where ResponseReceived is True from the end of the array)
+        If Cookie > 1 Then
+            For i = Cookie To 2 Step -1
+                If Not ServerRequests(i).ResponseReceived Then
+                    i = -1
+                    Exit For
+                End If
+            Next i
+            If i > 1 Then ReDim Preserve ServerRequests(i - 1)
+        End If
+    End If
 End Function
 
 '// COLORMODIFY - where L is passed as the start position of the text to be checked

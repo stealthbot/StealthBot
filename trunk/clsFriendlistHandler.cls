@@ -73,10 +73,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByVal pBuff As clsDataBuffer)
                         .LocationID = pBuff.GetByte()   ' Location
                         
                         ' Product ID
-                        .Game = StrReverse(pBuff.GetRaw(4))
-                        If Conv(.Game) = 0 Then
-                            .Game = "OFFL"
-                        End If
+                        .Game = DWordToString(pBuff.GetDWord)
                         
                         ' Location name
                         .Location = pBuff.GetString(UTF8)
@@ -112,12 +109,9 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByVal pBuff As clsDataBuffer)
                 '   to update the value.
                 '   (see: https://bnetdocs.org/packet/384/sid-friendsupdate)
                 
-                pBuff.GetDWORD
+                pBuff.GetDWord
                 ' Product ID
-                '.Game = StrReverse(pBuff.GetRaw(4))
-                'If Conv(.Game) = 0 Then
-                '    .Game = "OFFL"
-                'End If
+                '.Game = DWordToString(pBuff.GetDWORD)
                 
                 ' Location name
                 .Location = pBuff.GetString(UTF8)
@@ -141,10 +135,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByVal pBuff As clsDataBuffer)
                 .LocationID = pBuff.GetByte()   ' Location
                 
                 ' Product ID
-                .Game = StrReverse(pBuff.GetRaw(4))
-                If Conv(.Game) = 0 Then
-                    .Game = "OFFL"
-                End If
+                .Game = DWordToString(pBuff.GetDWord)
                 
                 ' Location name
                 .Location = pBuff.GetString(UTF8)

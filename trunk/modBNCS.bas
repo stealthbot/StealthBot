@@ -200,7 +200,7 @@ Public Function BNCSRecvPacket(ByVal pBuff As clsDataBuffer, Optional ByVal Scri
                 If PacketID >= &H70 Then
                     ' added in response to the clan channel takeover exploit
                     ' discovered 11/7/05
-                    If IsW3 Then
+                    If frmChat.ClanHandler.IsW3 Then
                         frmChat.ParseClanPacket PacketID, pBuff
                     End If
                 Else
@@ -891,18 +891,20 @@ End Sub
 Private Sub RECV_SID_READUSERDATA(pBuff As clsDataBuffer)
     On Error GoTo ERROR_HANDLER:
 
-    Dim i As Integer
-    
-    Dim iNumKeys As Long
-    Dim iRequest As Long
+    Dim i         As Integer
+    Dim iNumKeys  As Long
+    Dim Cookie    As Long
+    Dim sUsername As String
+    Dim aKeys()   As String
     Dim aValues() As String
+    Dim oRequest  As udtServerRequest
 
     pBuff.GetDWORD                  ' (DWORD) Number of accounts
     iNumKeys = pBuff.GetDWORD()     ' (DWORD) Number of keys
-    iRequest = pBuff.GetDWORD()     ' (DWORD) Request ID
+    Cookie = pBuff.GetDWORD()       ' (DWORD) Request ID
 
     If iNumKeys < 1 Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "Notice: Received user data request with no returned keys. Cookie: " & CStr(iRequest)
+        frmChat.AddChat RTBColors.ErrorMessageText, "Notice: Received user data request with no returned keys. Cookie: " & CStr(Cookie)
     Else
         ReDim aValues(iNumKeys - 1)
     
@@ -911,38 +913,22 @@ Private Sub RECV_SID_READUSERDATA(pBuff As clsDataBuffer)
             aValues(i) = pBuff.GetString(IIf(frmChat.mnuUTF8.Checked, UTF8, ANSI))
         Next i
     End If
-    
-    ' Find the request for this ID and hand it off to the event handler
-    i = UBound(UserDataRequests)
-    If i >= iRequest Then
-    
-        ' Process the request
-        With UserDataRequests(iRequest)
-            If .ResponseReceived Then
-                frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Notice: Received extra data response for user: {0}, # of keys: {1}", .Account, iNumKeys)
-            End If
-        
-            .ResponseReceived = True            ' Flag this request as received
-            .Values = aValues                   ' Link the values
+
+    If FindServerRequest(oRequest, Cookie, SID_READUSERDATA) Then
+        With oRequest
+            sUsername = .Tag(0)
+            ReDim aKeys(0 To iNumKeys - 1)
+            For i = 0 To iNumKeys - 1
+                aKeys(i) = .Tag(i + 1)
+            Next i
         End With
         
         ' Raise UserDataReceived event (also raises KeyReturn in scripting)
-        Event_UserDataReceived UserDataRequests(iRequest)
-        
-        ' Shrink the array if needed
-        If i > 1 Then
-            For i = i To 1 Step -1
-                If UserDataRequests(i).ResponseReceived Then
-                    ReDim Preserve UserDataRequests(i - 1)
-                Else
-                    Exit For
-                End If
-            Next
-        End If
+        Event_UserDataReceived oRequest, sUsername, aKeys(), aValues()
     Else
-        frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Notice: Received unsolicited user data, # of keys: {0}, Cookie: {1}", iNumKeys, iRequest)
+        frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Notice: Received unsolicited user data, # of keys: {0}, Cookie: {1}", iNumKeys, Cookie)
     End If
-    
+
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
@@ -1801,7 +1787,7 @@ On Error GoTo ERROR_HANDLER:
     
     Dim pBuff    As New clsDataBuffer
     Dim i        As Long
-    Dim keys     As Long
+    Dim Keys     As Long
     Dim sKey     As String
     Dim oKey     As New clsKeyDecoder
     
@@ -1818,16 +1804,16 @@ On Error GoTo ERROR_HANDLER:
         Exit Sub
     End If
     
-    keys = GetCDKeyCount
+    Keys = GetCDKeyCount
     
     With pBuff
         .InsertDWord ds.ClientToken  'Client Token
         .InsertDWord ds.CRevVersion  'CRev Version
         .InsertDWord ds.CRevChecksum 'CRev Checksum
-        .InsertDWord keys            'CDKey Count
+        .InsertDWord Keys            'CDKey Count
         .InsertBool (CanSpawn(BotVars.Product, oKey.KeyLength) And Config.UseSpawn)
         
-        For i = 1 To keys
+        For i = 1 To Keys
             If (i = 1) Then
                 sKey = BotVars.CDKey
             ElseIf (i = 2) Then

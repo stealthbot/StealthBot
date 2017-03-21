@@ -22,7 +22,6 @@ Public Type scInc
     lineCount As Integer
 End Type
 
-Private m_srootmenu         As New clsMenuObj
 Private m_arrObjs()         As scObj
 Private m_objCount          As Integer
 Private m_arrIncs()         As scInc

@@ -8,7 +8,7 @@ Public Sub OnAbout(Command As clsCommandObj)
 End Sub
 
 Public Sub OnAccountInfo(Command As clsCommandObj)
-    RequestSystemKeys UserCommand, Command
+    RequestSystemKeys reqUserCommand, Command
 End Sub
 
 Public Sub OnBanCount(Command As clsCommandObj)
@@ -445,10 +445,10 @@ End Sub
 Public Sub OnProfile(Command As clsCommandObj)
     If (Command.IsValid) Then
         If ((Not Command.IsLocal) Or (Command.PublicOutput)) Then
-            Call RequestProfile(Command.Argument("Username"), UserCommand, Command)
+            Call RequestProfile(Command.Argument("Username"), reqUserCommand, Command)
         Else
             frmProfile.PrepareForProfile Command.Argument("Username"), False
-            Call RequestProfile(Command.Argument("Username"), ProfileWindow, Command)
+            Call RequestProfile(Command.Argument("Username"), reqUserInterface, Command)
         End If
     End If
 End Sub

@@ -115,19 +115,40 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Private Const REQUEST_COOKIE As Integer = 0
+Private Const REQUEST_TAG    As Integer = 1
+Private Const REQUEST_NAME   As Integer = 2
+Private Const REQUEST_INV    As Integer = 3
+Private Const REQUEST_ISNEW  As Integer = 4
+
 Private Sub cmdAccept_Click()
-    Call modWar3Clan.InvitationResponse(ClanResponseAccept, Clan.Token, Clan.DWName, Clan.Creator, Clan.IsNew)
-    Clan.IsNew = False
+    Dim oRequest As udtServerRequest
+    Dim vArray() As Variant
+
+    If (g_Clan.PendingInvitation) Then
+        If FindServerRequest(oRequest, g_Clan.PendingInvitationCookie, SID_CLANINVITATIONRESPONSE) Then
+            vArray = oRequest.Tag
+            Call frmChat.ClanHandler.InvitationResponse(vArray(REQUEST_ISNEW), vArray(REQUEST_COOKIE), vArray(REQUEST_TAG), vArray(REQUEST_INV), clresAccept)
+            g_Clan.PendingInvitation = False
+        End If
+    End If
 
     frmChat.AddChat RTBColors.SuccessText, "[CLAN] Invitation accepted."
-    AwaitingClanMembership = 1
 
     Unload Me
 End Sub
 
 Sub cmdDecline_Click()
-    Call modWar3Clan.InvitationResponse(ClanResponseDecline, Clan.Token, Clan.DWName, Clan.Creator, Clan.IsNew)
-    Clan.IsNew = False
+    Dim oRequest As udtServerRequest
+    Dim vArray() As Variant
+
+    If (g_Clan.PendingInvitation) Then
+        If FindServerRequest(oRequest, g_Clan.PendingInvitationCookie, SID_CLANINVITATIONRESPONSE) Then
+            vArray = oRequest.Tag
+            Call frmChat.ClanHandler.InvitationResponse(vArray(REQUEST_ISNEW), vArray(REQUEST_COOKIE), vArray(REQUEST_TAG), vArray(REQUEST_INV), clresDecline)
+            g_Clan.PendingInvitation = False
+        End If
+    End If
 
     frmChat.AddChat RTBColors.ErrorMessageText, "[CLAN] Invitation declined."
 
@@ -135,12 +156,21 @@ Sub cmdDecline_Click()
 End Sub
 
 Private Sub Form_Load()
-    lblUser.Caption = Clan.Creator
-    lblClan.Caption = "Clan " & StrReverse(Clan.DWName)
+    Dim oRequest As udtServerRequest
+    Dim vArray() As Variant
+
+    If (g_Clan.PendingInvitation) Then
+        If FindServerRequest(oRequest, g_Clan.PendingInvitationCookie, SID_CLANINVITATIONRESPONSE, , False) Then
+            vArray = oRequest.Tag
+            lblUser.Caption = CStr(vArray(REQUEST_INV))
+            lblClan.Caption = StringFormat("Clan {0}: {1}", CStr(vArray(REQUEST_TAG)), CStr(vArray(REQUEST_NAME)))
+        End If
+    End If
+
     Me.Icon = frmChat.Icon
     cmdAccept.Enabled = False
     cmdDecline.Enabled = False
-    
+
     ClanAcceptTimerID = SetTimer(frmClanInvite.hWnd, 0, 2000, AddressOf ClanInviteTimerProc)
 End Sub
 

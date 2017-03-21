@@ -143,3 +143,22 @@ Public Function ByteArrToWCArr(ByRef bArr() As Byte) As Integer()
     ByteArrToWCArr = iArr
 
 End Function
+
+Public Function DWordToString(ByVal Value As Long) As String
+    
+    Dim Buffer As String * 4
+
+    CopyMemory ByVal Buffer, Value, 4
+
+    DWordToString = KillNull(StrReverse(Buffer))
+
+End Function
+
+Public Function StringToDWord(ByVal Value As String) As Long
+    
+    Dim Buffer As String * 4
+    Buffer = Value
+
+    CopyMemory StringToDWord, ByVal Buffer, 4
+
+End Function

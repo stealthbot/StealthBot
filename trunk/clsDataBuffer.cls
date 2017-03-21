@@ -179,13 +179,13 @@ Public Sub InsertDWord(ByVal Data As Long)
     m_bufsize = (m_bufsize + 4)
 End Sub
 
-Public Function GetDWORD(Optional Peek As Boolean = False) As Long
+Public Function GetDWord(Optional Peek As Boolean = False) As Long
     If ((m_bufpos + 4) > m_bufsize) Then
         Exit Function
     End If
 
     ' copy data to buffer
-    CopyMemory GetDWORD, m_buf(m_bufpos), 4
+    CopyMemory GetDWord, m_buf(m_bufpos), 4
 
     If (Not Peek) Then m_bufpos = (m_bufpos + 4)
 End Function
@@ -195,7 +195,7 @@ Public Sub InsertBool(ByVal Data As Boolean)
 End Sub
 
 Public Function GetBool(Optional Peek As Boolean = False) As Boolean
-    GetBool = Not CBool(GetDWORD(Peek) = 0)
+    GetBool = Not CBool(GetDWord(Peek) = 0)
 End Function
 
 Public Function GetFileTime(Optional Peek As Boolean = False) As Date
@@ -299,6 +299,30 @@ Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCO
             GetString = arrStr()
 
     End Select
+End Function
+
+Public Function GetStringArr(Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI) As String()
+    Dim sArray() As String
+    Dim sValue   As String
+    Dim i        As Integer
+
+    ' keep adding strings until reaching a 0-length string ("double null")
+    i = 0
+    Do
+        sValue = GetString(Encoding)
+        If LenB(sValue) > 0 Then
+            ReDim Preserve sArray(0 To i)
+            sArray(i) = sValue
+            i = i + 1
+        Else
+            Exit Do
+        End If
+    Loop
+
+    ' make a 0-length array of string
+    If i = 0 Then sArray() = Split(vbNullString)
+
+    GetStringArr = sArray()
 End Function
 
 Public Function GetRaw(Optional ByVal Length As Integer = -1, Optional Peek As Boolean = False) As String
@@ -490,7 +514,7 @@ Public Function GetPacketLength(Optional ByVal st As enuServerTypes = stBNCS) As
     
     Select Case st
         Case stBNCS
-            Value = GetDWORD(True)
+            Value = GetDWord(True)
             Value = CLng(Value \ 65536)
         Case stBNLS, stMCP
             Value = GetWord(True)

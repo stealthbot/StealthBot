@@ -16,9 +16,14 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_name    As String
-Private m_motd    As String
-Private m_members As Collection
+Private m_pi       As Boolean
+Private m_picookie As Long
+Private m_pmotd    As Boolean
+Private m_inclan   As Boolean
+Private m_myrank   As Byte
+Private m_name     As String
+Private m_motd     As String
+Private m_members  As Collection
 
 Private Sub Class_Initialize()
     Set m_members = New Collection
@@ -36,6 +41,15 @@ Public Property Let Name(str As String)
     m_name = str
 End Property
 
+' alias for Name
+Public Property Get Tag() As String
+    Tag = m_name
+End Property
+
+Public Property Let Tag(str As String)
+    m_name = str
+End Property
+
 Public Property Get MOTD() As String
     MOTD = m_motd
 End Property
@@ -44,11 +58,43 @@ Public Property Let MOTD(str As String)
     m_motd = str
 End Property
 
+Public Property Get InClan() As Boolean
+    InClan = m_inclan
+End Property
+
+Public Property Let InClan(bool As Boolean)
+    m_inclan = bool
+End Property
+
+Public Property Get PendingInvitation() As Boolean
+    PendingInvitation = m_pi
+End Property
+
+Public Property Let PendingInvitation(bool As Boolean)
+    m_pi = bool
+End Property
+
+Public Property Get PendingInvitationCookie() As Long
+    PendingInvitationCookie = m_picookie
+End Property
+
+Public Property Let PendingInvitationCookie(lng As Long)
+    m_picookie = lng
+End Property
+
+Public Property Get PendingClanMOTD() As Boolean
+    PendingClanMOTD = m_pmotd
+End Property
+
+Public Property Let PendingClanMOTD(bool As Boolean)
+    m_pmotd = bool
+End Property
+
 Public Property Get Self() As clsClanMemberObj
     Dim i As Integer
 
     Set Self = New clsClanMemberObj
-    
+
     For i = 1 To Members.Count
         'Changed 10/08/09 - Hdx - Now uses BotVars.Username instead of CurrentUsername so that if you login as a multiple (#2 #2) it will still work.
         If (StrComp(Members(i).Name, BotVars.Username, vbTextCompare) = 0) Then
@@ -108,6 +154,7 @@ Public Property Get Peons() As Collection
     Next i
 End Property
 
+' alias for GetUser()
 Public Function GetMember(ByVal Username As String) As Object
     Set GetMember = GetUser(Username)
 End Function
@@ -128,6 +175,7 @@ Public Function GetUser(ByVal Username As String) As Object
     End If
 End Function
 
+' alias for GetUserIndex()
 Public Function GetMemberIndex(ByVal Username As String) As Integer
     GetMemberIndex = GetUserIndex(Username)
 End Function
@@ -146,6 +194,7 @@ Public Function GetUserIndex(ByVal Username As String) As Integer
     GetUserIndex = 0
 End Function
 
+' alias for GetUserEx()
 Public Function GetMemberEx(ByVal Username As String) As Object
     Set GetMemberEx = GetUserEx(Username)
 End Function
@@ -166,6 +215,7 @@ Public Function GetUserEx(ByVal Username As String) As Object
     End If
 End Function
 
+' alias for GetUserIndexEx
 Public Function GetMemberIndexEx(ByVal Username As String) As Integer
     GetMemberIndexEx = GetUserIndexEx(Username)
 End Function
@@ -188,12 +238,41 @@ Public Sub Clear()
     Set m_members = New Collection
 End Sub
 
-Public Sub Disband(Optional ByVal Cookie As Long = &H1)
-    Call modWar3Clan.DisbandClan(Cookie)
+Public Sub Disband()
+    Call frmChat.ClanHandler.DisbandClan(reqScriptingCall)
 End Sub
 
-Public Sub SetMOTD(ByVal MOTD As String, Optional ByVal Cookie As Long = &H1)
-    Call modWar3Clan.SetClanMOTD(MOTD, Cookie)
+Public Sub Invite(ByVal Username As String)
+    Call frmChat.ClanHandler.InviteToClan(Username, reqScriptingCall)
+End Sub
+
+Public Sub FindCandidates(ByVal ClanTag As String)
+    Call frmChat.ClanHandler.CreateFindCandidates(ClanTag, reqScriptingCall)
+End Sub
+
+Public Sub Create(ByVal ClanTag As String, ByVal ClanName As String, ByRef Users() As Variant)
+    Dim Candidates() As String
+    Dim i As Integer
+
+    If LBound(Users) < UBound(Users) Then
+        ReDim Candidates(0 To UBound(Users) - LBound(Users))
+        For i = LBound(Users) To UBound(Users)
+            Candidates(i) = CStr(Users(i + LBound(Users)))
+        Next i
+        Call frmChat.ClanHandler.CreateInviteMultiple(ClanTag, ClanName, Candidates(), reqScriptingCall)
+    End If
+End Sub
+
+Public Sub RequestMemberList()
+    Call frmChat.ClanHandler.RequestClanList(reqScriptingCall)
+End Sub
+
+Public Sub RequestMOTD()
+    Call frmChat.ClanHandler.RequestClanMOTD(reqScriptingCall)
+End Sub
+
+Public Sub SetMOTD(ByVal MOTD As String)
+    Call frmChat.ClanHandler.SetClanMOTD(MOTD, reqScriptingCall)
 End Sub
 
 Public Function Clone() As Object

@@ -17,9 +17,9 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private m_name      As String
-Private m_rank      As Integer
+Private m_rank      As enuClanRank
 Private m_join_date As Date
-Private m_status    As Integer
+Private m_status    As Byte
 Private m_location  As String
 
 Public Property Get Name() As String
@@ -34,16 +34,16 @@ Public Property Get DisplayName() As String
     DisplayName = ConvertUsername(Name)
 End Property
 
-Public Property Get Rank() As Integer
+Public Property Get Rank() As enuClanRank
     Rank = m_rank
 End Property
 
-Public Property Let Rank(ByVal i As Integer)
+Public Property Let Rank(ByVal i As enuClanRank)
     m_rank = i
 End Property
 
 Public Property Get RankName() As String
-    RankName = GetRank(CByte(m_rank))
+    RankName = frmChat.ClanHandler.GetRank(CByte(m_rank))
 End Property
 
 Public Property Get JoinTime() As Date
@@ -54,11 +54,11 @@ Public Property Let JoinTime(ByVal dJoined As Date)
     m_join_date = dJoined
 End Property
 
-Public Property Get Status() As Integer
+Public Property Get Status() As Byte
     Status = m_status
 End Property
 
-Public Property Let Status(ByVal i As Integer)
+Public Property Let Status(ByVal i As Byte)
     m_status = i
 End Property
 
@@ -74,26 +74,30 @@ Public Property Let Location(ByVal str As String)
     m_location = str
 End Property
 
+Public Property Get IsSelf()
+    IsSelf = (StrComp(m_name, BotVars.Username, vbTextCompare) = 0)
+End Property
+
 Public Sub MakeChieftain()
-    Call modWar3Clan.MakeMemberChieftain(m_name)
+    Call frmChat.ClanHandler.MakeMemberChieftain(m_name, reqScriptingCall)
 End Sub
 
 Public Sub Promote(Optional ByVal Rank As Integer = -1)
     If ((Rank > -1) And (Rank <= m_rank)) Then
         Exit Sub
     End If
-    Call modWar3Clan.PromoteMember(m_name, IIf(Rank > -1, Rank, m_rank + 1))
+    Call frmChat.ClanHandler.PromoteMember(m_name, IIf(Rank > -1, Rank, m_rank + 1), reqScriptingCall)
 End Sub
 
 Public Sub Demote(Optional ByVal Rank As Integer = -1)
     If ((Rank > -1) And (Rank >= m_rank)) Then
         Exit Sub
     End If
-    Call modWar3Clan.DemoteMember(m_name, IIf(Rank > -1, Rank, m_rank - 1))
+    Call frmChat.ClanHandler.DemoteMember(m_name, IIf(Rank > -1, Rank, m_rank - 1), reqScriptingCall)
 End Sub
 
 Public Sub KickOut()
-    Call modWar3Clan.RemoveMember(m_name)
+    Call frmChat.ClanHandler.RemoveMember(m_name, IsSelf, reqScriptingCall)
 End Sub
 
 Public Function Clone() As Object

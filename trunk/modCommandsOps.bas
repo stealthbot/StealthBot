@@ -246,8 +246,8 @@ Public Sub OnGiveUp(Command As clsCommandObj)
             If (g_Channel.Self.IsOperator) Then
                 opsCount = GetOpsCount
                 
-                If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
-                    If (g_Clan.Self.Rank >= 4) Then
+                If (StrComp(g_Channel.Name, "Clan " & g_Clan.Name, vbTextCompare) = 0) Then
+                    If (g_Clan.Self.Rank >= clrankChieftain) Then
                         'Lets get a count of Shamans that are in the channel
                         For i = 1 To g_Clan.Shamans.Count
                             If (g_Channel.GetUserIndexEx(g_Clan.Shamans(i).Name) > 0) Then
@@ -275,7 +275,7 @@ Public Sub OnGiveUp(Command As clsCommandObj)
                         Exit Sub
                     End If
                 ElseIf (StrComp(Left$(g_Channel.Name, 5), "Clan ", vbTextCompare) = 0) Then
-                    If ((g_Clan.Self.Rank < 4) Or (Not StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0)) Then
+                    If ((g_Clan.Self.Rank < 4) Or (Not StrComp(g_Channel.Name, "Clan " & g_Clan.Name, vbTextCompare) = 0)) Then
                         If (opsCount >= 2) Then
                             Command.Respond "Error: There is currently a channel moderator present that cannot be removed from his or her position."
                             Exit Sub
