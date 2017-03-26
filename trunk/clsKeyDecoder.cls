@@ -87,6 +87,7 @@ End Property
 
 ' Returns the key provided in Initialize()
 Public Property Get Key() As String
+Attribute Key.VB_UserMemId = 0
     Key = m_Key
 End Property
 

@@ -359,7 +359,7 @@ Public Sub CreateFindCandidates(ByVal ClanTag As String, Optional ByVal eType As
         Set .Command = Command
         .PacketID = SID_CLANFINDCANDIDATES
         .PacketCommand = 0
-        .Tag = Username
+        .Tag = ClanTag
     End With
 
     Cookie = SaveServerRequest(oRequest)
@@ -387,7 +387,7 @@ Public Sub CreateInviteMultiple(ByVal ClanTag As String, ByVal ClanName As Strin
         Set .Command = Command
         .PacketID = SID_CLANINVITEMULTIPLE
         .PacketCommand = 0
-        .Tag = Username
+        .Tag = Array(ClanTag, ClanName, Users)
     End With
 
     Cookie = SaveServerRequest(oRequest)

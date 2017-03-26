@@ -1010,21 +1010,21 @@ Public Sub SEND_SID_CDKEY()
 On Error GoTo ERROR_HANDLER:
     Dim oKey As clsKeyDecoder
     Dim pBuff As clsDataBuffer
-    
+
     Set oKey = New clsKeyDecoder
-    
+
     oKey.Initialize BotVars.CDKey
     If Not oKey.IsValid Then
         frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
         frmChat.DoDisconnect
         Exit Sub
     End If
-    
+
     Set pBuff = New clsDataBuffer
     With pBuff
         .InsertBool (CanSpawn(BotVars.Product, oKey.KeyLength) And Config.UseSpawn)
-        .InsertNTString BotVars.CDKey
-        
+        .InsertNTString oKey.Key
+
         If (LenB(Config.CDKeyOwnerName) > 0) Then
             .InsertNTString Config.CDKeyOwnerName
         Else
@@ -1032,10 +1032,10 @@ On Error GoTo ERROR_HANDLER:
         End If
         .SendPacket SID_CDKEY
     End With
-    
+
     Set pBuff = Nothing
     Set oKey = Nothing
-    
+
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _
@@ -1183,7 +1183,7 @@ Public Sub SEND_SID_CDKEY2()
 On Error GoTo ERROR_HANDLER:
     Dim oKey  As clsKeyDecoder
     Dim pBuff As clsDataBuffer
-    
+
     Set oKey = New clsKeyDecoder
     oKey.Initialize BotVars.CDKey
     If Not oKey.IsValid Then
@@ -1192,8 +1192,12 @@ On Error GoTo ERROR_HANDLER:
         Exit Sub
     End If
 
-    If Not oKey.CalculateHash(ds.ClientToken, ds.ServerToken, BNCS_OLS) Then Exit Sub
-    
+    If Not oKey.CalculateHash(ds.ClientToken, ds.ServerToken, BNCS_OLS) Then
+        frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key could not be hashed."
+        frmChat.DoDisconnect
+        Exit Sub
+    End If
+
     Set pBuff = New clsDataBuffer
     With pBuff
         .InsertBool (CanSpawn(BotVars.Product, oKey.KeyLength) And Config.UseSpawn)
@@ -1804,36 +1808,30 @@ End Sub
 '*******************************
 Public Sub SEND_SID_AUTH_CHECK()
 On Error GoTo ERROR_HANDLER:
-    
-    Dim i     As Long
-    Dim Keys  As Long
-    Dim sKey  As String
-    Dim oKey  As clsKeyDecoder
-    Dim pBuff As clsDataBuffer
-    
+
+    Dim i            As Long
+    Dim Keys         As Long
+    Dim sKey         As String
+    Dim oKey(1 To 2) As clsKeyDecoder
+    Dim pBuff        As clsDataBuffer
+    Dim CanSpawnKey1 As Boolean
+
     If (Not BotVars.BNLS) Then
         If (Not CompileCheckrevision()) Then
             frmChat.DoDisconnect
             Exit Sub
         End If
     End If
-        
+
     If (ds.CRevChecksum = 0 Or ds.CRevVersion = 0 Or LenB(ds.CRevResult) = 0) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Check Revision Failed, sanity failed"
+        frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Check revision failed. Sanity check failed."
         frmChat.DoDisconnect
         Exit Sub
     End If
-    
+
     Keys = GetCDKeyCount
-    
-    Set pBuff = New clsDataBuffer
-    With pBuff
-        .InsertDWord ds.ClientToken  'Client Token
-        .InsertDWord ds.CRevVersion  'CRev Version
-        .InsertDWord ds.CRevChecksum 'CRev Checksum
-        .InsertDWord Keys            'CDKey Count
-        .InsertBool (CanSpawn(BotVars.Product, oKey.KeyLength) And Config.UseSpawn)
-        
+    CanSpawnKey1 = False
+    If Keys > 0 Then
         For i = 1 To Keys
             If (i = 1) Then
                 sKey = BotVars.CDKey
@@ -1842,26 +1840,45 @@ On Error GoTo ERROR_HANDLER:
             Else
                 sKey = ReadCfg$("Main", StringFormat("CDKey{0}", i))
             End If
-            
+
             'Initialize the key decoder and validate the key.
-            Set oKey = New clsKeyDecoder
-            oKey.Initialize sKey
-            If Not oKey.IsValid Then
-                frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
+            Set oKey(i) = New clsKeyDecoder
+            oKey(i).Initialize sKey
+            If Not oKey(i).IsValid Then
+                frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Your {0}CD-Key is invalid.", IIf(i = 2, "expansion", vbNullString))
                 frmChat.DoDisconnect
                 Exit Sub
             End If
-            
+
             'Calculate the hash
-            If Not oKey.CalculateHash(ds.ClientToken, ds.ServerToken, BNCS_NLS) Then Exit Sub
-            
-            .InsertDWord oKey.KeyLength
-            .InsertDWord oKey.ProductValue
-            .InsertDWord oKey.PublicValue
-            .InsertDWord 0&
-            .InsertNonNTString oKey.Hash
+            If Not oKey(i).CalculateHash(ds.ClientToken, ds.ServerToken, BNCS_NLS) Then
+                frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Your {0}CD-Key could not be hashed.", IIf(i = 2, "expansion", vbNullString))
+                frmChat.DoDisconnect
+                Exit Sub
+            End If
+
+            If Keys = 1 And i = 1 Then CanSpawnKey1 = CanSpawn(BotVars.Product, oKey(i).KeyLength)
         Next i
-        
+    End If
+
+    Set pBuff = New clsDataBuffer
+    With pBuff
+        .InsertDWord ds.ClientToken  'Client Token
+        .InsertDWord ds.CRevVersion  'CRev Version
+        .InsertDWord ds.CRevChecksum 'CRev Checksum
+        .InsertDWord Keys            'CDKey Count
+        .InsertBool (CanSpawnKey1 And Config.UseSpawn)
+
+        If Keys > 0 Then
+            For i = 1 To Keys
+                .InsertDWord oKey(i).KeyLength
+                .InsertDWord oKey(i).ProductValue
+                .InsertDWord oKey(i).PublicValue
+                .InsertDWord 0&
+                .InsertNonNTString oKey(i).Hash
+            Next i
+        End If
+
         .InsertNTString ds.CRevResult
         If (LenB(Config.CDKeyOwnerName) > 0) Then
             .InsertNTString Config.CDKeyOwnerName
@@ -1873,8 +1890,9 @@ On Error GoTo ERROR_HANDLER:
     End With
 
     Set pBuff = Nothing
-    Set oKey = Nothing
-    
+    Set oKey(1) = Nothing
+    Set oKey(2) = Nothing
+
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _

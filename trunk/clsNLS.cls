@@ -378,7 +378,8 @@ End Sub
 ' populates your databuffer for SID_AUTH_ACCOUNTCHANGEPROOF->S
 Public Sub AccountChangeProof(ByRef Buffer As Variant, ByVal Salt As String, ByVal B_Value As String, ByVal NewPassword As String)
 
-    Dim oNLS As New clsNLS
+    Dim oNLS As clsNLS
+    Set oNLS = New clsNLS
 
     Call oNLS.Initialize(m_Username, NewPassword)
     ' create an s and v
