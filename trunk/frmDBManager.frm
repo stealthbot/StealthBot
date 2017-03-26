@@ -1364,8 +1364,11 @@ Private Sub LoadView()
     Dim i               As Integer          ' counter
     Dim iPos            As Integer          ' node position
     
-    Dim cGroups         As New Collection   ' group list
-    Dim cRemove         As New Collection   ' groups that have been added
+    Dim cGroups         As Collection       ' group list
+    Dim cRemove         As Collection       ' groups that have been added
+    
+    Set cGroups = New Collection
+    Set cRemove = New Collection
 
     ' clear treeview
     Call trvUsers.Nodes.Clear

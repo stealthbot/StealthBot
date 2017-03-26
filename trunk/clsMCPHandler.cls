@@ -396,7 +396,8 @@ End Sub
 Public Sub SEND_MCP_STARTUP()
 On Error GoTo ERROR_HANDLER
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.InsertNonNTString m_MCPData
     pBuff.InsertNTString m_UniqueUsername
     pBuff.SendPacketMCP MCP_STARTUP
@@ -462,7 +463,8 @@ End Sub
 Public Sub SEND_MCP_CHARCREATE(ByVal CharType As Long, ByVal CharFlags As Long, ByVal CharName As String)
 On Error GoTo ERROR_HANDLER
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.InsertDWord CharType
     pBuff.InsertWord CharFlags
     pBuff.InsertNTString CharName
@@ -486,7 +488,8 @@ On Error GoTo ERROR_HANDLER
     If m_RequestPending Then Exit Sub
     m_RequestPending = True
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.InsertNTString CharName
     pBuff.SendPacketMCP MCP_CHARLOGON
     Set pBuff = Nothing
@@ -509,7 +512,8 @@ On Error GoTo ERROR_HANDLER
     If m_RequestPending Then Exit Sub
     m_RequestPending = True
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.InsertWord Flags
     pBuff.InsertNTString CharName
     pBuff.SendPacketMCP MCP_CHARDELETE
@@ -529,7 +533,8 @@ End Sub
 Public Sub SEND_MCP_MOTD()
 On Error GoTo ERROR_HANDLER
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.SendPacketMCP MCP_MOTD
     Set pBuff = Nothing
 
@@ -550,7 +555,8 @@ On Error GoTo ERROR_HANDLER
     If m_RequestPending Then Exit Sub
     m_RequestPending = True
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.InsertNTString CharName
     pBuff.SendPacketMCP MCP_CHARUPGRADE
     Set pBuff = Nothing
@@ -569,7 +575,8 @@ End Sub
 Public Sub SEND_MCP_CHARLIST2(Optional ByVal NumCharacters = 8)
 On Error GoTo ERROR_HANDLER
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.InsertDWord NumCharacters
     pBuff.SendPacketMCP MCP_CHARLIST2
     Set pBuff = Nothing

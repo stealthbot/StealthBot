@@ -63,7 +63,8 @@ End Sub
 Public Sub SEND_BNLS_AUTHORIZE(Optional sBotID As String = vbNullString)
 On Error GoTo ERROR_HANDLER:
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.InsertNTString IIf(LenB(sBotID) = 0, "stealth", sBotID)
     pBuff.vLSendPacket BNLS_AUTHORIZE
     Set pBuff = Nothing
@@ -101,14 +102,17 @@ End Sub
 Private Sub SEND_BNLS_AUTHORIZEPROOF(lServerToken As Long, Optional sPassword As String = vbNullString)
 On Error GoTo ERROR_HANDLER:
 
-    Dim cCRC      As New clsCRC32
+    Dim cCRC      As clsCRC32
     Dim lChecksum As Long
-    Dim pBuff     As New clsDataBuffer
+    Dim pBuff     As clsDataBuffer
+    
+    Set cCRC = New clsCRC32
     
     lChecksum = cCRC.CRC32(StringFormat("{0}{1}", _
         IIf(LenB(sPassword) = 0, "gn1ftx14oc", sPassword), _
         ZeroOffset(lServerToken, 8)))
     
+    Set pBuff = New clsDataBuffer
     
     pBuff.InsertDWord lChecksum
     pBuff.vLSendPacket BNLS_AUTHORIZEPROOF
@@ -169,7 +173,8 @@ End Sub
 Public Sub SEND_BNLS_REQUESTVERSIONBYTE(Optional sProduct As String = vbNullString)
 On Error GoTo ERROR_HANDLER:
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     
     pBuff.InsertDWord GetBNLSProductID(IIf(LenB(sProduct) = 0, BotVars.Product, sProduct))
     pBuff.vLSendPacket BNLS_REQUESTVERSIONBYTE
@@ -234,7 +239,8 @@ End Sub
 Public Sub SEND_BNLS_VERSIONCHECKEX2(sCRevFileTime As String, sCRevFileName As String, sCRevSeeds As String, Optional sProduct As String = vbNullString, Optional lFlags As Long = 0, Optional lCookie As Long = 1)
 On Error GoTo ERROR_HANDLER:
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     
     With pBuff
         .InsertDWord GetBNLSProductID(sProduct)

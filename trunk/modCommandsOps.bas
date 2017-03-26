@@ -238,13 +238,15 @@ Public Sub OnGiveUp(Command As clsCommandObj)
     Dim i         As Integer
     Dim opsCount  As Integer
     Dim sUsername As String
-    Dim colUsers  As New Collection
+    Dim colUsers  As Collection
     
     If (Command.IsValid) Then
         sUsername = Command.Argument("Username")
         If (g_Channel.GetUserIndex(sUsername) > 0) Then
             If (g_Channel.Self.IsOperator) Then
                 opsCount = GetOpsCount
+                
+                Set colUsers = New Collection
                 
                 If (StrComp(g_Channel.Name, "Clan " & g_Clan.Name, vbTextCompare) = 0) Then
                     If (g_Clan.Self.Rank >= clrankChieftain) Then

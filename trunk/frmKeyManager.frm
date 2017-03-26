@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmKeyManager 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -311,9 +311,10 @@ Private Sub txtActiveKey_KeyPress(KeyAscii As Integer)
 End Sub
 
 Private Sub ProcessKey(ByVal sKey As String)
-    Dim oKey As New clsKeyDecoder
+    Dim oKey As clsKeyDecoder
     Dim KeyProduct As Long
-    
+
+    Set oKey = New clsKeyDecoder
     oKey.Initialize sKey
     If Not oKey.IsValid Then
         KeyProduct = -1
@@ -357,27 +358,27 @@ End Function
 
 
 Private Sub Local_LoadCDKeys()
-    Dim keys As Collection
+    Dim Keys As Collection
     Dim sKey As Variant
-    Set keys = ListFileLoad(GetFilePath(FILE_KEY_LIST))
+    Set Keys = ListFileLoad(GetFilePath(FILE_KEY_LIST))
     
-    For Each sKey In keys
+    For Each sKey In Keys
         sKey = CStr(Trim(sKey))
         If Len(sKey) > 0 Then ProcessKey sKey
     Next sKey
 End Sub
 
 Private Sub Local_WriteCDKeys()
-    Dim keys As Collection
+    Dim Keys As Collection
     Dim Item As ListItem
     
-    Set keys = New Collection
+    Set Keys = New Collection
     
     For Each Item In lvKeys.ListItems
-        keys.Add Item.Tag
+        Keys.Add Item.Tag
     Next Item
     
-    ListFileSave GetFilePath(FILE_KEY_LIST), keys
+    ListFileSave GetFilePath(FILE_KEY_LIST), Keys
     
-    Set keys = Nothing
+    Set Keys = Nothing
 End Sub

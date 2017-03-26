@@ -95,7 +95,8 @@ End Sub
 
 Public Sub SaveQuickChannels()
     Dim i As Integer
-    Dim QCCollection As New Collection
+    Dim QCCollection As Collection
+    Set QCCollection = New Collection
     
     For i = LBound(QC) To UBound(QC)
         If LenB(QC(i)) = 0 Then

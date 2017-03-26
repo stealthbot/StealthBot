@@ -33,7 +33,8 @@ End Sub
 Public Sub OnLoadWinamp(Command As clsCommandObj)
     ' This command will run Winamp from the default directory, or the directory
     ' specified within the configuration file.
-    Dim winamp As New clsWinamp
+    Dim winamp As clsWinamp
+    Set winamp = New clsWinamp
     
     If (BotVars.DisableMP3Commands) Then Exit Sub
     

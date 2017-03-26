@@ -4847,33 +4847,33 @@ Private Sub lblAccountManage_Click()
 End Sub
 
 Sub lblAddCurrentKey_Click()
-    Dim keys As Collection
+    Dim Keys As Collection
     Dim Item As Variant
     Dim Key1 As String
     Dim Key2 As String
     
     ' Load the list
-    Set keys = ListFileLoad(GetFilePath(FILE_KEY_LIST))
+    Set Keys = ListFileLoad(GetFilePath(FILE_KEY_LIST))
     
     Key1 = UCase$(CDKeyReplacements(txtCDKey.Text))
     Key2 = UCase$(CDKeyReplacements(txtExpKey.Text))
     
     ' if it's already there, do nothing.
-    For Each Item In keys
+    For Each Item In Keys
         If StrComp(CStr(Item), Key1, vbTextCompare) = 0 Then Key1 = vbNullString
         If StrComp(CStr(Item), Key2, vbTextCompare) = 0 Then Key2 = vbNullString
     Next Item
     
     ' Add the keys
-    If LenB(Key1) > 0 Then keys.Add Key1
-    If LenB(Key2) > 0 Then keys.Add Key2
+    If LenB(Key1) > 0 Then Keys.Add Key1
+    If LenB(Key2) > 0 Then Keys.Add Key2
     
     ' Save the list
     If LenB(Key1) > 0 Or LenB(Key2) > 0 Then
-        ListFileSave GetFilePath(FILE_KEY_LIST), keys
+        ListFileSave GetFilePath(FILE_KEY_LIST), Keys
     End If
     
-    Set keys = Nothing
+    Set Keys = Nothing
 End Sub
 
 Private Sub lblManageKeys_Click()
@@ -4974,7 +4974,7 @@ Private Function SaveSettings() As Boolean
     Dim s As String
     Dim Clients(6) As String
     Dim i As Long, j As Long
-    Dim colBNLS As New Collection
+    Dim colBNLS As Collection
     
     ' First, CDKey Length check and corresponding stuff that needs to run first:
     Select Case True
@@ -5051,6 +5051,7 @@ Private Function SaveSettings() As Boolean
     
     ' Save the BNLS server list
     With cboBNLSServer
+        Set colBNLS = New Collection
         j = -1
         
         ' Check if the set server is in the list
@@ -5064,10 +5065,11 @@ Private Function SaveSettings() As Boolean
         If j >= 0 Or .ListCount > 0 Then
             For j = 1 To .ListCount
                 If Not (Len(.List(j)) = 0) Then colBNLS.Add .List(j)
-            Next
+            Next j
             
             ListFileSave GetFilePath(FILE_BNLS_LIST), colBNLS
         End If
+        Set colBNLS = Nothing
     End With
     
     Config.AutoConnect = CBool(chkConnectOnStartup.Value)

@@ -1098,7 +1098,8 @@ End Function
 '// CRC32
 '// Returns the result of a standard CRC32 hash
 Public Function CRC32(ByRef str As String) As Long
-    Dim clsCRC32 As New clsCRC32
+    Dim clsCRC32 As clsCRC32
+    Set clsCRC32 = New clsCRC32
     
     CRC32 = clsCRC32.CRC32(StringToByteArr(str))
     
@@ -1178,7 +1179,8 @@ End Function
 '// CREATEKEYDECODER
 '// Creates a KeyDecoder object for decoding and hashing CD keys.
 Public Function CreateKeyDecoder(ByVal CDKey As String) As clsKeyDecoder
-    Dim KD As New clsKeyDecoder
+    Dim KD As clsKeyDecoder
+    Set KD = New clsKeyDecoder
     
     If KD.Initialize(CDKey) Then
         Set CreateKeyDecoder = KD

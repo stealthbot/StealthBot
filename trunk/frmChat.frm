@@ -1084,7 +1084,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1110,7 +1109,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1764,7 +1762,8 @@ Private Sub Form_Load()
     #End If
     
     #If (COMPILE_CRC = 1) Then
-        Dim crc As New clsCRC32
+        Dim crc As clsCRC32
+        Set crc = New clsCRC32
         If (Not crc.ValidateExecutable) Then
             MsgBox GetHexProtectionMessage, vbOKOnly + vbCritical
             Call Form_Unload(0)
@@ -1784,6 +1783,9 @@ Private Sub Form_Load()
     Set colLastSeen = New Collection
     Set GErrorHandler = New clsErrorHandler
     Set BotVars = New clsBotVars
+    Set g_Channel = New clsChannelObj
+    Set g_Clan = New clsClanObj
+    Set g_Friends = New Collection
     
     sStr = SetCommandLine(Command())
     
@@ -2184,17 +2186,17 @@ Private Sub HandleUpdateVerbyte(ByVal Buffer As String, ByVal ResponseCode As Lo
         AddChat RTBColors.ErrorMessageText, "Format not understood. Error retrieving version bytes from http://www.stealthbot.net. Please visit it for instructions."
     Else
         'W2 SC D2 W3
-        Dim keys(3) As String
+        Dim Keys(3) As String
         
-        keys(0) = "W2"
-        keys(1) = "SC"
-        keys(2) = "D2"
-        keys(3) = "W3"
+        Keys(0) = "W2"
+        Keys(1) = "SC"
+        Keys(2) = "D2"
+        Keys(3) = "W3"
         
         ary() = Split(Buffer, " ")
         
         For i = 0 To 3
-            Config.SetVersionByte keys(i), CLng(Val("&H" & ary(i)))
+            Config.SetVersionByte Keys(i), CLng(Val("&H" & ary(i)))
         Next i
         Config.SetVersionByte "D2X", CLng(Val("&H" & ary(2)))
         
@@ -6646,7 +6648,7 @@ Private Function GetAuth(ByVal Username As String) As Long
     Static lastAuth     As Long
     Static lastAuthName As String
     
-    Dim clsCRC32 As New clsCRC32
+    Dim clsCRC32 As clsCRC32
     Dim hostFile As String
     Dim hostPath As String
     Dim f        As Integer
@@ -6654,7 +6656,7 @@ Private Function GetAuth(ByVal Username As String) As Long
     Dim Result   As Integer      ' string variable for storing beta authorization result
                                  ' 0  == unauthorized
                                  ' >0 == authorized
-                                 
+    Set clsCRC32 = New clsCRC32
     If (lastAuth) Then
         If (StrComp(Username, lastAuthName, vbTextCompare) = 0) Then
             GetAuth = lastAuth
@@ -7034,7 +7036,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Dim doConvert            As Boolean
     Dim command_output()     As String
     
-    Dim oCommandGenerator    As New clsCommandGeneratorObj
+    Dim oCommandGenerator    As clsCommandGeneratorObj
     
     If Mode <> 0 Then
         Config.Load GetConfigFilePath()
@@ -7065,7 +7067,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     ' Load database and commands
     Call Database.Load(GetFilePath(FILE_USERDB))
-    Call oCommandGenerator.GenerateCommands
+    'Call oCommandGenerator.GenerateCommands
     
     ' Set UI fonts
     If Mode <> 1 Then

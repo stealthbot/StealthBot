@@ -442,12 +442,14 @@ Private Function CreateCommandInstance(ByRef commandString As String, ByVal strU
     
     On Error GoTo ERROR_HANDLER
     
-    Dim doc As New clsCommandDocObj
+    Dim doc As clsCommandDocObj
     Dim cmd As clsCommandObj
     
     Dim CommandName As String
     Dim commandArgs As String
     Dim tmp() As String
+    
+    Set doc = New clsCommandDocObj
     
     '// separate the command's name and args from the command string
     tmp = Split(commandString, " ", 2)

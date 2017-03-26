@@ -134,13 +134,15 @@ End Property
 ' Calculates the key's hash
 Public Function CalculateHash(ByVal ClientToken As Long, ByVal ServerToken As Long, Optional ByVal LogonSystem As Long = BNCS_NLS) As Boolean
 On Error GoTo ERROR_HANDLER:
-    Dim Buffer As New clsDataBuffer
+    Dim Buffer As clsDataBuffer
     
     ' if private value is 0
     If Not IsValid Then
         CalculateHash = False
         Exit Function
     End If
+    
+    Set Buffer = New clsDataBuffer
     
     With Buffer
         .InsertDWord ClientToken

@@ -20,10 +20,6 @@ Public Function ChatQueueTimerProc()
     Dim j            As Integer
     Dim lastTimer    As Long
     
-    If (g_Channel Is Nothing) Then
-        Exit Function
-    End If
-
     If (g_Channel.IsSilent) Then
         Exit Function
     End If

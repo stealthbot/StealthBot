@@ -418,11 +418,13 @@ End Function
 
 Private Function CheckMatch(sExpression As String, sData As String, Optional CaseSensitive As Boolean = True) As Boolean
 On Error GoTo ERROR_HANDLER
-    Dim mRegExp  As New RegExp
+    Dim mRegExp As RegExp
+    Set RegExp = New RegExp
     mRegExp.Global = True
     mRegExp.Pattern = sExpression
     mRegExp.IgnoreCase = (Not CaseSensitive)
     CheckMatch = mRegExp.Test(sData)
+    Set RegExp = Nothing
     
     Exit Function
     

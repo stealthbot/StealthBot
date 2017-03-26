@@ -28,11 +28,12 @@ End Function
 Public Function DoubleHashPassword(ByVal Password As String, ByVal ClientToken As Long, ByVal ServerToken As Long, Optional ByVal Version As enuSHA1Type = shaBrokenROL) As String
     Dim Data()   As Byte
     Dim Result() As Byte
-    Dim Buffer   As New clsDataBuffer
+    Dim Buffer   As clsDataBuffer
 
     Data = StringToByteArr(Password)
     Call CalculateSHA1(Data, Result, Version)
 
+    Set Buffer = New clsDataBuffer
     With Buffer
         .InsertDWord ClientToken
         .InsertDWord ServerToken

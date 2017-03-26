@@ -247,7 +247,8 @@ End Function
 Public Sub SEND_SID_CLIENTID()
 On Error GoTo ERROR_HANDLER:
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     With pBuff
         .InsertDWord 0
         .InsertDWord 0
@@ -322,8 +323,8 @@ End Sub
 Public Sub SEND_SID_STARTVERSIONING(Optional lVerByte As Long = 0)
 On Error GoTo ERROR_HANDLER:
 
-    Dim pBuff As New clsDataBuffer
-    
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     With pBuff
         .InsertDWord GetDWORDOverride(Config.PlatformID)                      'Platform ID
         .InsertDWord GetDWORD(BotVars.Product)                                'Product ID
@@ -331,7 +332,6 @@ On Error GoTo ERROR_HANDLER:
         .InsertDWord 0  'Unknown
         .SendPacket SID_STARTVERSIONING
     End With
-    
     Set pBuff = Nothing
     
     Exit Sub
@@ -410,6 +410,7 @@ End Sub
 '*******************************
 Public Sub SEND_SID_REPORTVERSION(Optional lVerByte As Long = 0)
 On Error GoTo ERROR_HANDLER:
+    Dim pBuff As clsDataBuffer
 
     If (Not BotVars.BNLS) Then
         If (Not CompileCheckrevision()) Then
@@ -424,7 +425,7 @@ On Error GoTo ERROR_HANDLER:
         Exit Sub
     End If
     
-    Dim pBuff As New clsDataBuffer
+    Set pBuff = New clsDataBuffer
     With pBuff
         .InsertDWord GetDWORDOverride(Config.PlatformID)                      'Platform ID
         .InsertDWord GetDWORD(BotVars.Product)                                'Product ID
@@ -434,7 +435,6 @@ On Error GoTo ERROR_HANDLER:
         .InsertNTString ds.CRevResult                                         'Result
         .SendPacket SID_REPORTVERSION
     End With
-    
     Set pBuff = Nothing
     
     Exit Sub
@@ -469,7 +469,8 @@ End Sub
 '*******************************
 Private Sub SEND_SID_ENTERCHAT()
 On Error GoTo ERROR_HANDLER:
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.InsertNTString BotVars.Username
     pBuff.InsertNTString Config.CustomStatstring
     pBuff.SendPacket SID_ENTERCHAT
@@ -488,7 +489,8 @@ End Sub
 '*******************************
 Public Sub SEND_SID_LEAVECHAT()
 On Error GoTo ERROR_HANDLER:
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.SendPacket SID_LEAVECHAT
     Set pBuff = Nothing
 
@@ -535,7 +537,8 @@ End Sub
 '*******************************
 Private Sub SEND_SID_GETCHANNELLIST()
 On Error GoTo ERROR_HANDLER:
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.InsertDWord GetDWORD(BotVars.Product)
     pBuff.SendPacket SID_GETCHANNELLIST
     Set pBuff = Nothing
@@ -556,7 +559,8 @@ On Error GoTo ERROR_HANDLER:
 
     If (LenB(sText) = 0) Then Exit Sub
     
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.InsertNTString sText
     pBuff.SendPacket SID_CHATCOMMAND
     Set pBuff = Nothing
@@ -671,7 +675,7 @@ On Error GoTo ERROR_HANDLER:
     Dim st As SYSTEMTIME
     Dim ft As FILETIME
     
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
     
     LanguageAbr = String$(256, 0)
     Call GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SABBREVLANGNAME, LanguageAbr, Len(LanguageAbr))
@@ -683,6 +687,7 @@ On Error GoTo ERROR_HANDLER:
     If (Not Len(CountryAbr) = 3) Then CountryAbr = "USA"
     If (LenB(CountryName) = 0) Then CountryName = "United States"
     
+    Set pBuff = New clsDataBuffer
     With pBuff
         Call GetSystemTime(st)
         Call SystemTimeToFileTime(st, ft)
@@ -728,7 +733,8 @@ End Sub
 Private Sub SEND_SID_UDPPINGRESPONSE()
 On Error GoTo ERROR_HANDLER:
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
 
     pBuff.InsertDWord GetDWORDOverride(Config.UDPString, &H626E6574)    'default: bnet
     pBuff.SendPacket SID_UDPPINGRESPONSE
@@ -800,7 +806,8 @@ End Sub
 Public Sub SEND_SID_CLIENTID2()
 On Error GoTo ERROR_HANDLER:
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     With pBuff
         .InsertDWord 1
         .InsertDWord 0
@@ -863,7 +870,8 @@ End Sub
 Private Sub SEND_SID_PING(ByVal lPingValue As Long)
 On Error GoTo ERROR_HANDLER:
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     
     SetNagelStatus frmChat.sckBNet.SocketHandle, False
     
@@ -1000,8 +1008,10 @@ End Sub
 '*******************************
 Public Sub SEND_SID_CDKEY()
 On Error GoTo ERROR_HANDLER:
-    Dim oKey As New clsKeyDecoder
-    Dim pBuff As New clsDataBuffer
+    Dim oKey As clsKeyDecoder
+    Dim pBuff As clsDataBuffer
+    
+    Set oKey = New clsKeyDecoder
     
     oKey.Initialize BotVars.CDKey
     If Not oKey.IsValid Then
@@ -1010,6 +1020,7 @@ On Error GoTo ERROR_HANDLER:
         Exit Sub
     End If
     
+    Set pBuff = New clsDataBuffer
     With pBuff
         .InsertBool (CanSpawn(BotVars.Product, oKey.KeyLength) And Config.UseSpawn)
         .InsertNTString BotVars.CDKey
@@ -1085,7 +1096,7 @@ Public Sub SEND_SID_CHANGEPASSWORD()
 On Error GoTo ERROR_HANDLER:
     Dim sHash As String
     Dim sHash2 As String
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
 
     frmChat.tmrAccountLock.Enabled = True
     frmChat.tmrAccountLock.Tag = ACCOUNT_MODE_CHPWD
@@ -1096,6 +1107,8 @@ On Error GoTo ERROR_HANDLER:
         sHash = DoubleHashPassword(LCase$(Config.Password), ds.ClientToken, ds.ServerToken)
         sHash2 = DoubleHashPassword(LCase$(Config.NewPassword), ds.ClientToken, ds.ServerToken)
     End If
+
+    Set pBuff = New clsDataBuffer
 
     With pBuff
         .InsertDWord ds.ClientToken
@@ -1168,9 +1181,10 @@ End Sub
 '*******************************
 Public Sub SEND_SID_CDKEY2()
 On Error GoTo ERROR_HANDLER:
-    Dim oKey     As New clsKeyDecoder
-    Dim pBuff As New clsDataBuffer
+    Dim oKey  As clsKeyDecoder
+    Dim pBuff As clsDataBuffer
     
+    Set oKey = New clsKeyDecoder
     oKey.Initialize BotVars.CDKey
     If Not oKey.IsValid Then
         frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
@@ -1180,6 +1194,7 @@ On Error GoTo ERROR_HANDLER:
 
     If Not oKey.CalculateHash(ds.ClientToken, ds.ServerToken, BNCS_OLS) Then Exit Sub
     
+    Set pBuff = New clsDataBuffer
     With pBuff
         .InsertBool (CanSpawn(BotVars.Product, oKey.KeyLength) And Config.UseSpawn)
         .InsertDWord oKey.KeyLength
@@ -1285,7 +1300,7 @@ End Sub
 Public Sub SEND_SID_LOGONRESPONSE2()
 On Error GoTo ERROR_HANDLER:
     Dim sHash As String
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
 
     frmChat.tmrAccountLock.Enabled = True
     frmChat.tmrAccountLock.Tag = ACCOUNT_MODE_LOGON
@@ -1295,6 +1310,7 @@ On Error GoTo ERROR_HANDLER:
         sHash = DoubleHashPassword(LCase$(Config.Password), ds.ClientToken, ds.ServerToken)
     End If
     
+    Set pBuff = New clsDataBuffer
     With pBuff
         .InsertDWord ds.ClientToken
         .InsertDWord ds.ServerToken
@@ -1372,6 +1388,7 @@ End Sub
 Public Sub SEND_SID_CREATEACCOUNT2()
 On Error GoTo ERROR_HANDLER:
     
+    Dim pBuff As clsDataBuffer
     Dim sHash As String
     If Not Config.UseLowerCasePassword Then
         sHash = HashPassword(Config.Password)
@@ -1379,7 +1396,7 @@ On Error GoTo ERROR_HANDLER:
         sHash = HashPassword(LCase$(Config.Password))
     End If
     
-    Dim pBuff As New clsDataBuffer
+    Set pBuff = New clsDataBuffer
     With pBuff
         .InsertNonNTString sHash
         .InsertNTString Config.Username
@@ -1486,7 +1503,8 @@ On Error GoTo ERROR_HANDLER:
     
     If (LenB(sRealmTitle) = 0) Then Exit Sub
     
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.InsertDWord ds.ClientToken
     pBuff.InsertNonNTString DoubleHashPassword(sRealmServerPassword, ds.ClientToken, ds.ServerToken)
     pBuff.InsertNTString sRealmTitle
@@ -1564,7 +1582,8 @@ End Sub
 Public Sub SEND_SID_QUERYREALMS2()
 On Error GoTo ERROR_HANDLER:
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.SendPacket SID_QUERYREALMS2
     Set pBuff = Nothing
     
@@ -1671,7 +1690,8 @@ On Error GoTo ERROR_HANDLER:
     Dim CountryAbr  As String
     Dim CountryName As String
     
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     
     LocalIP = inet_addr(frmChat.sckBNet.LocalIP)
 
@@ -1785,11 +1805,11 @@ End Sub
 Public Sub SEND_SID_AUTH_CHECK()
 On Error GoTo ERROR_HANDLER:
     
-    Dim pBuff    As New clsDataBuffer
-    Dim i        As Long
-    Dim Keys     As Long
-    Dim sKey     As String
-    Dim oKey     As New clsKeyDecoder
+    Dim i     As Long
+    Dim Keys  As Long
+    Dim sKey  As String
+    Dim oKey  As clsKeyDecoder
+    Dim pBuff As clsDataBuffer
     
     If (Not BotVars.BNLS) Then
         If (Not CompileCheckrevision()) Then
@@ -1806,6 +1826,7 @@ On Error GoTo ERROR_HANDLER:
     
     Keys = GetCDKeyCount
     
+    Set pBuff = New clsDataBuffer
     With pBuff
         .InsertDWord ds.ClientToken  'Client Token
         .InsertDWord ds.CRevVersion  'CRev Version
@@ -1823,6 +1844,7 @@ On Error GoTo ERROR_HANDLER:
             End If
             
             'Initialize the key decoder and validate the key.
+            Set oKey = New clsKeyDecoder
             oKey.Initialize sKey
             If Not oKey.IsValid Then
                 frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
@@ -1909,12 +1931,15 @@ End Sub
 Public Sub SEND_SID_AUTH_ACCOUNTCREATE()
 On Error GoTo ERROR_HANDLER:
 
-    Dim oNLS As New clsNLS
+    Dim oNLS  As clsNLS
+    Dim pBuff As clsDataBuffer
+    
+    Set oNLS = New clsNLS
 
     Call oNLS.Initialize(Config.Username, Config.Password)
     Call oNLS.GenerateSaltAndVerifier
 
-    Dim pBuff As New clsDataBuffer
+    Set pBuff = New clsDataBuffer
     With pBuff
         .InsertNonNTString oNLS.Srp_Salt
         .InsertNonNTString oNLS.Srp_v
@@ -1997,7 +2022,8 @@ On Error GoTo ERROR_HANDLER:
     frmChat.tmrAccountLock.Tag = ACCOUNT_MODE_LOGON
     Call ds.NLS.Initialize(Config.Username, Config.Password)
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.InsertNonNTString ds.NLS.Srp_A
     pBuff.InsertNTString ds.NLS.Username
     pBuff.SendPacket SID_AUTH_ACCOUNTLOGON
@@ -2091,7 +2117,8 @@ End Sub
 Private Sub SEND_SID_AUTH_ACCOUNTLOGONPROOF()
 On Error GoTo ERROR_HANDLER:
     
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     With pBuff
         .InsertNonNTString ds.NLS.Srp_M1
         .SendPacket SID_AUTH_ACCOUNTLOGONPROOF
@@ -2157,7 +2184,8 @@ On Error GoTo ERROR_HANDLER:
     frmChat.tmrAccountLock.Tag = ACCOUNT_MODE_CHPWD
     Call ds.NLS.Initialize(Config.Username, Config.Password)
 
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     pBuff.InsertNonNTString ds.NLS.Srp_A
     pBuff.InsertNTString ds.NLS.Username
     pBuff.SendPacket SID_AUTH_ACCOUNTCHANGE
@@ -2234,12 +2262,15 @@ End Sub
 Public Sub SEND_SID_AUTH_ACCOUNTCHANGEPROOF()
 On Error GoTo ERROR_HANDLER:
 
-    Dim oNLS As New clsNLS
+    Dim oNLS  As clsNLS
+    Dim pBuff As clsDataBuffer
+    
+    Set oNLS = New clsNLS
 
     Call oNLS.Initialize(Config.Username, Config.NewPassword)
     Call oNLS.GenerateSaltAndVerifier
-
-    Dim pBuff As New clsDataBuffer
+    
+    Set pBuff = New clsDataBuffer
     With pBuff
         .InsertNonNTString ds.NLS.Srp_M1
         .InsertNonNTString oNLS.Srp_Salt
@@ -2284,7 +2315,8 @@ End Sub
 Public Sub SEND_SID_SETEMAIL(sEMailAddress As String)
 On Error GoTo ERROR_HANDLER:
     
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     With pBuff
         .InsertNTString sEMailAddress
         .SendPacket SID_SETEMAIL
@@ -2306,7 +2338,8 @@ End Sub
 Public Sub SEND_SID_RESETPASSWORD()
 On Error GoTo ERROR_HANDLER:
     
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     With pBuff
         .InsertNTString Config.Username
         .InsertNTString Config.RegisterEmailDefault
@@ -2330,7 +2363,8 @@ End Sub
 Public Sub SEND_SID_CHANGEEMAIL()
 On Error GoTo ERROR_HANDLER:
     
-    Dim pBuff As New clsDataBuffer
+    Dim pBuff As clsDataBuffer
+    Set pBuff = New clsDataBuffer
     With pBuff
         .InsertNTString Config.Username
         .InsertNTString Config.RegisterEmailDefault

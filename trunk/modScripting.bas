@@ -79,7 +79,7 @@ Public Sub LoadScripts()
     On Error GoTo ERROR_HANDLER
 
     Dim CurrentModule As Module
-    Dim Paths         As New Collection
+    Dim Paths         As Collection
     Dim strPath       As String
     Dim FileName      As String
     Dim fileExt       As String
@@ -91,6 +91,8 @@ Public Sub LoadScripts()
 
     ' check whether the override is disabling the script system
     If m_SystemDisabled Then Exit Sub
+    
+    Set Paths = New Collection
 
     ' ********************************
     '      LOAD SCRIPTS
@@ -822,7 +824,7 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
     On Error Resume Next
 
     Dim obj As scObj
-    Dim scriptName As String
+    Dim ScriptName As String
     
     If SCModule Is Nothing Then Exit Function
     
@@ -860,7 +862,7 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
     ' store our module handle
     Set obj.SCModule = SCModule
     
-    scriptName = GetScriptName(SCModule.Name)
+    ScriptName = GetScriptName(SCModule.Name)
     
     ' grab/create instance of object
     Select Case (UCase$(ObjType))
@@ -915,7 +917,7 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
             If (ObjCount("Menu", SCModule) = 0) Then
                 Dim tmp As clsMenuObj
                 ' get the dynamic menu dash
-                Set tmp = DynamicMenus("dashmnu" & scriptName)
+                Set tmp = DynamicMenus("dashmnu" & ScriptName)
                 ' show it
                 tmp.Visible = True
                 tmp.Caption = "-"
@@ -926,7 +928,7 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
             obj.obj.Name = ObjName
             
             obj.obj.Parent = _
-                DynamicMenus("mnu" & scriptName)
+                DynamicMenus("mnu" & ScriptName)
                 
             DynamicMenus.Add obj.obj
     End Select
@@ -1295,27 +1297,27 @@ Public Function Scripts() As Object
     Dim i   As Integer
     Dim str As String
     Dim SCModule As Module
-    Dim scriptName As String
+    Dim ScriptName As String
 
     Set Scripts = New Collection
 
     For i = 2 To frmChat.SControl.Modules.Count
-        scriptName = GetScriptName(CStr(i))
+        ScriptName = GetScriptName(CStr(i))
         
         str = GetScriptModule.CodeObject.GetSettingsEntry("Public")
         
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
-            Scripts.Add frmChat.SControl.Modules(i).CodeObject, scriptName
+            Scripts.Add frmChat.SControl.Modules(i).CodeObject, ScriptName
         End If
     Next i
 
 End Function
 
-Public Function GetModuleByName(ByVal scriptName As String) As Module
+Public Function GetModuleByName(ByVal ScriptName As String) As Module
     Dim i As Integer
     
     For i = 2 To frmChat.SControl.Modules.Count
-        If (StrComp(GetScriptName(CStr(i)), scriptName, vbTextCompare) = 0) Then
+        If (StrComp(GetScriptName(CStr(i)), ScriptName, vbTextCompare) = 0) Then
             Set GetModuleByName = frmChat.SControl.Modules(i)
             Exit Function
         End If
@@ -1400,13 +1402,13 @@ Public Function ValidObjectName(sName As String) As Boolean
 End Function
 
 Public Function ConvertStringArray(sArr() As String) As Variant()
-  Dim vArr() As Variant
-  Dim x As Integer
-  ReDim vArr(LBound(sArr) To UBound(sArr))
-  For x = LBound(sArr) To UBound(sArr)
-    vArr(x) = CVar(sArr(x))
-  Next x
-  ConvertStringArray = vArr
+    Dim vArr() As Variant
+    Dim x As Integer
+    ReDim vArr(LBound(sArr) To UBound(sArr))
+    For x = LBound(sArr) To UBound(sArr)
+        vArr(x) = CVar(sArr(x))
+    Next x
+    ConvertStringArray = vArr
 End Function
 
 Public Sub SC_Error()
@@ -1501,18 +1503,18 @@ Public Sub SC_Error()
 End Sub
 
 ' get currently executing module (can be nothing!)
-Public Function GetScriptModule(Optional ByVal scriptName As String = vbNullString) As Module
+Public Function GetScriptModule(Optional ByVal ScriptName As String = vbNullString) As Module
 
     On Error GoTo ERROR_HANDLER
     
     Dim i As Integer
     
     ' only loop if the scriptname was provided
-    If LenB(scriptName) > 0 Then
+    If LenB(ScriptName) > 0 Then
         ' loop through modules
         For i = 2 To m_sc_control.Modules.Count
             ' if Script("Name") = ScriptName then
-            If StrComp(GetScriptName(CStr(i)), scriptName, vbTextCompare) = 0 Then
+            If StrComp(GetScriptName(CStr(i)), ScriptName, vbTextCompare) = 0 Then
                 ' return this module
                 Set GetScriptModule = m_sc_control.Modules(i)
                 
@@ -1540,18 +1542,18 @@ End Function
 ' get the module.Name for the provided script name
 ' returns the currently executing one if none provided
 ' if the currently executing one is nothing (/exec), "exec" is returned
-Public Function GetModuleID(Optional ByVal scriptName As String = vbNullString) As String
+Public Function GetModuleID(Optional ByVal ScriptName As String = vbNullString) As String
 
     On Error GoTo ERROR_HANDLER
     
     Dim i As Integer
     
     ' only loop if the scriptname was provided
-    If LenB(scriptName) > 0 Then
+    If LenB(ScriptName) > 0 Then
         ' loop through modules
         For i = 2 To m_sc_control.Modules.Count
             ' if Script("Name") = ScriptName then
-            If StrComp(GetScriptName(CStr(i)), scriptName, vbTextCompare) = 0 Then
+            If StrComp(GetScriptName(CStr(i)), ScriptName, vbTextCompare) = 0 Then
                 ' return this ID
                 GetModuleID = m_sc_control.Modules(i).Name
                 Exit Function
@@ -1795,7 +1797,8 @@ End Function
 ' dictionary for the specified module
 Private Function SetScriptDictionary(ByRef mdl As Module)
     ' let's store a dictionary into the specified CodeObject.Script
-    Dim Dict As New Scripting.Dictionary
+    Dim Dict As Scripting.Dictionary
+    Set Dict = New Scripting.Dictionary
     ' make Script object keys case-insensitive
     Dict.CompareMode = TextCompare
     ' store it

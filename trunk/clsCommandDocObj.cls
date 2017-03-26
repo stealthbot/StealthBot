@@ -517,10 +517,13 @@ Private Sub WriteDocToFile(ByVal FilePath As String)
 
     On Error GoTo ERROR_HANDLER
 
-    Dim reader As New SAXXMLReader60 '// create the SAX reader
-    Dim writer As New MXXMLWriter60  '// create the XML writer
+    Dim reader As SAXXMLReader60 '// create the SAX reader
+    Dim writer As MXXMLWriter60  '// create the XML writer
 
     Dim iFileNo As Integer
+    
+    Set reader = New SAXXMLReader60
+    Set writer = New MXXMLWriter60
 
     '// set properties on the XML writer
     writer.byteOrderMark = True
