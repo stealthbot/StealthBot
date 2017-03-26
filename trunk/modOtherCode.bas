@@ -757,7 +757,7 @@ Public Sub AddName(ByVal Username As String, ByVal AccountName As String, ByVal 
         '.Refresh
     End With
     
-    frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
+    frmChat.ListviewTabs_Click 0
 End Sub
 
 

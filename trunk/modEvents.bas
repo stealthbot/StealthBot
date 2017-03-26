@@ -401,7 +401,7 @@ Public Sub Event_LeftChatEnvironment()
     
     SetTitle GetCurrentUsername & ", online on " & BotVars.Gateway
     
-    frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
+    frmChat.ListviewTabs_Click 0
     
     frmChat.AddChat RTBColors.JoinedChannelText, "-- Left channel --"
     
@@ -1120,8 +1120,6 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         'frmChat.AddChat vbRed, UserObj.Stats.IconCode
     
         AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, UserObj.Clan
-            
-        frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
         
         frmChat.ListviewTabs_Click 0
         
@@ -1415,9 +1413,6 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         ' add to user list
         AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, UserObj.Clan
         
-        ' update caption
-        frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString
-        
         ' focus on channel tab
         frmChat.ListviewTabs_Click 0
         
@@ -1562,8 +1557,6 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
 
             .Refresh
         End With
-        
-        frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
         
         frmChat.ListviewTabs_Click 0
         

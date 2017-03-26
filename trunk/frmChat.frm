@@ -24,6 +24,7 @@ Begin VB.Form frmChat
       TabIndex        =   1
       TabStop         =   0   'False
       Top             =   240
+      Visible         =   0   'False
       Width           =   3705
       _ExtentX        =   6535
       _ExtentY        =   11245
@@ -985,6 +986,7 @@ Begin VB.Form frmChat
       TabIndex        =   5
       TabStop         =   0   'False
       Top             =   240
+      Visible         =   0   'False
       Width           =   3705
       _ExtentX        =   6535
       _ExtentY        =   11245
@@ -1037,6 +1039,7 @@ Begin VB.Form frmChat
       TabIndex        =   2
       TabStop         =   0   'False
       Top             =   240
+      Visible         =   0   'False
       Width           =   3705
       _ExtentX        =   6535
       _ExtentY        =   11245
@@ -2388,7 +2391,7 @@ Sub Event_BNetError(ErrorNumber As Integer, Description As String)
     lvClanList.ListItems.Clear
     lvFriendList.ListItems.Clear
     
-    lblCurrentChannel.Caption = GetChannelString
+    ListviewTabs_Click 0
     
     ' NOV 18 04 Change here should fix the attention-grabbing on errors
     'If Me.WindowState <> vbMinimized Then cboSend.SetFocus
@@ -3005,9 +3008,7 @@ Private Sub ClanHandler_GetMemberList(ByVal Cookie As Long, ByRef Members() As c
             RunInAll "Event_ClanMemberList", Members(i).DisplayName, Members(i).Rank, Members(i).Status
         End If
     Next i
-
-    lblCurrentChannel.Caption = GetChannelString()
-
+    
     frmChat.ListviewTabs_Click 0
 End Sub
 
@@ -3207,7 +3208,7 @@ Private Sub ClanHandler_RemoveMemberReply(ByVal Cookie As Long, ByVal Result As 
                 AddChat RTBColors.InformationText, "[CLAN] You failed to remove that user from the clan."
         End Select
 
-        lblCurrentChannel.Caption = GetChannelString
+        ListviewTabs_Click 0
     Else
         On Error Resume Next
         RunInAll "Event_ClanRemoveUserReply", Result
@@ -3384,14 +3385,13 @@ Public Sub AddFriend(ByVal Username As String, ByVal Product As String, IsOnline
         Set f = Nothing
     End If
     
-    lblCurrentChannel.Caption = GetChannelString()
-    
-    frmChat.ListviewTabs_Click 0
+    ListviewTabs_Click 0
 End Sub
 
 Private Sub FriendListHandler_FriendAdded(ByVal Username As String, ByVal Product As String, ByVal Location As Byte, ByVal Status As Byte, ByVal Channel As String)
     AddFriend Username, Product, (Location > 0)
-    lblCurrentChannel.Caption = GetChannelString
+
+    ListviewTabs_Click 0
 End Sub
 
 Private Sub FriendListHandler_FriendListReceived(ByVal FriendCount As Byte)
@@ -3400,7 +3400,8 @@ End Sub
 
 Private Sub FriendListHandler_FriendListEntry(ByVal Username As String, ByVal Product As String, ByVal Channel As String, ByVal Status As Byte, ByVal Location As Byte)
     AddFriend Username, Product, (Location > 0)
-    lblCurrentChannel.Caption = GetChannelString
+    
+    ListviewTabs_Click 0
 End Sub
 
 Private Sub FriendListHandler_FriendMoved()
@@ -3418,7 +3419,7 @@ Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
         Set flItem = Nothing
     End If
     
-    lblCurrentChannel.Caption = GetChannelString
+    ListviewTabs_Click 0
 End Sub
 
 Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLIndex As Byte)
@@ -3484,34 +3485,28 @@ End Sub
 
 Public Sub ListviewTabs_Click(PreviousTab As Integer)
     Dim CurrentTab As Integer
-    
+    Dim PrevListView As ListView
+    Dim CurrListView As ListView
+
     CurrentTab = ListviewTabs.Tab
+    If CurrentTab <> PreviousTab Then
+        Select Case CurrentTab
+            Case LVW_BUTTON_CHANNEL: Set CurrListView = lvChannel
+            Case LVW_BUTTON_FRIENDS: Set CurrListView = lvFriendList
+            Case LVW_BUTTON_CLAN:    Set CurrListView = lvClanList
+        End Select
+        CurrListView.Visible = True
+        CurrListView.HideSelection = True
     
-    Select Case CurrentTab
-        Case LVW_BUTTON_CHANNEL ' = 0 = Channel button clicked
-            lblCurrentChannel.ToolTipText = "Currently in " & g_Channel.sType() & _
-                " channel " & g_Channel.Name & " (" & g_Channel.Users.Count & ")"
-            
-            lvChannel.ZOrder vbBringToFront
-            
-        Case LVW_BUTTON_FRIENDS ' = 1 = Friends button clicked
-            lblCurrentChannel.ToolTipText = "Currently viewing " & g_Friends.Count & " friends"
-        
-            lvFriendList.ZOrder vbBringToFront
-            
-        Case LVW_BUTTON_CLAN ' = 2 = Clan button clicked
-            lblCurrentChannel.ToolTipText = "Currently viewing " & _
-                g_Clan.Members.Count & " members of Clan " & g_Clan.Name
-        
-            lvClanList.ZOrder vbBringToFront
-            
-    End Select
-    
-    lvChannel.HideSelection = True
-    lvFriendList.HideSelection = True
-    lvClanList.HideSelection = True
-    
-    lblCurrentChannel.Caption = GetChannelString
+        Select Case PreviousTab
+            Case LVW_BUTTON_CHANNEL: Set PrevListView = lvChannel
+            Case LVW_BUTTON_FRIENDS: Set PrevListView = lvFriendList
+            Case LVW_BUTTON_CLAN:    Set PrevListView = lvClanList
+        End Select
+        PrevListView.Visible = False
+    End If
+
+    Call SetChannelListViewCaption
 End Sub
 
 ' This procedure relies on code in RecordcboSendSelInfo() that sets global variables
@@ -6331,7 +6326,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
             
             Call LockWindowUpdate(&H0)
             
-            lblCurrentChannel.Caption = GetChannelString()
+            ListviewTabs_Click 0
         End If
     
         tmrSilentChannel(0).Enabled = False
@@ -7882,21 +7877,32 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     MatchIndex = 1
 End Function
 
-Function GetChannelString() As String
-    If Not g_Online Then
-        GetChannelString = vbNullString
-    Else
-        Select Case ListviewTabs.Tab
-            Case 0:
-                If LenB(g_Channel.Name) = 0 Then
-                    GetChannelString = BotVars.Gateway
-                Else
-                    GetChannelString = g_Channel.Name & " (" & lvChannel.ListItems.Count & ")"
-                End If
-            Case 1: GetChannelString = "Friends (" & lvFriendList.ListItems.Count & ")"
-            Case 2: GetChannelString = "Clan " & g_Clan.Name & " (" & lvClanList.ListItems.Count & " members)"
-        End Select
-    End If
+Private Function SetChannelListViewCaption() As String
+    With lblCurrentChannel
+        If Not g_Online Then
+            .Caption = vbNullString
+            .ToolTipText = "Currently offline."
+        Else
+            Select Case ListviewTabs.Tab
+                Case LVW_BUTTON_CHANNEL:
+                    If LenB(g_Channel.Name) = 0 Then
+                        .Caption = BotVars.Gateway
+                        .ToolTipText = StringFormat("Currently online on {0}.", BotVars.Gateway)
+                    Else
+                        .Caption = StringFormat("{0} ({1})", _
+                                g_Channel.Name, g_Channel.Users.Count)
+                        .ToolTipText = StringFormat("Currently in {2} channel {0} ({1}).", _
+                                g_Channel.Name, g_Channel.Users.Count, g_Channel.sType())
+                    End If
+                Case LVW_BUTTON_FRIENDS
+                    .Caption = StringFormat("Your Friends ({0})", lvFriendList.ListItems.Count)
+                    .ToolTipText = StringFormat("Currently viewing {0} friends.", lvFriendList.ListItems.Count)
+                Case LVW_BUTTON_CLAN
+                    .Caption = StringFormat("Clan {0} ({1} members)", g_Clan.Name, lvClanList.ListItems.Count)
+                    .ToolTipText = StringFormat("Currently viewing {1} members of Clan {0}.", g_Clan.Name, lvClanList.ListItems.Count)
+            End Select
+        End If
+    End With
 End Function
 
 'this is a fucking mess. It reads:
@@ -7939,18 +7945,18 @@ Public Sub cmdShowHide_Click()
 End Sub
 
 '// to be called on every successful login
-Sub InitListviewTabs()
+Public Sub InitListviewTabs()
     ListviewTabs.TabEnabled(LVW_BUTTON_FRIENDS) = Config.FriendsListTab
     ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = g_Clan.InClan
 End Sub
 
 '// to be called at disconnect time
-Sub DisableListviewTabs()
+Public Sub DisableListviewTabs()
     ListviewTabs.TabEnabled(LVW_BUTTON_FRIENDS) = False
     ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
 End Sub
 
-Sub AddClanMember(ByVal Name As String, ByVal Rank As Integer, ByVal Online As Integer, Optional ByVal Index As Integer = 1)
+Private Sub AddClanMember(ByVal Name As String, ByVal Rank As Integer, ByVal Online As Integer, Optional ByVal Index As Integer = 1)
 On Error GoTo ERROR_HANDLER:
     Dim RankIcon As Integer
     
@@ -7979,11 +7985,9 @@ On Error GoTo ERROR_HANDLER:
         .ListItems(.ListItems.Count).ListSubItems.Add , , , Online
         .ListItems(.ListItems.Count).ListSubItems.Add , , RankIcon
     End With
-    
-    lblCurrentChannel.Caption = GetChannelString()
-    
+
     frmChat.ListviewTabs_Click 0
-    
+
     Exit Sub
 ERROR_HANDLER:
     AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddClanMember", Err.Number, Err.Description)
