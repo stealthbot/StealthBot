@@ -16,103 +16,103 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_event_id    As Long
-Private m_gtc         As Currency
-Private m_ping        As Long
-Private m_flags       As Long
-Private m_message     As String
-Private m_clan        As String
-Private m_game_id     As String
-Private m_icon_code   As String
-Private m_stat_string As String
-Private m_displayed   As Boolean
+Private m_EventID     As Long
+Private m_GTC         As Currency
+Private m_Ping        As Long
+Private m_Flags       As Long
+Private m_Message     As String
+Private m_Clan        As String
+Private m_GameID      As String
+Private m_IconCode    As String
+Private m_Statstring  As String
+Private m_Displayed   As Boolean
 
 Private Sub Class_Initialize()
     EventTick = GetTickCountMS()
 End Sub
 
 Public Property Get EventID() As Long
-    EventID = m_event_id
+    EventID = m_EventID
 End Property
 
 Public Property Let EventID(ByVal lng As Long)
-    m_event_id = lng
+    m_EventID = lng
 End Property
 
 Public Property Let EventTick(ByVal lng As Currency)
-    m_gtc = lng
+    m_GTC = lng
 End Property
 
 
 Public Property Get EventTick() As Currency
-    EventTick = m_gtc
+    EventTick = m_GTC
 End Property
 
 Public Property Get Ping() As Long
-    Ping = m_ping
+    Ping = m_Ping
 End Property
 
 Public Property Let Ping(ByVal lng As Long)
-    m_ping = lng
+    m_Ping = lng
 End Property
 
 Public Property Get Flags() As Long
-    Flags = m_flags
+    Flags = m_Flags
 End Property
 
 Public Property Let Flags(ByVal lng As Long)
-    m_flags = lng
+    m_Flags = lng
 End Property
 
 Public Property Get Message() As String
-    Message = m_message
+    Message = m_Message
 End Property
 
 Public Property Let Message(ByVal str As String)
-    m_message = str
+    m_Message = str
 End Property
 
 Public Property Get GameID() As String
-    GameID = m_game_id
+    GameID = m_GameID
 End Property
 
 Public Property Let GameID(ByVal str As String)
-    m_game_id = str
+    m_GameID = str
 End Property
 
 Public Property Get Clan() As String
-    Clan = m_clan
+    Clan = m_Clan
 End Property
 
 Public Property Let Clan(ByVal str As String)
-    m_clan = str
+    m_Clan = str
 End Property
 
 Public Property Get Statstring() As String
-    Statstring = m_stat_string
+    Statstring = m_Statstring
 End Property
 
 Public Property Let Statstring(ByVal str As String)
-    m_stat_string = str
+    m_Statstring = str
 End Property
 
 Public Property Get IconCode() As String
-    IconCode = m_icon_code
+    IconCode = m_IconCode
 End Property
 
 Public Property Let IconCode(ByVal str As String)
-    m_icon_code = str
+    m_IconCode = str
 End Property
 
 Public Property Get Displayed() As Boolean
     ' returns whether this event has been displayed in the RTB, useful for combining events
     ' in messages if chatdelay > 0, such as ops acquired and stats updates
-    Displayed = m_displayed
+    Displayed = m_Displayed
 End Property
 
 Public Property Let Displayed(ByVal bln As Boolean)
     ' sets whether this event has been displayed in the RTB
-    m_displayed = bln
+    m_Displayed = bln
 End Property
 
 Public Function Clone() As Object

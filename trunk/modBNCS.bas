@@ -327,7 +327,7 @@ On Error GoTo ERROR_HANDLER:
     Set pBuff = New clsDataBuffer
     With pBuff
         .InsertDWord GetDWORDOverride(Config.PlatformID)                      'Platform ID
-        .InsertDWord GetDWORD(BotVars.Product)                                'Product ID
+        .InsertDWord GetDWord(BotVars.Product)                                'Product ID
         .InsertDWord IIf(lVerByte = 0, GetVerByte(BotVars.Product), lVerByte) 'VersionByte
         .InsertDWord 0  'Unknown
         .SendPacket SID_STARTVERSIONING
@@ -351,7 +351,7 @@ On Error GoTo ERROR_HANDLER:
     Dim sInfo    As String
     Dim bSuccess As Boolean
 
-    lResult = pBuff.GetDWORD
+    lResult = pBuff.GetDWord
     sInfo = pBuff.GetString
     bSuccess = False
 
@@ -428,7 +428,7 @@ On Error GoTo ERROR_HANDLER:
     Set pBuff = New clsDataBuffer
     With pBuff
         .InsertDWord GetDWORDOverride(Config.PlatformID)                      'Platform ID
-        .InsertDWord GetDWORD(BotVars.Product)                                'Product ID
+        .InsertDWord GetDWord(BotVars.Product)                                'Product ID
         .InsertDWord IIf(lVerByte = 0, GetVerByte(BotVars.Product), lVerByte) 'VersionByte
         .InsertDWord ds.CRevVersion                                           'Exe Version
         .InsertDWord ds.CRevChecksum                                          'Checksum
@@ -539,7 +539,7 @@ Private Sub SEND_SID_GETCHANNELLIST()
 On Error GoTo ERROR_HANDLER:
     Dim pBuff As clsDataBuffer
     Set pBuff = New clsDataBuffer
-    pBuff.InsertDWord GetDWORD(BotVars.Product)
+    pBuff.InsertDWord GetDWord(BotVars.Product)
     pBuff.SendPacket SID_GETCHANNELLIST
     Set pBuff = Nothing
     
@@ -601,12 +601,12 @@ Private Sub RECV_SID_CHATEVENT(pBuff As clsDataBuffer)
     Dim sClanTag As String
     Dim sW3Icon  As String
     
-    EventID = pBuff.GetDWORD
-    lFlags = pBuff.GetDWORD
-    lPing = pBuff.GetDWORD
-    pBuff.GetDWORD                  'IP Address
-    pBuff.GetDWORD                  'Account Number
-    pBuff.GetDWORD                  'Reg Auth
+    EventID = pBuff.GetDWord
+    lFlags = pBuff.GetDWord
+    lPing = pBuff.GetDWord
+    pBuff.GetDWord                  'IP Address
+    pBuff.GetDWord                  'Account Number
+    pBuff.GetDWord                  'Reg Auth
     
     Select Case EventID
         Case ID_JOIN, ID_LEAVE, ID_USER, ID_USERFLAGS: ' user events: always encode statstring ANSI
@@ -757,7 +757,7 @@ End Sub
 Private Sub RECV_SID_MESSAGEBOX(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
 
-    Call Event_MessageBox(pBuff.GetDWORD, pBuff.GetString(UTF8), pBuff.GetString(UTF8))
+    Call Event_MessageBox(pBuff.GetDWord, pBuff.GetString(UTF8), pBuff.GetString(UTF8))
     
     Exit Sub
 ERROR_HANDLER:
@@ -774,8 +774,8 @@ End Sub
 Private Sub RECV_SID_LOGONCHALLENGEEX(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
     
-    ds.UDPValue = pBuff.GetDWORD
-    ds.ServerToken = pBuff.GetDWORD
+    ds.UDPValue = pBuff.GetDWord
+    ds.ServerToken = pBuff.GetDWord
     
     Exit Sub
 ERROR_HANDLER:
@@ -837,7 +837,7 @@ On Error GoTo ERROR_HANDLER:
     'Dim SendResponse As Boolean
     Dim Cookie As Long
 
-    Cookie = pBuff.GetDWORD
+    Cookie = pBuff.GetDWord
     
     'SendResponse = False
     'If GetTickCountMS() >= ds.LastPingResponse + 1000 Then
@@ -907,9 +907,9 @@ Private Sub RECV_SID_READUSERDATA(pBuff As clsDataBuffer)
     Dim aValues() As String
     Dim oRequest  As udtServerRequest
 
-    pBuff.GetDWORD                  ' (DWORD) Number of accounts
-    iNumKeys = pBuff.GetDWORD()     ' (DWORD) Number of keys
-    Cookie = pBuff.GetDWORD()       ' (DWORD) Request ID
+    pBuff.GetDWord                  ' (DWORD) Number of accounts
+    iNumKeys = pBuff.GetDWord()     ' (DWORD) Number of keys
+    Cookie = pBuff.GetDWord()       ' (DWORD) Request ID
 
     If iNumKeys < 1 Then
         frmChat.AddChat RTBColors.ErrorMessageText, "Notice: Received user data request with no returned keys. Cookie: " & CStr(Cookie)
@@ -951,7 +951,7 @@ End Sub
 Private Sub RECV_SID_LOGONCHALLENGE(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
     
-    ds.ServerToken = pBuff.GetDWORD
+    ds.ServerToken = pBuff.GetDWord
     
     Exit Sub
 ERROR_HANDLER:
@@ -970,7 +970,7 @@ On Error GoTo ERROR_HANDLER:
     Dim lResult As Long
     Dim sInfo   As String
     
-    lResult = pBuff.GetDWORD
+    lResult = pBuff.GetDWord
     sInfo = pBuff.GetString(UTF8)
 
     Select Case lResult
@@ -1052,7 +1052,7 @@ On Error GoTo ERROR_HANDLER:
     
     Dim lResult As Long
     
-    lResult = pBuff.GetDWORD
+    lResult = pBuff.GetDWord
 
     ds.AccountEntryPending = False
     frmChat.tmrAccountLock.Enabled = False
@@ -1138,7 +1138,7 @@ On Error GoTo ERROR_HANDLER:
     Dim lResult As Long
     Dim sInfo   As String
     
-    lResult = pBuff.GetDWORD
+    lResult = pBuff.GetDWord
     sInfo = pBuff.GetString(UTF8)
     
     Select Case lResult
@@ -1237,7 +1237,7 @@ On Error GoTo ERROR_HANDLER:
     Dim lResult As Long
     Dim sInfo  As String
     
-    lResult = pBuff.GetDWORD
+    lResult = pBuff.GetDWord
     sInfo = pBuff.GetString(UTF8)
 
     ds.AccountEntryPending = False
@@ -1343,7 +1343,7 @@ On Error GoTo ERROR_HANDLER:
     Dim sInfo   As String
     Dim sOut    As String
     
-    lResult = pBuff.GetDWORD
+    lResult = pBuff.GetDWord
     sInfo = pBuff.GetString(UTF8)
 
     ds.AccountEntryPending = False
@@ -1439,9 +1439,9 @@ On Error GoTo ERROR_HANDLER:
     If (Len(pBuff.GetRaw(, True)) > 8) Then
         sMCPData = pBuff.GetRaw(16)
         
-        sIP = GetAddressFromLong(pBuff.GetDWORD)
+        sIP = GetAddressFromLong(pBuff.GetDWord)
         
-        lPort = ntohs(pBuff.GetDWORD)
+        lPort = ntohs(pBuff.GetDWord)
         
         sMCPData = StringFormat("{0}{1}", sMCPData, pBuff.GetRaw(48))
         sUniq = pBuff.GetString(UTF8)
@@ -1470,8 +1470,8 @@ On Error GoTo ERROR_HANDLER:
             End With
         End If
     Else
-        pBuff.GetDWORD
-        lError = pBuff.GetDWORD
+        pBuff.GetDWord
+        lError = pBuff.GetDWord
         
         Select Case lError
             Case &H80000001: frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] The Diablo II Realm is currently unavailable. Please try again later."
@@ -1541,8 +1541,8 @@ On Error GoTo ERROR_HANDLER:
     Dim List()      As Variant
     Dim Server(0 To 1) As String
     
-    pBuff.GetDWORD 'Unknown
-    lCount = pBuff.GetDWORD
+    pBuff.GetDWord 'Unknown
+    lCount = pBuff.GetDWord
     
     If (MDebug("debug") And (MDebug("all") Or MDebug("info"))) Then
         frmChat.AddChat RTBColors.InformationText, "Received Realm List:"
@@ -1552,7 +1552,7 @@ On Error GoTo ERROR_HANDLER:
         ReDim List(lCount - 1)
         
         For i = 0 To lCount - 1
-            pBuff.GetDWORD 'Unknown
+            pBuff.GetDWord 'Unknown
             
             Server(0) = pBuff.GetString(UTF8)
             Server(1) = pBuff.GetString(UTF8)
@@ -1613,9 +1613,9 @@ Private Sub RECV_SID_AUTH_INFO(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
     Dim RemoteHostIP As String
 
-    ds.LogonType = pBuff.GetDWORD
-    ds.ServerToken = pBuff.GetDWORD
-    ds.UDPValue = pBuff.GetDWORD
+    ds.LogonType = pBuff.GetDWord
+    ds.ServerToken = pBuff.GetDWord
+    ds.UDPValue = pBuff.GetDWord
     ds.CRevFileTime = pBuff.GetRaw(8)
     ds.CRevFileName = pBuff.GetString
     ds.CRevSeed = pBuff.GetString
@@ -1707,7 +1707,7 @@ On Error GoTo ERROR_HANDLER:
     
         .InsertDWord Config.ProtocolID                                        'ProtocolID
         .InsertDWord GetDWORDOverride(Config.PlatformID, PLATFORM_INTEL)      'Platform ID
-        .InsertDWord GetDWORD(BotVars.Product)                                'Product ID
+        .InsertDWord GetDWord(BotVars.Product)                                'Product ID
         .InsertDWord IIf(lVerByte = 0, GetVerByte(BotVars.Product), lVerByte) 'VersionByte
         .InsertDWord GetDWORDOverride(Config.ProductLanguage)                 'Product Language
         .InsertDWord LocalIP                                                  'Local IP
@@ -1748,7 +1748,7 @@ On Error GoTo ERROR_HANDLER:
     Dim sInfo    As String
     Dim bSuccess As Boolean
     
-    lResult = pBuff.GetDWORD
+    lResult = pBuff.GetDWord
     sInfo = pBuff.GetString(UTF8)
 
     bSuccess = False
@@ -1909,7 +1909,7 @@ On Error GoTo ERROR_HANDLER:
     
     Dim lResult As Long
     
-    lResult = pBuff.GetDWORD
+    lResult = pBuff.GetDWord
 
     ds.AccountEntryPending = False
 
@@ -1987,7 +1987,7 @@ On Error GoTo ERROR_HANDLER:
     
     Dim lResult As Long
     
-    lResult = pBuff.GetDWORD
+    lResult = pBuff.GetDWord
     ds.NLS.Srp_Salt = pBuff.GetRaw(32)
     ds.NLS.Srp_B = pBuff.GetRaw(32)
     
@@ -2067,7 +2067,7 @@ On Error GoTo ERROR_HANDLER:
     Dim M2      As String
     Dim sInfo   As String
     
-    lResult = pBuff.GetDWORD
+    lResult = pBuff.GetDWord
     M2 = pBuff.GetRaw(20)
     sInfo = pBuff.GetString(UTF8)
 
@@ -2161,7 +2161,7 @@ On Error GoTo ERROR_HANDLER:
     
     Dim lResult As Long
     
-    lResult = pBuff.GetDWORD
+    lResult = pBuff.GetDWord
     ds.NLS.Srp_Salt = pBuff.GetRaw(32)
     ds.NLS.Srp_B = pBuff.GetRaw(32)
 
@@ -2227,7 +2227,7 @@ On Error GoTo ERROR_HANDLER:
     Dim lResult As Long
     Dim M2      As String
     
-    lResult = pBuff.GetDWORD
+    lResult = pBuff.GetDWord
     M2 = pBuff.GetRaw(20)
 
     ds.AccountEntryPending = False
@@ -2496,7 +2496,7 @@ On Error GoTo ERROR_HANDLER:
     lRet = lDefault
     
     If ((LenB(sDwordString) > 0) And (Len(sDwordString) < 5)) Then
-        lRet = GetDWORD(StrReverse(sDwordString))
+        lRet = GetDWord(StrReverse(sDwordString))
     End If
     
     GetDWORDOverride = lRet
@@ -2507,11 +2507,11 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.GetDWORDOverride()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
-Private Function GetDWORD(sData As String) As Long
+Private Function GetDWord(sData As String) As Long
 On Error GoTo ERROR_HANDLER:
     
     sData = Left$(StringFormat("{0}{1}", sData, String$(4, Chr$(0))), 4)
-    CopyMemory GetDWORD, ByVal sData, 4
+    CopyMemory GetDWord, ByVal sData, 4
     
     Exit Function
 ERROR_HANDLER:

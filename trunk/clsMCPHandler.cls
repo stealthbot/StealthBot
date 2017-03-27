@@ -273,7 +273,7 @@ Private Sub RECV_MCP_STARTUP(pBuff As clsDataBuffer)
     Dim Result As Long
 
     '(DWORD)      Result
-    Result = pBuff.GetDWORD
+    Result = pBuff.GetDWord
     '0x00: Success
     '0x0C: No Battle.net connection detected
     'Debug.Print n
@@ -296,7 +296,7 @@ Private Sub RECV_MCP_CHARCREATE(pBuff As clsDataBuffer)
     Dim Result As Long
 
     '(DWORD)      Result
-    Result = pBuff.GetDWORD
+    Result = pBuff.GetDWord
     '0x00: Success
     '0x14: Character already exists, or maximum number of characters (currently 8) reached.
     '0x15: Invalid Name
@@ -318,7 +318,7 @@ Private Sub RECV_MCP_CHARLOGON(pBuff As clsDataBuffer)
     Dim Result As Long
 
     '(DWORD)      Result
-    Result = pBuff.GetDWORD
+    Result = pBuff.GetDWord
     '0 x00: Success
     '0 x46: Player Not Found
     
@@ -340,7 +340,7 @@ Private Sub RECV_MCP_CHARDELETE(pBuff As clsDataBuffer)
     Dim Result As Long
 
     '(DWORD)      Result
-    Result = pBuff.GetDWORD
+    Result = pBuff.GetDWord
     
     Select Case Result
         Case &H0: Call Event_CharDeleteResponse(True, "Character deleted.")
@@ -375,7 +375,7 @@ Private Sub RECV_MCP_CHARUPDGRADE(pBuff As clsDataBuffer)
     Dim Result As Long
 
     '(DWORD)      Result
-    Result = pBuff.GetDWORD
+    Result = pBuff.GetDWord
     
     Select Case Result
         Case &H0: Call Event_CharUpgradeResponse(True, "Character upgrade successful.")
@@ -423,7 +423,7 @@ End Sub
 Private Sub RECV_MCP_CHARLIST2(pBuff As clsDataBuffer)
     Dim CharCount    As Integer
     Dim i            As Integer
-    Dim seconds      As Long
+    Dim Seconds      As Long
     Dim Expiry       As Date
     Dim CharName     As String
     Dim CharStats    As String
@@ -437,14 +437,14 @@ Private Sub RECV_MCP_CHARLIST2(pBuff As clsDataBuffer)
     Set m_CharacterList = New Collection
     
     For i = 1 To CharCount
-        seconds = pBuff.GetDWORD
+        Seconds = pBuff.GetDWord
         CharName = pBuff.GetString
         CharStats = pBuff.GetString
 
         Set CharStatsObj = New clsUserStats
         CharStatsObj.Statstring = BotVars.Product & RealmServerTitle(RealmServerSelectedIndex) & "," & _
                 CharName & "," & CharStats
-        Expiry = DateAdd("s", seconds, #1/1/1970#)
+        Expiry = DateAdd("s", Seconds, #1/1/1970#)
 
         m_CharacterList.Add Array(CharName, CharStatsObj, Expiry)
     Next i

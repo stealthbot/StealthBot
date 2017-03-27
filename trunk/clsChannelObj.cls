@@ -24,15 +24,15 @@ Private Const CHAN_SYSTEM     As Long = &H10
 Private Const CHAN_PRODUCT    As Long = &H20
 Private Const CHAN_GLOBAL     As Long = &H1000
 
-Private m_Name             As String
-Private m_Flags            As Long
-Private m_designated_heir  As String
-Private m_num_joins        As Long
-Private m_num_bans         As Long
-Private m_num_kicks        As Long
-Private m_join_date        As Date
-Private m_users            As Collection
-Private m_banlist          As Collection
+Private m_Name           As String
+Private m_Flags          As Long
+Private m_DesignatedHeir As String
+Private m_NumJoins       As Long
+Private m_NumBans        As Long
+Private m_NumKicks       As Long
+Private m_JoinDate       As Date
+Private m_Users          As Collection
+Private m_Banlist        As Collection
 
 Public Property Get sType() As String
     
@@ -79,15 +79,15 @@ End Property
 
 Private Sub Class_Initialize()
     
-    Set m_users = New Collection
-    Set m_banlist = New Collection
+    Set m_Users = New Collection
+    Set m_Banlist = New Collection
     
 End Sub
 
 Private Sub Class_Terminate()
 
-    Set m_users = Nothing
-    Set m_banlist = Nothing
+    Set m_Users = Nothing
+    Set m_Banlist = Nothing
     
 End Sub
 
@@ -105,13 +105,13 @@ End Property
 
 Public Property Get OperatorHeir() As String
 
-    OperatorHeir = m_designated_heir
+    OperatorHeir = m_DesignatedHeir
 
 End Property
 
 Public Property Let OperatorHeir(str As String)
 
-    m_designated_heir = str
+    m_DesignatedHeir = str
 
 End Property
 
@@ -129,13 +129,13 @@ End Property
 
 Public Property Let JoinTime(ByVal JDate As Date)
 
-    m_join_date = JDate
+    m_JoinDate = JDate
 
 End Property
 
 Public Property Get JoinTime() As Date
 
-    JoinTime = m_join_date
+    JoinTime = m_JoinDate
 
 End Property
 
@@ -157,13 +157,13 @@ End Property
 
 Public Property Get BanCount() As Long
 
-    BanCount = m_num_bans
+    BanCount = m_NumBans
 
 End Property
 
 Public Property Let BanCount(ByVal lng As Long)
 
-    m_num_bans = lng
+    m_NumBans = lng
     
 End Property
 
@@ -179,21 +179,21 @@ End Property
 
 Public Property Get Users() As Collection
 
-    Set Users = m_users
+    Set Users = m_Users
 
 End Property
 
 Public Sub ClearUsers()
 
-    Set m_users = Nothing
+    Set m_Users = Nothing
 
-    Set m_users = New Collection
+    Set m_Users = New Collection
 
 End Sub
 
 Public Sub ClearBanlist()
 
-    Set m_banlist = New Collection
+    Set m_Banlist = New Collection
 
 End Sub
 
@@ -280,14 +280,14 @@ Public Function GetUserIndex(ByVal Username As String, Optional ByVal SearchLimi
 
     Dim i As Integer
 
-    For i = 1 To m_users.Count
+    For i = 1 To m_Users.Count
         If (SearchLimit > 0) Then
             If (i >= SearchLimit) Then
                 Exit For
             End If
         End If
     
-        If (StrComp(m_users(i).DisplayName, Username, vbTextCompare) = 0) Then
+        If (StrComp(m_Users(i).DisplayName, Username, vbTextCompare) = 0) Then
             GetUserIndex = i
             
             Exit Function
@@ -300,7 +300,7 @@ End Function
 
 Public Property Get Banlist() As Collection
     
-    Set Banlist = m_banlist
+    Set Banlist = m_Banlist
 
 End Property
 

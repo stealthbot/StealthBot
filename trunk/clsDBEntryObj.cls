@@ -16,16 +16,16 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_Type        As String
-Private m_name        As String
-Private m_rank        As Long
-Private m_flags       As String
+Private m_Type       As String
+Private m_Name       As String
+Private m_Rank       As Long
+Private m_Flags      As String
 Private m_CreatedOn  As Date
 Private m_CreatedBy  As String
 Private m_ModifiedOn As Date
 Private m_ModifiedBy As String
-Private m_Groups      As Collection
-Private m_LastSeen    As Date
+Private m_Groups     As Collection
+Private m_LastSeen   As Date
 Private m_BanMessage As String
 
 Private Sub Class_Initialize()
@@ -41,27 +41,27 @@ Public Property Let EntryType(ByVal strType As String)
 End Property
 
 Public Property Get Name() As String
-    Name = m_name
+    Name = m_Name
 End Property
 
 Public Property Let Name(ByVal strName As String)
-    m_name = strName
+    m_Name = strName
 End Property
 
 Public Property Get Rank() As Long
-    Rank = m_rank
+    Rank = m_Rank
 End Property
 
 Public Property Let Rank(ByVal lngRank As Long)
-    m_rank = lngRank
+    m_Rank = lngRank
 End Property
 
 Public Property Get Flags() As String
-    Flags = m_flags
+    Flags = m_Flags
 End Property
 
 Public Property Let Flags(ByVal strFlags As String)
-    m_flags = strFlags
+    m_Flags = strFlags
 End Property
 
 Public Function IsInGroup(ByVal sGroupName As String) As Boolean
@@ -90,7 +90,7 @@ Public Function HasFlag(ByVal strFlag As String, Optional ByVal bCaseSensitive A
     Dim cmCompare As CompareMethod
     cmCompare = IIf(bCaseSensitive, vbBinaryCompare, vbTextCompare)
     
-    HasFlag = (InStr(1, m_flags, strFlag, cmCompare) > 0)
+    HasFlag = (InStr(1, m_Flags, strFlag, cmCompare) > 0)
 End Function
 
 Public Function HasAnyFlag(ByVal strFlags As String, Optional ByVal bCaseSensitive As Boolean = True) As Boolean

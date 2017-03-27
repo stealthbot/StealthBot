@@ -48,7 +48,7 @@ End Function
 Private Sub RECV_BNLS_AUTHORIZE(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
 
-    Call SEND_BNLS_AUTHORIZEPROOF(pBuff.GetDWORD)
+    Call SEND_BNLS_AUTHORIZEPROOF(pBuff.GetDWord)
 
     Exit Sub
 ERROR_HANDLER:
@@ -136,8 +136,8 @@ On Error GoTo ERROR_HANDLER:
     
     Dim lVerByte     As Long
     
-    If (Not pBuff.GetDWORD = 0) Then
-        lVerByte = pBuff.GetDWORD
+    If (Not pBuff.GetDWord = 0) Then
+        lVerByte = pBuff.GetDWord
         Config.SetVersionByte GetProductKey(), lVerByte 'Save BNLS's Version Byte
         Call Config.Save
         
@@ -200,12 +200,12 @@ Private Sub RECV_BNLS_VERSIONCHECKEX2(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
     Dim lVersionByte As Long
 
-    If (pBuff.GetDWORD = 1) Then
-        ds.CRevVersion = pBuff.GetDWORD
-        ds.CRevChecksum = pBuff.GetDWORD
+    If (pBuff.GetDWord = 1) Then
+        ds.CRevVersion = pBuff.GetDWord
+        ds.CRevChecksum = pBuff.GetDWord
         ds.CRevResult = pBuff.GetString
-        pBuff.GetDWORD
-        lVersionByte = pBuff.GetDWORD
+        pBuff.GetDWord
+        lVersionByte = pBuff.GetDWord
         
         Select Case modBNCS.GetLogonSystem()
             Case modBNCS.BNCS_NLS: Call modBNCS.SEND_SID_AUTH_CHECK

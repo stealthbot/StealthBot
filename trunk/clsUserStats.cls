@@ -21,7 +21,7 @@ Private m_stat_string         As String
 Private m_Game                As String
 Private m_icon                As String
 Private m_spawn               As Boolean
-Private m_clan                As String
+Private m_Clan                As String
 Private m_level               As Long
 Private m_character_name      As String
 Private m_character_class_id  As Long
@@ -258,11 +258,11 @@ Public Property Let IsSpawn(ByVal bln As Boolean)
 End Property
 
 Public Property Get Clan() As String
-    Clan = m_clan
+    Clan = m_Clan
 End Property
 
 Public Property Let Clan(ByVal str As String)
-    m_clan = str
+    m_Clan = str
 End Property
 
 Public Property Get Wins() As Long

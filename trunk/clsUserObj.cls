@@ -24,7 +24,7 @@ Private m_CharacterName     As String           ' D2 character name
 Private m_Clan              As String           ' W3 clan tag
 Private m_JoinDate          As Date             ' date-time joined the channel
 Private m_LastSpeakDate     As Date             ' time last seen talking
-Private m_StatString        As String
+Private m_Statstring        As String
 Private m_Game              As String           ' product code (WAR3, D2DV, STAR, etc)
 Private m_Queue             As Collection       ' queue'd chat events
 Private m_PassedChannelAuth As Boolean
@@ -82,8 +82,8 @@ Public Property Get Flags() As Long
     Flags = m_Flags
 End Property
 
-Public Property Let Flags(ByVal lValue As Long)
-    m_Flags = lValue
+Public Property Let Flags(ByVal iValue As Long)
+    m_Flags = iValue
 End Property
 
 
@@ -91,19 +91,19 @@ Public Property Get Ping() As Long
     Ping = m_Ping
 End Property
 
-Public Property Let Ping(ByVal lValue As Long)
-    m_Ping = lValue
+Public Property Let Ping(ByVal iValue As Long)
+    m_Ping = iValue
 End Property
 
 
-Public Property Get StatString() As String
-    StatString = m_StatString
+Public Property Get Statstring() As String
+    Statstring = m_Statstring
 End Property
 
-Public Property Let StatString(ByVal sValue As String)
-    m_StatString = sValue
+Public Property Let Statstring(ByVal sValue As String)
+    m_Statstring = sValue
     
-    m_StatsObj.StatString = m_StatString
+    m_StatsObj.Statstring = m_Statstring
 End Property
 
 
@@ -241,10 +241,10 @@ Public Sub DisplayQueue()
     
         Select Case (CurrentEvent.EventID)
             Case ID_USER
-                Call Event_UserInChannel(Name, CurrentEvent.Flags, CurrentEvent.StatString, CurrentEvent.Ping, j)
+                Call Event_UserInChannel(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, j)
                     
             Case ID_JOIN
-                Call Event_UserJoins(Name, CurrentEvent.Flags, CurrentEvent.StatString, CurrentEvent.Ping, j)
+                Call Event_UserJoins(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, j)
             
             Case ID_TALK
                 Call Event_UserTalk(Name, CurrentEvent.Flags, CurrentEvent.Message, CurrentEvent.Ping, j)
@@ -253,7 +253,7 @@ Public Sub DisplayQueue()
                 Call Event_UserEmote(Name, CurrentEvent.Flags, CurrentEvent.Message, j)
             
             Case ID_USERFLAGS
-                Call Event_FlagsUpdate(Name, CurrentEvent.Flags, CurrentEvent.StatString, CurrentEvent.Ping, j)
+                Call Event_FlagsUpdate(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, j)
         End Select
     Next j
     
@@ -290,7 +290,7 @@ Public Function Clone() As Object
     Clone.LastTalkTime = LastTalkTime
     Clone.PassedChannelAuth = PassedChannelAuth
     Clone.PendingBan = PendingBan
-    Clone.StatString = StatString
+    Clone.Statstring = Statstring
     
     For i = 1 To Queue.Count
         Clone.Queue.Add Queue(i).Clone()
