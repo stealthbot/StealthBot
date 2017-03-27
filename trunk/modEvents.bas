@@ -1381,7 +1381,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                 
             End If
             
-            If (Not CheckBlock(Username)) Then
+            If (Not Filters) Or (Not CheckBlock(Username)) Then
                 Dim UserColor As Long
                 Dim FDesc As String
                 FDesc = FlagDescription(AcqFlags Or Flags, False)
@@ -1505,7 +1505,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         End If
         
         If (g_Channel.Users(UserIndex).Queue.Count = 0) Then
-            If ((Not JoinMessagesOff) And (Not CheckBlock(Username))) Then
+            If ((Not JoinMessagesOff) And ((Not Filters) Or (Not CheckBlock(Username)))) Then
                 'If (GetVeto = False) Then
                 Dim UserColor As Long
                 
@@ -1927,7 +1927,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
     End If
     '#######
     
-    If ((Not (CheckMsg(Message, Username, -5))) And (Not (CheckBlock(Username)))) Then
+    If ((Not Filters) Or ((Not (CheckMsg(Message, Username, -5))) And (Not (CheckBlock(Username))))) Then
     
         If (Not (frmChat.mnuHideWhispersInrtbChat.Checked)) Then
             frmChat.AddChat lCarats, "<From ", RTBColors.WhisperUsernames, _
