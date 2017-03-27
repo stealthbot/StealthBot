@@ -62,6 +62,8 @@ Public Sub OnBlock(Command As clsCommandObj)
                 WriteINI "BlockList", "Filter" & (Total + 1), Command.Argument("Username"), FiltersPath
                 WriteINI "BlockList", "Total", Total + 1, FiltersPath
                 Command.Respond StringFormat("Added {0}{1}{0} to the username block list.", Chr$(34), Command.Argument("Username"))
+                
+                Call frmChat.LoadArray(LOAD_BLOCKLIST, g_Blocklist())
             Else
                 Command.Respond "Your filters file has been edited manually and is no longer valid. Please delete it."
             End If
@@ -232,6 +234,7 @@ Public Sub OnUnBlock(Command As clsCommandObj)
                 Next i
                 WriteINI "BlockList", "Total", (Total - 1), FiltersPath
                 Command.Respond StringFormat("Removed {0}{1}{0} from the blocked users list.", Chr$(34), Command.Argument("Username"))
+                Call frmChat.LoadArray(LOAD_BLOCKLIST, g_Blocklist())
             End If
         Else
             Command.Respond "Your filters file has been edited manually and is no longer valid. Please delete it."

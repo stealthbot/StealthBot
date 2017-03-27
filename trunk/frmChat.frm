@@ -1836,6 +1836,7 @@ Private Sub Form_Load()
     ReDim gOutFilters(0)
     ReDim gFilters(0)
     ReDim ServerRequests(0)
+    ReDim g_Blocklist(0)
     
     Call BuildProductInfo
     
@@ -7258,6 +7259,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     'LoadSafelist
     LoadArray LOAD_PHRASES, Phrases()
     LoadArray LOAD_FILTERS, gFilters()
+    LoadArray LOAD_BLOCKLIST, g_Blocklist()
     
     ProtectMsg = Config.ChannelProtectionMessage
 
@@ -7532,55 +7534,59 @@ ERROR_HANDLER:
 End Sub
 
 Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
-    Dim f As Integer
-    Dim Path As String
-    Dim temp As String
-    Dim i As Integer
-    Dim c As Integer
-    
-    f = FreeFile
-    
-    Const FI As String = "TextFilters"
-    
+    Dim iFileHandle     As Integer      ' Source file number
+    Dim sFilePath       As String       ' Full path to the source file
+    Dim sTemp           As String       ' Temporary string
+    Dim iFilterCount    As Integer      ' Total number of filters saved
+    Dim sFilterSection  As String       ' The section of filters to read (message vs users)
+    Dim i               As Integer      ' Counter
+
+    ' Determine where to read from.
     Select Case Mode
-        Case LOAD_FILTERS
-            Path = GetFilePath(FILE_FILTERS)
+        Case LOAD_FILTERS, LOAD_BLOCKLIST
+            sFilePath = GetFilePath(FILE_FILTERS)
+            sFilterSection = IIf(Mode = LOAD_FILTERS, "TextFilters", "BlockList")
         Case LOAD_PHRASES
-            Path = GetFilePath(FILE_PHRASE_BANS)
-        Case LOAD_DB
-            Path = GetFilePath(FILE_USERDB)
-            Exit Sub
+            sFilePath = GetFilePath(FILE_PHRASE_BANS)
     End Select
     
-    If Dir(Path) <> vbNullString Then
-        Open Path For Input As #f
-        If LOF(f) > 2 Then
-            ReDim tArray(0)
-            If Mode <> LOAD_FILTERS Then
-                Do
-                    Line Input #f, temp
-                    If Len(temp) > 0 Then
-                        ' removed for 2.5 - why am I PCing it ?
-                        'If Mode = LOAD_SAFELIST Then temp = PrepareCheck(temp)
-                        tArray(UBound(tArray)) = LCase(temp)
-                        ReDim Preserve tArray(UBound(tArray) + 1)
-                    End If
-                Loop While Not EOF(f)
-            Else
-                temp = ReadINI(FI, "Total", FILE_FILTERS)
-                If temp <> vbNullString And CInt(temp) > -1 Then
-                    c = Int(temp)
-                    For i = 1 To c
-                        temp = ReadINI(FI, "Filter" & i, FILE_FILTERS)
-                        If temp <> vbNullString Then
-                            tArray(UBound(tArray)) = LCase(temp)
-                            If i <> c Then ReDim Preserve tArray(UBound(tArray) + 1)
+    If Dir(sFilePath) <> vbNullString Then
+        ' Empty the turn array.
+        ReDim tArray(0)
+        
+        Select Case Mode
+            Case LOAD_FILTERS, LOAD_BLOCKLIST
+                ' Get the total number of filters
+                sTemp = ReadINI(sFilterSection, "Total", FILE_FILTERS)
+                If ((LenB(sTemp) > 0) And (CInt(sTemp) > 0)) Then
+                    iFilterCount = Int(sTemp)
+                    
+                    ' Read each filter into a row of the array.
+                    For i = 1 To iFilterCount
+                        sTemp = ReadINI(sFilterSection, "Filter" & i, FILE_FILTERS)
+                        If LenB(sTemp) > 0 Then
+                            tArray(UBound(tArray)) = sTemp
+                            ReDim Preserve tArray(UBound(tArray) + 1)
                         End If
                     Next i
                 End If
-            End If
+            Case Else
+                ' Read each line of the file into a row in the array.
+                Open sFilePath For Input As #iFileHandle
+                Do
+                    Line Input #iFileHandle, sTemp
+                    If LenB(sTemp) > 0 Then
+                        tArray(UBound(tArray)) = sTemp
+                        ReDim Preserve tArray(UBound(tArray) + 1)
+                    End If
+                Loop While Not EOF(iFileHandle)
+                Close #iFileHandle
+        End Select
+        
+        ' Remove the last unused row.
+        If UBound(tArray) > 0 Then
+            ReDim Preserve tArray(UBound(tArray) - 1)
         End If
-        Close #f
     End If
 End Sub
 

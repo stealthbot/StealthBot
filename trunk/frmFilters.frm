@@ -706,6 +706,7 @@ Private Sub Form_Unload(Cancel As Integer)
     
     Call frmChat.LoadOutFilters
     Call frmChat.LoadArray(LOAD_FILTERS, gFilters())
+    Call frmChat.LoadArray(LOAD_BLOCKLIST, g_Blocklist())
 End Sub
 
 Private Sub optBlock_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)

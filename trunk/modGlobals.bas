@@ -97,6 +97,7 @@ Public Catch() As String
 Public gBans() As udtBanList
 Public gOutFilters() As udtOutFilters
 Public gFilters() As String
+Public g_Blocklist() As String
 
 Public AutoModSafelistValue As Integer
 

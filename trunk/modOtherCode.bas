@@ -765,27 +765,14 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
     Dim s As String
     Dim i As Integer
     
-    If (LenB(Dir$(GetFilePath(FILE_FILTERS))) > 0) Then
-        s = ReadINI("BlockList", "Total", GetFilePath(FILE_FILTERS))
-        
-        If (StrictIsNumeric(s)) Then
-            i = s
-        Else
-            Exit Function
-        End If
-        
-        Username = PrepareCheck(Username)
-        
-        For i = 0 To i
-            s = ReadINI("BlockList", "Filter" & i, GetFilePath(FILE_FILTERS))
-            
-            If (Username Like PrepareCheck(s)) Then
+    For i = 0 To UBound(g_Blocklist)
+        If Len(g_Blocklist(i)) > 0 Then
+            If (PrepareCheck(Username) Like PrepareCheck(g_Blocklist(i))) Then
                 CheckBlock = True
-                
                 Exit Function
             End If
-        Next i
-    End If
+        End If
+    Next i
 End Function
 
 Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
