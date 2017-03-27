@@ -20,42 +20,42 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_Username    As String
-Private m_status      As Byte
-Private m_location_id As Byte
-Private m_location    As String
-Private m_game        As String
+Private m_Username   As String
+Private m_Status     As Byte
+Private m_LocationID As Byte
+Private m_Location   As String
+Private m_Game       As String
 
 Public Property Get Location() As String
-    Location = m_location
+    Location = m_Location
 End Property
 
 Public Property Let Location(ByVal sChannel As String)
-    m_location = sChannel
+    m_Location = sChannel
 End Property
 
-Public Property Get game() As String
-    game = m_game
+Public Property Get Game() As String
+    Game = m_Game
 End Property
 
-Public Property Let game(ByVal sProduct As String)
-    m_game = KillNull(sProduct)
+Public Property Let Game(ByVal sProduct As String)
+    m_Game = KillNull(sProduct)
 End Property
 
 Public Property Get LocationID() As Byte
-    LocationID = m_location_id
+    LocationID = m_LocationID
 End Property
 
 Public Property Let LocationID(ByVal byLocation As Byte)
-    m_location_id = byLocation
+    m_LocationID = byLocation
 End Property
 
 Public Property Get Status() As Byte
-    Status = m_status
+    Status = m_Status
 End Property
 
 Public Property Let Status(ByVal byStatus As Byte)
-    m_status = byStatus
+    m_Status = byStatus
 End Property
 
 Public Property Get IsMutual() As Boolean
@@ -98,7 +98,7 @@ Public Function Clone() As Object
     Set Clone = New clsFriendObj
     
     Clone.Name = Name
-    Clone.game = game
+    Clone.Game = Game
     Clone.Status = Status
     Clone.LocationID = LocationID
     Clone.Location = Location

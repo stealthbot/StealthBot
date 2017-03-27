@@ -121,7 +121,7 @@ Private Const REQUEST_NAME   As Integer = 2
 Private Const REQUEST_INV    As Integer = 3
 Private Const REQUEST_ISNEW  As Integer = 4
 
-Private Sub cmdAccept_Click()
+Public Sub cmdAccept_Click()
     Dim oRequest As udtServerRequest
     Dim vArray() As Variant
 
@@ -138,7 +138,7 @@ Private Sub cmdAccept_Click()
     Unload Me
 End Sub
 
-Sub cmdDecline_Click()
+Public Sub cmdDecline_Click()
     Dim oRequest As udtServerRequest
     Dim vArray() As Variant
 

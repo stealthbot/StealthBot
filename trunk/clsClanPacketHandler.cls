@@ -35,6 +35,7 @@ Public Event PromoteUserReply(ByVal Cookie As Long, ByVal Result As enuClanRespo
 Public Event RemoveMemberReply(ByVal Cookie As Long, ByVal Result As enuClanResponseValue)
 Public Event GetMemberList(ByVal Cookie As Long, ByVal Members As Collection)
 Public Event GetMOTD(ByVal Cookie As Long, ByVal Message As String)
+Public Event GetMemberInfo(ByVal Cookie As Long, ByVal Result As enuClanResponseValue, ByVal ClanName As String, ByVal Rank As enuClanRank, ByVal JoinDate As Date)
 Public Event UnknownClanEvent(ByVal PacketID As Byte, ByVal Data As String)
 
 Public LastRemoval As Currency
@@ -231,6 +232,9 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal inBuf As clsDataBuffer)
         Case SID_CLANMEMBERRANKCHANGE
             RaiseEvent MyRankChange(OldRank, NewRank, Username)
 
+        Case SID_CLANMEMBERINFORMATION
+            RaiseEvent GetMemberInfo(Cookie, Result, ClanName, Rank, JoinDate)
+
         Case Else
             RaiseEvent UnknownClanEvent(PacketID, inBuf.DebugOutput)
 
@@ -250,6 +254,35 @@ Public Function IsW3() As Boolean
     IsW3 = (BotVars.Product = "PX3W" Or BotVars.Product = "3RAW")
 
 End Function
+
+Public Sub RequestClanMemberInfo(ByVal Username As String, ByVal ClanTag As String, Optional ByVal eType As enuServerRequestHandlerType = reqScriptingCall, Optional ByVal Command As clsCommandObj)
+    Dim pBuf As clsDataBuffer
+    Dim oRequest As udtServerRequest
+    Dim Cookie As Long
+
+    If (LenB(Username) = 0) Then Exit Sub
+    If (LenB(ClanTag) = 0 Or Len(ClanTag) > 4) Then Exit Sub
+
+    With oRequest
+        .ResponseReceived = False
+        .HandlerType = eType
+        Set .Command = Command
+        .PacketID = SID_CLANMEMBERINFORMATION
+        .PacketCommand = 0
+        .Tag = Array(Username, ClanTag)
+    End With
+
+    Cookie = SaveServerRequest(oRequest)
+
+    Set pBuf = New clsDataBuffer
+    With pBuf
+        .InsertDWord Cookie
+        .InsertDWord StringToDWord(ClanTag)
+        .InsertNTString Username
+        .SendPacket SID_CLANMEMBERINFORMATION
+    End With
+    Set pBuf = Nothing
+End Sub
 
 Public Sub RequestClanList(Optional ByVal eType As enuServerRequestHandlerType = reqScriptingCall)
     Dim pBuf As clsDataBuffer
@@ -541,14 +574,33 @@ Public Sub MakeMemberChieftain(ByVal Username As String, Optional ByVal eType As
     Set pBuf = Nothing
 End Sub
 
-Public Function GetRank(ByVal i As enuClanRank) As String
+Public Function GetRankName(ByVal i As enuClanRank) As String
     Select Case i
-        Case clrankChieftain: GetRank = "Chieftain"     'Chief
-        Case clrankShaman:    GetRank = "Shaman"        'Shaman
-        Case clrankGrunt:     GetRank = "Grunt"         'Grunt
-        Case clrankPeon:      GetRank = "Peon"          'Peon
-        Case clrankRecruit:   GetRank = "Recruit"       'Recruit
-        Case Else:            GetRank = "Unknown"
+        Case clrankChieftain: GetRankName = "Chieftain"     'Chief
+        Case clrankShaman:    GetRankName = "Shaman"        'Shaman
+        Case clrankGrunt:     GetRankName = "Grunt"         'Grunt
+        Case clrankPeon:      GetRankName = "Peon"          'Peon
+        Case clrankRecruit:   GetRankName = "Recruit"       'Recruit
+        Case Else:            GetRankName = "Unknown 0x" & ZeroOffset(i, 2)
+    End Select
+End Function
+
+Public Function GetClanResponseText(ByVal i As enuClanResponseValue) As String
+    Select Case i
+        Case clresSuccess:          GetClanResponseText = "success"
+        Case clresNameInUse:        GetClanResponseText = "name in use"
+        Case clresTooSoon:          GetClanResponseText = "you must wait for the 7 day probation period to end"
+        Case clresNotEnoughMembers: GetClanResponseText = "not enough members"
+        Case clresDecline:          GetClanResponseText = "declined"
+        Case clresUnavailable:      GetClanResponseText = "user not available"
+        Case clresAccept:           GetClanResponseText = "accepted"
+        Case clresNotAuthorized:    GetClanResponseText = "you must have the required rank"
+        Case clresNotAllowed:       GetClanResponseText = "you cannot do that"
+        Case clresIsFull:           GetClanResponseText = "clan is full"
+        Case clresBadTag:           GetClanResponseText = "invalid clan tag"
+        Case clresBadName:          GetClanResponseText = "invalid clan name"
+        Case clresUserNotFound:     GetClanResponseText = "user not found"
+        Case Else:                  GetClanResponseText = "unknown message 0x" & ZeroOffset(i, 2)
     End Select
 End Function
 

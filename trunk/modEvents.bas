@@ -1452,7 +1452,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                 lMailCount = GetMailCount(Username)
                 
                 If (lMailCount > 0) Then
-                    frmChat.AddQ "/w " & Username & " You have " & L & _
+                    frmChat.AddQ "/w " & Username & " You have " & lMailCount & _
                         " new message" & IIf(lMailCount = 1, "", "s") & ". Type !inbox to retrieve."
                 End If
             End If

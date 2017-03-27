@@ -132,9 +132,11 @@ Public Function DispatchCommand(Command As clsCommandObj)
         Case "demote":         Call modCommandsClan.OnDemote(Command)
         Case "disbandclan":    Call modCommandsClan.OnDisbandClan(Command)
         Case "invite":         Call modCommandsClan.OnInvite(Command)
+        Case "leaveclan":      Call modCommandsClan.OnLeaveClan(Command)
         Case "makechieftain":  Call modCommandsClan.OnMakeChieftain(Command)
         Case "motd":           Call modCommandsClan.OnMOTD(Command)
         Case "promote":        Call modCommandsClan.OnPromote(Command)
+        Case "removemember":   Call modCommandsClan.OnRemoveMember(Command)
         Case "setmotd":        Call modCommandsClan.OnSetMOTD(Command)
         
         'Media Player comands

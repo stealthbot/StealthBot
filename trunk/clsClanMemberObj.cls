@@ -43,7 +43,7 @@ Public Property Let Rank(ByVal i As enuClanRank)
 End Property
 
 Public Property Get RankName() As String
-    RankName = frmChat.ClanHandler.GetRank(CByte(m_Rank))
+    RankName = frmChat.ClanHandler.GetRankName(CByte(m_Rank))
 End Property
 
 Public Property Get JoinTime() As Date

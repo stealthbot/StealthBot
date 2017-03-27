@@ -130,6 +130,18 @@ Public Sub OnInvite(Command As clsCommandObj)
     End If
 End Sub
 
+Public Sub OnLeaveClan(Command As clsCommandObj)
+    If (g_Clan.InClan) Then
+        If (g_Clan.Self.Rank < clrankChieftain) Then
+            Call frmChat.ClanHandler.RemoveMember(g_Clan.Self.Name, True, reqUserCommand, Command)
+        Else
+            Command.Respond "Error: The bot cannot be the chieftain in its clan and leave the clan."
+        End If
+    Else
+        Command.Respond "Error: The bot must be a member of a clan."
+    End If
+End Sub
+
 Public Sub OnMakeChieftain(Command As clsCommandObj)
     If (g_Clan.InClan) Then
         If (g_Clan.Self.Rank >= clrankChieftain) Then
@@ -187,6 +199,21 @@ Public Sub OnPromote(Command As clsCommandObj)
     End If
 End Sub
 
+Public Sub OnRemoveMember(Command As clsCommandObj)
+    If (g_Clan.InClan) Then
+        If (g_Clan.Self.Rank >= clrankShaman) Then
+            If (Command.IsValid) Then
+                Call frmChat.ClanHandler.RemoveMember(ReverseConvertUsernameGateway(Command.Argument("Username")), False, reqUserCommand, Command)
+            Else
+                Command.Respond "Error: You must specify a username to remove."
+            End If
+        Else
+            Command.Respond "Error: The bot must be a shaman or chieftain in its clan to remove users."
+        End If
+    Else
+        Command.Respond "Error: The bot must be a member of a clan."
+    End If
+End Sub
 
 Public Sub OnSetMOTD(Command As clsCommandObj)
     ' This command will set the clan channel's Message Of The Day.  This

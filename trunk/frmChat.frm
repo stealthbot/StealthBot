@@ -1086,6 +1086,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1111,6 +1112,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2909,11 +2911,11 @@ Private Sub ClanHandler_MyRankChange(ByVal OldRank As enuClanRank, ByVal NewRank
     If (g_Clan.Self.Rank < NewRank) Then
         AddChat RTBColors.JoinText, "[CLAN] You have been promoted by ", _
                 RTBColors.JoinUsername, Initiator, RTBColors.JoinText, ". Your new rank is ", _
-                RTBColors.JoinUsername, ClanHandler.GetRank(NewRank), RTBColors.JoinText, "."
+                RTBColors.JoinUsername, ClanHandler.GetRankName(NewRank), RTBColors.JoinText, "."
     Else
         AddChat RTBColors.JoinText, "[CLAN] You have been demoted by ", _
                 RTBColors.JoinUsername, Initiator, RTBColors.JoinText, ". Your new rank is ", _
-                RTBColors.JoinUsername, ClanHandler.GetRank(NewRank), RTBColors.JoinText, "."
+                RTBColors.JoinUsername, ClanHandler.GetRankName(NewRank), RTBColors.JoinText, "."
     End If
 
     g_Clan.Self.Rank = NewRank
@@ -2950,7 +2952,7 @@ Private Sub ClanHandler_Info(ByVal ClanTag As String, ByVal Rank As enuClanRank)
             
         RunInAll "Event_BotJoinedClan", ClanTag
     Else
-        AddChat RTBColors.JoinText, "[CLAN] You are a ", RTBColors.JoinUsername, ClanHandler.GetRank(Rank), RTBColors.JoinText, " in ", _
+        AddChat RTBColors.JoinText, "[CLAN] You are a ", RTBColors.JoinUsername, ClanHandler.GetRankName(Rank), RTBColors.JoinText, " in ", _
                 RTBColors.JoinUsername, "Clan " & ClanTag, RTBColors.JoinText, "."
         
         RunInAll "Event_BotClanInfo", ClanTag, Rank
@@ -2989,28 +2991,6 @@ Private Sub ClanHandler_InvitationReceived(ByVal Cookie As Long, ByVal ClanTag A
     End If
 
     RunInAll "Event_ClanInvitation", Cookie, ClanTag, ClanName, InvitedBy, IsNewClan
-End Sub
-
-Private Sub ClanHandler_GetMemberList(ByVal Cookie As Long, ByVal Members As Collection)
-    Dim i As Long
-    Dim oRequest As udtServerRequest
-    Dim Member As clsClanMemberObj
-
-    Call FindServerRequest(oRequest, Cookie)
-
-    For i = 1 To Members.Count
-        Set Member = Members.Item(i)
-        g_Clan.Members.Add Member
-        AddClanMember Member.Name, Member.Rank, Member.Status
-
-        If oRequest.HandlerType = reqScriptingCall Then
-            On Error Resume Next
-            RunInAll "Event_ClanMemberList", Member.DisplayName, Member.Rank, Member.Status
-        End If
-        Set Member = Nothing
-    Next i
-    
-    Call UpdateListviewTabs
 End Sub
 
 Private Sub ClanHandler_MemberUpdate(ByVal Member As clsClanMemberObj)
@@ -3078,137 +3058,223 @@ Private Sub ClanHandler_GetMOTD(ByVal Cookie As Long, ByVal Message As String)
     End If
 End Sub
 
+Private Sub ClanHandler_GetMemberList(ByVal Cookie As Long, ByVal Members As Collection)
+    Dim i As Long
+    Dim oRequest As udtServerRequest
+    Dim Member As clsClanMemberObj
+
+    Call FindServerRequest(oRequest, Cookie)
+
+    For i = 1 To Members.Count
+        Set Member = Members.Item(i)
+        g_Clan.Members.Add Member
+        AddClanMember Member.Name, Member.Rank, Member.Status
+
+        If oRequest.HandlerType = reqScriptingCall Then
+            On Error Resume Next
+            RunInAll "Event_ClanMemberList", Member.DisplayName, Member.Rank, Member.Status
+        End If
+        Set Member = Nothing
+    Next i
+    
+    Call UpdateListviewTabs
+End Sub
+
+Private Sub ClanHandler_GetMemberInfo(ByVal Cookie As Long, ByVal Result As enuClanResponseValue, ByVal ClanName As String, ByVal Rank As enuClanRank, ByVal JoinDate As Date)
+    Dim i        As Long
+    Dim oRequest As udtServerRequest
+    Dim Username As String
+    Dim ClanTag  As String
+    Dim Member   As clsClanMemberObj
+    Dim RespText As String
+
+    Call FindServerRequest(oRequest, Cookie)
+
+    Username = oRequest.Tag(0)
+    ClanTag = oRequest.Tag(1)
+
+    If (g_Clan.InClan And StrComp(g_Clan.Name, ClanTag, vbTextCompare) = 0) Then
+        g_Clan.FullName = ClanName
+        Set Member = g_Clan.GetMember(Username)
+        If Not Member Is Nothing Then
+            Member.JoinTime = JoinDate
+            Member.Rank = Rank
+        End If
+        Set Member = Nothing
+
+        Call UpdateListviewTabs
+    End If
+
+    If Result = clresSuccess Then
+        RespText = StringFormat("{0} is a {1} in Clan {2}: {3} since {4}.", Username, ClanHandler.GetRankName(Rank), ClanTag, ClanName, JoinDate)
+    Else
+        RespText = StringFormat("Error: Get {0} member info failed - {1}.", Username, ClanHandler.GetClanResponseText(Result))
+    End If
+
+    If oRequest.HandlerType = reqScriptingCall Then
+        On Error Resume Next
+        RunInAll "Event_ClanMemberInfo", Result, Username, ClanTag, ClanName, Rank, JoinDate
+    ElseIf oRequest.HandlerType = reqUserCommand Then
+        oRequest.Command.Respond RespText
+        oRequest.Command.SendResponse
+    ElseIf oRequest.HandlerType = reqUserInterface Then
+        AddChat RTBColors.ConsoleText, RespText
+    End If
+End Sub
+
 Private Sub ClanHandler_DemoteUserReply(ByVal Cookie As Long, ByVal Result As enuClanResponseValue)
     Dim oRequest As udtServerRequest
+    Dim ResponseText As String
+    Dim Username As String
 
     Call FindServerRequest(oRequest, Cookie)
+    Username = oRequest.Tag(0)
 
-    If oRequest.HandlerType <> reqScriptingCall Then
-        If Result = clresSuccess Then
-            AddChat RTBColors.SuccessText, "[CLAN] User demoted successfully."
-        Else
-            AddChat RTBColors.ErrorMessageText, "[CLAN] User demotion failed."
-        End If
+    If Result = clresSuccess Then
+        ResponseText = StringFormat("{0} demoted successfully.", Username)
     Else
+        ResponseText = StringFormat("Error: {0} demotion failed - {1}.", Username, ClanHandler.GetClanResponseText(Result))
+    End If
+
+    If oRequest.HandlerType = reqScriptingCall Then
         On Error Resume Next
         RunInAll "Event_ClanDemoteUserReply", Result
-    End If
-End Sub
-
-Private Sub ClanHandler_DisbandClanReply(ByVal Cookie As Long, ByVal Result As enuClanResponseValue)
-    Dim oRequest As udtServerRequest
-
-    Call FindServerRequest(oRequest, Cookie)
-
-    If MDebug("debug") Then
-        AddChat RTBColors.ConsoleText, "DisbandClanReply: " & Result
-    End If
-
-    If oRequest.HandlerType = reqScriptingCall Then
-        On Error Resume Next
-        RunInAll "Event_ClanDisbandReply", Result
-    End If
-End Sub
-
-Private Sub ClanHandler_MakeChieftainReply(ByVal Cookie As Long, ByVal Result As enuClanResponseValue)
-    Dim oRequest As udtServerRequest
-
-    Call FindServerRequest(oRequest, Cookie)
-
-    If MDebug("debug") Then
-        AddChat RTBColors.ConsoleText, "MakeChieftainReply: " & Result
-    End If
-
-    If oRequest.HandlerType = reqScriptingCall Then
-        On Error Resume Next
-        RunInAll "Event_ClanMakeChieftainReply", Result
-    End If
-End Sub
-
-Private Sub ClanHandler_InviteUserReply(ByVal Cookie As Long, ByVal Result As enuClanResponseValue)
-    Dim oRequest As udtServerRequest
-
-    Call FindServerRequest(oRequest, Cookie)
-
-    '0x00: Invitation accepted
-    '0x04: Invitation declined
-    '0x05: Failed to invite user
-    '0x09: Clan is full
-
-    If oRequest.HandlerType <> reqScriptingCall Then
-        Select Case Result
-            Case clresAccept:       AddChat RTBColors.SuccessText, "[CLAN] The invitation was accepted."
-            Case clresDecline:      AddChat RTBColors.ErrorMessageText, "[CLAN] The invitation was declined."
-            Case clresUnavailable:  AddChat RTBColors.ErrorMessageText, "[CLAN] The invitation failed."
-            Case clresIsFull:       AddChat RTBColors.ErrorMessageText, "[CLAN] The invitation failed: Your clan is full."
-            Case Else:              AddChat RTBColors.ErrorMessageText, "[CLAN] Unknown invitation status: 0x" & ZeroOffset(Result, 2)
-        End Select
-    Else
-        On Error Resume Next
-        RunInAll "Event_ClanInviteUserReply", Result
+    ElseIf oRequest.HandlerType = reqUserCommand Then
+        oRequest.Command.Respond ResponseText
+        oRequest.Command.SendResponse
+    ElseIf oRequest.HandlerType = reqUserInterface Then
+        AddChat RTBColors.ConsoleText, ResponseText
     End If
 End Sub
 
 Private Sub ClanHandler_PromoteUserReply(ByVal Cookie As Long, ByVal Result As enuClanResponseValue)
     Dim oRequest As udtServerRequest
+    Dim ResponseText As String
+    Dim Username As String
 
     Call FindServerRequest(oRequest, Cookie)
+    Username = oRequest.Tag(0)
 
-    If oRequest.HandlerType <> reqScriptingCall Then
-        If Result = clresSuccess Then
-            AddChat RTBColors.SuccessText, "[CLAN] User promoted successfully."
-        Else
-            AddChat RTBColors.ErrorMessageText, "[CLAN] User promotion failed."
-        End If
+    If Result = clresSuccess Then
+        ResponseText = StringFormat("{0} promoted successfully.", Username)
     Else
+        ResponseText = StringFormat("Error: {0} promotion failed - {1}.", Username, ClanHandler.GetClanResponseText(Result))
+    End If
+
+    If oRequest.HandlerType = reqScriptingCall Then
         On Error Resume Next
         RunInAll "Event_ClanPromoteUserReply", Result
+    ElseIf oRequest.HandlerType = reqUserCommand Then
+        oRequest.Command.Respond ResponseText
+        oRequest.Command.SendResponse
+    ElseIf oRequest.HandlerType = reqUserInterface Then
+        AddChat RTBColors.ConsoleText, ResponseText
     End If
 End Sub
 
 Private Sub ClanHandler_RemoveMemberReply(ByVal Cookie As Long, ByVal Result As enuClanResponseValue)
     Dim oRequest As udtServerRequest
+    Dim ResponseText As String
+    Dim Username As String
+
+    Call FindServerRequest(oRequest, Cookie)
+    Username = oRequest.Tag(0)
+
+    If CBool(oRequest.Tag(1)) Then
+        If Result = clresSuccess Then
+            ResponseText = "Left the clan successfully."
+        Else
+            ResponseText = StringFormat("Error: Clan leave failed - {0}.", ClanHandler.GetClanResponseText(Result))
+        End If
+    Else
+        If Result = clresSuccess Then
+            ResponseText = StringFormat("{0} removed successfully.", Username)
+        Else
+            ResponseText = StringFormat("Error: {0} removal failed - {1}.", Username, ClanHandler.GetClanResponseText(Result))
+        End If
+    End If
+
+    If oRequest.HandlerType = reqScriptingCall Then
+        On Error Resume Next
+        RunInAll "Event_ClanRemoveUserReply", Result
+    ElseIf oRequest.HandlerType = reqUserCommand Then
+        oRequest.Command.Respond ResponseText
+        oRequest.Command.SendResponse
+    ElseIf oRequest.HandlerType = reqUserInterface Then
+        AddChat RTBColors.ConsoleText, ResponseText
+    End If
+End Sub
+
+Private Sub ClanHandler_DisbandClanReply(ByVal Cookie As Long, ByVal Result As enuClanResponseValue)
+    Dim oRequest As udtServerRequest
+    Dim ResponseText As String
 
     Call FindServerRequest(oRequest, Cookie)
 
-'    0x00: Successfully removed user from clan
-'    0x02: Too soon to remove user
-'    0x03: Not enough members to remove this user
-'    0x07: Not authorized to remove the user
-'    0x08: User is not in your clan
-    
-    'Debug.Print "Removed successfully!"
-
-    If oRequest.HandlerType <> reqScriptingCall Then
-        Select Case Result
-            Case clresSuccess
-                If CBool(oRequest.Tag(1)) Then
-                    AddChat RTBColors.SuccessText, "[CLAN] You have successfully left the clan."
-                Else
-                    AddChat RTBColors.SuccessText, "[CLAN] User removed successfully."
-                End If
-
-            Case clresTooSoon
-                AddChat RTBColors.ErrorMessageText, "[CLAN] That user is currently on probation."
-
-            Case clresNotEnoughMembers
-                AddChat RTBColors.ErrorMessageText, "[CLAN] There are not enough members for you to remove that user."
-
-            Case clresNotAuthorized
-                AddChat RTBColors.ErrorMessageText, "[CLAN] You are not authorized to remove that user."
-
-            Case clresNotAllowed
-                AddChat RTBColors.ErrorMessageText, "[CLAN] You are not allowed to remove that user."
-
-            Case Else
-                AddChat RTBColors.InformationText, "[CLAN] 0x78 Response code: 0x" & ZeroOffset(Result, 2)
-                AddChat RTBColors.InformationText, "[CLAN] You failed to remove that user from the clan."
-        End Select
-
-        Call UpdateListviewTabs
+    If Result = clresSuccess Then
+        ResponseText = "Clan disbanded successfully."
     Else
+        ResponseText = StringFormat("Error: Disband clan failed - {0}.", ClanHandler.GetClanResponseText(Result))
+    End If
+
+    If oRequest.HandlerType = reqScriptingCall Then
         On Error Resume Next
-        RunInAll "Event_ClanRemoveUserReply", Result
+        RunInAll "Event_ClanDisbandReply", Result
+    ElseIf oRequest.HandlerType = reqUserCommand Then
+        oRequest.Command.Respond ResponseText
+        oRequest.Command.SendResponse
+    ElseIf oRequest.HandlerType = reqUserInterface Then
+        AddChat RTBColors.ConsoleText, ResponseText
+    End If
+End Sub
+
+Private Sub ClanHandler_MakeChieftainReply(ByVal Cookie As Long, ByVal Result As enuClanResponseValue)
+    Dim oRequest As udtServerRequest
+    Dim ResponseText As String
+    Dim Username As String
+
+    Call FindServerRequest(oRequest, Cookie)
+    Username = CStr(oRequest.Tag)
+
+    If Result = clresSuccess Then
+        ResponseText = StringFormat("{0} is now the chieftain.", Username)
+    Else
+        ResponseText = StringFormat("Error: Promotion of {0} to chieftain failed - {1}.", Username, ClanHandler.GetClanResponseText(Result))
+    End If
+
+    If oRequest.HandlerType = reqScriptingCall Then
+        On Error Resume Next
+        RunInAll "Event_ClanMakeChieftainReply", Result
+    ElseIf oRequest.HandlerType = reqUserCommand Then
+        oRequest.Command.Respond ResponseText
+        oRequest.Command.SendResponse
+    ElseIf oRequest.HandlerType = reqUserInterface Then
+        AddChat RTBColors.ConsoleText, ResponseText
+    End If
+End Sub
+
+Private Sub ClanHandler_InviteUserReply(ByVal Cookie As Long, ByVal Result As enuClanResponseValue)
+    Dim oRequest As udtServerRequest
+    Dim ResponseText As String
+    Dim Username As String
+
+    Call FindServerRequest(oRequest, Cookie)
+    Username = CStr(oRequest.Tag)
+
+    If Result = clresSuccess Then
+        ResponseText = StringFormat("{0} accepted the invitation.", Username)
+    Else
+        ResponseText = StringFormat("Error: {0} invitation failed - {1}.", Username, ClanHandler.GetClanResponseText(Result))
+    End If
+
+    If oRequest.HandlerType = reqScriptingCall Then
+        On Error Resume Next
+        RunInAll "Event_ClanInviteUserReply", Result
+    ElseIf oRequest.HandlerType = reqUserCommand Then
+        oRequest.Command.Respond ResponseText
+        oRequest.Command.SendResponse
+    ElseIf oRequest.HandlerType = reqUserInterface Then
+        AddChat RTBColors.ConsoleText, ResponseText
     End If
 End Sub
 

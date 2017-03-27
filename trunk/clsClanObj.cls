@@ -16,78 +16,87 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_pi       As Boolean
-Private m_picookie As Long
-Private m_pmotd    As Boolean
-Private m_inclan   As Boolean
-Private m_myrank   As Byte
-Private m_name     As String
-Private m_motd     As String
-Private m_members  As Collection
+Private m_PI       As Boolean
+Private m_PICookie As Long
+Private m_PMOTD    As Boolean
+Private m_InClan   As Boolean
+Private m_MyRank   As Byte
+Private m_Tag      As String
+Private m_Name     As String
+Private m_MOTD     As String
+Private m_Members  As Collection
 
 Private Sub Class_Initialize()
-    Set m_members = New Collection
+    Set m_Members = New Collection
 End Sub
 
 Private Sub Class_Terminate()
-    Set m_members = Nothing
+    Set m_Members = Nothing
 End Sub
 
 Public Property Get Name() As String
-    Name = m_name
+    Name = m_Tag
 End Property
 
 Public Property Let Name(str As String)
-    m_name = str
+    m_Tag = str
 End Property
 
 ' alias for Name
 Public Property Get Tag() As String
-    Tag = m_name
+    Tag = m_Tag
 End Property
 
 Public Property Let Tag(str As String)
-    m_name = str
+    m_Tag = str
+End Property
+
+Public Property Get FullName() As String
+    FullName = m_Name
+End Property
+
+Public Property Let FullName(str As String)
+    m_Name = str
 End Property
 
 Public Property Get MOTD() As String
-    MOTD = m_motd
+    MOTD = m_MOTD
 End Property
 
 Public Property Let MOTD(str As String)
-    m_motd = str
+    m_MOTD = str
 End Property
 
 Public Property Get InClan() As Boolean
-    InClan = m_inclan
+    InClan = m_InClan
 End Property
 
 Public Property Let InClan(bool As Boolean)
-    m_inclan = bool
+    m_InClan = bool
 End Property
 
 Public Property Get PendingInvitation() As Boolean
-    PendingInvitation = m_pi
+    PendingInvitation = m_PI
 End Property
 
 Public Property Let PendingInvitation(bool As Boolean)
-    m_pi = bool
+    m_PI = bool
 End Property
 
 Public Property Get PendingInvitationCookie() As Long
-    PendingInvitationCookie = m_picookie
+    PendingInvitationCookie = m_PICookie
 End Property
 
 Public Property Let PendingInvitationCookie(lng As Long)
-    m_picookie = lng
+    m_PICookie = lng
 End Property
 
 Public Property Get PendingClanMOTD() As Boolean
-    PendingClanMOTD = m_pmotd
+    PendingClanMOTD = m_PMOTD
 End Property
 
 Public Property Let PendingClanMOTD(bool As Boolean)
-    m_pmotd = bool
+    m_PMOTD = bool
 End Property
 
 Public Property Get Self() As clsClanMemberObj
@@ -105,7 +114,7 @@ Public Property Get Self() As clsClanMemberObj
 End Property
 
 Public Property Get Members() As Collection
-    Set Members = m_members
+    Set Members = m_Members
 End Property
 
 Public Property Get Chieftain() As clsClanMemberObj
@@ -235,7 +244,7 @@ Public Function GetUserIndexEx(ByVal Username As String) As Integer
 End Function
 
 Public Sub Clear()
-    Set m_members = New Collection
+    Set m_Members = New Collection
 End Sub
 
 Public Sub Disband()
@@ -269,6 +278,10 @@ End Sub
 
 Public Sub RequestMOTD()
     Call frmChat.ClanHandler.RequestClanMOTD(reqScriptingCall)
+End Sub
+
+Public Sub RequestMemberInfo(ByVal Username As String, ByVal ClanTag As String)
+    Call frmChat.ClanHandler.RequestClanMemberInfo(Username, ClanTag, reqScriptingCall)
 End Sub
 
 Public Sub SetMOTD(ByVal MOTD As String)
