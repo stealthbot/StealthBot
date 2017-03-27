@@ -14,6 +14,7 @@ Begin VB.Form frmChat
    ClientWidth     =   11400
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
+   KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
    ScaleHeight     =   7965
    ScaleWidth      =   11400
@@ -1082,7 +1083,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1108,7 +1108,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1916,14 +1915,14 @@ Private Sub Form_Load()
     
     Call ClearChannel
     
-    frmChat.KeyPreview = True
     SetTitle "Disconnected"
     
     frmChat.UpdateTrayTooltip
     
+    UserCancelledConnect = True
+    
     Me.Show
     Me.Refresh
-    Me.AutoRedraw = True
     
     AddChat RTBColors.ConsoleText, "-> Welcome to " & CVERSION & ", by Stealth."
     AddChat RTBColors.ConsoleText, "-> If you enjoy StealthBot, consider supporting its development at http://donate.stealthbot.net"
@@ -8055,7 +8054,7 @@ On Error GoTo ERROR_HANDLER
 
     ListItem.SmallIcon = RankIcon
     ListItem.ListSubItems.Item(1).ReportIcon = OnlineIcon
-    ListItem.ListSubItems.Item(2).Text = CStr(10000 + (10000 * RankIcon) + ListItem.Index)
+    ListItem.ListSubItems.Item(2).Text = CStr(1000 * RankIcon + ListItem.Index)
 
     Exit Sub
 ERROR_HANDLER:
