@@ -33,7 +33,7 @@ Public Event InviteUserReply(ByVal Cookie As Long, ByVal Result As enuClanRespon
 Public Event DemoteUserReply(ByVal Cookie As Long, ByVal Result As enuClanResponseValue)
 Public Event PromoteUserReply(ByVal Cookie As Long, ByVal Result As enuClanResponseValue)
 Public Event RemoveMemberReply(ByVal Cookie As Long, ByVal Result As enuClanResponseValue)
-Public Event GetMemberList(ByVal Cookie As Long, ByRef Members() As clsClanMemberObj)
+Public Event GetMemberList(ByVal Cookie As Long, ByVal Members As Collection)
 Public Event GetMOTD(ByVal Cookie As Long, ByVal Message As String)
 Public Event UnknownClanEvent(ByVal PacketID As Byte, ByVal Data As String)
 
@@ -58,7 +58,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal inBuf As clsDataBuffer)
     Dim Rank         As enuClanRank
     Dim JoinDate     As Date
     Dim Member       As clsClanMemberObj
-    Dim Members()    As clsClanMemberObj
+    Dim Members      As Collection
     Dim IsServerReq  As Boolean
     Dim IsPromotion  As Boolean
 
@@ -66,84 +66,86 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal inBuf As clsDataBuffer)
 
     Select Case PacketID
         Case SID_CLANFINDCANDIDATES                 ' standard server request
-            Cookie = inBuf.GetDWORD                 ' (DWORD) Cookie
+            Cookie = inBuf.GetDWord                 ' (DWORD) Cookie
             Result = inBuf.GetByte                  ' (BYTE) Result
             Count = inBuf.GetByte                   ' (BYTE) Candidate count
             Candidates = inBuf.GetStringArr         ' (STRING[]) Candidate names
             IsServerReq = True
 
         Case SID_CLANINVITEMULTIPLE                 ' standard server request
-            Cookie = inBuf.GetDWORD                 ' (DWORD) Cookie
+            Cookie = inBuf.GetDWord                 ' (DWORD) Cookie
             Result = inBuf.GetByte                  ' (BYTE) Result
             Candidates = inBuf.GetStringArr         ' (STRING[]) Failed candidate names
             IsServerReq = True
 
         Case SID_CLANCREATIONINVITATION             ' client request
-            Cookie = inBuf.GetDWORD                 ' (DWORD) Cookie
-            ClanTag = DWordToString(inBuf.GetDWORD) ' (BYTE) Clan tag
+            Cookie = inBuf.GetDWord                 ' (DWORD) Cookie
+            ClanTag = DWordToString(inBuf.GetDWord) ' (BYTE) Clan tag
             ClanName = inBuf.GetString              ' (STRING) Clan name
             Username = inBuf.GetString              ' (STRING) Inviter
             Count = inBuf.GetByte                   ' (BYTE) Candidate count
             Candidates = inBuf.GetStringArr         ' (STRING[]) Candidate names
 
         Case SID_CLANDISBAND                        ' standard server request
-            Cookie = inBuf.GetDWORD                 ' (DWORD) Cookie
+            Cookie = inBuf.GetDWord                 ' (DWORD) Cookie
             Result = inBuf.GetByte                  ' (BYTE) Result
             IsServerReq = True
 
         Case SID_CLANMAKECHIEFTAIN                  ' standard server request
-            Cookie = inBuf.GetDWORD                 ' (DWORD) Cookie
+            Cookie = inBuf.GetDWord                 ' (DWORD) Cookie
             Result = inBuf.GetByte                  ' (BYTE) Result
             IsServerReq = True
 
         Case SID_CLANINFO                           ' information event
             inBuf.GetByte                           ' (BYTE) 0
-            ClanTag = DWordToString(inBuf.GetDWORD) ' (DWORD) Clan tag
+            ClanTag = DWordToString(inBuf.GetDWord) ' (DWORD) Clan tag
             Rank = inBuf.GetByte                    ' (BYTE) My rank
 
         Case SID_CLANQUITNOTIFY                     ' information event
             Result = inBuf.GetByte                  ' (BYTE) 1
 
         Case SID_CLANINVITATION                     ' server request (awaits another user response)
-            Cookie = inBuf.GetDWORD                 ' (DWORD) Cookie
+            Cookie = inBuf.GetDWord                 ' (DWORD) Cookie
             Result = inBuf.GetByte                  ' (BYTE) Result
             IsServerReq = True
 
         Case SID_CLANREMOVEMEMBER                   ' standard server request
-            Cookie = inBuf.GetDWORD                 ' (DWORD) Cookie
+            Cookie = inBuf.GetDWord                 ' (DWORD) Cookie
             Result = inBuf.GetByte                  ' (BYTE) Result
             IsServerReq = True
 
         Case SID_CLANINVITATIONRESPONSE             ' client request
-            Cookie = inBuf.GetDWORD                 ' (DWORD) Cookie
-            ClanTag = DWordToString(inBuf.GetDWORD) ' (BYTE) Clan tag
+            Cookie = inBuf.GetDWord                 ' (DWORD) Cookie
+            ClanTag = DWordToString(inBuf.GetDWord) ' (BYTE) Clan tag
             ClanName = inBuf.GetString              ' (STRING) Clan name
             Username = inBuf.GetString              ' (STRING) Inviter
             Candidates = Split(vbNullString) ' empty string()
 
         Case SID_CLANRANKCHANGE                     ' standard server request
-            Cookie = inBuf.GetDWORD                 ' (DWORD) Cookie
+            Cookie = inBuf.GetDWord                 ' (DWORD) Cookie
             Result = inBuf.GetByte                  ' (BYTE) Result
             IsServerReq = True
 
         Case SID_CLANMOTD                           ' standard server request
-            Cookie = inBuf.GetDWORD                 ' (DWORD) Cookie
-            inBuf.GetDWORD                          ' (DWORD) 0
+            Cookie = inBuf.GetDWord                 ' (DWORD) Cookie
+            inBuf.GetDWord                          ' (DWORD) 0
             Message = inBuf.GetString               ' (STRING) Message
             IsServerReq = True
 
         Case SID_CLANMEMBERLIST                     ' standard server request
-            Cookie = inBuf.GetDWORD                 ' (DWORD) Cookie
+            Cookie = inBuf.GetDWord                 ' (DWORD) Cookie
             Count = inBuf.GetByte                   ' (BYTE) Member count
-            ReDim Members(0 To Count - 1)           ' (MEMBER[]) Members
-            For i = 0 To Count - 1
-                Set Members(i) = New clsClanMemberObj
-                With Members(i)
+            Set Members = New Collection            ' (MEMBER[]) Members
+            For i = 1 To Count
+                Set Member = New clsClanMemberObj
+                With Member
                     .Name = inBuf.GetString         ' (STRING) Username
                     .Rank = inBuf.GetByte           ' (BYTE) Rank
                     .Status = inBuf.GetByte         ' (BYTE) Status
                     .Location = inBuf.GetString     ' (STRING) Location
                 End With
+                Members.Add Member
+                Set Member = Nothing
             Next i
             IsServerReq = True
 
@@ -165,7 +167,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal inBuf As clsDataBuffer)
             Username = inBuf.GetString              ' (STRING) Initiator
 
         Case SID_CLANMEMBERINFORMATION              ' standard server request
-            Cookie = inBuf.GetDWORD                 ' (DWORD) Cookie
+            Cookie = inBuf.GetDWord                 ' (DWORD) Cookie
             Result = inBuf.GetByte                  ' (BYTE) Result
             ClanName = inBuf.GetString              ' (STRING) Clan name
             Rank = inBuf.GetByte                    ' (BYTE) Rank
@@ -221,7 +223,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal inBuf As clsDataBuffer)
             RaiseEvent GetMOTD(Cookie, Message)
 
         Case SID_CLANMEMBERLIST
-            RaiseEvent GetMemberList(Cookie, Members())
+            RaiseEvent GetMemberList(Cookie, Members)
 
         Case SID_CLANMEMBERSTATUSCHANGE
             RaiseEvent MemberUpdate(Member)
@@ -551,12 +553,12 @@ Public Function GetRank(ByVal i As enuClanRank) As String
 End Function
 
 Public Function TimeSinceLastRemoval() As Long
-    Dim L As Currency
+    Dim NowTC As Currency
     
     If LastRemoval > 0 Then
-        L = GetTickCountMS()
+        NowTC = GetTickCountMS()
         
-        TimeSinceLastRemoval = (L - LastRemoval) \ 1000
+        TimeSinceLastRemoval = (NowTC - LastRemoval) \ 1000
     Else
         TimeSinceLastRemoval = 30
     End If

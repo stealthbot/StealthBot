@@ -460,14 +460,14 @@ Public Function FindByte(ByVal Value As Integer) As Long
 End Function
 
 Public Function IsFullPacket(Optional ByVal st As enuServerTypes = stBNCS) As Boolean
-    Dim lngPacketLen As Long, L As Long
+    Dim lngPacketLen As Long, ByteIndex As Long
     
     IsFullPacket = False
     
     If m_bufsize > 0 Then
-        L = FindByte(&HFF)
+        ByteIndex = FindByte(&HFF)
         
-        If st <> stBNCS Or L = 1 Then
+        If st <> stBNCS Or ByteIndex = 1 Then
             lngPacketLen = GetPacketLength(st)
             
             If (lngPacketLen = 0) Then
@@ -492,15 +492,15 @@ Public Function IsFullPacket(Optional ByVal st As enuServerTypes = stBNCS) As Bo
                         "a valid packet!"
                 frmChat.AddChat RTBColors.ErrorMessageText, "The following data is being purged:"
                 
-                If L > 0 Then
+                If ByteIndex > 0 Then
                     frmChat.AddChat RTBColors.ErrorMessageText, Space$(1) & DebugOutput()
                 Else
                     frmChat.AddChat RTBColors.ErrorMessageText, Space$(1) & DebugOutput()
                 End If
             End If
             
-            If L > 0 Then
-                m_bufpos = L
+            If ByteIndex > 0 Then
+                m_bufpos = ByteIndex
                 Call Clear
             Else
                 Call Clear

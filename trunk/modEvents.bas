@@ -262,7 +262,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     frmChat.UpdateTrayTooltip
     
     frmChat.ListviewTabs.Tab = LVW_BUTTON_CHANNEL
-    Call frmChat.ListviewTabs_Click(LVW_BUTTON_CHANNEL)
+    Call frmChat.UpdateListviewTabs
     
     ' have we just joined the void?
     If (g_Channel.IsSilent) Then
@@ -401,7 +401,7 @@ Public Sub Event_LeftChatEnvironment()
     
     SetTitle GetCurrentUsername & ", online on " & BotVars.Gateway
     
-    frmChat.ListviewTabs_Click 0
+    Call frmChat.UpdateListviewTabs
     
     frmChat.AddChat RTBColors.JoinedChannelText, "-- Left channel --"
     
@@ -454,12 +454,6 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
     
     CurrentUsername = KillNull(Username)
     
-    'RequestSystemKeys
-    
-    Call SetNagelStatus(frmChat.sckBNet.SocketHandle, True)
-    
-    Call EnableSO_KEEPALIVE(frmChat.sckBNet.SocketHandle)
-    
     If (StrComp(Left$(CurrentUsername, 2), "w#", vbTextCompare) = 0) Then
         CurrentUsername = Mid(CurrentUsername, 3)
     End If
@@ -471,10 +465,6 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
         End If
     End If
 
-    ' show home channel in menu
-    PrepareHomeChannelMenu
-    PrepareQuickChannelMenu
-
     ' setup Bot menu game-specific features
     ShowW3 = (StrComp(Stats.Game, PRODUCT_WAR3, vbBinaryCompare) = 0) Or (StrComp(Stats.Game, PRODUCT_W3XP, vbBinaryCompare) = 0)
     ShowD2 = (StrComp(Stats.Game, PRODUCT_D2DV, vbBinaryCompare) = 0) Or (StrComp(Stats.Game, PRODUCT_D2XP, vbBinaryCompare) = 0)
@@ -485,30 +475,36 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
     SharedScriptSupport.myUsername = GetCurrentUsername
     
     With frmChat
-        .InitListviewTabs
-    
         .AddChat RTBColors.InformationText, "[BNCS] Logged on as ", RTBColors.SuccessText, Username, _
             RTBColors.InformationText, StringFormat(" using {0}.", Stats.ToString)
-            
+
+        Call SetNagelStatus(.sckBNet.SocketHandle, True)
+
+        Call EnableSO_KEEPALIVE(.sckBNet.SocketHandle)
+
+        ' show home channel in menu
+        PrepareHomeChannelMenu
+        PrepareQuickChannelMenu
+
+        .InitListviewTabs
+
         .tmrAccountLock.Enabled = False
         .UpTimer.Enabled = True
+
+        If (frmChat.sckBNLS.State <> sckClosed) Then
+            frmChat.sckBNLS.Close
+        End If
+
+        If (ExReconnectTimerID > 0) Then
+            Call KillTimer(0, ExReconnectTimerID)
+            
+            ExReconnectTimerID = 0
+        End If
+
+        If Config.FriendsListTab Then
+            Call .FriendListHandler.RequestFriendsList
+        End If
     End With
-    
-    If (frmChat.sckBNLS.State <> sckClosed) Then
-        frmChat.sckBNLS.Close
-    End If
-    
-    If (ExReconnectTimerID > 0) Then
-        Call KillTimer(0, ExReconnectTimerID)
-        
-        ExReconnectTimerID = 0
-    End If
-    
-    If Config.FriendsListTab Then
-        Call frmChat.FriendListHandler.RequestFriendsList
-    End If
-    
-    Set Stats = Nothing
     
     RequestSystemKeys reqInternal
     If (LenB(BotVars.Gateway) > 0) Then
@@ -521,6 +517,8 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
         
         RunInAll "Event_LoggedOn", CurrentUsername, BotVars.Product
     End If
+    
+    Set Stats = Nothing
     
     Exit Sub
 ERROR_HANDLER:
@@ -1121,7 +1119,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
         AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, UserObj.Clan
         
-        frmChat.ListviewTabs_Click 0
+        Call frmChat.UpdateListviewTabs
         
         DoLastSeen Username
     Else
@@ -1253,7 +1251,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim i           As Long
     Dim temp        As Byte
     Dim Level       As Byte
-    Dim L           As Long
+    Dim lMailCount  As Long
     Dim Banned      As Boolean
     Dim f           As Integer
     Dim UserIndex   As Integer
@@ -1413,8 +1411,8 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         ' add to user list
         AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, UserObj.Clan
         
-        ' focus on channel tab
-        frmChat.ListviewTabs_Click 0
+        ' if focus on channel tab, update header
+        Call frmChat.UpdateListviewTabs
         
         ' flash window
         If (frmChat.mnuFlash.Checked) Then
@@ -1451,11 +1449,11 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
             
             If (mail) Then
-                L = GetMailCount(Username)
+                lMailCount = GetMailCount(Username)
                 
-                If (L > 0) Then
+                If (lMailCount > 0) Then
                     frmChat.AddQ "/w " & Username & " You have " & L & _
-                        " new message" & IIf(L = 1, "", "s") & ". Type !inbox to retrieve."
+                        " new message" & IIf(lMailCount = 1, "", "s") & ". Type !inbox to retrieve."
                 End If
             End If
         End If
@@ -1558,7 +1556,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
             .Refresh
         End With
         
-        frmChat.ListviewTabs_Click 0
+        Call frmChat.UpdateListviewTabs
         
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' call event script function

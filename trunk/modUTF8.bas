@@ -150,7 +150,7 @@ Public Function DWordToString(ByVal Value As Long) As String
 
     CopyMemory ByVal Buffer, Value, 4
 
-    DWordToString = KillNull(StrReverse(Buffer))
+    DWordToString = KillNull(StrReverse$(Buffer))
 
 End Function
 

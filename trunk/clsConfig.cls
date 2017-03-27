@@ -1232,8 +1232,8 @@ Public Property Get MonitorCount() As Long
     MonitorCount = m_MonitorCount
 End Property
 
-Public Property Let MonitorCount(ByVal lValue As Long)
-    m_MonitorCount = lValue
+Public Property Let MonitorCount(ByVal iValue As Long)
+    m_MonitorCount = iValue
 End Property
 
 
@@ -1524,8 +1524,8 @@ Public Property Get ProtocolID() As Long
     ProtocolID = m_ProtocolID
 End Property
 
-Public Property Let ProtocolID(ByVal lValue As Long)
-    m_ProtocolID = lValue
+Public Property Let ProtocolID(ByVal iValue As Long)
+    m_ProtocolID = iValue
 End Property
 
 Public Property Get PlatformID() As String
@@ -1569,8 +1569,8 @@ Public Property Get DebugWardenFlags() As Long
     DebugWardenFlags = m_DebugWardenFlags
 End Property
 
-Public Property Let DebugWardenFlags(ByVal lValue As Long)
-    m_DebugWardenFlags = lValue
+Public Property Let DebugWardenFlags(ByVal iValue As Long)
+    m_DebugWardenFlags = iValue
 End Property
 
 

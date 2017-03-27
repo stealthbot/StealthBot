@@ -24,7 +24,6 @@ Begin VB.Form frmChat
       TabIndex        =   1
       TabStop         =   0   'False
       Top             =   240
-      Visible         =   0   'False
       Width           =   3705
       _ExtentX        =   6535
       _ExtentY        =   11245
@@ -1748,7 +1747,7 @@ Private Const SB_INET_BETA  As String = "AUTHBETA"
 Private Sub Form_Load()
     Dim s As String
     Dim f As Integer
-    Dim L As Long
+    Dim HeightVal As Long
     Dim FrmSplashInUse As Boolean
     Dim strBeta As String
     Dim sStr() As String
@@ -1856,13 +1855,13 @@ Private Sub Form_Load()
     End If
     
     If Config.PositionHeight > 0 Then
-        L = (IIf(CLng(Config.PositionHeight) < 200, 200, CLng(Config.PositionHeight)) * Screen.TwipsPerPixelY)
+        HeightVal = (IIf(CLng(Config.PositionHeight) < 200, 200, CLng(Config.PositionHeight)) * Screen.TwipsPerPixelY)
         
         If (rtbWhispersVisible) Then
-            L = L - (rtbWhispers.Height / Screen.TwipsPerPixelY)
+            HeightVal = HeightVal - (rtbWhispers.Height / Screen.TwipsPerPixelY)
         End If
         
-        Me.Height = L
+        Me.Height = HeightVal
     End If
     
     If Config.PositionWidth > 0 Then
@@ -2392,7 +2391,7 @@ Sub Event_BNetError(ErrorNumber As Integer, Description As String)
     lvClanList.ListItems.Clear
     lvFriendList.ListItems.Clear
     
-    ListviewTabs_Click 0
+    Call UpdateListviewTabs
     
     ' NOV 18 04 Change here should fix the attention-grabbing on errors
     'If Me.WindowState <> vbMinimized Then cboSend.SetFocus
@@ -2896,7 +2895,7 @@ Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
         ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
         lvClanList.ListItems.Clear
         ListviewTabs.Tab = LVW_BUTTON_CHANNEL
-        Call ListviewTabs_Click(LVW_BUTTON_CHANNEL)
+        Call UpdateListviewTabs
 
         On Error Resume Next
         RunInAll "Event_BotRemovedFromClan"
@@ -2960,9 +2959,7 @@ Private Sub ClanHandler_Info(ByVal ClanTag As String, ByVal Rank As enuClanRank)
     Call ClanHandler.RequestClanList(reqInternal)
     Call ClanHandler.RequestClanMOTD(reqInternal)
     
-    'frmChat.ClanHandler.RequestClanMotd 1
-    
-    frmChat.ListviewTabs_Click 0
+    Call UpdateListviewTabs
 End Sub
 
 Private Sub ClanHandler_InvitationReceived(ByVal Cookie As Long, ByVal ClanTag As String, ByVal ClanName As String, ByVal InvitedBy As String, ByVal IsNewClan As Boolean, ByRef Users() As String)
@@ -2994,27 +2991,30 @@ Private Sub ClanHandler_InvitationReceived(ByVal Cookie As Long, ByVal ClanTag A
     RunInAll "Event_ClanInvitation", Cookie, ClanTag, ClanName, InvitedBy, IsNewClan
 End Sub
 
-Private Sub ClanHandler_GetMemberList(ByVal Cookie As Long, ByRef Members() As clsClanMemberObj)
+Private Sub ClanHandler_GetMemberList(ByVal Cookie As Long, ByVal Members As Collection)
     Dim i As Long
     Dim oRequest As udtServerRequest
+    Dim Member As clsClanMemberObj
 
     Call FindServerRequest(oRequest, Cookie)
 
-    For i = LBound(Members) To UBound(Members)
-        g_Clan.Members.Add Members(i)
-        AddClanMember Members(i).DisplayName, Members(i).Rank, Members(i).Status
+    For i = 1 To Members.Count
+        Set Member = Members.Item(i)
+        g_Clan.Members.Add Member
+        AddClanMember Member.Name, Member.Rank, Member.Status
 
         If oRequest.HandlerType = reqScriptingCall Then
             On Error Resume Next
-            RunInAll "Event_ClanMemberList", Members(i).DisplayName, Members(i).Rank, Members(i).Status
+            RunInAll "Event_ClanMemberList", Member.DisplayName, Member.Rank, Member.Status
         End If
+        Set Member = Nothing
     Next i
     
-    frmChat.ListviewTabs_Click 0
+    Call UpdateListviewTabs
 End Sub
 
 Private Sub ClanHandler_MemberUpdate(ByVal Member As clsClanMemberObj)
-    Dim x        As ListItem
+    Dim ListItem As ListItem
     Dim pos      As Integer
     Dim OldRank  As enuClanRank
     Dim Username As String
@@ -3039,31 +3039,27 @@ Private Sub ClanHandler_MemberUpdate(ByVal Member As clsClanMemberObj)
         ' we didn't have a record of this user, assume this isn't a rank change...
         OldRank = Member.Rank
     End If
-    
-    Username = ConvertUsername(Member.Name)
 
-    If StrComp(Username, BotVars.Username, vbTextCompare) = 0 Then
+    If StrComp(Member.Name, BotVars.Username, vbTextCompare) = 0 Then
         g_Clan.Self.Rank = Member.Rank
     End If
-    
+
     If Member.Rank <> OldRank Then
         With RTBColors
-            AddChat .JoinText, "[CLAN] Member update: ", .JoinUsername, Username, _
+            AddChat .JoinText, "[CLAN] Member update: ", .JoinUsername, Member.DisplayName, _
                     .JoinText, " is now a ", .JoinUsername, Member.RankName, .JoinText, "."
         End With
     End If
 
-    Set x = lvClanList.FindItem(Username)
-
-    If Not (x Is Nothing) Then
-        Index = x.Index
-        lvClanList.ListItems.Remove Index
-        Set x = Nothing
+    Set ListItem = lvClanList.FindItem(Member.Name)
+    If Not (ListItem Is Nothing) Then
+        SetClanMember ListItem, Member.Rank, Member.Status
+        Set ListItem = Nothing
+    Else
+        AddClanMember Member.Name, Member.Rank, Member.Status
     End If
 
-    If Index < 1 Then Index = 1
-    
-    AddClanMember Member.DisplayName, Member.Rank, Member.IsOnline, Index
+    Call UpdateListviewTabs
     
     On Error Resume Next
     RunInAll "Event_ClanMemberUpdate", Member.Name, Member.Rank, Member.IsOnline
@@ -3209,7 +3205,7 @@ Private Sub ClanHandler_RemoveMemberReply(ByVal Cookie As Long, ByVal Result As 
                 AddChat RTBColors.InformationText, "[CLAN] You failed to remove that user from the clan."
         End Select
 
-        ListviewTabs_Click 0
+        Call UpdateListviewTabs
     Else
         On Error Resume Next
         RunInAll "Event_ClanRemoveUserReply", Result
@@ -3242,8 +3238,6 @@ Public Function GetLogFilePath() As String
 End Function
 
 Sub Form_Unload(Cancel As Integer)
-    Dim Key As String, L As Long
-    
     Inet.Cancel
     
     AddChat RTBColors.ErrorMessageText, "Shutting down..."
@@ -3386,13 +3380,13 @@ Public Sub AddFriend(ByVal Username As String, ByVal Product As String, IsOnline
         Set f = Nothing
     End If
     
-    ListviewTabs_Click 0
+    Call UpdateListviewTabs
 End Sub
 
 Private Sub FriendListHandler_FriendAdded(ByVal Username As String, ByVal Product As String, ByVal Location As Byte, ByVal Status As Byte, ByVal Channel As String)
     AddFriend Username, Product, (Location > 0)
 
-    ListviewTabs_Click 0
+    Call UpdateListviewTabs
 End Sub
 
 Private Sub FriendListHandler_FriendListReceived(ByVal FriendCount As Byte)
@@ -3402,7 +3396,7 @@ End Sub
 Private Sub FriendListHandler_FriendListEntry(ByVal Username As String, ByVal Product As String, ByVal Channel As String, ByVal Status As Byte, ByVal Location As Byte)
     AddFriend Username, Product, (Location > 0)
     
-    ListviewTabs_Click 0
+    Call UpdateListviewTabs
 End Sub
 
 Private Sub FriendListHandler_FriendMoved()
@@ -3420,7 +3414,7 @@ Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
         Set flItem = Nothing
     End If
     
-    ListviewTabs_Click 0
+    Call UpdateListviewTabs
 End Sub
 
 Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLIndex As Byte)
@@ -3484,7 +3478,7 @@ Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, x As 
     PopupMenu mnuQCTop
 End Sub
 
-Public Sub ListviewTabs_Click(PreviousTab As Integer)
+Private Sub ListviewTabs_Click(PreviousTab As Integer)
     Dim CurrentTab As Integer
     Dim PrevListView As ListView
     Dim CurrListView As ListView
@@ -3498,6 +3492,7 @@ Public Sub ListviewTabs_Click(PreviousTab As Integer)
         End Select
         CurrListView.Visible = True
         CurrListView.HideSelection = True
+        CurrListView.Refresh
     
         Select Case PreviousTab
             Case LVW_BUTTON_CHANNEL: Set PrevListView = lvChannel
@@ -3507,7 +3502,35 @@ Public Sub ListviewTabs_Click(PreviousTab As Integer)
         PrevListView.Visible = False
     End If
 
-    Call SetChannelListViewCaption
+    With lblCurrentChannel
+        If Not g_Online Then
+            .Caption = vbNullString
+            .ToolTipText = "Currently offline."
+        Else
+            Select Case ListviewTabs.Tab
+                Case LVW_BUTTON_CHANNEL:
+                    If LenB(g_Channel.Name) = 0 Then
+                        .Caption = BotVars.Gateway
+                        .ToolTipText = StringFormat("Currently online on {0}.", BotVars.Gateway)
+                    Else
+                        .Caption = StringFormat("{0} ({1})", _
+                                g_Channel.Name, g_Channel.Users.Count)
+                        .ToolTipText = StringFormat("Currently in {2} channel {0} ({1}).", _
+                                g_Channel.Name, g_Channel.Users.Count, g_Channel.sType())
+                    End If
+                Case LVW_BUTTON_FRIENDS
+                    .Caption = StringFormat("Your Friends ({0})", lvFriendList.ListItems.Count)
+                    .ToolTipText = StringFormat("Currently viewing {0} friends.", lvFriendList.ListItems.Count)
+                Case LVW_BUTTON_CLAN
+                    .Caption = StringFormat("Clan {0} ({1} members)", g_Clan.Name, lvClanList.ListItems.Count)
+                    .ToolTipText = StringFormat("Currently viewing {1} members of Clan {0}.", g_Clan.Name, lvClanList.ListItems.Count)
+            End Select
+        End If
+    End With
+End Sub
+
+Public Sub UpdateListviewTabs()
+    Call ListviewTabs_Click(ListviewTabs.Tab)
 End Sub
 
 ' This procedure relies on code in RecordcboSendSelInfo() that sets global variables
@@ -4044,11 +4067,11 @@ End Sub
 Private Sub mnuPopClanRemove_Click()
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
 
-    Dim L As Long
-    L = ClanHandler.TimeSinceLastRemoval
+    Dim LastRemoval As Long
+    LastRemoval = ClanHandler.TimeSinceLastRemoval
 
-    If L < 30 Then
-        AddChat RTBColors.ErrorMessageText, "You must wait " & 30 - L & " more seconds before you " & _
+    If LastRemoval < 30 Then
+        AddChat RTBColors.ErrorMessageText, "You must wait " & 30 - LastRemoval & " more seconds before you " & _
                 "can remove another user from your clan."
     Else
         If MsgBox("Are you sure you want to remove this user from the clan?", vbExclamation + vbYesNo, _
@@ -4546,8 +4569,8 @@ Private Sub mnuDisableVoidView_Click()
 End Sub
 
 Private Sub mnuDisconnect2_Click()
-    Dim Key As String, L As Long
-    Key = GetProductKey()
+'    Dim Key As String, L As Long
+'    Key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
 '        AttemptedNewVerbyte = False
@@ -5180,8 +5203,8 @@ Sub mnuLock_Click()
 End Sub
 
 Sub mnuDisconnect_Click()
-    Dim Key As String, L As Long
-    Key = GetProductKey()
+'    Dim Key As String, L As Long
+'    Key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
 '        AttemptedNewVerbyte = False
@@ -5635,7 +5658,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             If (Shift = vbCtrlMask) Then
                 If (CurrentTab <> LVW_BUTTON_CHANNEL) Then
                     ListviewTabs.Tab = LVW_BUTTON_CHANNEL
-                    Call ListviewTabs_Click(CurrentTab)
+                    Call UpdateListviewTabs
                 Else
                     cboSend.SelStart = 0
                     cboSend.SelLength = Len(cboSend.Text)
@@ -5646,7 +5669,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             If (Shift = vbCtrlMask) Then
                 If (CurrentTab <> LVW_BUTTON_FRIENDS) And (ListviewTabs.TabEnabled(LVW_BUTTON_FRIENDS)) Then
                     ListviewTabs.Tab = LVW_BUTTON_FRIENDS
-                    Call ListviewTabs_Click(CurrentTab)
+                    Call UpdateListviewTabs
                 End If
             End If
             
@@ -5654,7 +5677,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             If (Shift = vbCtrlMask) Then
                 If (CurrentTab <> LVW_BUTTON_CLAN) And (ListviewTabs.TabEnabled(LVW_BUTTON_CLAN)) Then
                     ListviewTabs.Tab = LVW_BUTTON_CLAN
-                    Call ListviewTabs_Click(CurrentTab)
+                    Call UpdateListviewTabs
                 End If
             End If
             
@@ -5693,7 +5716,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Call txtPre.SetFocus
                 Else
                     Call ListviewTabs.SetFocus
-                    Call ListviewTabs_Click(0)
+                    Call UpdateListviewTabs
                 End If
             Else
             
@@ -6327,7 +6350,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
             
             Call LockWindowUpdate(&H0)
             
-            ListviewTabs_Click 0
+            Call UpdateListviewTabs
         End If
     
         tmrSilentChannel(0).Enabled = False
@@ -7883,34 +7906,6 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     MatchIndex = 1
 End Function
 
-Private Function SetChannelListViewCaption() As String
-    With lblCurrentChannel
-        If Not g_Online Then
-            .Caption = vbNullString
-            .ToolTipText = "Currently offline."
-        Else
-            Select Case ListviewTabs.Tab
-                Case LVW_BUTTON_CHANNEL:
-                    If LenB(g_Channel.Name) = 0 Then
-                        .Caption = BotVars.Gateway
-                        .ToolTipText = StringFormat("Currently online on {0}.", BotVars.Gateway)
-                    Else
-                        .Caption = StringFormat("{0} ({1})", _
-                                g_Channel.Name, g_Channel.Users.Count)
-                        .ToolTipText = StringFormat("Currently in {2} channel {0} ({1}).", _
-                                g_Channel.Name, g_Channel.Users.Count, g_Channel.sType())
-                    End If
-                Case LVW_BUTTON_FRIENDS
-                    .Caption = StringFormat("Your Friends ({0})", lvFriendList.ListItems.Count)
-                    .ToolTipText = StringFormat("Currently viewing {0} friends.", lvFriendList.ListItems.Count)
-                Case LVW_BUTTON_CLAN
-                    .Caption = StringFormat("Clan {0} ({1} members)", g_Clan.Name, lvClanList.ListItems.Count)
-                    .ToolTipText = StringFormat("Currently viewing {1} members of Clan {0}.", g_Clan.Name, lvClanList.ListItems.Count)
-            End Select
-        End If
-    End With
-End Function
-
 'this is a fucking mess. It reads:
 '"This copy of StealthBot has been tampered with. Please get a new copy of StealthBot at http://www.stealthbot.net.
 'Additionally, please report the website at which you downloaded StealthBot in an e-mail to abuse@stealthbot.net. Thanks!"
@@ -7962,41 +7957,48 @@ Public Sub DisableListviewTabs()
     ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
 End Sub
 
-Private Sub AddClanMember(ByVal Name As String, ByVal Rank As Integer, ByVal Online As Integer, Optional ByVal Index As Integer = 1)
+Private Sub AddClanMember(ByVal Name As String, ByVal Rank As Integer, ByVal Status As Integer)
 On Error GoTo ERROR_HANDLER:
     Dim RankIcon As Integer
-    
-    RankIcon = Rank
-    
-    If (RankIcon = clrankRecruit) Then RankIcon = IC_CLAN_PEON ' peon probation rank -> normal peon icon
-    If (RankIcon < clrankRecruit Or RankIcon > clrankChieftain) Then RankIcon = IC_CLAN_UNKNOWN '// handle bad ranks
-    
-    '// add user
-    
-    Name = KillNull(Name)
-    
-    If Online <> 0 Then
-        Online = IC_CLAN_STATUS_ONLINE
-    Else
-        Online = IC_CLAN_STATUS_OFFLINE
-    End If
-    
-    With lvClanList
-        .ListItems.Add Index, , Name, , RankIcon
-        If (BotVars.NoColoring = False) Then
-            If (StrComp(BotVars.Username, Name, vbTextCompare) = 0) Then
-                .ListItems(.ListItems.Count).ForeColor = FormColors.ChannelListSelf
-            End If
-        End If
-        .ListItems(.ListItems.Count).ListSubItems.Add , , , Online
-        .ListItems(.ListItems.Count).ListSubItems.Add , , RankIcon
-    End With
+    Dim ListItem As ListItem
 
-    frmChat.ListviewTabs_Click 0
+    Set ListItem = lvClanList.ListItems.Add(lvClanList.ListItems.Count + 1, , Name)
+    If (BotVars.NoColoring = False) Then
+        If (StrComp(BotVars.Username, Name, vbTextCompare) = 0) Then
+            ListItem.ForeColor = FormColors.ChannelListSelf
+        End If
+    End If
+    ListItem.ListSubItems.Add , , , IC_CLAN_UNKNOWN
+    ListItem.ListSubItems.Add , , vbNullString
+    SetClanMember ListItem, Rank, Status
 
     Exit Sub
 ERROR_HANDLER:
     AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddClanMember", Err.Number, Err.Description)
+End Sub
+
+Private Sub SetClanMember(ByVal ListItem As ListItem, ByVal Rank As Integer, ByVal Status As Integer)
+On Error GoTo ERROR_HANDLER
+    Dim RankIcon   As Integer
+    Dim OnlineIcon As Integer
+    RankIcon = Rank
+
+    If (RankIcon = clrankRecruit) Then RankIcon = IC_CLAN_PEON ' peon probation rank -> normal peon icon
+    If (RankIcon < clrankRecruit Or RankIcon > clrankChieftain) Then RankIcon = IC_CLAN_UNKNOWN '// handle bad ranks
+
+    If Status <> 0 Then
+        OnlineIcon = IC_CLAN_STATUS_ONLINE
+    Else
+        OnlineIcon = IC_CLAN_STATUS_OFFLINE
+    End If
+
+    ListItem.SmallIcon = RankIcon
+    ListItem.ListSubItems.Item(1).ReportIcon = OnlineIcon
+    ListItem.ListSubItems.Item(2).Text = CStr(10000 + (1000 * RankIcon) + ListItem.Index)
+
+    Exit Sub
+ERROR_HANDLER:
+    AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.SetClanMember", Err.Number, Err.Description)
 End Sub
 
 Private Function GetClanSelectedUser() As String

@@ -757,7 +757,7 @@ Public Sub AddName(ByVal Username As String, ByVal AccountName As String, ByVal 
         '.Refresh
     End With
     
-    frmChat.ListviewTabs_Click 0
+    Call frmChat.UpdateListviewTabs
 End Sub
 
 
@@ -2224,7 +2224,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
    
     Dim arr()          As Variant
     Dim s              As String
-    Dim L              As Long
+    Dim l              As Long
     Dim lngVerticalPos As Long
     Dim Diff           As Long
     Dim i              As Long
@@ -2365,18 +2365,18 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         
             If ((StrictIsNumeric(saElements(i + 1))) And (Len(saElements(i + 2)) > 0)) Then
-                L = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
+                l = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
                 
-                While (L > 0)
-                    Mid$(saElements(i + 2), L + 1, 1) = "/"
+                While (l > 0)
+                    Mid$(saElements(i + 2), l + 1, 1) = "/"
                     
-                    L = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
+                    l = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
                 Wend
             
-                L = Len(rtb.Text)
+                l = Len(rtb.Text)
             
                 With rtb
-                    .SelStart = L
+                    .SelStart = l
                     .SelLength = 0
                     .SelFontName = saElements(i)
                     .SelColor = saElements(i + 1)
@@ -2398,7 +2398,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         End If
 
-        ColorModify rtb, L
+        ColorModify rtb, l
 
         If (blUnlock) Then
             SendMessage rtb.hWnd, WM_VSCROLL, _
