@@ -999,7 +999,7 @@ Begin VB.Form frmChat
       HideColumnHeaders=   -1  'True
       OLEDragMode     =   1
       _Version        =   393217
-      SmallIcons      =   "imlIcons"
+      SmallIcons      =   "imlClan"
       ForeColor       =   10079232
       BackColor       =   0
       BorderStyle     =   1
@@ -1014,7 +1014,7 @@ Begin VB.Form frmChat
          Strikethrough   =   0   'False
       EndProperty
       OLEDragMode     =   1
-      NumItems        =   4
+      NumItems        =   3
       BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
          Object.Width           =   4057
       EndProperty
@@ -1025,11 +1025,7 @@ Begin VB.Form frmChat
       BeginProperty ColumnHeader(3) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
          Alignment       =   1
          SubItemIndex    =   2
-         Object.Width           =   2540
-      EndProperty
-      BeginProperty ColumnHeader(4) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         SubItemIndex    =   3
-         Object.Width           =   88
+         Object.Width           =   0
       EndProperty
    End
    Begin MSComctlLib.ListView lvFriendList 
@@ -1919,14 +1915,6 @@ Private Sub Form_Load()
     End With
     
     Call ClearChannel
-
-    With lvClanList
-        .View = lvwReport
-        .SmallIcons = imlClan
-        .ColumnHeaders(1).Width = (.Width \ 4) * 3 - 150
-        .ColumnHeaders(2).Width = .Width \ 4 + 200
-        .ColumnHeaders(3).Width = 0
-    End With
     
     frmChat.KeyPreview = True
     SetTitle "Disconnected"
@@ -2240,7 +2228,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
     
     
     Dim s As String
-    Dim L As Long
+    Dim l As Long
     Dim i As Integer
     
     If Not BotVars.LockChat Then
@@ -2286,7 +2274,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             If Len(saElements(i + 1)) > 0 Then
                 With rtbWhispers
                     .SelStart = Len(.Text)
-                    L = .SelStart
+                    l = .SelStart
                     .SelLength = 0
                     .SelColor = saElements(i)
                     .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
@@ -2295,7 +2283,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             End If
         Next i
         
-        Call ColorModify(rtbWhispers, L)
+        Call ColorModify(rtbWhispers, l)
     End If
 End Sub
 
@@ -2751,7 +2739,6 @@ Sub Form_Resize()
         With lvClanList
             .ColumnHeaders(1).Width = (.Width \ 4) * 3 - 150
             .ColumnHeaders(2).Width = imlClan.ImageWidth '.Width \ 4 + 200
-            .ColumnHeaders(3).Width = 0
         End With
         
         With lvFriendList
@@ -3033,11 +3020,16 @@ Private Sub ClanHandler_MemberUpdate(ByVal Member As clsClanMemberObj)
 
     Set ListItem = lvClanList.FindItem(Member.Name)
     If Not (ListItem Is Nothing) Then
+        ' set the icon and status in place
         SetClanMember ListItem, Member.Rank, Member.Status
         Set ListItem = Nothing
     Else
+        ' wasn't found...
         AddClanMember Member.Name, Member.Rank, Member.Status
     End If
+
+    ' re-sort
+    lvClanList.Sorted = True
 
     Call UpdateListviewTabs
     
@@ -3076,6 +3068,9 @@ Private Sub ClanHandler_GetMemberList(ByVal Cookie As Long, ByVal Members As Col
         End If
         Set Member = Nothing
     Next i
+
+    ' re-sort
+    lvClanList.Sorted = True
     
     Call UpdateListviewTabs
 End Sub
@@ -8060,7 +8055,7 @@ On Error GoTo ERROR_HANDLER
 
     ListItem.SmallIcon = RankIcon
     ListItem.ListSubItems.Item(1).ReportIcon = OnlineIcon
-    ListItem.ListSubItems.Item(2).Text = CStr(10000 + (1000 * RankIcon) + ListItem.Index)
+    ListItem.ListSubItems.Item(2).Text = CStr(10000 + (10000 * RankIcon) + ListItem.Index)
 
     Exit Sub
 ERROR_HANDLER:
