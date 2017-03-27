@@ -1923,6 +1923,8 @@ On Error GoTo ERROR_HANDLER:
                 frmAccountManager.ShowMode ACCOUNT_MODE_LOGON
             End If
 
+            Exit Sub
+
         Case Else
             Call Event_LogonEvent(ACCOUNT_MODE_CREAT, lResult, vbNullString)
     End Select
