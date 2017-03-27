@@ -995,7 +995,7 @@ Private Function WarCraftIII_ToString() As String
         buf = " (Level " & Level()
         If (IsWCG) Then
             buf = buf & ", " & IconName() & " icon"
-        ElseIf (Icon() <> vbNullString) Then
+        ElseIf (LenB(Icon()) > 0 And StrComp(Icon(), StrReverse$(Game()), vbBinaryCompare) <> 0) Then
             buf = buf & ", icon tier " & IconTier() & ", " & IconName() & " icon"
         End If
         
