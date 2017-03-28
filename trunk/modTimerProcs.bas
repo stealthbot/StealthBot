@@ -62,23 +62,6 @@ Public Sub ScriptReload_TimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal 
     End If
 End Sub
 
-'/* Timer proc for invite accept form - deny accept/decline of the invitation for 3 sec */
-Public Function ClanInviteTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal idEvent As Long, ByVal dwTimer As Long)
-    Call KillTimer(frmClanInvite.hWnd, ClanAcceptTimerID)
-    ClanAcceptTimerID = 0
-    
-    frmClanInvite.cmdAccept.Enabled = True
-    frmClanInvite.cmdDecline.Enabled = True
-    
-    ClanAcceptTimerID = SetTimer(frmClanInvite.hWnd, 0, 28000, AddressOf ClanInviteTimerProc2)
-End Function
-
-'/* Timer proc 2 for invite accept form - autodeclines after 30 seconds */
-Public Function ClanInviteTimerProc2(ByVal hWnd As Long, ByVal uMsg As Long, ByVal idEvent As Long, ByVal dwTimer As Long)
-    Call KillTimer(frmClanInvite.hWnd, ClanAcceptTimerID)
-    Call frmClanInvite.cmdDecline_Click
-End Function
-
 
 ' Timer procedure for the queue
 Public Sub QueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal idEvent As Long, ByVal dwTimer As Long)

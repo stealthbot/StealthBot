@@ -11,7 +11,6 @@ Public Database As New clsDatabase
 Public ReconnectTimerID As Long
 Public ExReconnectTimerID As Long
 Public SCReloadTimerID As Long
-Public ClanAcceptTimerID As Long
 Public QueueTimerID As Long
 Public rtbWhispersVisible As Boolean
 Public cboSendHadFocus As Boolean
