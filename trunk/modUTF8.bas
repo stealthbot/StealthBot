@@ -147,9 +147,7 @@ End Function
 Public Function DWordToString(ByVal Value As Long) As String
     
     Dim Buffer As String * 4
-
     CopyMemory ByVal Buffer, Value, 4
-
     DWordToString = KillNull(StrReverse$(Buffer))
 
 End Function
@@ -157,8 +155,9 @@ End Function
 Public Function StringToDWord(ByVal Value As String) As Long
     
     Dim Buffer As String * 4
-    Buffer = Value
-
+    Buffer = String$(4, vbNullChar)
+    Mid$(Buffer, 1, Len(Value)) = Value
+    Buffer = StrReverse$(Buffer)
     CopyMemory StringToDWord, ByVal Buffer, 4
 
 End Function
