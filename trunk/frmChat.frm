@@ -1039,8 +1039,10 @@ Begin VB.Form frmChat
       Width           =   3705
       _ExtentX        =   6535
       _ExtentY        =   11245
+      SortKey         =   2
       View            =   3
       LabelEdit       =   1
+      Sorted          =   -1  'True
       LabelWrap       =   0   'False
       HideSelection   =   -1  'True
       HideColumnHeaders=   -1  'True
@@ -1062,7 +1064,7 @@ Begin VB.Form frmChat
          Strikethrough   =   0   'False
       EndProperty
       OLEDragMode     =   1
-      NumItems        =   2
+      NumItems        =   3
       BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
          Object.Width           =   4057
       EndProperty
@@ -1070,6 +1072,10 @@ Begin VB.Form frmChat
          Alignment       =   1
          SubItemIndex    =   1
          Object.Width           =   88
+      EndProperty
+      BeginProperty ColumnHeader(3) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         SubItemIndex    =   2
+         Object.Width           =   0
       EndProperty
    End
    Begin RichTextLib.RichTextBox rtbWhispers 
@@ -3387,151 +3393,162 @@ Sub Form_Unload(Cancel As Integer)
     #End If
 End Sub
 
+Private Sub FriendListHandler_FriendsListReply(ByVal Friends As Collection)
+    Dim FriendObj   As clsFriendObj
+    Dim i           As Integer
+    Dim EntryNumber As Integer
 
-Public Sub AddFriend(ByVal Username As String, ByVal Product As String, IsOnline As Boolean)
-    Dim i As Integer, OnlineIcon As Integer
-    Dim f As ListItem
-    Const ICOFFLINE = MONITOR_OFFLINE
-    Const ICONLINE = MONITOR_ONLINE
-    
-    If IsOnline Then OnlineIcon = ICONLINE Else OnlineIcon = ICOFFLINE
-    
-    'Everybody Else
-    Select Case Product
-        Case Is = PRODUCT_STAR
-            i = ICSTAR
-        Case Is = PRODUCT_SEXP
-            i = ICSEXP
-        Case Is = PRODUCT_D2DV
-            i = ICD2DV
-        Case Is = PRODUCT_D2XP
-            i = ICD2XP
-        Case Is = PRODUCT_W2BN
-            i = ICW2BN
-        Case Is = PRODUCT_WAR3
-            i = ICWAR3
-        Case Is = PRODUCT_W3XP
-            i = ICWAR3X
-        Case Is = PRODUCT_CHAT
-            i = ICCHAT
-        Case Is = PRODUCT_DRTL
-            i = ICDIABLO
-        Case Is = PRODUCT_DSHR
-            i = ICDIABLOSW
-        Case Is = PRODUCT_JSTR
-            i = ICJSTR
-        Case Is = PRODUCT_SSHR
-            i = ICSCSW
-        Case Else
-            i = ICUNKNOWN
-    End Select
-    
-    Set f = lvFriendList.FindItem(Username)
-    
-    If (f Is Nothing) Then
-        With lvFriendList.ListItems
-            .Add , , Username, , i
-            .Item(.Count).ListSubItems.Add , , , OnlineIcon
+    Set g_Friends = Friends
+
+    If Config.FriendsListTab Then
+        lvFriendList.ListItems.Clear
+        For i = 1 To Friends.Count
+            EntryNumber = i - 1
+            Set FriendObj = Friends.Item(i)
+            If FriendObj.IsOnline Or Config.ShowOfflineFriends Then
+                AddFriendItem FriendObj.DisplayName, FriendObj.Game, FriendObj.Status, FriendObj.LocationID, EntryNumber
+            End If
+            Set FriendObj = Nothing
+        Next i
+
+        ' re-sort
+        lvFriendList.Sorted = True
+
+        Call UpdateListviewTabs
+    End If
+End Sub
+
+Private Sub FriendListHandler_FriendsUpdate(ByVal EntryNumber As Byte, ByVal FriendObj As clsFriendObj)
+    Dim ListItem As ListItem
+
+    If g_Friends.Count > EntryNumber Then
+        ' NOTE: There is a server bug here where, when this packet is sent automaticlaly
+        '   (not requested), the fields contains your own information instead when logged on.
+        '   Because of this, we ignore that field completely and wait for the periodic updates
+        '   to update the value.
+        '   (see: https://bnetdocs.org/packet/384/sid-friendsupdate)
+        With g_Friends.Item(EntryNumber + 1)
+            If .IsOnline Then
+                FriendObj.Status = .Status
+                FriendObj.LocationID = .LocationID
+                FriendObj.Game = .Game
+                FriendObj.Location = .Location
+            End If
+            .Status = FriendObj.Status
+            .LocationID = FriendObj.LocationID
+            .Game = FriendObj.Game
+            .Location = FriendObj.Location
         End With
-    Else
-        f.SmallIcon = i
-        f.ListSubItems.Item(1).ReportIcon = OnlineIcon
-        
-        Set f = Nothing
     End If
-    
-    Call UpdateListviewTabs
-End Sub
 
-Private Sub FriendListHandler_FriendAdded(ByVal Username As String, ByVal Product As String, ByVal Location As Byte, ByVal Status As Byte, ByVal Channel As String)
-    AddFriend Username, Product, (Location > 0)
+    If Config.FriendsListTab Then
+        Set ListItem = GetFriendItem(EntryNumber)
+        If Not (ListItem Is Nothing) Then
+            ' set the icon and status in place
+            SetFriendItem ListItem, EntryNumber, True, FriendObj.Game, FriendObj.Status, FriendObj.LocationID
+            Set ListItem = Nothing
+        Else
+            ' wasn't found...
+            If FriendObj.IsOnline Or Config.ShowOfflineFriends Then
+                AddFriendItem FriendObj.DisplayName, FriendObj.Game, FriendObj.Status, FriendObj.LocationID, EntryNumber
+            End If
+        End If
 
-    Call UpdateListviewTabs
-End Sub
+        ' re-sort
+        lvFriendList.Sorted = True
 
-Private Sub FriendListHandler_FriendListReceived(ByVal FriendCount As Byte)
-    lvFriendList.ListItems.Clear
-End Sub
-
-Private Sub FriendListHandler_FriendListEntry(ByVal Username As String, ByVal Product As String, ByVal Channel As String, ByVal Status As Byte, ByVal Location As Byte)
-    AddFriend Username, Product, (Location > 0)
-    
-    Call UpdateListviewTabs
-End Sub
-
-Private Sub FriendListHandler_FriendMoved()
-    Call FriendListHandler.RequestFriendsList
-End Sub
-
-Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
-    Dim flItem As ListItem
-    
-    Set flItem = lvFriendList.FindItem(Username)
-   
-    If (Not (flItem Is Nothing)) Then
-        lvFriendList.ListItems.Remove flItem.Index
-    
-        Set flItem = Nothing
+        Call UpdateListviewTabs
     End If
-    
-    Call UpdateListviewTabs
 End Sub
 
-Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLIndex As Byte)
-    On Error GoTo ERROR_HANDLER
+Private Sub FriendListHandler_FriendsAdd(ByVal FriendObj As clsFriendObj)
+    Dim EntryNumber As Integer
 
-    Dim x As ListItem
-    Dim i As Integer
-    Const ICONLINE = MONITOR_ONLINE
-    Const ICOFFLINE = MONITOR_OFFLINE
+    EntryNumber = g_Friends.Count
+    g_Friends.Add FriendObj
+
+    If Config.FriendsListTab Then
+        If FriendObj.IsOnline Or Config.ShowOfflineFriends Then
+            AddFriendItem FriendObj.DisplayName, FriendObj.Game, FriendObj.Status, FriendObj.LocationID, EntryNumber
+        End If
+
+        ' re-sort
+        lvFriendList.Sorted = True
+
+        Call UpdateListviewTabs
+    End If
+End Sub
+
+Private Sub FriendListHandler_FriendsRemove(ByVal EntryNumber As Byte)
+    Dim ListItem As ListItem
+    Dim i        As Integer
+
+    If g_Friends.Count > EntryNumber Then
+        g_Friends.Remove EntryNumber + 1
+    End If
+
+    If Config.FriendsListTab Then
+        Set ListItem = GetFriendItem(EntryNumber)
+        If Not (ListItem Is Nothing) Then
+            lvFriendList.ListItems.Remove ListItem.Index
+            For i = EntryNumber + 1 To g_Friends.Count + 1
+                Set ListItem = GetFriendItem(i)
+                If Not (ListItem Is Nothing) Then
+                    SetFriendItem ListItem, i - 1
+                End If
+            Next i
+        End If
     
-    Set x = lvFriendList.FindItem(Username)
-    
-    If Not (x Is Nothing) Then
-        With g_Friends.Item(FLIndex)
-            Select Case .LocationID
-                Case FRL_OFFLINE
-                    x.SmallIcon = ICUNKNOWN
-                    
-                    x.ListSubItems.Item(1).ReportIcon = ICOFFLINE
-                    
-                Case Else
-                    If x.ListSubItems.Item(1).ReportIcon = ICOFFLINE Then
-                        'Friend is now online - notify user?
+        Call UpdateListviewTabs
+    End If
+End Sub
+
+Private Sub FriendListHandler_FriendsPosition(ByVal EntryNumber As Byte, ByVal NewPosition As Byte)
+    Dim FriendObj As clsFriendObj
+    Dim ListItem  As ListItem
+    Dim ListItem2 As ListItem
+    Dim i         As Integer
+
+    If g_Friends.Count > EntryNumber Then
+        Set FriendObj = g_Friends.Item(EntryNumber + 1)
+        g_Friends.Remove EntryNumber + 1
+        If g_Friends.Count > NewPosition Then
+            g_Friends.Add FriendObj, , NewPosition + 1
+        Else
+            g_Friends.Add FriendObj
+        End If
+        Set FriendObj = Nothing
+    End If
+
+    If Config.FriendsListTab Then
+        Set ListItem = GetFriendItem(EntryNumber)
+        If Not (ListItem Is Nothing) Then
+            If EntryNumber < NewPosition Then
+                ' f demote
+                For i = EntryNumber + 1 To NewPosition
+                    Set ListItem2 = GetFriendItem(i)
+                    If Not (ListItem2 Is Nothing) Then
+                        SetFriendItem ListItem2, i - 1
                     End If
-                    
-                    x.ListSubItems.Item(1).ReportIcon = ICONLINE
-                    
-                    Select Case .Game
-                        Case Is = PRODUCT_STAR: i = ICSTAR
-                        Case Is = PRODUCT_SEXP: i = ICSEXP
-                        Case Is = PRODUCT_D2DV: i = ICD2DV
-                        Case Is = PRODUCT_D2XP: i = ICD2XP
-                        Case Is = PRODUCT_W2BN: i = ICW2BN
-                        Case Is = PRODUCT_WAR3: i = ICWAR3
-                        Case Is = PRODUCT_W3XP: i = ICWAR3X
-                        Case Is = PRODUCT_CHAT: i = ICCHAT
-                        Case Is = PRODUCT_DRTL: i = ICDIABLO
-                        Case Is = PRODUCT_DSHR: i = ICDIABLOSW
-                        Case Is = PRODUCT_JSTR: i = ICJSTR
-                        Case Is = PRODUCT_SSHR: i = ICSCSW
-                        Case Else: i = ICUNKNOWN
-                    End Select
-                    
-                    x.SmallIcon = i
-            End Select
-        End With
-        
+                Next i
+                SetFriendItem ListItem, NewPosition
+            ElseIf EntryNumber > NewPosition Then
+                ' f promote
+                For i = EntryNumber - 1 To NewPosition Step -1
+                    Set ListItem2 = GetFriendItem(i)
+                    If Not (ListItem2 Is Nothing) Then
+                        SetFriendItem ListItem2, i + 1
+                    End If
+                Next i
+                SetFriendItem ListItem, NewPosition
+            End If
+        End If
+
+        ' re-sort
+        lvFriendList.Sorted = True
+
+        Call UpdateListviewTabs
     End If
-    
-    Set x = Nothing
-    
-    Exit Sub
-    
-ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in FriendUpdate()."
-    
-    Exit Sub
 End Sub
 
 Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -4326,7 +4343,6 @@ Private Sub mnuPopFLPromote_Click()
 End Sub
 
 Private Sub mnuPopFLRefresh_Click()
-    lvFriendList.ListItems.Clear
     Call FriendListHandler.RequestFriendsList
 End Sub
 
@@ -7114,6 +7130,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Dim bln                  As Boolean
     Dim doConvert            As Boolean
     Dim command_output()     As String
+    Dim FriendObj            As clsFriendObj
     
     Dim oCommandGenerator    As clsCommandGeneratorObj
     
@@ -7272,14 +7289,24 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             AddName CurrentUser.DisplayName, CurrentUser.Name, CurrentUser.Game, CurrentUser.Flags, CurrentUser.Ping, _
                 CurrentUser.Stats.IconCode, CurrentUser.Clan
         Next i
-        
-        frmChat.lvFriendList.ListItems.Clear
-        
-        For i = 1 To g_Friends.Count
-            Set CurrentUser = g_Friends(i)
-        
-            AddFriend CurrentUser.DisplayName, CurrentUser.Game, CurrentUser.Status
-        Next i
+
+        lvFriendList.ListItems.Clear
+
+        If Config.FriendsListTab Then
+            lvFriendList.ListItems.Clear
+            For i = 1 To g_Friends.Count
+                Set FriendObj = g_Friends.Item(i)
+                If FriendObj.IsOnline Or Config.ShowOfflineFriends Then
+                    AddFriendItem FriendObj.DisplayName, FriendObj.Game, FriendObj.Status, FriendObj.LocationID, i - 1
+                End If
+                Set FriendObj = Nothing
+            Next i
+
+            ' re-sort
+            lvFriendList.Sorted = True
+        End If
+
+        Call UpdateListviewTabs
     End If
     
     JoinMessagesOff = Not Config.ShowJoinLeaves
@@ -8017,9 +8044,73 @@ Public Sub DisableListviewTabs()
     ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
 End Sub
 
+Private Sub AddFriendItem(ByVal Name As String, ByVal Game As String, ByVal Status As Byte, ByVal LocationID As Byte, ByVal EntryNumber As Integer)
+On Error GoTo ERROR_HANDLER
+    Dim ListItem As ListItem
+
+    Set ListItem = lvFriendList.ListItems.Add(lvFriendList.ListItems.Count + 1, , Name)
+    ListItem.ListSubItems.Add , , , ICUNKNOWN
+    ListItem.ListSubItems.Add , , vbNullString
+    SetFriendItem ListItem, EntryNumber, True, Game, Status, LocationID
+
+    Exit Sub
+ERROR_HANDLER:
+    AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddFriendItem", Err.Number, Err.Description)
+End Sub
+
+Private Sub SetFriendItem(ByVal ListItem As ListItem, ByVal EntryNumber As Integer, Optional ByVal SettingFields As Boolean = False, Optional ByVal Game As String, Optional ByVal Status As Byte, Optional ByVal LocationID As Byte)
+On Error GoTo ERROR_HANDLER
+    Dim OnlineIcon As Integer
+    Dim GameIcon   As Integer
+
+    If SettingFields Then
+        Select Case Game
+            Case PRODUCT_STAR: GameIcon = ICSTAR
+            Case PRODUCT_SEXP: GameIcon = ICSEXP
+            Case PRODUCT_D2DV: GameIcon = ICD2DV
+            Case PRODUCT_D2XP: GameIcon = ICD2XP
+            Case PRODUCT_W2BN: GameIcon = ICW2BN
+            Case PRODUCT_WAR3: GameIcon = ICWAR3
+            Case PRODUCT_W3XP: GameIcon = ICWAR3X
+            Case PRODUCT_CHAT: GameIcon = ICCHAT
+            Case PRODUCT_DRTL: GameIcon = ICDIABLO
+            Case PRODUCT_DSHR: GameIcon = ICDIABLOSW
+            Case PRODUCT_JSTR: GameIcon = ICJSTR
+            Case PRODUCT_SSHR: GameIcon = ICSCSW
+            Case Else:         GameIcon = ICUNKNOWN
+        End Select
+
+        Select Case LocationID
+            Case 0:     OnlineIcon = IC_FRIEND_OFFLINE
+            Case Else:  OnlineIcon = IC_FRIEND_ONLINE
+        End Select
+
+        ListItem.SmallIcon = GameIcon
+        ListItem.ListSubItems.Item(1).ReportIcon = OnlineIcon
+    End If
+
+    ListItem.ListSubItems.Item(2).Text = CStr(1000 + EntryNumber)
+
+    Exit Sub
+ERROR_HANDLER:
+    AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.SetFriendItem", Err.Number, Err.Description)
+End Sub
+
+Private Function GetFriendItem(ByVal EntryNumber As Integer) As ListItem
+    Dim ListItem As ListItem
+
+    Set GetFriendItem = Nothing
+
+    For Each ListItem In lvFriendList.ListItems
+        If StrComp(ListItem.ListSubItems.Item(2).Text, CStr(1000 + EntryNumber), vbBinaryCompare) = 0 Then
+            Set GetFriendItem = ListItem
+            Exit Function
+        End If
+    Next ListItem
+End Function
+
 Private Sub AddClanMember(ByVal Name As String, ByVal Rank As Integer, ByVal Status As Integer)
 On Error GoTo ERROR_HANDLER:
-    Dim RankIcon As Integer
     Dim ListItem As ListItem
 
     Set ListItem = lvClanList.ListItems.Add(lvClanList.ListItems.Count + 1, , Name)

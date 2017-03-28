@@ -107,8 +107,8 @@ Public Const LAG_5 = 27
 Public Const LAG_6 = 28
 
 ' State icons
-Public Const MONITOR_ONLINE = 29
-Public Const MONITOR_OFFLINE = 30
+Public Const IC_FRIEND_ONLINE = 29
+Public Const IC_FRIEND_OFFLINE = 30
 
 ' World Cyber Games icons
 Public Const IC_WCG_PLAYER = 94

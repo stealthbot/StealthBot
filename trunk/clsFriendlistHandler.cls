@@ -13,23 +13,85 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Private Const SID_FRIENDSLIST& = &H65
-Private Const SID_FRIENDSUPDATE& = &H66
-Private Const SID_FRIENDSADD& = &H67
-Private Const SID_FRIENDSREMOVE& = &H68
-Private Const SID_FRIENDSPOSITION& = &H69
+Public Event FriendsListReply(ByVal Friends As Collection)
+Public Event FriendsUpdate(ByVal EntryNumber As Byte, ByVal FriendObj As clsFriendObj)
+Public Event FriendsAdd(ByVal FriendObj As clsFriendObj)
+Public Event FriendsRemove(ByVal EntryNumber As Byte)
+Public Event FriendsPosition(ByVal EntryNumber As Byte, ByVal NewPosition As Byte)
 
-Public Event FriendUpdate(ByVal Username As String, ByVal FLIndex As Byte)
-Public Event FriendAdded(ByVal Username As String, ByVal Product As String, ByVal Location As Byte, _
-                            ByVal Status As Byte, ByVal Channel As String)
-Public Event FriendRemoved(ByVal Username As String)
-Public Event FriendListReceived(ByVal FriendCount As Byte)
-Public Event FriendListEntry(ByVal Username As String, ByVal Product As String, ByVal Channel As String, _
-                             ByVal Status As Byte, ByVal Location As Byte)
-Public Event FriendMoved()
+Public Sub ParsePacket(ByVal PacketID As Long, ByVal inBuf As clsDataBuffer)
+    On Error GoTo ERROR_HANDLER
 
-Private Sub Class_Initialize()
-    Set g_Friends = New Collection
+    Dim FriendObj As clsFriendObj
+    Dim Friends   As Collection
+    Dim i         As Integer
+    Dim Count     As Byte
+    Dim EntryNum  As Byte
+    Dim NewPos    As Byte
+
+    Select Case PacketID
+        Case SID_FRIENDSLIST                        ' no-cookie server request
+            Count = inBuf.GetByte                   ' (BYTE) Friend count
+            Set Friends = New Collection            ' (MEMBER[]) Members
+            For i = 1 To Count
+                Set FriendObj = New clsFriendObj
+                With FriendObj
+                    .Name = inBuf.GetString         ' (STRING) Username
+                    .Status = inBuf.GetByte         ' (BYTE) Status
+                    .LocationID = inBuf.GetByte     ' (BYTE) Location
+                    .Game = DWordToString(inBuf.GetDWord) ' (DWORD) Product
+                    .Location = inBuf.GetString     ' (STRING) Location name
+                End With
+                Friends.Add FriendObj
+                Set FriendObj = Nothing
+            Next i
+
+            RaiseEvent FriendsListReply(Friends)
+
+        Case SID_FRIENDSUPDATE                      ' information event
+            EntryNum = inBuf.GetByte                ' (BYTE) Entry number
+            Set FriendObj = New clsFriendObj
+            With FriendObj
+                .Status = inBuf.GetByte             ' (BYTE) Status
+                .LocationID = inBuf.GetByte         ' (BYTE) Location
+                .Game = DWordToString(inBuf.GetDWord) ' (DWORD) Product
+                .Location = inBuf.GetString         ' (STRING) Location name
+            End With
+
+            RaiseEvent FriendsUpdate(EntryNum, FriendObj)
+
+        Case SID_FRIENDSADD                         ' information event
+            Set FriendObj = New clsFriendObj
+            With FriendObj
+                .Name = inBuf.GetString             ' (STRING) Username
+                .Status = inBuf.GetByte             ' (BYTE) Status
+                .LocationID = inBuf.GetByte         ' (BYTE) Location
+                .Game = DWordToString(inBuf.GetDWord) ' (DWORD) Product
+                .Location = inBuf.GetString         ' (STRING) Location name
+            End With
+
+            RaiseEvent FriendsAdd(FriendObj)
+        
+        Case SID_FRIENDSREMOVE
+            EntryNum = inBuf.GetByte                ' (BYTE) Entry number
+
+            RaiseEvent FriendsRemove(EntryNum)
+
+        Case SID_FRIENDSPOSITION
+            EntryNum = inBuf.GetByte                ' (BYTE) Entry number
+            NewPos = inBuf.GetByte             ' (BYTE) New position
+
+            RaiseEvent FriendsPosition(EntryNum, NewPos)
+
+    End Select
+
+    Exit Sub
+
+ERROR_HANDLER:
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: " & Err.Description & " in clsFriendlistHandler.ParsePacket()."
+
+    Exit Sub
+
 End Sub
 
 Public Sub RequestFriendsList()
@@ -37,157 +99,6 @@ Public Sub RequestFriendsList()
     Set pBuf = New clsDataBuffer
     pBuf.SendPacket SID_FRIENDSLIST
     Set pBuf = Nothing
-End Sub
-
-Public Sub ParsePacket(ByVal PacketID As Long, ByVal pBuff As clsDataBuffer)
-    On Error GoTo ERROR_HANDLER
-    
-    Dim flTemp As clsFriendObj
-    Dim n As Integer
-
-    Select Case PacketID
-        Case SID_FRIENDSLIST
-            '0x65 packet format
-            '(BYTE)       Number of Entries
-            'For each entry:
-            '(STRING)     Account
-            '(BYTE)       Status
-            '(BYTE)       Location
-            '(DWORD)      ProductID
-            '(STRING)     Location name
-
-            Call ResetList
-            
-            n = pBuff.GetByte()     ' Number of entries
-            RaiseEvent FriendListReceived(n)
-            
-            If (n > 0) Then
-            
-                'For each entry
-                For n = 0 To n - 1
-                    Set flTemp = New clsFriendObj
-
-                    With flTemp
-                        .Name = pBuff.GetString()       ' Account
-                        .Status = pBuff.GetByte()       ' Status
-                        .LocationID = pBuff.GetByte()   ' Location
-                        
-                        ' Product ID
-                        .Game = DWordToString(pBuff.GetDWord)
-                        
-                        ' Location name
-                        .Location = pBuff.GetString(UTF8)
-                    End With
-                    
-                    ' Add to the internal list
-                    g_Friends.Add flTemp
-
-                    RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.Game, flTemp.Location, flTemp.Status, _
-                         flTemp.LocationID)
-                         
-                    Set flTemp = Nothing
-                Next n
-            End If
-            
-        Case SID_FRIENDSUPDATE
-            '0x66 packet format
-            '(BYTE)       Entry number
-            '(BYTE)       Status
-            '(BYTE)       Location
-            '(DWORD)      ProductID
-            '(STRING)     Location name
-            
-            n = pBuff.GetByte() + 1
-            
-            With g_Friends(n)
-                .Status = pBuff.GetByte()       ' Status
-                .LocationID = pBuff.GetByte()   ' Location
-                
-                ' NOTE: There is a server bug here where, when this packet is sent automaticlaly
-                '   (not requested), the ProductID field contains your own product instead.
-                '   Because of this, we ignore that field completely and wait for the periodic updates
-                '   to update the value.
-                '   (see: https://bnetdocs.org/packet/384/sid-friendsupdate)
-                
-                pBuff.GetDWord
-                ' Product ID
-                '.Game = DWordToString(pBuff.GetDWORD)
-                
-                ' Location name
-                .Location = pBuff.GetString(UTF8)
-                
-                RaiseEvent FriendUpdate(.DisplayName, n)
-            End With
-        
-        Case SID_FRIENDSADD
-            '0x67 packet format
-            '(STRING)       Account
-            '(BYTE)         Status
-            '(BYTE)         Location
-            '(DWORD)        ProductID
-            '(STRING)       Location name
-            
-            Set flTemp = New clsFriendObj
-        
-            With flTemp
-                .Name = pBuff.GetString()       ' Account
-                .Status = pBuff.GetByte()       ' Status
-                .LocationID = pBuff.GetByte()   ' Location
-                
-                ' Product ID
-                .Game = DWordToString(pBuff.GetDWord)
-                
-                ' Location name
-                .Location = pBuff.GetString(UTF8)
-
-                RaiseEvent FriendAdded(.DisplayName, .Game, .LocationID, .Status, .Location)
-            End With
-            
-            ' Add to the internal list
-            g_Friends.Add flTemp
-            
-            Set flTemp = Nothing
-        
-        Case SID_FRIENDSREMOVE
-            '0x68 packet format
-            '(BYTE)       Entry Number
-            
-            n = pBuff.GetByte() + 1
-            
-            If n > 0 And n <= g_Friends.Count Then
-                RaiseEvent FriendRemoved(g_Friends.Item(n).DisplayName)
-                
-                g_Friends.Remove n
-            End If
-        
-        Case SID_FRIENDSPOSITION
-            '0x69 packet format
-            '(BYTE)     Old Position
-            '(BYTE)     New Position
-            
-            Set flTemp = Nothing
-            RaiseEvent FriendMoved
-    
-    End Select
-    
-    Set flTemp = Nothing
-
-    Exit Sub
-
-ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: " & Err.Description & " in ParsePacket()."
-
-    Exit Sub
-
-    'debug.print "Error " & Err.Number & " (" & Err.Description & ") in procedure ParsePacket of Class Module clsFriendListHandler"
-    
-End Sub
-
-Public Sub ResetList()
-    'frmChat.lvFriendList.ListItems.Clear
-    
-    Set g_Friends = Nothing
-    Set g_Friends = New Collection
 End Sub
 
 Public Function UsernameToFLIndex(ByVal sUsername As String) As Integer
