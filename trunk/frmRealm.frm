@@ -8,6 +8,7 @@ Begin VB.Form frmRealm
    ClientLeft      =   525
    ClientTop       =   840
    ClientWidth     =   10920
+   KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
@@ -793,6 +794,10 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_Click()
+    Call StopLoginTimer
+End Sub
+
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
     Call StopLoginTimer
 End Sub
 
