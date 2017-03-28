@@ -177,17 +177,11 @@ Private Ticks As Integer
 Private vArray() As Variant
 
 Private Sub cmdAccept_Click()
-    Dim oRequest As udtServerRequest
-
-    If (g_Clan.PendingInvitation) Then
-        If FindServerRequest(oRequest, g_Clan.PendingInvitationCookie, SID_CLANINVITATIONRESPONSE) Then
-            vArray = oRequest.Tag
-            Call frmChat.ClanHandler.InvitationResponse( _
-                    CBool(vArray(REQUEST_ISNEW)), CLng(vArray(REQUEST_COOKIE)), _
-                    CStr(vArray(REQUEST_TAG)), CStr(vArray(REQUEST_INV)), clresAccept)
-            g_Clan.PendingInvitation = False
-        End If
-    End If
+    ' send invitation response
+    Call frmChat.ClanHandler.InvitationResponse( _
+            CBool(vArray(REQUEST_ISNEW)), CLng(vArray(REQUEST_COOKIE)), _
+            CStr(vArray(REQUEST_TAG)), CStr(vArray(REQUEST_INV)), _
+            clresAccept)
 
     frmChat.AddChat RTBColors.SuccessText, "[CLAN] Invitation accepted."
 
@@ -195,18 +189,11 @@ Private Sub cmdAccept_Click()
 End Sub
 
 Private Sub cmdDecline_Click()
-    Dim oRequest As udtServerRequest
-    Dim vArray() As Variant
-
-    If (g_Clan.PendingInvitation) Then
-        If FindServerRequest(oRequest, g_Clan.PendingInvitationCookie, SID_CLANINVITATIONRESPONSE) Then
-            vArray = oRequest.Tag
-            Call frmChat.ClanHandler.InvitationResponse( _
-                    CBool(vArray(REQUEST_ISNEW)), CLng(vArray(REQUEST_COOKIE)), _
-                    CStr(vArray(REQUEST_TAG)), CStr(vArray(REQUEST_INV)), clresDecline)
-            g_Clan.PendingInvitation = False
-        End If
-    End If
+    ' send invitation response
+    Call frmChat.ClanHandler.InvitationResponse( _
+            CBool(vArray(REQUEST_ISNEW)), CLng(vArray(REQUEST_COOKIE)), _
+            CStr(vArray(REQUEST_TAG)), CStr(vArray(REQUEST_INV)), _
+            clresDecline)
 
     frmChat.AddChat RTBColors.ErrorMessageText, "[CLAN] Invitation declined."
 
@@ -217,20 +204,28 @@ Private Sub Form_Load()
     Dim oRequest As udtServerRequest
 
     If (g_Clan.PendingInvitation) Then
-        If FindServerRequest(oRequest, g_Clan.PendingInvitationCookie, SID_CLANINVITATIONRESPONSE, , False) Then
-            Me.Icon = frmChat.Icon
+        g_Clan.PendingInvitation = False
+        If FindServerRequest(oRequest, g_Clan.PendingInvitationCookie, SID_CLANINVITATIONRESPONSE) Then
+            ' set variables for instance
+            vArray = oRequest.Tag
             Ticks = CLAN_TIMER_TIMEOUT
 
-            vArray = oRequest.Tag
+            ' set up appearance
+            Me.Icon = frmChat.Icon
+
             lblClan.Caption = StringFormat("Clan {0}", CStr(vArray(REQUEST_TAG)))
             lblClan.ForeColor = RTBColors.JoinUsername
             lblName.Caption = CStr(vArray(REQUEST_NAME))
             lblInv.Caption = StringFormat("Invited by:  {0}", CStr(vArray(REQUEST_INV)))
-            Call tmrTimeout_Timer
 
+            ' disable buttons
             cmdAccept.Enabled = False
             cmdDecline.Enabled = False
+
+            ' tick once and enable 1-second timer
+            Call tmrTimeout_Timer
             tmrTimeout.Enabled = True
+
             Exit Sub
         End If
     End If
@@ -244,19 +239,23 @@ Private Sub Form_Unload(Cancel As Integer)
 End Sub
 
 Private Sub tmrTimeout_Timer()
-    If Ticks <= CLAN_BUTTON_TIMEOUT Then
+    ' re-enable buttons?
+    If Ticks = CLAN_BUTTON_TIMEOUT Then
         cmdAccept.Enabled = True
         cmdDecline.Enabled = True
     End If
 
+    ' time out?
     If Ticks <= 0 Then
         cmdDecline_Click
         Exit Sub
     End If
 
+    ' set timer caption
     lblTimer.Caption = StringFormat("Invitation expires in {0} second{1}...", _
             Ticks, IIf(Ticks <> 1, "s", vbNullString))
 
+    ' count down
     Ticks = Ticks - 1
 End Sub
 
