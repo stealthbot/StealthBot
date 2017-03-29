@@ -5026,7 +5026,8 @@ Private Function DoCDKeyLengthCheck(ByVal sKey As String, ByVal sProd As String)
     
     Select Case sProd
         Case PRODUCT_STAR, PRODUCT_SEXP
-            If ((Len(sKey) <> 13) And (Len(sKey) <> 26)) Then DoCDKeyLengthCheck = False
+            DoCDKeyLengthCheck = True
+            'If ((Len(sKey) <> 13) And (Len(sKey) <> 26)) Then DoCDKeyLengthCheck = False
             
         Case PRODUCT_D2DV, PRODUCT_D2XP
             If ((Len(sKey) <> 16) And (Len(sKey) <> 26)) Then DoCDKeyLengthCheck = False
@@ -5500,15 +5501,15 @@ Sub optSTAR_Click()
     chkSHR.Visible = True
     chkSpawn.Enabled = True
     chkJPN.Visible = True
-    txtCDKey.Enabled = True
+    txtCDKey.Enabled = False
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     If (chkSHR.Value) Then
         SetHashPath GetGamePath("RHSS")
         chkSpawn.Enabled = False
-        txtCDKey.Enabled = False
     ElseIf (chkJPN.Value) Then
         SetHashPath GetGamePath("RTSJ")
+        txtCDKey.Enabled = True
     Else
         SetHashPath GetGamePath("RATS")
     End If
@@ -5554,7 +5555,7 @@ Sub optSEXP_Click()
     chkSpawn.Enabled = False
     chkSpawn.Value = vbUnchecked
     chkJPN.Visible = False
-    txtCDKey.Enabled = True
+    txtCDKey.Enabled = False
     txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     SetHashPath GetGamePath("RATS")
@@ -5604,6 +5605,7 @@ End Sub
 Private Sub chkJPN_Click()
     Dim Checked As Boolean
     Checked = CBool(chkJPN.Value)
+    txtCDKey.Enabled = Checked
     If (Checked) Then chkSHR.Value = vbUnchecked
     If (optSTAR.Value) Then
         If (Checked) Then
@@ -5620,7 +5622,7 @@ Private Sub chkSHR_Click()
     If (Checked) Then chkJPN.Value = vbUnchecked
     If (optSTAR.Value) Then
         chkSpawn.Enabled = Not Checked
-        txtCDKey.Enabled = Not Checked
+        txtCDKey.Enabled = (chkJPN.Value = vbChecked)
         If (Checked) Then
             SetHashPath GetGamePath("RHSS")
         Else
