@@ -64,26 +64,26 @@ Public Const ICD2DV = 4
 Public Const ICD2XP = 5
 Public Const ICW2BN = 6
 Public Const ICWAR3 = 7
-Public Const ICCHAT = 8
+Public Const ICWAR3X = 8
 Public Const ICDIABLO = 9
 Public Const ICDIABLOSW = 10
 Public Const ICJSTR = 11
-Public Const ICWAR3X = 12
-Public Const ICSCSW = 13
+Public Const ICSCSW = 12
+Public Const ICCHAT = 13
 
 ' stats spawn icons
-Public Const IC_STAR_SPAWN = 132
-Public Const IC_JSTR_SPAWN = 133
-Public Const IC_W2BN_SPAWN = 145
-Public Const IC_DIAB_SPAWN = 158
+Public Const IC_STAR_SPAWN = 140
+Public Const IC_JSTR_SPAWN = 141
+Public Const IC_W2BN_SPAWN = 153
+Public Const IC_DIAB_SPAWN = 166
 
 ' stats icon sequences
-Public Const ICON_START_WAR3 = 68
-Public Const ICON_START_W3XP = 31
-Public Const ICON_START_D2 = 114
-Public Const ICON_START_SC = 121
-Public Const ICON_START_W2 = 134
-Public Const ICON_START_D1 = 146
+Public Const ICON_START_WAR3 = 76
+Public Const ICON_START_W3XP = 39
+Public Const ICON_START_D2 = 122
+Public Const ICON_START_SC = 129
+Public Const ICON_START_W2 = 142
+Public Const ICON_START_D1 = 154
 
 ' flags icons
 Public Const ICGAVEL = 14
@@ -107,26 +107,26 @@ Public Const LAG_5 = 27
 Public Const LAG_6 = 28
 
 ' State icons
-Public Const IC_FRIEND_ONLINE = 29
-Public Const IC_FRIEND_OFFLINE = 30
+Public Const IC_FRIEND_START = 29
+Public Const IC_FRIEND_MUTUAL_START = 34
 
 ' World Cyber Games icons
-Public Const IC_WCG_PLAYER = 94
-Public Const IC_WCG_REF = 95
+Public Const IC_WCG_PLAYER = 102
+Public Const IC_WCG_REF = 103
 
 ' UPDATED WCG Icons
-Public Const IC_WCRF = 108
-Public Const IC_WCPL = 109
-Public Const IC_WCGO = 110
-Public Const IC_WCSI = 111
-Public Const IC_WCBR = 112
-Public Const IC_WCPG = 113
+Public Const IC_WCRF = 116
+Public Const IC_WCPL = 117
+Public Const IC_WCGO = 118
+Public Const IC_WCSI = 119
+Public Const IC_WCBR = 120
+Public Const IC_WCPG = 121
 
 ' PGTour icons
-Public Const IC_PGT_A = 96
-Public Const IC_PGT_B = 99
-Public Const IC_PGT_C = 102
-Public Const IC_PGT_D = 105
+Public Const IC_PGT_A = 104
+Public Const IC_PGT_B = 107
+Public Const IC_PGT_C = 110
+Public Const IC_PGT_D = 113
 
 'Mode1 Values
 Public Const BVT_VOTE_ADD As Byte = 1
@@ -147,7 +147,8 @@ Public Const FRL_OFFLINE& = &H0
 Public Const FRL_NOTINCHAT& = &H1
 Public Const FRL_INCHAT& = &H2
 Public Const FRL_PUBLICGAME& = &H3
-Public Const FRL_PRIVATEGAME& = &H5
+Public Const FRL_PRIVATEGAME& = &H4
+Public Const FRL_PRIVATEGAME_MUTUAL& = &H5
 
 Public Const FRS_NONE& = &H0
 Public Const FRS_MUTUAL& = &H1
