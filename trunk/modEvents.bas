@@ -116,7 +116,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     
     ' we aren't in a silent channel, are we?
     If (g_Channel.IsSilent) Then
-        AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, _
+        frmChat.AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, _
             UserObj.Clan
     Else
         If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
@@ -131,7 +131,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                     End If
                 End If
                 
-                pos = checkChannel(Username)
+                pos = frmChat.GetChannelItemIndex(Username)
                 
                 If (pos) Then
                     Dim NewFlags As Long
@@ -149,7 +149,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                         pos = 1
                     End If
                     
-                    AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, _
+                    frmChat.AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, _
                         UserObj.Clan, pos
                     
                     ' default to display this event
@@ -1117,7 +1117,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     If (StatUpdate = False) Then
         'frmChat.AddChat vbRed, UserObj.Stats.IconCode
     
-        AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, UserObj.Clan
+        frmChat.AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, UserObj.Clan
         
         Call frmChat.UpdateListviewTabs
         
@@ -1164,7 +1164,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 End If
             End If
             
-            pos = checkChannel(Username)
+            pos = frmChat.GetChannelItemIndex(Username)
 
             If (pos > 0) Then
             
@@ -1199,7 +1199,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 If (BotVars.ShowStatsIcons) Then 'and the icon code is valid
                     If (UserObj.Stats.IconCode <> -1) Then
                         ' if the icon in the list is not the icon found by stats, update
-                        NewIcon = GetSmallIcon(UserObj.Game, UserObj.Flags, UserObj.Stats.IconCode)
+                        NewIcon = frmChat.GetSmallIcon(UserObj.Game, UserObj.Flags, UserObj.Stats.IconCode)
                         If (found.SmallIcon <> NewIcon) Then
                             found.SmallIcon = NewIcon
                         End If
@@ -1409,7 +1409,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         End If
         
         ' add to user list
-        AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, UserObj.Clan
+        frmChat.AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, UserObj.Clan
         
         ' if focus on channel tab, update header
         Call frmChat.UpdateListviewTabs
@@ -1543,7 +1543,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     
     RemoveBanFromQueue Username
     
-    pos = checkChannel(Username)
+    pos = frmChat.GetChannelItemIndex(Username)
     
     If (pos > 0) Then
         If (frmChat.mnuFlash.Checked) Then

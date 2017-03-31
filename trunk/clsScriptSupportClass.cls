@@ -546,7 +546,7 @@ End Function
 '// Returns the channel list position of a user by their username
 '// Returns 0 if the user is not present
 Public Function GetPositionByName(ByVal sUser As String) As Integer
-    GetPositionByName = checkChannel(sUser)
+    GetPositionByName = frmChat.GetChannelItemIndex(sUser)
 End Function
 
 

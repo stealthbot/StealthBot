@@ -2747,7 +2747,7 @@ Sub Form_Resize()
         End With
         
         With lvFriendList
-            .ColumnHeaders(1).Width = (.Width \ 4) * 3
+            .ColumnHeaders(1).Width = (.Width \ 4) * 3 - 150
             .ColumnHeaders(2).Width = imlIcons.ImageWidth '.Width \ 4 + 200
         End With
     End If
@@ -3026,11 +3026,11 @@ Private Sub ClanHandler_MemberUpdate(ByVal Member As clsClanMemberObj)
     Set ListItem = lvClanList.FindItem(Member.Name)
     If Not (ListItem Is Nothing) Then
         ' set the icon and status in place
-        SetClanMember ListItem, Member.Rank, Member.Status
+        SetClanMember ListItem, Member.DisplayName, Member.Rank, Member.Status
         Set ListItem = Nothing
     Else
         ' wasn't found...
-        AddClanMember Member.Name, Member.Rank, Member.Status
+        AddClanMember Member.Name, Member.DisplayName, Member.Rank, Member.Status
     End If
 
     ' re-sort
@@ -3065,7 +3065,7 @@ Private Sub ClanHandler_GetMemberList(ByVal Cookie As Long, ByVal Members As Col
     For i = 1 To Members.Count
         Set Member = Members.Item(i)
         g_Clan.Members.Add Member
-        AddClanMember Member.Name, Member.Rank, Member.Status
+        AddClanMember Member.Name, Member.DisplayName, Member.Rank, Member.Status
 
         If oRequest.HandlerType = reqScriptingCall Then
             On Error Resume Next
@@ -3446,7 +3446,6 @@ Private Sub FriendListHandler_FriendsUpdate(ByVal EntryNumber As Byte, ByVal Fri
         If Not (ListItem Is Nothing) Then
             ' set the icon and status in place
             SetFriendItem ListItem, EntryNumber, True, FriendObj.Game, FriendObj.Status, FriendObj.LocationID
-            Set ListItem = Nothing
         Else
             ' wasn't found...
             If FriendObj.IsOnline Or Config.ShowOfflineFriends Then
@@ -3504,10 +3503,10 @@ Private Sub FriendListHandler_FriendsRemove(ByVal EntryNumber As Byte)
 End Sub
 
 Private Sub FriendListHandler_FriendsPosition(ByVal EntryNumber As Byte, ByVal NewPosition As Byte)
-    Dim FriendObj As clsFriendObj
-    Dim ListItem  As ListItem
-    Dim ListItem2 As ListItem
-    Dim i         As Integer
+    Dim FriendObj     As clsFriendObj
+    Dim ListItem      As ListItem
+    Dim ListItemShift As ListItem
+    Dim i             As Integer
 
     If g_Friends.Count > EntryNumber Then
         Set FriendObj = g_Friends.Item(EntryNumber + 1)
@@ -3526,18 +3525,18 @@ Private Sub FriendListHandler_FriendsPosition(ByVal EntryNumber As Byte, ByVal N
             If EntryNumber < NewPosition Then
                 ' f demote
                 For i = EntryNumber + 1 To NewPosition
-                    Set ListItem2 = GetFriendItem(i)
-                    If Not (ListItem2 Is Nothing) Then
-                        SetFriendItem ListItem2, i - 1
+                    Set ListItemShift = GetFriendItem(i)
+                    If Not (ListItemShift Is Nothing) Then
+                        SetFriendItem ListItemShift, i - 1
                     End If
                 Next i
                 SetFriendItem ListItem, NewPosition
             ElseIf EntryNumber > NewPosition Then
                 ' f promote
                 For i = EntryNumber - 1 To NewPosition Step -1
-                    Set ListItem2 = GetFriendItem(i)
-                    If Not (ListItem2 Is Nothing) Then
-                        SetFriendItem ListItem2, i + 1
+                    Set ListItemShift = GetFriendItem(i)
+                    If Not (ListItemShift Is Nothing) Then
+                        SetFriendItem ListItemShift, i + 1
                     End If
                 Next i
                 SetFriendItem ListItem, NewPosition
@@ -6709,8 +6708,8 @@ Private Sub UpTimer_Timer()
                     End If
                 End If
                 
-                If (BotVars.NoColoring = False) Then
-                    pos = checkChannel(.DisplayName)
+                If (Not BotVars.NoColoring) Then
+                    pos = frmChat.GetChannelItemIndex(.Name)
                 
                     If (pos > 0) Then
                         newColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
@@ -8044,7 +8043,204 @@ Public Sub DisableListviewTabs()
     ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
 End Sub
 
-Private Sub AddFriendItem(ByVal Name As String, ByVal Game As String, ByVal Status As Byte, ByVal LocationID As Byte, ByVal EntryNumber As Integer)
+Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long, IconCode As Integer) As Long
+    Dim i As Long
+    
+    If (BotVars.ShowFlagsIcons = False) Then
+        i = IconCode ' disable any of the below flags-based icons
+    ElseIf (Flags And USER_BLIZZREP) = USER_BLIZZREP Then 'Flags = 1: blizzard rep
+        i = ICBLIZZ
+    ElseIf (Flags And USER_SYSOP) = USER_SYSOP Then 'Flags = 8: battle.net sysop
+        i = ICSYSOP
+    ElseIf (Flags And USER_CHANNELOP) = USER_CHANNELOP Then 'op
+        i = ICGAVEL
+    ElseIf (Flags And USER_GUEST) = USER_GUEST Then 'guest
+        i = ICSPECS
+    ElseIf (Flags And USER_SPEAKER) = USER_SPEAKER Then 'speaker
+        i = ICSPEAKER
+    ElseIf (Flags And USER_GFPLAYER) = USER_GFPLAYER Then 'GF player
+        i = IC_GF_PLAYER
+    ElseIf (Flags And USER_GFOFFICIAL) = USER_GFOFFICIAL Then 'GF official
+        i = IC_GF_OFFICIAL
+    ElseIf (Flags And USER_SQUELCHED) = USER_SQUELCHED Then 'squelched
+        i = ICSQUELCH
+    Else
+        i = IconCode
+    'Else
+    '    Select Case (UCase$(sProduct))
+    '        Case Is =  PRODUCT_STAR: I = ICSTAR
+    '        Case Is = PRODUCT_SEXP: I = ICSEXP
+    '        Case Is = PRODUCT_D2DV: I = ICD2DV
+    '        Case Is = PRODUCT_D2XP: I = ICD2XP
+    '        Case Is = PRODUCT_W2BN: I = ICW2BN
+    '        Case Is = PRODUCT_CHAT: I = ICCHAT
+    '        Case Is = PRODUCT_DRTL: I = ICDIABLO
+    '        Case Is = PRODUCT_DSHR: I = ICDIABLOSW
+    '        Case Is = PRODUCT_JSTR: I = ICJSTR
+    '        Case Is = PRODUCT_SSHR: I = ICSCSW
+    '        Case Is = PRODUCT_WAR3: I = ICWAR3
+    '        Case Is = PRODUCT_W3XP: I = ICWAR3X
+    '
+    '        '*** Special icons for WCG added 6/24/07 ***
+    '        Case Is = "WCRF": I = IC_WCRF
+    '        Case Is = "WCPL": I = IC_WCPL
+    '        Case Is = "WCGO": I = IC_WCGO
+    '        Case Is = "WCSI": I = IC_WCSI
+    '        Case Is = "WCBR": I = IC_WCBR
+    '        Case Is = "WCPG": I = IC_WCPG
+    '
+    '        '*** Special icons for PGTour ***
+    '        Case Is = "__A+": I = IC_PGT_A + 1
+    '        Case Is = "___A": I = IC_PGT_A
+    '        Case Is = "__A-": I = IC_PGT_A - 1
+    '        Case Is = "__B+": I = IC_PGT_B + 1
+    '        Case Is = "___B": I = IC_PGT_B
+    '        Case Is = "__B-": I = IC_PGT_B - 1
+    '        Case Is = "__C+": I = IC_PGT_C + 1
+    '        Case Is = "___C": I = IC_PGT_C
+    '        Case Is = "__C-": I = IC_PGT_C - 1
+    '        Case Is = "__D+": I = IC_PGT_D + 1
+    '        Case Is = "___D": I = IC_PGT_D
+    '        Case Is = "__D-": I = IC_PGT_D - 1
+    '
+    '        Case Else: I = ICUNKNOWN
+    '    End Select
+    End If
+    
+    GetSmallIcon = i
+End Function
+
+Public Sub AddName(ByVal Username As String, ByVal AccountName As String, ByVal Product As String, ByVal Flags As Long, ByVal Ping As Long, IconCode As Integer, Optional Clan As String, Optional ForcePosition As Integer)
+On Error GoTo ERROR_HANDLER
+    Dim i          As Integer
+    Dim LagIcon    As Integer
+    Dim isPriority As Integer
+    Dim IsSelf     As Boolean
+    
+    If (StrComp(Username, GetCurrentUsername, vbTextCompare) = 0) Then
+        MyFlags = Flags
+        
+        SharedScriptSupport.BotFlags = MyFlags
+        
+        IsSelf = True
+    End If
+    
+    'If (GetChannelItemIndex(Username) > 0) Then
+    '    Exit Sub
+    'End If
+    
+    Select Case (Ping)
+        Case 0
+            LagIcon = 0
+        Case 1 To 199
+            LagIcon = LAG_1
+        Case 200 To 299
+            LagIcon = LAG_2
+        Case 300 To 399
+            LagIcon = LAG_3
+        Case 400 To 499
+            LagIcon = LAG_4
+        Case 500 To 599
+            LagIcon = LAG_5
+        Case Is >= 600 Or -1
+            LagIcon = LAG_6
+        Case Else
+            LagIcon = ICUNKNOWN
+    End Select
+    
+    If ((Flags And USER_NOUDP) = USER_NOUDP) Then
+        LagIcon = LAG_PLUG
+    End If
+    
+    isPriority = (frmChat.lvChannel.ListItems.Count + 1)
+    
+    i = GetSmallIcon(Product, Flags, IconCode)
+    
+    'Special Cases
+    'If i = ICSQUELCH Then
+    '    'Debug.Print "Returned a SQUELCH icon"
+    '    If ForcePosition > 0 Then isPriority = ForcePosition
+    '
+    If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or _
+            ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Or _
+            ((Flags And USER_SYSOP&) = USER_SYSOP&)) Then
+        
+        If (ForcePosition = 0) Then
+            isPriority = 1
+        Else
+            isPriority = ForcePosition
+        End If
+
+    Else
+        If (ForcePosition > 0) Then
+            isPriority = ForcePosition
+        End If
+    End If
+    
+    If (i > frmChat.imlIcons.ListImages.Count) Then
+        i = frmChat.imlIcons.ListImages.Count
+    End If
+        
+    With frmChat.lvChannel
+        .Enabled = False
+        
+        .ListItems.Add isPriority, , Username, , i
+        
+        ' store account name here so popup menus work
+        .ListItems.Item(isPriority).Tag = AccountName
+        
+        If (.ColumnHeaders(2).Width > 0) Then
+            .ListItems.Item(isPriority).ListSubItems.Add , , Clan
+        End If
+        
+        If (.ColumnHeaders(3).Width > 0) Then
+            .ListItems.Item(isPriority).ListSubItems.Add , , , LagIcon
+        End If
+        
+        If (Not BotVars.NoColoring) Then
+            .ListItems.Item(isPriority).ForeColor = GetNameColor(Flags, 0, IsSelf)
+        End If
+        
+        .Enabled = True
+        
+        '.Refresh
+    End With
+    
+    If IsSelf Then
+        Call frmChat.UpdateListviewTabs
+    End If
+
+    Exit Sub
+ERROR_HANDLER:
+    AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddName", Err.Number, Err.Description)
+End Sub
+
+
+Public Function GetChannelItemIndex(ByVal NameToFind As String) As Integer
+    Dim lvItem As ListItem
+
+    Set lvItem = frmChat.lvChannel.FindItem(NameToFind)
+
+    If (lvItem Is Nothing) Then
+        If BotVars.UseD2Naming Then
+            GetChannelItemIndex = 0
+            Dim i As Integer
+            For i = 1 To lvChannel.ListItems.Count
+                If (StrComp(lvChannel.ListItems(i).Tag, CleanUsername(ReverseConvertUsernameGateway(NameToFind)), vbTextCompare) = 0) Then
+                    GetChannelItemIndex = i
+                    Exit For
+                End If
+            Next i
+        Else
+            GetChannelItemIndex = 0
+        End If
+    Else
+        GetChannelItemIndex = lvItem.Index
+    End If
+End Function
+
+Private Sub AddFriendItem(ByVal Name As String, ByVal Game As String, _
+        ByVal Status As Byte, ByVal LocationID As Byte, ByVal EntryNumber As Integer)
 On Error GoTo ERROR_HANDLER
     Dim ListItem As ListItem
 
@@ -8058,7 +8254,9 @@ ERROR_HANDLER:
     AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddFriendItem", Err.Number, Err.Description)
 End Sub
 
-Private Sub SetFriendItem(ByVal ListItem As ListItem, ByVal EntryNumber As Integer, Optional ByVal SettingFields As Boolean = False, Optional ByVal Game As String, Optional ByVal Status As Byte, Optional ByVal LocationID As Byte)
+Private Sub SetFriendItem(ByVal ListItem As ListItem, ByVal EntryNumber As Integer, _
+        Optional ByVal SettingFields As Boolean = False, Optional ByVal Game As String, _
+        Optional ByVal Status As Byte, Optional ByVal LocationID As Byte)
 On Error GoTo ERROR_HANDLER
     Dim OnlineIcon As Integer
     Dim GameIcon   As Integer
@@ -8089,7 +8287,10 @@ On Error GoTo ERROR_HANDLER
         ListItem.ListSubItems.Item(1).ReportIcon = OnlineIcon
     End If
 
+    ListItem.Tag = CInt(EntryNumber)
     ListItem.ListSubItems.Item(2).Text = CStr(1000 + EntryNumber)
+
+    Set ListItem = Nothing
 
     Exit Sub
 ERROR_HANDLER:
@@ -8097,38 +8298,39 @@ ERROR_HANDLER:
 End Sub
 
 Private Function GetFriendItem(ByVal EntryNumber As Integer) As ListItem
-    Dim ListItem As ListItem
+    Dim i As Integer
 
     Set GetFriendItem = Nothing
 
-    For Each ListItem In lvFriendList.ListItems
-        If StrComp(ListItem.ListSubItems.Item(2).Text, CStr(1000 + EntryNumber), vbBinaryCompare) = 0 Then
-            Set GetFriendItem = ListItem
+    For i = 1 To lvFriendList.ListItems.Count
+        If (CInt(lvFriendList.ListItems.Item(i).Tag) = EntryNumber) Then
+            Set GetFriendItem = lvFriendList.ListItems.Item(i)
             Exit Function
         End If
-    Next ListItem
+    Next i
 End Function
 
-Private Sub AddClanMember(ByVal Name As String, ByVal Rank As Integer, ByVal Status As Integer)
+Private Sub AddClanMember(ByVal Name As String, ByVal DisplayName As String, ByVal Rank As Integer, ByVal Status As Integer)
 On Error GoTo ERROR_HANDLER:
     Dim ListItem As ListItem
 
-    Set ListItem = lvClanList.ListItems.Add(lvClanList.ListItems.Count + 1, , Name)
-    If (BotVars.NoColoring = False) Then
+    Set ListItem = lvClanList.ListItems.Add(lvClanList.ListItems.Count + 1, , DisplayName)
+    If (Not BotVars.NoColoring) Then
         If (StrComp(BotVars.Username, Name, vbTextCompare) = 0) Then
             ListItem.ForeColor = FormColors.ChannelListSelf
         End If
     End If
     ListItem.ListSubItems.Add , , , IC_CLAN_UNKNOWN
     ListItem.ListSubItems.Add , , vbNullString
-    SetClanMember ListItem, Rank, Status
+    ListItem.Tag = CStr(Name)
+    SetClanMember ListItem, DisplayName, Rank, Status
 
     Exit Sub
 ERROR_HANDLER:
     AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddClanMember", Err.Number, Err.Description)
 End Sub
 
-Private Sub SetClanMember(ByVal ListItem As ListItem, ByVal Rank As Integer, ByVal Status As Integer)
+Private Sub SetClanMember(ByVal ListItem As ListItem, ByVal DisplayName As String, ByVal Rank As Integer, ByVal Status As Integer)
 On Error GoTo ERROR_HANDLER
     Dim RankIcon   As Integer
     Dim OnlineIcon As Integer
@@ -8143,6 +8345,7 @@ On Error GoTo ERROR_HANDLER
         OnlineIcon = IC_CLAN_STATUS_OFFLINE
     End If
 
+    ListItem.Text = DisplayName
     ListItem.SmallIcon = RankIcon
     ListItem.ListSubItems.Item(1).ReportIcon = OnlineIcon
     ListItem.ListSubItems.Item(2).Text = CStr(1000 * RankIcon + ListItem.Index)
