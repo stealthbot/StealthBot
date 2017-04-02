@@ -1758,20 +1758,6 @@ Private AUTH_CHECKED As Boolean
 Public SettingsForm As frmSettings
 Public ChatNoScroll As Boolean
 
-Private Const HKEY_LOCAL_MACHINE = &H80000002
-Private Const REG_SZ = 1
-Private Const WM_USER = 1024
-Private Const CB_LIMITTEXT = &H141
-Private Const SB_BOTTOM = 7
-Private Const EM_SCROLL = &HB5
-
-Private Type sockaddr_in
-    sin_family As Integer
-    sin_port As Integer
-    sin_addr As String * 4
-    sin_zero As String * 8
-End Type
-
 Private Const SB_INET_UNSET As String = vbNullString
 Private Const SB_INET_NEWS1 As String = "SBNEWS_AUTOCONNECT"
 Private Const SB_INET_NEWS  As String = "SBNEWS"

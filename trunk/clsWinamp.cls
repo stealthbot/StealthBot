@@ -102,10 +102,10 @@ Private Const WA_RELOADSKIN = 40291
 Private Const WA_CLOSE = 40001
 Private Const WA_PREVTRACK   As Long = 40044
 Private Const WA_NEXTTRACK   As Long = 40048
-Private Const WA_PLAY        As Long = 40045 
-Private Const WA_PAUSE       As Long = 40046 
-Private Const WA_STOP        As Long = 40047 
-Private Const WA_FADEOUTSTOP As Long = 40147 
+Private Const WA_PLAY        As Long = 40045
+Private Const WA_PAUSE       As Long = 40046
+Private Const WA_STOP        As Long = 40047
+Private Const WA_FADEOUTSTOP As Long = 40147
 
 Private Type extendedFileInfoStruct
     FileName As String
@@ -132,7 +132,7 @@ Private Sub Class_Initialize()
 End Sub
 
 Private Function GetWindowHandle() As Long
-    Dim lRet As Long 
+    Dim lRet As Long
     
     lRet = (FindWindow("Winamp v1.x", vbNullString))
     
@@ -144,11 +144,11 @@ Private Function GetWindowHandle() As Long
 End Function
 
 ' Winamp 2.04+ Only
-Private Function GetWinampSongTitle(Optional ByVal entryNumber As Integer = 0) As String
+Private Function GetWinampSongTitle(Optional ByVal EntryNumber As Integer = 0) As String
     Dim SongTitle       As String
-    Dim WinampProcessID As Long  
-    Dim ProcessHandle   As Long  
-    Dim SongTitleRemote As Long   
+    Dim WinampProcessID As Long
+    Dim ProcessHandle   As Long
+    Dim SongTitleRemote As Long
     Dim ret             As String
     
     If (IsLoaded() = False) Then
@@ -157,8 +157,8 @@ Private Function GetWinampSongTitle(Optional ByVal entryNumber As Integer = 0) A
     
     SongTitle = String$(1024, vbNullChar)
     
-    If (entryNumber = 0) Then
-        entryNumber = PlaylistPosition() - 1
+    If (EntryNumber = 0) Then
+        EntryNumber = PlaylistPosition() - 1
     End If
     
     '// Get process ID
@@ -169,7 +169,7 @@ Private Function GetWinampSongTitle(Optional ByVal entryNumber As Integer = 0) A
     
     If (ProcessHandle > 0) Then
         '// Get pointer
-        SongTitleRemote = CStr(SendMessage(m_hWnd, WM_WA_IPC, entryNumber, IPC_GETPLAYLISTTITLE))
+        SongTitleRemote = CStr(SendMessage(m_hWnd, WM_WA_IPC, EntryNumber, IPC_GETPLAYLISTTITLE))
         
         If (SongTitleRemote > 0) Then
             '// Try to read it
@@ -198,11 +198,11 @@ Public Function IsLoaded() As Boolean
     End If
 End Function
 
-Public Function Start(Optional filePath As String) As Boolean
-    If ((Dir$(filePath) <> vbNullString) And (filePath <> vbNullString)) Then
+Public Function Start(Optional FilePath As String) As Boolean
+    If ((Dir$(FilePath) <> vbNullString) And (FilePath <> vbNullString)) Then
         Start = True
         
-        Shell filePath, vbNormalFocus
+        Shell FilePath, vbNormalFocus
     Else
         If (Dir$(WA_DEFAULT_PATH) <> vbNullString) Then
             Start = True
@@ -213,7 +213,7 @@ Public Function Start(Optional filePath As String) As Boolean
 End Function
 
 Public Sub NextTrack()
-   PlayTrack PlaylistPosition + 1   
+   PlayTrack PlaylistPosition + 1
 End Sub
 
 Public Sub PreviousTrack()
@@ -231,10 +231,10 @@ Public Sub PlayTrack(Optional ByVal Track As Variant = vbNullString)
         If (StrictIsNumeric(Track)) Then
             SendMessage m_hWnd, WM_USER, Track - 1, IPC_SETPLAYLISTPOS
         Else
-            Dim lngJumpto  As Long  
-            Dim lngEdit    As Long  
-            Dim lngListBox As Long   
-            Dim iterations As Integer 
+            Dim lngJumpto  As Long
+            Dim lngEdit    As Long
+            Dim lngListBox As Long
+            Dim iterations As Integer
    
             PostMessage m_hWnd, WA_SENDCUSTOMDATA, WA_DIALOGJUMPTOFILE, 0
             
@@ -376,7 +376,7 @@ Public Property Get IsPlaying() As Boolean
         Exit Property
     End If
 
-    IsPlaying =  CBool((SendMessage(m_hWnd, WM_WA_IPC, 0, WA_GETSTATUS) = 1))
+    IsPlaying = CBool((SendMessage(m_hWnd, WM_WA_IPC, 0, WA_GETSTATUS) = 1))
 End Property
 
 Public Property Get IsPaused() As Boolean
