@@ -68,7 +68,7 @@ Begin VB.Form frmChat
       Enabled         =   0   'False
       Interval        =   30000
       Left            =   6240
-      Top             =   4560
+      Top             =   4080
    End
    Begin MSScriptControlCtl.ScriptControl SControl 
       Left            =   120
@@ -854,7 +854,7 @@ Begin VB.Form frmChat
       Enabled         =   0   'False
       Index           =   0
       Interval        =   500
-      Left            =   6240
+      Left            =   5760
       Top             =   4080
    End
    Begin VB.ComboBox cboSend 
@@ -949,7 +949,7 @@ Begin VB.Form frmChat
    Begin VB.Timer tmrIdleTimer 
       Enabled         =   0   'False
       Interval        =   1000
-      Left            =   7200
+      Left            =   6240
       Top             =   4560
    End
    Begin VB.CommandButton cmdShowHide 
@@ -1005,12 +1005,6 @@ Begin VB.Form frmChat
       _ExtentY        =   741
       _Version        =   393216
       RemotePort      =   6112
-   End
-   Begin VB.Timer UpTimer 
-      Enabled         =   0   'False
-      Interval        =   1000
-      Left            =   6720
-      Top             =   4080
    End
    Begin MSComctlLib.ListView lvClanList 
       Height          =   6375
@@ -2329,7 +2323,6 @@ End Sub
 
 Sub Event_BNetDisconnected()
     tmrIdleTimer.Enabled = False
-    UpTimer.Enabled = False
     ConnectionTickCount = 0@
     BotVars.JoinWatch = 0
     
@@ -6278,7 +6271,12 @@ Private Sub tmrIdleTimer_Timer()
 
     ' long-counter
     Static lCounter As Long
-    Dim pBuf As clsDataBuffer
+
+    Dim pBuf      As clsDataBuffer
+    Dim newColor  As Long
+    Dim i         As Integer
+    Dim pos       As Integer
+    Dim doCheck   As Boolean
 
     lCounter = lCounter + 1
     If lCounter >= &H3C000000 Then lCounter = 0
@@ -6325,6 +6323,80 @@ Private Sub tmrIdleTimer_Timer()
             Set pBuf = New clsDataBuffer
             pBuf.SendPacket SID_NULL
             Set pBuf = Nothing
+        End If
+
+        If (floodCap > 2) Then
+            floodCap = floodCap - 3
+        End If
+
+        If (VoteDuration > 0) Then
+            VoteDuration = VoteDuration - 1
+
+            If (VoteDuration = 0) Then
+                Dim s As String
+
+                s = Voting(BVT_VOTE_END)
+
+                If (Len(s) > 1) Then
+                    AddQ s
+                End If
+            End If
+        End If
+
+        If (g_Queue.Count > 0) Then
+            Ban vbNullString, 0, 3
+        End If
+
+        If (g_Channel.IsSilent = False) Then
+            doCheck = True
+
+            For i = 1 To g_Channel.Users.Count
+                With g_Channel.Users(i)
+                    If (g_Channel.Self.IsOperator) Then
+                        If (.IsOperator = False) Then
+                            ' channel password
+                            If ((BotVars.ChannelPasswordDelay > 0) And (Len(BotVars.ChannelPassword) > 0)) Then
+                                If (.PassedChannelAuth = False) Then
+                                    If (.TimeInChannel() > BotVars.ChannelPasswordDelay) Then
+                                        If (GetSafelist(.DisplayName) = False) Then
+                                            Ban .DisplayName & " Password time is up", (AutoModSafelistValue - 1)
+
+                                            doCheck = False
+                                        End If
+                                    End If
+                                End If
+                            End If
+
+                            ' idle bans
+                            If ((doCheck) And ((BotVars.IB_On = BTRUE) And (BotVars.IB_Wait > 0))) Then
+                                If (.TimeSinceTalk() > BotVars.IB_Wait) Then
+                                    If (GetSafelist(.DisplayName) = False) Then
+                                        Ban .DisplayName & " Idle for " & BotVars.IB_Wait & "+ seconds", _
+                                                (AutoModSafelistValue - 1), IIf(BotVars.IB_Kick, 1, 0)
+
+                                        doCheck = False
+                                    End If
+                                End If
+                            End If
+                        End If
+                    End If
+
+                    If (Not BotVars.NoColoring) Then
+                        pos = frmChat.GetChannelItemIndex(.Name)
+
+                        If (pos > 0) Then
+                            newColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
+                                    GetCurrentUsername, vbBinaryCompare) = 0)
+
+                            If (lvChannel.ListItems(pos).ForeColor <> newColor) Then
+                                lvChannel.ListItems(pos).ForeColor = newColor
+                            End If
+                        End If
+                    End If
+                End With
+
+                doCheck = True
+            Next i
         End If
     End If
     
@@ -6685,99 +6757,6 @@ Public Sub Pause(ByVal fSeconds As Single, Optional ByVal AllowEvents As Boolean
     Else
         Sleep fSeconds * 1000
     End If
-End Sub
-
-'/* Fires every second */
-Private Sub UpTimer_Timer()
-
-    On Error GoTo ERROR_HANDLER
-
-    Dim newColor  As Long
-    Dim i         As Integer
-    Dim pos       As Integer
-    Dim doCheck   As Boolean
-    
-    If (floodCap > 2) Then
-        floodCap = floodCap - 3
-    End If
-    
-    If (VoteDuration > 0) Then
-        VoteDuration = VoteDuration - 1
-        
-        If (VoteDuration = 0) Then
-            Dim s As String
-            
-            s = Voting(BVT_VOTE_END)
-            
-            If (Len(s) > 1) Then
-                AddQ s
-            End If
-        End If
-    End If
-    
-    If (g_Queue.Count > 0) Then
-        Ban vbNullString, 0, 3
-    End If
-
-    If (g_Channel.IsSilent = False) Then
-        doCheck = True
-    
-        For i = 1 To g_Channel.Users.Count
-            With g_Channel.Users(i)
-                If (g_Channel.Self.IsOperator) Then
-                    If (.IsOperator = False) Then
-                        ' channel password
-                        If ((BotVars.ChannelPasswordDelay > 0) And (Len(BotVars.ChannelPassword) > 0)) Then
-                            If (.PassedChannelAuth = False) Then
-                                If (.TimeInChannel() > BotVars.ChannelPasswordDelay) Then
-                                    If (GetSafelist(.DisplayName) = False) Then
-                                        Ban .DisplayName & " Password time is up", (AutoModSafelistValue - 1)
-                                         
-                                        doCheck = False
-                                    End If
-                                End If
-                            End If
-                        End If
-                        
-                        ' idle bans
-                        If ((doCheck) And ((BotVars.IB_On = BTRUE) And (BotVars.IB_Wait > 0))) Then
-                            If (.TimeSinceTalk() > BotVars.IB_Wait) Then
-                                If (GetSafelist(.DisplayName) = False) Then
-                                    Ban .DisplayName & " Idle for " & BotVars.IB_Wait & "+ seconds", _
-                                        (AutoModSafelistValue - 1), IIf(BotVars.IB_Kick, 1, 0)
-                                        
-                                    doCheck = False
-                                End If
-                            End If
-                        End If
-                    End If
-                End If
-                
-                If (Not BotVars.NoColoring) Then
-                    pos = frmChat.GetChannelItemIndex(.Name)
-                
-                    If (pos > 0) Then
-                        newColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
-                            GetCurrentUsername, vbBinaryCompare) = 0)
-                        
-                        If (lvChannel.ListItems(pos).ForeColor <> newColor) Then
-                            lvChannel.ListItems(pos).ForeColor = newColor
-                        End If
-                    End If
-                End If
-            End With
-            
-            doCheck = True
-        Next i
-    End If
-    
-    Exit Sub
-    
-ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in UpTimer_Timer()."
-
-    Exit Sub
-    
 End Sub
 
 'StealthLock (c) 2003 Stealth, Please do not remove this header

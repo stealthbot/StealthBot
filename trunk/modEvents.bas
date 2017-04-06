@@ -489,7 +489,6 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
         .InitListviewTabs
 
         .tmrAccountLock.Enabled = False
-        .UpTimer.Enabled = True
 
         If (frmChat.sckBNLS.State <> sckClosed) Then
             frmChat.sckBNLS.Close
