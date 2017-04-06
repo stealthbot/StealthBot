@@ -3440,20 +3440,21 @@ End Sub
 
 Private Sub FriendListHandler_FriendsUpdate(ByVal EntryNumber As Byte, ByVal FriendObj As clsFriendObj)
     Dim ListItem As ListItem
+    Dim oRequest As udtServerRequest
+
+    If FriendObj.LocationID <> FRL_OFFLINE Then
+        If Not FindServerRequest(oRequest, -1, SID_FRIENDSUPDATE, EntryNumber) Then
+            ' NOTE: There is a server bug here where, when this packet is sent automaticlaly
+            '   (not requested), the fields contains your own information instead when logged on.
+            '   Because of this, we resend the request (if there isn't one already).
+            '   (see: https://bnetdocs.org/packet/384/sid-friendsupdate)
+            Call FriendListHandler.RequestFriendItem(EntryNumber, reqInternal)
+            Exit Sub
+        End If
+    End If
 
     If g_Friends.Count > EntryNumber Then
-        ' NOTE: There is a server bug here where, when this packet is sent automaticlaly
-        '   (not requested), the fields contains your own information instead when logged on.
-        '   Because of this, we ignore that field completely and wait for the periodic updates
-        '   to update the value.
-        '   (see: https://bnetdocs.org/packet/384/sid-friendsupdate)
         With g_Friends.Item(EntryNumber + 1)
-            If .IsOnline Then
-                FriendObj.Status = .Status
-                FriendObj.LocationID = .LocationID
-                FriendObj.Game = .Game
-                FriendObj.Location = .Location
-            End If
             .Status = FriendObj.Status
             .LocationID = FriendObj.LocationID
             .Game = FriendObj.Game

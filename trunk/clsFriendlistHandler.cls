@@ -48,7 +48,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByVal inBuf As clsDataBuffer)
 
             RaiseEvent FriendsListReply(Friends)
 
-        Case SID_FRIENDSUPDATE                      ' information event
+        Case SID_FRIENDSUPDATE                      ' information event/no-cookie server request
             EntryNum = inBuf.GetByte                ' (BYTE) Entry number
             Set FriendObj = New clsFriendObj
             With FriendObj
@@ -98,6 +98,29 @@ Public Sub RequestFriendsList()
     Dim pBuf As clsDataBuffer
     Set pBuf = New clsDataBuffer
     pBuf.SendPacket SID_FRIENDSLIST
+    Set pBuf = Nothing
+End Sub
+
+Public Sub RequestFriendItem(ByVal EntryNumber As Integer, Optional ByVal eType As enuServerRequestHandlerType = reqScriptingCall, Optional ByVal Command As clsCommandObj)
+    Dim pBuf As clsDataBuffer
+    Dim oRequest As udtServerRequest
+
+    With oRequest
+        .ResponseReceived = False
+        .HandlerType = eType
+        Set .Command = Command
+        .PacketID = SID_FRIENDSUPDATE
+        .PacketCommand = EntryNumber
+        .Tag = Empty
+    End With
+
+    Call SaveServerRequest(oRequest)
+
+    Set pBuf = New clsDataBuffer
+    With pBuf
+        .InsertByte EntryNumber
+        .SendPacket SID_FRIENDSUPDATE
+    End With
     Set pBuf = Nothing
 End Sub
 
