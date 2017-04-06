@@ -8436,6 +8436,18 @@ On Error GoTo ERROR_HANDLER
             OnlineIcon = IC_FRIEND_START + LocationID
         End If
 
+        If (Not BotVars.NoColoring) Then
+            If (Status And FRS_AWAY) = FRS_AWAY Then
+                ListItem.ForeColor = FormColors.ChannelListOps
+            ElseIf (Status And FRS_DND) = FRS_DND Then
+                ListItem.ForeColor = FormColors.ChannelListSquelched
+            ElseIf LocationID <> FRL_OFFLINE Then
+                ListItem.ForeColor = FormColors.ChannelListText
+            Else
+                ListItem.ForeColor = FormColors.ChannelListIdle
+            End If
+        End If
+
         ListItem.SmallIcon = GameIcon
         ListItem.ListSubItems.Item(1).ReportIcon = OnlineIcon
     End If
