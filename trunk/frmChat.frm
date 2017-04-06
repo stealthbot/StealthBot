@@ -3531,7 +3531,9 @@ Private Sub FriendListHandler_FriendsRemove(ByVal EntryNumber As Byte)
                 End If
             Next i
         End If
-    
+
+        lvFriendList.Refresh
+
         Call UpdateListviewTabs
     End If
 End Sub
