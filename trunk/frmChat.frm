@@ -7162,7 +7162,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Dim bln                  As Boolean
     Dim doConvert            As Boolean
     Dim command_output()     As String
-    Dim FriendObj            As clsFriendObj
     
     Dim oCommandGenerator    As clsCommandGeneratorObj
     
@@ -7304,43 +7303,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     BotVars.ShowStatsIcons = Config.ShowStatsIcons
     BotVars.ShowFlagsIcons = Config.ShowFlagIcons
     
-    If (g_Online) Then
-        Dim found       As ListItem
-        Dim CurrentUser As Object
-        Dim outbuf      As String
-
-        SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
-        
-        frmChat.UpdateTrayTooltip
-        
-        lvChannel.ListItems.Clear
-        
-        For i = 1 To g_Channel.Users.Count
-            Set CurrentUser = g_Channel.Users(i)
-        
-            AddName CurrentUser.DisplayName, CurrentUser.Name, CurrentUser.Game, CurrentUser.Flags, CurrentUser.Ping, _
-                CurrentUser.Stats.IconCode, CurrentUser.Clan
-        Next i
-
-        lvFriendList.ListItems.Clear
-
-        If Config.FriendsListTab Then
-            lvFriendList.ListItems.Clear
-            For i = 1 To g_Friends.Count
-                Set FriendObj = g_Friends.Item(i)
-                If FriendObj.IsOnline Or Config.ShowOfflineFriends Then
-                    AddFriendItem FriendObj.DisplayName, FriendObj.Game, FriendObj.Status, FriendObj.LocationID, i - 1
-                End If
-                Set FriendObj = Nothing
-            Next i
-
-            ' re-sort
-            lvFriendList.Sorted = True
-        End If
-
-        Call UpdateListviewTabs
-    End If
-    
     JoinMessagesOff = Not Config.ShowJoinLeaves
     mnuToggle.Checked = JoinMessagesOff
 
@@ -7421,37 +7383,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     mnuFlash.Checked = Config.FlashOnEvents
     
-    For i = 0 To 2
-        With ProxyConnInfo(i)
-            .ServerType = i
-            Select Case i
-                Case stBNCS: .UseProxy = Config.UseProxy
-                Case stBNLS: .UseProxy = Config.UseProxy And Config.ProxyBNLS
-                Case stMCP:  .UseProxy = Config.UseProxy And Config.ProxyMCP
-                Case Else:   .UseProxy = False
-            End Select
-            
-            If .UseProxy Then
-                ' set these values so that next connection attempt uses them--
-                ' they may not be accurate for the current connection so
-                ' use the values on the socket to get current IP/Port
-                .ProxyIP = Config.ProxyIP
-                .ProxyPort = Config.ProxyPort
-                If CBool(StrComp(Config.ProxyType, PROXY_SETTING_SOCKS5, vbTextCompare) = 0) Then
-                    .Version = 5
-                Else
-                    .Version = 4
-                End If
-                .Username = Config.ProxyUsername
-                .Password = Config.ProxyPassword
-                .RemoteResolveHost = Config.ProxyServerResolve
-                
-                ' do not set RemoteIP, RemotePort, RemoteHostName, Status, IsUsingProxy;
-                ' those are set on proxy connect and shouldn't be touched by the config
-            End If
-        End With
-    Next i
-    
     BotVars.NoTray = Not Config.MinimizeToTray
     BotVars.NoAutocompletion = Not Config.NameAutoComplete
     BotVars.NoColoring = Not Config.NameColoring
@@ -7496,6 +7427,85 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     If (Not (s = vbNullString)) Then
         g_Logger.LogPath = s
     End If
+    
+    If (g_Online) Then
+        Dim found       As ListItem
+        Dim outbuf      As String
+        Dim ChannelUser As clsUserObj
+        Dim FriendObj   As clsFriendObj
+        Dim Member      As clsClanMemberObj
+
+        SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
+        
+        frmChat.UpdateTrayTooltip
+
+        lvChannel.ListItems.Clear
+        For i = 1 To g_Channel.Users.Count
+            Set ChannelUser = g_Channel.Users(i)
+        
+            AddName ChannelUser.DisplayName, ChannelUser.Name, ChannelUser.Game, ChannelUser.Flags, ChannelUser.Ping, _
+                    ChannelUser.Stats.IconCode, ChannelUser.Clan
+        Next i
+
+        lvFriendList.ListItems.Clear
+        If Config.FriendsListTab Then
+            For i = 1 To g_Friends.Count
+                Set FriendObj = g_Friends.Item(i)
+                If FriendObj.IsOnline Or Config.ShowOfflineFriends Then
+                    AddFriendItem FriendObj.DisplayName, FriendObj.Game, FriendObj.Status, FriendObj.LocationID, i - 1
+                End If
+                Set FriendObj = Nothing
+            Next i
+
+            ' re-sort
+            lvFriendList.Sorted = True
+        End If
+
+        lvClanList.ListItems.Clear
+        If g_Clan.InClan Then
+            For i = 1 To g_Clan.Members.Count
+                Set Member = g_Clan.Members.Item(i)
+                AddClanMember Member.Name, Member.DisplayName, Member.Rank, Member.Status
+                Set Member = Nothing
+            Next i
+
+            ' re-sort
+            lvClanList.Sorted = True
+        End If
+
+        Call UpdateListviewTabs
+    End If
+    
+    For i = 0 To 2
+        With ProxyConnInfo(i)
+            .ServerType = i
+            Select Case i
+                Case stBNCS: .UseProxy = Config.UseProxy
+                Case stBNLS: .UseProxy = Config.UseProxy And Config.ProxyBNLS
+                Case stMCP:  .UseProxy = Config.UseProxy And Config.ProxyMCP
+                Case Else:   .UseProxy = False
+            End Select
+            
+            If .UseProxy Then
+                ' set these values so that next connection attempt uses them--
+                ' they may not be accurate for the current connection so
+                ' use the values on the socket to get current IP/Port
+                .ProxyIP = Config.ProxyIP
+                .ProxyPort = Config.ProxyPort
+                If CBool(StrComp(Config.ProxyType, PROXY_SETTING_SOCKS5, vbTextCompare) = 0) Then
+                    .Version = 5
+                Else
+                    .Version = 4
+                End If
+                .Username = Config.ProxyUsername
+                .Password = Config.ProxyPassword
+                .RemoteResolveHost = Config.ProxyServerResolve
+                
+                ' do not set RemoteIP, RemotePort, RemoteHostName, Status, IsUsingProxy;
+                ' those are set on proxy connect and shouldn't be touched by the config
+            End If
+        End With
+    Next i
 
     Call ChatQueue_Initialize
 

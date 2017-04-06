@@ -5237,17 +5237,17 @@ Private Function SaveSettings() As Boolean
     '// Save the config instance to disk
     Call Config.Save
     
-    '// Load the config into the form
-    Call frmChat.ReloadConfig(1)
-    
-    '// RESIZE FORM TO FIX ANY UI CHANGES
-    Call frmChat.Form_Resize
-    
     '// Take care of the colors.
     If ModifiedColors Then
         Call SaveColors
         Call GetColorLists
     End If
+    
+    '// Load the config into the form
+    Call frmChat.ReloadConfig(1)
+    
+    '// RESIZE FORM TO FIX ANY UI CHANGES
+    Call frmChat.Form_Resize
     
     SaveSettings = True
 End Function
