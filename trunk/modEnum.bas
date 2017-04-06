@@ -169,15 +169,17 @@ Public Enum eCharacterTypes
 End Enum
 
 Public Enum enuSettingsPanels
-    spConnectionConfig = 0
-    spConnectionAdvanced = 1
-    spInterfaceGeneral = 2
-    spInterfaceFontsColors = 3
-    spGenModeration = 4
-    spGenGreets = 5
-    spGenIdles = 6
-    spGenMisc = 7
-    spSplash = 8
+    spSplash = 0
+    spConnectionConfig = 1
+    spConnectionAdvanced = 2
+    spInterfaceGeneral = 3
+    spInterfaceChat = 4
+    spInterfaceFontsColors = 5
+    spGenModeration = 6
+    spGenGreets = 7
+    spGenIdles = 8
+    spGenCommands = 9
+    spGenLogging = 10
 End Enum
 
 Public Enum enuDBActions

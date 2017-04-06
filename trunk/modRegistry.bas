@@ -17,12 +17,14 @@ Const KEY_READ = &H20019  ' ((READ_CONTROL Or KEY_QUERY_VALUE Or
                           ' KEY_ENUMERATE_SUB_KEYS Or KEY_NOTIFY) And (Not
                           ' SYNCHRONIZE))
 
-Const REG_SZ = 1
-Const REG_EXPAND_SZ = 2
-Const REG_BINARY = 3
-Const REG_DWORD = 4
-Const REG_MULTI_SZ = 7
-Const ERROR_MORE_DATA = 234
+Private Const REG_SZ = 1
+Private Const REG_EXPAND_SZ = 2
+Private Const REG_BINARY = 3
+Private Const REG_DWORD = 4
+Private Const REG_MULTI_SZ = 7
+Private Const ERROR_MORE_DATA = 234
+
+Public Const HKEY_LOCAL_MACHINE = &H80000002
 
 ' Read a Registry value
 '
@@ -34,7 +36,7 @@ Const ERROR_MORE_DATA = 234
 ' REG_MULTI_SZ values are returned as a null-delimited stream of strings
 ' (VB6 users can use SPlit to convert to an array of string)
 
-Function GetRegistryValue(ByVal hKey As Long, ByVal KeyName As String, _
+Public Function GetRegistryValue(ByVal hKey As Long, ByVal KeyName As String, _
     ByVal ValueName As String, Optional DefaultValue As Variant) As Variant
     Dim handle As Long
     Dim resLong As Long
