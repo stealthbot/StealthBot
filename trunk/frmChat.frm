@@ -1121,7 +1121,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1147,7 +1146,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2038,9 +2036,6 @@ Private Sub Form_Load()
 '    BotVars.ProxyIP = "213.210.194.139"
 '    BotVars.ProxyPort = 1080
     'BotVars.ProxyIsSocks5 = True
-
-    lvFriendList.ColumnHeaders(2).Width = imlIcons.ImageWidth
-    lvClanList.ColumnHeaders(2).Width = imlClan.ImageWidth
 End Sub
 
 Public Sub cacheTimer_Timer()
@@ -2625,7 +2620,7 @@ Sub FindBNLSServerEntry()
 End Sub
 
 ' Updated 8/8/07 to support new prefix/suffix box feature
-Sub Form_Resize()
+Public Sub Form_Resize()
     On Error Resume Next
     
     Dim lblHeight As Integer
@@ -2761,14 +2756,29 @@ Sub Form_Resize()
             cmdShowHide.Move ListviewTabs.Left + ListviewTabs.Width, lvChannel.Top + lvChannel.Height
         End If
         
-        With lvClanList
-            .ColumnHeaders(1).Width = (.Width \ 4) * 3 - 150
-            .ColumnHeaders(2).Width = imlClan.ImageWidth '.Width \ 4 + 200
+        With lvChannel
+            If Config.HideClanDisplay Then
+                .ColumnHeaders(1).Width = (.Width \ 4) * 3 + 200
+                .ColumnHeaders(2).Width = 0
+            Else
+                .ColumnHeaders(1).Width = (.Width \ 4) * 3 - 500
+                .ColumnHeaders(2).Width = 700
+            End If
+            If Config.HidePingDisplay Then
+                .ColumnHeaders(3).Width = 0
+            Else
+                .ColumnHeaders(3).Width = imlIcons.ImageWidth
+            End If
         End With
         
         With lvFriendList
-            .ColumnHeaders(1).Width = (.Width \ 4) * 3 - 150
+            .ColumnHeaders(1).Width = (.Width \ 4) * 3 + 200
             .ColumnHeaders(2).Width = imlIcons.ImageWidth '.Width \ 4 + 200
+        End With
+        
+        With lvClanList
+            .ColumnHeaders(1).Width = (.Width \ 4) * 3 - 200
+            .ColumnHeaders(2).Width = imlClan.ImageWidth '.Width \ 4 + 200
         End With
     End If
     
@@ -7279,20 +7289,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     AutoModSafelistValue = Config.AutoSafelistLevel
     BotVars.ShowOfflineFriends = Config.ShowOfflineFriends
     
-    If Config.HideClanDisplay Then
-        With lvChannel
-            .Width = (.Width - .ColumnHeaders(2).Width)
-            .ColumnHeaders(2).Width = 0
-        End With
-    End If
-    
-    If Config.HidePingDisplay Then
-        With lvChannel
-            .Width = (.Width - .ColumnHeaders(3).Width)
-            .ColumnHeaders(3).Width = 0
-        End With
-    End If
-    
     BotVars.RetainOldBans = Config.RetainOldBans
     BotVars.StoreAllBans = Config.StoreAllBans
     
@@ -7428,6 +7424,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         g_Logger.LogPath = s
     End If
     
+    Call Form_Resize
+    
     If (g_Online) Then
         Dim found       As ListItem
         Dim outbuf      As String
@@ -7442,7 +7440,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         lvChannel.ListItems.Clear
         For i = 1 To g_Channel.Users.Count
             Set ChannelUser = g_Channel.Users(i)
-        
+
             AddName ChannelUser.DisplayName, ChannelUser.Name, ChannelUser.Game, ChannelUser.Flags, ChannelUser.Ping, _
                     ChannelUser.Stats.IconCode, ChannelUser.Clan
         Next i
@@ -8153,6 +8151,31 @@ Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long, Icon
     GetSmallIcon = i
 End Function
 
+Private Function GetLagIcon(ByVal Ping As Long, ByVal Flags As Long) As Long
+    Select Case (Ping)
+        Case 0
+            GetLagIcon = 0
+        Case 1 To 199
+            GetLagIcon = LAG_1
+        Case 200 To 299
+            GetLagIcon = LAG_2
+        Case 300 To 399
+            GetLagIcon = LAG_3
+        Case 400 To 499
+            GetLagIcon = LAG_4
+        Case 500 To 599
+            GetLagIcon = LAG_5
+        Case Is >= 600 Or -1
+            GetLagIcon = LAG_6
+        Case Else
+            GetLagIcon = ICUNKNOWN
+    End Select
+    
+    If ((Flags And USER_NOUDP) = USER_NOUDP) Then
+        GetLagIcon = LAG_PLUG
+    End If
+End Function
+
 Private Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal IsSelf As Boolean) As Long
     '/* Self */
     If (IsSelf) Then
@@ -8289,29 +8312,6 @@ On Error GoTo ERROR_HANDLER
     '    Exit Sub
     'End If
     
-    Select Case (Ping)
-        Case 0
-            LagIcon = 0
-        Case 1 To 199
-            LagIcon = LAG_1
-        Case 200 To 299
-            LagIcon = LAG_2
-        Case 300 To 399
-            LagIcon = LAG_3
-        Case 400 To 499
-            LagIcon = LAG_4
-        Case 500 To 599
-            LagIcon = LAG_5
-        Case Is >= 600 Or -1
-            LagIcon = LAG_6
-        Case Else
-            LagIcon = ICUNKNOWN
-    End Select
-    
-    If ((Flags And USER_NOUDP) = USER_NOUDP) Then
-        LagIcon = LAG_PLUG
-    End If
-    
     isPriority = (frmChat.lvChannel.ListItems.Count + 1)
     
     i = GetSmallIcon(Product, Flags, IconCode)
@@ -8349,13 +8349,14 @@ On Error GoTo ERROR_HANDLER
         ' store account name here so popup menus work
         .ListItems.Item(isPriority).Tag = AccountName
         
-        If (.ColumnHeaders(2).Width > 0) Then
-            .ListItems.Item(isPriority).ListSubItems.Add , , Clan
-        End If
+        .ListItems.Item(isPriority).ListSubItems.Add , , Clan
         
-        If (.ColumnHeaders(3).Width > 0) Then
-            .ListItems.Item(isPriority).ListSubItems.Add , , , LagIcon
+        If (.ColumnHeaders(3).Width = 0) Then
+            LagIcon = 0
+        Else
+            LagIcon = GetLagIcon(Ping, Flags)
         End If
+        .ListItems.Item(isPriority).ListSubItems.Add , , , LagIcon
         
         If (Not BotVars.NoColoring) Then
             .ListItems.Item(isPriority).ForeColor = GetNameColor(Flags, 0, IsSelf)
