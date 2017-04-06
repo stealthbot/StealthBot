@@ -1158,7 +1158,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   360
          TabIndex        =   63
-         ToolTipText     =   "Name coloring changes the color of people's names in the user lists based on their status or activity."
+         ToolTipText     =   "Show ping icons in the channel list."
          Top             =   3360
          Value           =   1  'Checked
          Width           =   2775
@@ -1179,7 +1179,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   360
          TabIndex        =   62
-         ToolTipText     =   "Name coloring changes the color of people's names in the user lists based on their status or activity."
+         ToolTipText     =   "Show Clan tags in the channel list."
          Top             =   3000
          Value           =   1  'Checked
          Width           =   2775
