@@ -3903,7 +3903,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single
             
                     'sTemp = sTemp & vbCrLf
                     sTemp = sTemp & "Ping at logon: " & .Ping & "ms" & vbCrLf
-                    sTemp = sTemp & "Flags: " & FlagDescription(.Flags, True) & vbCrLf
+                    sTemp = sTemp & "Flags: " & GetFlagDescription(.Flags, True) & vbCrLf
                     sTemp = sTemp & vbCrLf
                     sTemp = sTemp & .Stats.ToString
                 
@@ -8140,6 +8140,123 @@ Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long, Icon
     End If
     
     GetSmallIcon = i
+End Function
+
+Private Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal IsSelf As Boolean) As Long
+    '/* Self */
+    If (IsSelf) Then
+        'Debug.Print "Assigned color IsSelf"
+        GetNameColor = FormColors.ChannelListSelf
+        
+        Exit Function
+    End If
+    
+    '/* Squelched */
+    If ((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
+        'Debug.Print "Assigned color SQUELCH"
+        GetNameColor = FormColors.ChannelListSquelched
+        
+        Exit Function
+    End If
+    
+    '/* Blizzard */
+    If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or _
+        ((Flags And USER_SYSOP&) = USER_SYSOP&)) Then
+       
+        GetNameColor = COLOR_BLUE
+        
+        Exit Function
+    End If
+    
+    '/* Operator */
+    If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+        'Debug.Print "Assigned color OP"
+        GetNameColor = FormColors.ChannelListOps
+        Exit Function
+    End If
+    
+    '/* Idle */
+    If (IdleTime > BotVars.SecondsToIdle) Then
+        'Debug.Print "Assigned color IDLE"
+        GetNameColor = FormColors.ChannelListIdle
+        Exit Function
+    End If
+    
+    '/* Default */
+    'Debug.Print "Assigned color NORMAL"
+    GetNameColor = FormColors.ChannelListText
+End Function
+
+Public Function GetFlagDescription(ByVal Flags As Long, ByVal ShowAll As Boolean) As String
+    Dim sOut As String
+    Dim sSep As String
+    
+    sOut = vbNullString
+    sSep = vbNullString
+    
+    If (Flags And USER_SQUELCHED) = USER_SQUELCHED And ShowAll Then
+        sOut = sOut & sSep & "squelched"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_CHANNELOP) = USER_CHANNELOP Then
+        sOut = sOut & sSep & "channel operator"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_BLIZZREP) = USER_BLIZZREP Then
+        sOut = sOut & sSep & "Blizzard representative"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_SYSOP) = USER_SYSOP Then
+        sOut = sOut & sSep & "Battle.net system operator"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_NOUDP) = USER_NOUDP And ShowAll Then
+        sOut = sOut & sSep & "UDP plug"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_BEEPENABLED) = USER_BEEPENABLED And ShowAll Then
+        sOut = sOut & sSep & "beep enabled"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_GUEST) = USER_GUEST Then
+        sOut = sOut & sSep & "guest"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_SPEAKER) = USER_SPEAKER Then
+        sOut = sOut & sSep & "speaker"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_GFOFFICIAL) = USER_GFOFFICIAL Then
+        sOut = sOut & sSep & "GF official"
+        sSep = ", "
+    End If
+    
+    If (Flags And USER_GFPLAYER) = USER_GFPLAYER Then
+        sOut = sOut & sSep & "GF player"
+        sSep = ", "
+    End If
+    
+    If (LenB(sOut) = 0) And ShowAll Then
+        If (Flags = &H0&) Then
+            sOut = "normal"
+        Else
+            sOut = "unknown"
+        End If
+    End If
+    
+    GetFlagDescription = sOut
+    
+    If ShowAll Then
+        GetFlagDescription = GetFlagDescription & " [0x" & Right$("00000000" & Hex(Flags), 8) & "]"
+    End If
 End Function
 
 Public Sub AddName(ByVal Username As String, ByVal AccountName As String, ByVal Product As String, ByVal Flags As Long, ByVal Ping As Long, IconCode As Integer, Optional Clan As String, Optional ForcePosition As Integer)

@@ -165,8 +165,8 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                     If Not Displayed Then
                         Dim FDescN As String
                         Dim FDescO As String
-                        FDescN = FlagDescription(NewFlags, False)
-                        FDescO = FlagDescription(LostFlags, False)
+                        FDescN = frmChat.GetFlagDescription(NewFlags, False)
+                        FDescO = frmChat.GetFlagDescription(LostFlags, False)
                         
                         If LenB(FDescN) > 0 Then
                             frmChat.AddChat RTBColors.JoinUsername, "-- ", RTBColors.JoinedChannelName, _
@@ -1138,7 +1138,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 If Not Displayed Then
                     Dim UserColor As Long
                     Dim FDesc As String
-                    FDesc = FlagDescription(Flags, False)
+                    FDesc = frmChat.GetFlagDescription(Flags, False)
                     
                     If LenB(FDesc) > 0 Then
                         FDesc = " as a " & FDesc
@@ -1382,7 +1382,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             If (Not Filters) Or (Not CheckBlock(Username)) Then
                 Dim UserColor As Long
                 Dim FDesc As String
-                FDesc = FlagDescription(AcqFlags Or Flags, False)
+                FDesc = frmChat.GetFlagDescription(AcqFlags Or Flags, False)
                 
                 If LenB(FDesc) > 0 Then
                     FDesc = " as a " & FDesc
