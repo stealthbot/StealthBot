@@ -13,8 +13,6 @@ Public Declare Function GetTickCount Lib "Kernel32.dll" () As Long
 Public Declare Function GetTickCount64 Lib "Kernel32.dll" () As Currency
 Public Declare Sub GetLocalTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
 
-Public ConnectionTickCount As Currency
-
 Private Const TIME_ZONE_ID_UNKNOWN = 0
 Private Const TIME_ZONE_ID_STANDARD = 1
 Private Const TIME_ZONE_ID_DAYLIGHT = 2
@@ -149,14 +147,6 @@ End Function
 
 Public Function GetTickCountS() As Long
     GetTickCountS = CLng(GetTickCount64() * 10)
-End Function
-
-Public Function GetConnectionUptime() As Currency
-    If g_Online Then
-        GetConnectionUptime = GetTickCountMS() - ConnectionTickCount
-    Else
-        GetConnectionUptime = 0@
-    End If
 End Function
 
 '// Converts a millisecond or second time value to humanspeak.. modified to support BNet's Time

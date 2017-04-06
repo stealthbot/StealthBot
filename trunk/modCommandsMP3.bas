@@ -220,19 +220,19 @@ Public Sub OnUseWinamp(Command As clsCommandObj)
     End If
 End Sub
 
-Private Function SecondsToString(ByVal seconds As Long) As String
+Private Function SecondsToString(ByVal Seconds As Long) As String
     Dim temp  As Long
-    Dim mins  As Long
-    Dim hours As Long
-    temp = seconds
+    Dim Mins  As Long
+    Dim Hours As Long
+    temp = Seconds
     
-    hours = temp \ 3600
-    temp = temp - (hours * 3600)
-    mins = temp \ 60
-    temp = temp - (mins * 60)
+    Hours = temp \ 3600
+    temp = temp - (Hours * 3600)
+    Mins = temp \ 60
+    temp = temp - (Mins * 60)
     
-    SecondsToString = IIf(hours, Right$("00" & hours, 2) & ":", vbNullString) & _
-        Right$("00" & mins, 2) & ":" & Right$("00" & temp, 2)
+    SecondsToString = IIf(Hours, Right$("00" & Hours, 2) & ":", vbNullString) & _
+        Right$("00" & Mins, 2) & ":" & Right$("00" & temp, 2)
 End Function
 
 

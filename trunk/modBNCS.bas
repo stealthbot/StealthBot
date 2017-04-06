@@ -137,6 +137,7 @@ Public Const PLATFORM_INTEL   As Long = &H49583836 'IX86
 Public Const PLATFORM_POWERPC As Long = &H504D4143 'PMAC
 Public Const PLATFORM_OSX     As Long = &H584D4143 'XMAC
 
+Public ConnectionTickCount As Currency
 
 Public ds As New clsDataStorage 'Need to rename this -.-
 
@@ -2787,3 +2788,11 @@ Public Sub HandleEmptyCRevSeed()
         frmChat.DoDisconnect
     End If
 End Sub
+
+Public Function GetConnectionUptime() As Currency
+    If g_Online Then
+        GetConnectionUptime = GetTickCountMS() - ConnectionTickCount
+    Else
+        GetConnectionUptime = 0@
+    End If
+End Function
