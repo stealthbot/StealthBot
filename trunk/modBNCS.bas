@@ -283,6 +283,11 @@ On Error GoTo ERROR_HANDLER:
         ds.CRevSeed = .GetString
     End With
     
+    If (StrComp(ds.CRevSeed, "A=0 B=0 C=0 4 A=A+S C=C+A", vbBinaryCompare) = 0) Then
+        ' broken server default seed, proceed by making it "2" checks
+        ds.CRevSeed = "A=0 B=0 C=0 4 A=A+S B=B+C C=C+A A=A+B"
+    End If
+    
     Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Checking version...")
     If (MDebug("all") Or MDebug("crev")) Then
         frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Name: {0}", ds.CRevFileName)
@@ -1621,6 +1626,11 @@ On Error GoTo ERROR_HANDLER:
     ds.CRevFileName = pBuff.GetString
     ds.CRevSeed = pBuff.GetString
     ds.ServerSig = pBuff.GetRaw(128)
+    
+    If (StrComp(ds.CRevSeed, "A=0 B=0 C=0 4 A=A+S C=C+A", vbBinaryCompare) = 0) Then
+        ' broken server default seed, proceed by making it "2" checks
+        ds.CRevSeed = "A=0 B=0 C=0 4 A=A+S B=B+C C=C+A A=A+B"
+    End If
     
     Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Checking version...")
     
