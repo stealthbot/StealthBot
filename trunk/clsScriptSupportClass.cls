@@ -1080,7 +1080,7 @@ End Function
 '// GETCONNECTIONUPTIME
 '// Returns the amount of time your bot has been online
 Public Function GetConnectionUptime() As String
-    GetConnectionUptime = ConvertTimeInterval(modDateTime.GetConnectionUptime())
+    GetConnectionUptime = ConvertTimeInterval(modBNCS.GetConnectionUptime())
 End Function
 
 '// GETSYSTEMUPTIMEMS
@@ -1092,7 +1092,7 @@ End Function
 '// GETCONNECTIONUPTIMEMS
 '// Returns the amount of time your bot has been online in milliseconds
 Public Function GetConnectionUptimeMS() As Double
-    GetConnectionUptimeMS = modDateTime.GetConnectionUptime()
+    GetConnectionUptimeMS = modBNCS.GetConnectionUptime()
 End Function
 
 '// CRC32

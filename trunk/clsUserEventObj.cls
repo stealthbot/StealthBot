@@ -28,7 +28,7 @@ Private m_Statstring  As String
 Private m_Displayed   As Boolean
 
 Private Sub Class_Initialize()
-    EventTick = GetTickCountMS()
+    EventTick = modDateTime.GetTickCountMS()
 End Sub
 
 Public Property Get EventID() As Long

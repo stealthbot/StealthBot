@@ -444,7 +444,7 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
     
     g_Online = True
     
-    ConnectionTickCount = GetTickCountMS()
+    ConnectionTickCount = modDateTime.GetTickCountMS()
     
     ' in case this wasn't set before
     ds.EnteredChatFirstTime = True

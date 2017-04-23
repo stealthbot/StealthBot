@@ -125,7 +125,7 @@ Private Sub Form_Load()
       Case Else: lblVersion.Caption = "[ " & CVERSION & " ]"
     End Select
     
-    lStartTick = GetTickCountMS
+    lStartTick = modDateTime.GetTickCountMS
 End Sub
 
 Private Sub Form_LostFocus()
@@ -143,7 +143,7 @@ End Sub
 Private Sub tmrUnload_Timer()
     On Error GoTo KILL_FORM
     
-    If ((GetTickCountMS - lStartTick) >= AUTO_UNLOAD_DELAY) Then
+    If ((modDateTime.GetTickCountMS - lStartTick) >= AUTO_UNLOAD_DELAY) Then
         GoTo KILL_FORM
     End If
     bHasShown = True

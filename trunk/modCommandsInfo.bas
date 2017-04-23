@@ -730,9 +730,9 @@ End Sub
 
 Public Sub OnUptime(Command As clsCommandObj)
     If g_Online Then
-        Command.Respond StringFormat("System uptime {0}; connection uptime {1}.", ConvertTimeInterval(GetTickCountMS()), ConvertTimeInterval(GetConnectionUptime()))
+        Command.Respond StringFormat("System uptime {0}; connection uptime {1}.", ConvertTimeInterval(modDateTime.GetTickCountMS()), ConvertTimeInterval(modBNCS.GetConnectionUptime()))
     Else
-        Command.Respond StringFormat("System uptime {0}.", ConvertTimeInterval(GetTickCountMS()))
+        Command.Respond StringFormat("System uptime {0}.", ConvertTimeInterval(modDateTime.GetTickCountMS()))
     End If
 End Sub
 

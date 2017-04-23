@@ -4194,7 +4194,7 @@ Private Sub mnuPopClanRemove_Click()
                 Call ClanHandler.RemoveMember(GetClanSelectedUser, False, reqUserInterface)
             End If
 
-            ClanHandler.LastRemoval = GetTickCountMS()
+            ClanHandler.LastRemoval = modDateTime.GetTickCountMS()
         End If
     End If
 End Sub
@@ -6444,7 +6444,7 @@ Private Sub tmrIdleTimer_Timer_IdleMsg()
         End If
         
     ElseIf IdleType = "uptime" Then
-        IdleMsg = "/me -: System Uptime: " & ConvertTimeInterval(GetTickCountMS()) & " :: Connection Uptime: " & ConvertTimeInterval(GetConnectionUptime()) & " :: " & CVERSION & " :-"
+        IdleMsg = "/me -: System Uptime: " & ConvertTimeInterval(modDateTime.GetTickCountMS()) & " :: Connection Uptime: " & ConvertTimeInterval(modBNCS.GetConnectionUptime()) & " :: " & CVERSION & " :-"
         
     ElseIf IdleType = "mp3" Then
         Dim WindowTitle As String

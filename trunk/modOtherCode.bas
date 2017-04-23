@@ -1423,8 +1423,8 @@ Public Function DoReplacements(ByVal s As String, Optional ByVal Username As Str
 
     s = Replace(s, "%ver", CVERSION)
     s = Replace(s, "%v", CVERSION)
-    s = Replace(s, "%botup", ConvertTimeInterval(GetConnectionUptime()))
-    s = Replace(s, "%cpuup", ConvertTimeInterval(GetTickCountMS()))
+    s = Replace(s, "%botup", ConvertTimeInterval(modBNCS.GetConnectionUptime()))
+    s = Replace(s, "%cpuup", ConvertTimeInterval(modDateTime.GetTickCountMS()))
     s = Replace(s, "%chan", g_Channel.Name)
     s = Replace(s, "%c", g_Channel.Name)
     s = Replace(s, "%me", GetCurrentUsername)

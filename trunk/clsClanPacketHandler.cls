@@ -608,7 +608,7 @@ Public Function TimeSinceLastRemoval() As Long
     Dim NowTC As Currency
     
     If LastRemoval > 0 Then
-        NowTC = GetTickCountMS()
+        NowTC = modDateTime.GetTickCountMS()
         
         TimeSinceLastRemoval = (NowTC - LastRemoval) \ 1000
     Else

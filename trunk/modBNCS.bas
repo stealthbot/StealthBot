@@ -846,9 +846,9 @@ On Error GoTo ERROR_HANDLER:
     Cookie = pBuff.GetDWord
     
     'SendResponse = False
-    'If GetTickCountMS() >= ds.LastPingResponse + 1000 Then
+    'If modDateTime.GetTickCountMS() >= ds.LastPingResponse + 1000 Then
     '    SendResponse = True
-    '    ds.LastPingResponse = GetTickCountMS()
+    '    ds.LastPingResponse = modDateTime.GetTickCountMS()
     'End If
     'frmChat.AddChat vbWhite, StringFormat("PING uTicks={0} LPR={1} C={2} SendResponse={3}", uTicks, ds.LastPingResponse, cookie, SendResponse)
 
@@ -2801,7 +2801,7 @@ End Sub
 
 Public Function GetConnectionUptime() As Currency
     If g_Online Then
-        GetConnectionUptime = GetTickCountMS() - ConnectionTickCount
+        GetConnectionUptime = modDateTime.GetTickCountMS() - ConnectionTickCount
     Else
         GetConnectionUptime = 0@
     End If

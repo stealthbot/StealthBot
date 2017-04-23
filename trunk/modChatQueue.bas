@@ -32,7 +32,7 @@ Public Function ChatQueueTimerProc()
         Set CurrentUser = g_Channel.Users(i)
     
         If (CurrentUser.Queue.Count > 0) Then
-            If ((GetTickCountMS() - CurrentUser.Queue(1).EventTick) >= BotVars.ChatDelay) Then
+            If ((modDateTime.GetTickCountMS() - CurrentUser.Queue(1).EventTick) >= BotVars.ChatDelay) Then
                 CurrentUser.DisplayQueue
             End If
         End If
