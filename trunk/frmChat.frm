@@ -3622,7 +3622,7 @@ Private Sub ListviewTabs_Click(PreviousTab As Integer)
                         .ToolTipText = StringFormat("Currently online on {0}.", BotVars.Gateway)
                     Else
                         .Caption = StringFormat("{0} ({1})", _
-                                g_Channel.Name, g_Channel.Users.Count)
+                                Replace(g_Channel.Name, "&", "&&", , , vbBinaryCompare), g_Channel.Users.Count)
                         .ToolTipText = StringFormat("Currently in {2} channel {0} ({1}).", _
                                 g_Channel.Name, g_Channel.Users.Count, g_Channel.sType())
                     End If
