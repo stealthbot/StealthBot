@@ -45,7 +45,7 @@ Public Function UTF8Decode(ByRef buf() As Byte) As String
     Dim UnicodeChars    As Long
     
     ' grab Length of string after conversion
-    UnicodeChars = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, VarPtr(buf(0)), UBound(buf) + 1, 0, 0)
+    UnicodeChars = MultiByteToWideChar(CP_UTF8, 0, VarPtr(buf(0)), UBound(buf) + 1, 0, 0)
             
     If (UnicodeChars = 0) Then
         Exit Function
@@ -55,7 +55,7 @@ Public Function UTF8Decode(ByRef buf() As Byte) As String
     ReDim UnicodeBuffer(0 To (UnicodeChars * 2 - 1))
     
     ' translate utf-8 string to unicode
-    Call MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, VarPtr(buf(0)), UBound(buf) + 1, VarPtr(UnicodeBuffer(0)), UnicodeChars)
+    Call MultiByteToWideChar(CP_UTF8, 0, VarPtr(buf(0)), UBound(buf) + 1, VarPtr(UnicodeBuffer(0)), UnicodeChars)
    
     ' translate from unicode to ansi
     UTF8Decode = StrConv(ByteArrToString(UnicodeBuffer()), vbFromUnicode)
