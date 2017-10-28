@@ -6909,7 +6909,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
         
         ' check for invalid characters in the message
         For i = 1 To Len(strTmp)
-            currChar = Asc(Mid$(strTmp, i, 1))
+            currChar = AscW(Mid$(strTmp, i, 1))
         
             If (currChar < 32) Then
                 Exit Function
@@ -6920,10 +6920,10 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
         If (StrComp(Left$(strTmp, 1), "/", vbBinaryCompare) = 0) Then
             ' if so, we have extra work to do
             For i = 2 To Len(strTmp)
-                currChar = Asc(Mid$(strTmp, i, 1))
+                currChar = AscW(Mid$(strTmp, i, 1))
             
                 ' find the first non-space after the /
-                If (Not currChar = Asc(Space(1))) Then
+                If (currChar <> 32) Then
                     Exit For
                 End If
             Next i
@@ -6934,7 +6934,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             End If
 
             ' Find the next instance of a space (the end of the command word)
-            Index = InStr(1, strTmp, Space(1), vbBinaryCompare)
+            Index = InStr(1, strTmp, Space$(1), vbBinaryCompare)
             
             ' is it a valid command word?
             If (Index > 2) Then
