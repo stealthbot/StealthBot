@@ -2006,7 +2006,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
         ' remove from backlog if overflow
         Length = GetRTBLength(rtb)
-        If ((BotVars.MaxBacklogSize) And (Length >= BotVars.MaxBacklogSize)) Then
+        If ((BotVars.MaxBacklogSize) And (Length > BotVars.MaxBacklogSize)) Then
             If (blUnlock = False) Then
                 rtb.Visible = False
 
@@ -2015,11 +2015,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
 
             With rtb
-                If Length > BotVars.MaxBacklogSize Then
-                    RemoveLength = InStr(Length - BotVars.MaxBacklogSize, GetRTBText(rtb), vbLf, vbBinaryCompare)
-                Else
-                    RemoveLength = InStr(1, Length, vbLf, vbBinaryCompare)
-                End If
+                RemoveLength = InStr(Length - BotVars.MaxBacklogSize, GetRTBText(rtb), vbLf, vbBinaryCompare)
                 SetTextSelection rtb, 0, RemoveLength
                 ' remove line from stored selection
                 SelStart = SelStart - RemoveLength
