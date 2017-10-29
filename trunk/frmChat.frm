@@ -4277,16 +4277,21 @@ Private Sub mnuPopClanWebProfileW3XP_Click()
 End Sub
 
 Private Sub mnuPopClanWhisper_Click()
-    On Error Resume Next
-    
+    Dim Value As String
+
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
-    
-    If cboSend.Text <> vbNullString Then
-        AddQ "/w " & CleanUsername(GetClanSelectedUser, True) & Space(1) & _
-                cboSend.Text, PRIORITY.CONSOLE_MESSAGE
-        
-        cboSend.AddItem cboSend.Text, 0
+
+    Value = cboSend.Text
+
+    If LenB(Value) > 0 Then
+        Value = "/w " & CleanUsername(GetClanSelectedUser, True) & Space(1) & Value
+
+        AddQ Value, PRIORITY.CONSOLE_MESSAGE
+
+        cboSend.AddItem Value, 0
         cboSend.Text = vbNullString
+
+        On Error Resume Next
         cboSend.SetFocus
     End If
 End Sub
@@ -4900,15 +4905,21 @@ Private Sub mnuPopUnsquelch_Click()
 End Sub
 
 Private Sub mnuPopWhisper_Click()
-    On Error Resume Next
+    Dim Value As String
+
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
-    
-    If cboSend.Text <> vbNullString Then
-        AddQ "/w " & CleanUsername(GetSelectedUser, True) & Space(1) & _
-                cboSend.Text, PRIORITY.CONSOLE_MESSAGE
-        
-        cboSend.AddItem cboSend.Text, 0
+
+    Value = cboSend.Text
+
+    If LenB(Value) > 0 Then
+        Value = "/w " & CleanUsername(GetSelectedUser, True) & Space(1) & Value
+
+        AddQ Value, PRIORITY.CONSOLE_MESSAGE
+
+        cboSend.AddItem Value, 0
         cboSend.Text = vbNullString
+
+        On Error Resume Next
         cboSend.SetFocus
     End If
 End Sub
@@ -4940,7 +4951,6 @@ Sub ClearChatScreen(Optional ByVal ClearOption As Integer = 3)
     ' check for 1 (or 3) and clear chats
     If ClearOption And 1 Then
         rtbChat.Text = vbNullString
-        rtbChatLength = 0
         ' add a sensical cleared message
         If ClearOption And 2 Then
             AddChat RTBColors.InformationText, "Chat window cleared."
@@ -5959,6 +5969,10 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             Value = Value & cboSend.Text
             ' suffix box
             If txtPost.Visible Then Value = Value & txtPost.Text
+
+            If LenB(Value) = 0 Then
+                Exit Sub
+            End If
             
             If DoRunCommands Then
                 On Error Resume Next
