@@ -50,7 +50,7 @@ Begin VB.Form frmSettings
       EndProperty
       Height          =   255
       Left            =   3840
-      TabIndex        =   216
+      TabIndex        =   218
       Top             =   4920
       Width           =   855
    End
@@ -67,7 +67,7 @@ Begin VB.Form frmSettings
       EndProperty
       Height          =   255
       Left            =   3000
-      TabIndex        =   215
+      TabIndex        =   217
       Top             =   4920
       Width           =   855
    End
@@ -84,7 +84,7 @@ Begin VB.Form frmSettings
       EndProperty
       Height          =   255
       Left            =   4800
-      TabIndex        =   217
+      TabIndex        =   219
       Top             =   4920
       Width           =   2535
    End
@@ -102,7 +102,7 @@ Begin VB.Form frmSettings
       EndProperty
       Height          =   255
       Left            =   8280
-      TabIndex        =   218
+      TabIndex        =   220
       Top             =   4920
       Width           =   1335
    End
@@ -120,7 +120,7 @@ Begin VB.Form frmSettings
       EndProperty
       Height          =   255
       Left            =   7440
-      TabIndex        =   219
+      TabIndex        =   221
       Top             =   4920
       Width           =   855
    End
@@ -1142,6 +1142,48 @@ Begin VB.Form frmSettings
       TabIndex        =   49
       Top             =   0
       Width           =   6615
+      Begin VB.CheckBox chkMutualFriendAlerts 
+         BackColor       =   &H00000000&
+         Caption         =   "Show mutual friend alerts"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   3480
+         TabIndex        =   60
+         ToolTipText     =   "Enable showing ""Your friend has X"" alerts for mutual friends."
+         Top             =   2160
+         Value           =   1  'Checked
+         Width           =   2775
+      End
+      Begin VB.CheckBox chkExtraServerMessages 
+         BackColor       =   &H00000000&
+         Caption         =   "Show extra server messages"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   3480
+         TabIndex        =   59
+         ToolTipText     =   "Enable showing ""You are still away"", ""No one hears you"", email service whisper, and server welcome messages."
+         Top             =   1800
+         Value           =   1  'Checked
+         Width           =   2775
+      End
       Begin VB.CheckBox chkShowChannelPings 
          BackColor       =   &H00000000&
          Caption         =   "Show user ping column"
@@ -1157,9 +1199,9 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   63
+         TabIndex        =   64
          ToolTipText     =   "Show ping icons in the channel list."
-         Top             =   3360
+         Top             =   3720
          Value           =   1  'Checked
          Width           =   2775
       End
@@ -1178,9 +1220,9 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   62
+         TabIndex        =   63
          ToolTipText     =   "Show Clan tags in the channel list."
-         Top             =   3000
+         Top             =   3360
          Value           =   1  'Checked
          Width           =   2775
       End
@@ -1199,9 +1241,9 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   3480
-         TabIndex        =   60
+         TabIndex        =   67
          ToolTipText     =   "If not in a WarCraft III clan, allow the bot to process invitations sent to you."
-         Top             =   2160
+         Top             =   3000
          Value           =   1  'Checked
          Width           =   2775
       End
@@ -1220,9 +1262,9 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   3480
-         TabIndex        =   66
+         TabIndex        =   68
          ToolTipText     =   "Determines whether or not offline friends are hidden from the /f list command."
-         Top             =   2640
+         Top             =   3360
          Value           =   1  'Checked
          Width           =   2775
       End
@@ -1241,9 +1283,9 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   3480
-         TabIndex        =   67
+         TabIndex        =   69
          ToolTipText     =   "Determines whether or not offline friends are hidden from the /f list command."
-         Top             =   3000
+         Top             =   3720
          Width           =   2775
       End
       Begin VB.CheckBox chkWhispersInChat 
@@ -1261,9 +1303,9 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   3480
-         TabIndex        =   59
+         TabIndex        =   61
          ToolTipText     =   "Whisper are shown in the separate whisper panel below. Enable this to also show them in the main chat window."
-         Top             =   1800
+         Top             =   2520
          Value           =   1  'Checked
          Width           =   2775
       End
@@ -1405,9 +1447,9 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   61
+         TabIndex        =   62
          ToolTipText     =   "Name coloring changes the color of people's names in the user lists based on their status or activity."
-         Top             =   2640
+         Top             =   3000
          Value           =   1  'Checked
          Width           =   2775
       End
@@ -1426,8 +1468,8 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   65
-         Top             =   4080
+         TabIndex        =   66
+         Top             =   4440
          Value           =   1  'Checked
          Width           =   2775
       End
@@ -1446,8 +1488,8 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   64
-         Top             =   3720
+         TabIndex        =   65
+         Top             =   4080
          Value           =   1  'Checked
          Width           =   2775
       End
@@ -1476,8 +1518,8 @@ Begin VB.Form frmSettings
          Index           =   33
          X1              =   360
          X2              =   6240
-         Y1              =   2520
-         Y2              =   2520
+         Y1              =   2880
+         Y2              =   2880
       End
       Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
@@ -1534,7 +1576,7 @@ Begin VB.Form frmSettings
       Height          =   4815
       Index           =   5
       Left            =   3000
-      TabIndex        =   68
+      TabIndex        =   70
       Top             =   0
       Width           =   6615
       Begin VB.CommandButton cmdSaveColor 
@@ -1550,7 +1592,7 @@ Begin VB.Form frmSettings
          EndProperty
          Height          =   255
          Left            =   4200
-         TabIndex        =   102
+         TabIndex        =   104
          Top             =   2160
          Width           =   2055
       End
@@ -1569,7 +1611,7 @@ Begin VB.Form frmSettings
          Height          =   315
          Left            =   360
          Style           =   2  'Dropdown List
-         TabIndex        =   82
+         TabIndex        =   84
          Top             =   1800
          Width           =   5895
       End
@@ -1587,7 +1629,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   360
-         TabIndex        =   84
+         TabIndex        =   86
          Top             =   2520
          Width           =   1575
       End
@@ -1604,7 +1646,7 @@ Begin VB.Form frmSettings
          EndProperty
          Height          =   255
          Left            =   360
-         TabIndex        =   87
+         TabIndex        =   89
          Top             =   3000
          Width           =   1575
       End
@@ -1622,7 +1664,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   600
-         TabIndex        =   89
+         TabIndex        =   91
          Top             =   3360
          Width           =   615
       End
@@ -1640,7 +1682,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   1560
-         TabIndex        =   91
+         TabIndex        =   93
          Top             =   3360
          Width           =   615
       End
@@ -1658,7 +1700,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   2520
-         TabIndex        =   93
+         TabIndex        =   95
          Top             =   3360
          Width           =   615
       End
@@ -1675,7 +1717,7 @@ Begin VB.Form frmSettings
          EndProperty
          Height          =   255
          Left            =   360
-         TabIndex        =   98
+         TabIndex        =   100
          Top             =   3720
          Width           =   2775
       End
@@ -1692,7 +1734,7 @@ Begin VB.Form frmSettings
          EndProperty
          Height          =   255
          Left            =   3240
-         TabIndex        =   99
+         TabIndex        =   101
          Top             =   3720
          Width           =   1455
       End
@@ -1709,7 +1751,7 @@ Begin VB.Form frmSettings
          EndProperty
          Height          =   255
          Left            =   4200
-         TabIndex        =   80
+         TabIndex        =   82
          Top             =   1560
          Width           =   2055
       End
@@ -1726,7 +1768,7 @@ Begin VB.Form frmSettings
          EndProperty
          Height          =   255
          Left            =   4800
-         TabIndex        =   100
+         TabIndex        =   102
          Top             =   3720
          Width           =   1455
       End
@@ -1745,7 +1787,7 @@ Begin VB.Form frmSettings
          Height          =   285
          Left            =   3600
          MaxLength       =   6
-         TabIndex        =   96
+         TabIndex        =   98
          Top             =   3240
          Width           =   1455
       End
@@ -1762,7 +1804,7 @@ Begin VB.Form frmSettings
          EndProperty
          Height          =   255
          Left            =   5160
-         TabIndex        =   97
+         TabIndex        =   99
          Top             =   3240
          Width           =   1095
       End
@@ -1781,7 +1823,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   1920
-         TabIndex        =   77
+         TabIndex        =   79
          Top             =   1200
          Width           =   2175
       End
@@ -1800,7 +1842,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   1920
-         TabIndex        =   72
+         TabIndex        =   74
          Top             =   840
          Width           =   2175
       End
@@ -1820,7 +1862,7 @@ Begin VB.Form frmSettings
          Height          =   285
          Left            =   4560
          MaxLength       =   2
-         TabIndex        =   79
+         TabIndex        =   81
          Top             =   1200
          Width           =   615
       End
@@ -1840,7 +1882,7 @@ Begin VB.Form frmSettings
          Height          =   285
          Left            =   4560
          MaxLength       =   2
-         TabIndex        =   74
+         TabIndex        =   76
          Top             =   840
          Width           =   615
       End
@@ -1865,7 +1907,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   2040
-         TabIndex        =   85
+         TabIndex        =   87
          Top             =   2640
          Width           =   1215
       End
@@ -1873,7 +1915,7 @@ Begin VB.Form frmSettings
          BorderStyle     =   1  'Fixed Single
          Height          =   375
          Left            =   3360
-         TabIndex        =   86
+         TabIndex        =   88
          Top             =   2520
          Width           =   2895
       End
@@ -1893,7 +1935,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   0
          Left            =   360
-         TabIndex        =   81
+         TabIndex        =   83
          Top             =   1560
          Width           =   1215
       End
@@ -1913,7 +1955,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   1
          Left            =   360
-         TabIndex        =   83
+         TabIndex        =   85
          Top             =   2280
          Width           =   4335
       End
@@ -1933,7 +1975,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   3
          Left            =   360
-         TabIndex        =   88
+         TabIndex        =   90
          Top             =   3360
          Width           =   135
       End
@@ -1953,7 +1995,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   4
          Left            =   1320
-         TabIndex        =   90
+         TabIndex        =   92
          Top             =   3360
          Width           =   135
       End
@@ -1973,7 +2015,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   5
          Left            =   2280
-         TabIndex        =   92
+         TabIndex        =   94
          Top             =   3360
          Width           =   255
       End
@@ -1993,7 +2035,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   2
          Left            =   3360
-         TabIndex        =   94
+         TabIndex        =   96
          Top             =   3000
          Width           =   2415
       End
@@ -2014,7 +2056,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   6
          Left            =   3360
-         TabIndex        =   95
+         TabIndex        =   97
          Top             =   3240
          Width           =   255
       End
@@ -2034,7 +2076,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   2
          Left            =   4200
-         TabIndex        =   73
+         TabIndex        =   75
          Top             =   840
          Width           =   375
       End
@@ -2054,7 +2096,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   3
          Left            =   360
-         TabIndex        =   75
+         TabIndex        =   77
          ToolTipText     =   "Changes the font settings for the channel list."
          Top             =   1200
          Width           =   975
@@ -2075,7 +2117,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   0
          Left            =   360
-         TabIndex        =   70
+         TabIndex        =   72
          ToolTipText     =   "Changes the font setting for the main chat window."
          Top             =   840
          Width           =   975
@@ -2096,7 +2138,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   1
          Left            =   1440
-         TabIndex        =   71
+         TabIndex        =   73
          Top             =   840
          Width           =   495
       End
@@ -2116,7 +2158,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   5
          Left            =   4200
-         TabIndex        =   78
+         TabIndex        =   80
          Top             =   1200
          Width           =   375
       End
@@ -2136,7 +2178,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   4
          Left            =   1440
-         TabIndex        =   76
+         TabIndex        =   78
          Top             =   1200
          Width           =   495
       End
@@ -2164,7 +2206,7 @@ Begin VB.Form frmSettings
          Height          =   375
          Index           =   3
          Left            =   360
-         TabIndex        =   69
+         TabIndex        =   71
          Top             =   240
          Width           =   4815
       End
@@ -2183,7 +2225,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   101
+         TabIndex        =   103
          Top             =   4200
          Width           =   5895
       End
@@ -2194,7 +2236,7 @@ Begin VB.Form frmSettings
       Height          =   4815
       Index           =   6
       Left            =   3000
-      TabIndex        =   103
+      TabIndex        =   105
       Top             =   0
       Width           =   6615
       Begin VB.CheckBox chkPhraseKick 
@@ -2212,7 +2254,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   2160
-         TabIndex        =   112
+         TabIndex        =   114
          ToolTipText     =   "Instead of banning users for saying banned phrases, the bot will kick them."
          Top             =   2640
          Width           =   615
@@ -2232,7 +2274,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   2160
-         TabIndex        =   110
+         TabIndex        =   112
          ToolTipText     =   "Instead of banning quiet users, the bot will kick them."
          Top             =   2280
          Width           =   615
@@ -2253,7 +2295,7 @@ Begin VB.Form frmSettings
          Height          =   285
          Left            =   2040
          MaxLength       =   25
-         TabIndex        =   115
+         TabIndex        =   117
          Top             =   3120
          Width           =   615
       End
@@ -2272,7 +2314,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   108
+         TabIndex        =   110
          ToolTipText     =   "Ban Evasion attempts to keep people who are banned out of your channel."
          Top             =   1800
          Width           =   2295
@@ -2292,7 +2334,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   4680
-         TabIndex        =   121
+         TabIndex        =   123
          ToolTipText     =   "Instead of banning idle users, the bot will kick them."
          Top             =   720
          Width           =   1215
@@ -2312,7 +2354,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   3240
-         TabIndex        =   132
+         TabIndex        =   134
          ToolTipText     =   "Ban Warcraft III users who have the Peon icon."
          Top             =   3120
          Width           =   2295
@@ -2332,7 +2374,7 @@ Begin VB.Form frmSettings
          Height          =   285
          Left            =   3240
          MaxLength       =   180
-         TabIndex        =   139
+         TabIndex        =   141
          Text            =   "You are below the required level for entry."
          Top             =   4305
          Width           =   3135
@@ -2353,7 +2395,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   5
          Left            =   4560
-         TabIndex        =   130
+         TabIndex        =   132
          Top             =   2400
          Width           =   1812
       End
@@ -2373,7 +2415,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   3
          Left            =   4560
-         TabIndex        =   128
+         TabIndex        =   130
          Top             =   2160
          Width           =   1812
       End
@@ -2392,7 +2434,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   111
+         TabIndex        =   113
          ToolTipText     =   "Ban unsafelisted users who say banned phrases."
          Top             =   2640
          Width           =   1695
@@ -2412,7 +2454,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   105
+         TabIndex        =   107
          ToolTipText     =   "Ban squelched users."
          Top             =   720
          Width           =   1935
@@ -2433,7 +2475,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   0
          Left            =   3240
-         TabIndex        =   125
+         TabIndex        =   127
          Top             =   1920
          Width           =   975
       End
@@ -2453,7 +2495,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   1
          Left            =   4560
-         TabIndex        =   126
+         TabIndex        =   128
          Top             =   1920
          Width           =   1215
       End
@@ -2473,7 +2515,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   2
          Left            =   3240
-         TabIndex        =   127
+         TabIndex        =   129
          Top             =   2160
          Width           =   975
       End
@@ -2493,7 +2535,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   6
          Left            =   3240
-         TabIndex        =   131
+         TabIndex        =   133
          Top             =   2640
          Width           =   1335
       End
@@ -2513,7 +2555,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   4
          Left            =   3240
-         TabIndex        =   129
+         TabIndex        =   131
          Top             =   2400
          Width           =   1335
       End
@@ -2532,7 +2574,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   109
+         TabIndex        =   111
          ToolTipText     =   "Ban unsafelisted users that talk."
          Top             =   2280
          Width           =   1695
@@ -2552,7 +2594,7 @@ Begin VB.Form frmSettings
          Height          =   285
          Left            =   360
          MaxLength       =   180
-         TabIndex        =   119
+         TabIndex        =   121
          Text            =   "Lockdown Enabled"
          Top             =   4305
          Width           =   2415
@@ -2572,7 +2614,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   117
+         TabIndex        =   119
          ToolTipText     =   "Ban unsafelisted users who join the channel."
          Top             =   3720
          Width           =   2295
@@ -2592,7 +2634,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   107
+         TabIndex        =   109
          ToolTipText     =   "Kick users who yell (uppercase message longer than 5 letters)."
          Top             =   1440
          Width           =   1935
@@ -2613,7 +2655,7 @@ Begin VB.Form frmSettings
          Height          =   285
          Left            =   5760
          MaxLength       =   25
-         TabIndex        =   137
+         TabIndex        =   139
          Top             =   3720
          Width           =   495
       End
@@ -2632,7 +2674,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   106
+         TabIndex        =   108
          ToolTipText     =   "Ban users with a UDP plug."
          Top             =   1080
          Width           =   1935
@@ -2653,7 +2695,7 @@ Begin VB.Form frmSettings
          Height          =   285
          Left            =   4080
          MaxLength       =   25
-         TabIndex        =   135
+         TabIndex        =   137
          Top             =   3720
          Width           =   495
       End
@@ -2672,7 +2714,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   3240
-         TabIndex        =   120
+         TabIndex        =   122
          ToolTipText     =   "Ban users who have been idle for the specified number of seconds."
          Top             =   720
          Width           =   1455
@@ -2693,7 +2735,7 @@ Begin VB.Form frmSettings
          Height          =   285
          Left            =   5160
          MaxLength       =   25
-         TabIndex        =   123
+         TabIndex        =   125
          Top             =   1080
          Width           =   615
       End
@@ -2712,7 +2754,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   113
+         TabIndex        =   115
          ToolTipText     =   "Ban unsafelisted users who have a ping, in milliseconds, higher than specified."
          Top             =   3120
          Width           =   975
@@ -2734,7 +2776,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   0
          Left            =   1320
-         TabIndex        =   114
+         TabIndex        =   116
          Top             =   3120
          Width           =   615
       End
@@ -2762,7 +2804,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   1
          Left            =   2760
-         TabIndex        =   116
+         TabIndex        =   118
          Top             =   3120
          Width           =   255
       End
@@ -2807,7 +2849,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   8
          Left            =   3240
-         TabIndex        =   138
+         TabIndex        =   140
          Top             =   4065
          Width           =   1335
       End
@@ -2827,7 +2869,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   3
          Left            =   3600
-         TabIndex        =   122
+         TabIndex        =   124
          Top             =   1080
          Width           =   1575
       End
@@ -2847,7 +2889,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   4
          Left            =   3240
-         TabIndex        =   124
+         TabIndex        =   126
          Top             =   1680
          Width           =   855
       End
@@ -2867,7 +2909,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   2
          Left            =   360
-         TabIndex        =   118
+         TabIndex        =   120
          ToolTipText     =   "Shorter is better"
          Top             =   4065
          Width           =   1935
@@ -2888,7 +2930,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   5
          Left            =   3240
-         TabIndex        =   133
+         TabIndex        =   135
          Top             =   3480
          Width           =   2295
       End
@@ -2909,7 +2951,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   6
          Left            =   3240
-         TabIndex        =   134
+         TabIndex        =   136
          Top             =   3720
          Width           =   735
       End
@@ -2930,7 +2972,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   7
          Left            =   4680
-         TabIndex        =   136
+         TabIndex        =   138
          Top             =   3720
          Width           =   975
       End
@@ -2958,7 +3000,7 @@ Begin VB.Form frmSettings
          Height          =   375
          Index           =   4
          Left            =   360
-         TabIndex        =   104
+         TabIndex        =   106
          Top             =   240
          Width           =   4815
       End
@@ -2969,7 +3011,7 @@ Begin VB.Form frmSettings
       Height          =   4815
       Index           =   8
       Left            =   3000
-      TabIndex        =   140
+      TabIndex        =   142
       Top             =   0
       Width           =   6615
       Begin VB.OptionButton optMsg 
@@ -2988,7 +3030,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   5280
          Style           =   1  'Graphical
-         TabIndex        =   144
+         TabIndex        =   146
          Top             =   960
          Value           =   -1  'True
          Width           =   975
@@ -3009,7 +3051,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   5280
          Style           =   1  'Graphical
-         TabIndex        =   147
+         TabIndex        =   149
          Top             =   2040
          Width           =   975
       End
@@ -3029,7 +3071,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   5280
          Style           =   1  'Graphical
-         TabIndex        =   145
+         TabIndex        =   147
          Top             =   1320
          Width           =   975
       End
@@ -3049,7 +3091,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   5280
          Style           =   1  'Graphical
-         TabIndex        =   146
+         TabIndex        =   148
          Top             =   1680
          Width           =   975
       End
@@ -3068,7 +3110,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   142
+         TabIndex        =   144
          Top             =   840
          Width           =   2175
       End
@@ -3086,7 +3128,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   360
-         TabIndex        =   152
+         TabIndex        =   154
          Text            =   "/me is a %ver"
          Top             =   1800
          Width           =   4335
@@ -3106,7 +3148,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   2400
-         TabIndex        =   149
+         TabIndex        =   151
          Text            =   "6"
          Top             =   1200
          Width           =   495
@@ -3127,7 +3169,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   2
          Left            =   3000
-         TabIndex        =   150
+         TabIndex        =   152
          Top             =   1200
          Width           =   735
       End
@@ -3187,7 +3229,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   0
          Left            =   3840
-         TabIndex        =   143
+         TabIndex        =   145
          Top             =   840
          Width           =   1455
       End
@@ -3207,7 +3249,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   1
          Left            =   360
-         TabIndex        =   148
+         TabIndex        =   150
          Top             =   1200
          Width           =   1935
       End
@@ -3227,7 +3269,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   3
          Left            =   360
-         TabIndex        =   151
+         TabIndex        =   153
          Top             =   1560
          Width           =   1095
       End
@@ -3254,7 +3296,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   1935
          Left            =   360
-         TabIndex        =   153
+         TabIndex        =   155
          Top             =   2280
          Width           =   5895
       End
@@ -3274,7 +3316,7 @@ Begin VB.Form frmSettings
          Height          =   375
          Index           =   5
          Left            =   360
-         TabIndex        =   141
+         TabIndex        =   143
          Top             =   240
          Width           =   4815
       End
@@ -3285,7 +3327,7 @@ Begin VB.Form frmSettings
       Height          =   4815
       Index           =   2
       Left            =   3000
-      TabIndex        =   166
+      TabIndex        =   168
       Top             =   0
       Width           =   6615
       Begin VB.CheckBox chkProxyBNLS 
@@ -3303,7 +3345,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   4560
-         TabIndex        =   191
+         TabIndex        =   193
          ToolTipText     =   "Routes the BNLS connection through the same proxy."
          Top             =   4200
          Width           =   1215
@@ -3323,7 +3365,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   4560
-         TabIndex        =   192
+         TabIndex        =   194
          ToolTipText     =   "Routes a Diablo II Realm connection through the same proxy."
          Top             =   4440
          Width           =   1935
@@ -3343,7 +3385,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   240
-         TabIndex        =   174
+         TabIndex        =   176
          ToolTipText     =   "Automatically connect when the bot starts up."
          Top             =   2640
          Width           =   1815
@@ -3362,7 +3404,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   3120
-         TabIndex        =   183
+         TabIndex        =   185
          ToolTipText     =   "Created accounts will automatically be registered with this address. Leave blank to prompt each time."
          Top             =   2880
          Width           =   3015
@@ -3383,7 +3425,7 @@ Begin VB.Form frmSettings
          ItemData        =   "frmSettings.frx":0000
          Left            =   2400
          List            =   "frmSettings.frx":0002
-         TabIndex        =   171
+         TabIndex        =   173
          Text            =   "cboBNLSServer"
          Top             =   1200
          Width           =   3855
@@ -3404,7 +3446,7 @@ Begin VB.Form frmSettings
          Height          =   285
          Left            =   1560
          MaxLength       =   15
-         TabIndex        =   176
+         TabIndex        =   178
          Text            =   "1000"
          Top             =   3000
          Width           =   615
@@ -3425,7 +3467,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   5400
          Style           =   1  'Graphical
-         TabIndex        =   186
+         TabIndex        =   188
          Top             =   3480
          Width           =   735
       End
@@ -3445,7 +3487,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   4560
          Style           =   1  'Graphical
-         TabIndex        =   185
+         TabIndex        =   187
          Top             =   3480
          Value           =   -1  'True
          Width           =   735
@@ -3465,7 +3507,7 @@ Begin VB.Form frmSettings
          Height          =   285
          Left            =   3720
          MaxLength       =   5
-         TabIndex        =   190
+         TabIndex        =   192
          Top             =   4200
          Width           =   735
       End
@@ -3484,7 +3526,7 @@ Begin VB.Form frmSettings
          Height          =   285
          Left            =   3720
          MaxLength       =   15
-         TabIndex        =   188
+         TabIndex        =   190
          Top             =   3840
          Width           =   2415
       End
@@ -3503,7 +3545,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   3000
-         TabIndex        =   184
+         TabIndex        =   186
          ToolTipText     =   "Routes your Battle.net connection through a SOCKS4 or SOCKS5 proxy."
          Top             =   3480
          Width           =   1215
@@ -3523,7 +3565,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   240
-         TabIndex        =   180
+         TabIndex        =   182
          ToolTipText     =   "Sets whether or not you have a lag plug when you sign on. If you don't know what this is, leave it off."
          Top             =   4320
          Width           =   1215
@@ -3543,7 +3585,7 @@ Begin VB.Form frmSettings
          Height          =   315
          Left            =   240
          Style           =   2  'Dropdown List
-         TabIndex        =   179
+         TabIndex        =   181
          Top             =   3840
          Width           =   2295
       End
@@ -3564,7 +3606,7 @@ Begin VB.Form frmSettings
          Left            =   1920
          List            =   "frmSettings.frx":0006
          Style           =   2  'Dropdown List
-         TabIndex        =   169
+         TabIndex        =   171
          Top             =   840
          Width           =   4335
       End
@@ -3592,7 +3634,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   7
          Left            =   4320
-         TabIndex        =   182
+         TabIndex        =   184
          Top             =   2640
          Width           =   1815
       End
@@ -3613,7 +3655,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   6
          Left            =   3000
-         TabIndex        =   181
+         TabIndex        =   183
          Top             =   2640
          Width           =   1095
       End
@@ -3641,7 +3683,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   1
          Left            =   360
-         TabIndex        =   170
+         TabIndex        =   172
          Top             =   1200
          Width           =   2055
       End
@@ -3661,7 +3703,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   4
          Left            =   2280
-         TabIndex        =   177
+         TabIndex        =   179
          Top             =   3000
          Width           =   255
       End
@@ -3681,7 +3723,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   3
          Left            =   240
-         TabIndex        =   175
+         TabIndex        =   177
          Top             =   3000
          Width           =   1335
       End
@@ -3702,7 +3744,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   9
          Left            =   3000
-         TabIndex        =   189
+         TabIndex        =   191
          Top             =   4200
          Width           =   615
       End
@@ -3723,7 +3765,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   8
          Left            =   3000
-         TabIndex        =   187
+         TabIndex        =   189
          Top             =   3840
          Width           =   615
       End
@@ -3751,7 +3793,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   5
          Left            =   240
-         TabIndex        =   178
+         TabIndex        =   180
          Top             =   3600
          Width           =   975
       End
@@ -3770,7 +3812,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   375
          Left            =   360
-         TabIndex        =   173
+         TabIndex        =   175
          Top             =   1920
          Width           =   6015
          WordWrap        =   -1  'True
@@ -3791,7 +3833,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   0
          Left            =   360
-         TabIndex        =   168
+         TabIndex        =   170
          Top             =   840
          Width           =   1575
       End
@@ -3811,7 +3853,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   2
          Left            =   360
-         TabIndex        =   172
+         TabIndex        =   174
          Top             =   1680
          Width           =   5895
       End
@@ -3839,7 +3881,7 @@ Begin VB.Form frmSettings
          Height          =   375
          Index           =   7
          Left            =   360
-         TabIndex        =   167
+         TabIndex        =   169
          Top             =   240
          Width           =   4815
       End
@@ -3850,7 +3892,7 @@ Begin VB.Form frmSettings
       Height          =   4815
       Index           =   7
       Left            =   3000
-      TabIndex        =   193
+      TabIndex        =   195
       Top             =   0
       Width           =   6615
       Begin VB.CheckBox chkMail 
@@ -3868,7 +3910,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   200
+         TabIndex        =   202
          ToolTipText     =   "Check the mail.ini file when users join."
          Top             =   4440
          Width           =   2415
@@ -3888,7 +3930,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   196
+         TabIndex        =   198
          Top             =   1200
          Width           =   2655
       End
@@ -3907,7 +3949,7 @@ Begin VB.Form frmSettings
          Height          =   285
          Left            =   360
          MaxLength       =   200
-         TabIndex        =   198
+         TabIndex        =   200
          Text            =   "Welcome to %c, %0! I am a %v."
          Top             =   1800
          Width           =   5895
@@ -3927,7 +3969,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   195
+         TabIndex        =   197
          Top             =   840
          Width           =   3015
       End
@@ -3946,7 +3988,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   2172
          Left            =   360
-         TabIndex        =   199
+         TabIndex        =   201
          Top             =   2280
          Width           =   5892
       End
@@ -3965,7 +4007,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   197
+         TabIndex        =   199
          Top             =   1560
          Width           =   1935
       End
@@ -3993,7 +4035,7 @@ Begin VB.Form frmSettings
          Height          =   375
          Index           =   8
          Left            =   360
-         TabIndex        =   194
+         TabIndex        =   196
          Top             =   240
          Width           =   4815
       End
@@ -4004,7 +4046,7 @@ Begin VB.Form frmSettings
       Height          =   4815
       Index           =   10
       Left            =   3000
-      TabIndex        =   201
+      TabIndex        =   203
       Top             =   0
       Width           =   6615
       Begin VB.CheckBox chkLogDBActions 
@@ -4022,7 +4064,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   480
-         TabIndex        =   206
+         TabIndex        =   208
          ToolTipText     =   "Any actions that change the database will be logged in the log folder in a file called 'database.txt'."
          Top             =   2280
          Width           =   2295
@@ -4042,7 +4084,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   480
-         TabIndex        =   207
+         TabIndex        =   209
          ToolTipText     =   "Any commands issued to the bot will be logged in a file in the bot's Logs folder called 'commandlog.txt'."
          Top             =   2610
          Width           =   2295
@@ -4062,7 +4104,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   2160
-         TabIndex        =   213
+         TabIndex        =   215
          Text            =   "0"
          Top             =   4320
          Width           =   735
@@ -4082,7 +4124,7 @@ Begin VB.Form frmSettings
          Height          =   315
          Left            =   360
          Style           =   2  'Dropdown List
-         TabIndex        =   205
+         TabIndex        =   207
          Top             =   1680
          Width           =   5895
       End
@@ -4101,7 +4143,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   2160
-         TabIndex        =   210
+         TabIndex        =   212
          Text            =   "10000"
          ToolTipText     =   $"frmSettings.frx":0008
          Top             =   3960
@@ -4123,7 +4165,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   2
          Left            =   360
-         TabIndex        =   208
+         TabIndex        =   210
          Top             =   3360
          Width           =   3615
       End
@@ -4152,7 +4194,7 @@ Begin VB.Form frmSettings
          Height          =   615
          Index           =   0
          Left            =   480
-         TabIndex        =   203
+         TabIndex        =   205
          Top             =   720
          Width           =   5655
       End
@@ -4172,7 +4214,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   1
          Left            =   360
-         TabIndex        =   204
+         TabIndex        =   206
          Top             =   1440
          Width           =   2535
       End
@@ -4192,7 +4234,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   5
          Left            =   360
-         TabIndex        =   212
+         TabIndex        =   214
          Top             =   4320
          Width           =   1575
       End
@@ -4212,7 +4254,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   6
          Left            =   2880
-         TabIndex        =   214
+         TabIndex        =   216
          Top             =   4320
          Width           =   975
       End
@@ -4232,7 +4274,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   4
          Left            =   2880
-         TabIndex        =   211
+         TabIndex        =   213
          Top             =   3960
          Width           =   975
       End
@@ -4252,7 +4294,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   3
          Left            =   360
-         TabIndex        =   209
+         TabIndex        =   211
          Top             =   3960
          Width           =   1695
       End
@@ -4273,7 +4315,7 @@ Begin VB.Form frmSettings
          Height          =   375
          Index           =   9
          Left            =   360
-         TabIndex        =   202
+         TabIndex        =   204
          Top             =   240
          Width           =   3255
       End
@@ -4292,7 +4334,7 @@ Begin VB.Form frmSettings
       Height          =   4815
       Index           =   9
       Left            =   3000
-      TabIndex        =   154
+      TabIndex        =   156
       Top             =   0
       Width           =   6615
       Begin VB.TextBox txtOwner 
@@ -4310,7 +4352,7 @@ Begin VB.Form frmSettings
          Height          =   285
          Left            =   360
          MaxLength       =   30
-         TabIndex        =   160
+         TabIndex        =   162
          ToolTipText     =   "This account has full control over the bot. Use carefully!"
          Top             =   2160
          Width           =   2775
@@ -4330,7 +4372,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   2520
-         TabIndex        =   162
+         TabIndex        =   164
          Text            =   "."
          Top             =   2640
          Width           =   615
@@ -4350,7 +4392,7 @@ Begin VB.Form frmSettings
          Height          =   285
          Left            =   360
          MaxLength       =   31
-         TabIndex        =   165
+         TabIndex        =   167
          ToolTipText     =   "The channel to go to when kicked. Leave blank to stay in The Void."
          Top             =   4320
          Width           =   2775
@@ -4370,7 +4412,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   156
+         TabIndex        =   158
          ToolTipText     =   "Allow commands such as .next and .back that change your current Winamp/iTunes song."
          Top             =   840
          Width           =   2655
@@ -4390,7 +4432,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   158
+         TabIndex        =   160
          ToolTipText     =   "Whisper the return messages of all bot commands."
          Top             =   1560
          Width           =   2895
@@ -4410,7 +4452,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   157
+         TabIndex        =   159
          ToolTipText     =   "ProfileAmp writes Winamp's currently played song to your profile every 30 seconds."
          Top             =   1200
          Width           =   2655
@@ -4430,7 +4472,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   360
-         TabIndex        =   163
+         TabIndex        =   165
          ToolTipText     =   "The bot will join a specified channel when kicked, instead of rejoining."
          Top             =   3720
          Width           =   2895
@@ -4451,7 +4493,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   2
          Left            =   360
-         TabIndex        =   164
+         TabIndex        =   166
          Top             =   4080
          Width           =   2775
       End
@@ -4471,7 +4513,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   0
          Left            =   360
-         TabIndex        =   159
+         TabIndex        =   161
          Top             =   1920
          Width           =   1215
       End
@@ -4491,7 +4533,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Index           =   1
          Left            =   1080
-         TabIndex        =   161
+         TabIndex        =   163
          ToolTipText     =   "The command trigger is used to identify a chat message as a command."
          Top             =   2640
          Width           =   1335
@@ -4520,7 +4562,7 @@ Begin VB.Form frmSettings
          Height          =   375
          Index           =   6
          Left            =   360
-         TabIndex        =   155
+         TabIndex        =   157
          Top             =   240
          Width           =   4815
       End
@@ -5189,14 +5231,16 @@ Private Function SaveSettings() As Boolean
     Config.ChatFilters = CBool(chkFilter.Value)
     Config.ShowJoinLeaves = CBool(chkJoinLeaves.Value)
     Config.HideBanMessages = Not CBool(chkBanMessages.Value)
-    Config.HideBanMessages = Not CBool(chkBanMessages.Value)
-    Config.IgnoreClanInvites = Not CBool(chkClanInvitations.Value)
+    Config.HideWhispersInMain = Not CBool(chkWhispersInChat.Value)
+    Config.HideExtraServerAlerts = Not CBool(chkExtraServerMessages.Value)
+    Config.HideMutualFriendAlerts = Not CBool(chkMutualFriendAlerts.Value)
     
     Config.NameColoring = CBool(chkUserListNameColor.Value)
     Config.HideClanDisplay = Not CBool(chkShowChannelClans.Value)
     Config.HidePingDisplay = Not CBool(chkShowChannelPings.Value)
     Config.ShowStatsIcons = CBool(chkShowUserGameStatsIcons.Value)
     Config.ShowFlagIcons = CBool(chkShowUserFlagsIcons.Value)
+    Config.IgnoreClanInvites = Not CBool(chkClanInvitations.Value)
     Config.FriendsListTab = CBool(chkEnableFriendsList.Value)
     Config.ShowOfflineFriends = CBool(chkShowOffline.Value)
     
@@ -5824,13 +5868,15 @@ Private Sub InitIntChat()
     chkJoinLeaves.Value = Abs(Config.ShowJoinLeaves)
     chkBanMessages.Value = Abs(Not Config.HideBanMessages)
     chkWhispersInChat.Value = Abs(Not Config.HideWhispersInMain)
-    chkClanInvitations.Value = Abs(Not Config.IgnoreClanInvites)
+    chkExtraServerMessages.Value = Abs(Not Config.HideExtraServerAlerts)
+    chkMutualFriendAlerts.Value = Abs(Not Config.HideMutualFriendAlerts)
     
     chkUserListNameColor.Value = Abs(Config.NameColoring)
     chkShowChannelClans.Value = Abs(Not Config.HideClanDisplay)
     chkShowChannelPings.Value = Abs(Not Config.HidePingDisplay)
     chkShowUserGameStatsIcons.Value = Abs(Config.ShowStatsIcons)
     chkShowUserFlagsIcons.Value = Abs(Config.ShowFlagIcons)
+    chkClanInvitations.Value = Abs(Not Config.IgnoreClanInvites)
     chkEnableFriendsList.Value = Abs(Config.FriendsListTab)
     chkShowOffline.Value = Abs(Config.ShowOfflineFriends)
 End Sub

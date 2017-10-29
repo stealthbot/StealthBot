@@ -142,6 +142,8 @@ Private m_UseUTF8                   As Boolean
 Private m_UrlDetection              As Boolean
 Private m_ShowOutgoingWhispers      As Boolean
 Private m_HideWhispersInMain        As Boolean
+Private m_HideExtraServerAlerts     As Boolean
+Private m_HideMutualFriendAlerts    As Boolean
 Private m_TimestampMode             As Byte
 Private m_ChatFont                  As String
 Private m_ChatFontSize              As Integer
@@ -957,6 +959,22 @@ End Property
 
 Public Property Let HideWhispersInMain(ByVal sValue As Boolean)
     m_HideWhispersInMain = sValue
+End Property
+
+Public Property Get HideExtraServerAlerts() As Boolean
+    HideExtraServerAlerts = m_HideExtraServerAlerts
+End Property
+
+Public Property Let HideExtraServerAlerts(ByVal sValue As Boolean)
+    m_HideExtraServerAlerts = sValue
+End Property
+
+Public Property Get HideMutualFriendAlerts() As Boolean
+    HideMutualFriendAlerts = m_HideMutualFriendAlerts
+End Property
+
+Public Property Let HideMutualFriendAlerts(ByVal sValue As Boolean)
+    m_HideMutualFriendAlerts = sValue
 End Property
 
 Public Property Get TimestampMode() As Byte
@@ -1801,6 +1819,8 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_UI, "DetectURLs", m_UrlDetection
     WriteSetting SECTION_UI, "ShowOutgoingWhispers", m_ShowOutgoingWhispers
     WriteSetting SECTION_UI, "HideWhispersInMain", m_HideWhispersInMain
+    WriteSetting SECTION_UI, "HideExtraServerAlerts", m_HideExtraServerAlerts
+    WriteSetting SECTION_UI, "HideMutualFriendAlerts", m_HideMutualFriendAlerts
     WriteSetting SECTION_UI, "TimestampMode", m_TimestampMode
     WriteSetting SECTION_UI, "ChatFont", m_ChatFont
     WriteSetting SECTION_UI, "ChatSize", m_ChatFontSize
@@ -1998,6 +2018,8 @@ Private Sub LoadDefaults()
     m_UrlDetection = True
     m_ShowOutgoingWhispers = True
     m_HideWhispersInMain = False
+    m_HideExtraServerAlerts = False
+    m_HideMutualFriendAlerts = False
     m_TimestampMode = 1
     m_ChatFont = "Tahoma"
     m_ChatFontSize = 10
@@ -2345,6 +2367,8 @@ Private Sub LoadVersion6Config()
     m_UrlDetection = ReadSettingB(SECTION_UI, "DetectURLs", m_UrlDetection)
     m_ShowOutgoingWhispers = ReadSettingB(SECTION_UI, "ShowOutgoingWhispers", m_ShowOutgoingWhispers)
     m_HideWhispersInMain = ReadSettingB(SECTION_UI, "HideWhispersInMain", m_HideWhispersInMain)
+    m_HideExtraServerAlerts = ReadSettingB(SECTION_UI, "HideExtraServerAlerts", m_HideExtraServerAlerts)
+    m_HideMutualFriendAlerts = ReadSettingB(SECTION_UI, "HideMutualFriendAlerts", m_HideMutualFriendAlerts)
     m_TimestampMode = ReadSettingL(SECTION_UI, "TimestampMode", m_TimestampMode)
     m_ChatFont = ReadSetting(SECTION_UI, "ChatFont", m_ChatFont)
     m_ChatFontSize = ReadSettingL(SECTION_UI, "ChatSize", m_ChatFontSize)

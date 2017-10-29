@@ -726,7 +726,11 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Const MSG_WHOIS_IN_GAME      As String = " in game "
     Const MSG_WHOIS_IN_PRIVATE   As String = " a private "
 
-    Const MSG_MARKED_AWAY        As String = "You are still marked"
+    Const MSG_STILL_AWAY         As String = "You are still marked as away."
+    Const MSG_NO_ONE_HEARS       As String = "No one hears you."
+    Const MSG_SERVER_WELCOME     As String = "Welcome to Battle.net!"
+    Const MSG_SERVER_HOST        As String = "This server is hosted by "
+    Const MSG_SERVER_LAST_LOGON  As String = "Last logon: "
 
     Const MSG_FRIENDSCH_END      As String = " your friends list."
     Const MSG_FRIENDSCH_ADDED    As String = "Added "
@@ -809,9 +813,15 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             End If
         End If
 
-        ' You are still marked as away: filter TODO: option
-        If (StrComp(Left$(Message, Len(MSG_MARKED_AWAY)), MSG_MARKED_AWAY, vbTextCompare) = 0) Then
-            Exit Sub
+        ' filter "extra" messages: you are still marked as away, no one hears you, and server welcome messages
+        If Config.HideExtraServerAlerts Then
+            If ((StrComp(Message, MSG_STILL_AWAY, vbTextCompare) = 0) Or _
+                (StrComp(Message, MSG_NO_ONE_HEARS, vbTextCompare) = 0) Or _
+                (StrComp(Message, MSG_SERVER_WELCOME, vbTextCompare) = 0) Or _
+                (StrComp(Left$(Message, Len(MSG_SERVER_HOST)), MSG_SERVER_HOST, vbTextCompare) = 0) Or _
+                (StrComp(Left$(Message, Len(MSG_SERVER_LAST_LOGON)), MSG_SERVER_LAST_LOGON, vbTextCompare) = 0)) Then
+                Exit Sub
+            End If
         End If
 
         ' friends list changes: request updates for unsupported FL
@@ -1881,11 +1891,34 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         On Error GoTo ERROR_HANDLER
     #End If
     
+    Const EMAIL_SERVICE_USER As String = "# Email Service #"
+    Const MSG_YOUR_FRIEND    As String = "Your friend "
+    
     'Dim s       As String
     Dim lCarats As Long
     Dim WWIndex As Integer
+    Dim FIndex As Integer
     
     Username = ConvertUsername(Username)
+    
+    ' filter email service?
+    If Config.HideExtraServerAlerts Then
+        If (StrComp(Username, EMAIL_SERVICE_USER, vbBinaryCompare) = 0) Then
+            Exit Sub
+        End If
+    End If
+    
+    ' filter friend alerts?
+    If Config.HideMutualFriendAlerts Then
+        FIndex = frmChat.FriendListHandler.UsernameToFLIndex(Username)
+        If FIndex <> 0 Then
+            If g_Friends(FIndex).IsMutual Or Not g_Friends(FIndex).IsOnline Then
+                If (StrComp(Left$(Message, Len(MSG_YOUR_FRIEND)), MSG_YOUR_FRIEND, vbBinaryCompare) = 0) Then
+                    Exit Sub
+                End If
+            End If
+        End If
+    End If
     
     If (Catch(0) <> vbNullString) Then
         Call CheckPhrase(Username, Message, CPWHISPER)
