@@ -1903,6 +1903,13 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim RemoveLength   As Long
     Dim EscapePos      As Long
     Dim Index          As Long
+    Dim j              As Long
+    Dim StyleSep       As Long
+    Dim StyleBold      As Boolean
+    Dim StyleItal      As Boolean
+    Dim StyleUndl      As Boolean
+    Dim StyleStri      As Boolean
+    Dim FontName       As String
     Dim str            As String
     Dim arrCount       As Long
     Dim SelStart       As Long
@@ -1932,7 +1939,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
             arr(Index) = saElements(i + 1)
             arr(Index - 1) = saElements(i)
-            arr(Index - 2) = rtb.Font.Name
+            arr(Index - 2) = vbNullString
 
             Index = Index + 3
         Next i
@@ -2055,7 +2062,34 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
                 With rtb
                     SetTextSelection rtb, -1, -1
-                    .SelFontName = saElements(i)
+                    StyleSep = InStr(1, saElements(i), ":", vbBinaryCompare)
+                    If StyleSep > 1 Then
+                        For j = 1 To StyleSep - 1
+                            Select Case UCase$(Mid$(saElements(i), j, 1))
+                                Case "B": StyleBold = Not StyleBold ' bold
+                                Case "I": StyleItal = Not StyleItal ' italic
+                                Case "U": StyleUndl = Not StyleUndl ' underline
+                                Case "S": StyleStri = Not StyleStri ' strikethrough
+                                Case "R":                           ' reset style
+                                    StyleBold = False
+                                    StyleItal = False
+                                    StyleUndl = False
+                                    StyleStri = False
+                            End Select
+                        Next j
+                    End If
+                    .SelBold = StyleBold
+                    .SelItalic = StyleItal
+                    .SelUnderline = StyleUndl
+                    .SelStrikeThru = StyleStri
+                    FontName = Mid$(saElements(i), StyleSep + 1)
+                    If StrComp(FontName, "%", vbBinaryCompare) = 0 Then
+                        ' default font
+                        .SelFontName = rtb.Font.Name
+                    ElseIf LenB(FontName) > 0 Then
+                        ' change font
+                        .SelFontName = FontName
+                    End If
                     .SelColor = saElements(i + 1)
                     RTBSetSelectedText rtb, s
                     str = str & s
