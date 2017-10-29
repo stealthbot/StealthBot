@@ -5,10 +5,57 @@ Attribute VB_Name = "modUTF8"
 'http://forum.valhallalegends.com/phpbbs/index.php?board=18;action=display;threadid=1027&start=0
 Option Explicit
 
-Private Declare Function GetLastError Lib "Kernel32.dll" () As Long
-
 Private Declare Function MultiByteToWideChar Lib "Kernel32.dll" (ByVal Codepage As Long, ByVal dwFlags As Long, ByVal lpMultiByteStr As Long, ByVal cchMultiByte As Long, ByVal lpWideCharStr As Long, ByVal cchWideChar As Long) As Long
 Private Declare Function WideCharToMultiByte Lib "Kernel32.dll" (ByVal Codepage As Long, ByVal dwFlags As Long, ByVal lpWideCharStr As Long, ByVal cchWideChar As Long, ByVal lpMultiByteStr As Long, ByVal cchMultiByte As Long, ByVal lpDefaultChar As Long, ByVal lpUsedDefaultChar As Long) As Long
+
+Private Enum RTBC_FLAGS ' CharFormat (SCF_) flags for EM_SETCHARFORMAT message.
+    RTBC_DEFAULT = 0
+    RTBC_SELECTION = 1
+    RTBC_WORD = 2 'Combine with RTBC_SELECTION!
+    RTBC_ALL = 4
+End Enum
+
+Public Enum RTBW_FLAGS ' Flags for the SETEXTEX data structure.
+    RTBW_DEFAULT = 0   ' Deletes undo stack, discards RTF formatting, replaces all text.
+    RTBW_KEEPUNDO = 1  ' Keeps undo stack.
+    RTBW_SELECTION = 2 ' Replaces selection and keeps RTF formatting.
+End Enum
+
+Private Type SETTEXTEX
+    Flags As RTBW_FLAGS
+    Codepage As Long
+End Type
+
+Private Type GETTEXTLENGTHEX
+    Flags As Long
+    Codepage As Long
+End Type
+
+Private Type GETTEXTEX
+    cb As Long
+    Flags As Long
+    Codepage As Long
+    lpDefaultChar As Long
+    lpUsedDefChar As Long
+End Type
+
+Private Type CHARRANGE
+    cpMin As Long
+    cpMax As Long
+End Type
+
+Private Const WM_USER As Long = &H400
+Private Const EM_EXGETSEL As Long = WM_USER + 52
+Private Const EM_EXSETSEL As Long = WM_USER + 55
+Private Const EM_SETTEXTEX As Long = WM_USER + 97
+Private Const EM_GETTEXTEX As Long = WM_USER + 94
+Private Const EM_GETTEXTLENGTHEX As Long = WM_USER + 95
+
+Private Const GT_USECRLF As Long = 1&
+
+Private Const GTL_USECRLF As Long = 1&
+Private Const GTL_PRECISE As Long = 2&
+Private Const GTL_NUMCHARS As Long = 8&
 
 Private Const MB_ERR_INVALID_CHARS As Long = &H8
 
@@ -181,3 +228,62 @@ Public Function StringToDWord(ByVal Value As String) As Long
     CopyMemory StringToDWord, ByVal Buffer, 4
 
 End Function
+
+Public Function GetRTBLength(rtb As RichTextBox) As Long
+
+    Dim GetTextLengthObj As GETTEXTLENGTHEX
+    
+    GetTextLengthObj.Flags = GTL_USECRLF Or GTL_PRECISE Or GTL_NUMCHARS
+    GetTextLengthObj.Codepage = CP_UNICODE
+    GetRTBLength = SendMessageW(rtb.hWnd, EM_GETTEXTLENGTHEX, VarPtr(GetTextLengthObj), 0)
+
+End Function
+
+Public Function GetRTBText(rtb As RichTextBox) As String
+    
+    Dim GetTextObj As GETTEXTEX
+    Dim iChars As Long
+    
+    iChars = GetRTBLength(rtb)
+    
+    If iChars > 0 Then
+        GetTextObj.cb = (iChars + 1) * 2
+        GetTextObj.Flags = GT_USECRLF
+        GetTextObj.Codepage = CP_UNICODE
+        GetRTBText = String$(iChars, vbNullChar)
+        SendMessageW rtb.hWnd, EM_GETTEXTEX, VarPtr(GetTextObj), StrPtr(GetRTBText)
+    Else
+        GetRTBText = vbNullString
+    End If
+
+End Function
+
+Public Sub RTBSetSelectedText(rtb As RichTextBox, ByVal sText As String)
+    
+    Dim SetTextObj As SETTEXTEX
+    
+    SetTextObj.Flags = RTBW_SELECTION
+    SetTextObj.Codepage = CP_UNICODE
+    SendMessageW rtb.hWnd, EM_SETTEXTEX, ByVal VarPtr(SetTextObj), ByVal StrPtr(sText)
+
+End Sub
+
+Public Sub GetTextSelection(cnt As Control, sParam As Long, eParam As Long)
+
+    Dim CharRangeObj As CHARRANGE
+
+    SendMessageW cnt.hWnd, EM_EXGETSEL, 0, ByVal VarPtr(CharRangeObj)
+    sParam = CharRangeObj.cpMin
+    eParam = CharRangeObj.cpMax
+
+End Sub
+
+Public Sub SetTextSelection(cnt As Control, ByVal sParam As Long, ByVal eParam As Long)
+
+    Dim CharRangeObj As CHARRANGE
+    
+    CharRangeObj.cpMin = sParam
+    CharRangeObj.cpMax = eParam
+    SendMessageW cnt.hWnd, EM_EXSETSEL, 0, ByVal VarPtr(CharRangeObj)
+
+End Sub

@@ -33,10 +33,6 @@ Public ConfigOverride As String
 Public CommandLine As String
 Public lLauncherVersion As Long
 
-Public rtbChatLength As Long
-
-
-
 Public g_Connected As Boolean
 Public g_Online As Boolean
 

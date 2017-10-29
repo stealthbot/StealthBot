@@ -1878,6 +1878,7 @@ Public Function UsernameRegex(ByVal Username As String, ByVal sPattern As String
     UsernameRegex = (prepName Like prepPatt)
 End Function
 
+
 ' Fixed font issue when an element was only 1 character long -Pyro (9/28/08)
 ' Fixed issue with displaying null text.
 
@@ -1891,7 +1892,6 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
    
     Dim arr()          As Variant
     Dim s              As String
-    Dim l              As Long
     Dim lngVerticalPos As Long
     Dim Diff           As Long
     Dim i              As Long
@@ -1899,7 +1899,10 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim blUnlock       As Boolean
     Dim LogThis        As Boolean
     Dim Length         As Long
-    Dim Count          As Long
+    Dim NewLength      As Long
+    Dim RemoveLength   As Long
+    Dim EscapePos      As Long
+    Dim Index          As Long
     Dim str            As String
     Dim arrCount       As Long
     Dim SelStart       As Long
@@ -1912,151 +1915,159 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     ' *****************************************
     '              SANITY CHECKS
     ' *****************************************
-    
-    If (StrictIsNumeric(saElements(0))) Then
-        Count = 2
-    
+
+    ' empty array
+    If LBound(saElements) > UBound(saElements) Then
+        Exit Sub
+    End If
+
+    ' if first element is numeric
+    If (IsNumeric(saElements(0))) Then
+        Index = 2
+
+        ' convert AddChat Color, Text, Color, Text, ...
+        '      to AddChat DefaultFont, Color, Text, DefaultFont, Color, Text, ...
         For i = LBound(saElements) To UBound(saElements) Step 2
-            ReDim Preserve arr(0 To Count) As Variant
-            
-            arr(Count) = saElements(i + 1)
-            arr(Count - 1) = saElements(i)
-            arr(Count - 2) = rtb.Font.Name
-            
-            Count = Count + 3
+            ReDim Preserve arr(0 To Index) As Variant
+
+            arr(Index) = saElements(i + 1)
+            arr(Index - 1) = saElements(i)
+            arr(Index - 2) = rtb.Font.Name
+
+            Index = Index + 3
         Next i
-        
+
         saElements() = arr()
     End If
-    
-    rtbChatLength = Len(rtb.Text)
 
+    ' verify arguments
     For i = LBound(saElements) To UBound(saElements) Step 3
-        If (i >= UBound(saElements)) Then
+        ' element count not a multiple of 3
+        If ((i + 2) > UBound(saElements)) Then
             Exit Sub
         End If
-    
-        If (StrictIsNumeric(saElements(i + 1)) = False) Then
+
+        ' color is not positive Integer or Long value
+        If (IsNumeric(saElements(i + 1)) = False) Then
             Exit Sub
         End If
-        
-        Length = _
-            Length + Len(KillNull(saElements(i + 2)))
+
+        ' convert negative Integer values to Long (for example &H99CC is negative, convert to &H99CC&)
+        If (saElements(i + 1) < 0) Then
+            saElements(i + 1) = CLng(saElements(i + 1) + &H10000)
+        Else
+            saElements(i + 1) = CLng(saElements(i + 1))
+        End If
+
+        ' out of color range
+        If (saElements(i + 1) < 0 Or saElements(i + 1) > &HFFFFFF) Then
+            Exit Sub
+        End If
+
+        ' store combined length of input
+        NewLength = NewLength + Len(KillNull(saElements(i + 2)))
     Next i
-    
-    If (Length = 0) Then
+
+    ' input must have non-zero length
+    If (NewLength = 0) Then
         Exit Sub
     End If
 
     If ((BotVars.LockChat = False) Or (rtb <> frmChat.rtbChat)) Then
-        
         ' store rtb carat and whether rtb has focus
-        With rtb
-            SelStart = .SelStart
-            SelLength = .SelLength
-            blnHasFocus = (rtb.Parent.ActiveControl Is rtb And rtb.Parent.WindowState <> vbMinimized)
-            ' whether it's at the end or within one vbCrLf of the end
-            blnAtEnd = (SelStart >= rtbChatLength - 2)
-        End With
- 
+        GetTextSelection rtb, SelStart, SelLength
+        blnHasFocus = (rtb.Parent.ActiveControl Is rtb And rtb.Parent.WindowState <> vbMinimized)
+        ' whether it's at the end or within one vbCrLf of the end
+        blnAtEnd = (SelStart >= GetRTBLength(rtb) - 2)
+
+        ' is the RTB at the bottom?
         lngVerticalPos = IsScrolling(rtb)
     
         If (lngVerticalPos) Then
             rtb.Visible = False
-        
+
             ' below causes smooth scrolling, but also screen flickers :(
             'LockWindowUpdate rtb.hWnd
-        
+
             blUnlock = True
         End If
-        
-        If (rtb = frmChat.rtbChat) Then
-            LogThis = (BotVars.Logging > 0)
-        ElseIf (rtb = frmChat.rtbWhispers) Then
+
+        ' how to log this event
+        If (rtb = frmChat.rtbChat) Or (rtb = frmChat.rtbWhispers) Then
             LogThis = (BotVars.Logging > 0)
         End If
-        
-        If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
+
+        ' remove from backlog if overflow
+        Length = GetRTBLength(rtb)
+        If ((BotVars.MaxBacklogSize) And (Length >= BotVars.MaxBacklogSize)) Then
             If (blUnlock = False) Then
                 rtb.Visible = False
-            
+
                 ' below causes smooth scrolling, but also screen flickers :(
                 'LockWindowUpdate rtb.hWnd
             End If
-        
+
             With rtb
-                .SelStart = 0
-                .SelLength = InStr(1, .Text, vbLf, vbBinaryCompare)
-                ' remove line from stored selection
-                SelStart = SelStart - .SelLength
-                ' if selection included part of what was removed, add negative start point
-                ' to length to get difference length and start selection at 0
-                If SelStart < 0 Then
-                    SelLength = SelLength + SelStart
-                    SelStart = 0
-                    ' if new length is negative, then the selection is now gone, so selection
-                    ' length should be 0
-                    If SelLength < 0 Then SelLength = 0
+                If Length > BotVars.MaxBacklogSize Then
+                    RemoveLength = InStr(Length - BotVars.MaxBacklogSize, GetRTBText(rtb), vbLf, vbBinaryCompare)
+                Else
+                    RemoveLength = InStr(1, Length, vbLf, vbBinaryCompare)
                 End If
-                .SelFontName = rtb.Font.Name
-                .SelFontSize = rtb.Font.Size
-                .SelText = ""
+                SetTextSelection rtb, 0, RemoveLength
+                ' remove line from stored selection
+                SelStart = SelStart - RemoveLength
+                SelLength = SelLength - RemoveLength
+                ' if selection included part of what was removed, add negative start point
+                ' to length to get difference in length, and set start selection at 0
+                If SelStart < 0 Then SelStart = 0
+                If SelLength < 0 Then SelLength = 0
+                RTBSetSelectedText rtb, vbNullString
             End With
-            
+
             If (blUnlock = False) Then
                 rtb.Visible = True
-            
+
                 ' below causes smooth scrolling, but also screen flickers :(
                 'LockWindowUpdate &H0
             End If
         End If
-        
-        s = GetTimeStamp()
-        
-        With rtb
-            .SelStart = Len(.Text)
-            .SelLength = 0
-            .SelFontName = rtb.Font.Name
-            .SelFontSize = rtb.Font.Size
-            .SelBold = False
-            .SelItalic = False
-            .SelUnderline = False
-            .SelColor = RTBColors.TimeStamps
-            .SelText = s
-            .SelLength = Len(.SelText)
-        End With
 
+        ' place timestamp
+        s = GetTimeStamp()
+        If LenB(s) > 0 Then
+            With rtb
+                SetTextSelection rtb, -1, -1
+                .SelFontName = rtb.Font.Name
+                .SelFontSize = rtb.Font.Size
+                .SelBold = False
+                .SelItalic = False
+                .SelUnderline = False
+                .SelStrikeThru = False
+                .SelColor = RTBColors.TimeStamps
+                RTBSetSelectedText rtb, s
+            End With
+        End If
+
+        ' place each element
         For i = LBound(saElements) To UBound(saElements) Step 3
-            If (InStr(1, saElements(i + 2), vbNullChar, vbBinaryCompare) > 0) Then
-                KillNull saElements(i + 2)
-            End If
-        
             If ((StrictIsNumeric(saElements(i + 1))) And (Len(saElements(i + 2)) > 0)) Then
-                l = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
-                
-                While (l > 0)
-                    Mid$(saElements(i + 2), l + 1, 1) = "/"
-                    
-                    l = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
-                Wend
-            
-                l = Len(rtb.Text)
-            
+                s = KillNull(saElements(i + 2))
+
                 With rtb
-                    .SelStart = l
-                    .SelLength = 0
+                    SetTextSelection rtb, -1, -1
                     .SelFontName = saElements(i)
                     .SelColor = saElements(i + 1)
-                    .SelText = _
-                        saElements(i + 2) & Left$(vbCrLf, -2 * CLng((i + 2) = _
-                            UBound(saElements)))
-                    str = _
-                        str & saElements(i + 2)
-                    .SelLength = Len(.SelText)
+                    RTBSetSelectedText rtb, s
+                    str = str & s
                 End With
             End If
         Next i
-        
+
+        With rtb
+            SetTextSelection rtb, -1, -1
+            RTBSetSelectedText rtb, vbCrLf
+        End With
+
         If (LogThis) Then
             If (rtb = frmChat.rtbChat) Then
                 g_Logger.WriteChat str
@@ -2065,7 +2076,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         End If
 
-        ColorModify rtb, l
+        ColorModify rtb, GetRTBLength(rtb) - NewLength
 
         If (blUnlock) Then
             SendMessage rtb.hWnd, WM_VSCROLL, _
@@ -2082,18 +2093,14 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             If blnHasFocus Then
                 ' restore carat location and selection if not previously at end
                 If Not blnAtEnd Then
-                    .SelStart = SelStart
-                    .SelLength = SelLength
+                    SetTextSelection rtb, SelStart, SelLength
                 End If
-                
-                ' restore focus
-                '.SetFocus
             End If
         End With
     End If
-    
+
     RichTextErrorCounter = 0
-    
+
     Exit Sub
     
 ERROR_HANDLER:
