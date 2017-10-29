@@ -720,15 +720,35 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         On Error GoTo ERROR_HANDLER
     #End If
 
-    Const MSG_BANNED      As String = " was banned by "
-    Const MSG_UNBANNED    As String = " was unbanned by "
-    Const MSG_SQUELCHED   As String = " has been squelched."
-    Const MSG_UNSQUELCHED As String = " has been unsquelched."
-    Const MSG_KICKEDOUT   As String = " kicked you out of the channel!"
-    Const MSG_FRIENDS     As String = "Your friends are:"
+    Const MSG_WHOIS_1            As String = "You are "
+    Const MSG_WHOIS_2            As String = ", using "
+    Const MSG_WHOIS_IN_CHANNEL   As String = " in channel "
+    Const MSG_WHOIS_IN_GAME      As String = " in game "
+    Const MSG_WHOIS_IN_PRIVATE   As String = " a private "
+
+    Const MSG_MARKED_AWAY        As String = "You are still marked"
+
+    Const MSG_FRIENDSCH_END      As String = " your friends list."
+    Const MSG_FRIENDSCH_ADDED    As String = "Added "
+    Const MSG_FRIENDSCH_REMOVED  As String = "Removed "
+    Const MSG_FRIENDSCH_PROMOTED As String = "Promoted "
+    Const MSG_FRIENDSCH_DEMOTED  As String = "Demoted "
+
+    Const MSG_BAN                As String = " was banned by "
+    Const MSG_UNBAN              As String = " was unbanned by "
+
+    Const MSG_RECVKICK           As String = " kicked you out of the channel!"
+
+    Const MSG_UNSQUELCH          As String = " has been unsquelched."
+
+    Const MSG_DESIGNATED         As String = " is your new designated heir."
+
+    Const MSG_FRIENDS            As String = "Your friends are:"
+    Const MSG_FRIEND_OFFLINE     As String = ", offline"
+    Const MSG_FRIENDS_SB_HIDING  As String = "  ÿci(StealthBot is hiding your offline friends)"
     
     Dim i      As Integer
-    Dim temp   As String
+    Dim User   As String
     Dim bHide  As Boolean
     Dim ToANSI As String
     
@@ -761,42 +781,45 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         '    .Enabled = True
         'End With
     End If
-    
-    ' what is our current gateway name?
-    If (BotVars.Gateway = vbNullString) Then
-        If (InStr(1, Message, "You are ", vbTextCompare) > 0) And (InStr(1, Message, ", using ", _
-                vbTextCompare) > 0) Then
-                
-            If ((InStr(1, Message, " in channel ", vbTextCompare) = 0) And _
-                    (InStr(1, Message, " in game ", vbTextCompare) = 0) And _
-                    (InStr(1, Message, " a private ", vbTextCompare) = 0)) Then
-                    
-                i = InStrRev(Message, Space$(1))
-                
-                BotVars.Gateway = Mid$(Message, i + 1)
-                
-                SetTitle GetCurrentUsername & ", online on " & BotVars.Gateway
-                
-                Call DoChannelJoinHome
-                
-                Call InsertDummyQueueEntry
-                
-                RunInAll "Event_LoggedOn", CurrentUsername, BotVars.Product
-
-                Exit Sub
-            End If
-        End If
-    End If
 
     If (InStr(1, Message, Space$(1), vbBinaryCompare) <> 0) Then
-        If (InStr(1, Message, "are still marked", vbTextCompare) <> 0) Then
+        ' what is our current gateway name?
+        If (LenB(BotVars.Gateway) = 0) Then
+            If (StrComp(Left$(Message, Len(MSG_WHOIS_1)), MSG_WHOIS_1, vbTextCompare) = 0) And (InStr(1, Message, MSG_WHOIS_2, _
+                    vbTextCompare) > 0) Then
+
+                If ((InStr(1, Message, MSG_WHOIS_IN_CHANNEL, vbTextCompare) = 0) And _
+                        (InStr(1, Message, MSG_WHOIS_IN_GAME, vbTextCompare) = 0) And _
+                        (InStr(1, Message, MSG_WHOIS_IN_PRIVATE, vbTextCompare) = 0)) Then
+
+                    i = InStrRev(Message, Space$(1))
+
+                    BotVars.Gateway = Mid$(Message, i + 1)
+
+                    SetTitle GetCurrentUsername & ", online on " & BotVars.Gateway
+
+                    Call DoChannelJoinHome
+
+                    Call InsertDummyQueueEntry
+
+                    RunInAll "Event_LoggedOn", CurrentUsername, BotVars.Product
+
+                    Exit Sub
+                End If
+            End If
+        End If
+
+        ' You are still marked as away: filter TODO: option
+        If (StrComp(Left$(Message, Len(MSG_MARKED_AWAY)), MSG_MARKED_AWAY, vbTextCompare) = 0) Then
             Exit Sub
         End If
-        
-        If ((InStr(1, Message, " from your friends list.", vbBinaryCompare) > 0) Or _
-            (InStr(1, Message, " to your friends list.", vbBinaryCompare) > 0) Or _
-            (InStr(1, Message, " in your friends list.", vbBinaryCompare) > 0) Or _
-            (InStr(1, Message, " of your friends list.", vbBinaryCompare) > 0)) Then
+
+        ' friends list changes: request updates for unsupported FL
+        If (StrComp(Right$(Message, Len(MSG_FRIENDSCH_END)), MSG_FRIENDSCH_END, vbTextCompare) = 0) And _
+            ((StrComp(Left$(Message, Len(MSG_FRIENDSCH_ADDED)), MSG_FRIENDSCH_ADDED, vbTextCompare) = 0) Or _
+             (StrComp(Left$(Message, Len(MSG_FRIENDSCH_REMOVED)), MSG_FRIENDSCH_REMOVED, vbTextCompare) = 0) Or _
+             (StrComp(Left$(Message, Len(MSG_FRIENDSCH_PROMOTED)), MSG_FRIENDSCH_PROMOTED, vbTextCompare) = 0) Or _
+             (StrComp(Left$(Message, Len(MSG_FRIENDSCH_DEMOTED)), MSG_FRIENDSCH_DEMOTED, vbTextCompare) = 0)) Then
             
             If Config.FriendsListTab Then
                 If Not frmChat.FriendListHandler.SupportsFriendPackets(Config.Game) Then
@@ -804,140 +827,131 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 End If
             End If
         End If
-        
-        'Ban Evasion and banned-user tracking
-        temp = Split(Message, " ")(1)
-        
+
+        'banned-user tracking
+        User = Split(Message, Space$(1))(1)
         ' added 1/21/06 thanks to
         ' http://www.stealthbot.net/forum/index.php?showtopic=24582
-        
-        If (Len(temp) > 0) Then
-            Dim Banning    As Boolean
-            Dim Unbanning  As Boolean
-            Dim User       As String
-            Dim cOperator  As String
-            Dim msgPos     As Integer
-            Dim pos        As Integer
-            Dim tmp        As String
-            Dim banpos     As Integer
-            Dim j          As Integer
-            Dim Reason     As String
-            
-            If (InStr(1, Message, MSG_BANNED, vbTextCompare) > 0) Then
-                User = Left$(Message, _
-                    (InStr(1, Message, MSG_BANNED, vbBinaryCompare) - 1))
-                
-                Reason = Mid$(Message, InStr(1, Message, MSG_BANNED, vbBinaryCompare) + Len(MSG_BANNED) + 1) ' trim out username and banned message
-                If (InStr(1, Reason, " (", vbBinaryCompare)) Then 'Did they give a message?
-                  Reason = Mid$(Reason, InStr(1, Reason, " (") + 2) 'trim out the banning name (Note, when banned by a rep using Len(Username) won't work as its banned "By a Blizzard Representative")
-                  Reason = Left$(Reason, Len(Reason) - 2) 'Trim off the trailing ")."
-                Else
-                  Reason = vbNullString
-                End If
-                
-                If (Len(User) > 0) Then
-                    pos = g_Channel.GetUserIndex(Username)
-                    
-                    If (pos > 0) Then
-                        Dim BanlistObj As clsBanlistUserObj
-                                                
-                        banpos = g_Channel.IsOnBanList(User, Username)
+
+        If (Len(User) > 0) Then
+            If (InStr(1, Message, MSG_BAN, vbTextCompare) > 0) Then
+                If (StrComp(User, Left$(Message, (InStr(1, Message, MSG_BAN, vbBinaryCompare) - 1)), vbTextCompare) = 0) Then
+                    ' " was banned by " must follow User (first word)
+                    Dim Reason     As String
+                    Dim BanlistObj As clsBanlistUserObj
+                    Dim pos        As Integer
+                    Dim banpos     As Integer
+
+                    Reason = Mid$(Message, InStr(1, Message, MSG_BAN, vbBinaryCompare) + Len(MSG_BAN) + 1) ' trim out username and banned message
+                    If (InStr(1, Reason, " (", vbBinaryCompare)) Then 'Did they give a message?
+                        Reason = Mid$(Reason, InStr(1, Reason, " (") + 2) 'trim out the banning name (Note, when banned by a rep using Len(Username) won't work as its banned "By a Blizzard Representative")
+                        Reason = Left$(Reason, Len(Reason) - 2) 'Trim off the trailing ")."
+                    Else
+                        Reason = vbNullString
+                    End If
+
+                    If (Len(User) > 0) Then
+                        pos = g_Channel.GetUserIndex(Username)
                         
-                        If (banpos > 0) Then
-                            g_Channel.Banlist.Remove banpos
-                        Else
-                            g_Channel.BanCount = (g_Channel.BanCount + 1)
-                        End If
-                        
-                        If ((BotVars.StoreAllBans) Or _
-                                (StrComp(Username, GetCurrentUsername, vbBinaryCompare) = 0)) Then
-                            
-                            Set BanlistObj = New clsBanlistUserObj
-                            
-                            With BanlistObj
-                                .Name = User
-                                .Operator = Username
-                                .DateOfBan = UtcNow
-                                .IsDuplicateBan = (g_Channel.IsOnBanList(User) > 0)
-                                .Reason = Reason
-                            End With
-                        
-                            If (BanlistObj.IsDuplicateBan) Then
-                                With g_Channel.Banlist(g_Channel.IsOnBanList(User))
-                                    .IsDuplicateBan = False
-                                End With
+                        If (pos > 0) Then
+                            banpos = g_Channel.IsOnBanList(User, Username)
+
+                            If (banpos > 0) Then
+                                g_Channel.Banlist.Remove banpos
+                            Else
+                                g_Channel.BanCount = (g_Channel.BanCount + 1)
                             End If
-                            
-                            g_Channel.Banlist.Add BanlistObj
+
+                            If ((BotVars.StoreAllBans) Or _
+                                    (StrComp(Username, GetCurrentUsername, vbBinaryCompare) = 0)) Then
+
+                                Set BanlistObj = New clsBanlistUserObj
+
+                                With BanlistObj
+                                    .Name = User
+                                    .Operator = Username
+                                    .DateOfBan = UtcNow
+                                    .IsDuplicateBan = (g_Channel.IsOnBanList(User) > 0)
+                                    .Reason = Reason
+                                End With
+
+                                If (BanlistObj.IsDuplicateBan) Then
+                                    With g_Channel.Banlist(g_Channel.IsOnBanList(User))
+                                        .IsDuplicateBan = False
+                                    End With
+                                End If
+
+                                g_Channel.Banlist.Add BanlistObj
+                            End If
                         End If
+
+                        Call RemoveBanFromQueue(User)
                     End If
-                    
-                    Call RemoveBanFromQueue(User)
-                End If
-                
-                If (frmChat.mnuHideBans.Checked) Then
-                    bHide = True
-                End If
-            ElseIf (InStr(1, Message, MSG_UNBANNED, vbTextCompare) > 0) Then
-                User = Left$(Message, _
-                    (InStr(1, Message, MSG_UNBANNED, vbBinaryCompare) - 1))
-                                
-                If (Len(User) > 0) Then
-                    g_Channel.BanCount = (g_Channel.BanCount - 1)
-                    
-                    Do
-                        banpos = g_Channel.IsOnBanList(User)
-                    
-                        If (banpos > 0) Then
-                            g_Channel.Banlist.Remove banpos
-                        End If
-                    Loop While (banpos <> 0)
-                End If
-            End If
-    
-            '// backup channel
-            If (InStr(1, Message, "kicked you out", vbTextCompare) > 0) Then
-                If (BotVars.UseBackupChan) Then
-                    If (Len(BotVars.BackupChan) > 0) Then
-                        frmChat.AddQ "/join " & BotVars.BackupChan
+
+                    If (frmChat.mnuHideBans.Checked) Then
+                        bHide = True
                     End If
-                Else
-                    frmChat.AddQ "/join " & g_Channel.Name
                 End If
-            End If
-            
-            If (InStr(1, Message, " has been unsquelched", vbTextCompare) > 0) Then
-                If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
-                    frmChat.lvChannel.ListItems.Clear
+            ElseIf (InStr(1, Message, MSG_UNBAN, vbTextCompare) > 0) Then
+                If (StrComp(User, Left$(Message, (InStr(1, Message, MSG_UNBAN, vbBinaryCompare) - 1)), vbTextCompare) = 0) Then
+                    ' " was unbanned by " must follow User (first word)
+                    Dim rembanpos As Integer
+
+                    If (Len(User) > 0) Then
+                        g_Channel.BanCount = (g_Channel.BanCount - 1)
+
+                        Do
+                            rembanpos = g_Channel.IsOnBanList(User)
+
+                            If (rembanpos > 0) Then
+                                g_Channel.Banlist.Remove rembanpos
+                            End If
+                        Loop While (rembanpos <> 0)
+                    End If
                 End If
             End If
         End If
-        
-        If (InStr(1, Message, "designated heir", vbTextCompare) <> 0) Then
-            g_Channel.OperatorHeir = Left$(Message, Len(Message) - 29)
+
+        ' backup channel
+        If (StrComp(Right$(Message, Len(MSG_RECVKICK)), MSG_RECVKICK, vbTextCompare) = 0) Then
+            If (BotVars.UseBackupChan) Then
+                If (Len(BotVars.BackupChan) > 0) Then
+                    frmChat.AddQ "/join " & BotVars.BackupChan
+                End If
+            Else
+                frmChat.AddQ "/join " & g_Channel.Name
+            End If
         End If
-        
-        
-        temp = "Your friends are:"
-        
-        If (StrComp(Left$(Message, Len(temp)), temp) = 0) Then
+
+        ' silent channel unsquelch
+        If (StrComp(Right$(Message, Len(MSG_UNSQUELCH)), MSG_UNSQUELCH, vbTextCompare) = 0) Then
+            If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
+                frmChat.lvChannel.ListItems.Clear
+            End If
+        End If
+
+        ' store designated
+        If (StrComp(Right$(Message, Len(MSG_DESIGNATED)), MSG_DESIGNATED, vbTextCompare) = 0) Then
+            g_Channel.OperatorHeir = Left$(Message, Len(Message) - Len(MSG_DESIGNATED))
+        End If
+
+        ' friends hiding
+        If (StrComp(Message, MSG_FRIENDS, vbTextCompare) = 0) Then
             If (Not (BotVars.ShowOfflineFriends)) Then
-                Message = Message & _
-                    "  ÿci(StealthBot is hiding your offline friends)"
+                Message = Message & MSG_FRIENDS_SB_HIDING
             End If
         End If
-    
+        If (StrComp(Right$(Message, Len(MSG_FRIEND_OFFLINE)), MSG_FRIEND_OFFLINE, vbTextCompare) = 0) Then
+            If (BotVars.ShowOfflineFriends) Then
+                frmChat.AddChat RTBColors.ServerInfoText, Message
+            End If
+        Else
+            If (Not (bHide)) Then
+                frmChat.AddChat RTBColors.ServerInfoText, Message
+            End If
+        End If
+
     End If ' message contains a space
-    
-    If (StrComp(Right$(Message, 9), ", offline", vbTextCompare) = 0) Then
-        If (BotVars.ShowOfflineFriends) Then
-            frmChat.AddChat RTBColors.ServerInfoText, Message
-        End If
-    Else
-        If (Not (bHide)) Then
-            frmChat.AddChat RTBColors.ServerInfoText, Message
-        End If
-    End If
 
     RunInAll "Event_ServerInfo", Message
     Exit Sub
