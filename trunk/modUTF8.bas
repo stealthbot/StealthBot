@@ -12,10 +12,18 @@ Private Declare Function WideCharToMultiByte Lib "Kernel32.dll" (ByVal Codepage 
 
 Private Const MB_ERR_INVALID_CHARS As Long = &H8
 
-Private Const CP_ACP               As Long = 0
-Private Const CP_UTF8              As Long = 65001
+Private Const CP_ACP     As Long = 0
+Private Const CP_1252    As Long = 1252
+Private Const CP_UTF8    As Long = 65001
+Private Const CP_UNICODE As Long = 1200&
 
-Public Function UTF8Encode(ByRef str As String) As Byte()
+Private Const ERROR_SUCCESS                 As Long = 0
+Private Const ERROR_NOT_ENOUGH_MEMORY       As Long = 8
+Private Const ERROR_INVALID_PARAMETER       As Long = 87
+Private Const ERROR_INSUFFICIENT_BUFFER     As Long = 122
+Private Const ERROR_NO_UNICODE_TRANSLATION  As Long = 1113
+
+Public Function UTF8Encode(ByRef str As String, Optional ByVal Codepage As Long = CP_UTF8) As Byte()
     Dim UTF8Buffer() As Byte
     Dim UTF8Chars    As Long
     Dim lstr         As String
@@ -23,7 +31,7 @@ Public Function UTF8Encode(ByRef str As String) As Byte()
     lstr = str
     
     ' grab Length of string after conversion
-    UTF8Chars = WideCharToMultiByte(CP_UTF8, 0, ByVal StrPtr(lstr), Len(lstr), 0, 0, 0, 0)
+    UTF8Chars = WideCharToMultiByte(Codepage, 0, ByVal StrPtr(lstr), Len(lstr), 0, 0, 0, 0)
     
     If (UTF8Chars = 0) Then
         ReDim UTF8Encode(0)
@@ -34,28 +42,40 @@ Public Function UTF8Encode(ByRef str As String) As Byte()
     ReDim UTF8Buffer(0 To UTF8Chars)
     
     ' translate from unicode to utf-8
-    Call WideCharToMultiByte(CP_UTF8, 0, ByVal StrPtr(lstr), Len(lstr), VarPtr(UTF8Buffer(0)), UTF8Chars, 0, 0)
+    Call WideCharToMultiByte(Codepage, 0, ByVal StrPtr(lstr), Len(lstr), VarPtr(UTF8Buffer(0)), UTF8Chars, 0, 0)
     
     ' return unicode buffer
     UTF8Encode = UTF8Buffer
 End Function
 
-Public Function UTF8Decode(ByRef buf() As Byte) As String
+Public Function UTF8Decode(ByRef buf() As Byte, Optional ByVal Codepage As Long = CP_UTF8) As String
     Dim UnicodeBuffer() As Byte
     Dim UnicodeChars    As Long
     
     ' grab Length of string after conversion
-    UnicodeChars = MultiByteToWideChar(CP_UTF8, 0, VarPtr(buf(0)), UBound(buf) + 1, 0, 0)
+    UnicodeChars = MultiByteToWideChar(Codepage, MB_ERR_INVALID_CHARS, VarPtr(buf(0)), UBound(buf) + 1, 0, 0)
             
     If (UnicodeChars = 0) Then
-        Exit Function
+        Select Case Err.LastDllError
+            Case ERROR_NO_UNICODE_TRANSLATION
+                ' try again with CP_1252
+                Codepage = CP_1252
+                UnicodeChars = MultiByteToWideChar(Codepage, 0, VarPtr(buf(0)), UBound(buf) + 1, 0, 0)
+                
+                If (UnicodeChars = 0) Then
+                    Exit Function
+                End If
+            Case Else
+                ' another error
+                Exit Function
+        End Select
     End If
     
     ' initialize buffer
     ReDim UnicodeBuffer(0 To (UnicodeChars * 2 - 1))
     
     ' translate utf-8 string to unicode
-    Call MultiByteToWideChar(CP_UTF8, 0, VarPtr(buf(0)), UBound(buf) + 1, VarPtr(UnicodeBuffer(0)), UnicodeChars)
+    Call MultiByteToWideChar(Codepage, 0, VarPtr(buf(0)), UBound(buf) + 1, VarPtr(UnicodeBuffer(0)), UnicodeChars)
    
     ' translate from unicode to ansi
     UTF8Decode = StrConv(ByteArrToString(UnicodeBuffer()), vbFromUnicode)

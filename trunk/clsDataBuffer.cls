@@ -236,7 +236,7 @@ Public Sub InsertNTString(ByRef Data As String, _
     Select Case (Encoding)
         Case STRINGENCODING.ANSI
             ' convert from Unicode (VB6 string) to Byte()
-            arrStr() = StringToNTByteArr(Data)
+            arrStr() = modUTF8.UTF8Encode(Data, 1252)
             
         Case STRINGENCODING.UTF8
             ' encode result as Unicode (encoded in UTF-8)
@@ -288,7 +288,7 @@ Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCO
     Select Case (Encoding)
         Case STRINGENCODING.ANSI
             ' convert from Byte() to Unicode (VB6 string)
-            GetString = ByteArrToString(arrStr())
+            GetString = modUTF8.UTF8Decode(arrStr(), 1252)
 
         Case STRINGENCODING.UTF8
             ' decode result as Unicode (encoded in UTF-8)
