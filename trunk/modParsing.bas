@@ -167,6 +167,13 @@ Public Sub SetProfile(ByVal Location As String, ByVal Description As String, Opt
     Const MAX_SEX As Long = 200
     Const MAX_LOC As Long = 200
     Dim pBuf As clsDataBuffer
+    Dim Encoding As STRINGENCODING
+
+    If (frmChat.mnuUTF8.Checked) Then
+        Encoding = UTF8
+    Else
+        Encoding = ANSI
+    End If
     
     '// Sanity checks
     If Len(Description) > MAX_DESCR Then
@@ -192,9 +199,9 @@ Public Sub SetProfile(ByVal Location As String, ByVal Description As String, Opt
         .InsertNTString "Profile\Description"
         .InsertNTString "Profile\Sex"
                                             '// Values()
-        .InsertNTString Location
-        .InsertNTString Description
-        .InsertNTString Sex
+        .InsertNTString Location, Encoding
+        .InsertNTString Description, Encoding
+        .InsertNTString Sex, Encoding
         
         .SendPacket SID_WRITEUSERDATA
     End With

@@ -287,7 +287,9 @@ Private Sub cmdCancel_Click()
 End Sub
 
 Private Sub cmdOK_Click()
-    If m_IsWriting Then Call SetProfile(rtbField(FIELD_LOC).Text, rtbField(FIELD_PRF).Text, rtbField(FIELD_SEX).Text)
+    If m_IsWriting Then
+        Call SetProfile(GetRTBText(rtbField(FIELD_LOC)), GetRTBText(rtbField(FIELD_PRF)), GetRTBText(rtbField(FIELD_SEX)))
+    End If
     Unload Me
 End Sub
 
@@ -336,7 +338,14 @@ Public Sub PrepareForProfile(ByVal Username As String, ByVal IsWriting As Boolea
 End Sub
 
 Public Sub SetKey(ByVal KeyName As String, ByVal KeyValue As String)
-    Dim Index As Integer
+    Dim Index        As Integer
+    Dim saElements() As Variant
+    Dim arr()        As Variant
+    Dim i            As Long
+    Dim StyleBold    As Boolean
+    Dim StyleItal    As Boolean
+    Dim StyleUndl    As Boolean
+    Dim StyleStri    As Boolean
 
     ' make sure shown
     Show
@@ -353,13 +362,28 @@ Public Sub SetKey(ByVal KeyName As String, ByVal KeyValue As String)
 
     With rtbField(Index)
         .Text = vbNullString
-
-        .SelStart = 0
-        .SelLength = 0
+        SetTextSelection rtbField(Index), 0, 0
+        .SelBold = False
+        .SelItalic = False
+        .SelUnderline = False
+        .SelFontName = rtbField(Index).Font.Name
         .SelColor = vbWhite
-        .SelText = KeyValue
 
-       If m_IsWriting = False Then Call ColorModify(rtbField(Index), 0)
+        If m_IsWriting Then
+            RTBSetSelectedText rtbField(Index), KeyValue
+        Else
+            ReDim saElements(0 To 2)
+            saElements(0) = vbNullString
+            saElements(1) = vbWhite
+            saElements(2) = KeyValue
+            If ApplyGameColors(saElements(), arr()) Then
+                saElements() = arr()
+            End If
+            ' place each element
+            For i = LBound(saElements) To UBound(saElements) Step 3
+                DisplayRichTextElement rtbField(Index), saElements(), i, StyleBold, StyleItal, StyleUndl, StyleStri
+            Next i
+        End If
     End With
 
     SetFocus

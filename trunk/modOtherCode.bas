@@ -1903,13 +1903,10 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim RemoveLength   As Long
     Dim EscapePos      As Long
     Dim Index          As Long
-    Dim j              As Long
-    Dim StyleSep       As Long
     Dim StyleBold      As Boolean
     Dim StyleItal      As Boolean
     Dim StyleUndl      As Boolean
     Dim StyleStri      As Boolean
-    Dim FontName       As String
     Dim str            As String
     Dim arrCount       As Long
     Dim SelStart       As Long
@@ -2057,44 +2054,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
         ' place each element
         For i = LBound(saElements) To UBound(saElements) Step 3
-            If ((StrictIsNumeric(saElements(i + 1))) And (Len(saElements(i + 2)) > 0)) Then
-                s = KillNull(saElements(i + 2))
-
-                With rtb
-                    SetTextSelection rtb, -1, -1
-                    StyleSep = InStr(1, saElements(i), ":", vbBinaryCompare)
-                    If StyleSep > 1 Then
-                        For j = 1 To StyleSep - 1
-                            Select Case UCase$(Mid$(saElements(i), j, 1))
-                                Case "B": StyleBold = Not StyleBold ' bold
-                                Case "I": StyleItal = Not StyleItal ' italic
-                                Case "U": StyleUndl = Not StyleUndl ' underline
-                                Case "S": StyleStri = Not StyleStri ' strikethrough
-                                Case "R":                           ' reset style
-                                    StyleBold = False
-                                    StyleItal = False
-                                    StyleUndl = False
-                                    StyleStri = False
-                            End Select
-                        Next j
-                    End If
-                    .SelBold = StyleBold
-                    .SelItalic = StyleItal
-                    .SelUnderline = StyleUndl
-                    .SelStrikeThru = StyleStri
-                    FontName = Mid$(saElements(i), StyleSep + 1)
-                    If StrComp(FontName, "%", vbBinaryCompare) = 0 Then
-                        ' default font
-                        .SelFontName = rtb.Font.Name
-                    ElseIf LenB(FontName) > 0 Then
-                        ' change font
-                        .SelFontName = FontName
-                    End If
-                    .SelColor = saElements(i + 1)
-                    RTBSetSelectedText rtb, s
-                    str = str & s
-                End With
-            End If
+            DisplayRichTextElement rtb, saElements(), i, StyleBold, StyleItal, StyleUndl, StyleStri
         Next i
 
         With rtb
@@ -2153,6 +2113,52 @@ ERROR_HANDLER:
     
     Exit Sub
     
+End Sub
+
+Public Sub DisplayRichTextElement(rtb As RichTextBox, saElements() As Variant, ByVal i As Long, _
+        Optional StyleBold As Boolean, Optional StyleItal As Boolean, Optional StyleUndl As Boolean, Optional StyleStri As Boolean)
+    Dim s        As String
+    Dim j        As Long
+    Dim StyleSep As Long
+    Dim FontName As String
+
+    If ((StrictIsNumeric(saElements(i + 1))) And (Len(saElements(i + 2)) > 0)) Then
+        s = KillNull(saElements(i + 2))
+
+        With rtb
+            SetTextSelection rtb, -1, -1
+            StyleSep = InStr(1, saElements(i), ":", vbBinaryCompare)
+            If StyleSep > 1 Then
+                For j = 1 To StyleSep - 1
+                    Select Case UCase$(Mid$(saElements(i), j, 1))
+                        Case "B": StyleBold = Not StyleBold ' bold
+                        Case "I": StyleItal = Not StyleItal ' italic
+                        Case "U": StyleUndl = Not StyleUndl ' underline
+                        Case "S": StyleStri = Not StyleStri ' strikethrough
+                        Case "R":                           ' reset style
+                            StyleBold = False
+                            StyleItal = False
+                            StyleUndl = False
+                            StyleStri = False
+                    End Select
+                Next j
+            End If
+            .SelBold = StyleBold
+            .SelItalic = StyleItal
+            .SelUnderline = StyleUndl
+            .SelStrikeThru = StyleStri
+            FontName = Mid$(saElements(i), StyleSep + 1)
+            If StrComp(FontName, "%", vbBinaryCompare) = 0 Then
+                ' default font
+                .SelFontName = rtb.Font.Name
+            ElseIf LenB(FontName) > 0 Then
+                ' change font
+                .SelFontName = FontName
+            End If
+            .SelColor = saElements(i + 1)
+            RTBSetSelectedText rtb, s
+        End With
+    End If
 End Sub
 
 Public Function IsScrolling(ByRef rtb As RichTextBox) As Long
