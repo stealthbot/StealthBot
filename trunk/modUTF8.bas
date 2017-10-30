@@ -316,12 +316,12 @@ Public Function ApplyGameColors(saElements() As Variant, arr() As Variant) As Bo
                 TextBefore = Left$(saElements(i + 2), CodePos - 1)
                 TextAfter = Mid$(saElements(i + 2), CodePos + CodeLength)
                 If LenB(TextBefore) > 0 And LenB(TextAfter) > 0 Then
-                    ' split required, add element to arr
+                    ' color code mid string, split required, add element to arr
                     ReDim Preserve arr(LBound(arr) To UBound(arr) + 3)
                     arr(j + 2) = TextBefore
                     If Not IsColor Then
                         arr(j + 3) = CombineStyle(saElements(i), StyleSpec)
-                        arr(j + 4) = saElements(i + 1) ' continue color
+                        arr(j + 4) = arr(j + 1) ' continue color
                     Else
                         arr(j + 3) = vbNullString ' continue font
                         arr(j + 4) = Color
@@ -354,8 +354,11 @@ End Function
 
 Private Function CombineStyle(ByVal StyleFont As String, ByVal StyleSpec As String) As String
 
-    If InStr(1, StyleFont, ":", vbBinaryCompare) > 0 Then
-        CombineStyle = StyleSpec & StyleFont
+    Dim ColPos As Long
+    ColPos = InStr(1, StyleFont, ":", vbBinaryCompare)
+
+    If ColPos > 0 Then
+        CombineStyle = Left$(StyleFont, ColPos - 1) & StyleSpec & Mid$(StyleFont, ColPos)
     Else
         CombineStyle = StyleSpec & ":" & StyleFont
     End If
