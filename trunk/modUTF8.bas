@@ -295,6 +295,7 @@ Public Function ApplyGameColors(saElements() As Variant, arr() As Variant) As Bo
     Dim IsColor     As Boolean
     Dim Color       As Long
     Dim StyleSpec   As String
+    Dim CodeLength  As Long
     Dim TextBefore  As String
     Dim TextAfter   As String
 
@@ -309,11 +310,11 @@ Public Function ApplyGameColors(saElements() As Variant, arr() As Variant) As Bo
         arr(j + 1) = saElements(i + 1)
         arr(j + 2) = saElements(i + 2)
         Do
-            CodePos = IsColorCode(saElements(i + 2), IsColor, Color, StyleSpec)
+            CodePos = IsColorCode(saElements(i + 2), IsColor, Color, StyleSpec, CodeLength)
             If CodePos > 0 Then
                 ApplyGameColors = True
                 TextBefore = Left$(saElements(i + 2), CodePos - 1)
-                TextAfter = Mid$(saElements(i + 2), CodePos + 3)
+                TextAfter = Mid$(saElements(i + 2), CodePos + CodeLength)
                 If LenB(TextBefore) > 0 And LenB(TextAfter) > 0 Then
                     ' split required, add element to arr
                     ReDim Preserve arr(LBound(arr) To UBound(arr) + 3)
@@ -364,7 +365,7 @@ End Function
 ' given a string, returns the string index of the first game color code inside
 ' if none, returns 0
 ' if one is found, sets IsColor, Color, and StyleSpec
-Private Function IsColorCode(ByVal sInput As String, ByRef IsColor As Boolean, ByRef Color As Long, ByRef StyleSpec As String) As Long
+Private Function IsColorCode(ByVal sInput As String, ByRef IsColor As Boolean, ByRef Color As Long, ByRef StyleSpec As String, ByRef CodeLength As Long) As Long
 
     Dim i      As Long
     Dim c      As String * 1
@@ -375,6 +376,7 @@ Private Function IsColorCode(ByVal sInput As String, ByRef IsColor As Boolean, B
     IsColor = False
     Color = 0
     StyleSpec = vbNullString
+    CodeLength = 0
 
     ' search by char
     For i = 1 To Len(sInput) - 1
@@ -396,6 +398,7 @@ Private Function IsColorCode(ByVal sInput As String, ByRef IsColor As Boolean, B
 
             If IsCode Then
                 IsColorCode = i
+                CodeLength = 2
                 Exit Function
             End If
         End If
@@ -429,6 +432,7 @@ Private Function IsColorCode(ByVal sInput As String, ByRef IsColor As Boolean, B
 
                 If IsCode Then
                     IsColorCode = i
+                    CodeLength = 3
                     Exit Function
                 End If
             End If
