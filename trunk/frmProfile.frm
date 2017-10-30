@@ -441,17 +441,17 @@ Private Sub rtbField_KeyDown(Index As Integer, KeyCode As Integer, Shift As Inte
     Select Case (KeyCode)
         Case vbKeyB
             If (Shift = vbCtrlMask) Then
-                rtbField(Index).SelText = "ÿcb"
+                rtbField(Index).SelText = Chr$(255) & "cb"
             End If
             
         Case vbKeyU
             If (Shift = vbCtrlMask) Then
-                rtbField(Index).SelText = "ÿcu"
+                rtbField(Index).SelText = Chr$(255) & "cu"
             End If
             
         Case vbKeyI
             If (Shift = vbCtrlMask) Then
-                rtbField(Index).SelText = "ÿci"
+                rtbField(Index).SelText = Chr$(255) & "ci"
             End If
             
         Case vbKeyReturn

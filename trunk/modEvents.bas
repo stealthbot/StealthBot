@@ -749,7 +749,6 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
 
     Const MSG_FRIENDS            As String = "Your friends are:"
     Const MSG_FRIEND_OFFLINE     As String = ", offline"
-    Const MSG_FRIENDS_SB_HIDING  As String = "  ÿci(StealthBot is hiding your offline friends)"
     
     Dim i      As Integer
     Dim User   As String
@@ -948,7 +947,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         ' friends hiding
         If (StrComp(Message, MSG_FRIENDS, vbTextCompare) = 0) Then
             If (Not (BotVars.ShowOfflineFriends)) Then
-                Message = Message & MSG_FRIENDS_SB_HIDING
+                Message = Message & "  " & Chr$(255) & "ci(StealthBot is hiding your offline friends)"
             End If
         End If
         If (StrComp(Right$(Message, Len(MSG_FRIEND_OFFLINE)), MSG_FRIEND_OFFLINE, vbTextCompare) = 0) Then

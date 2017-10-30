@@ -103,7 +103,7 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal IsProxy As Boolean, 
                     Case stBNCS
                         GetErrorString = GetErrorString & "Try choosing a different server in the " & _
                             "Settings dialog. If you are connecting to a gateway address, such as " & _
-                                "ÿcbuseast.battle.netÿcb, try using one of the IP addresses listed below it."
+                                Chr$(255) & "cbuseast.battle.net" & Chr$(255) & "cb, try using one of the IP addresses listed below it."
                     Case stBNLS
                         GetErrorString = GetErrorString & "The server appears to be unreachable " & _
                             "at this time. Please check back in an hour or two, select a different BNLS " & _
@@ -127,7 +127,7 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal IsProxy As Boolean, 
                     Case stBNCS
                         GetErrorString = GetErrorString & "Try choosing a different server in the " & _
                             "Settings dialog. If you are connecting to a gateway address, such as " & _
-                                "ÿcbuseast.battle.netÿcb, try using one of the IP addresses listed below it."
+                                Chr$(255) & "cbuseast.battle.net" & Chr$(255) & "cb, try using one of the IP addresses listed below it."
                     Case stBNLS
                         GetErrorString = GetErrorString & "The server appears to be unavailable at " & _
                             "this time. The bot will keep trying to connect to it; if you continue to " & _

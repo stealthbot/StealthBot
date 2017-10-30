@@ -32,7 +32,7 @@ Public Sub HandleNews(ByVal Buffer As String, ByVal ResponseCode As Long)
             '############# Beta only
             #If BETA Then
                 frmChat.AddChat RTBColors.ServerInfoText, "->> "
-                frmChat.AddChat RTBColors.ServerInfoText, "->> ÿcbStealthBot Beta News"
+                frmChat.AddChat RTBColors.ServerInfoText, "->> " & Chr$(255) & "cbStealthBot Beta News"
                 
                 If InStr(1, Splt(4), "\n") > 0 Then
                     SubSplt() = Split(Splt(4), "\n")
@@ -51,9 +51,9 @@ Public Sub HandleNews(ByVal Buffer As String, ByVal ResponseCode As Long)
             
             If Val(Splt(1)) <> App.REVISION Or (lLauncherVersion > 0 And Val(Splt(2)) <> lLauncherVersion) Then '// old version
                 If (Val(Splt(0)) <= App.REVISION) Then
-                    frmChat.AddChat RTBColors.InformationText, "ÿcbYou are running a development release of StealthBot, visit http://www.stealthbot.net/wiki/BuildLog for more information"
+                    frmChat.AddChat RTBColors.InformationText, Chr$(255) & "cbYou are running a development release of StealthBot, visit http://www.stealthbot.net/wiki/BuildLog for more information"
                 Else
-                    frmChat.AddChat RTBColors.ErrorMessageText, "ÿcbYou are running an outdated version of StealthBot."
+                    frmChat.AddChat RTBColors.ErrorMessageText, Chr$(255) & "cbYou are running an outdated version of StealthBot."
                     frmChat.AddChat RTBColors.ErrorMessageText, "To download an updated version or for more information, visit http://www.stealthbot.net."
                     frmChat.AddChat RTBColors.ErrorMessageText, "To disable version checking, add the line " & Chr(34) & "DisableSBNews=Y" & Chr(34) & " under the [Main] section of your config.ini file."
                 End If
@@ -61,7 +61,7 @@ Public Sub HandleNews(ByVal Buffer As String, ByVal ResponseCode As Long)
             
             If Len(Splt(3)) > 1 Then
                 frmChat.AddChat RTBColors.ServerInfoText, ">> "
-                frmChat.AddChat RTBColors.ServerInfoText, ">> ÿcbStealthBot News"
+                frmChat.AddChat RTBColors.ServerInfoText, ">> " & Chr$(255) & "cbStealthBot News"
                 
                 If InStr(1, Splt(3), "\n") > 0 Then
                     SubSplt() = Split(Splt(3), "\n")

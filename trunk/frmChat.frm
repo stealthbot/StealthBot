@@ -5743,7 +5743,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             
         Case vbKeyB
             If (Shift = vbCtrlMask) Then
-                cboSend.SelText = "ÿcb"
+                cboSend.SelText = Chr$(255) & "cb"
             End If
             
         'Case vbKeyJ
@@ -5753,12 +5753,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             
         Case vbKeyU
             If (Shift = vbCtrlMask) Then
-                cboSend.SelText = "ÿcu"
+                cboSend.SelText = Chr$(255) & "cu"
             End If
             
         Case vbKeyI
             If (Shift = vbCtrlMask) Then
-                cboSend.SelText = "ÿci"
+                cboSend.SelText = Chr$(255) & "ci"
             End If
             
         Case vbKeyDelete
