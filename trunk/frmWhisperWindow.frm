@@ -38,7 +38,6 @@ Begin VB.Form frmWhisperWindow
       _ExtentY        =   4683
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmWhisperWindow.frx":0000
@@ -296,51 +295,8 @@ Private Sub txtSend_KeyPress(KeyAscii As Integer)
 End Sub
 
 Sub AddWhisper(ParamArray saElements() As Variant)
+    Dim arr() As Variant
 
-    On Error Resume Next
-    Dim s As String
-    Dim L As Long
-    Dim i As Integer, oldSelStart As Integer, oldSelLength As Integer
-    
-    oldSelStart = txtSend.SelStart
-    oldSelStart = oldSelStart + txtSend.SelLength
-    
-    If GetForegroundWindow() = Me.hWnd Then
-        rtbWhispers.Locked = True
-    End If
-    
-    If Not BotVars.LockChat Then
-        With rtbWhispers
-            .SelStart = Len(.Text)
-            .SelLength = 0
-            .SelColor = RTBColors.TimeStamps
-            .SelText = s
-            .SelStart = Len(.Text)
-        End With
-        
-        For i = LBound(saElements) To UBound(saElements) Step 2
-            If InStr(1, saElements(i), vbNullChar, vbBinaryCompare) > 0 Then _
-                KillNull saElements(i)
-            
-            If Len(saElements(i + 1)) > 0 Then
-                With rtbWhispers
-                    .SelStart = Len(.Text)
-                    L = .SelStart
-                    .SelLength = 0
-                    .SelColor = saElements(i)
-                    .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
-                    .SelStart = Len(.Text)
-                End With
-            End If
-        Next i
-        
-        Call ColorModify(rtbWhispers, L)
-        
-        txtSend.SelStart = oldSelStart
-        txtSend.SelLength = oldSelLength
-    End If
-    
-'    If rtbWhispers.Locked Then
-'        rtbWhispers.Locked = False
-'    End If
+    arr() = saElements
+    Call DisplayRichText(rtbWhispers, arr)
 End Sub

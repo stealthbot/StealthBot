@@ -1974,6 +1974,10 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         ' store combined length of input
         NewLength = NewLength + Len(KillNull(saElements(i + 2)))
     Next i
+    
+    If ApplyGameColors(saElements(), arr()) Then
+        saElements() = arr()
+    End If
 
     ' input must have non-zero length
     If (NewLength = 0) Then
@@ -2106,7 +2110,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         End If
 
-        ColorModify rtb, GetRTBLength(rtb) - NewLength
+        'ColorModify rtb, GetRTBLength(rtb) - NewLength
 
         If (blUnlock) Then
             SendMessage rtb.hWnd, WM_VSCROLL, _

@@ -2226,7 +2226,6 @@ End Sub
 ' Updated 8/07/07 with greater precision
 Sub AddChat(ParamArray saElements() As Variant)
     Dim arr() As Variant
-    Dim i     As Integer
 
     arr() = saElements
     Call DisplayRichText(frmChat.rtbChat, arr)
@@ -2234,71 +2233,9 @@ End Sub
 
 Sub AddWhisper(ParamArray saElements() As Variant)
     Dim arr() As Variant
-    
-    arr() = saElements
-    
-    Call DisplayRichText(frmChat.rtbWhispers, arr)
-    Exit Sub
-    
-    
-    Dim s As String
-    Dim l As Long
-    Dim i As Integer
-    
-    If Not BotVars.LockChat Then
-        'If ((BotVars.MaxBacklogSize) And (Len(rtbWhispers.text) >= BotVars.MaxBacklogSize)) Then
-            If BotVars.Logging < 2 Then
-                Close #1
-                Open (StringFormat("{0}{1}-WHISPERS.txt", GetFolderPath("Logs"), Format(Date, "YYYY-MM-DD"))) For Append As #1
-            End If
-            
-            With rtbWhispers
-                .Visible = False
-                .SelStart = 0
-                .SelLength = InStr(1, .Text, vbLf, vbBinaryCompare)
-                If BotVars.Logging < 2 Then Print #1, Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
-                .SelText = vbNullString
-                .Visible = True
-            End With
 
-            Close #1
-        'End If
-        
-        Select Case BotVars.TSSetting
-            Case 0: s = " [" & Time & "] "
-            Case 1: s = " [" & Format(Time, "HH:MM:SS") & "] "
-            Case 2: s = " [" & Format(Time, "HH:MM:SS") & "." & GetCurrentMS & "] "
-            Case 3: s = vbNullString
-        End Select
-        
-        With rtbWhispers
-            .SelStart = Len(.Text)
-            .SelLength = 0
-            .SelColor = RTBColors.TimeStamps
-            If .SelBold = True Then .SelBold = False
-            If .SelItalic = True Then .SelItalic = False
-            .SelText = s
-            .SelStart = Len(.Text)
-        End With
-        
-        For i = LBound(saElements) To UBound(saElements) Step 2
-            If InStr(1, saElements(i), vbNullChar, vbBinaryCompare) > 0 Then _
-                KillNull saElements(i)
-            
-            If Len(saElements(i + 1)) > 0 Then
-                With rtbWhispers
-                    .SelStart = Len(.Text)
-                    l = .SelStart
-                    .SelLength = 0
-                    .SelColor = saElements(i)
-                    .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
-                    .SelStart = Len(.Text)
-                End With
-            End If
-        Next i
-        
-        Call ColorModify(rtbWhispers, l)
-    End If
+    arr() = saElements
+    Call DisplayRichText(frmChat.rtbWhispers, arr)
 End Sub
 
 

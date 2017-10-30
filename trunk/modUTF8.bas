@@ -287,3 +287,156 @@ Public Sub SetTextSelection(cnt As Control, ByVal sParam As Long, ByVal eParam A
     SendMessageW cnt.hWnd, EM_EXSETSEL, 0, ByVal VarPtr(CharRangeObj)
 
 End Sub
+
+Public Function ApplyGameColors(saElements() As Variant, arr() As Variant) As Boolean
+
+    Dim i, j        As Long
+    Dim CodePos     As Long
+    Dim IsColor     As Boolean
+    Dim Color       As Long
+    Dim StyleSpec   As String
+    Dim TextBefore  As String
+    Dim TextAfter   As String
+
+    ApplyGameColors = False
+
+    ' start off with the same number of elements
+    ReDim arr(LBound(saElements) To UBound(saElements))
+
+    j = LBound(arr)
+    For i = LBound(saElements) To UBound(saElements) Step 3
+        arr(j) = saElements(i)
+        arr(j + 1) = saElements(i + 1)
+        arr(j + 2) = saElements(i + 2)
+        Do
+            CodePos = IsColorCode(saElements(i + 2), IsColor, Color, StyleSpec)
+            If CodePos > 0 Then
+                ApplyGameColors = True
+                TextBefore = Left$(saElements(i + 2), CodePos - 1)
+                TextAfter = Mid$(saElements(i + 2), CodePos + 3)
+                If LenB(TextBefore) > 0 And LenB(TextAfter) > 0 Then
+                    ' split required, add element to arr
+                    ReDim Preserve arr(LBound(arr) To UBound(arr) + 3)
+                    arr(j + 2) = TextBefore
+                    If Not IsColor Then
+                        arr(j + 3) = CombineStyle(saElements(i), StyleSpec)
+                        arr(j + 4) = saElements(i + 1) ' continue color
+                    Else
+                        arr(j + 3) = vbNullString ' continue font
+                        arr(j + 4) = Color
+                    End If
+                    arr(j + 5) = TextAfter
+                    j = j + 3
+                    saElements(i + 2) = TextAfter
+                ElseIf LenB(TextBefore) = 0 Then
+                    ' color code starts element
+                    If Not IsColor Then
+                        arr(j) = CombineStyle(arr(j), StyleSpec)
+                        'arr(j + 1) = saElements(i + 1) ' continue color
+                    Else
+                        'arr(j) = vbNullString  ' continue font
+                        arr(j + 1) = Color
+                    End If
+                    arr(j + 2) = TextAfter
+                    saElements(i + 2) = TextAfter
+                ElseIf LenB(TextAfter) = 0 Then
+                    ' color code ends element
+                    arr(j + 2) = TextBefore
+                    saElements(i + 2) = vbNullString
+                End If
+            End If
+        Loop While CodePos > 0
+        j = j + 3
+    Next i
+
+End Function
+
+Private Function CombineStyle(ByVal StyleFont As String, ByVal StyleSpec As String) As String
+
+    If InStr(1, StyleFont, ":", vbBinaryCompare) > 0 Then
+        CombineStyle = StyleSpec & StyleFont
+    Else
+        CombineStyle = StyleSpec & ":" & StyleFont
+    End If
+
+End Function
+
+' given a string, returns the string index of the first game color code inside
+' if none, returns 0
+' if one is found, sets IsColor, Color, and StyleSpec
+Private Function IsColorCode(ByVal sInput As String, ByRef IsColor As Boolean, ByRef Color As Long, ByRef StyleSpec As String) As Long
+
+    Dim i      As Long
+    Dim c      As String * 1
+    Dim CodeID As String
+    Dim IsCode As Boolean
+
+    ' default byrefs
+    IsColor = False
+    Color = 0
+    StyleSpec = vbNullString
+
+    ' search by char
+    For i = 1 To Len(sInput) - 1
+        c = Mid$(sInput, i, 1)
+        If AscW(c) = &HC1 Or c = Chr$(&HC1) Then
+            ' DIABLO/WARCRAFT II/STARCRAFT
+            CodeID = Mid$(sInput, i + 1, 1)
+            IsCode = True
+            Select Case CodeID
+                Case "Q":           IsColor = True: Color = &H5D5D5D  ' grey
+                Case "R":           IsColor = True: Color = &H36E01E  ' green
+                Case "Z", "X", "S": IsColor = True: Color = &H74A9A0  ' yellow
+                Case "Y", "[":      IsColor = True: Color = &H5226E7  ' red
+                Case "V", "@":      IsColor = True: Color = &HE84D62  ' blue
+                Case "W", "P":      IsColor = True: Color = &HFFFFFF  ' white
+                Case "T", "U":      IsColor = True: Color = &HCCCC00  ' cyan/teal
+                Case Else:          IsCode = False
+            End Select
+
+            If IsCode Then
+                IsColorCode = i
+                Exit Function
+            End If
+        End If
+
+        If AscW(c) = &HFF Or c = Chr$(&HFF) Then
+            ' DIABLO II
+            ' ycX where X = b, i, u, ., ;, :, <, or 0-9
+            If StrComp(Mid$(sInput, i + 1, 1), "c", vbTextCompare) = 0 Then
+                CodeID = Mid$(sInput, i + 2, 1)
+                IsCode = True
+                Select Case CodeID
+                    Case "b":  StyleSpec = "B"
+                    Case "i":  StyleSpec = "I"
+                    Case "u":  StyleSpec = "U"
+                    Case ".":  StyleSpec = "BU"
+                    Case ";":  IsColor = True: Color = &HCE008D ' purple
+                    Case ":":  IsColor = True: Color = &H2D828  ' ligher green
+                    Case "<":  IsColor = True: Color = &HA200&  ' dark green
+                    Case "0":  IsColor = True: Color = &HFFFFFF ' white
+                    Case "1":  IsColor = True: Color = &H3E3ECE ' red
+                    Case "2":  IsColor = True: Color = &HCE00&  ' green
+                    Case "3":  IsColor = True: Color = &H9C4044 ' blue
+                    Case "4":  IsColor = True: Color = &H6091A1 ' gold
+                    Case "5":  IsColor = True: Color = &H555555 ' grey
+                    Case "6":  IsColor = True: Color = &H80808  ' black
+                    Case "7":  IsColor = True: Color = &H659DA8 ' gold
+                    Case "8":  IsColor = True: Color = &H88CE&  ' gold orange
+                    Case "9":  IsColor = True: Color = &H51CECE ' light yellow
+                    Case Else: IsCode = False
+                End Select
+
+                If IsCode Then
+                    IsColorCode = i
+                    Exit Function
+                End If
+            End If
+        End If
+    Next i
+
+    ' nothing found
+    IsColorCode = 0
+
+End Function
+
