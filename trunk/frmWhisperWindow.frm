@@ -122,12 +122,18 @@ Private Sub Form_Load()
     
     With frmChat.rtbChat
         rtbWhispers.Font.Name = .Font.Name
-        rtbWhispers.Font.Bold = .Font.Bold
         rtbWhispers.Font.Size = .Font.Size
         txtSend.Font.Name = .Font.Name
-        txtSend.Font.Bold = .Font.Bold
         txtSend.Font.Size = .Font.Size
     End With
+    
+    #If (COMPILE_DEBUG = 0) Then
+        HookWindowProc Me.hWnd
+    #End If
+
+    If Config.UrlDetection Then
+        EnableURLDetect rtbWhispers.hWnd
+    End If
     
     Form_Resize
     
@@ -138,6 +144,11 @@ End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     Call DestroyWW(m_imyIndex)
+
+    DisableURLDetect rtbWhispers.hWnd
+    #If (COMPILE_DEBUG = 0) Then
+        UnhookWindowProc Me.hWnd
+    #End If
 End Sub
 
 Private Sub mnuClose_Click()

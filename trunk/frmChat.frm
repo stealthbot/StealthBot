@@ -3297,6 +3297,7 @@ Sub Form_Unload(Cancel As Integer)
     Call modWarden.WardenCleanup(WardenInstance)
 
     DisableURLDetect frmChat.rtbChat.hWnd
+    DisableURLDetect frmChat.rtbWhispers.hWnd
     UnhookWindowProc frmChat.hWnd
     
     DestroyAllWWs
@@ -7265,8 +7266,10 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     If Config.UrlDetection Then
         EnableURLDetect rtbChat.hWnd
+        EnableURLDetect rtbWhispers.hWnd
     Else
         DisableURLDetect rtbChat.hWnd
+        DisableURLDetect rtbWhispers.hWnd
     End If
     
     ' reload quotes file
