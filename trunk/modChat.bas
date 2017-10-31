@@ -53,8 +53,9 @@ Private Const EM_SETTEXTEX As Long = WM_USER + 97
 Private Const EM_GETTEXTEX As Long = WM_USER + 94
 Private Const EM_GETTEXTLENGTHEX As Long = WM_USER + 95
 
-Private Const EM_SCROLL   As Long = &HB5
-Private Const EM_GETTHUMB As Long = &HBE
+Private Const EM_SCROLL      As Long = &HB5
+Private Const EM_SCROLLCARET As Long = &HB7
+Private Const EM_GETTHUMB    As Long = &HBE
 
 Private Const SB_VERT As Long = 1
 Private Const SB_HORZ As Long = 0
@@ -272,7 +273,6 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         With rtb
             SetTextSelection rtb, -1, -1
             RTBSetSelectedText rtb, vbCrLf
-            SetTextSelection rtb, -1, -1
         End With
 
         If (LogThis) Then
@@ -287,7 +287,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
         If Not blnCanVScroll And CanVScroll(rtb) Then
             ' didn't previously have scrollbar but now does
-            SetVScrollBottom rtb
+            ScrollToBottom rtb
             If (blUnlock) Then
                 rtb.Visible = True
             End If
@@ -842,10 +842,12 @@ Public Function CanVScroll(cnt As Control) As Boolean
 
 End Function
 
-Public Sub SetVScrollBottom(cnt As Control)
+Public Sub ScrollToBottom(cnt As Control)
 
-    LockWindowUpdate cnt.hWnd
-    SendMessage cnt.hWnd, EM_SCROLL, SB_BOTTOM, &H0
-    LockWindowUpdate &H0
+    SetTextSelection cnt, -1, -1
+    SendMessageW cnt.hWnd, EM_SCROLLCARET, 0&, 0&
+    'LockWindowUpdate cnt.hWnd
+    'SendMessage cnt.hWnd, EM_SCROLL, SB_BOTTOM, &H0
+    'LockWindowUpdate &H0
 
 End Sub
