@@ -4891,9 +4891,9 @@ Sub ClearChatScreen(Optional ByVal ClearOption As Integer = 3)
         rtbChat.Text = vbNullString
         ' add a sensical cleared message
         If ClearOption And 2 Then
-            AddChat RTBColors.InformationText, "Chat window cleared."
+            AddChat RTBColors.ConsoleText, ">> Chat window cleared."
         Else
-            AddChat RTBColors.InformationText, "Chat and whisper windows cleared."
+            AddChat RTBColors.ConsoleText, ">> Chat and whisper windows cleared."
         End If
     End If
     

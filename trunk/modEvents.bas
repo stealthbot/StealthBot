@@ -1025,17 +1025,27 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     
     If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
         If (AllowedToTalk(Username, Message)) Then
-            'If (GetVeto = False) Then
-                frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, Username & _
-                    Space$(1), RTBColors.EmoteText, Message & ">"
-            'End If
-            
+            ' catch phrases
             If (Catch(0) <> vbNullString) Then
                 CheckPhrase Username, Message, CPEMOTE
             End If
-            
+
+            ' flash window on events
             If (frmChat.mnuFlash.Checked) Then
                 FlashWindow
+            End If
+
+            ' display to screen
+            frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, Username & _
+                    Space$(1), RTBColors.EmoteText, Message & ">"
+
+            ' vote check
+            If (VoteDuration > 0) Then
+                If (InStr(1, LCase(Message), "yes", vbTextCompare) > 0) Then
+                    Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDYES, Username)
+                ElseIf (InStr(1, LCase(Message), "no", vbTextCompare) > 0) Then
+                    Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDNO, Username)
+                End If
             End If
         End If
         
@@ -1044,15 +1054,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         
         On Error Resume Next
-        
-        If ((BotVars.NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
-            If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
-                vbBinaryCompare) = 0) Then
-                
-                Message = BotVars.Trigger & Mid$(Message, Len(BotVars.TriggerLong) + 1)
-            End If
-        End If
-        
+
         RunInAll "Event_UserEmote", Username, Flags, Message
     End If
 
@@ -1662,12 +1664,23 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     
     If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
         If (Message <> vbNullString) Then
+            ' user and message filters
             If (AllowedToTalk(Username, Message)) Then
+                ' catch phrases
+                If (Catch(0) <> vbNullString) Then
+                    CheckPhrase Username, Message, CPTALK
+                End If
+
+                ' flash window on events
+                If (frmChat.mnuFlash.Checked) Then
+                    FlashWindow
+                End If
+
+                ' prepare to display, get colors
                 ' are we watching the user?
                 'If (StrComp(WatchUser, Username, vbTextCompare) = 0) Then
                 If (PrepareCheck(Username) Like PrepareCheck(WatchUser)) Then
                     UsernameColor = RTBColors.ErrorMessageText
-                    
                 ' is user an operator?
                 ElseIf ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
                     UsernameColor = RTBColors.TalkUsernameOp
@@ -1677,40 +1690,30 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
                 
                 If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or ((Flags And USER_SYSOP&) = _
                         USER_SYSOP&)) Then
-                        
                     TextColor = RGB(97, 105, 255)
-                    
                     CaratColor = RGB(97, 105, 255)
                 Else
                     TextColor = RTBColors.TalkNormalText
-                    
                     CaratColor = RTBColors.Carats
                 End If
-                
-                'If (GetVeto = False) Then
-                    frmChat.AddChat CaratColor, "<", UsernameColor, Username, CaratColor, "> ", _
+
+                ' display to screen
+                frmChat.AddChat CaratColor, "<", UsernameColor, Username, CaratColor, "> ", _
                         TextColor, Message
-                'End If
-                
-                If (Catch(0) <> vbNullString) Then
-                    CheckPhrase Username, Message, CPTALK
+
+                ' vote check
+                If (VoteDuration > 0) Then
+                    If (InStr(1, LCase(Message), "yes", vbTextCompare) > 0) Then
+                        Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDYES, Username)
+                    ElseIf (InStr(1, LCase(Message), "no", vbTextCompare) > 0) Then
+                        Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDNO, Username)
+                    End If
                 End If
-                    
-                If (frmChat.mnuFlash.Checked) Then
-                    FlashWindow
-                End If
+
+                ' process command
+                Call ProcessCommand(Username, Message, False, False)
             End If
         End If
-        
-        If (VoteDuration > 0) Then
-            If (InStr(1, LCase(Message), "yes", vbTextCompare) > 0) Then
-                Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDYES, Username)
-            ElseIf (InStr(1, LCase(Message), "no", vbTextCompare) > 0) Then
-                Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDNO, Username)
-            End If
-        End If
-        
-        Call ProcessCommand(Username, Message, False, False)
         
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' call event script function
@@ -1718,17 +1721,16 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
 
         On Error Resume Next
         
+        ' fudge trigger for scripts?
         If ((BotVars.NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
             If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
                     vbBinaryCompare) = 0) Then
-                
                 Message = BotVars.Trigger & Mid$(Message, Len(BotVars.TriggerLong) + 1)
             End If
         End If
-    
+
         RunInAll "Event_UserTalk", Username, Flags, Message, Ping
     End If
-    
 
     Exit Sub
 ERROR_HANDLER:
@@ -1896,93 +1898,64 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
     'Dim s       As String
     Dim lCarats As Long
     Dim WWIndex As Integer
-    Dim FIndex As Integer
-    
+    Dim FIndex  As Integer
+    Dim IsES    As Boolean
+    Dim IsShown As Boolean
+
     Username = ConvertUsername(Username)
-    
+
+    ' filters...
+    IsES = False
+
     ' filter email service?
-    If Config.HideExtraServerAlerts Then
-        If (StrComp(Username, EMAIL_SERVICE_USER, vbBinaryCompare) = 0) Then
-            Exit Sub
-        End If
+    If (StrComp(Username, EMAIL_SERVICE_USER, vbBinaryCompare) = 0) Then
+        IsES = True
+        IsShown = (Not Config.HideExtraServerAlerts)
     End If
-    
+
     ' filter friend alerts?
     If Config.HideMutualFriendAlerts Then
         FIndex = frmChat.FriendListHandler.UsernameToFLIndex(Username)
         If FIndex <> 0 Then
             If g_Friends(FIndex).IsMutual Or Not g_Friends(FIndex).IsOnline Then
                 If (StrComp(Left$(Message, Len(MSG_YOUR_FRIEND)), MSG_YOUR_FRIEND, vbBinaryCompare) = 0) Then
-                    Exit Sub
+                    IsShown = False
                 End If
             End If
         End If
     End If
-    
-    If (Catch(0) <> vbNullString) Then
-        Call CheckPhrase(Username, Message, CPWHISPER)
-    End If
-    
-    If (frmChat.mnuFlash.Checked) Then
-        FlashWindow
-    End If
-    
-    If (StrComp(Message, BotVars.ChannelPassword, vbTextCompare) = 0) Then
-        lCarats = g_Channel.GetUserIndex(Username)
-        
-        If (lCarats > 0) Then
-            With g_Channel.Users(lCarats)
-                .PassedChannelAuth = True
-            End With
-            
-            frmChat.AddQ "/w " & Username & " Password accepted."
+
+    ' user and message filters
+    If (AllowedToTalk(Username, Message) And IsShown) Then
+        ' catch phrases
+        If (Not IsES And Catch(0) <> vbNullString) Then
+            Call CheckPhrase(Username, Message, CPWHISPER)
         End If
-    End If
-    
-    If (VoteDuration > 0) Then
-        If (InStr(1, Message, "yes", vbTextCompare) > 0) Then
-            Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDYES, Username)
-        ElseIf (InStr(1, Message, "no", vbTextCompare) > 0) Then
-            Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDNO, Username)
+
+        ' flash window on events
+        If (Not IsES And frmChat.mnuFlash.Checked) Then
+            FlashWindow
         End If
-    End If
-            
-    lCarats = RTBColors.WhisperCarats
-    
-    If (Flags And &H1) Then
-        lCarats = COLOR_BLUE
-    End If
-    
-    '####### Mail check
-    If (mail) Then
-        If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-            Dim Msg As udtMail
-            
-            If (GetMailCount(Username) > 0) Then
-                Call GetMailMessage(Username, Msg)
-                
-                If (Len(RTrim(Msg.To)) > 0) Then
-                    frmChat.AddQ "/w " & Username & " Message from " & _
-                        RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
-                End If
-            End If
+
+        ' display to screen
+        lCarats = RTBColors.WhisperCarats
+
+        If (Flags And &H1) Then
+            lCarats = COLOR_BLUE
         End If
-    End If
-    '#######
-    
-    If ((Not Filters) Or ((Not (CheckMsg(Message, Username, -5))) And (Not (CheckBlock(Username))))) Then
-    
+
         If (Not (frmChat.mnuHideWhispersInrtbChat.Checked)) Then
             frmChat.AddChat lCarats, "<From ", RTBColors.WhisperUsernames, _
                 Username, lCarats, "> ", RTBColors.WhisperText, Message
         End If
-        
+
         frmChat.AddWhisper lCarats, "<From ", RTBColors.WhisperUsernames, _
             Username, lCarats, "> ", RTBColors.WhisperText, Message
-            
+
         frmChat.rtbWhispers.Visible = rtbWhispersVisible
-                       
-        If (frmChat.mnuToggleWWUse.Checked) Then
+
+        ' individual whisper windows
+        If (Not IsES And frmChat.mnuToggleWWUse.Checked) Then
         'If ((frmChat.mnuToggleWWUse.Checked) And _
             '(frmChat.WindowState <> vbMinimized)) Then
             
@@ -1992,24 +1965,66 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
                 With colWhisperWindows.Item(WWIndex)
                     If (.Shown = False) Then
                         'window was previously hidden
-                        
+
                         ShowWW WWIndex
                     End If
-                    
+
                     .Caption = "Whisper Window: " & Username
-                    
-                    .AddWhisper RTBColors.WhisperUsernames, "> " & Username, lCarats, _
-                        ": ", RTBColors.WhisperText, Message
+                    .AddWhisper lCarats, "<", RTBColors.WhisperUsernames, _
+                        Username, lCarats, "> ", RTBColors.WhisperText, Message
                 End With
             End If
         End If
-    
-        Call ProcessCommand(Username, Message, False, True)
-    End If
-    
-    If (Not (CheckBlock(Username))) Then
-        LastWhisper = Username
-        LastWhisperFromTime = Now
+
+        ' channel password
+        If (Not IsES And StrComp(Message, BotVars.ChannelPassword, vbTextCompare) = 0) Then
+            lCarats = g_Channel.GetUserIndex(Username)
+
+            If (lCarats > 0) Then
+                With g_Channel.Users(lCarats)
+                    .PassedChannelAuth = True
+                End With
+
+                frmChat.AddQ "/w " & Username & " Password accepted."
+            End If
+        End If
+
+        ' vote check
+        If (Not IsES And VoteDuration > 0) Then
+            If (InStr(1, Message, "yes", vbTextCompare) > 0) Then
+                Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDYES, Username)
+            ElseIf (InStr(1, Message, "no", vbTextCompare) > 0) Then
+                Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDNO, Username)
+            End If
+        End If
+
+        '####### Mail check
+        If (Not IsES And mail) Then
+            If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
+                Dim Msg As udtMail
+
+                If (GetMailCount(Username) > 0) Then
+                    Call GetMailMessage(Username, Msg)
+
+                    If (Len(RTrim(Msg.To)) > 0) Then
+                        frmChat.AddQ "/w " & Username & " Message from " & _
+                            RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
+                    End If
+                End If
+            End If
+        End If
+        '#######
+
+        ' process as command
+        If (Not IsES) Then
+            Call ProcessCommand(Username, Message, False, True)
+        End If
+
+        ' set last whisper
+        If (Not IsES) Then
+            LastWhisper = Username
+            LastWhisperFromTime = Now
+        End If
     End If
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -2037,33 +2052,38 @@ Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, By
         On Error GoTo ERROR_HANDLER
     #End If
     
+    Const FRIEND_MSG_USER As String = "your friends"
+    
+    Dim lCarats As Long
     Dim WWIndex As Integer
     
     'frmChat.AddChat vbRed, Username
     
-    If (StrComp(Username, "your friends", vbTextCompare) <> 0) Then
+    If (StrComp(Username, FRIEND_MSG_USER, vbBinaryCompare) <> 0) Then
         Username = ConvertUsername(Username)
         
         LastWhisperTo = Username
     Else
         LastWhisperTo = "%f%"
     End If
+    
+    lCarats = RTBColors.WhisperCarats
 
     If (Not (frmChat.mnuHideWhispersInrtbChat.Checked)) Then
-        frmChat.AddChat RTBColors.WhisperCarats, "<To ", RTBColors.WhisperUsernames, _
-            Username, RTBColors.WhisperCarats, "> ", RTBColors.WhisperText, Message
+        frmChat.AddChat lCarats, "<To ", RTBColors.WhisperUsernames, _
+            Username, lCarats, "> ", RTBColors.WhisperText, Message
     End If
     
     If ((frmChat.mnuHideWhispersInrtbChat.Checked) Or _
         (frmChat.mnuToggleShowOutgoing.Checked)) Then
         
-        frmChat.AddWhisper RTBColors.WhisperCarats, "<To ", RTBColors.WhisperUsernames, _
-            Username, RTBColors.WhisperCarats, "> ", RTBColors.WhisperText, Message
+        frmChat.AddWhisper lCarats, "<To ", RTBColors.WhisperUsernames, _
+            Username, lCarats, "> ", RTBColors.WhisperText, Message
     End If
 
     If (frmChat.mnuToggleWWUse.Checked) Then
         If ((InStr(1, Message, "ß~ß") = 0) And _
-            (StrComp(Username, "your friends") <> 0)) Then
+            (StrComp(Username, FRIEND_MSG_USER, vbBinaryCompare) <> 0)) Then
             
             WWIndex = AddWhisperWindow(Username)
             
@@ -2071,9 +2091,11 @@ Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, By
                 Call ShowWW(WWIndex)
             End If
             
-            colWhisperWindows.Item(WWIndex).Caption = "Whisper Window: " & Username
-            colWhisperWindows.Item(WWIndex).AddWhisper RTBColors.TalkBotUsername, "> " & _
-                GetCurrentUsername, RTBColors.WhisperCarats, ": ", RTBColors.WhisperText, Message
+            With colWhisperWindows.Item(WWIndex)
+                .Caption = "Whisper Window: " & Username
+                .AddWhisper lCarats, "<", RTBColors.TalkBotUsername, _
+                    GetCurrentUsername, lCarats, "> ", RTBColors.WhisperText, Message
+            End With
         End If
     End If
     
