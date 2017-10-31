@@ -222,13 +222,6 @@ Public Const CPWHISPER As Byte = 2
 
 Public Const GWL_WNDPROC = (-4)
 
-Public Const WM_VSCROLL = &H115
-Public Const SB_VERT As Long = 1
-Public Const EM_GETTHUMB = &HBE
-Public Const SB_HORZ As Long = 0
-Public Const SB_BOTH As Long = 3
-Public Const SB_THUMBPOSITION = &H4
-
 Public Const BTRUE& = 1
 Public Const BFALSE& = 0
 

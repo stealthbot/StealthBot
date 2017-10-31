@@ -5674,15 +5674,11 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
         Case vbKeyV 'PASTE
             Dim x() As String
             Dim n As Long
-            
-            If (IsScrolling(rtbChat)) Then
-                LockWindowUpdate rtbChat.hWnd
-            
-                SendMessage rtbChat.hWnd, EM_SCROLL, SB_BOTTOM, &H0
-                
-                LockWindowUpdate &H0
+
+            If (GetVScrollPosition(rtbChat)) Then
+                SetVScrollBottom rtbChat
             End If
-        
+
             If (Shift = vbCtrlMask) Then
                 On Error Resume Next
                 
@@ -5870,17 +5866,13 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             Dim DoRunCommands     As Boolean
             Dim NoProcs()         As String
             Dim StartOutfilterPos As Long
-            
-            If (IsScrolling(rtbChat)) Then
-                LockWindowUpdate rtbChat.hWnd
-            
-                SendMessage rtbChat.hWnd, EM_SCROLL, SB_BOTTOM, &H0
-                
-                LockWindowUpdate &H0
+
+            If (GetVScrollPosition(rtbChat)) Then
+                SetVScrollBottom rtbChat
             End If
-            
+
             DoRunCommands = True
-        
+
             Select Case (Shift)
                 Case vbShiftMask 'CTRL+ENTER - rewhisper
                     If LenB(cboSend.Text) > 0 Then
@@ -5920,7 +5912,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             If (Left$(Value, 6) = "/tell ") Then
                 Value = "/w " & Mid$(Value, 7)
             End If
-                
+            
             If DoRunCommands Then
                 If (Left$(Value, 1) = "/") Then
                     If (LenB(Config.ServerCommandList) > 0) Then
