@@ -113,17 +113,20 @@ Public Declare Function SetCursorPos Lib "user32" (ByVal x As Long, ByVal y As L
 Public Declare Function SetCursor Lib "user32" (ByVal hCursor As Long) As Long
 Public Declare Function LoadCursor Lib "user32" Alias "LoadCursorA" (ByVal hInstance As Long, ByVal lpCursorName As Long) As Long
 
-Public Const CB_LIMITTEXT = &H141
-Public Const SB_BOTTOM = 7
-Public Const EM_SCROLL = &HB5
-Public Const IDC_HAND = 32649&
+Public Const CB_LIMITTEXT As Long = &H141
+Public Const SB_BOTTOM    As Long = 7
+Public Const EM_SCROLL    As Long = &HB5
+Public Const WS_HSCROLL   As Long = &H100000
+Public Const WS_VSCROLL   As Long = &H200000
+Public Const GWL_STYLE    As Long = (-16)
+Public Const IDC_HAND     As Long = 32649&
 
 Public Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" ( _
     ByVal hWnd As Long, _
     ByVal nIndex As Long, _
     ByVal dwNewLong As Long) As Long
     
-Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hWnd _
+Public Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hWnd _
     As Long, ByVal nIndex As Long) As Long
     
 Public Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" ( _

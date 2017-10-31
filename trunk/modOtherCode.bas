@@ -1893,6 +1893,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim arr()          As Variant
     Dim s              As String
     Dim lngVerticalPos As Long
+    Dim blnCanVScroll  As Boolean
     Dim Diff           As Long
     Dim i              As Long
     Dim intRange       As Long
@@ -1990,7 +1991,8 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
         ' is the RTB at the bottom?
         lngVerticalPos = IsScrolling(rtb)
-    
+        blnCanVScroll = CanVScroll(rtb)
+
         If (lngVerticalPos) Then
             rtb.Visible = False
 
@@ -2060,6 +2062,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         With rtb
             SetTextSelection rtb, -1, -1
             RTBSetSelectedText rtb, vbCrLf
+            SetTextSelection rtb, -1, -1
         End With
 
         If (LogThis) Then
@@ -2072,7 +2075,15 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
         'ColorModify rtb, GetRTBLength(rtb) - NewLength
 
-        If (blUnlock) Then
+        If Not blnCanVScroll And CanVScroll(rtb) Then
+            ' didn't previously have scrollbar but now does
+            LockWindowUpdate rtb.hWnd
+            SendMessage rtb.hWnd, EM_SCROLL, SB_BOTTOM, &H0
+            LockWindowUpdate &H0
+            If (blUnlock) Then
+                rtb.Visible = True
+            End If
+        ElseIf (blUnlock) Then
             SendMessage rtb.hWnd, WM_VSCROLL, _
                 SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&
                 
@@ -2187,6 +2198,14 @@ Public Function IsScrolling(ByRef rtb As RichTextBox) As Long
         End If
         
     End If
+
+End Function
+
+Public Function CanVScroll(cnt As Control) As Boolean
+
+    Dim Style As Long
+    Style = GetWindowLong(cnt.hWnd, GWL_STYLE)
+    CanVScroll = CBool((Style And WS_VSCROLL) = WS_VSCROLL)
 
 End Function
 
