@@ -7468,8 +7468,7 @@ Private Sub ChangeRTBFont(rtb As RichTextBox, ByVal NewFont As String, ByVal New
     Dim tmpBuffer As String
     
     With rtb
-        .SelStart = 0
-        .SelLength = Len(.Text)
+        SetTextSelection rtb, 0, -1
         .SelFontSize = NewSize
         .SelFontName = NewFont
         tmpBuffer = .TextRTF
@@ -7477,7 +7476,7 @@ Private Sub ChangeRTBFont(rtb As RichTextBox, ByVal NewFont As String, ByVal New
         .Font.Name = NewFont
         .Font.Size = NewSize
         .TextRTF = tmpBuffer
-        .SelStart = Len(.Text)
+        SetTextSelection rtb, -1, -1
     End With
 End Sub
 
