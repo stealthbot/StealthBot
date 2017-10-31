@@ -11,7 +11,7 @@ Begin VB.Form frmWhisperWindow
    LinkTopic       =   "Form1"
    ScaleHeight     =   3270
    ScaleWidth      =   4695
-   StartUpPosition =   1  'CenterOwner
+   StartUpPosition =   3  'Windows Default
    Begin MSComDlg.CommonDialog cdl 
       Left            =   2160
       Top             =   1440
@@ -38,6 +38,7 @@ Begin VB.Form frmWhisperWindow
       _ExtentY        =   4683
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmWhisperWindow.frx":0000
