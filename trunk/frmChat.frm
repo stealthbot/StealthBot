@@ -55,6 +55,7 @@ Begin VB.Form frmChat
          Object.Width           =   4145
       EndProperty
       BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         Alignment       =   2
          SubItemIndex    =   1
          Object.Width           =   1252
       EndProperty
