@@ -752,7 +752,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     
     Dim i      As Integer
     Dim User   As String
-    Dim bHide  As Boolean
+    Dim Hidden As Boolean
     Dim ToANSI As String
     
     If (Message = vbNullString) Then
@@ -761,24 +761,27 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     
     Username = ConvertUsername(Username)
 
+    Hidden = False
+
     If g_Clan.InClan Then
         If (StrComp(g_Channel.Name, "Clan " & g_Clan.Name, vbTextCompare) = 0) Then
             If (g_Clan.PendingClanMOTD) Then
                 Call frmChat.AddChat(RTBColors.ServerInfoText, Message)
                 g_Clan.PendingClanMOTD = False
+                On Error Resume Next
+                RunInAll "Event_ServerInfo", Message
                 Exit Sub
             End If
         End If
     End If
-    
+
     If (g_request_receipt) Then ' for .cs and .cb commands
         Caching = True
-    
-        
+
         ' Changed 08-18-09 - Hdx - Uses the new Channel cache function, Eventually to beremoved to script
         'Call CacheChannelList(Message, 1)
         Call CacheChannelList(enAdd, Message)
-        
+
         'With frmChat.cacheTimer
         '    .Enabled = False
         '    .Enabled = True
@@ -788,12 +791,12 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     If (InStr(1, Message, Space$(1), vbBinaryCompare) <> 0) Then
         ' what is our current gateway name?
         If (LenB(BotVars.Gateway) = 0) Then
-            If (StrComp(Left$(Message, Len(MSG_WHOIS_1)), MSG_WHOIS_1, vbTextCompare) = 0) And (InStr(1, Message, MSG_WHOIS_2, _
-                    vbTextCompare) > 0) Then
+            If (StrComp(Left$(Message, Len(MSG_WHOIS_1)), MSG_WHOIS_1, vbBinaryCompare) = 0) And (InStr(1, Message, MSG_WHOIS_2, _
+                    vbBinaryCompare) > 0) Then
 
-                If ((InStr(1, Message, MSG_WHOIS_IN_CHANNEL, vbTextCompare) = 0) And _
-                        (InStr(1, Message, MSG_WHOIS_IN_GAME, vbTextCompare) = 0) And _
-                        (InStr(1, Message, MSG_WHOIS_IN_PRIVATE, vbTextCompare) = 0)) Then
+                If ((InStr(1, Message, MSG_WHOIS_IN_CHANNEL, vbBinaryCompare) = 0) And _
+                        (InStr(1, Message, MSG_WHOIS_IN_GAME, vbBinaryCompare) = 0) And _
+                        (InStr(1, Message, MSG_WHOIS_IN_PRIVATE, vbBinaryCompare) = 0)) Then
 
                     i = InStrRev(Message, Space$(1))
 
@@ -804,9 +807,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                     Call DoChannelJoinHome
 
                     Call InsertDummyQueueEntry
-
+                    
+                    On Error Resume Next
                     RunInAll "Event_LoggedOn", CurrentUsername, BotVars.Product
-
+                    RunInAll "Event_ServerInfo", Message
                     Exit Sub
                 End If
             End If
@@ -814,21 +818,21 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
 
         ' filter "extra" messages: you are still marked as away, no one hears you, and server welcome messages
         If Config.HideExtraServerAlerts Then
-            If ((StrComp(Message, MSG_STILL_AWAY, vbTextCompare) = 0) Or _
-                (StrComp(Message, MSG_NO_ONE_HEARS, vbTextCompare) = 0) Or _
-                (StrComp(Message, MSG_SERVER_WELCOME, vbTextCompare) = 0) Or _
-                (StrComp(Left$(Message, Len(MSG_SERVER_HOST)), MSG_SERVER_HOST, vbTextCompare) = 0) Or _
-                (StrComp(Left$(Message, Len(MSG_SERVER_LAST_LOGON)), MSG_SERVER_LAST_LOGON, vbTextCompare) = 0)) Then
-                Exit Sub
+            If ((StrComp(Message, MSG_STILL_AWAY, vbBinaryCompare) = 0) Or _
+                (StrComp(Message, MSG_NO_ONE_HEARS, vbBinaryCompare) = 0) Or _
+                (StrComp(Message, MSG_SERVER_WELCOME, vbBinaryCompare) = 0) Or _
+                (StrComp(Left$(Message, Len(MSG_SERVER_HOST)), MSG_SERVER_HOST, vbBinaryCompare) = 0) Or _
+                (StrComp(Left$(Message, Len(MSG_SERVER_LAST_LOGON)), MSG_SERVER_LAST_LOGON, vbBinaryCompare) = 0)) Then
+                Hidden = True
             End If
         End If
 
         ' friends list changes: request updates for unsupported FL
-        If (StrComp(Right$(Message, Len(MSG_FRIENDSCH_END)), MSG_FRIENDSCH_END, vbTextCompare) = 0) And _
-            ((StrComp(Left$(Message, Len(MSG_FRIENDSCH_ADDED)), MSG_FRIENDSCH_ADDED, vbTextCompare) = 0) Or _
-             (StrComp(Left$(Message, Len(MSG_FRIENDSCH_REMOVED)), MSG_FRIENDSCH_REMOVED, vbTextCompare) = 0) Or _
-             (StrComp(Left$(Message, Len(MSG_FRIENDSCH_PROMOTED)), MSG_FRIENDSCH_PROMOTED, vbTextCompare) = 0) Or _
-             (StrComp(Left$(Message, Len(MSG_FRIENDSCH_DEMOTED)), MSG_FRIENDSCH_DEMOTED, vbTextCompare) = 0)) Then
+        If (StrComp(Right$(Message, Len(MSG_FRIENDSCH_END)), MSG_FRIENDSCH_END, vbBinaryCompare) = 0) And _
+            ((StrComp(Left$(Message, Len(MSG_FRIENDSCH_ADDED)), MSG_FRIENDSCH_ADDED, vbBinaryCompare) = 0) Or _
+             (StrComp(Left$(Message, Len(MSG_FRIENDSCH_REMOVED)), MSG_FRIENDSCH_REMOVED, vbBinaryCompare) = 0) Or _
+             (StrComp(Left$(Message, Len(MSG_FRIENDSCH_PROMOTED)), MSG_FRIENDSCH_PROMOTED, vbBinaryCompare) = 0) Or _
+             (StrComp(Left$(Message, Len(MSG_FRIENDSCH_DEMOTED)), MSG_FRIENDSCH_DEMOTED, vbBinaryCompare) = 0)) Then
             
             If Config.FriendsListTab Then
                 If Not frmChat.FriendListHandler.SupportsFriendPackets(Config.Game) Then
@@ -843,8 +847,8 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         ' http://www.stealthbot.net/forum/index.php?showtopic=24582
 
         If (Len(User) > 0) Then
-            If (InStr(1, Message, MSG_BAN, vbTextCompare) > 0) Then
-                If (StrComp(User, Left$(Message, (InStr(1, Message, MSG_BAN, vbBinaryCompare) - 1)), vbTextCompare) = 0) Then
+            If (InStr(1, Message, MSG_BAN, vbBinaryCompare) > 0) Then
+                If (StrComp(User, Left$(Message, (InStr(1, Message, MSG_BAN, vbBinaryCompare) - 1)), vbBinaryCompare) = 0) Then
                     ' " was banned by " must follow User (first word)
                     Dim Reason     As String
                     Dim BanlistObj As clsBanlistUserObj
@@ -898,11 +902,11 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                     End If
 
                     If (frmChat.mnuHideBans.Checked) Then
-                        bHide = True
+                        Hidden = True
                     End If
                 End If
-            ElseIf (InStr(1, Message, MSG_UNBAN, vbTextCompare) > 0) Then
-                If (StrComp(User, Left$(Message, (InStr(1, Message, MSG_UNBAN, vbBinaryCompare) - 1)), vbTextCompare) = 0) Then
+            ElseIf (InStr(1, Message, MSG_UNBAN, vbBinaryCompare) > 0) Then
+                If (StrComp(User, Left$(Message, (InStr(1, Message, MSG_UNBAN, vbBinaryCompare) - 1)), vbBinaryCompare) = 0) Then
                     ' " was unbanned by " must follow User (first word)
                     Dim rembanpos As Integer
 
@@ -922,7 +926,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
 
         ' backup channel
-        If (StrComp(Right$(Message, Len(MSG_RECVKICK)), MSG_RECVKICK, vbTextCompare) = 0) Then
+        If (StrComp(Right$(Message, Len(MSG_RECVKICK)), MSG_RECVKICK, vbBinaryCompare) = 0) Then
             If (BotVars.UseBackupChan) Then
                 If (Len(BotVars.BackupChan) > 0) Then
                     frmChat.AddQ "/join " & BotVars.BackupChan
@@ -933,31 +937,32 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
 
         ' silent channel unsquelch
-        If (StrComp(Right$(Message, Len(MSG_UNSQUELCH)), MSG_UNSQUELCH, vbTextCompare) = 0) Then
+        If (StrComp(Right$(Message, Len(MSG_UNSQUELCH)), MSG_UNSQUELCH, vbBinaryCompare) = 0) Then
             If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
                 frmChat.lvChannel.ListItems.Clear
             End If
         End If
 
         ' store designated
-        If (StrComp(Right$(Message, Len(MSG_DESIGNATED)), MSG_DESIGNATED, vbTextCompare) = 0) Then
+        If (StrComp(Right$(Message, Len(MSG_DESIGNATED)), MSG_DESIGNATED, vbBinaryCompare) = 0) Then
             g_Channel.OperatorHeir = Left$(Message, Len(Message) - Len(MSG_DESIGNATED))
         End If
 
         ' friends hiding
-        If (StrComp(Message, MSG_FRIENDS, vbTextCompare) = 0) Then
+        If (StrComp(Message, MSG_FRIENDS, vbBinaryCompare) = 0) Then
             If (Not (BotVars.ShowOfflineFriends)) Then
                 Message = Message & "  " & Chr$(255) & "ci(StealthBot is hiding your offline friends)"
             End If
         End If
-        If (StrComp(Right$(Message, Len(MSG_FRIEND_OFFLINE)), MSG_FRIEND_OFFLINE, vbTextCompare) = 0) Then
-            If (BotVars.ShowOfflineFriends) Then
-                frmChat.AddChat RTBColors.ServerInfoText, Message
+        If (StrComp(Right$(Message, Len(MSG_FRIEND_OFFLINE)), MSG_FRIEND_OFFLINE, vbBinaryCompare) = 0) Then
+            If (Not BotVars.ShowOfflineFriends) Then
+                Hidden = True
             End If
-        Else
-            If (Not (bHide)) Then
-                frmChat.AddChat RTBColors.ServerInfoText, Message
-            End If
+        End If
+
+        ' display
+        If (Not (Hidden)) Then
+            frmChat.AddChat RTBColors.ServerInfoText, Message
         End If
 
     End If ' message contains a space
