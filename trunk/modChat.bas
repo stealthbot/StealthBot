@@ -100,31 +100,35 @@ Private Const ERROR_NO_UNICODE_TRANSLATION  As Long = 1113
 ' Overhauls to DisplayRichText functionality, allowing Unicode and better color applying. - Ribose 2017-10
 Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Variant)
     On Error GoTo ERROR_HANDLER
-   
+
+    ' index for iterating through elements
+    Dim i              As Long
+    ' for pre-modifying the array (CTCT... > FCTFCT... and applying game colors)
     Dim arr()          As Variant
-    Dim s              As String
+    Dim j              As Long
+    ' values to save and restore after print
     Dim lngVerticalPos As Long
     Dim blnCanVScroll  As Boolean
-    Dim Diff           As Long
-    Dim i              As Long
-    Dim intRange       As Long
-    Dim blUnlock       As Boolean
+    Dim blnCaratAtEnd  As Boolean
+    Dim blnScrollAtEnd As Boolean
+    Dim SelStart       As Long
+    Dim SelLength      As Long
+    ' don't draw while printing
+    Dim blnUnlock      As Boolean
+    ' logging
+    Dim LineLength     As Long
+    Dim LineText       As String
     Dim LogThis        As Boolean
+    ' for backlog removal
     Dim Length         As Long
-    Dim NewLength      As Long
     Dim RemoveLength   As Long
-    Dim EscapePos      As Long
-    Dim Index          As Long
+    ' line etyle state
     Dim StyleBold      As Boolean
     Dim StyleItal      As Boolean
     Dim StyleUndl      As Boolean
     Dim StyleStri      As Boolean
-    Dim str            As String
-    Dim arrCount       As Long
-    Dim SelStart       As Long
-    Dim SelLength      As Long
-    Dim blnHasFocus    As Boolean
-    Dim blnAtEnd       As Boolean
+    ' string to print
+    Dim ElementText    As String
     
     Static RichTextErrorCounter As Integer
 
@@ -139,18 +143,18 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
     ' if first element is numeric
     If (IsNumeric(saElements(0))) Then
-        Index = 2
+        j = 2
 
         ' convert AddChat Color, Text, Color, Text, ...
         '      to AddChat DefaultFont, Color, Text, DefaultFont, Color, Text, ...
         For i = LBound(saElements) To UBound(saElements) Step 2
-            ReDim Preserve arr(0 To Index) As Variant
+            ReDim Preserve arr(0 To j) As Variant
 
-            arr(Index) = saElements(i + 1)
-            arr(Index - 1) = saElements(i)
-            arr(Index - 2) = vbNullString
+            arr(j) = saElements(i + 1)
+            arr(j - 1) = saElements(i)
+            arr(j - 2) = vbNullString
 
-            Index = Index + 3
+            j = j + 3
         Next i
 
         saElements() = arr()
@@ -181,7 +185,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         End If
 
         ' store combined length of input
-        NewLength = NewLength + Len(KillNull(saElements(i + 2)))
+        LineLength = LineLength + Len(KillNull(saElements(i + 2)))
     Next i
     
     If ApplyGameColors(saElements(), arr()) Then
@@ -189,28 +193,29 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     End If
 
     ' input must have non-zero length
-    If (NewLength = 0) Then
+    If (LineLength = 0) Then
         Exit Sub
     End If
 
     If ((BotVars.LockChat = False) Or (rtb <> frmChat.rtbChat)) Then
         ' store rtb carat and whether rtb has focus
         GetTextSelection rtb, SelStart, SelLength
-        blnHasFocus = (rtb.Parent.ActiveControl Is rtb And rtb.Parent.WindowState <> vbMinimized)
-        ' whether it's at the end or within one vbCrLf of the end
-        blnAtEnd = (SelStart >= GetRTBLength(rtb) - 2)
+
+        ' whether carat is at the end or within one vbCrLf of the end
+        blnCaratAtEnd = (SelStart >= GetRTBLength(rtb) - 2)
 
         ' is the RTB at the bottom?
         lngVerticalPos = GetVScrollPosition(rtb)
         blnCanVScroll = CanVScroll(rtb)
+        blnScrollAtEnd = (Not blnCanVScroll) Or (lngVerticalPos = 0)
 
-        If (lngVerticalPos) Then
+        If (blnScrollAtEnd) Then
             rtb.Visible = False
 
             ' below causes smooth scrolling, but also screen flickers :(
             'LockWindowUpdate rtb.hWnd
 
-            blUnlock = True
+            blnUnlock = True
         End If
 
         ' how to log this event
@@ -221,7 +226,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         ' remove from backlog if overflow
         Length = GetRTBLength(rtb)
         If ((BotVars.MaxBacklogSize) And (Length > BotVars.MaxBacklogSize)) Then
-            If (blUnlock = False) Then
+            If (blnUnlock = False) Then
                 rtb.Visible = False
 
                 ' below causes smooth scrolling, but also screen flickers :(
@@ -229,6 +234,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
 
             With rtb
+                Debug.Print "S " & SelStart & ", L " & SelLength
                 RemoveLength = InStr(Length - BotVars.MaxBacklogSize, GetRTBText(rtb), vbLf, vbBinaryCompare)
                 SetTextSelection rtb, 0, RemoveLength
                 ' remove line from stored selection
@@ -238,10 +244,11 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 ' to length to get difference in length, and set start selection at 0
                 If SelStart < 0 Then SelStart = 0
                 If SelLength < 0 Then SelLength = 0
+                'Debug.Print "S " & SelStart & ", L " & SelLength
                 RTBSetSelectedText rtb, vbNullString
             End With
 
-            If (blUnlock = False) Then
+            If (blnUnlock = False) Then
                 rtb.Visible = True
 
                 ' below causes smooth scrolling, but also screen flickers :(
@@ -250,8 +257,8 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         End If
 
         ' place timestamp
-        s = GetTimeStamp()
-        If LenB(s) > 0 Then
+        ElementText = GetTimeStamp()
+        If LenB(ElementText) > 0 Then
             With rtb
                 SetTextSelection rtb, -1, -1
                 .SelFontName = rtb.Font.Name
@@ -261,55 +268,62 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 .SelUnderline = False
                 .SelStrikeThru = False
                 .SelColor = RTBColors.TimeStamps
-                RTBSetSelectedText rtb, s
+                RTBSetSelectedText rtb, ElementText
             End With
         End If
 
         ' place each element
         For i = LBound(saElements) To UBound(saElements) Step 3
             DisplayRichTextElement rtb, saElements(), i, StyleBold, StyleItal, StyleUndl, StyleStri
+
+            ElementText = KillNull(saElements(i + 2))
+            LineText = LineText & ElementText
         Next i
 
         With rtb
             SetTextSelection rtb, -1, -1
             RTBSetSelectedText rtb, vbCrLf
+            LineText = LineText & vbCrLf
         End With
 
         If (LogThis) Then
             If (rtb = frmChat.rtbChat) Then
-                g_Logger.WriteChat str
+                g_Logger.WriteChat LineText
             ElseIf (rtb = frmChat.rtbWhispers) Then
-                g_Logger.WriteWhisper str
+                g_Logger.WriteWhisper LineText
             End If
         End If
 
-        'ColorModify rtb, GetRTBLength(rtb) - NewLength
+        'ColorModify rtb, GetRTBLength(rtb) - LineLength
 
-        If Not blnCanVScroll And CanVScroll(rtb) Then
-            ' didn't previously have scrollbar but now does
+        ' set scrollbar
+        If blnScrollAtEnd Then
+            ' scroll to end
+            'Debug.Print "SCROLL TO BOTTOM"
             ScrollToBottom rtb
-            If (blUnlock) Then
-                rtb.Visible = True
-            End If
-        ElseIf (blUnlock) Then
+        Else
+            ' set to scroll specific position
+            'Debug.Print "SCROLL TO " & lngVerticalPos
             SendMessage rtb.hWnd, WM_VSCROLL, _
-                SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&
-                
+                    SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&
+        End If
+
+        ' set carat
+        If blnCaratAtEnd Then
+            ' carat was at the end before
+            SelStart = -1
+            SelLength = -1
+        End If
+        'Debug.Print "SET CARAT " & SelStart & "," & SelLength
+        SetTextSelection rtb, SelStart, SelLength
+
+        If (blnUnlock) Then
+            ' was invisible
             rtb.Visible = True
-                
+
             ' below causes smooth scrolling, but also screen flickers :(
             'LockWindowUpdate &H0
         End If
-        
-        With rtb
-            ' if has focus
-            If blnHasFocus Then
-                ' restore carat location and selection if not previously at end
-                If Not blnAtEnd Then
-                    SetTextSelection rtb, SelStart, SelLength
-                End If
-            End If
-        End With
     End If
 
     RichTextErrorCounter = 0
@@ -844,10 +858,9 @@ End Function
 
 Public Sub ScrollToBottom(cnt As Control)
 
-    SetTextSelection cnt, -1, -1
+    LockWindowUpdate cnt.hWnd
     SendMessageW cnt.hWnd, EM_SCROLLCARET, 0&, 0&
-    'LockWindowUpdate cnt.hWnd
     'SendMessage cnt.hWnd, EM_SCROLL, SB_BOTTOM, &H0
-    'LockWindowUpdate &H0
+    LockWindowUpdate &H0
 
 End Sub

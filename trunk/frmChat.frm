@@ -5677,6 +5677,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             Dim n As Long
 
             If (GetVScrollPosition(rtbChat)) Then
+                SetTextSelection rtbChat, -1, -1
                 ScrollToBottom rtbChat
             End If
 
@@ -5869,6 +5870,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             Dim StartOutfilterPos As Long
 
             If (GetVScrollPosition(rtbChat)) Then
+                SetTextSelection rtbChat, -1, -1
                 ScrollToBottom rtbChat
             End If
 
