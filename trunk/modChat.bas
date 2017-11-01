@@ -283,7 +283,6 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         With rtb
             SetTextSelection rtb, -1, -1
             RTBSetSelectedText rtb, vbCrLf
-            LineText = LineText & vbCrLf
         End With
 
         If (LogThis) Then
