@@ -148,6 +148,7 @@ Begin VB.Form frmEMailReg
       Left            =   120
       TabIndex        =   0
       Top             =   120
+      UseMnemonic     =   0   'False
       Width           =   5055
       WordWrap        =   -1  'True
    End

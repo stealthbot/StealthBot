@@ -163,6 +163,7 @@ Begin VB.Form frmAccountManager
       Left            =   240
       TabIndex        =   2
       Top             =   720
+      UseMnemonic     =   0   'False
       Width           =   3255
    End
 End

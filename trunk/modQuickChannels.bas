@@ -130,11 +130,11 @@ Public Sub PrepareQuickChannelMenu()
                 End If
                 
                 .Visible = True
-                .Caption = MakeChannelMenuItemSafe(Caption)
+                .Caption = EscapeMenuItemCaption(Caption)
             Else
                 If Not ShownAddQC And LenB(g_Channel.Name) > 0 Then
                     frmChat.mnuCustomChannelAdd.Visible = True
-                    frmChat.mnuCustomChannelAdd.Caption = StringFormat("&Add {0}{1}{0} as F{2}", Chr$(34), MakeChannelMenuItemSafe(g_Channel.Name, True), CStr(i + 1))
+                    frmChat.mnuCustomChannelAdd.Caption = StringFormat("&Add {0}{1}{0} as F{2}", Chr$(34), EscapeMenuItemCaption(g_Channel.Name, True), CStr(i + 1))
                     
                     ShownAddQC = True
                 End If
@@ -156,13 +156,13 @@ Public Sub PrepareHomeChannelMenu()
 
     ShowHome = (g_Online And LenB(Config.HomeChannel) > 0 And StrComp(Config.HomeChannel, g_Channel.Name, vbTextCompare) <> 0)
     With frmChat.mnuHomeChannel
-        .Caption = MakeChannelMenuItemSafe(Config.HomeChannel, True) & " (&Home Channel)"
+        .Caption = EscapeMenuItemCaption(Config.HomeChannel, True) & " (&Home Channel)"
         .Visible = ShowHome
     End With
 
     ShowLast = (g_Online And LenB(BotVars.LastChannel) > 0 And StrComp(BotVars.LastChannel, g_Channel.Name, vbTextCompare) <> 0)
     With frmChat.mnuLastChannel
-        .Caption = MakeChannelMenuItemSafe(BotVars.LastChannel, True) & " (&Previous Channel)"
+        .Caption = EscapeMenuItemCaption(BotVars.LastChannel, True) & " (&Previous Channel)"
         .Visible = ShowLast
     End With
 
@@ -197,7 +197,7 @@ Public Sub PreparePublicChannelMenu()
                 End If
 
                 With frmChat.mnuPublicChannels(i - 1)
-                    .Caption = MakeChannelMenuItemSafe(BotVars.PublicChannels.Item(i))
+                    .Caption = EscapeMenuItemCaption(BotVars.PublicChannels.Item(i))
                     .Visible = True
                 End With
             Next i
@@ -208,14 +208,4 @@ Public Sub PreparePublicChannelMenu()
     frmChat.mnuPCDash.Visible = AnyVisible
     frmChat.mnuPCHeader.Visible = AnyVisible
 End Sub
-
-Private Function MakeChannelMenuItemSafe(ByVal sChannel As String, Optional ByVal CanBeDash As Boolean = False) As String
-    sChannel = Replace(sChannel, "&", "&&", , , vbBinaryCompare)
-
-    If Not CanBeDash And StrComp(sChannel, "-", vbBinaryCompare) = 0 Then
-        sChannel = "&-"
-    End If
-
-    MakeChannelMenuItemSafe = sChannel
-End Function
 

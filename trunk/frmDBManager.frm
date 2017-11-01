@@ -274,6 +274,7 @@ Begin VB.Form frmDBManager
          Left            =   240
          TabIndex        =   21
          Top             =   4560
+         UseMnemonic     =   0   'False
          Width           =   2775
       End
       Begin VB.Label lblBanMessage 
@@ -303,6 +304,7 @@ Begin VB.Form frmDBManager
          Left            =   360
          TabIndex        =   15
          Top             =   1800
+         UseMnemonic     =   0   'False
          Width           =   2655
       End
       Begin VB.Label lblGroups 
@@ -332,6 +334,7 @@ Begin VB.Form frmDBManager
          Left            =   480
          TabIndex        =   16
          Top             =   1995
+         UseMnemonic     =   0   'False
          Width           =   2535
       End
       Begin VB.Label lblCreatedBy 
@@ -351,6 +354,7 @@ Begin VB.Form frmDBManager
          Left            =   480
          TabIndex        =   13
          Top             =   1300
+         UseMnemonic     =   0   'False
          Width           =   2415
       End
       Begin VB.Label lblFlags 
@@ -390,6 +394,7 @@ Begin VB.Form frmDBManager
          Left            =   360
          TabIndex        =   12
          Top             =   1095
+         UseMnemonic     =   0   'False
          Width           =   2655
       End
       Begin VB.Label lblCreated 
@@ -409,6 +414,7 @@ Begin VB.Form frmDBManager
          Left            =   240
          TabIndex        =   11
          Top             =   900
+         UseMnemonic     =   0   'False
          Width           =   2775
       End
       Begin VB.Label lblModified 
@@ -428,6 +434,7 @@ Begin VB.Form frmDBManager
          Left            =   240
          TabIndex        =   14
          Top             =   1605
+         UseMnemonic     =   0   'False
          Width           =   2775
       End
    End
@@ -1001,7 +1008,7 @@ Private Sub HandleSaved()
             fraEntry.Caption = vbNullString
             Me.Caption = "User Database Manager"
         Else
-            fraEntry.Caption = m_CurrentEntry.ToString()
+            fraEntry.Caption = EscapeLabelCaption(m_CurrentEntry.ToString())
             Me.Caption = "User Database Manager - " & m_CurrentEntry.ToString()
         End If
     End If
@@ -1017,7 +1024,7 @@ Private Sub HandleUnsaved()
             m_Modified = True
             cmdSaveUser.Enabled = True
             cmdDiscardUser.Enabled = True
-            fraEntry.Caption = m_CurrentEntry.ToString() & " *"
+            fraEntry.Caption = EscapeLabelCaption(m_CurrentEntry.ToString()) & " *"
             Me.Caption = "User Database Manager - " & m_CurrentEntry.ToString() & " *"
         End If
     End If

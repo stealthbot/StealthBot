@@ -58,6 +58,7 @@ Begin VB.Form frmAbout
       Left            =   4560
       TabIndex        =   8
       Top             =   4680
+      UseMnemonic     =   0   'False
       Width           =   2175
    End
    Begin VB.Label lblSpecialThanks 
@@ -99,6 +100,7 @@ Begin VB.Form frmAbout
       Left            =   6960
       TabIndex        =   5
       Top             =   4680
+      UseMnemonic     =   0   'False
       Width           =   1215
    End
    Begin VB.Label lblURL 
@@ -120,6 +122,7 @@ Begin VB.Form frmAbout
       Left            =   2880
       TabIndex        =   4
       Top             =   4680
+      UseMnemonic     =   0   'False
       Width           =   1335
    End
    Begin VB.Label lblURL 
@@ -141,6 +144,7 @@ Begin VB.Form frmAbout
       Left            =   480
       TabIndex        =   3
       Top             =   4680
+      UseMnemonic     =   0   'False
       Width           =   1935
    End
    Begin VB.Label lblOK 
@@ -161,6 +165,7 @@ Begin VB.Form frmAbout
       Left            =   7200
       TabIndex        =   1
       Top             =   5160
+      UseMnemonic     =   0   'False
       Width           =   1125
    End
    Begin VB.Line Line1 
@@ -188,6 +193,7 @@ Begin VB.Form frmAbout
       Left            =   360
       TabIndex        =   0
       Top             =   120
+      UseMnemonic     =   0   'False
       Width           =   7995
    End
    Begin VB.Line Line1 
@@ -215,6 +221,7 @@ Begin VB.Form frmAbout
       Left            =   360
       TabIndex        =   2
       Top             =   5280
+      UseMnemonic     =   0   'False
       Width           =   6855
    End
 End

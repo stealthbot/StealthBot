@@ -429,6 +429,7 @@ Begin VB.Form frmQuickChannel
       Left            =   120
       TabIndex        =   0
       Top             =   120
+      UseMnemonic     =   0   'False
       Width           =   3735
    End
 End

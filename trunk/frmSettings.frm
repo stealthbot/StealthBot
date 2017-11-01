@@ -171,6 +171,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   4
          Top             =   960
+         UseMnemonic     =   0   'False
          Width           =   6015
       End
       Begin VB.Line Line 
@@ -199,6 +200,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   3
          Top             =   240
+         UseMnemonic     =   0   'False
          Width           =   3255
       End
    End
@@ -583,6 +585,7 @@ Begin VB.Form frmSettings
          Left            =   1320
          TabIndex        =   8
          Top             =   840
+         UseMnemonic     =   0   'False
          Width           =   1455
       End
       Begin VB.Label lblAddCurrentKey 
@@ -603,6 +606,7 @@ Begin VB.Form frmSettings
          MousePointer    =   1  'Arrow
          TabIndex        =   13
          Top             =   2040
+         UseMnemonic     =   0   'False
          Width           =   1095
       End
       Begin VB.Label lblManageKeys 
@@ -624,6 +628,7 @@ Begin VB.Form frmSettings
          MousePointer    =   1  'Arrow
          TabIndex        =   14
          Top             =   2040
+         UseMnemonic     =   0   'False
          Width           =   855
       End
       Begin VB.Label lblBasic 
@@ -844,6 +849,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   6
          Top             =   240
+         UseMnemonic     =   0   'False
          Width           =   4815
       End
    End
@@ -1130,6 +1136,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   37
          Top             =   240
+         UseMnemonic     =   0   'False
          Width           =   4815
       End
    End
@@ -1547,6 +1554,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   50
          Top             =   240
+         UseMnemonic     =   0   'False
          Width           =   4815
       End
       Begin VB.Label lblChat 
@@ -1909,6 +1917,7 @@ Begin VB.Form frmSettings
          Left            =   2040
          TabIndex        =   87
          Top             =   2640
+         UseMnemonic     =   0   'False
          Width           =   1215
       End
       Begin VB.Label lblEg 
@@ -1917,6 +1926,7 @@ Begin VB.Form frmSettings
          Left            =   3360
          TabIndex        =   88
          Top             =   2520
+         UseMnemonic     =   0   'False
          Width           =   2895
       End
       Begin VB.Label lblColor 
@@ -2208,6 +2218,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   71
          Top             =   240
+         UseMnemonic     =   0   'False
          Width           =   4815
       End
       Begin VB.Label lblColorStatus 
@@ -2227,6 +2238,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   103
          Top             =   4200
+         UseMnemonic     =   0   'False
          Width           =   5895
       End
    End
@@ -3002,6 +3014,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   106
          Top             =   240
+         UseMnemonic     =   0   'False
          Width           =   4815
       End
    End
@@ -3298,6 +3311,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   155
          Top             =   2280
+         UseMnemonic     =   0   'False
          Width           =   5895
       End
       Begin VB.Label lblHeader 
@@ -3318,6 +3332,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   143
          Top             =   240
+         UseMnemonic     =   0   'False
          Width           =   4815
       End
    End
@@ -3636,6 +3651,7 @@ Begin VB.Form frmSettings
          Left            =   4320
          TabIndex        =   184
          Top             =   2640
+         UseMnemonic     =   0   'False
          Width           =   1815
       End
       Begin VB.Label lblConn 
@@ -3814,6 +3830,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   175
          Top             =   1920
+         UseMnemonic     =   0   'False
          Width           =   6015
          WordWrap        =   -1  'True
       End
@@ -3883,6 +3900,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   169
          Top             =   240
+         UseMnemonic     =   0   'False
          Width           =   4815
       End
    End
@@ -3990,6 +4008,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   201
          Top             =   2280
+         UseMnemonic     =   0   'False
          Width           =   5892
       End
       Begin VB.Label lblGreet 
@@ -4037,6 +4056,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   196
          Top             =   240
+         UseMnemonic     =   0   'False
          Width           =   4815
       End
    End
@@ -4196,6 +4216,7 @@ Begin VB.Form frmSettings
          Left            =   480
          TabIndex        =   205
          Top             =   720
+         UseMnemonic     =   0   'False
          Width           =   5655
       End
       Begin VB.Label lblLog 
@@ -4317,6 +4338,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   204
          Top             =   240
+         UseMnemonic     =   0   'False
          Width           =   3255
       End
       Begin VB.Line Line 
@@ -4564,6 +4586,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   157
          Top             =   240
+         UseMnemonic     =   0   'False
          Width           =   4815
       End
    End

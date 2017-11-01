@@ -142,6 +142,7 @@ Begin VB.Form frmDBGameSelection
       Left            =   440
       TabIndex        =   0
       Top             =   120
+      UseMnemonic     =   0   'False
       Width           =   2775
    End
 End

@@ -138,6 +138,7 @@ Begin VB.Form frmCustomInputBox
       Left            =   120
       TabIndex        =   0
       Top             =   120
+      UseMnemonic     =   0   'False
       Width           =   3975
    End
 End

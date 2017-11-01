@@ -297,6 +297,7 @@ Begin VB.Form frmCommandManager
          Left            =   2280
          TabIndex        =   25
          Top             =   3480
+         UseMnemonic     =   0   'False
          Width           =   2775
       End
       Begin VB.Label lblSyntax 
@@ -316,6 +317,7 @@ Begin VB.Form frmCommandManager
          Left            =   240
          TabIndex        =   4
          Top             =   240
+         UseMnemonic     =   0   'False
          Width           =   4800
       End
       Begin VB.Label lblAlias 
@@ -862,12 +864,15 @@ End Sub
 '// Call this sub whenever the form controls have been changed
 '// 08/30/2008 JSM - Created
 Private Sub FormIsDirty()
+    Dim CaptionString As String
+
     If Not m_ResettingForm Then
         m_SelectedElement.IsDirty = True
         cmdSaveCommand.Enabled = True
         cmdDiscardCommand.Enabled = True
-        fraCommand.Caption = GetCaptionString
-        Me.Caption = "Command Manager - " & fraCommand.Caption
+        CaptionString = GetCaptionString()
+        fraCommand.Caption = EscapeLabelCaption(CaptionString)
+        Me.Caption = "Command Manager - " & CaptionString
     End If
 End Sub
 
@@ -1003,6 +1008,7 @@ Private Sub PrepareCommandForm()
 
     Dim Parameter As clsCommandParamsObj
     Dim Restriction As clsCommandRestrictionObj
+    Dim CaptionString As String
 
     Dim requirements As String
     Dim sItem As String
@@ -1145,8 +1151,9 @@ Private Sub PrepareCommandForm()
     cmdSaveCommand.Enabled = False
     cmdDiscardCommand.Enabled = False
 
-    fraCommand.Caption = GetCaptionString()
-    Me.Caption = "Command Manager - " & fraCommand.Caption
+    CaptionString = GetCaptionString()
+    fraCommand.Caption = EscapeLabelCaption(CaptionString)
+    Me.Caption = "Command Manager - " & CaptionString
 
     m_ResettingForm = False
 

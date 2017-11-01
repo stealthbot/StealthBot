@@ -74,6 +74,7 @@ Begin VB.Form frmClanInvite
       Left            =   120
       TabIndex        =   4
       Top             =   1320
+      UseMnemonic     =   0   'False
       Width           =   2895
    End
    Begin VB.Label lblInv 
@@ -94,6 +95,7 @@ Begin VB.Form frmClanInvite
       Left            =   120
       TabIndex        =   3
       Top             =   1080
+      UseMnemonic     =   0   'False
       Width           =   2895
    End
    Begin VB.Label lblName 
@@ -114,6 +116,7 @@ Begin VB.Form frmClanInvite
       Left            =   120
       TabIndex        =   2
       Top             =   720
+      UseMnemonic     =   0   'False
       Width           =   2895
    End
    Begin VB.Label lblClan 
@@ -134,6 +137,7 @@ Begin VB.Form frmClanInvite
       Left            =   120
       TabIndex        =   1
       Top             =   360
+      UseMnemonic     =   0   'False
       Width           =   2895
    End
    Begin VB.Label lblInvite 
@@ -154,6 +158,7 @@ Begin VB.Form frmClanInvite
       Left            =   120
       TabIndex        =   0
       Top             =   120
+      UseMnemonic     =   0   'False
       Width           =   2895
    End
 End

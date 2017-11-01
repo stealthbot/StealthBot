@@ -1115,6 +1115,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1140,6 +1141,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1171,6 +1173,7 @@ Begin VB.Form frmChat
       Left            =   8880
       TabIndex        =   10
       Top             =   0
+      UseMnemonic     =   0   'False
       Width           =   3698
    End
    Begin VB.Menu mnuBot 
@@ -3559,8 +3562,7 @@ Private Sub ListviewTabs_Click(PreviousTab As Integer)
                         .Caption = BotVars.Gateway
                         .ToolTipText = StringFormat("Currently online on {0}.", BotVars.Gateway)
                     Else
-                        .Caption = StringFormat("{0} ({1})", _
-                                Replace(g_Channel.Name, "&", "&&", , , vbBinaryCompare), g_Channel.Users.Count)
+                        .Caption = StringFormat("{0} ({1})", g_Channel.Name, g_Channel.Users.Count)
                         .ToolTipText = StringFormat("Currently in {2} channel {0} ({1}).", _
                                 g_Channel.Name, g_Channel.Users.Count, g_Channel.sType())
                     End If
@@ -3569,7 +3571,8 @@ Private Sub ListviewTabs_Click(PreviousTab As Integer)
                     .ToolTipText = StringFormat("Currently viewing {0} friends.", lvFriendList.ListItems.Count)
                 Case LVW_BUTTON_CLAN
                     .Caption = StringFormat("Clan {0} ({1} members)", g_Clan.Name, lvClanList.ListItems.Count)
-                    .ToolTipText = StringFormat("Currently viewing {1} members of Clan {0}.", g_Clan.Name, lvClanList.ListItems.Count)
+                    .ToolTipText = StringFormat("Currently viewing {1} members of Clan {0}.", _
+                            g_Clan.Name, lvClanList.ListItems.Count)
             End Select
         End If
     End With
@@ -6219,7 +6222,7 @@ Private Sub tmrIdleTimer_Timer()
     Static lCounter As Long
 
     Dim pBuf      As clsDataBuffer
-    Dim newColor  As Long
+    Dim NewColor  As Long
     Dim i         As Integer
     Dim pos       As Integer
     Dim doCheck   As Boolean
@@ -6331,11 +6334,11 @@ Private Sub tmrIdleTimer_Timer()
                         pos = frmChat.GetChannelItemIndex(.Name)
 
                         If (pos > 0) Then
-                            newColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
+                            NewColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
                                     GetCurrentUsername, vbBinaryCompare) = 0)
 
-                            If (lvChannel.ListItems(pos).ForeColor <> newColor) Then
-                                lvChannel.ListItems(pos).ForeColor = newColor
+                            If (lvChannel.ListItems(pos).ForeColor <> NewColor) Then
+                                lvChannel.ListItems(pos).ForeColor = NewColor
                             End If
                         End If
                     End If

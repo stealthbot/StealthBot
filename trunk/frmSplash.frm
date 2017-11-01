@@ -45,6 +45,7 @@ Begin VB.Form frmSplash
       Left            =   120
       TabIndex        =   0
       Top             =   4680
+      UseMnemonic     =   0   'False
       Width           =   6735
    End
    Begin VB.Image BDay 

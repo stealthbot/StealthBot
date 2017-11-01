@@ -1957,3 +1957,17 @@ Private Function MonitorEnumProc(ByVal hMonitor As Long, ByVal hDCMonitor As Lon
     dwData = dwData + 1
     MonitorEnumProc = 1
 End Function
+
+Public Function EscapeLabelCaption(ByVal sText As String)
+    EscapeLabelCaption = Replace(sText, "&", "&&", , , vbBinaryCompare)
+End Function
+
+Public Function EscapeMenuItemCaption(ByVal sChannel As String, Optional ByVal CanBeDash As Boolean = False) As String
+    sChannel = EscapeLabelCaption(sChannel)
+
+    If Not CanBeDash And StrComp(sChannel, "-", vbBinaryCompare) = 0 Then
+        sChannel = "&-"
+    End If
+
+    EscapeMenuItemCaption = sChannel
+End Function

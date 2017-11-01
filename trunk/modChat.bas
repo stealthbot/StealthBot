@@ -234,7 +234,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
 
             With rtb
-                Debug.Print "S " & SelStart & ", L " & SelLength
+                'Debug.Print "S " & SelStart & ", L " & SelLength
                 RemoveLength = InStr(Length - BotVars.MaxBacklogSize, GetRTBText(rtb), vbLf, vbBinaryCompare)
                 SetTextSelection rtb, 0, RemoveLength
                 ' remove line from stored selection

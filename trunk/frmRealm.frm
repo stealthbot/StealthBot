@@ -494,6 +494,7 @@ Begin VB.Form frmRealm
          Left            =   2400
          TabIndex        =   27
          Top             =   3600
+         UseMnemonic     =   0   'False
          Width           =   2535
       End
       Begin VB.Label lblRealm 
@@ -612,6 +613,7 @@ Begin VB.Form frmRealm
       Left            =   120
       TabIndex        =   1
       Top             =   4380
+      UseMnemonic     =   0   'False
       Width           =   7695
    End
    Begin VB.Label lblRealm 

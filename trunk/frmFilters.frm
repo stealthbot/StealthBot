@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmFilters 
    BackColor       =   &H00000000&
    BorderStyle     =   3  'Fixed Dialog
@@ -410,6 +410,7 @@ Begin VB.Form frmFilters
       Left            =   120
       TabIndex        =   10
       Top             =   5640
+      UseMnemonic     =   0   'False
       Width           =   1335
    End
    Begin VB.Label IncomingLbl 
@@ -440,6 +441,7 @@ Begin VB.Form frmFilters
       Left            =   120
       TabIndex        =   3
       Top             =   120
+      UseMnemonic     =   0   'False
       Width           =   2895
    End
    Begin VB.Label IncomingLbl 
@@ -478,6 +480,7 @@ Begin VB.Form frmFilters
       Left            =   120
       TabIndex        =   11
       Top             =   5880
+      UseMnemonic     =   0   'False
       Width           =   7575
    End
    Begin VB.Label OutgoingLbl 
@@ -511,42 +514,42 @@ Private OldMaxBlockIndex    As Integer
 Private OldMaxFilterIndex   As Integer
 ' Updated later to erase old entries
 
-Private Sub cmdAdd_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub cmdAdd_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     Call Form_MouseMove(0, 0, 0, 0)
 End Sub
 
-Private Sub cmdDone_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub cmdDone_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     Call Form_MouseMove(0, 0, 0, 0)
 End Sub
 
-Private Sub cmdOutAdd_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub cmdOutAdd_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     Call Form_MouseMove(0, 0, 0, 0)
 End Sub
 
-Private Sub cmdEdit_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub cmdEdit_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     lblMI.Caption = "Allows you to edit the selected item."
 End Sub
 
 Private Sub cmdOutAdd_Click()
-    If txtOutAdd(0).text <> vbNullString And txtOutAdd(1).text <> vbNullString Then
-        lvReplace.ListItems.Add lvReplace.ListItems.Count + 1, , txtOutAdd(0).text
-        lvReplace.ListItems.Item(lvReplace.ListItems.Count).ListSubItems.Add , , txtOutAdd(1).text
-        txtOutAdd(0).text = vbNullString
-        txtOutAdd(1).text = vbNullString
+    If txtOutAdd(0).Text <> vbNullString And txtOutAdd(1).Text <> vbNullString Then
+        lvReplace.ListItems.Add lvReplace.ListItems.Count + 1, , txtOutAdd(0).Text
+        lvReplace.ListItems.Item(lvReplace.ListItems.Count).ListSubItems.Add , , txtOutAdd(1).Text
+        txtOutAdd(0).Text = vbNullString
+        txtOutAdd(1).Text = vbNullString
         txtOutAdd(0).SetFocus
     End If
 End Sub
 
 Private Sub cmdEdit_Click()
     If lbText.ListIndex <> -1 Then
-        txtAdd.text = lbText.text
+        txtAdd.Text = lbText.Text
         Call cmdRem_CLick
     ElseIf lbBlock.ListIndex <> -1 Then
-        txtAdd.text = lbBlock.text
+        txtAdd.Text = lbBlock.Text
         Call cmdRem_CLick
     ElseIf Not (lvReplace.SelectedItem Is Nothing) Then
-        txtOutAdd(0).text = lvReplace.ListItems.Item(lvReplace.SelectedItem.Index).text
-        txtOutAdd(1).text = lvReplace.ListItems.Item(lvReplace.SelectedItem.Index).ListSubItems.Item(1).text
+        txtOutAdd(0).Text = lvReplace.ListItems.Item(lvReplace.SelectedItem.Index).Text
+        txtOutAdd(1).Text = lvReplace.ListItems.Item(lvReplace.SelectedItem.Index).ListSubItems.Item(1).Text
         Call cmdOutRem_Click
     End If
 End Sub
@@ -557,7 +560,7 @@ Private Sub cmdOutRem_Click()
     End If
 End Sub
 
-Private Sub cmdOutRem_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub cmdOutRem_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     lblMI.Caption = "Removes the selected item from the list."
 End Sub
 
@@ -620,7 +623,7 @@ Private Sub cmdDone_Click()
     Unload Me
 End Sub
 
-Private Sub cmdRem_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub cmdRem_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     lblMI.Caption = "Clicking this button will remove any usernames or filters that you have selected on either list."
 End Sub
 
@@ -629,26 +632,26 @@ Private Sub cmdRem_CLick()
     If lbBlock.ListIndex <> -1 Then lbBlock.RemoveItem lbBlock.ListIndex
 End Sub
 
-Private Sub lbBlock_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lbBlock_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     lblMI.Caption = "Adding usernames to this list will cause the bot to completely block any and all messages from their username. The filter system supports wildcards. Example: Adding 'floodbot*' to the list will cause the bot to stop any messages coming from anybody whose name starts with the word 'FloodBot'. The filter is not applied to whispers."
 End Sub
 
-Private Sub lbText_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lbText_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     lblMI.Caption = "Adding filters to this list will cause the bot to completely block any and all messages containing the text you added. Useful for blocking annoying floodbot or other spams."
 End Sub
 
-Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Form_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     lblMI.Caption = "Incoming chat filters are toggled by pressing CTRL + F inside the bot." & _
         vbNewLine & "Outgoing filters are permanently active."
 End Sub
 
 Private Sub cmdAdd_Click()
     If optBlock.Value = True Then
-        lbBlock.AddItem txtAdd.text
+        lbBlock.AddItem txtAdd.Text
     Else
-        lbText.AddItem txtAdd.text
+        lbText.AddItem txtAdd.Text
     End If
-    txtAdd.text = vbNullString
+    txtAdd.Text = vbNullString
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
@@ -695,8 +698,8 @@ Private Sub Form_Unload(Cancel As Integer)
     ' Write new outgoing filters
     If lvReplace.ListItems.Count <> 0 Then
         For i = 1 To lvReplace.ListItems.Count
-            WriteINI "Outgoing", "Find" & i, Replace(lvReplace.ListItems.Item(i).text, " ", "¦"), FILE_FILTERS
-            WriteINI "Outgoing", "Replace" & i, Replace(lvReplace.ListItems.Item(i).ListSubItems.Item(1).text, " ", "¦"), FILE_FILTERS
+            WriteINI "Outgoing", "Find" & i, Replace(lvReplace.ListItems.Item(i).Text, " ", "¦"), FILE_FILTERS
+            WriteINI "Outgoing", "Replace" & i, Replace(lvReplace.ListItems.Item(i).ListSubItems.Item(1).Text, " ", "¦"), FILE_FILTERS
         Next i
         
         WriteINI "Outgoing", "Total", lvReplace.ListItems.Count, FILE_FILTERS
@@ -709,52 +712,52 @@ Private Sub Form_Unload(Cancel As Integer)
     Call frmChat.LoadArray(LOAD_BLOCKLIST, g_Blocklist())
 End Sub
 
-Private Sub optBlock_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub optBlock_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     Call lbBlock_MouseMove(0, 0, 0, 0)
 End Sub
 
-Private Sub optText_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub optText_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     Call lbText_MouseMove(0, 0, 0, 0)
 End Sub
 
 Private Sub optType_Click(Index As Integer)
     Dim i As Byte
-    Dim A As Boolean
+    Dim a As Boolean
     
     If Index = 0 Then   'Incoming Filters Clicked
         optType(1).Value = False
         optType(0).Value = True
-        A = True
+        a = True
     Else                'Outgoing Filters Clicked
         optType(0).Value = False
         optType(1).Value = True
-        A = False
+        a = False
     End If
     
-    lbText.Visible = A
-    lbBlock.Visible = A
-    txtAdd.Visible = A
-    cmdAdd.Visible = A
-    cmdRem.Visible = A
+    lbText.Visible = a
+    lbBlock.Visible = a
+    txtAdd.Visible = a
+    cmdAdd.Visible = a
+    cmdRem.Visible = a
     
     For i = 0 To IncomingLbl.UBound
-        IncomingLbl(i).Visible = A
+        IncomingLbl(i).Visible = a
     Next i
     
     For i = 0 To OutgoingLbl.UBound
-        OutgoingLbl(i).Visible = Not A
+        OutgoingLbl(i).Visible = Not a
     Next i
     
-    optText.Visible = A
-    optBlock.Visible = A
-    lvReplace.Visible = Not A
-    txtOutAdd(0).Visible = Not A
-    txtOutAdd(1).Visible = Not A
-    cmdOutRem.Visible = Not A
-    cmdOutAdd.Visible = Not A
+    optText.Visible = a
+    optBlock.Visible = a
+    lvReplace.Visible = Not a
+    txtOutAdd(0).Visible = Not a
+    txtOutAdd(1).Visible = Not a
+    cmdOutRem.Visible = Not a
+    cmdOutAdd.Visible = Not a
 End Sub
 
-Private Sub optType_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub optType_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
     If Index = 0 Then
         lblMI.Caption = "Change your incoming chat filters (message filters) here."
     Else

@@ -154,6 +154,7 @@ Begin VB.Form frmCatch
       Left            =   120
       TabIndex        =   7
       Top             =   5280
+      UseMnemonic     =   0   'False
       Width           =   3735
    End
    Begin VB.Label Label1 
@@ -173,6 +174,7 @@ Begin VB.Form frmCatch
       Left            =   600
       TabIndex        =   5
       Top             =   120
+      UseMnemonic     =   0   'False
       Width           =   2655
    End
 End
@@ -184,8 +186,8 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub chkFlashOnCaughtPhrase_Click()
-    If Config.FlashOnCatchPhrases <> CBool(chkFlashOnCaughtPhrase.value) Then
-        Config.FlashOnCatchPhrases = CBool(chkFlashOnCaughtPhrase.value)
+    If Config.FlashOnCatchPhrases <> CBool(chkFlashOnCaughtPhrase.Value) Then
+        Config.FlashOnCatchPhrases = CBool(chkFlashOnCaughtPhrase.Value)
         Call Config.Save
     End If
 End Sub
@@ -234,7 +236,7 @@ End Sub
 Private Sub Form_Load()
     Me.Icon = frmChat.Icon
     If Config.FlashOnCatchPhrases Then
-        chkFlashOnCaughtPhrase.value = vbChecked
+        chkFlashOnCaughtPhrase.Value = vbChecked
     End If
     
     Dim i As Integer
