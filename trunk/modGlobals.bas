@@ -76,7 +76,6 @@ Public Caching As Boolean
 Public Dii As Boolean
 Public MyFlags As Long
 Public BanCount As Integer
-Public g_lastQueueUser As String
 Public g_request_receipt As Boolean
 
 Public WatchUser As String

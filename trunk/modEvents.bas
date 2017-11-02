@@ -1904,41 +1904,40 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
     Dim lCarats As Long
     Dim WWIndex As Integer
     Dim FIndex  As Integer
-    Dim IsES    As Boolean
-    Dim IsShown As Boolean
+    Dim Hidden  As Boolean
+    Dim SkipPr  As Boolean
 
     Username = ConvertUsername(Username)
 
     ' filters...
-    IsES = False
+    SkipPr = False
 
     ' filter email service?
     If (StrComp(Username, EMAIL_SERVICE_USER, vbBinaryCompare) = 0) Then
-        IsES = True
-        IsShown = (Not Config.HideExtraServerAlerts)
+        SkipPr = True
+        Hidden = (Config.HideExtraServerAlerts)
     End If
 
     ' filter friend alerts?
-    If Config.HideMutualFriendAlerts Then
-        FIndex = frmChat.FriendListHandler.UsernameToFLIndex(Username)
-        If FIndex <> 0 Then
-            If g_Friends(FIndex).IsMutual Or Not g_Friends(FIndex).IsOnline Then
-                If (StrComp(Left$(Message, Len(MSG_YOUR_FRIEND)), MSG_YOUR_FRIEND, vbBinaryCompare) = 0) Then
-                    IsShown = False
-                End If
+    FIndex = frmChat.FriendListHandler.UsernameToFLIndex(Username)
+    If FIndex <> 0 Then
+        If g_Friends(FIndex).IsMutual Or Not g_Friends(FIndex).IsOnline Then
+            If (StrComp(Left$(Message, Len(MSG_YOUR_FRIEND & Username)), MSG_YOUR_FRIEND & Username, vbBinaryCompare) = 0) Then
+                SkipPr = True
+                Hidden = (Config.HideMutualFriendAlerts)
             End If
         End If
     End If
 
     ' user and message filters
-    If (AllowedToTalk(Username, Message) And IsShown) Then
+    If (AllowedToTalk(Username, Message) And Not Hidden) Then
         ' catch phrases
-        If (Not IsES And Catch(0) <> vbNullString) Then
+        If (Not SkipPr And Catch(0) <> vbNullString) Then
             Call CheckPhrase(Username, Message, CPWHISPER)
         End If
 
         ' flash window on events
-        If (Not IsES And frmChat.mnuFlash.Checked) Then
+        If (Not SkipPr And frmChat.mnuFlash.Checked) Then
             FlashWindow
         End If
 
@@ -1960,29 +1959,26 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         frmChat.rtbWhispers.Visible = rtbWhispersVisible
 
         ' individual whisper windows
-        If (Not IsES And frmChat.mnuToggleWWUse.Checked) Then
+        If (Not SkipPr And frmChat.mnuToggleWWUse.Checked) Then
         'If ((frmChat.mnuToggleWWUse.Checked) And _
             '(frmChat.WindowState <> vbMinimized)) Then
+            WWIndex = AddWhisperWindow(Username)
             
-            If (Not (IrrelevantWhisper(Message, Username))) Then
-                WWIndex = AddWhisperWindow(Username)
-                
-                With colWhisperWindows.Item(WWIndex)
-                    If (.Shown = False) Then
-                        'window was previously hidden
+            With colWhisperWindows.Item(WWIndex)
+                If (.Shown = False) Then
+                    'window was previously hidden
 
-                        ShowWW WWIndex
-                    End If
+                    ShowWW WWIndex
+                End If
 
-                    .Caption = "Whisper Window: " & Username
-                    .AddWhisper lCarats, "<", RTBColors.WhisperUsernames, _
-                        Username, lCarats, "> ", RTBColors.WhisperText, Message
-                End With
-            End If
+                .Caption = "Whisper Window: " & Username
+                .AddWhisper lCarats, "<", RTBColors.WhisperUsernames, _
+                    Username, lCarats, "> ", RTBColors.WhisperText, Message
+            End With
         End If
 
         ' channel password
-        If (Not IsES And StrComp(Message, BotVars.ChannelPassword, vbTextCompare) = 0) Then
+        If (Not SkipPr And StrComp(Message, BotVars.ChannelPassword, vbTextCompare) = 0) Then
             lCarats = g_Channel.GetUserIndex(Username)
 
             If (lCarats > 0) Then
@@ -1995,7 +1991,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         End If
 
         ' vote check
-        If (Not IsES And VoteDuration > 0) Then
+        If (Not SkipPr And VoteDuration > 0) Then
             If (InStr(1, Message, "yes", vbTextCompare) > 0) Then
                 Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDYES, Username)
             ElseIf (InStr(1, Message, "no", vbTextCompare) > 0) Then
@@ -2004,7 +2000,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         End If
 
         '####### Mail check
-        If (Not IsES And mail) Then
+        If (Not SkipPr And mail) Then
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
                 Dim Msg As udtMail
 
@@ -2021,12 +2017,12 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         '#######
 
         ' process as command
-        If (Not IsES) Then
+        If (Not SkipPr) Then
             Call ProcessCommand(Username, Message, False, True)
         End If
 
         ' set last whisper
-        If (Not IsES) Then
+        If (Not SkipPr) Then
             LastWhisper = Username
             LastWhisperFromTime = Now
         End If
@@ -2039,8 +2035,6 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
     If BotIsClosing Then Exit Sub
     
     On Error Resume Next
-    
-    g_lastQueueUser = Username
     
     RunInAll "Event_WhisperFromUser", Username, Flags, Message, Ping
     'End If

@@ -1044,37 +1044,6 @@ Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boo
     End If
 End Function
 
-
-' Used by the Individual Whisper Window system to determine whether a message should be
-'  forwarded to an IWW
-Public Function IrrelevantWhisper(ByVal sIn As String, ByVal sUser As String) As Boolean
-    IrrelevantWhisper = False
-    
-    If InStr(sIn, Chr(223) & Chr(126) & Chr(223)) Then
-        IrrelevantWhisper = True
-        Exit Function
-    End If
-    
-    sUser = NameWithoutRealm(sUser, 1)
-    
-    'Debug.Print "strComp(" & Left$(sIn, 12 + Len(sUser)) & ", Your friend " & sUser & ")"
-    
-    If StrComp(Left$(sIn, 12 + Len(sUser)), "Your friend " & sUser) = 0 Then
-        IrrelevantWhisper = True
-        Exit Function
-    End If
-End Function
-
-Public Sub UpdateSafelistedStatus(ByVal sUser As String, ByVal bStatus As Boolean)
-    Dim i As Integer
-    
-    'i = UsernameToIndex(sUser)
-    
-    If i > 0 Then
-        'colUsersInChannel.Item(i).Safelisted = bStatus
-    End If
-End Sub
-
 Public Sub AddBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     Const MAX_BAN_COUNT As Integer = 80
 

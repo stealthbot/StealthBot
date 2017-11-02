@@ -6817,8 +6817,8 @@ Private Function ReplaceEnvironmentVars(ByVal str As String) As String
 
 End Function
 
-Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optional ByVal User As String = _
-    vbNullString, Optional ByVal Tag As String = vbNullString, Optional OversizeDelimiter As String = " ") As Integer
+Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, _
+        Optional ByVal Tag As String = vbNullString, Optional OversizeDelimiter As String = " ") As Integer
 
     On Error GoTo ERROR_HANDLER
     
