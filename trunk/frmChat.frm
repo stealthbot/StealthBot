@@ -1111,6 +1111,7 @@ Begin VB.Form frmChat
       TabIndex        =   4
       TabStop         =   0   'False
       Top             =   6960
+      Visible         =   0   'False
       Width           =   12375
       _ExtentX        =   21828
       _ExtentY        =   2990
@@ -1766,7 +1767,6 @@ Private Const SB_INET_BETA  As String = "AUTHBETA"
 Private Sub Form_Load()
     Dim s As String
     Dim f As Integer
-    Dim HeightVal As Long
     Dim FrmSplashInUse As Boolean
     Dim strBeta As String
     Dim sStr() As String
@@ -1811,9 +1811,6 @@ Private Sub Form_Load()
     sStr = SetCommandLine(Command())
     
     ' EVERYTHING ELSE
-    rtbWhispers.Visible = False 'default
-    rtbWhispersVisible = False
-
     'Set dictTimerInterval = New Dictionary
     'Set dictTimerEnabled = New Dictionary
     'Set dictTimerCount = New Dictionary
@@ -1830,14 +1827,12 @@ Private Sub Form_Load()
     f = FreeFile
     
     With rtbChat
-        .Font.Size = 8
         .SelTabCount = 1
         .SelTabs(0) = 15 * Screen.TwipsPerPixelX
         .SelHangingIndent = .SelTabs(0)
     End With
     
     With rtbWhispers
-        .Font.Size = 8
         .SelTabCount = 1
         .SelTabs(0) = 15 * Screen.TwipsPerPixelX
         .SelHangingIndent = .SelTabs(0)
@@ -1866,21 +1861,14 @@ Private Sub Form_Load()
         frmSplash.Show
         FrmSplashInUse = True
     End If
-    
-    If Config.ShowWhisperBox Then
-        If Not rtbWhispersVisible Then Call cmdShowHide_Click
-    Else
-        If rtbWhispersVisible Then Call cmdShowHide_Click
-    End If
+
+    ' whisper panel show/hide button
+    ShowHideChangeHeight = False
+    rtbWhispers.Visible = False 'default
+    cmdShowHide.Caption = CAP_HIDE
     
     If Config.PositionHeight > 0 Then
-        HeightVal = (IIf(CLng(Config.PositionHeight) < 200, 200, CLng(Config.PositionHeight)) * Screen.TwipsPerPixelY)
-        
-        If (rtbWhispersVisible) Then
-            HeightVal = HeightVal - (rtbWhispers.Height / Screen.TwipsPerPixelY)
-        End If
-        
-        Me.Height = HeightVal
+        Me.Height = (IIf(CLng(Config.PositionHeight) < 200, 200, CLng(Config.PositionHeight)) * Screen.TwipsPerPixelY)
     End If
     
     If Config.PositionWidth > 0 Then
@@ -1978,6 +1966,9 @@ Private Sub Form_Load()
     
     TASKBARCREATED_MSGID = RegisterWindowMessage("TaskbarCreated")
     
+    ' whisper panel show/hide button: now user can click (after reload config)
+    ShowHideChangeHeight = True
+    ' focus on send box
     cboSend.SetFocus
     
     LoadQuickChannels
@@ -2623,7 +2614,7 @@ Public Sub Form_Resize()
         cboSend.Width = rtbChat.Width
         
         With cmdShowHide
-            If rtbWhispersVisible Then
+            If rtbWhispers.Visible Then
                 'Debug.Print "-> " & rtbWhispers.Height
                 .Height = rtbWhispers.Height + 285
                 .Caption = CAP_HIDE
@@ -2637,10 +2628,8 @@ Public Sub Form_Resize()
             .ZOrder vbBringToFront
         End With
         
-        rtbWhispers.Visible = rtbWhispersVisible
-        
         'height is based on rtbchat.height + cmdshowhide.height
-        If rtbWhispersVisible Then
+        If rtbWhispers.Visible Then
             rtbChat.Height = ((Me.ScaleHeight / Screen.TwipsPerPixelY) - (txtPre.Height / _
                 Screen.TwipsPerPixelY) - (rtbWhispers.Height / Screen.TwipsPerPixelY)) * _
                     (Screen.TwipsPerPixelY)
@@ -2683,7 +2672,7 @@ Public Sub Form_Resize()
         ListviewTabs.Move lvChannel.Left, cboSend.Top + Screen.TwipsPerPixelY, lvChannel.Width - _
             cmdShowHide.Width - Screen.TwipsPerPixelX, cboSend.Height '+ 2 * Screen.TwipsPerPixelY
         
-        If rtbWhispersVisible Then
+        If rtbWhispers.Visible Then
             cmdShowHide.Move (((rtbWhispers.Left + rtbWhispers.Width) / Screen.TwipsPerPixelX) + 1) * _
                 Screen.TwipsPerPixelX, lvChannel.Top + lvChannel.Height + Screen.TwipsPerPixelY
         Else
@@ -2718,7 +2707,6 @@ Public Sub Form_Resize()
     
     If Me.WindowState = vbMaximized Then
         WasMaximized = True
-        Call RecordWindowPosition(True)
     ElseIf Me.WindowState = vbMinimized Then
         If WasMaximized Then
             WasMaximized = False
@@ -3276,7 +3264,7 @@ Sub Form_Unload(Cancel As Integer)
         If Me.WindowState <> vbMinimized Then
             Call RecordWindowPosition(CBool(Me.WindowState = vbMaximized))
         End If
-        
+        'Debug.Print Config.ShowWhisperBox
         Call Config.Save
     End If
 
@@ -5257,13 +5245,13 @@ Sub mnuLock_Click()
     mnuLock.Checked = (Not (mnuLock.Checked))
     
     If BotVars.LockChat = False Then
-        AddChat RTBColors.InformationText, "Chat window locked."
+        AddChat RTBColors.ConsoleText, ">> Chat window locked."
         AddChat RTBColors.ErrorMessageText, "NO MESSAGES WHATSOEVER WILL BE DISPLAYED UNTIL YOU UNLOCK THE WINDOW."
         AddChat RTBColors.ErrorMessageText, "To return to normal mode, press CTRL+L or use the toggle under the Window menu."
         BotVars.LockChat = True
     Else
         BotVars.LockChat = False
-        AddChat RTBColors.SuccessText, "Chat window unlocked."
+        AddChat RTBColors.ConsoleText, ">> Chat window unlocked."
     End If
 End Sub
 
@@ -7202,8 +7190,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
         
         If ResizeChatElements Then
-            Call ChangeRTBFont(rtbChat, Config.ChatFont, Config.ChannelListFontSize)
-            Call ChangeRTBFont(rtbWhispers, Config.ChatFont, Config.ChannelListFontSize)
+            Call ChangeRTBFont(rtbChat, Config.ChatFont, Config.ChatFontSize)
+            Call ChangeRTBFont(rtbWhispers, Config.ChatFont, Config.ChatFontSize)
             
             Form_Resize
         End If
@@ -7355,6 +7343,11 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = Config.GetFilePath("Logs")
     If (Not (s = vbNullString)) Then
         g_Logger.LogPath = s
+    End If
+    
+    ' xor: if showwhisperbox XOR whisperboxopen then toggle it
+    If (Config.ShowWhisperBox Xor (StrComp(cmdShowHide.Caption, CAP_HIDE, vbBinaryCompare) = 0)) Then
+        Call cmdShowHide_Click
     End If
     
     Call Form_Resize
@@ -7988,20 +7981,23 @@ End Sub
 
 'SHOW/HIDE STUFF
 Public Sub cmdShowHide_Click()
-    rtbWhispersVisible = (StrComp(cmdShowHide.Caption, CAP_HIDE))
-    rtbWhispers.Visible = rtbWhispersVisible
-    Config.WhisperWindows = CBool(rtbWhispers.Visible)
-    Call Config.Save
-    
-    If Me.WindowState <> vbMaximized And Me.WindowState <> vbMinimized Then
-        If rtbWhispersVisible Then
+    Dim Visible As Boolean
+    Visible = (Not rtbWhispers.Visible)
+
+    'Debug.Print ShowHideChangeHeight
+    If Me.WindowState = vbNormal And ShowHideChangeHeight Then
+        If Visible Then
             Me.Height = Me.Height + rtbWhispers.Height - Screen.TwipsPerPixelY
         Else
             Me.Height = Me.Height - rtbWhispers.Height + Screen.TwipsPerPixelY
         End If
     End If
-        
+
+    rtbWhispers.Visible = Visible
     Call Form_Resize
+
+    Config.ShowWhisperBox = Visible
+    Call Config.Save
 End Sub
 
 '// to be called on every successful login
@@ -8720,7 +8716,7 @@ Public Sub RecordWindowPosition(Optional Maximized As Boolean = False)
         Config.PositionHeight = Int(Me.Height / Screen.TwipsPerPixelY)
         Config.PositionWidth = Int(Me.Width / Screen.TwipsPerPixelX)
     End If
-    
+
     Config.IsMaximized = Maximized
     Call Config.Save
 End Sub

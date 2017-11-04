@@ -923,7 +923,7 @@ Begin VB.Form frmSettings
       End
       Begin VB.CheckBox chkWhisperPanelExpand 
          BackColor       =   &H00000000&
-         Caption         =   "Expand expandable whisper panel"
+         Caption         =   "Show expandable whisper panel"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -937,7 +937,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   360
          TabIndex        =   45
-         ToolTipText     =   "Enables the small prefix box to the left of the send box used to put text before all messages."
+         ToolTipText     =   "Shows the whisper panel below the main chat box."
          Top             =   2520
          Width           =   2775
       End
@@ -6198,8 +6198,8 @@ Sub SaveFontSettings()
     End If
     
     If ResizeChatElements Then
-        Call ChangeRTBFont(frmChat.rtbChat, Config.ChatFont, Config.ChannelListFontSize)
-        Call ChangeRTBFont(frmChat.rtbWhispers, Config.ChatFont, Config.ChannelListFontSize)
+        Call ChangeRTBFont(frmChat.rtbChat, Config.ChatFont, Config.ChatFontSize)
+        Call ChangeRTBFont(frmChat.rtbWhispers, Config.ChatFont, Config.ChatFontSize)
         
         frmChat.Form_Resize
     End If

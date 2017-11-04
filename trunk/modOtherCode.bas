@@ -1145,7 +1145,7 @@ Public Function IsBanned(ByVal sUser As String) As Boolean
         sUser = Left$(sUser, InStr(1, sUser, _
             "#", vbBinaryCompare) - 1)
         
-        Debug.Print sUser
+        'Debug.Print sUser
     End If
     
     For i = 0 To UBound(gBans)

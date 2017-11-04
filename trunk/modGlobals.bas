@@ -12,7 +12,9 @@ Public ReconnectTimerID As Long
 Public ExReconnectTimerID As Long
 Public SCReloadTimerID As Long
 Public QueueTimerID As Long
-Public rtbWhispersVisible As Boolean
+
+' frmchat constants
+Public ShowHideChangeHeight As Boolean
 Public cboSendHadFocus As Boolean
 Public cboSendSelStart As Long
 Public cboSendSelLength As Long

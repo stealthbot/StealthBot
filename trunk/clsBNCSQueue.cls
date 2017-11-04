@@ -71,7 +71,7 @@ Public Function GetDelay(ByVal sText As String) As Long
     End If
     
     ThisPacketCost = BotVars.QueueCostPerPacket + (ThisByteDelay * Len(sText))
-    Debug.Print "Cost for this packet: " & ThisPacketCost
+    'Debug.Print "Cost for this packet: " & ThisPacketCost
     
     '// Check how long this packet will have to wait
     If (Credits < 0) Then
@@ -84,7 +84,7 @@ Public Function GetDelay(ByVal sText As String) As Long
     
     Credits = Credits - ThisPacketCost
     
-    Debug.Print "Remaining credits: " & Credits & "; delay: " & RequiredDelay
+    'Debug.Print "Remaining credits: " & Credits & "; delay: " & RequiredDelay
     GetDelay = RequiredDelay
 End Function
 

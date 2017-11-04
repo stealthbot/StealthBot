@@ -45,6 +45,8 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
+      Enabled         =   -1  'True
+      AutoVerbMenu    =   -1  'True
       TextRTF         =   $"frmProfile.frx":0CCA
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -85,8 +87,10 @@ Begin VB.Form frmProfile
       _ExtentY        =   4895
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
+      AutoVerbMenu    =   -1  'True
       TextRTF         =   $"frmProfile.frx":0D5B
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -110,6 +114,8 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
+      Enabled         =   -1  'True
+      AutoVerbMenu    =   -1  'True
       TextRTF         =   $"frmProfile.frx":0DEC
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -133,6 +139,8 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
+      Enabled         =   -1  'True
+      AutoVerbMenu    =   -1  'True
       TextRTF         =   $"frmProfile.frx":0E7D
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"

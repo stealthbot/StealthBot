@@ -1956,8 +1956,6 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         frmChat.AddWhisper lCarats, "<From ", RTBColors.WhisperUsernames, _
             Username, lCarats, "> ", RTBColors.WhisperText, Message
 
-        frmChat.rtbWhispers.Visible = rtbWhispersVisible
-
         ' individual whisper windows
         If (Not SkipPr And frmChat.mnuToggleWWUse.Checked) Then
         'If ((frmChat.mnuToggleWWUse.Checked) And _
@@ -2081,9 +2079,7 @@ Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, By
     End If
 
     If (frmChat.mnuToggleWWUse.Checked) Then
-        If ((InStr(1, Message, "ß~ß") = 0) And _
-            (StrComp(Username, FRIEND_MSG_USER, vbBinaryCompare) <> 0)) Then
-            
+        If (StrComp(Username, FRIEND_MSG_USER, vbBinaryCompare) <> 0) Then
             WWIndex = AddWhisperWindow(Username)
             
             If (frmChat.WindowState <> vbMinimized) Then
@@ -2098,11 +2094,6 @@ Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, By
         End If
     End If
     
-    If (Not (rtbWhispersVisible)) Then
-        If (frmChat.rtbWhispers.Visible = True) Then
-            frmChat.rtbWhispers.Visible = False
-        End If
-    End If
     Exit Sub
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, _

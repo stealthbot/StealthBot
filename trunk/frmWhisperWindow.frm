@@ -6,7 +6,7 @@ Begin VB.Form frmWhisperWindow
    Caption         =   "< account name >"
    ClientHeight    =   3270
    ClientLeft      =   165
-   ClientTop       =   450
+   ClientTop       =   810
    ClientWidth     =   4695
    LinkTopic       =   "Form1"
    ScaleHeight     =   3270
@@ -38,9 +38,9 @@ Begin VB.Form frmWhisperWindow
       _ExtentY        =   4683
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
+      AutoVerbMenu    =   -1  'True
       TextRTF         =   $"frmWhisperWindow.frx":0000
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -126,6 +126,12 @@ Private Sub Form_Load()
         rtbWhispers.Font.Size = .Font.Size
         txtSend.Font.Name = .Font.Name
         txtSend.Font.Size = .Font.Size
+    End With
+    
+    With rtbWhispers
+        .SelTabCount = 1
+        .SelTabs(0) = 15 * Screen.TwipsPerPixelX
+        .SelHangingIndent = .SelTabs(0)
     End With
     
     #If (COMPILE_DEBUG = 0) Then

@@ -115,6 +115,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim SelLength      As Long
     ' don't draw while printing
     Dim blnUnlock      As Boolean
+    Dim blnVisible     As Boolean
     ' logging
     Dim LineLength     As Long
     Dim LineText       As String
@@ -208,6 +209,9 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         lngVerticalPos = GetVScrollPosition(rtb)
         blnCanVScroll = CanVScroll(rtb)
         blnScrollAtEnd = (Not blnCanVScroll) Or (lngVerticalPos = 0)
+
+        ' did this RTB start invisible?
+        blnVisible = rtb.Visible
 
         If (blnScrollAtEnd) Then
             rtb.Visible = False
@@ -323,6 +327,8 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             ' below causes smooth scrolling, but also screen flickers :(
             'LockWindowUpdate &H0
         End If
+
+        rtb.Visible = blnVisible
     End If
 
     RichTextErrorCounter = 0
