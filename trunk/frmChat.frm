@@ -6816,14 +6816,14 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, _
     Dim currChar       As Long
     Dim Send           As String
     Dim Command        As String
-    Dim GTC            As Double
+    Dim GTC            As Currency
     Dim Q              As clsQueueObj
     Dim delay          As Long
     Dim Index          As Long
     Dim s              As String      ' temp string for settings
     Dim MaxLength      As Integer     ' stores max length for split (with override)
     
-    Static LastGTC  As Double
+    Static LastGTC  As Currency
     Static BanCount As Integer
 
     strTmp = Message
@@ -6996,7 +6996,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, _
         ' add to the queue!
         For i = LBound(Splt) To UBound(Splt)
             ' store current tick
-            GTC = GetTickCount()
+            GTC = modDateTime.GetTickCountMS()
             
             ' store working copy
             Send = Splt(i)

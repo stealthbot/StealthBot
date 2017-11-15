@@ -39,7 +39,7 @@ Attribute VB_Exposed = False
 ' PRIVATE VARIABLES
 Option Explicit
 
-Private LastSent As Double
+Private LastSent As Currency
 Private Credits As Long
 
 '    /** Note on implementation: This will assume that all previous packets have already been sent.  Don't call this multiple
@@ -55,14 +55,14 @@ Public Function GetDelay(ByVal sText As String) As Long
     
     If Credits < BotVars.QueueMaxCredits Then
         ' Adjust credits up
-        Credits = Credits + ((GetTickCount() - LastSent) / BotVars.QueueCreditRate)
+        Credits = Credits + ((modDateTime.GetTickCountMS() - LastSent) / BotVars.QueueCreditRate)
         
         If Credits > BotVars.QueueMaxCredits Then
             Credits = BotVars.QueueMaxCredits
         End If
     End If
     
-    LastSent = GetTickCount()
+    LastSent = modDateTime.GetTickCountMS()
     '        int thisByteDelay = byteCost;
     ThisByteDelay = byteCost
     
@@ -90,7 +90,7 @@ End Function
 
 Public Sub ClearQueue()
     Credits = 0
-    LastSent = GetTickCount()
+    LastSent = modDateTime.GetTickCountMS()
     ' TODO: Clear the actual queue
 End Sub
 
