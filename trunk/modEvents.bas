@@ -759,7 +759,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
 
     If g_Clan.InClan Then
         If (StrComp(g_Channel.Name, "Clan " & g_Clan.Name, vbTextCompare) = 0) Then
-            If (g_Clan.PendingClanMOTD) Then
+            If (g_Clan.PendingClanMOTD And StrComp(Message, g_Clan.MOTD, vbBinaryCompare) = 0) Then
                 Call frmChat.AddChat(RTBColors.ServerInfoText, Message)
                 g_Clan.PendingClanMOTD = False
                 On Error Resume Next
@@ -945,7 +945,12 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         ' friends hiding
         If (StrComp(Message, MSG_FRIENDS, vbBinaryCompare) = 0) Then
             If (Not (BotVars.ShowOfflineFriends)) Then
-                Message = Message & "  " & Chr$(255) & "ci(StealthBot is hiding your offline friends)"
+                ' display it early and append the hiding indicator
+                If (Not (Hidden)) Then
+                    frmChat.AddChat RTBColors.ServerInfoText, Message & "  " & Chr$(255) & "ci(StealthBot is hiding your offline friends)"
+                    ' hide it next time
+                    Hidden = True
+                End If
             End If
         End If
         If (StrComp(Right$(Message, Len(MSG_FRIEND_OFFLINE)), MSG_FRIEND_OFFLINE, vbBinaryCompare) = 0) Then
