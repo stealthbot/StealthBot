@@ -1117,6 +1117,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1142,6 +1143,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1863,7 +1865,9 @@ Private Sub Form_Load()
     ShowHideChangeHeight = False
     rtbWhispers.Visible = False 'default
     cmdShowHide.Caption = CAP_HIDE
-    
+
+    SkipResize = True
+
     If Config.PositionHeight > 0 Then
         Me.Height = (IIf(CLng(Config.PositionHeight) < 200, 200, CLng(Config.PositionHeight)) * Screen.TwipsPerPixelY)
     End If
@@ -1895,18 +1899,17 @@ Private Sub Form_Load()
     If Config.IsMaximized Then
         Me.WindowState = vbMaximized
     End If
+    SkipResize = False
 
     Set ClanHandler = New clsClanPacketHandler
     Set FriendListHandler = New clsFriendlistHandler
     Set ListToolTip = New clsCTooltip
-    
+
     Set ReceiveBuffer(stBNCS) = New clsDataBuffer
     Set ReceiveBuffer(stBNLS) = New clsDataBuffer
     Set ReceiveBuffer(stMCP) = New clsDataBuffer
-    
+
     Call ReloadConfig
-    
-    Call Form_Resize
     
     Call GetColorLists
     Call InitListviewTabs
@@ -2437,6 +2440,8 @@ Public Sub Form_Resize()
     Dim lblHeight As Integer
     Static WasMaximized As Boolean
     Static DoMaximize As Boolean
+
+    If SkipResize Then Exit Sub
     
     If Me.WindowState = vbMinimized Then
         If Not BotVars.NoTray Then
@@ -7075,7 +7080,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             Call ChangeRTBFont(rtbChat, Config.ChatFont, Config.ChatFontSize)
             Call ChangeRTBFont(rtbWhispers, Config.ChatFont, Config.ChatFontSize)
             
-            Form_Resize
+            Call Form_Resize
         End If
     End If
     
@@ -7922,15 +7927,17 @@ Public Sub cmdShowHide_Click()
     Dim Visible As Boolean
     Visible = (Not rtbWhispers.Visible)
 
-    'Debug.Print ShowHideChangeHeight
     If Me.WindowState = vbNormal And ShowHideChangeHeight Then
+        SkipResize = True
         If Visible Then
-            Me.Height = Me.Height + rtbWhispers.Height - Screen.TwipsPerPixelY
+            Me.Height = Me.Height + rtbWhispers.Height ' - Screen.TwipsPerPixelY
         Else
-            Me.Height = Me.Height - rtbWhispers.Height + Screen.TwipsPerPixelY
+            Me.Height = Me.Height - rtbWhispers.Height ' + Screen.TwipsPerPixelY
         End If
+        SkipResize = False
     End If
 
+    'Debug.Print ShowHideChangeHeight
     rtbWhispers.Visible = Visible
     Call Form_Resize
 
