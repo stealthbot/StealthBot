@@ -28,7 +28,6 @@ Public g_OSVersion As New clsOSVersion
 Public SharedScriptSupport As New clsScriptSupportClass
 Public ReceiveBuffer(0 To 2) As clsDataBuffer
 Public ProxyConnInfo(0 To 2) As udtProxyConnectionInfo
-Public GErrorHandler As clsErrorHandler
 
 Public ConfigOverride As String
 Public CommandLine As String

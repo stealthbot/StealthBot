@@ -61,7 +61,7 @@ Private Function MakePacket(ByRef Data() As Byte, ByVal PktLen As Long, _
 
 End Function
 
-Private Function NamePacketType(ByVal PktType As enuServerTypes) As String
+Public Function NamePacketType(ByVal PktType As enuServerTypes) As String
     Select Case PktType
         Case stBNCS:  NamePacketType = "BNCS"
         Case stBNLS:  NamePacketType = "BNLS"
