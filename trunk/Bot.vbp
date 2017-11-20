@@ -41,7 +41,6 @@ Form=frmWhisperWindow.frm
 Module=modWhisperWindows; modWhisperWindows.bas
 Module=modWindow; modWindow.bas
 Module=modMail; modMail.bas
-Class=clsErrorHandler; clsErrorHandler.cls
 Module=modBNCSutil; modBNCSutil.bas
 Module=modEvents; modEvents.bas
 Module=modColors; modColors.bas
