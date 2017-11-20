@@ -7366,6 +7366,7 @@ Private Sub DisplayError(ByVal ErrorNumber As Integer, ByVal ErrorDescription As
         Optional ByVal IsProxyConnecting As Boolean = False, Optional ByVal ExistingConnection As Boolean = False)
     Dim sPrefix     As String
     Dim sServerType As String
+    Dim sProtocol   As String
 
     Select Case (Source)
         Case stBNLS: sPrefix = "[BNLS] ":  sServerType = "BNLS"
@@ -7376,7 +7377,9 @@ Private Sub DisplayError(ByVal ErrorNumber As Integer, ByVal ErrorDescription As
     If (IsProxyConnecting) Then
         sPrefix = "[PROXY] " & sPrefix
         sServerType = "proxy"
+        Source = stPROXY
     End If
+    sProtocol = NamePacketType(Source)
     
     If LenB(ErrorDescription) = 0 Then
         ErrorDescription = "The " & sServerType & " server has closed the connection."
@@ -7393,6 +7396,8 @@ Private Sub DisplayError(ByVal ErrorNumber As Integer, ByVal ErrorDescription As
     Else
         AddChat RTBColors.ErrorMessageText, sPrefix & "Disconnected."
     End If
+
+    Call RunInAll("Event_ConnectionError", sProtocol, ErrorNumber, ErrorDescription)
 End Sub
 
 Sub LoadOutFilters()
