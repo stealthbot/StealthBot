@@ -211,10 +211,10 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         blnScrollAtEnd = (Not blnCanVScroll) Or (lngVerticalPos = 0)
 
         ' did this RTB start invisible?
-        blnVisible = rtb.Visible
+        'blnVisible = rtb.Visible
 
         If (blnScrollAtEnd) Then
-            rtb.Visible = False
+            'rtb.Visible = False
 
             ' below causes smooth scrolling, but also screen flickers :(
             'LockWindowUpdate rtb.hWnd
@@ -231,7 +231,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         Length = GetRTBLength(rtb)
         If ((BotVars.MaxBacklogSize) And (Length > BotVars.MaxBacklogSize)) Then
             If (blnUnlock = False) Then
-                rtb.Visible = False
+                'rtb.Visible = False
 
                 ' below causes smooth scrolling, but also screen flickers :(
                 'LockWindowUpdate rtb.hWnd
@@ -253,7 +253,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End With
 
             If (blnUnlock = False) Then
-                rtb.Visible = True
+                'rtb.Visible = True
 
                 ' below causes smooth scrolling, but also screen flickers :(
                 'LockWindowUpdate &H0
@@ -322,13 +322,13 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
         If (blnUnlock) Then
             ' was invisible
-            rtb.Visible = True
+            'rtb.Visible = True
 
             ' below causes smooth scrolling, but also screen flickers :(
             'LockWindowUpdate &H0
         End If
 
-        rtb.Visible = blnVisible
+        'rtb.Visible = blnVisible
     End If
 
     RichTextErrorCounter = 0
