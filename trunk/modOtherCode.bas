@@ -1847,26 +1847,6 @@ Public Function UsernameRegex(ByVal Username As String, ByVal sPattern As String
     UsernameRegex = (prepName Like prepPatt)
 End Function
 
-Public Sub CloseAllConnections(Optional ShowMessage As Boolean = True)
-    If (frmChat.sckBNLS.State <> sckClosed) Then: frmChat.sckBNLS.Close
-    If (frmChat.sckBNet.State <> sckClosed) Then: frmChat.sckBNet.Close
-    If (frmChat.sckMCP.State <> sckClosed) Then: frmChat.sckMCP.Close
-    
-    If (ShowMessage) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "All connections closed."
-    End If
-    
-    BNLSAuthorized = False
-    
-    SetTitle "Disconnected"
-    
-    frmChat.UpdateTrayTooltip
-    
-    g_Online = False
-    
-    RunInAll "Event_ServerError", "All connections closed."
-End Sub
-
 Public Sub BuildProductInfo()
     ' 4-digit code, short code, full name, home channel, number of keys, BNLS ID, logon system, version byte
     ProductList(0) = CreateProductInfo("UNKW", vbNullString, "Unknown Product", "Unknown", 0, &H0, &H0, &H0)

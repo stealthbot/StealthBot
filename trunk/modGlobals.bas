@@ -9,7 +9,6 @@ Public Database As New clsDatabase
 
 'Timer variables
 Public ReconnectTimerID As Long
-Public ExReconnectTimerID As Long
 Public SCReloadTimerID As Long
 Public QueueTimerID As Long
 
@@ -36,6 +35,7 @@ Public CommandLine As String
 Public lLauncherVersion As Long
 
 Public g_Connected As Boolean
+Public g_ConnectionAlive As Boolean
 Public g_Online As Boolean
 
 Public g_Quotes As New clsQuotesObj
@@ -45,7 +45,10 @@ Public g_Channel As clsChannelObj
 Public g_Friends As Collection
 Public g_Clan As clsClanObj
 
-Public UserCancelledConnect As Boolean
+Public AutoReconnectActive As Boolean
+Public AutoReconnectTry    As Long
+Public AutoReconnectTicks  As Long
+Public AutoReconnectIn     As Long
 
 'For closing the bot with the quit command
 Public BotIsClosing As Boolean

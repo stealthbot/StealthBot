@@ -2,43 +2,15 @@ Attribute VB_Name = "modTimerProcs"
 Option Explicit
 
 Public Sub Reconnect_TimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal idEvent As Long, ByVal dwTimer As Long)
-    If (Not (UserCancelledConnect)) Then
-        Call frmChat.Connect
-    End If
-    
-    UserCancelledConnect = False
-    
-    Call KillTimer(0, ReconnectTimerID)
-    
-    ReconnectTimerID = 0
-End Sub
-
-Public Sub ExtendedReconnect_TimerProc(ByVal hWnd As Long, ByVal uMsg As Long, _
-    ByVal idEvent As Long, ByVal dwTimer As Long)
-    
-    '// Ticks = number of 30-second intervals passed since timer was initiated
-    ExReconTicks = (ExReconTicks + 1)
-    
-    If ((ExReconTicks >= ExReconMinutes) And (UserCancelledConnect = False)) Then
-        Call KillTimer(0, ExReconnectTimerID)
-        
-        UserCancelledConnect = False
-        
-        Call frmChat.Connect
-        
-        ExReconnectTimerID = 0
-        ExReconTicks = 0
-        ExReconMinutes = 0
-    End If
-    
-    If ((ExReconTicks >= ExReconMinutes) Or (UserCancelledConnect)) Then
-        Call KillTimer(0, ExReconnectTimerID)
-        
-        UserCancelledConnect = False
-        
-        ExReconnectTimerID = 0
-        ExReconTicks = 0
-        ExReconMinutes = 0
+    If (AutoReconnectActive) Then
+        If (AutoReconnectTicks >= AutoReconnectIn) Then
+            Call KillTimer(0, ReconnectTimerID)
+            Call frmChat.Connect
+        Else
+            AutoReconnectTicks = AutoReconnectTicks + 1
+        End If
+    Else
+        Call KillTimer(0, ReconnectTimerID)
     End If
 End Sub
 

@@ -81,7 +81,7 @@ Public Sub OnCQ(Command As clsCommandObj)
 End Sub
 
 Public Sub OnDisconnect(Command As clsCommandObj)
-    frmChat.DoDisconnect
+    Call frmChat.DoDisconnect
 End Sub
 
 Public Sub OnExpand(Command As clsCommandObj)

@@ -79,7 +79,9 @@ Private m_NewPassword               As String
 '[FEATURES]
 Private m_UseBackupChannel          As Boolean
 Private m_BackupChannel             As String
+Private m_ReconnectType             As Byte
 Private m_ReconnectDelay            As Long
+Private m_ReconnectDelayMax         As Long
 Private m_BotMail                   As Boolean
 Private m_ProfileAmp                As Boolean
 Private m_VoidView                  As Boolean
@@ -480,12 +482,28 @@ Public Property Let BackupChannel(ByVal sValue As String)
     m_BackupChannel = sValue
 End Property
 
+Public Property Get ReconnectType() As Byte
+    ReconnectType = m_ReconnectType
+End Property
+
+Public Property Let ReconnectType(ByVal sValue As Byte)
+    m_ReconnectType = sValue
+End Property
+
 Public Property Get ReconnectDelay() As Long
     ReconnectDelay = m_ReconnectDelay
 End Property
 
 Public Property Let ReconnectDelay(ByVal sValue As Long)
     m_ReconnectDelay = sValue
+End Property
+
+Public Property Get ReconnectDelayMax() As Long
+    ReconnectDelayMax = m_ReconnectDelayMax
+End Property
+
+Public Property Let ReconnectDelayMax(ByVal sValue As Long)
+    m_ReconnectDelayMax = sValue
 End Property
 
 Public Property Get BotMail() As Boolean
@@ -1757,7 +1775,9 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     
     WriteSetting SECTION_FEATURES, "UseBackupChannel", m_UseBackupChannel
     WriteSetting SECTION_FEATURES, "BackupChannel", m_BackupChannel
+    WriteSetting SECTION_FEATURES, "ReconnectType", m_ReconnectType
     WriteSetting SECTION_FEATURES, "ReconnectDelay", m_ReconnectDelay
+    WriteSetting SECTION_FEATURES, "ReconnectDelayMax", m_ReconnectDelayMax
     WriteSetting SECTION_FEATURES, "BotMail", m_BotMail
     WriteSetting SECTION_FEATURES, "ProfileAmp", m_ProfileAmp
     WriteSetting SECTION_FEATURES, "VoidView", m_VoidView
@@ -1954,7 +1974,9 @@ Private Sub LoadDefaults()
     '[Features]
     m_UseBackupChannel = False
     m_BackupChannel = vbNullString
-    m_ReconnectDelay = 1000
+    m_ReconnectType = 2
+    m_ReconnectDelay = 300
+    m_ReconnectDelayMax = 3600
     m_BotMail = True
     m_ProfileAmp = False
     m_VoidView = False
@@ -2305,7 +2327,9 @@ Private Sub LoadVersion6Config()
 
     m_UseBackupChannel = ReadSettingB(SECTION_FEATURES, "UseBackupChannel", m_UseBackupChannel)
     m_BackupChannel = ReadSetting(SECTION_FEATURES, "BackupChannel", m_BackupChannel)
+    m_ReconnectType = ReadSettingL(SECTION_FEATURES, "ReconnectType", m_ReconnectType)
     m_ReconnectDelay = ReadSettingL(SECTION_FEATURES, "ReconnectDelay", m_ReconnectDelay)
+    m_ReconnectDelayMax = ReadSettingL(SECTION_FEATURES, "ReconnectDelayMax", m_ReconnectDelayMax)
     m_BotMail = ReadSettingB(SECTION_FEATURES, "BotMail", m_BotMail)
     m_ProfileAmp = ReadSettingB(SECTION_FEATURES, "ProfileAmp", m_ProfileAmp)
     m_VoidView = ReadSettingB(SECTION_FEATURES, "VoidView", m_VoidView)
@@ -2481,8 +2505,11 @@ Private Sub ConformValues()
     If m_MaxBacklogSize < 0 Then m_MaxBacklogSize = 10000
     If m_MaxLogFileSize < 0 Then m_MaxLogFileSize = 50000000
     
-    If m_ReconnectDelay < 0 Then m_ReconnectDelay = 1000
-    If m_ReconnectDelay > 60000 Then m_ReconnectDelay = 60000
+    If m_ReconnectType < 0 Or m_ReconnectType > 2 Then m_ReconnectType = 2
+    If m_ReconnectDelay < 0 Then m_ReconnectDelay = 5
+    If m_ReconnectDelay > 86400 Then m_ReconnectDelay = 86400
+    If m_ReconnectDelayMax < m_ReconnectDelay Then m_ReconnectDelayMax = m_ReconnectDelay
+    If m_ReconnectDelayMax > 86400 Then m_ReconnectDelayMax = 86400
     
     If m_PingSpoofing < 0 Or m_PingSpoofing > 2 Then m_PingSpoofing = 0
     If m_ProxyPort < 0 Or m_ProxyPort > 65535 Then m_ProxyPort = 1080

@@ -2792,7 +2792,7 @@ End Function
 Public Sub HandleEmptyCRevSeed()
     frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] CheckRevision seed was returned empty! This is usually due to an unrecognized verison byte."
     If (BotVars.BNLS) Then
-        frmChat.HandleBnlsError "[BNCS] The BNLS server you are using may be misconfigured."
+        Call frmChat.HandleBnlsError(0, "The BNLS server you are using may be misconfigured.", True)
     Else
         frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] You can reset your version bytes to the latest by going to Bot -> Update Version Bytes"
         frmChat.DoDisconnect

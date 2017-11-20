@@ -1117,7 +1117,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1143,7 +1142,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1802,7 +1800,6 @@ Private Sub Form_Load()
     
     Set colWhisperWindows = New Collection
     Set colLastSeen = New Collection
-    Set GErrorHandler = New clsErrorHandler
     Set BotVars = New clsBotVars
     Set g_Channel = New clsChannelObj
     Set g_Clan = New clsClanObj
@@ -1928,8 +1925,6 @@ Private Sub Form_Load()
     SetTitle "Disconnected"
     
     frmChat.UpdateTrayTooltip
-    
-    UserCancelledConnect = True
     
     Me.Show
     Me.Refresh
@@ -2254,100 +2249,15 @@ Sub Event_BNetConnecting()
 End Sub
 
 Sub Event_BNetDisconnected()
-    tmrIdleTimer.Enabled = False
-    ConnectionTickCount = 0@
-    BotVars.JoinWatch = 0
-    
-    AddChat RTBColors.ErrorMessageText, "[BNCS] Disconnected."
-    
-    Call DoDisconnect(True)
-    
-    SetTitle "Disconnected"
-    
-    UpdateTrayTooltip
-    
-    g_Online = False
-    
-    Call ClearChannel
-    
-    ProxyConnInfo(stBNCS).Status = psNotConnected
-    ProxyConnInfo(stBNLS).Status = psNotConnected
-    ProxyConnInfo(stMCP).Status = psNotConnected
-    'AddChat RTBColors.ErrorMessageText, "[BNCS] Attempting to reconnect, please wait..."
-    'AddChat RTBColors.SuccessText, "Connection initialized."
-    
-    If sckBNet.State <> sckClosed Then sckBNet.Close
-    If sckBNLS.State <> sckClosed Then sckBNLS.Close
-    
-    BNLSAuthorized = False
-    
-    'If Not UserCancelledConnect Then
-    '    ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
-    '        AddressOf Reconnect_TimerProc)
-    'End If
-End Sub
-
-Sub Event_BNetError(ErrorNumber As Integer, Description As String)
-    Dim s As String
+    Dim Alive             As Boolean
     Dim IsProxyConnecting As Boolean
-    
-    If ProxyConnInfo(stBNCS).IsUsingProxy And ProxyConnInfo(stBNCS).Status <> psOnline Then
-        s = "[BNCS] [PROXY] "
-    Else
-        s = "[BNCS] "
-    End If
-    
-    AddChat RTBColors.ErrorMessageText, s & ErrorNumber & " -- " & Description
-    AddChat RTBColors.ErrorMessageText, s & "Disconnected."
-    
-    If (sckBNet.State <> sckClosed) Then
-        Call sckBNet.Close
-    End If
-    
-    If (sckBNLS.State <> sckClosed) Then
-        Call sckBNLS.Close
-    End If
-    
-    If (sckMCP.State <> sckClosed) Then
-        Call sckMCP.Close
-    End If
-    
-    g_Connected = False
-    
-    UserCancelledConnect = False
-    
-    DoDisconnect 1, True
-    
-    SetTitle "Disconnected"
-    
-    frmChat.UpdateTrayTooltip
-    
-    Call ClearChannel
-    lvClanList.ListItems.Clear
-    lvFriendList.ListItems.Clear
-    
-    Call UpdateListviewTabs
-    
-    ' NOV 18 04 Change here should fix the attention-grabbing on errors
-    'If Me.WindowState <> vbMinimized Then cboSend.SetFocus
-    
+    Alive = g_ConnectionAlive
     IsProxyConnecting = ProxyConnInfo(stBNCS).IsUsingProxy And ProxyConnInfo(stBNCS).Status <> psOnline
-    If DisplayError(ErrorNumber, IsProxyConnecting, stBNCS) = True Then
-        AddChat RTBColors.ErrorMessageText, _
-            "[BNCS] Attempting to reconnect in " & (BotVars.ReconnectDelay / 1000) & _
-                IIf(((BotVars.ReconnectDelay / 1000) <> 1), " seconds", " second") & _
-                        "..."
-        
-        UserCancelledConnect = False 'this should fix the beta reconnect problems
-        
-        'ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
-        '    AddressOf Reconnect_TimerProc)
-        
-        'ExReconTicks = 0
-        'ExReconMinutes = BotVars.ReconnectDelay / 1000
-        'ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, _
-        '    1000, AddressOf ExtendedReconnect_TimerProc)
-    End If
+
+    ' proxy or BNCS connection unexpectedly closed
+    Call DoDisconnect(False)
+    Call DisplayError(0, vbNullString, stBNCS, IsProxyConnecting, Alive)
+    Call DoScheduleAutoReconnect(Alive)
 End Sub
 
 Sub Event_BNLSAuthEvent(Success As Boolean)
@@ -2375,54 +2285,30 @@ Sub Event_BNLSConnecting()
     End If
 End Sub
 
-Sub Event_BNLSDataError(Message As Byte)
-    If Message = 0 Then
-        AddChat RTBColors.ErrorMessageText, "[BNLS] Your CD-Key was rejected. It may be invalid. Try connecting again."
-    ElseIf Message = 1 Then
-        AddChat RTBColors.ErrorMessageText, "[BNLS] Error! Your CD-Key is bad."
-    ElseIf Message = 2 Then
-        AddChat RTBColors.ErrorMessageText, "[BNLS] Error! BNLS has failed CheckRevision. Please check your bot's settings and try again."
-        AddChat RTBColors.ErrorMessageText, "[BNLS] Product: " & StrReverse(BotVars.Product) & "."
-    ElseIf Message = 3 Then
-        AddChat RTBColors.ErrorMessageText, "[BNLS] Error! Bad NLS revision."
-    End If
-End Sub
-
-Private Sub Event_BNLSError(ErrorNumber As Integer, Description As String)
-    If ProxyConnInfo(stBNLS).IsUsingProxy And ProxyConnInfo(stBNLS).Status <> psOnline Then
-        DisplayError ErrorNumber, True, stBNLS
-    ElseIf Not HandleBnlsError("[BNLS] Error " & ErrorNumber & ": " & Description) Then
-        ' if we aren't using the finder display the error
-        DisplayError ErrorNumber, False, stBNLS
-    End If
-End Sub
-
-
 ' this function will return whether we are going to use the finder
-Public Function HandleBnlsError(ByVal ErrorMessage As String) As Boolean
-    HandleBnlsError = False
-    
-    sckBNet.Close
-    
+Public Function HandleBnlsError(ByVal Number As Integer, ByVal Description As String, _
+        Optional ByVal NoAutoReconnect As Boolean = False) As Boolean
+    Dim Alive As Boolean
+    Alive = g_ConnectionAlive
+
+    'Close the current BNLS connection
+    Call DoDisconnect(False)
+    Call DisplayError(Number, Description, stBNLS, False, Alive)
     ' Is the BNLS server finder enabled?
     If Config.BNLSFinder Then
         Call RotateBnlsServer
+        HandleBnlsError = True
     Else
-        AddChat RTBColors.ErrorMessageText, ErrorMessage
-        
-        UserCancelledConnect = False
-        DoDisconnect 1, True
+        ' if we aren't using the finder, schedule reconnect
+        If Not NoAutoReconnect Then
+            Call DoScheduleAutoReconnect(Alive)
+        End If
+        HandleBnlsError = False
     End If
-    
-    ' return the BotVars
-    HandleBnlsError = Config.BNLSFinder
 End Function
 
 ' Moves the connection to the next available BNLS server
-Public Sub RotateBnlsServer()
-    'Close the current BNLS connection
-    sckBNLS.Close
-    
+Private Sub RotateBnlsServer()
     'Notify user the current BNLS server failed
     AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BNLSServer & " failed."
     
@@ -3256,8 +3142,6 @@ Public Function GetLogFilePath() As String
 End Function
 
 Sub Form_Unload(Cancel As Integer)
-    Inet.Cancel
-    
     AddChat RTBColors.ErrorMessageText, "Shutting down..."
     
     If Config.FileExists Then
@@ -3268,13 +3152,12 @@ Sub Form_Unload(Cancel As Integer)
         Call Config.Save
     End If
 
-    Call DoDisconnect(1)
+    Call DoDisconnect
 
     Shell_NotifyIcon NIM_DELETE, nid
     
     On Error Resume Next
     
-    RunInAll "Event_LoggedOff"
     RunInAll "Event_Close"
     RunInAll "Event_Shutdown"
     
@@ -3282,8 +3165,8 @@ Sub Form_Unload(Cancel As Integer)
     
     On Error GoTo 0
     
-    If ExReconnectTimerID > 0 Then
-        KillTimer 0, ExReconnectTimerID
+    If ReconnectTimerID > 0 Then
+        KillTimer 0, ReconnectTimerID
     End If
 
     Call modWarden.WardenCleanup(WardenInstance)
@@ -3298,7 +3181,6 @@ Sub Form_Unload(Cancel As Integer)
     Set BotVars = Nothing
     Set ClanHandler = Nothing
     Set ListToolTip = Nothing
-    Set GErrorHandler = Nothing
     Set FriendListHandler = Nothing
     Set colWhisperWindows = Nothing
     Set colLastSeen = Nothing
@@ -4617,16 +4499,6 @@ Private Sub mnuDisableVoidView_Click()
 End Sub
 
 Private Sub mnuDisconnect2_Click()
-'    Dim Key As String, L As Long
-'    Key = GetProductKey()
-    
-'    If AttemptedNewVerbyte Then
-'        AttemptedNewVerbyte = False
-'        l = CLng(Val("&H" & ReadCFG("Main", Key & "VerByte")))
-'        WriteINI "Main", Key & "VerByte", Hex(l - 1)
-'    End If
-    
-    GErrorHandler.Reset
     Call DoDisconnect
 End Sub
 
@@ -5200,7 +5072,6 @@ Private Sub mnuToggleFilters_Click()
 End Sub
 
 Private Sub mnuConnect_Click()
-    GErrorHandler.Reset
     Call DoConnect
 End Sub
 
@@ -5256,16 +5127,6 @@ Sub mnuLock_Click()
 End Sub
 
 Sub mnuDisconnect_Click()
-'    Dim Key As String, L As Long
-'    Key = GetProductKey()
-    
-'    If AttemptedNewVerbyte Then
-'        AttemptedNewVerbyte = False
-'        l = CLng(Val("&H" & ReadCFG("Main", Key & "VerByte")))
-'        WriteINI "Main", Key & "VerByte", Hex(l - 1)
-'    End If
-    
-    GErrorHandler.Reset
     Call DoDisconnect
 End Sub
 
@@ -6023,13 +5884,7 @@ Public Sub SControl_Error()
 End Sub
 
 Private Sub sckBNet_Close()
-    sckBNet.Close
-    If sckBNLS.State <> sckClosed Then sckBNLS.Close
-    
     Call Event_BNetDisconnected
-    
-    ds.ClientToken = 0
-    g_Connected = False
 End Sub
 
 Private Sub sckBNet_Connect()
@@ -6083,16 +5938,37 @@ Sub InitBNetConnection()
 End Sub
 
 Private Sub sckBNet_Error(ByVal Number As Integer, Description As String, ByVal sCode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-    Call Event_BNetError(Number, Description)
+    Dim Alive             As Boolean
+    Dim IsProxyConnecting As Boolean
+    Alive = g_ConnectionAlive
+    IsProxyConnecting = ProxyConnInfo(stBNCS).IsUsingProxy And ProxyConnInfo(stBNCS).Status <> psOnline
+
+    ' proxy or BNCS connection threw error
+    Call DoDisconnect(False)
+    Call DisplayError(Number, Description, stBNCS, IsProxyConnecting, Alive)
+    Call DoScheduleAutoReconnect(Alive)
 End Sub
 
 Private Sub sckMCP_Close()
-    AddChat RTBColors.ErrorMessageText, "[REALM] Connection closed."
-    
-    If Not ds.MCPHandler Is Nothing Then
-        ds.MCPHandler.IsRealmError = True
-        
-        Call DoDisconnect
+    Dim IsProxyConnecting As Boolean
+
+    If Not g_Online Then
+        IsProxyConnecting = ProxyConnInfo(stMCP).IsUsingProxy And ProxyConnInfo(stMCP).Status <> psOnline
+
+        ' This event is ignored if we've entered chat
+        If IsProxyConnecting Then
+            ' proxy connection unexpectedly closed
+            Call DisplayError(0, vbNullString, stMCP, IsProxyConnecting, True)
+            If ds.MCPHandler.FormActive Then
+                frmRealm.UnloadRealmError
+            End If
+        ElseIf Not ds.MCPHandler Is Nothing Then
+            ' MCP connection unexpectedly closed (ignored if no window)
+            Call DisplayError(0, vbNullString, stMCP, IsProxyConnecting, True)
+            If ds.MCPHandler.FormActive Then
+                frmRealm.UnloadRealmError
+            End If
+        End If
     End If
 End Sub
 
@@ -6176,13 +6052,21 @@ ERROR_HANDLER:
 End Sub
 
 Private Sub sckMCP_Error(ByVal Number As Integer, Description As String, ByVal sCode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+    Dim IsProxyConnecting As Boolean
+
     If Not g_Online Then
+        IsProxyConnecting = ProxyConnInfo(stMCP).IsUsingProxy And ProxyConnInfo(stMCP).Status <> psOnline
+
         ' This message is ignored if we've entered chat
-        AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & Number & ": " & Description
-        
-        If ProxyConnInfo(stMCP).IsUsingProxy And ProxyConnInfo(stMCP).Status <> psOnline Then
-            DisplayError Number, True, stMCP
+        If IsProxyConnecting Then
+            ' proxy connection threw error
+            Call DisplayError(Number, Description, stMCP, IsProxyConnecting, True)
+            If ds.MCPHandler.FormActive Then
+                frmRealm.UnloadRealmError
+            End If
         ElseIf Not ds.MCPHandler Is Nothing Then
+            ' MCP connection threw error (ignored if no window)
+            Call DisplayError(Number, Description, stMCP, IsProxyConnecting, True)
             If ds.MCPHandler.FormActive Then
                 frmRealm.UnloadRealmError
             End If
@@ -6593,7 +6477,7 @@ Sub Connect()
                 "Please edit your connection settings by choosing Bot Settings under the Settings menu." & _
                 vbNewLine & Left$(MissingInfo, Len(MissingInfo) - 2) & ".", vbInformation
             
-            Call DoDisconnect(1)
+            Call DoDisconnect
             
             Exit Sub
         End If
@@ -6604,7 +6488,7 @@ Sub Connect()
                 MsgBox "You have selected to use a proxy for one or more connections, but no proxy is configured. Please set one up in the Advanced " & _
                     " section of Bot Settings or disable Use Proxy.", vbInformation
                     
-                Call DoDisconnect(1)
+                Call DoDisconnect
                 
                 Exit Sub
             End If
@@ -6633,7 +6517,6 @@ Sub Connect()
                 Call AddChat(RTBColors.ErrorMessageText, "- - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -")
                 
                 Call DoDisconnect
-                UserCancelledConnect = False
                 Exit Sub
             End If
         #Else
@@ -7119,7 +7002,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     'End If
     
     BotVars.BNLSServer = Config.BNLSServer
-    BotVars.ReconnectDelay = Config.ReconnectDelay
     
     ' Load database and commands
     Call Database.Load(GetFilePath(FILE_USERDB))
@@ -7480,28 +7362,38 @@ Private Sub ChangeRTBFont(rtb As RichTextBox, ByVal NewFont As String, ByVal New
 End Sub
 
 'returns OK to Proceed
-Function DisplayError(ByVal ErrorNumber As Integer, ByVal IsProxyConnecting As Boolean, ByVal Source As enuServerTypes) As Boolean
-    
-    Dim s As String
-    
-    s = GErrorHandler.GetErrorString(ErrorNumber, IsProxyConnecting, Source)
-    
-    If (LenB(s) > 0) Then
-        If (IsProxyConnecting) Then
-            s = "[PROXY] " & s
-        End If
-        
-        Select Case (Source)
-            Case stBNLS: s = "[BNLS] " & s
-            Case stBNCS: s = "[BNCS] " & s
-            Case stMCP: s = "[REALM] " & s
-        End Select
-        
-        AddChat RTBColors.ErrorMessageText, s
+Private Sub DisplayError(ByVal ErrorNumber As Integer, ByVal ErrorDescription As String, ByVal Source As enuServerTypes, _
+        Optional ByVal IsProxyConnecting As Boolean = False, Optional ByVal ExistingConnection As Boolean = False)
+    Dim sPrefix     As String
+    Dim sServerType As String
+
+    Select Case (Source)
+        Case stBNLS: sPrefix = "[BNLS] ":  sServerType = "BNLS"
+        Case stBNCS: sPrefix = "[BNCS] ":  sServerType = "Battle.net"
+        Case stMCP:  sPrefix = "[REALM] ": sServerType = "Diablo II Realm"
+    End Select
+
+    If (IsProxyConnecting) Then
+        sPrefix = "[PROXY] " & sPrefix
+        sServerType = "proxy"
     End If
     
-    DisplayError = GErrorHandler.OKToProceed()
-End Function
+    If LenB(ErrorDescription) = 0 Then
+        ErrorDescription = "The " & sServerType & " server has closed the connection."
+    End If
+
+    If ErrorNumber = 0 Then
+        AddChat RTBColors.ErrorMessageText, sPrefix & "Error -- " & ErrorDescription
+    Else
+        AddChat RTBColors.ErrorMessageText, sPrefix & "Error #" & ErrorNumber & " -- " & ErrorDescription
+    End If
+
+    If Not ExistingConnection Then
+        AddChat RTBColors.ErrorMessageText, sPrefix & "Unable to connect to the " & sServerType & " server."
+    Else
+        AddChat RTBColors.ErrorMessageText, sPrefix & "Disconnected."
+    End If
+End Sub
 
 Sub LoadOutFilters()
     Const o As String = "Outgoing"
@@ -7580,7 +7472,13 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
     Dim pBuff As clsDataBuffer
     
     If bytesTotal = 0 Then Exit Sub
-    
+
+    g_ConnectionAlive = True
+    If AutoReconnectActive Then
+        AutoReconnectActive = False
+        AutoReconnectTry = 0
+    End If
+
     ' read buffer as Byte()
     sckBNet.GetData buf(), vbArray + vbByte, bytesTotal
     ' add data to buffer
@@ -7666,12 +7564,27 @@ Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
 End Sub
 
 Private Sub sckBNLS_Close()
+    Dim Alive             As Boolean
+    Dim IsProxyConnecting As Boolean
+
     If MDebug("all") Then
         AddChat COLOR_BLUE, "BNLS CLOSE"
     End If
     If (Not BNLSAuthorized) Then
-        AddChat RTBColors.ErrorMessageText, "You have been disconnected from the BNLS server. You may be IPbanned from the server, it may be having issues, or there is something blocking your connection."
-        AddChat RTBColors.ErrorMessageText, "Try using another BNLS server to connect, and check your firewall settings."
+        Alive = g_ConnectionAlive
+        IsProxyConnecting = ProxyConnInfo(stBNLS).IsUsingProxy And ProxyConnInfo(stBNLS).Status <> psOnline
+
+        If IsProxyConnecting Then
+            ' proxy unexpectedly closed connection
+            Call DoDisconnect(False)
+            Call DisplayError(0, vbNullString, stBNCS, IsProxyConnecting, Alive)
+            Call DoScheduleAutoReconnect(Alive)
+        Else
+            ' BNLS unexpectedly closed connection
+            Call frmChat.HandleBnlsError(0, "You have been disconnected from the BNLS server. " & _
+                    "You may be IPbanned from the server, it may be having issues, " & _
+                    "or there is something blocking your connection.", True)
+        End If
     End If
 End Sub
 
@@ -7703,6 +7616,12 @@ Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
     Dim pBuff As clsDataBuffer
     
     If bytesTotal = 0 Then Exit Sub
+
+    g_ConnectionAlive = True
+    If AutoReconnectActive Then
+        AutoReconnectActive = False
+        AutoReconnectTry = 0
+    End If
     
     ' read buffer as Byte()
     sckBNLS.GetData buf(), vbArray + vbByte, bytesTotal
@@ -7732,7 +7651,21 @@ ERROR_HANDLER:
 End Sub
 
 Private Sub sckBNLS_Error(ByVal Number As Integer, Description As String, ByVal sCode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-    Call Event_BNLSError(Number, Description)
+    Dim Alive             As Boolean
+    Dim IsProxyConnecting As Boolean
+    Alive = g_ConnectionAlive
+    IsProxyConnecting = ProxyConnInfo(stBNLS).IsUsingProxy And ProxyConnInfo(stBNLS).Status <> psOnline
+
+    If IsProxyConnecting Then
+        ' proxy connection threw error
+        Call DoDisconnect(False)
+        Call DisplayError(Number, Description, stBNLS, IsProxyConnecting, Alive)
+        Call DoScheduleAutoReconnect(Alive)
+    Else
+        ' BNLS connection threw error
+        ' display and optionally go to server finder
+        Call HandleBnlsError(Number, Description)
+    End If
 End Sub
 
 'This function checks if the user selected when right-clicked is the same one when they click on the menu option. - FrOzeN
@@ -8532,172 +8465,207 @@ Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single,
     End If
 End Sub
 
-Sub DoConnect()
-
-    If ((sckBNLS.State <> sckClosed) Or (sckBNet.State <> sckClosed)) Then
+Public Sub DoConnect()
+    If ((sckBNLS.State <> sckClosed) Or (sckBNet.State <> sckClosed) Or (AutoReconnectActive)) Then
         Call DoDisconnect
     End If
-    
-    ConnectionTickCount = 0@
-    
-    UserCancelledConnect = False
-    
+
     'Reset the BNLS auto-locator list
     BNLSFinderGotList = False
-    
-    'If Not IsValidIPAddress(BotVars.Server) And BotVars.UseProxy Then
-        'AddChat RTBColors.ErrorMessageText, "[PROXY] Proxied connections must use a direct server IP address, such as those listed below your desired gateway in the Connection Settings menu, to connect."
-        'AddChat RTBColors.ErrorMessageText, "[PROXY] Please change servers and try connecting again."
-    'Else
-        Call Connect
-    'End If
+
+    Call Connect
 End Sub
 
-Sub DoDisconnect(Optional ByVal DoNotShow As Boolean = False, Optional ByVal LeaveUCCAlone As Boolean = False)
+Public Sub DoDisconnect(Optional ByVal ClientInitiated As Boolean = True)
     On Error GoTo ERROR_HANDLER
 
-    Dim i As Integer
-    
-    If (Not (UserCancelledConnect)) Then
-        tmrAccountLock.Enabled = False
-        tmrIdleTimer.Enabled = False
+    Dim BNCSDisconnected     As Boolean
+    Dim AnythingToDisconnect As Boolean
 
-        SetTitle "Disconnected"
-        
-        frmChat.UpdateTrayTooltip
-        
-        Call CloseAllConnections(Not DoNotShow)
-        
-        Set g_Channel = New clsChannelObj
-        Set g_Clan = New clsClanObj
-        Set g_Friends = New Collection
-        
-        ReDim ServerRequests(0)
-        
-        BotVars.Gateway = vbNullString
-        
-        CurrentUsername = vbNullString
-        
-        ListviewTabs.Tab = 0
-        
-        Call g_Queue.Clear
-        
-        If Not LeaveUCCAlone Then
-            UserCancelledConnect = True
-        End If
-        
-        If (UserCancelledConnect) Then
-            'AddChat vbRed, "DISC!"
-        
-            If ReconnectTimerID > 0 Then
-                KillTimer 0, ReconnectTimerID
-                ReconnectTimerID = 0
-            End If
-            
-            If ExReconnectTimerID > 0 Then
-                KillTimer 0, ExReconnectTimerID
-                ExReconnectTimerID = 0
-            End If
-            
-            If SCReloadTimerID > 0 Then
-                KillTimer 0, SCReloadTimerID
-                SCReloadTimerID = 0
-            End If
-        Else
-            'ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
-            '    AddressOf Reconnect_TimerProc)
-            '
-            'ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, _
-            '    BotVars.ReconnectDelay, AddressOf ExtendedReconnect_TimerProc)
-        End If
-        
-        DisableListviewTabs
-        
-        ProxyConnInfo(stBNLS).Status = psNotConnected
-        ProxyConnInfo(stBNCS).Status = psNotConnected
-        ProxyConnInfo(stMCP).Status = psNotConnected
-        
-        lvClanList.ListItems.Clear
-        
-        ReceiveBuffer(stBNLS).Clear
-        ReceiveBuffer(stBNCS).Clear
-        ReceiveBuffer(stMCP).Clear
-        
-        g_Connected = False
-        g_Online = False
-        ds.EnteredChatFirstTime = False
-        ds.ClientToken = 0
-        ds.AccountEntry = False
+    ' clean up connections
+    AnythingToDisconnect = False
 
-        If frmAccountManager.Visible Then
-            frmAccountManager.LeftAccountEntryMode
-        End If
-        
-        Call ClearChannel
-        lvClanList.ListItems.Clear
-        lvFriendList.ListItems.Clear
-        
-        'tmrSilentChannel(0).Enabled = False
-        
-        Call g_Queue.Clear
+    If ClientInitiated Then
+        If AutoReconnectActive Then AnythingToDisconnect = True
+        AutoReconnectActive = False
+        AutoReconnectTry = 0
+        AutoReconnectTicks = 0
+        AutoReconnectIn = 0
+    End If
+
+    If (frmChat.sckBNLS.State <> sckClosed) Then
+        AnythingToDisconnect = True
+        frmChat.sckBNLS.Close
+    End If
+    If (frmChat.sckBNet.State <> sckClosed) Then
+        AnythingToDisconnect = True
+        BNCSDisconnected = True
+        frmChat.sckBNet.Close
+    End If
+    If (frmChat.sckMCP.State <> sckClosed) Then
+        AnythingToDisconnect = True
+        frmChat.sckMCP.Close
+    End If
+
+    ProxyConnInfo(stBNLS).Status = psNotConnected
+    ProxyConnInfo(stBNCS).Status = psNotConnected
+    ProxyConnInfo(stMCP).Status = psNotConnected
+
+    ReceiveBuffer(stBNLS).Clear
+    ReceiveBuffer(stBNCS).Clear
+    ReceiveBuffer(stMCP).Clear
+
+    ' close any pending Inet
+    If Inet.StillExecuting Then
+        AnythingToDisconnect = True
+        Inet.Tag = SB_INET_UNSET
+        Inet.Cancel
+    End If
     
-        BNLSAuthorized = False
-        ConnectionTickCount = 0@
-        
-        mnuProfile.Enabled = False
-        mnuClanCreate.Visible = False
-        mnuRealmSwitch.Visible = False
-        
-        BotVars.LastChannel = vbNullString
-        PrepareHomeChannelMenu
-        PrepareQuickChannelMenu
-        
-        Set BotVars.PublicChannels = Nothing
-        PreparePublicChannelMenu
-        
-        If ((Me.WindowState = vbNormal) And _
-            (DoNotShow = 0)) Then
-            
+    ' reset BNLS finder
+    BNLSFinderGotList = False
+    BNLSFinderIndex = 0
+    BNLSAuthorized = False
+
+    ' clean up resources
+    tmrAccountLock.Enabled = False
+    tmrIdleTimer.Enabled = False
+
+    Call g_Queue.Clear
+
+    Set g_Channel = New clsChannelObj
+    Set g_Clan = New clsClanObj
+    Set g_Friends = New Collection
+
+    Set BotVars.PublicChannels = Nothing
+    BotVars.LastChannel = vbNullString
+
+    ReDim ServerRequests(0)
+
+    g_Connected = False
+    g_ConnectionAlive = False
+    g_Online = False
+    ConnectionTickCount = 0@
+
+    ds.EnteredChatFirstTime = False
+    ds.ClientToken = 0
+    ds.AccountEntry = False
+    BotVars.Gateway = vbNullString
+    CurrentUsername = vbNullString
+
+    ' reset UI
+    DisableListviewTabs
+    Call ClearChannel
+    lvClanList.ListItems.Clear
+    lvFriendList.ListItems.Clear
+    ListviewTabs.Tab = 0
+
+    mnuProfile.Enabled = False
+    mnuClanCreate.Visible = False
+    mnuRealmSwitch.Visible = False
+
+    PrepareHomeChannelMenu
+    PrepareQuickChannelMenu
+    PreparePublicChannelMenu
+
+    ' clean up account manager
+    If frmAccountManager.Visible Then
+        frmAccountManager.LeftAccountEntryMode
+    End If
+
+    ' clean up realms
+    If Not ds.MCPHandler Is Nothing Then
+        If ds.MCPHandler.FormActive Then
+            frmRealm.UnloadAfterBNCSClose
+        End If
+
+        Set ds.MCPHandler = Nothing
+    End If
+
+    ' unload clan invitation popup
+    Unload frmClanInvite
+
+    ' clean up email reg
+    Unload frmEMailReg
+
+    SetTitle "Disconnected"
+    UpdateTrayTooltip
+
+    ' reset reconnect timer
+    If ReconnectTimerID > 0 Then
+        KillTimer 0, ReconnectTimerID
+        ReconnectTimerID = 0
+    End If
+
+    If SCReloadTimerID > 0 Then
+        KillTimer 0, SCReloadTimerID
+        SCReloadTimerID = 0
+    End If
+
+    If (ClientInitiated And AnythingToDisconnect) Then
+        ' display message
+        frmChat.AddChat RTBColors.ErrorMessageText, "All connections closed."
+
+        ' reset focus to send box
+        If ((Me.WindowState <> vbMinimized)) Then
             'This SetFocus() call causes an error if any script have InputBoxes open.
             'This is the best fix I could come up with. :( -Pyro
             On Error Resume Next
             Call cboSend.SetFocus
             On Error GoTo ERROR_HANDLER
         End If
-        
-        ' clean up realms
-        If Not ds.MCPHandler Is Nothing Then
-            If ds.MCPHandler.FormActive Then
-                frmRealm.UnloadAfterBNCSClose
-            End If
-            
-            Set ds.MCPHandler = Nothing
-        End If
-        
-        ' unload clan invitation popup
-        Unload frmClanInvite
-        
-        ' clean up email reg
-        Unload frmEMailReg
-        
-        ' close any pending Inet
-        Inet.Tag = SB_INET_UNSET
-        Inet.Cancel
-        
-        ' reset BNLS finder
-        BNLSFinderGotList = False
-        BNLSFinderIndex = 0
-        
-        On Error Resume Next
-        RunInAll "Event_LoggedOff"
     End If
     
+    ' tell scripts
+    On Error Resume Next
+    If BNCSDisconnected Then
+        RunInAll "Event_LoggedOff"
+        RunInAll "Event_ServerError", "All connections closed."
+    End If
+
     Exit Sub
-    
+
 ERROR_HANDLER:
     AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in DoDisconnect()."
-    
+
     Exit Sub
+
+End Sub
+
+Public Sub DoScheduleAutoReconnect(ByVal JustLostConnection As Boolean)
+    If Not JustLostConnection And AutoReconnectTry = 0 Then
+        ' we can't wait the 0-length wait unless we just lost connection to get here
+        AutoReconnectTry = 1
+    End If
+
+    Select Case Config.ReconnectType:
+        Case 0 ' disabled
+            Exit Sub
+        Case 1 ' always wait DELAY (first ATTEMPT = 0)
+            AutoReconnectIn = Config.ReconnectDelay
+            If AutoReconnectTry = 0 Then AutoReconnectIn = 0
+        Case 2 ' always wait DELAY * ATTEMPT (first ATTEMPT = 0)
+            AutoReconnectIn = (Config.ReconnectDelay * AutoReconnectTry)
+            If AutoReconnectIn > Config.ReconnectDelayMax Then
+                AutoReconnectIn = Config.ReconnectDelayMax
+            End If
+    End Select
+    If AutoReconnectIn < 1 Then
+        AutoReconnectIn = 1
+    End If
+
+    AutoReconnectActive = True
+    AutoReconnectTry = AutoReconnectTry + 1
+    AutoReconnectTicks = 0
+
+    If (ReconnectTimerID) Then
+        Call KillTimer(0, ReconnectTimerID)
+    End If
+    
+    ReconnectTimerID = SetTimer(0, ReconnectTimerID, 1000, AddressOf Reconnect_TimerProc)
+
+    AddChat RTBColors.InformationText, _
+            StringFormat("Attempting to reconnect in {0}...", modDateTime.ConvertTimeInterval(AutoReconnectIn, True))
 End Sub
 
 Public Sub ParseFriendsPacket(ByVal PacketID As Long, ByVal pBuff As clsDataBuffer)

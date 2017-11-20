@@ -217,8 +217,7 @@ On Error GoTo ERROR_HANDLER:
                 frmChat.DoDisconnect
         End Select
     Else
-        frmChat.Event_BNLSDataError 2
-        frmChat.DoDisconnect
+        Call frmChat.HandleBnlsError(0, StringFormat("BNLS has failed CheckRevision (Product: {0}).", StrReverse(BotVars.Product)), True)
     End If
     
     Exit Sub

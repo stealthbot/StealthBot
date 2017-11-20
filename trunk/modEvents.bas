@@ -494,12 +494,6 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
             frmChat.sckBNLS.Close
         End If
 
-        If (ExReconnectTimerID > 0) Then
-            Call KillTimer(0, ExReconnectTimerID)
-            
-            ExReconnectTimerID = 0
-        End If
-
         If Config.FriendsListTab Then
             Call .FriendListHandler.RequestFriendsList
         End If
@@ -1816,7 +1810,7 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
                 IIf(LenB(ExtraInfo) = 0, vbNullString, " Extra Information: " & ExtraInfo)
 
             If (BotVars.BNLS) Then
-                If (frmChat.HandleBnlsError("[BNCS] BNLS has not been updated yet, " & _
+                If (frmChat.HandleBnlsError(0, "BNLS has not been updated yet, " & _
                         "or you experienced an error. Try connecting again.")) Then
                     ' if we are using the finder, then don't close all connections
                     Message = 0
@@ -1884,6 +1878,19 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
     
     If (Message > 0) Then
         Call frmChat.DoDisconnect
+
+        If (Message = 6) Then
+            ' CD-Key in use?
+            Dim MyOwnerName As String
+            MyOwnerName = Config.CDKeyOwnerName
+            If (LenB(MyOwnerName) = 0) Then
+                MyOwnerName = Config.Username
+            End If
+            If (StrComp(ExtraInfo, MyOwnerName, vbBinaryCompare) = 0) Then
+                ' schedule reconnect; don't do the 0-wait one
+                Call frmChat.DoScheduleAutoReconnect(False)
+            End If
+        End If
     End If
     
     Exit Sub
