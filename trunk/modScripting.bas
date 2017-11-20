@@ -1490,7 +1490,7 @@ Public Sub SC_Error()
     tmp = SharedScriptSupport.GetSettingsEntry("Enabled", CleanFileName(tmp))
     
     If (StrComp(tmp, "False", vbTextCompare) <> 0) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Scripting {0} error '{1}' in {2}: (line {3}; column {4})", _
+        frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Scripting {0} error #{1} in {2}: (line {3}; column {4})", _
             ErrType, Number, Name, Line, Column)
         frmChat.AddChat RTBColors.ErrorMessageText, Description
         If LenB(Trim$(Text)) > 0 Then
