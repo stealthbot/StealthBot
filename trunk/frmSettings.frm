@@ -3411,7 +3411,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   315
-         Left            =   240
+         Left            =   360
          Style           =   2  'Dropdown List
          TabIndex        =   178
          Top             =   2760
@@ -3434,7 +3434,7 @@ Begin VB.Form frmSettings
          Left            =   3000
          TabIndex        =   198
          ToolTipText     =   "Routes the BNLS connection through the same proxy."
-         Top             =   4080
+         Top             =   4200
          Width           =   1935
       End
       Begin VB.CheckBox chkProxyMCP 
@@ -3454,7 +3454,7 @@ Begin VB.Form frmSettings
          Left            =   3000
          TabIndex        =   199
          ToolTipText     =   "Routes a Diablo II Realm connection through the same proxy."
-         Top             =   4320
+         Top             =   4440
          Width           =   1935
       End
       Begin VB.CheckBox chkConnectOnStartup 
@@ -3471,7 +3471,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   240
+         Left            =   360
          TabIndex        =   177
          ToolTipText     =   "Automatically connect when the bot starts up."
          Top             =   2280
@@ -3490,11 +3490,11 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   285
-         Left            =   3120
+         Left            =   2880
          TabIndex        =   190
          ToolTipText     =   "Created accounts will automatically be registered with this address. Leave blank to prompt each time."
-         Top             =   2520
-         Width           =   3015
+         Top             =   2640
+         Width           =   3375
       End
       Begin VB.ComboBox cboBNLSServer 
          BackColor       =   &H00993300&
@@ -3555,8 +3555,8 @@ Begin VB.Form frmSettings
          Left            =   5400
          Style           =   1  'Graphical
          TabIndex        =   193
-         Top             =   3000
-         Width           =   735
+         Top             =   3120
+         Width           =   855
       End
       Begin VB.OptionButton optSocks4 
          BackColor       =   &H00000000&
@@ -3572,12 +3572,12 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   4560
+         Left            =   4440
          Style           =   1  'Graphical
          TabIndex        =   192
-         Top             =   3000
+         Top             =   3120
          Value           =   -1  'True
-         Width           =   735
+         Width           =   855
       End
       Begin VB.TextBox txtProxyPort 
          BackColor       =   &H00993300&
@@ -3595,7 +3595,7 @@ Begin VB.Form frmSettings
          Left            =   3720
          MaxLength       =   5
          TabIndex        =   197
-         Top             =   3720
+         Top             =   3840
          Width           =   735
       End
       Begin VB.TextBox txtProxyIP 
@@ -3614,8 +3614,8 @@ Begin VB.Form frmSettings
          Left            =   3720
          MaxLength       =   15
          TabIndex        =   195
-         Top             =   3360
-         Width           =   2415
+         Top             =   3480
+         Width           =   2535
       End
       Begin VB.CheckBox chkUseProxies 
          BackColor       =   &H00000000&
@@ -3634,7 +3634,7 @@ Begin VB.Form frmSettings
          Left            =   3000
          TabIndex        =   191
          ToolTipText     =   "Routes your Battle.net connection through a SOCKS4 or SOCKS5 proxy."
-         Top             =   3000
+         Top             =   3120
          Width           =   1215
       End
       Begin VB.CheckBox chkUDP 
@@ -3651,7 +3651,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   240
+         Left            =   360
          TabIndex        =   187
          ToolTipText     =   "Sets whether or not you have a UDP plug (lag plug) when you sign on. If you don't know what this is, leave it off."
          Top             =   4440
@@ -3670,7 +3670,7 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   315
-         Left            =   240
+         Left            =   360
          Style           =   2  'Dropdown List
          TabIndex        =   186
          Top             =   4080
@@ -3696,6 +3696,29 @@ Begin VB.Form frmSettings
          TabIndex        =   172
          Top             =   840
          Width           =   4335
+      End
+      Begin VB.TextBox lblHashPath 
+         Alignment       =   2  'Center
+         Appearance      =   0  'Flat
+         BackColor       =   &H00000000&
+         BeginProperty Font 
+            Name            =   "Verdana"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   360
+         Locked          =   -1  'True
+         TabIndex        =   176
+         Text            =   "N/A"
+         ToolTipText     =   "N/A"
+         Top             =   1800
+         Width           =   5895
       End
       Begin VB.Label lblConn 
          BackColor       =   &H00000000&
@@ -3752,7 +3775,7 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   10
-         Left            =   240
+         Left            =   360
          TabIndex        =   227
          Top             =   2520
          Width           =   2295
@@ -3761,11 +3784,12 @@ Begin VB.Form frmSettings
          BorderColor     =   &H00FFFFFF&
          Index           =   26
          X1              =   2640
-         X2              =   240
+         X2              =   360
          Y1              =   3840
          Y2              =   3840
       End
       Begin VB.Label lblConn 
+         Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
          Caption         =   "(for account registration)"
          BeginProperty Font 
@@ -3780,14 +3804,13 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   7
-         Left            =   4320
+         Left            =   4080
          TabIndex        =   189
-         Top             =   2280
+         Top             =   2400
          UseMnemonic     =   0   'False
-         Width           =   1815
+         Width           =   2175
       End
       Begin VB.Label lblConn 
-         Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
          Caption         =   "Email &Address"
          BeginProperty Font 
@@ -3802,18 +3825,18 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   6
-         Left            =   3000
+         Left            =   2880
          TabIndex        =   188
-         Top             =   2280
+         Top             =   2400
          Width           =   1095
       End
       Begin VB.Line Line 
          BorderColor     =   &H00FFFFFF&
          Index           =   27
          X1              =   2880
-         X2              =   6360
-         Y1              =   2880
-         Y2              =   2880
+         X2              =   6240
+         Y1              =   3000
+         Y2              =   3000
       End
       Begin VB.Label lblConn 
          BackColor       =   &H00000000&
@@ -3895,7 +3918,7 @@ Begin VB.Form frmSettings
          Index           =   9
          Left            =   3000
          TabIndex        =   196
-         Top             =   3720
+         Top             =   3840
          Width           =   615
       End
       Begin VB.Label lblConn 
@@ -3916,7 +3939,7 @@ Begin VB.Form frmSettings
          Index           =   8
          Left            =   3000
          TabIndex        =   194
-         Top             =   3360
+         Top             =   3480
          Width           =   615
       End
       Begin VB.Line Line 
@@ -3924,7 +3947,7 @@ Begin VB.Form frmSettings
          Index           =   25
          X1              =   2760
          X2              =   2760
-         Y1              =   2520
+         Y1              =   2280
          Y2              =   4680
       End
       Begin VB.Label lblConn 
@@ -3942,31 +3965,10 @@ Begin VB.Form frmSettings
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Index           =   5
-         Left            =   240
+         Left            =   360
          TabIndex        =   185
          Top             =   3840
          Width           =   2295
-      End
-      Begin VB.Label lblHashPath 
-         Alignment       =   2  'Center
-         BackColor       =   &H80000012&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00FFFFFF&
-         Height          =   375
-         Left            =   360
-         TabIndex        =   176
-         Top             =   1800
-         UseMnemonic     =   0   'False
-         Width           =   6015
-         WordWrap        =   -1  'True
       End
       Begin VB.Label lblConn 
          BackColor       =   &H00000000&
@@ -5001,9 +5003,10 @@ Private Function AddBNLSServer(ByVal sServerHost As String) As Integer
 End Function
 
 Private Sub SetHashPath(ByVal Path As String)
-    lblHashPath.Caption = Path
+    lblHashPath.Text = Path
     lblHashPath.ToolTipText = Path
-    
+    lblHashPath.SelStart = Len(Path)
+
     ' Try to adjust font size for long paths
     If ((Len(Path) > 80) And (Not InStr(Path, Space(1)) > 0)) Then
         If Len(Path) > 100 Then
@@ -5164,6 +5167,11 @@ Sub lblAddCurrentKey_Click()
     End If
     
     Set Keys = Nothing
+End Sub
+
+Private Sub lblHashPath_GotFocus()
+    lblHashPath.SelStart = 0
+    lblHashPath.SelLength = Len(lblHashPath.Text)
 End Sub
 
 Private Sub lblManageKeys_Click()
