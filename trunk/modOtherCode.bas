@@ -1850,8 +1850,8 @@ End Function
 Public Sub BuildProductInfo()
     ' 4-digit code, short code, full name, home channel, number of keys, BNLS ID, logon system, version byte
     ProductList(0) = CreateProductInfo("UNKW", vbNullString, "Unknown Product", "Unknown", 0, &H0, &H0, &H0)
-    ProductList(1) = CreateProductInfo(PRODUCT_STAR, "SC", "StarCraft", "StarCraft", 0, &H1, BNCS_NLS, &HD6)
-    ProductList(2) = CreateProductInfo(PRODUCT_SEXP, "SC", "StarCraft Broodwar", "Brood War", 0, &H2, BNCS_NLS, &HD6)
+    ProductList(1) = CreateProductInfo(PRODUCT_STAR, "SC", "StarCraft", "StarCraft", 0, &H1, BNCS_NLS, &HD3)
+    ProductList(2) = CreateProductInfo(PRODUCT_SEXP, "SC", "StarCraft Broodwar", "Brood War", 0, &H2, BNCS_NLS, &HD3)
     ProductList(3) = CreateProductInfo(PRODUCT_W2BN, "W2", "WarCraft II: Battle.net Edition", "WarCraft II", 1, &H3, BNCS_OLS, &H4F)
     ProductList(4) = CreateProductInfo(PRODUCT_D2DV, "D2", "Diablo II", "Diablo II", 1, &H4, BNCS_NLS, &HE)
     ProductList(5) = CreateProductInfo(PRODUCT_D2XP, "D2X", "Diablo II: Lord of Destruction", "Diablo II", 2, &H5, BNCS_NLS, &HE)
