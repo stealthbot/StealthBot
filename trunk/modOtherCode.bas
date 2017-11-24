@@ -623,7 +623,7 @@ Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String,
                 Msg = PrepareCheck(DoReplacements(gFilters(i), Username, Ping))
             End If
             
-            If (Msg Like "*" & gFilters(i) & "*") Then
+            If (Msg Like "*" & PrepareCheck(gFilters(i)) & "*") Then
                 CheckMsg = True
                    
                 Exit Function
