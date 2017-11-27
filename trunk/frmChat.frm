@@ -3601,11 +3601,13 @@ Private Sub lvClanList_dblClick()
 End Sub
 
 Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
-    Dim aInx As Integer
-    Dim sProd As String * 4
-    Dim HasOps As Boolean
-    Dim UserIsW3 As Boolean
+    Dim aInx         As Integer
+    Dim sProd        As String * 4
+    Dim HasOps       As Boolean
+    Dim UserIsW3     As Boolean
     Dim UserHasStats As Boolean
+    Dim IsPubGateway As Boolean
+    Dim Gateway      As String
     
     If (lvChannel.SelectedItem Is Nothing) Then
         Exit Sub
@@ -3613,24 +3615,32 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, 
 
     If Button = vbRightButton Then
         If Not (lvChannel.SelectedItem Is Nothing) Then
-            aInx = g_Channel.GetUserIndex(GetSelectedUser)
+            aInx = lvChannel.SelectedItem.Index
             
             If aInx > 0 Then
-                sProd = g_Channel.Users(aInx).Game
-                UserIsW3 = (sProd = PRODUCT_W3XP Or sProd = PRODUCT_WAR3)
-                Select Case sProd
-                    Case PRODUCT_STAR, PRODUCT_SEXP, PRODUCT_W2BN, PRODUCT_WAR3, PRODUCT_W3XP, PRODUCT_JSTR, PRODUCT_SSHR
-                        UserHasStats = True
-                End Select
-                HasOps = g_Channel.Self.IsOperator()
-                
-                mnuPopInvite.Enabled = UserIsW3 And LenB(g_Channel.Users(aInx).Clan) = 0 And InStr(1, GetSelectedUser, "#") = 0 And g_Clan.Self.Rank >= 3
-                
-                mnuPopStats.Enabled = UserHasStats
-                mnuPopWebProfile.Enabled = UserIsW3
-                mnuPopKick.Enabled = HasOps
-                mnuPopDes.Enabled = HasOps
-                mnuPopBan.Enabled = HasOps
+                With g_Channel.PriorityUsers(aInx)
+                    sProd = .Game
+                    UserIsW3 = (sProd = PRODUCT_W3XP Or sProd = PRODUCT_WAR3)
+                    Select Case sProd
+                        Case PRODUCT_STAR, PRODUCT_SEXP, PRODUCT_W2BN, PRODUCT_WAR3, PRODUCT_W3XP, PRODUCT_JSTR, PRODUCT_SSHR
+                            UserHasStats = True
+                    End Select
+                    HasOps = g_Channel.Self.IsOperator()
+
+                    Gateway = GetUserNamespace(.Name)
+                    Select Case Gateway
+                        Case "Azeroth", "Lordaeron", "Northrend", "Kalimdor"
+                            IsPubGateway = True
+                    End Select
+
+                    mnuPopInvite.Enabled = UserIsW3 And LenB(.Clan) = 0 And InStr(1, GetSelectedUser, "#") = 0 And g_Clan.Self.Rank >= 3
+
+                    mnuPopStats.Enabled = UserHasStats
+                    mnuPopWebProfile.Enabled = UserIsW3 And IsPubGateway
+                    mnuPopKick.Enabled = HasOps
+                    mnuPopDes.Enabled = HasOps
+                    mnuPopBan.Enabled = HasOps
+                End With
             End If
         End If
         
@@ -3641,13 +3651,15 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, 
 End Sub
 
 Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
-    Dim aInx As Integer
-    Dim sProd As String * 4
-    Dim bIsOn As Boolean
-    Dim bIsMutual As Boolean
-    Dim UserIsW3 As Boolean
+    Dim aInx         As Integer
+    Dim sProd        As String * 4
+    Dim bIsOn        As Boolean
+    Dim bIsMutual    As Boolean
+    Dim UserIsW3     As Boolean
     Dim UserHasStats As Boolean
     Dim SelfHasStats As Boolean
+    Dim IsPubGateway As Boolean
+    Dim Gateway      As String
     
     If (lvFriendList.SelectedItem Is Nothing) Then
         Exit Sub
@@ -3658,24 +3670,34 @@ Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, x As Singl
             aInx = lvFriendList.SelectedItem.Index
             
             If aInx > 0 Then
-                sProd = g_Friends(aInx).Game
-                bIsOn = g_Friends(aInx).IsOnline
-                bIsMutual = g_Friends(aInx).IsMutual
-                UserIsW3 = (sProd = PRODUCT_W3XP Or sProd = PRODUCT_WAR3)
-                Select Case sProd
-                    Case PRODUCT_STAR, PRODUCT_SEXP, PRODUCT_W2BN, PRODUCT_WAR3, PRODUCT_W3XP, PRODUCT_JSTR, PRODUCT_SSHR
-                        UserHasStats = True
-                End Select
-                Select Case StrReverse(BotVars.Product)
-                    Case PRODUCT_STAR, PRODUCT_SEXP, PRODUCT_W2BN, PRODUCT_WAR3, PRODUCT_W3XP, PRODUCT_JSTR, PRODUCT_SSHR
-                        SelfHasStats = True
-                End Select
-                
-                mnuPopFLWhisper.Enabled = bIsOn
-                mnuPopFLInvite.Enabled = UserIsW3 And bIsMutual And g_Clan.Self.Rank >= 3
+                With g_Friends(aInx)
+                    sProd = .Game
+                    bIsOn = .IsOnline
+                    bIsMutual = .IsMutual
 
-                mnuPopFLStats.Enabled = UserHasStats Or SelfHasStats
-                mnuPopFLWebProfile.Enabled = UserIsW3
+                    UserIsW3 = (sProd = PRODUCT_W3XP Or sProd = PRODUCT_WAR3)
+                    Select Case sProd
+                        Case PRODUCT_STAR, PRODUCT_SEXP, PRODUCT_W2BN, PRODUCT_WAR3, PRODUCT_W3XP, PRODUCT_JSTR, PRODUCT_SSHR
+                            UserHasStats = True
+                    End Select
+
+                    Select Case StrReverse(BotVars.Product)
+                        Case PRODUCT_STAR, PRODUCT_SEXP, PRODUCT_W2BN, PRODUCT_WAR3, PRODUCT_W3XP, PRODUCT_JSTR, PRODUCT_SSHR
+                            SelfHasStats = True
+                    End Select
+
+                    Gateway = GetUserNamespace(.Name)
+                    Select Case Gateway
+                        Case "Azeroth", "Lordaeron", "Northrend", "Kalimdor"
+                            IsPubGateway = True
+                    End Select
+                
+                    mnuPopFLWhisper.Enabled = bIsOn
+                    mnuPopFLInvite.Enabled = UserIsW3 And bIsMutual And g_Clan.Self.Rank >= 3
+
+                    mnuPopFLStats.Enabled = UserHasStats Or SelfHasStats
+                    mnuPopFLWebProfile.Enabled = UserIsW3 And IsPubGateway
+                End With
             End If
         End If
         
@@ -3920,12 +3942,12 @@ Private Sub mnuOpenScriptFolder_Click()
 End Sub
 
 Private Sub mnuPopClanAddLeft_Click()
-    On Error Resume Next
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     If txtPre.Enabled Then 'fix for topic 25290 -a
         txtPre.Text = StringFormat("/w {0} ", GetClanSelectedUser)
         
+        On Error Resume Next
         cboSend.SetFocus
         cboSend.SelStart = Len(cboSend.Text)
     End If
@@ -3934,15 +3956,13 @@ End Sub
 Private Sub mnuPopClanAddToFList_Click()
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    If Not (lvClanList.SelectedItem Is Nothing) Then
-        AddQ "/f a " & CleanUsername(GetClanSelectedUser), PRIORITY.CONSOLE_MESSAGE
-    End If
+    AddQ "/f a " & CleanUsername(GetClanSelectedUser), PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopClanCopy_Click()
-    On Error Resume Next
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
+    On Error Resume Next
     Clipboard.Clear
     
     Clipboard.SetText GetClanSelectedUser
@@ -4058,48 +4078,22 @@ Private Sub mnuPopClanStatsW3XP_Click()
 End Sub
 
 Private Sub mnuPopClanUserlistWhois_Click()
-    On Error Resume Next
-    
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    Dim temp As udtUserAccess
-    Dim s As String
-    
-    s = GetClanSelectedUser
-    
-    temp = Database.GetUserAccess(s)
-    
-    With RTBColors
-        If temp.Rank > -1 Then
-            If temp.Rank > 0 Then
-                If temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with rank " & temp.Rank & " and flags " & temp.Flags & "."
-                Else
-                    AddChat .ConsoleText, "Found user " & s & ", with rank " & temp.Rank & "."
-                End If
-            Else
-                If temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with flags " & temp.Flags & "."
-                Else
-                    AddChat .ConsoleText, "User not found."
-                End If
-            End If
-        Else
-            AddChat .ConsoleText, "User not found."
-        End If
-    End With
+    Call ProcessCommand(GetCurrentUsername, "/whois " & GetClanSelectedUser, True, False)
+    g_Queue.RemoveItem g_Queue.Count - 1
 End Sub
 
 Private Sub mnuPopClanWebProfileWAR3_Click()
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    GetW3LadderProfile GetClanSelectedUser, WAR3
+    GetW3LadderProfile GetClanSelectedUser, WAR3, GetUserNamespace(GetClanSelectedUser)
 End Sub
 
 Private Sub mnuPopClanWebProfileW3XP_Click()
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    GetW3LadderProfile GetClanSelectedUser, W3XP
+    GetW3LadderProfile GetClanSelectedUser, W3XP, GetUserNamespace(GetClanSelectedUser)
 End Sub
 
 Private Sub mnuPopClanWhisper_Click()
@@ -4125,13 +4119,10 @@ End Sub
 Private Sub mnuPopClanWhois_Click()
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    If Not (lvClanList.SelectedItem Is Nothing) Then
-        AddQ "/whois " & lvClanList.SelectedItem.Text, PRIORITY.CONSOLE_MESSAGE
-    End If
+    AddQ "/whois " & lvClanList.SelectedItem.Text, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopFLAddLeft_Click()
-    On Error Resume Next
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     Dim Index As Integer
     Dim s As String
@@ -4142,15 +4133,16 @@ Private Sub mnuPopFLAddLeft_Click()
         s = StringFormat("/w {0}{1} ", s, GetFriendsSelectedUser)
         txtPre.Text = s
         
+        On Error Resume Next
         cboSend.SetFocus
         cboSend.SelStart = Len(cboSend.Text)
     End If
 End Sub
 
 Private Sub mnuPopFLCopy_Click()
-    On Error Resume Next
     If Not PopupMenuFLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
+    On Error Resume Next
     Clipboard.Clear
     
     Clipboard.SetText GetFriendsSelectedUser
@@ -4160,28 +4152,24 @@ End Sub
 Private Sub mnuPopFLDemote_Click()
     If Not PopupMenuFLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    If Not (lvFriendList.SelectedItem Is Nothing) Then
-        With lvFriendList.SelectedItem
-            If (.Index < lvFriendList.ListItems.Count) Then
-                AddQ "/f d " & GetFriendsSelectedUser, PRIORITY.CONSOLE_MESSAGE
-                'MoveFriend .index, .index + 1
-            End If
-        End With
-    End If
+    With lvFriendList.SelectedItem
+        If (.Index < lvFriendList.ListItems.Count) Then
+            AddQ "/f d " & GetFriendsSelectedUser, PRIORITY.CONSOLE_MESSAGE
+            'MoveFriend .index, .index + 1
+        End If
+    End With
 End Sub
 
 Private Sub mnuPopFLInvite_Click()
     If Not PopupMenuFLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     Dim sPlayer As String
     
-    If Not lvFriendList.SelectedItem Is Nothing Then
-        sPlayer = GetFriendsSelectedUser
-    End If
+    sPlayer = GetFriendsSelectedUser
     
     If LenB(sPlayer) > 0 Then
         If g_Clan.Self.Rank >= 3 Then
             Call ClanHandler.InviteToClan(ReverseConvertUsernameGateway(sPlayer), reqUserInterface)
-            AddChat RTBColors.InformationText, "[CLAN] Invitation sent to " & GetFriendsSelectedUser & ", awaiting reply."
+            AddChat RTBColors.InformationText, "[CLAN] Invitation sent to " & sPlayer & ", awaiting reply."
         End If
     End If
 End Sub
@@ -4189,25 +4177,21 @@ End Sub
 Private Sub mnuPopFLProfile_Click()
     If Not PopupMenuFLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
 
-    If Not lvFriendList.SelectedItem Is Nothing Then
-        RequestProfile CleanUsername(lvFriendList.SelectedItem.Text), reqUserInterface
+    RequestProfile CleanUsername(GetFriendsSelectedUser), reqUserInterface
 
-        frmProfile.PrepareForProfile CleanUsername(lvFriendList.SelectedItem.Text), False
-    End If
+    frmProfile.PrepareForProfile CleanUsername(GetFriendsSelectedUser), False
 End Sub
 
 'Will move the selected user one spot up on the friends list.
 Private Sub mnuPopFLPromote_Click()
     If Not PopupMenuFLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    If Not (lvFriendList.SelectedItem Is Nothing) Then
-        With lvFriendList.SelectedItem
-            If (.Index > 1) Then
-                AddQ "/f p " & GetFriendsSelectedUser, PRIORITY.CONSOLE_MESSAGE
-                'MoveFriend .index, .index - 1
-            End If
-        End With
-    End If
+    With lvFriendList.SelectedItem
+        If (.Index > 1) Then
+            AddQ "/f p " & GetFriendsSelectedUser, PRIORITY.CONSOLE_MESSAGE
+            'MoveFriend .index, .index - 1
+        End If
+    End With
 End Sub
 
 Private Sub mnuPopFLRefresh_Click()
@@ -4217,9 +4201,7 @@ End Sub
 Private Sub mnuPopFLRemove_Click()
     If Not PopupMenuFLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    If Not (lvFriendList.SelectedItem Is Nothing) Then
-        AddQ "/f r " & GetFriendsSelectedUser, PRIORITY.CONSOLE_MESSAGE
-    End If
+    AddQ "/f r " & GetFriendsSelectedUser, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopFLStats_Click()
@@ -4257,36 +4239,10 @@ Private Sub mnuPopFLStats_Click()
 End Sub
 
 Private Sub mnuPopFLUserlistWhois_Click()
-    On Error Resume Next
-    
     If Not PopupMenuFLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    Dim temp As udtUserAccess
-    Dim s As String
-    
-    s = GetFriendsSelectedUser
-    
-    temp = Database.GetUserAccess(s)
-    
-    With RTBColors
-        If temp.Rank > -1 Then
-            If temp.Rank > 0 Then
-                If temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with rank " & temp.Rank & " and flags " & temp.Flags & "."
-                Else
-                    AddChat .ConsoleText, "Found user " & s & ", with rank " & temp.Rank & "."
-                End If
-            Else
-                If temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with flags " & temp.Flags & "."
-                Else
-                    AddChat .ConsoleText, "User not found."
-                End If
-            End If
-        Else
-            AddChat .ConsoleText, "User not found."
-        End If
-    End With
+    Call ProcessCommand(GetCurrentUsername, "/whois " & GetFriendsSelectedUser, True, False)
+    g_Queue.RemoveItem g_Queue.Count - 1
 End Sub
 
 Private Sub mnuPopFLWebProfile_Click()
@@ -4318,7 +4274,7 @@ Private Sub mnuPopFLWebProfile_Click()
             End Select
     End Select
     
-    GetW3LadderProfile CleanUsername(GetFriendsSelectedUser), webProd
+    GetW3LadderProfile CleanUsername(GetFriendsSelectedUser), webProd, GetUserNamespace(CleanUsername(GetFriendsSelectedUser))
 End Sub
 
 Private Sub mnuPopFLWhisper_Click()
@@ -4345,20 +4301,17 @@ Private Sub mnuPopInvite_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     Dim sPlayer As String
     
-    If Not lvChannel.SelectedItem Is Nothing Then
-        sPlayer = GetSelectedUser
-    End If
+    sPlayer = GetSelectedUser
     
     If LenB(sPlayer) > 0 Then
         If g_Clan.Self.Rank >= 3 Then
             Call ClanHandler.InviteToClan(ReverseConvertUsernameGateway(sPlayer), reqUserInterface)
-            AddChat RTBColors.InformationText, "[CLAN] Invitation sent to " & GetSelectedUser & ", awaiting reply."
+            AddChat RTBColors.InformationText, "[CLAN] Invitation sent to " & sPlayer & ", awaiting reply."
         End If
     End If
 End Sub
 
 Private Sub mnuPopProfile_Click()
-    On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     Dim sUser As String
     sUser = StripAccountNumber(CleanUsername(GetSelectedUser))
@@ -4374,8 +4327,8 @@ Private Sub mnuPopStats_Click()
     
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    aInx = g_Channel.GetUserIndex(GetSelectedUser)
-    sProd = g_Channel.Users(aInx).Game
+    aInx = lvChannel.SelectedItem.Index
+    sProd = g_Channel.PriorityUsers(aInx).Game
     Select Case sProd
         Case PRODUCT_STAR, PRODUCT_SEXP, PRODUCT_W2BN, PRODUCT_WAR3, PRODUCT_W3XP, PRODUCT_JSTR, PRODUCT_SSHR
             ' get stats for user on their current product
@@ -4396,35 +4349,10 @@ Private Sub mnuPopStats_Click()
 End Sub
 
 Private Sub mnuPopUserlistWhois_Click()
-    On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    Dim temp As udtUserAccess
-    Dim s As String
-    
-    s = GetSelectedUser
-    
-    temp = Database.GetUserAccess(s)
-    
-    With RTBColors
-        If temp.Rank > -1 Then
-            If temp.Rank > 0 Then
-                If temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with rank " & temp.Rank & " and flags " & temp.Flags & "."
-                Else
-                    AddChat .ConsoleText, "Found user " & s & ", with rank " & temp.Rank & "."
-                End If
-            Else
-                If temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with flags " & temp.Flags & "."
-                Else
-                    AddChat .ConsoleText, "User not found."
-                End If
-            End If
-        Else
-            AddChat .ConsoleText, "User not found."
-        End If
-    End With
+    Call ProcessCommand(GetCurrentUsername, "/whois " & GetSelectedUser, True, False)
+    g_Queue.RemoveItem g_Queue.Count - 1
 End Sub
 
 Private Sub mnuHomeChannel_Click()
@@ -4642,7 +4570,6 @@ Private Sub mnuPacketLog_Click()
 End Sub
 
 Private Sub mnuPopAddLeft_Click()
-    On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     Dim Index As Integer
     Dim s As String
@@ -4653,6 +4580,7 @@ Private Sub mnuPopAddLeft_Click()
         s = StringFormat("/w {0}{1} ", s, GetSelectedUser)
         txtPre.Text = s
         
+        On Error Resume Next
         cboSend.SetFocus
         cboSend.SelStart = Len(cboSend.Text)
     End If
@@ -4661,32 +4589,26 @@ End Sub
 Private Sub mnuPopAddToFList_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    If Not (lvChannel.SelectedItem Is Nothing) Then
-        AddQ "/f a " & StripAccountNumber(CleanUsername(GetSelectedUser)), PRIORITY.CONSOLE_MESSAGE
-    End If
+    AddQ "/f a " & StripAccountNumber(CleanUsername(GetSelectedUser)), PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopDes_Click()
-    On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
 
-    AddQ "/designate " & CleanUsername(GetSelectedUser, True), PRIORITY.CONSOLE_MESSAGE
+    If g_Channel.Self.IsOperator() Then
+        AddQ "/designate " & CleanUsername(GetSelectedUser, True), PRIORITY.CONSOLE_MESSAGE
+    End If
 End Sub
 
 Private Sub mnuPopFLWhois_Click()
     If Not PopupMenuFLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    If Not (lvFriendList.SelectedItem Is Nothing) Then
-        AddQ "/whois " & lvFriendList.SelectedItem.Text, PRIORITY.CONSOLE_MESSAGE
-    End If
+    AddQ "/whois " & lvFriendList.SelectedItem.Text, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopSafelist_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
-
     Dim toSafe As String
-    
-    On Error Resume Next
     
     toSafe = GetSelectedUser
     
@@ -4695,10 +4617,7 @@ End Sub
 
 Private Sub mnuPopShitlist_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
-
     Dim toBan As String
-    
-    On Error Resume Next
     
     toBan = GetSelectedUser
     
@@ -4706,7 +4625,6 @@ Private Sub mnuPopShitlist_Click()
 End Sub
 
 Private Sub mnuPopSquelch_Click()
-    On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     AddQ "/squelch " & GetSelectedUser, PRIORITY.CONSOLE_MESSAGE, PRIORITY.CONSOLE_MESSAGE
@@ -4714,7 +4632,6 @@ End Sub
 
 
 Private Sub mnuPopUnsquelch_Click()
-    'On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     AddQ "/unsquelch " & GetSelectedUser, PRIORITY.CONSOLE_MESSAGE
@@ -4781,7 +4698,6 @@ Sub ClearChatScreen(Optional ByVal ClearOption As Integer = 3)
 End Sub
 
 Private Sub mnuPopWhois_Click()
-    On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     AddQ "/whois " & CleanUsername(GetSelectedUser, True), PRIORITY.CONSOLE_MESSAGE
@@ -4790,12 +4706,13 @@ End Sub
 Private Sub mnuPopWebProfile_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    Dim aInx As Integer
-    Dim sProd As String
-    Dim webProd As enuWebProfileTypes
+    Dim aInx     As Integer
+    Dim sProd    As String
+    Dim webProd  As enuWebProfileTypes
+    Dim Username As String
     
     aInx = lvChannel.SelectedItem.Index
-    sProd = g_Channel.Users(aInx).Game
+    sProd = g_Channel.PriorityUsers(aInx).Game
     Select Case sProd
         ' get web profile for user on their current product
         Case PRODUCT_WAR3
@@ -4808,7 +4725,8 @@ Private Sub mnuPopWebProfile_Click()
             Exit Sub
     End Select
     
-    GetW3LadderProfile StripAccountNumber(CleanUsername(GetSelectedUser)), webProd
+    Username = StripAccountNumber(CleanUsername(GetSelectedUser))
+    GetW3LadderProfile Username, webProd, GetUserNamespace(Username)
 End Sub
 
 Private Sub mnuClearedTxt_Click()
@@ -4944,9 +4862,9 @@ Private Sub mnuFilters_Click()
 End Sub
 
 Private Sub mnuPopCopy_Click()
-    On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
+    On Error Resume Next
     Clipboard.Clear
     
     Clipboard.SetText GetSelectedUser
@@ -5092,7 +5010,7 @@ End Sub
 Private Sub mnuPopKick_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    If MyFlags = 2 Or MyFlags = 18 Then
+    If g_Channel.Self.IsOperator() Then
         AddQ "/kick " & CleanUsername(GetSelectedUser, True), PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
@@ -5100,7 +5018,7 @@ End Sub
 Private Sub mnuPopBan_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    If MyFlags = 2 Or MyFlags = 18 Then
+    If g_Channel.Self.IsOperator() Then
         AddQ "/ban " & CleanUsername(GetSelectedUser, True), PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
@@ -7732,18 +7650,6 @@ Private Function PopupMenuCLUserCheck() As Boolean
     PopupMenuCLUserCheck = True
 End Function
 
-Function GetSelectedUsers() As Collection
-    Dim i As Integer
-
-    Set GetSelectedUsers = New Collection
-    
-    For i = 1 To lvChannel.ListItems.Count
-        If (lvChannel.ListItems(i).Selected) Then
-            Call GetSelectedUsers.Add(lvChannel.ListItems(i).Text)
-        End If
-    Next i
-End Function
-
 Function GetSelectedUser() As String
     If (lvChannel.SelectedItem Is Nothing) Then
         GetSelectedUser = vbNullString
@@ -8444,17 +8350,19 @@ Private Function GetClanSelectedUser() As String
 End Function
 
 Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
-    Dim aInx As Integer
-    Dim bIsOn As Boolean
-    Dim MyRank As Long
-    Dim TheirRank As Long
-    Dim CanMoveUp As Boolean
-    Dim CanMoveDown As Boolean
-    Dim CanRemove As Boolean
+    Dim aInx         As Integer
+    Dim bIsOn        As Boolean
+    Dim MyRank       As Long
+    Dim TheirRank    As Long
+    Dim CanMoveUp    As Boolean
+    Dim CanMoveDown  As Boolean
+    Dim CanRemove    As Boolean
     Dim CanMakeChief As Boolean
-    Dim CanDisband As Boolean
-    Dim IsSelf As Boolean
-    Dim CanLeave As Boolean
+    Dim CanDisband   As Boolean
+    Dim IsSelf       As Boolean
+    Dim CanLeave     As Boolean
+    Dim IsPubGateway As Boolean
+    Dim Gateway      As String
     
     If (lvClanList.SelectedItem Is Nothing) Then
         Exit Sub
@@ -8466,33 +8374,43 @@ Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single,
             
             If aInx > 0 Then
                 MyRank = g_Clan.Self.Rank
-                TheirRank = g_Clan.GetUser(GetClanSelectedUser).Rank
-                IsSelf = StrComp(g_Clan.Self.Name, GetClanSelectedUser, vbBinaryCompare) = 0
-                
-                CanMoveUp = Not IsSelf And (MyRank > (TheirRank + 1)) And (TheirRank > 0)
-                CanMoveDown = Not IsSelf And (MyRank > TheirRank) And (TheirRank > 1)
-                CanRemove = Not IsSelf And (CanMoveUp Or CanMoveDown)
-                CanMakeChief = Not IsSelf And (MyRank = 4) And (TheirRank > 1)
-                CanLeave = IsSelf And (MyRank > 0 And MyRank < 4)
-                CanDisband = IsSelf And (MyRank = 4)
-                
-                bIsOn = g_Clan.GetUser(GetClanSelectedUser).IsOnline
-                
-                mnuPopClanWhisper.Enabled = bIsOn
-                
-                mnuPopClanPromote.Enabled = CanMoveUp
-                mnuPopClanDemote.Enabled = CanMoveDown
-                mnuPopClanRemove.Enabled = CanRemove
-                mnuPopClanLeave.Enabled = CanLeave
-                mnuPopClanDisband.Enabled = CanDisband
-                mnuPopClanMakeChief.Enabled = CanMakeChief
-                
-                mnuPopClanPromote.Visible = Not IsSelf
-                mnuPopClanDemote.Visible = Not IsSelf
-                mnuPopClanRemove.Visible = Not IsSelf
-                mnuPopClanLeave.Visible = IsSelf And (MyRank <> 4)
-                mnuPopClanDisband.Visible = IsSelf And (MyRank = 4)
-                mnuPopClanMakeChief.Visible = Not IsSelf And (MyRank = 4)
+                With g_Clan.GetUser(GetClanSelectedUser)
+                    TheirRank = .Rank
+                    IsSelf = StrComp(g_Clan.Self.Name, .Name, vbBinaryCompare) = 0
+
+                    CanMoveUp = Not IsSelf And (MyRank > (TheirRank + 1)) And (TheirRank > 0)
+                    CanMoveDown = Not IsSelf And (MyRank > TheirRank) And (TheirRank > 1)
+                    CanRemove = Not IsSelf And (CanMoveUp Or CanMoveDown)
+                    CanMakeChief = Not IsSelf And (MyRank = 4) And (TheirRank > 1)
+                    CanLeave = IsSelf And (MyRank > 0 And MyRank < 4)
+                    CanDisband = IsSelf And (MyRank = 4)
+
+                    bIsOn = .IsOnline
+
+                    Gateway = GetUserNamespace(.Name)
+                    Select Case Gateway
+                        Case "Azeroth", "Lordaeron", "Northrend", "Kalimdor"
+                            IsPubGateway = True
+                    End Select
+
+                    mnuPopClanWhisper.Enabled = bIsOn
+                    
+                    mnuPopClanPromote.Enabled = CanMoveUp
+                    mnuPopClanDemote.Enabled = CanMoveDown
+                    mnuPopClanRemove.Enabled = CanRemove
+                    mnuPopClanLeave.Enabled = CanLeave
+                    mnuPopClanDisband.Enabled = CanDisband
+                    mnuPopClanMakeChief.Enabled = CanMakeChief
+
+                    mnuPopClanPromote.Visible = Not IsSelf
+                    mnuPopClanDemote.Visible = Not IsSelf
+                    mnuPopClanRemove.Visible = Not IsSelf
+                    mnuPopClanLeave.Visible = IsSelf And (MyRank <> 4)
+                    mnuPopClanDisband.Visible = IsSelf And (MyRank = 4)
+                    mnuPopClanMakeChief.Visible = Not IsSelf And (MyRank = 4)
+
+                    mnuPopClanWebProfile.Enabled = IsPubGateway
+                End With
             End If
         End If
         

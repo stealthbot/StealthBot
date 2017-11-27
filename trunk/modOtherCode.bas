@@ -799,21 +799,23 @@ Public Function VBHexToHTMLHex(ByVal sIn As String) As String
 End Function
 
 '//10-15-2009 - Hdx - Updated url to new address
-Public Sub GetW3LadderProfile(ByVal sPlayer As String, ByVal eType As enuWebProfileTypes)
+Public Sub GetW3LadderProfile(ByVal sPlayer As String, ByVal eType As enuWebProfileTypes, ByVal Gateway As String)
     Const W3LadderURLFormat As String = "http://{0}.battle.net/war3/ladder/{1}-player-profile.aspx?Gateway={2}&PlayerName={3}"
     Dim W3LadderURL As String
     Dim W3WebProfileType As String
-    Dim W3Realm As String
     Dim W3Domain As String
     W3Domain = "classic"
     
     If (LenB(sPlayer) > 0) Then
         W3WebProfileType = IIf(eType = W3XP, PRODUCT_W3XP, PRODUCT_WAR3)
-        W3Realm = GetW3Realm(sPlayer)
-        If W3Realm = "Kalimdor" Then W3Domain = "asialadders"
-        W3LadderURL = StringFormat(W3LadderURLFormat, W3Domain, LCase$(W3WebProfileType), W3Realm, NameWithoutRealm(sPlayer, 1))
+        Select Case Gateway
+            Case "Kalimdor":                          W3Domain = "asialadders"
+            Case "Azeroth", "Lordaeron", "Northrend": W3Domain = "classic"
+            Case Else:                                Exit Sub
+        End Select
+        W3LadderURL = StringFormat(W3LadderURLFormat, W3Domain, LCase$(W3WebProfileType), Gateway, NameWithoutRealm(sPlayer, 1))
         
-        ShellOpenURL W3LadderURL, sPlayer & "'s " & UCase$(W3WebProfileType) & " ladder profile"
+        ShellOpenURL W3LadderURL, sPlayer & "'s " & UCase$(W3WebProfileType) & " ladder profile on " & Gateway
     End If
 End Sub
 
@@ -864,15 +866,15 @@ Public Function GetCurrentUsername() As String
 
 End Function
 
-Public Function GetW3Realm(Optional ByVal Username As String) As String
+Public Function GetUserNamespace(Optional ByVal Username As String) As String
     If (LenB(Username) = 0) Then
-        GetW3Realm = BotVars.Gateway
+        GetUserNamespace = BotVars.Gateway
     Else
         If (InStr(1, Username, Config.GatewayDelimiter, vbBinaryCompare) > 0) Then
-            GetW3Realm = Mid$(Username, InStr(1, Username, Config.GatewayDelimiter, _
-                vbBinaryCompare) + 1)
+            GetUserNamespace = Mid$(Username, InStr(1, Username, Config.GatewayDelimiter, _
+                    vbBinaryCompare) + 1)
         Else
-            GetW3Realm = BotVars.Gateway
+            GetUserNamespace = BotVars.Gateway
         End If
     End If
 End Function
