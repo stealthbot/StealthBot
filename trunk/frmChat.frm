@@ -5274,9 +5274,11 @@ Private Sub tmrAccountLock_Timer()
     Call Event_LogonEvent(tmrAccountLock.Tag, -2&, vbNullString)
 
     AddChat RTBColors.ErrorMessageText, "[BNCS] Your account appears to be locked, likely due to an excessive number of " & _
-        "invalid logons.  Please try that account again in 15-20 minutes."
+        "invalid logons."
 
     Call DoDisconnect
+    ' schedule reconnect; don't do the 0-wait one
+    Call DoScheduleAutoReconnect(False, 1800)
 End Sub
 
 Private Sub tmrScript_Timer(Index As Integer)
@@ -8655,7 +8657,7 @@ ERROR_HANDLER:
 
 End Sub
 
-Public Sub DoScheduleAutoReconnect(ByVal JustLostConnection As Boolean)
+Public Sub DoScheduleAutoReconnect(ByVal JustLostConnection As Boolean, Optional ByVal MinimumWait As Long = 0)
     If Not JustLostConnection And AutoReconnectTry = 0 Then
         ' we can't wait the 0-length wait unless we just lost connection to get here
         AutoReconnectTry = 1
@@ -8667,10 +8669,16 @@ Public Sub DoScheduleAutoReconnect(ByVal JustLostConnection As Boolean)
         Case 1 ' always wait DELAY (first ATTEMPT = 0)
             AutoReconnectIn = Config.ReconnectDelay
             If AutoReconnectTry = 0 Then AutoReconnectIn = 0
+            If AutoReconnectIn < MinimumWait Then AutoReconnectIn = MinimumWait
         Case 2 ' always wait DELAY * ATTEMPT (first ATTEMPT = 0)
             AutoReconnectIn = (Config.ReconnectDelay * AutoReconnectTry)
+            If AutoReconnectIn < MinimumWait Then
+                AutoReconnectTry = (MinimumWait \ Config.ReconnectDelay)
+                AutoReconnectIn = (Config.ReconnectDelay * AutoReconnectTry)
+            End If
             If AutoReconnectIn > Config.ReconnectDelayMax Then
                 AutoReconnectIn = Config.ReconnectDelayMax
+                If AutoReconnectIn < MinimumWait Then AutoReconnectIn = MinimumWait
             End If
     End Select
     If AutoReconnectIn < 1 Then
