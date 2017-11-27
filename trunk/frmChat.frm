@@ -3736,7 +3736,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single
                     'ParseStatstring .Statstring, sOutBuf, Clan
             
                     'sTemp = sTemp & vbCrLf
-                    sTemp = sTemp & "Ping at logon: " & .Ping & "ms" & vbCrLf
+                    sTemp = sTemp & "Ping at logon: " & Format$(.Ping, "#,##0") & "ms" & vbCrLf
                     sTemp = sTemp & "Flags: " & GetFlagDescription(.Flags, True) & vbCrLf
                     sTemp = sTemp & vbCrLf
                     sTemp = sTemp & .Stats.ToString

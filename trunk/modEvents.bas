@@ -1144,6 +1144,11 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     'ParseStatstring OriginalStatstring, Stats, Clan
     If (StatUpdate = False) Then
         'frmChat.AddChat vbRed, UserObj.Stats.IconCode
+        'frmChat.AddChat RTBColors.JoinText, "-- User in channel: ", _
+        '    RTBColors.JoinUsername, Username, _
+        '    RTBColors.JoinUsername, " [" & Format$(Ping, "#,##0") & "ms]", _
+        '    RTBColors.JoinText, " is using " & UserObj.Stats.ToString, _
+        '    RTBColors.JoinText, "."
     
         frmChat.AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, UserObj.Clan
         
@@ -1185,7 +1190,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                     
                     frmChat.AddChat RTBColors.JoinText, "-- Stats updated: ", _
                         UserColor, Username, _
-                        RTBColors.JoinUsername, " [" & Ping & "ms]", _
+                        RTBColors.JoinUsername, " [" & Format$(Ping, "#,##0") & "ms]", _
                         RTBColors.JoinText, " is using " & UserObj.Stats.ToString, _
                         RTBColors.JoinUsername, FDesc, _
                         RTBColors.JoinText, "."
@@ -1429,7 +1434,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                 
                 frmChat.AddChat RTBColors.JoinText, "-- ", _
                     UserColor, Username, _
-                    RTBColors.JoinUsername, " [" & Ping & "ms]", _
+                    RTBColors.JoinUsername, " [" & Format$(Ping, "#,##0") & "ms]", _
                     RTBColors.JoinText, " has joined the channel using " & UserObj.Stats.ToString, _
                     RTBColors.JoinUsername, FDesc, _
                     RTBColors.JoinText, "."
