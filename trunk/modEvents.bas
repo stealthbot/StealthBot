@@ -1877,6 +1877,10 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
             
             frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your expansion CD-key is for another game."
         
+        Case 11:
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Version check failed! " & _
+                "The Battle.net server says your version must be downgraded."
+        
         Case Else
             frmChat.AddChat RTBColors.ErrorMessageText, "Unhandled 0x51 response! Value: " & Message
     End Select

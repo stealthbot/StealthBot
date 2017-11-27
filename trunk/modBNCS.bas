@@ -367,9 +367,10 @@ On Error GoTo ERROR_HANDLER:
         Case 2: 'Success
             bSuccess = True
             'Call Event_VersionCheck(0, sInfo)
-        Case 3: Call Event_VersionCheck(1, sInfo) '"Reinstall Required", Invalid version
+        Case 3: Call Event_VersionCheck(11, sInfo) 'Downgrade Version
         Case Else:
-            frmChat.AddChat RTBColors.ErrorMessageText, "Unknown SID_REPORTVERSION Response: 0x" & ZeroOffset(lResult, 8)
+            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(lResult, 8))
+            Call frmChat.DoDisconnect
     End Select
 
     If Config.IgnoreVersionCheck Then bSuccess = True
@@ -1770,6 +1771,7 @@ On Error GoTo ERROR_HANDLER:
             bSuccess = True
 
         Case &H100, &H101: Call Event_VersionCheck(1, sInfo) 'Outdated/Invalid Version
+        Case &H102: Call Event_VersionCheck(11, sInfo) 'Downgrade Version
         Case &H200: Call Event_VersionCheck(2, sInfo) 'Invalid CDKey
         Case &H201: Call Event_VersionCheck(6, sInfo) 'CDKey is In Use
         Case &H202: Call Event_VersionCheck(5, sInfo) 'CDKey is Banned
@@ -1779,7 +1781,8 @@ On Error GoTo ERROR_HANDLER:
         Case &H212: Call Event_VersionCheck(9, sInfo) 'Exp CDKey is Banned
         Case &H213: Call Event_VersionCheck(10, sInfo) 'Exp CDKey is for the wrong product
         Case Else:
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(lResult, 8))
+            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown SID_AUTH_CHECK Response: 0x" & ZeroOffset(lResult, 8))
+            Call frmChat.DoDisconnect
     End Select
 
     If Config.IgnoreVersionCheck Then bSuccess = True
