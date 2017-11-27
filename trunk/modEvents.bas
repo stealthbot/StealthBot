@@ -2153,7 +2153,7 @@ End Sub
 '10/01/09 - Hdx - This is for SID_MESSAGEBOX, for now it'll raise it's own event, and Event_ServerError
 Public Function Event_MessageBox(lStyle As Long, sText As String, sCaption As String)
 On Error GoTo ERROR_HANDLER:
-    Call Event_ServerError(sText)
+    Call Event_ServerError("[BNCS] " & sCaption & ": " & sText)
     
     RunInAll "Event_MessageBox", lStyle, sText, sCaption
 
