@@ -51,7 +51,7 @@ End Function
 Public Function ShowWW(ByVal Index As Integer) As Boolean
     Dim ReturnFocus As Boolean
     
-    ReturnFocus = cboSendHadFocus
+    ReturnFocus = frmChat.cboSendHadFocus
     
     If Index > 0 And Index <= colWhisperWindows.Count Then
         ShowWW = True

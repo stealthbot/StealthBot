@@ -1751,6 +1751,15 @@ Private MultiLinePaste As Boolean
 Private doAuth As Boolean
 Private AUTH_CHECKED As Boolean
 
+' window state
+Private ShowHideChangeHeight As Boolean
+Private rtbWhispers_Visible As Boolean
+Private SkipResize As Boolean
+Public cboSendHadFocus As Boolean
+Private cboSendSelStart As Long
+Private cboSendSelLength As Long
+Private ShuttingDown As Boolean
+
 'Forms
 Public SettingsForm As frmSettings
 Public ChatNoScroll As Boolean
@@ -1863,6 +1872,7 @@ Private Sub Form_Load()
 
     ' whisper panel show/hide button
     ShowHideChangeHeight = False
+    rtbWhispers_Visible = False
     rtbWhispers.Visible = False 'default
     cmdShowHide.Caption = CAP_HIDE
 
@@ -2505,7 +2515,7 @@ Public Sub Form_Resize()
         cboSend.Width = rtbChat.Width
         
         With cmdShowHide
-            If rtbWhispers.Visible Then
+            If rtbWhispers_Visible Then
                 'Debug.Print "-> " & rtbWhispers.Height
                 .Height = rtbWhispers.Height + 285
                 .Caption = CAP_HIDE
@@ -2520,7 +2530,7 @@ Public Sub Form_Resize()
         End With
         
         'height is based on rtbchat.height + cmdshowhide.height
-        If rtbWhispers.Visible Then
+        If rtbWhispers_Visible Then
             rtbChat.Height = ((Me.ScaleHeight / Screen.TwipsPerPixelY) - (txtPre.Height / _
                 Screen.TwipsPerPixelY) - (rtbWhispers.Height / Screen.TwipsPerPixelY)) * _
                     (Screen.TwipsPerPixelY)
@@ -2555,7 +2565,7 @@ Public Sub Form_Resize()
         'the issue is not with Vista, but with Aero.
         With rtbWhispers
             If .Visible Then
-                .Move rtbChat.Left, cboSend.Top + cboSend.Height, (Me.ScaleWidth - cmdShowHide.Width - Screen.TwipsPerPixelX)
+                .Move rtbChat.Left, cboSend.Top + cboSend.Height, (Me.ScaleWidth - cmdShowHide.Width) ' - Screen.TwipsPerPixelX)
             End If
         End With
         
@@ -2563,7 +2573,7 @@ Public Sub Form_Resize()
         ListviewTabs.Move lvChannel.Left, cboSend.Top + Screen.TwipsPerPixelY, lvChannel.Width - _
             cmdShowHide.Width - Screen.TwipsPerPixelX, cboSend.Height '+ 2 * Screen.TwipsPerPixelY
         
-        If rtbWhispers.Visible Then
+        If rtbWhispers_Visible Then
             cmdShowHide.Move (((rtbWhispers.Left + rtbWhispers.Width) / Screen.TwipsPerPixelX) + 1) * _
                 Screen.TwipsPerPixelX, lvChannel.Top + lvChannel.Height + Screen.TwipsPerPixelY
         Else
@@ -3147,6 +3157,7 @@ Public Function GetLogFilePath() As String
 End Function
 
 Sub Form_Unload(Cancel As Integer)
+    ShuttingDown = True
     AddChat RTBColors.ErrorMessageText, "Shutting down..."
     
     If Config.FileExists Then
@@ -7924,12 +7935,12 @@ End Sub
 
 'SHOW/HIDE STUFF
 Public Sub cmdShowHide_Click()
-    Dim Visible As Boolean
-    Visible = (Not rtbWhispers.Visible)
+    rtbWhispers_Visible = (Not rtbWhispers_Visible)
+    If rtbWhispers_Visible Then rtbWhispers.Visible = True
 
     If Me.WindowState = vbNormal And ShowHideChangeHeight Then
         SkipResize = True
-        If Visible Then
+        If rtbWhispers_Visible Then
             Me.Height = Me.Height + rtbWhispers.Height ' - Screen.TwipsPerPixelY
         Else
             Me.Height = Me.Height - rtbWhispers.Height ' + Screen.TwipsPerPixelY
@@ -7938,10 +7949,10 @@ Public Sub cmdShowHide_Click()
     End If
 
     'Debug.Print ShowHideChangeHeight
-    rtbWhispers.Visible = Visible
     Call Form_Resize
+    If Not rtbWhispers_Visible Then rtbWhispers.Visible = False
 
-    Config.ShowWhisperBox = Visible
+    Config.ShowWhisperBox = rtbWhispers_Visible
     Call Config.Save
 End Sub
 
@@ -8614,7 +8625,7 @@ Public Sub DoDisconnect(Optional ByVal ClientInitiated As Boolean = True)
         SCReloadTimerID = 0
     End If
 
-    If (ClientInitiated And AnythingToDisconnect) Then
+    If (ClientInitiated And AnythingToDisconnect And Not ShuttingDown) Then
         ' display message
         frmChat.AddChat RTBColors.ErrorMessageText, "All connections closed."
 

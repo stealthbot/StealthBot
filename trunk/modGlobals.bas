@@ -12,12 +12,6 @@ Public ReconnectTimerID As Long
 Public SCReloadTimerID As Long
 Public QueueTimerID As Long
 
-' frmchat constants
-Public ShowHideChangeHeight As Boolean
-Public SkipResize As Boolean
-Public cboSendHadFocus As Boolean
-Public cboSendSelStart As Long
-Public cboSendSelLength As Long
 Public LogPacketTraffic As Boolean
 Public cfgVersion As Long
 
