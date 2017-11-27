@@ -31,7 +31,6 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     Dim UserIndex       As Integer
     Dim i               As Integer
     Dim PreviousFlags   As Long
-    Dim Clan            As String
     Dim parsed          As String
     Dim pos             As Integer
     Dim doUpdate        As Boolean
@@ -42,8 +41,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     If (LenB(Username) < 1) Then
         Exit Sub
     End If
- 
-    
+
     UserIndex = g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     If (UserIndex > 0) Then
@@ -65,18 +63,10 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                 PreviousFlags = UserObj.Flags
             End If
         Else
-            PreviousFlags = _
-                UserObj.Queue(QueuedEventID - 1).Flags
+            PreviousFlags = UserObj.Queue(QueuedEventID - 1).Flags
         End If
-        
-        Clan = UserObj.Clan
     Else
-        If (g_Channel.IsSilent = False) Then
-            frmChat.AddChat RTBColors.ErrorMessageText, "Warning! There was a flags update received for a user that we do " & _
-                    "not have a record for.  This may be indicative of a server split or other technical difficulty."
-                    
-            Exit Sub
-        Else
+        If (g_Channel.IsSilent) Then
             If (g_Channel.Users.Count >= 200) Then
                 Exit Sub
             End If
@@ -87,21 +77,22 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                 .Name = Username
                 .Statstring = Message
             End With
+        Else
+            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Warning! Phantom user {0} has received a flags update.", UserObj.DisplayName)
+            Exit Sub
         End If
     End If
+    
+    ' get channel list position
+    pos = g_Channel.GetUserIndexByPriority(CleanUsername(Username))
+    
+    ' convert user name
+    Username = UserObj.DisplayName
     
     With UserObj
         .Flags = Flags
         .Ping = Ping
     End With
-    
-    If (g_Channel.IsSilent) Then
-        g_Channel.Users.Add UserObj
-    End If
-
-    ' convert username to appropriate
-    ' display format
-    Username = UserObj.DisplayName
     
     ' are we receiving a flag update for ourselves?
     If (StrComp(Username, GetCurrentUsername, vbBinaryCompare) = 0) Then
@@ -116,22 +107,18 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     
     ' we aren't in a silent channel, are we?
     If (g_Channel.IsSilent) Then
-        frmChat.AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, _
-            UserObj.Clan
+        g_Channel.Users.Add UserObj
+        frmChat.AddName UserObj
     Else
         If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
             If (Flags <> PreviousFlags) Then
                 If (g_Channel.Self.IsOperator) Then
-                    If ((Username = GetCurrentUsername) And _
-                            ((PreviousFlags And USER_CHANNELOP) <> USER_CHANNELOP)) Then
-                            
+                    If ((StrComp(Username, GetCurrentUsername, vbBinaryCompare) = 0) And (Not frmChat.IsPriorityUser(PreviousFlags))) Then
                         g_Channel.CheckUsers
                     Else
                         g_Channel.CheckUser Username
                     End If
                 End If
-                
-                pos = frmChat.GetChannelItemIndex(Username)
                 
                 If (pos) Then
                     Dim NewFlags As Long
@@ -143,14 +130,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                     NewFlags = Not (Flags Imp PreviousFlags)
                     LostFlags = Not (PreviousFlags Imp Flags)
                 
-                    If (NewFlags And USER_CHANNELOP) = USER_CHANNELOP Or _
-                        (NewFlags And USER_BLIZZREP) = USER_BLIZZREP Or _
-                        (NewFlags And USER_SYSOP) = USER_SYSOP Then
-                        pos = 1
-                    End If
-                    
-                    frmChat.AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, _
-                        UserObj.Clan, pos
+                    frmChat.AddName UserObj
                     
                     ' default to display this event
                     Displayed = False
@@ -168,12 +148,13 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                         FDescN = frmChat.GetFlagDescription(NewFlags, False)
                         FDescO = frmChat.GetFlagDescription(LostFlags, False)
                         
-                        If LenB(FDescN) > 0 Then
+                        If LenB(FDescN) > 0 And LenB(FDescO) > 0 Then
+                            frmChat.AddChat RTBColors.JoinUsername, "-- ", RTBColors.JoinedChannelName, _
+                                Username, RTBColors.JoinText, " is now a " & FDescN & " and no longer a " & FDescO & "."
+                        ElseIf LenB(FDescN) > 0 Then
                             frmChat.AddChat RTBColors.JoinUsername, "-- ", RTBColors.JoinedChannelName, _
                                 Username, RTBColors.JoinText, " is now a " & FDescN & "."
-                        End If
-                        
-                        If LenB(FDescO) > 0 Then
+                        ElseIf LenB(FDescO) > 0 Then
                             frmChat.AddChat RTBColors.JoinUsername, "-- ", RTBColors.JoinedChannelName, _
                                 Username, RTBColors.JoinText, " is no longer a " & FDescO & "."
                         End If
@@ -734,6 +715,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
 
     Const MSG_BAN                As String = " was banned by "
     Const MSG_UNBAN              As String = " was unbanned by "
+    Const MSG_KICK               As String = " was kicked out of the channel by "
 
     Const MSG_RECVKICK           As String = " kicked you out of the channel!"
 
@@ -782,59 +764,59 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         'End With
     End If
 
+    ' what is our current gateway name?
+    If (LenB(BotVars.Gateway) = 0) Then
+        If (StrComp(Left$(Message, Len(MSG_WHOIS_1)), MSG_WHOIS_1, vbBinaryCompare) = 0) And (InStr(1, Message, MSG_WHOIS_2, _
+                vbBinaryCompare) > 0) Then
+
+            If ((InStr(1, Message, MSG_WHOIS_IN_CHANNEL, vbBinaryCompare) = 0) And _
+                    (InStr(1, Message, MSG_WHOIS_IN_GAME, vbBinaryCompare) = 0) And _
+                    (InStr(1, Message, MSG_WHOIS_IN_PRIVATE, vbBinaryCompare) = 0)) Then
+
+                i = InStrRev(Message, Space$(1))
+
+                BotVars.Gateway = Mid$(Message, i + 1)
+
+                SetTitle GetCurrentUsername & ", online on " & BotVars.Gateway
+
+                Call DoChannelJoinHome
+
+                Call InsertDummyQueueEntry
+                
+                On Error Resume Next
+                RunInAll "Event_LoggedOn", CurrentUsername, BotVars.Product
+                RunInAll "Event_ServerInfo", Message
+                Exit Sub
+            End If
+        End If
+    End If
+
+    ' filter "extra" messages: you are still marked as away, no one hears you, and server welcome messages
+    If Config.HideExtraServerAlerts Then
+        If ((StrComp(Message, MSG_STILL_AWAY, vbBinaryCompare) = 0) Or _
+            (StrComp(Message, MSG_NO_ONE_HEARS, vbBinaryCompare) = 0) Or _
+            (StrComp(Message, MSG_SERVER_WELCOME, vbBinaryCompare) = 0) Or _
+            (StrComp(Left$(Message, Len(MSG_SERVER_HOST)), MSG_SERVER_HOST, vbBinaryCompare) = 0) Or _
+            (StrComp(Left$(Message, Len(MSG_SERVER_LAST_LOGON)), MSG_SERVER_LAST_LOGON, vbBinaryCompare) = 0)) Then
+            Hidden = True
+        End If
+    End If
+
+    ' friends list changes: request updates for unsupported FL
+    If (StrComp(Right$(Message, Len(MSG_FRIENDSCH_END)), MSG_FRIENDSCH_END, vbBinaryCompare) = 0) And _
+        ((StrComp(Left$(Message, Len(MSG_FRIENDSCH_ADDED)), MSG_FRIENDSCH_ADDED, vbBinaryCompare) = 0) Or _
+         (StrComp(Left$(Message, Len(MSG_FRIENDSCH_REMOVED)), MSG_FRIENDSCH_REMOVED, vbBinaryCompare) = 0) Or _
+         (StrComp(Left$(Message, Len(MSG_FRIENDSCH_PROMOTED)), MSG_FRIENDSCH_PROMOTED, vbBinaryCompare) = 0) Or _
+         (StrComp(Left$(Message, Len(MSG_FRIENDSCH_DEMOTED)), MSG_FRIENDSCH_DEMOTED, vbBinaryCompare) = 0)) Then
+        
+        If Config.FriendsListTab Then
+            If Not frmChat.FriendListHandler.SupportsFriendPackets(Config.Game) Then
+                Call frmChat.FriendListHandler.RequestFriendsList
+            End If
+        End If
+    End If
+
     If (InStr(1, Message, Space$(1), vbBinaryCompare) <> 0) Then
-        ' what is our current gateway name?
-        If (LenB(BotVars.Gateway) = 0) Then
-            If (StrComp(Left$(Message, Len(MSG_WHOIS_1)), MSG_WHOIS_1, vbBinaryCompare) = 0) And (InStr(1, Message, MSG_WHOIS_2, _
-                    vbBinaryCompare) > 0) Then
-
-                If ((InStr(1, Message, MSG_WHOIS_IN_CHANNEL, vbBinaryCompare) = 0) And _
-                        (InStr(1, Message, MSG_WHOIS_IN_GAME, vbBinaryCompare) = 0) And _
-                        (InStr(1, Message, MSG_WHOIS_IN_PRIVATE, vbBinaryCompare) = 0)) Then
-
-                    i = InStrRev(Message, Space$(1))
-
-                    BotVars.Gateway = Mid$(Message, i + 1)
-
-                    SetTitle GetCurrentUsername & ", online on " & BotVars.Gateway
-
-                    Call DoChannelJoinHome
-
-                    Call InsertDummyQueueEntry
-                    
-                    On Error Resume Next
-                    RunInAll "Event_LoggedOn", CurrentUsername, BotVars.Product
-                    RunInAll "Event_ServerInfo", Message
-                    Exit Sub
-                End If
-            End If
-        End If
-
-        ' filter "extra" messages: you are still marked as away, no one hears you, and server welcome messages
-        If Config.HideExtraServerAlerts Then
-            If ((StrComp(Message, MSG_STILL_AWAY, vbBinaryCompare) = 0) Or _
-                (StrComp(Message, MSG_NO_ONE_HEARS, vbBinaryCompare) = 0) Or _
-                (StrComp(Message, MSG_SERVER_WELCOME, vbBinaryCompare) = 0) Or _
-                (StrComp(Left$(Message, Len(MSG_SERVER_HOST)), MSG_SERVER_HOST, vbBinaryCompare) = 0) Or _
-                (StrComp(Left$(Message, Len(MSG_SERVER_LAST_LOGON)), MSG_SERVER_LAST_LOGON, vbBinaryCompare) = 0)) Then
-                Hidden = True
-            End If
-        End If
-
-        ' friends list changes: request updates for unsupported FL
-        If (StrComp(Right$(Message, Len(MSG_FRIENDSCH_END)), MSG_FRIENDSCH_END, vbBinaryCompare) = 0) And _
-            ((StrComp(Left$(Message, Len(MSG_FRIENDSCH_ADDED)), MSG_FRIENDSCH_ADDED, vbBinaryCompare) = 0) Or _
-             (StrComp(Left$(Message, Len(MSG_FRIENDSCH_REMOVED)), MSG_FRIENDSCH_REMOVED, vbBinaryCompare) = 0) Or _
-             (StrComp(Left$(Message, Len(MSG_FRIENDSCH_PROMOTED)), MSG_FRIENDSCH_PROMOTED, vbBinaryCompare) = 0) Or _
-             (StrComp(Left$(Message, Len(MSG_FRIENDSCH_DEMOTED)), MSG_FRIENDSCH_DEMOTED, vbBinaryCompare) = 0)) Then
-            
-            If Config.FriendsListTab Then
-                If Not frmChat.FriendListHandler.SupportsFriendPackets(Config.Game) Then
-                    Call frmChat.FriendListHandler.RequestFriendsList
-                End If
-            End If
-        End If
-
         'banned-user tracking
         User = Split(Message, Space$(1))(1)
         ' added 1/21/06 thanks to
@@ -858,7 +840,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                     End If
 
                     If (Len(User) > 0) Then
-                        pos = g_Channel.GetUserIndex(Username)
+                        pos = g_Channel.GetUserIndexByPriority(Username)
                         
                         If (pos > 0) Then
                             banpos = g_Channel.IsOnBanList(User, Username)
@@ -916,55 +898,59 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                         Loop While (rembanpos <> 0)
                     End If
                 End If
-            End If
-        End If
-
-        ' backup channel
-        If (StrComp(Right$(Message, Len(MSG_RECVKICK)), MSG_RECVKICK, vbBinaryCompare) = 0) Then
-            If (BotVars.UseBackupChan) Then
-                If (Len(BotVars.BackupChan) > 0) Then
-                    frmChat.AddQ "/join " & BotVars.BackupChan
-                End If
-            Else
-                frmChat.AddQ "/join " & g_Channel.Name
-            End If
-        End If
-
-        ' silent channel unsquelch
-        If (StrComp(Right$(Message, Len(MSG_UNSQUELCH)), MSG_UNSQUELCH, vbBinaryCompare) = 0) Then
-            If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
-                frmChat.lvChannel.ListItems.Clear
-            End If
-        End If
-
-        ' store designated
-        If (StrComp(Right$(Message, Len(MSG_DESIGNATED)), MSG_DESIGNATED, vbBinaryCompare) = 0) Then
-            g_Channel.OperatorHeir = Left$(Message, Len(Message) - Len(MSG_DESIGNATED))
-        End If
-
-        ' friends hiding
-        If (StrComp(Message, MSG_FRIENDS, vbBinaryCompare) = 0) Then
-            If (Not (BotVars.ShowOfflineFriends)) Then
-                ' display it early and append the hiding indicator
-                If (Not (Hidden)) Then
-                    frmChat.AddChat RTBColors.ServerInfoText, Message & "  " & Chr$(255) & "ci(StealthBot is hiding your offline friends)"
-                    ' hide it next time
-                    Hidden = True
+            ElseIf (InStr(1, Message, MSG_KICK, vbBinaryCompare) > 0) Then
+                If (StrComp(User, Left$(Message, (InStr(1, Message, MSG_KICK, vbBinaryCompare) - 1)), vbBinaryCompare) = 0) Then
+                    ' " was kicked out of the channel by " must follow User (first word)
+                    g_Channel.KickCount = (g_Channel.KickCount + 1)
                 End If
             End If
         End If
-        If (StrComp(Right$(Message, Len(MSG_FRIEND_OFFLINE)), MSG_FRIEND_OFFLINE, vbBinaryCompare) = 0) Then
-            If (Not BotVars.ShowOfflineFriends) Then
+    End If ' message contains a space
+
+    ' backup channel
+    If (StrComp(Right$(Message, Len(MSG_RECVKICK)), MSG_RECVKICK, vbBinaryCompare) = 0) Then
+        If (BotVars.UseBackupChan) Then
+            If (Len(BotVars.BackupChan) > 0) Then
+                frmChat.AddQ "/join " & BotVars.BackupChan
+            End If
+        Else
+            frmChat.AddQ "/join " & g_Channel.Name
+        End If
+    End If
+
+    ' silent channel unsquelch
+    If (StrComp(Right$(Message, Len(MSG_UNSQUELCH)), MSG_UNSQUELCH, vbBinaryCompare) = 0) Then
+        If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
+            frmChat.lvChannel.ListItems.Clear
+        End If
+    End If
+
+    ' store designated
+    If (StrComp(Right$(Message, Len(MSG_DESIGNATED)), MSG_DESIGNATED, vbBinaryCompare) = 0) Then
+        g_Channel.OperatorHeir = Left$(Message, Len(Message) - Len(MSG_DESIGNATED))
+    End If
+
+    ' friends hiding
+    If (StrComp(Message, MSG_FRIENDS, vbBinaryCompare) = 0) Then
+        If (Not (BotVars.ShowOfflineFriends)) Then
+            ' display it early and append the hiding indicator
+            If (Not (Hidden)) Then
+                frmChat.AddChat RTBColors.ServerInfoText, Message & "  " & Chr$(255) & "ci(StealthBot is hiding your offline friends)"
+                ' hide it next time
                 Hidden = True
             End If
         End If
-
-        ' display
-        If (Not (Hidden)) Then
-            frmChat.AddChat RTBColors.ServerInfoText, Message
+    End If
+    If (StrComp(Right$(Message, Len(MSG_FRIEND_OFFLINE)), MSG_FRIEND_OFFLINE, vbBinaryCompare) = 0) Then
+        If (Not BotVars.ShowOfflineFriends) Then
+            Hidden = True
         End If
+    End If
 
-    End If ' message contains a space
+    ' display
+    If (Not (Hidden)) Then
+        frmChat.AddChat RTBColors.ServerInfoText, Message
+    End If
 
     RunInAll "Event_ServerInfo", Message
     Exit Sub
@@ -1072,6 +1058,9 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
+    
+    Static LastUsername As String
+    Static LastPing     As Long
 
     Dim UserEvent    As clsUserEventObj
     Dim UserObj      As clsUserObj
@@ -1097,8 +1086,26 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
 
     UserIndex = g_Channel.GetUserIndexEx(CleanUsername(Username))
 
-    If (UserIndex > 0) Then
+    ' phantom UserInChannel detection:
+    ' conditions:
+    '   other user is a phantom: we haven't seen g_Channel.Self yet and there's a duplicate
+    '   we have a phantom of ourself: LastUsername is the same but LastPing is different (not guarenteed to work!)
+    ' mark the latest not-you as a phantom, and proceed as if new user
+    If (UserIndex > 0) And (LenB(g_Channel.Self.Name) = 0 Or _
+            (StrComp(Username, LastUsername, vbTextCompare) = 0 And LastPing <> Ping)) Then
+        Dim UserObjPhantom As clsUserObj
+        Set UserObjPhantom = g_Channel.Users(UserIndex)
+        frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Warning! Phantom user {0} detected.", UserObjPhantom.DisplayName)
+        UserObjPhantom.IsPhantom = True
+        Set UserObjPhantom = Nothing
 
+        UserIndex = 0
+    End If
+
+    LastUsername = Username
+    LastPing = Ping
+
+    If (UserIndex > 0) Then
         Set UserObj = g_Channel.Users(UserIndex)
         
         If (QueuedEventID = 0) Then
@@ -1125,6 +1132,8 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         StatUpdate = True
     Else
         Set UserObj = New clsUserObj
+        g_Channel.JoinCount = g_Channel.JoinCount + 1
+        UserObj.UserlistWeight = g_Channel.JoinCount
     End If
     
     With UserObj
@@ -1150,7 +1159,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         '    RTBColors.JoinText, " is using " & UserObj.Stats.ToString, _
         '    RTBColors.JoinText, "."
     
-        frmChat.AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, UserObj.Clan
+        frmChat.AddName UserObj
         
         Call frmChat.UpdateListviewTabs
         
@@ -1197,7 +1206,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 End If
             End If
             
-            pos = frmChat.GetChannelItemIndex(Username)
+            pos = g_Channel.GetUserIndexByPriority(Username)
 
             If (pos > 0) Then
             
@@ -1310,40 +1319,45 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     
         Set UserObj = g_Channel.Users(UserIndex)
     Else
-        If (UserIndex = 0) Then
-            Set UserObj = New clsUserObj
-            
-            With UserObj
-                .Name = Username
+        ' mark the first as a phantom, and proceed as if new user
+        If (UserIndex > 0) Then
+            Dim UserObjPhantom As clsUserObj
+            Set UserObjPhantom = g_Channel.Users(UserIndex)
+            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Warning! Phantom user {0} detected.", UserObjPhantom.DisplayName)
+            UserObjPhantom.IsPhantom = True
+            Set UserObjPhantom = Nothing
+        End If
+        
+        g_Channel.JoinCount = g_Channel.JoinCount + 1
+
+        Set UserObj = New clsUserObj
+
+        With UserObj
+            .Name = Username
+            .Flags = Flags
+            .Ping = Ping
+            .JoinTime = UtcNow
+            .Statstring = Statstring
+            .UserlistWeight = g_Channel.JoinCount
+        End With
+
+        If (BotVars.ChatDelay > 0) Then
+            Set UserEvent = New clsUserEventObj
+
+            With UserEvent
+                .EventID = ID_JOIN
                 .Flags = Flags
                 .Ping = Ping
-                .JoinTime = UtcNow
+                .GameID = UserObj.Game
                 .Statstring = Statstring
+                .Clan = UserObj.Clan
+                .IconCode = UserObj.Stats.Icon
             End With
 
-            If (BotVars.ChatDelay > 0) Then
-                Set UserEvent = New clsUserEventObj
-                
-                With UserEvent
-                    .EventID = ID_JOIN
-                    .Flags = Flags
-                    .Ping = Ping
-                    .GameID = UserObj.Game
-                    .Statstring = Statstring
-                    .Clan = UserObj.Clan
-                    .IconCode = UserObj.Stats.Icon
-                End With
-                
-                UserObj.Queue.Add UserEvent
-            End If
-
-            g_Channel.Users.Add UserObj
-        Else
-            frmChat.AddChat RTBColors.ErrorMessageText, "Warning! We have received a join event for a user that we had thought was " & _
-                    "already present within the channel.  This may be indicative of a server split or other technical difficulty."
-            
-            Exit Sub
+            UserObj.Queue.Add UserEvent
         End If
+
+        g_Channel.Users.Add UserObj
     End If
     
     Username = UserObj.DisplayName
@@ -1442,7 +1456,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         End If
         
         ' add to user list
-        frmChat.AddName Username, UserObj.Name, UserObj.Game, Flags, Ping, UserObj.Stats.IconCode, UserObj.Clan
+        frmChat.AddName UserObj
         
         ' if focus on channel tab, update header
         Call frmChat.UpdateListviewTabs
@@ -1519,51 +1533,46 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         On Error GoTo ERROR_HANDLER
     #End If
 
-    Dim UserObj   As clsUserObj
-    
-    Dim UserIndex As Integer
-    Dim i         As Integer
-    Dim ii        As Integer
-    Dim Holder()  As Variant
-    Dim pos       As Integer
-    Dim bln       As Boolean
+    Dim UserObj       As clsUserObj
+    Dim UserIndex     As Integer
+    Dim pos           As Integer
+    Dim PassJoinDelay As Boolean
 
     UserIndex = g_Channel.GetUserIndexEx(CleanUsername(Username))
     
-    If (UserIndex > 0) Then
-        If (g_Channel.Users(UserIndex).IsOperator) Then
-            g_Channel.RemoveBansFromOperator Username
-        End If
-        
-        If (g_Channel.Users(UserIndex).Queue.Count = 0) Then
-            If ((Not JoinMessagesOff) And ((Not Filters) Or (Not CheckBlock(Username)))) Then
-                'If (GetVeto = False) Then
-                Dim UserColor As Long
-                
-                ' display message
-                If (Flags And USER_BLIZZREP) Then
-                    UserColor = RGB(97, 105, 255)
-                ElseIf (Flags And USER_SYSOP) Then
-                    UserColor = RGB(97, 105, 255)
-                ElseIf (Flags And USER_CHANNELOP) Then
-                    UserColor = RTBColors.TalkUsernameOp
-                Else
-                    UserColor = RTBColors.JoinUsername
-                End If
-                
-                frmChat.AddChat RTBColors.JoinText, "-- ", _
-                    UserColor, g_Channel.Users(UserIndex).DisplayName, _
-                    RTBColors.JoinText, " has left the channel."
-                'End If
-            End If
-        End If
-        
-        g_Channel.Users.Remove UserIndex
-    Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "Warning! We have received a leave event for a user that we didn't know " & _
-                "was in the channel.  This may be indicative of a server split or other technical difficulty."
-    
+    If (UserIndex = 0) Then
+        frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Warning! Phantom user {0} has left the channel.", CleanUsername(Username))
         Exit Sub
+    End If
+    
+    Set UserObj = g_Channel.Users(UserIndex)
+    
+    If (UserObj.IsOperator) Then
+        g_Channel.RemoveBansFromOperator Username
+    End If
+    
+    If (UserObj.Queue.Count = 0) Then
+        PassJoinDelay = True
+        If ((Not JoinMessagesOff) And ((Not Filters) Or (Not CheckBlock(Username)))) Then
+            'If (GetVeto = False) Then
+            Dim UserColor As Long
+            
+            ' display message
+            If (Flags And USER_BLIZZREP) Then
+                UserColor = RGB(97, 105, 255)
+            ElseIf (Flags And USER_SYSOP) Then
+                UserColor = RGB(97, 105, 255)
+            ElseIf (Flags And USER_CHANNELOP) Then
+                UserColor = RTBColors.TalkUsernameOp
+            Else
+                UserColor = RTBColors.JoinUsername
+            End If
+            
+            frmChat.AddChat RTBColors.JoinText, "-- ", _
+                UserColor, UserObj.DisplayName, _
+                RTBColors.JoinText, " has left the channel."
+            'End If
+        End If
     End If
     
     If (StrComp(Username, g_Channel.OperatorHeir, vbTextCompare) = 0) Then
@@ -1572,13 +1581,17 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         Call g_Channel.CheckUsers
     End If
     
-    Username = ConvertUsername(Username)
+    Username = UserObj.DisplayName
     
     RemoveBanFromQueue Username
     
-    pos = frmChat.GetChannelItemIndex(Username)
+    pos = g_Channel.GetUserIndexByPriority(Username)
     
-    If (pos > 0) Then
+    'Debug.Print "Remove " & Username & " Index: " & UserIndex
+    g_Channel.Users.Remove UserIndex
+    Set UserObj = Nothing
+    
+    If (PassJoinDelay And pos > 0) Then
         If (frmChat.mnuFlash.Checked) Then
             FlashWindow
         End If

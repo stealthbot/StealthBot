@@ -30,6 +30,8 @@ Private m_Queue             As Collection       ' queue'd chat events
 Private m_PassedChannelAuth As Boolean
 Private m_StatsObj          As clsUserStats
 Private m_PendingBan        As Boolean
+Private m_Phantom           As Boolean
+Private m_Weight            As Long
 
 Private m_CleanName         As String
 Private m_DisplayName       As String           ' name displayed according to conventions
@@ -159,21 +161,33 @@ Public Property Let PendingBan(ByVal bValue As Boolean)
 End Property
 
 
+Public Property Get IsPhantom() As Boolean
+    IsPhantom = m_Phantom
+End Property
+
+Public Property Let IsPhantom(ByVal bValue As Boolean)
+    m_Phantom = bValue
+End Property
+
+
 Public Property Get IsBnetAdmin() As Boolean
-    IsBnetAdmin = ((m_Flags And USER_SYSOP&) = USER_SYSOP&)
+    IsBnetAdmin = ((m_Flags And USER_SYSOP) = USER_SYSOP)
 End Property
 
 Public Property Get IsBlizzRep() As Boolean
-    IsBlizzRep = ((m_Flags And USER_BLIZZREP&) = USER_BLIZZREP&)
+    IsBlizzRep = ((m_Flags And USER_BLIZZREP) = USER_BLIZZREP)
 End Property
 
-Public Property Get IsOperator() As Boolean
-    IsOperator = (((m_Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Or _
-                   IsBlizzRep() Or IsBnetAdmin())
+Public Property Get IsSpeaker() As Boolean
+    IsSpeaker = ((m_Flags And USER_SPEAKER) = USER_SPEAKER)
 End Property
 
 Public Property Get IsSquelched() As Boolean
-    IsSquelched = ((m_Flags And USER_SQUELCHED&) = USER_SQUELCHED&)
+    IsSquelched = ((m_Flags And USER_SQUELCHED) = USER_SQUELCHED)
+End Property
+
+Public Property Get IsOperator() As Boolean
+    IsOperator = frmChat.IsPriorityUser(m_Flags)
 End Property
 
 
@@ -192,6 +206,14 @@ End Property
 
 Public Property Get JoinTime() As Date
     JoinTime = m_JoinDate
+End Property
+
+Public Property Let UserlistWeight(ByVal lng As Long)
+    m_Weight = lng
+End Property
+
+Public Property Get UserlistWeight() As Long
+    UserlistWeight = m_Weight
 End Property
 
 
@@ -290,6 +312,8 @@ Public Function Clone() As Object
     Clone.LastTalkTime = LastTalkTime
     Clone.PassedChannelAuth = PassedChannelAuth
     Clone.PendingBan = PendingBan
+    Clone.IsPhantom = IsPhantom
+    Clone.UserlistWeight = UserlistWeight
     Clone.Statstring = Statstring
     
     For i = 1 To Queue.Count

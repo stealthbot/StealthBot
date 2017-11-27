@@ -1117,7 +1117,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1143,7 +1142,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3729,10 +3727,10 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single
             'End If
                 
             
-            lItemIndex = g_Channel.GetUserIndex(lvChannel.ListItems(m_lCurItemIndex).Text)
+            'lItemIndex = g_Channel.GetUserIndex(lvChannel.ListItems(m_lCurItemIndex).Text)
             
-            If (lItemIndex > 0) Then
-                With g_Channel.Users(lItemIndex)
+            If (m_lCurItemIndex > 0 And m_lCurItemIndex <= g_Channel.PriorityUsers.Count) Then
+                With g_Channel.PriorityUsers(m_lCurItemIndex)
                     'ParseStatstring .Statstring, sOutBuf, Clan
             
                     'sTemp = sTemp & vbCrLf
@@ -6192,8 +6190,9 @@ Private Sub tmrIdleTimer_Timer()
         If (g_Channel.IsSilent = False) Then
             doCheck = True
 
-            For i = 1 To g_Channel.Users.Count
-                With g_Channel.Users(i)
+            pos = 0
+            For i = 1 To g_Channel.PriorityUsers.Count
+                With g_Channel.PriorityUsers(i)
                     If (g_Channel.Self.IsOperator) Then
                         If (.IsOperator = False) Then
                             ' channel password
@@ -6223,10 +6222,9 @@ Private Sub tmrIdleTimer_Timer()
                         End If
                     End If
 
-                    If (Not BotVars.NoColoring) Then
-                        pos = frmChat.GetChannelItemIndex(.Name)
-
-                        If (pos > 0) Then
+                    If (.Queue.Count = 0) Then
+                        pos = pos + 1
+                        If (Not BotVars.NoColoring) Then
                             NewColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
                                     GetCurrentUsername, vbBinaryCompare) = 0)
 
@@ -6382,7 +6380,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
             '
             '        ParseStatstring user.Statstring, Stats, Clan
             '
-            '        AddName user.DisplayName, user.Game, user.Flags, user.Ping, user.Clan
+            '        AddName User
             '    End If
             'Next i
             
@@ -7261,6 +7259,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     If (g_Online) Then
         Dim found       As ListItem
         Dim outbuf      As String
+        Dim pos         As Integer
         Dim ChannelUser As clsUserObj
         Dim FriendObj   As clsFriendObj
         Dim Member      As clsClanMemberObj
@@ -7270,11 +7269,13 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         frmChat.UpdateTrayTooltip
 
         lvChannel.ListItems.Clear
-        For i = 1 To g_Channel.Users.Count
-            Set ChannelUser = g_Channel.Users(i)
-
-            AddName ChannelUser.DisplayName, ChannelUser.Name, ChannelUser.Game, ChannelUser.Flags, ChannelUser.Ping, _
-                    ChannelUser.Stats.IconCode, ChannelUser.Clan
+        pos = 0
+        For i = 1 To g_Channel.PriorityUsers.Count
+            Set ChannelUser = g_Channel.PriorityUsers(i)
+            If (ChannelUser.Queue.Count = 0) Then
+                pos = pos + 1
+                AddName ChannelUser, pos
+            End If
         Next i
 
         lvFriendList.ListItems.Clear
@@ -8095,7 +8096,7 @@ Private Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal
     End If
     
     '/* Operator */
-    If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+    If ((Flags And USER_CHANNELOP) = USER_CHANNELOP) Then
         'Debug.Print "Assigned color OP"
         GetNameColor = FormColors.ChannelListOps
         Exit Function
@@ -8185,15 +8186,27 @@ Public Function GetFlagDescription(ByVal Flags As Long, ByVal ShowAll As Boolean
     End If
 End Function
 
-Public Sub AddName(ByVal Username As String, ByVal AccountName As String, ByVal Product As String, ByVal Flags As Long, ByVal Ping As Long, IconCode As Integer, Optional Clan As String, Optional ForcePosition As Integer)
-On Error GoTo ERROR_HANDLER
-    Dim i          As Integer
-    Dim LagIcon    As Integer
-    Dim isPriority As Integer
-    Dim IsSelf     As Boolean
+Public Function IsPriorityUser(ByVal Flags As Long) As Boolean
+    IsPriorityUser = False
+    IsPriorityUser = IsPriorityUser Or ((Flags And USER_CHANNELOP) = USER_CHANNELOP)
+    IsPriorityUser = IsPriorityUser Or ((Flags And USER_BLIZZREP) = USER_BLIZZREP)
+    IsPriorityUser = IsPriorityUser Or ((Flags And USER_SYSOP) = USER_SYSOP)
+    IsPriorityUser = IsPriorityUser Or ((Flags And USER_SPEAKER) = USER_SPEAKER)
+End Function
+
+Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal Position As Integer = 0)
+    #If COMPILE_DEBUG = 0 Then
+        On Error GoTo ERROR_HANDLER
+    #End If
+
+    Dim i        As Integer
+    Dim LagIcon  As Integer
+    Dim Weight   As Long
+    Dim IsSelf   As Boolean
+    Dim ListItem As ListItem
     
-    If (StrComp(Username, GetCurrentUsername, vbTextCompare) = 0) Then
-        MyFlags = Flags
+    If (StrComp(UserObj.DisplayName, GetCurrentUsername, vbTextCompare) = 0) Then
+        MyFlags = UserObj.Flags
         
         SharedScriptSupport.BotFlags = MyFlags
         
@@ -8204,54 +8217,63 @@ On Error GoTo ERROR_HANDLER
     '    Exit Sub
     'End If
     
-    isPriority = (frmChat.lvChannel.ListItems.Count + 1)
+    Weight = UserObj.UserlistWeight
+    'Debug.Print UserObj.Name & " WEIGHT: " & Weight
+    If IsPriorityUser(UserObj.Flags) Then Weight = Weight * -1
     
-    i = GetSmallIcon(Product, Flags, IconCode)
+    If Position = 0 Then
+        Position = 1
+        For i = 1 To g_Channel.PriorityUsers.Count
+            If g_Channel.PriorityUsers(i).UserlistWeight > Weight Then
+                Exit For
+            End If
+            Position = i
+        Next i
+        If Position > lvChannel.ListItems.Count + 1 Then Position = lvChannel.ListItems.Count + 1
+    End If
+    
+    i = GetSmallIcon(UserObj.Game, UserObj.Flags, UserObj.Stats.IconCode)
     
     'Special Cases
     'If i = ICSQUELCH Then
     '    'Debug.Print "Returned a SQUELCH icon"
     '    If ForcePosition > 0 Then isPriority = ForcePosition
     '
-    If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or _
-            ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Or _
-            ((Flags And USER_SYSOP&) = USER_SYSOP&)) Then
-        
-        If (ForcePosition = 0) Then
-            isPriority = 1
-        Else
-            isPriority = ForcePosition
-        End If
-
-    Else
-        If (ForcePosition > 0) Then
-            isPriority = ForcePosition
-        End If
-    End If
+    'If (IsPriorityUser(Flags)) Then
+    '    If (ForcePosition = 0) Then
+    '        IsPriority = 1
+    '    Else
+    '        IsPriority = ForcePosition
+    '    End If
+    'Else
+    '    If (ForcePosition > 0) Then
+    '        IsPriority = ForcePosition
+    '    End If
+    'End If
     
     If (i > frmChat.imlIcons.ListImages.Count) Then
-        i = frmChat.imlIcons.ListImages.Count
+        i = ICUNKNOWN
     End If
         
     With frmChat.lvChannel
         .Enabled = False
         
-        .ListItems.Add isPriority, , Username, , i
+        Set ListItem = .ListItems.Add(Position, , UserObj.DisplayName, , i)
         
         ' store account name here so popup menus work
-        .ListItems.Item(isPriority).Tag = AccountName
+        ListItem.Tag = UserObj.Name
         
-        .ListItems.Item(isPriority).ListSubItems.Add , , Clan
+        ListItem.ListSubItems.Add , , UserObj.Clan
         
         If (.ColumnHeaders(3).Width = 0) Then
             LagIcon = 0
         Else
-            LagIcon = GetLagIcon(Ping, Flags)
+            LagIcon = GetLagIcon(UserObj.Ping, UserObj.Flags)
         End If
-        .ListItems.Item(isPriority).ListSubItems.Add , , , LagIcon
+        ListItem.ListSubItems.Add , , , LagIcon
         
         If (Not BotVars.NoColoring) Then
-            .ListItems.Item(isPriority).ForeColor = GetNameColor(Flags, 0, IsSelf)
+            ListItem.ForeColor = GetNameColor(UserObj.Flags, UserObj.TimeSinceTalk, IsSelf)
         End If
         
         .Enabled = True

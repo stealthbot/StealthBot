@@ -145,13 +145,15 @@ Public Property Get IsSilent() As Boolean
 
 End Property
 
-Public Property Let JoinCount(ByVal lng As Long)
+Public Property Get JoinCount() As Long
 
+    JoinCount = m_NumJoins
 
 End Property
 
-Public Property Get JoinCount() As Long
+Public Property Let JoinCount(ByVal lng As Long)
 
+    m_NumJoins = lng
 
 End Property
 
@@ -167,13 +169,15 @@ Public Property Let BanCount(ByVal lng As Long)
     
 End Property
 
-Public Property Let KickCount(ByVal lng As Long)
+Public Property Get KickCount() As Long
 
+    KickCount = m_NumKicks
 
 End Property
 
-Public Property Get KickCount() As Long
+Public Property Let KickCount(ByVal lng As Long)
 
+    m_NumKicks = lng
 
 End Property
 
@@ -182,6 +186,38 @@ Public Property Get Users() As Collection
     Set Users = m_Users
 
 End Property
+
+Public Property Get PriorityUsers() As Collection
+
+    Dim i As Integer
+    Set PriorityUsers = New Collection
+    
+    For i = Users.Count To 1 Step -1
+        If (Users(i).IsOperator) Then
+            PriorityUsers.Add Users(i)
+        End If
+    Next i
+    For i = 1 To Users.Count
+        If (Not Users(i).IsOperator) Then
+            PriorityUsers.Add Users(i)
+        End If
+    Next i
+
+End Property
+
+Public Property Get Operators() As Collection
+
+    Dim i As Integer
+    Set Operators = New Collection
+    
+    For i = 1 To Users.Count
+        If (Users(i).IsOperator) Then
+            Operators.Add Users(i)
+        End If
+    Next i
+
+End Property
+
 
 Public Sub ClearUsers()
 
@@ -203,10 +239,9 @@ Public Property Get Self() As clsUserObj
 
     Set Self = New clsUserObj
     
-    For i = 1 To Users.Count
-        If (StrComp(Users(i).Name, CleanUsername(CurrentUsername), vbTextCompare) = 0) Then
+    For i = Users.Count To 1 Step -1
+        If (StrComp(Users(i).Name, CleanUsername(CurrentUsername), vbTextCompare) = 0) And (Users(i).IsPhantom = False) Then
             Set Self = Users(i)
-            
             Exit Property
         End If
     Next i
@@ -237,16 +272,15 @@ Public Function GetUserIndexEx(ByVal AccountName As String, Optional ByVal Searc
     
     AccountName = modEvents.CleanUsername(AccountName)
 
-    For i = 1 To Users.Count
+    For i = Users.Count To 1 Step -1
         If (SearchLimit > 0) Then
             If (i >= SearchLimit) Then
                 Exit For
             End If
         End If
     
-        If (StrComp(Users(i).Name, AccountName, vbTextCompare) = 0) Then
+        If (StrComp(Users(i).Name, AccountName, vbTextCompare) = 0) And (Users(i).IsPhantom = False) Then
             GetUserIndexEx = i
-            
             Exit Function
         End If
     Next i
@@ -261,9 +295,9 @@ Public Function GetUser(ByVal Username As String, Optional ByVal SearchLimit As 
     
     If (StrictIsNumeric(Username) And (Len(Username) <= 4)) Then
         Index = CInt(Val(Username))
-                If (Index > Users.Count) Then
-                        Index = GetUserIndex(Username, SearchLimit)
-                End If
+        If (Index > Users.Count) Then
+            Index = GetUserIndex(Username, SearchLimit)
+        End If
     Else
         Index = GetUserIndex(Username, SearchLimit)
     End If
@@ -280,21 +314,41 @@ Public Function GetUserIndex(ByVal Username As String, Optional ByVal SearchLimi
 
     Dim i As Integer
 
-    For i = 1 To m_Users.Count
+    For i = m_Users.Count To 1 Step -1
         If (SearchLimit > 0) Then
             If (i >= SearchLimit) Then
                 Exit For
             End If
         End If
     
-        If (StrComp(m_Users(i).DisplayName, Username, vbTextCompare) = 0) Then
+        If (StrComp(m_Users(i).DisplayName, Username, vbTextCompare) = 0) And (Users(i).IsPhantom = False) Then
             GetUserIndex = i
-            
             Exit Function
         End If
     Next i
     
     GetUserIndex = 0
+
+End Function
+
+Public Function GetUserIndexByPriority(ByVal Username As String, Optional ByVal SearchLimit As Integer = 0) As Integer
+
+    Dim i As Integer
+
+    For i = 1 To PriorityUsers.Count
+        If (SearchLimit > 0) Then
+            If (i >= SearchLimit) Then
+                Exit For
+            End If
+        End If
+    
+        If (StrComp(PriorityUsers(i).Name, Username, vbTextCompare) = 0) And (PriorityUsers(i).IsPhantom = False) Then
+            GetUserIndexByPriority = i
+            Exit Function
+        End If
+    Next i
+    
+    GetUserIndexByPriority = 0
 
 End Function
 
@@ -323,7 +377,6 @@ Public Function IsOnBanList(ByVal Username As String, Optional ByVal Operator As
         
             If (bln) Then
                 IsOnBanList = i
-                
                 Exit Function
             End If
         End If
@@ -598,10 +651,10 @@ Public Function CheckUsers() As Integer
         doCheck = True
         
         If (OperatorHeir = vbNullString) Then
-            For i = 1 To Users.Count
+            For i = Users.Count To 1 Step -1
                 Set CurrentUser = Users(i)
             
-                If (CurrentUser.IsOperator = False) Then
+                If (CurrentUser.IsOperator = False) And (CurrentUser.IsPhantom = False) Then
                     DBEntry = _
                         Database.GetUserAccess(CurrentUser.DisplayName)
                 
@@ -623,7 +676,7 @@ Public Function CheckUsers() As Integer
         For i = Users.Count To 1 Step -1
             Set CurrentUser = Users(i)
         
-            If (CurrentUser.IsOperator = False) Then
+            If (CurrentUser.IsOperator = False) And (CurrentUser.IsPhantom = False) Then
                 If (CheckUser(CurrentUser.DisplayName, CurrentUser)) Then
                     Count = (Count + 1)
                 End If
@@ -637,17 +690,18 @@ End Function
 
 Public Function CheckQueue(ByVal Username As String) As Boolean
 
+    Dim i           As Integer
     Dim CurrentUser As clsUserObj
 
-    For Each CurrentUser In Users
-        If (StrComp(CurrentUser.DisplayName, Username, vbTextCompare) = 0) Then
+    For i = Users.Count To 1 Step -1
+        Set CurrentUser = Users(i)
+        If (StrComp(CurrentUser.DisplayName, Username, vbTextCompare) = 0) And (CurrentUser.IsPhantom = False) Then
             If (CurrentUser.Queue.Count) Then
                 CheckQueue = True
             End If
-            
             Exit For
         End If
-    Next
+    Next i
 
 End Function
 
