@@ -818,7 +818,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
 
     If (InStr(1, Message, Space$(1), vbBinaryCompare) <> 0) Then
         'banned-user tracking
-        User = Split(Message, Space$(1))(1)
+        User = Split(Message, Space$(1))(0)
         ' added 1/21/06 thanks to
         ' http://www.stealthbot.net/forum/index.php?showtopic=24582
 
