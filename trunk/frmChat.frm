@@ -6107,7 +6107,9 @@ End Sub
 ' BNCS.SID_CLANMOTD (10 minutes - may change)
 ' BNCS.SID_FRIENDSLIST (5 minutes - for D1,W2,D2 [no update], SC,W3 [bug in SID_FRIENDSUPDATE])
 Private Sub tmrIdleTimer_Timer()
-    On Error GoTo ERROR_HANDLER
+    #If COMPILE_DEBUG = 0 Then
+        On Error GoTo ERROR_HANDLER
+    #End If
 
     ' long-counter
     Static lCounter As Long
@@ -6251,7 +6253,9 @@ ERROR_HANDLER:
 End Sub
 
 Private Sub tmrIdleTimer_Timer_IdleMsg()
-    On Error GoTo ERROR_HANDLER
+    #If COMPILE_DEBUG = 0 Then
+        On Error GoTo ERROR_HANDLER
+    #End If
 
     Dim U As String, IdleMsg As String, s() As String
     Dim IdleWaitS As String, IdleType As String
@@ -6345,7 +6349,9 @@ ERROR_HANDLER:
 End Sub
 
 Private Sub tmrSilentChannel_Timer(Index As Integer)
-    On Error GoTo ERROR_HANDLER
+    #If COMPILE_DEBUG = 0 Then
+        On Error GoTo ERROR_HANDLER
+    #End If
 
     Dim User    As clsUserObj
     Dim Item    As ListItem
@@ -8262,33 +8268,11 @@ ERROR_HANDLER:
     AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddName", Err.Number, Err.Description)
 End Sub
 
-
-Public Function GetChannelItemIndex(ByVal NameToFind As String) As Integer
-    Dim lvItem As ListItem
-
-    Set lvItem = frmChat.lvChannel.FindItem(NameToFind)
-
-    If (lvItem Is Nothing) Then
-        If BotVars.UseD2Naming Then
-            GetChannelItemIndex = 0
-            Dim i As Integer
-            For i = 1 To lvChannel.ListItems.Count
-                If (StrComp(lvChannel.ListItems(i).Tag, CleanUsername(ReverseConvertUsernameGateway(NameToFind)), vbTextCompare) = 0) Then
-                    GetChannelItemIndex = i
-                    Exit For
-                End If
-            Next i
-        Else
-            GetChannelItemIndex = 0
-        End If
-    Else
-        GetChannelItemIndex = lvItem.Index
-    End If
-End Function
-
 Private Sub AddFriendItem(ByVal Name As String, ByVal Game As String, _
         ByVal Status As Byte, ByVal LocationID As Byte, ByVal EntryNumber As Integer)
-On Error GoTo ERROR_HANDLER
+    #If COMPILE_DEBUG = 0 Then
+        On Error GoTo ERROR_HANDLER
+    #End If
     Dim ListItem As ListItem
 
     Set ListItem = lvFriendList.ListItems.Add(lvFriendList.ListItems.Count + 1, , Name)
@@ -8305,7 +8289,9 @@ End Sub
 Private Sub SetFriendItem(ByVal ListItem As ListItem, ByVal EntryNumber As Integer, _
         Optional ByVal SettingFields As Boolean = False, Optional ByVal Game As String, _
         Optional ByVal Status As Byte, Optional ByVal LocationID As Byte)
-On Error GoTo ERROR_HANDLER
+    #If COMPILE_DEBUG = 0 Then
+        On Error GoTo ERROR_HANDLER
+    #End If
     Dim OnlineIcon As Integer
     Dim GameIcon   As Integer
 
@@ -8374,7 +8360,9 @@ Private Function GetFriendItem(ByVal EntryNumber As Integer) As ListItem
 End Function
 
 Private Sub AddClanMember(ByVal Name As String, ByVal DisplayName As String, ByVal Rank As Integer, ByVal Status As Integer)
-On Error GoTo ERROR_HANDLER:
+    #If COMPILE_DEBUG = 0 Then
+        On Error GoTo ERROR_HANDLER
+    #End If
     Dim ListItem As ListItem
 
     Set ListItem = lvClanList.ListItems.Add(lvClanList.ListItems.Count + 1, , DisplayName)
@@ -8395,7 +8383,9 @@ ERROR_HANDLER:
 End Sub
 
 Private Sub SetClanMember(ByVal ListItem As ListItem, ByVal DisplayName As String, ByVal Rank As Integer, ByVal Status As Integer)
-On Error GoTo ERROR_HANDLER
+    #If COMPILE_DEBUG = 0 Then
+        On Error GoTo ERROR_HANDLER
+    #End If
     Dim RankIcon   As Integer
     Dim OnlineIcon As Integer
     RankIcon = Rank
