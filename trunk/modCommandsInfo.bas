@@ -193,6 +193,9 @@ End Sub
 Public Sub OnHelp(Command As clsCommandObj)
     Dim strCommand As String
     Dim strScript  As String
+    Dim StateStr   As String
+    Dim AliasStr1  As String
+    Dim AliasStr2  As String
     Dim docs       As clsCommandDocObj
     
     strCommand = IIf(Command.IsValid, Command.Argument("Command"), "help")
@@ -203,22 +206,24 @@ Public Sub OnHelp(Command As clsCommandObj)
         Command.Respond "Sorry, but no related documentation could be found."
     Else
         If (docs.Aliases.Count > 1) Then
-            Command.Respond StringFormat("[{0} (aliases: {4})]: {1} [syntax: {2}] {3}", _
-            docs.Name, docs.Description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort, docs.AliasString)
+            AliasStr1 = " (aliases: "
+            AliasStr2 = ")"
         ElseIf (docs.Aliases.Count = 1) Then
-            Command.Respond StringFormat("[{0} (alias: {4})]: {1} [syntax: {2}] {3}", _
-            docs.Name, docs.Description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort, docs.AliasString)
-        Else
-            Command.Respond StringFormat("[{0}]: {1} [syntax: {2}] {3}", _
-            docs.Name, docs.Description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort)
+            AliasStr1 = " (alias: "
+            AliasStr2 = ")"
         End If
+        If (Not docs.IsEnabled) Then StateStr = " (disabled)"
+
+        Command.Respond StringFormat("[{0}{1}{2}{3}]{4}: {5} [syntax: {6}] {7}", _
+                docs.Name, AliasStr1, docs.AliasString, AliasStr2, StateStr, _
+                docs.Description, docs.SyntaxString(Command.IsLocal), docs.RequirementsStringShort)
     End If
     Set docs = Nothing
     
 End Sub
 
 Public Sub OnHelpAttr(Command As clsCommandObj)
-On Error GoTo ERROR_HANDLER
+    On Error GoTo ERROR_HANDLER
     
     Dim tmpbuf      As String
     
@@ -238,7 +243,7 @@ ERROR_HANDLER:
 End Sub
 
 Public Sub OnHelpRank(Command As clsCommandObj)
-On Error GoTo ERROR_HANDLER
+    On Error GoTo ERROR_HANDLER
     
     Dim tmpbuf      As String
     
@@ -291,21 +296,22 @@ On Error GoTo ERROR_HANDLER
     Dim Script  As Module
     
     If modScripting.GetScriptSystemDisabled() Then
-        Command.Respond "Error: Scripts are globally disabled via the override."
+        Command.Respond "Error: Scripts are globally disabled."
         Exit Sub
     End If
     
-    If (LenB(Command.Argument("Script")) > 0) Then
-        Set Script = modScripting.GetModuleByName(Command.Argument("Script"))
+    Name = Command.Argument("Script")
+    If (LenB(Name) > 0) Then
+        Set Script = modScripting.GetModuleByName(Name, True)
         If (Script Is Nothing) Then
-            Command.Respond "Could not find the script specified."
+            Command.Respond StringFormat("Error: Could not find the script ""{0}"".", Name)
         Else
-            If (Not StrComp(Script.CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 1) Then
-                Command.Respond StringFormat("The Script {0} loaded in {1}ms.", _
-                    GetScriptName(Script.Name), _
-                    GetScriptDictionary(Script)("InitPerf"))
+            Name = modScripting.GetScriptName(Script.Name)
+            If (modScripting.IsScriptEnabled(Name) = False) Then
+                Command.Respond StringFormat("Error: Script ""{0}"" is currently disabled.", Name)
             Else
-                Command.Respond "That script is currently disabled."
+                Command.Respond StringFormat("The script ""{0}"" loaded in {1}ms.", _
+                        Name, Format$(GetScriptDictionary(Script)("InitPerf"), "#,##0"))
             End If
         End If
     Else
@@ -317,18 +323,16 @@ On Error GoTo ERROR_HANDLER
             End If
             For i = 2 To frmChat.SControl.Modules.Count
                 Set Script = frmChat.SControl.Modules(i)
-                
-                If (Not StrComp(Script.CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 0) Then
+                Name = modScripting.GetScriptName(CStr(i))
+                If (modScripting.IsScriptEnabled(Name)) Then
                     If (Command.IsLocal And Not Command.PublicOutput) Then
-                        Command.Respond StringFormat(" '{0}' loaded in {1}ms.", _
-                            GetScriptName(Script.Name), _
-                            GetScriptDictionary(Script)("InitPerf"))
+                        Command.Respond StringFormat("    ""{0}"": {1}ms.", _
+                            Name, Format$(GetScriptDictionary(Script)("InitPerf"), "#,##0"))
                     Else
-                        strRet = StringFormat("{0} '{1}' {2}ms{3}", _
-                            strRet, _
-                            GetScriptName(Script.Name), _
-                            GetScriptDictionary(Script)("InitPerf"), _
-                            IIf(i = frmChat.SControl.Modules.Count, vbNullString, ","))
+                        strRet = StringFormat("{0} ""{1}"": {2}ms{3}", _
+                            strRet, Name, _
+                            Format$(GetScriptDictionary(Script)("InitPerf"), "#,##0"), _
+                            IIf(i = frmChat.SControl.Modules.Count, ".", "; "))
                     End If
                 End If
             Next i
@@ -338,7 +342,7 @@ On Error GoTo ERROR_HANDLER
             Command.Respond "There are no scripts currently loaded."
         End If
     End If
-        
+    
     Exit Sub
 ERROR_HANDLER:
     frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnInitPerf()."
@@ -478,43 +482,49 @@ End Sub
 Public Sub OnScriptDetail(Command As clsCommandObj)
 On Error GoTo ERROR_HANDLER
     
-    Dim Script As Module
+    Dim Module As Module
+    Dim Name   As String
     
     If modScripting.GetScriptSystemDisabled() Then
-        Command.Respond "Error: Scripts are globally disabled via the override."
+        Command.Respond "Error: Scripts are globally disabled."
         Exit Sub
     End If
     
     If (Command.IsValid) Then
-        Set Script = modScripting.GetModuleByName(Command.Argument("Script"))
-        If (Script Is Nothing) Then
-            Command.Respond "Error: Could not find specified script."
+        Name = Command.Argument("Script")
+        Set Module = modScripting.GetModuleByName(Name, True)
+        If (Module Is Nothing) Then
+            Command.Respond StringFormat("Error: Could not find the script ""{0}"".", Name)
         Else
             Dim ScriptInfo  As Dictionary
             Dim Version     As String
             Dim VerTotal    As Double
             Dim Author      As String
             Dim Description As String
+            Dim StateStr    As String
+            Dim VerStr      As String
+            Dim AuthorStr   As String
+            Dim DescrStr    As String
             
-            Set ScriptInfo = GetScriptDictionary(Script)
-            
+            Set ScriptInfo = GetScriptDictionary(Module)
+
+            Name = modScripting.GetScriptName(Module.Name)
             Version = StringFormat("{0}.{1}{2}", Val(ScriptInfo("Major")), Val(ScriptInfo("Minor")), _
                 IIf(Val(ScriptInfo("Revision")) > 0, " Revision " & Val(ScriptInfo("Revision")), vbNullString))
-                
             VerTotal = Val(ScriptInfo("Major")) + Val(ScriptInfo("Minor")) + Val(ScriptInfo("Revision"))
-                     
             Author = ScriptInfo("Author")
             Description = ScriptInfo("Description")
+
+            If modScripting.IsScriptEnabled(Name) = False Then StateStr = " (disabled)"
+            If VerTotal > 0 Then VerStr = " v" & Version
+            If LenB(Author) > 0 Then AuthorStr = " by " & Author
+            If LenB(Description) > 0 Then DescrStr = ": " & Description
+            If Right$(DescrStr, 1) <> "." Then DescrStr = DescrStr & "."
             
             If ((LenB(Author) = 0) And (VerTotal = 0) And (LenB(Description) = 0)) Then
-                Command.Respond StringFormat("There is no additional information for the '{0}' script.", _
-                    GetScriptName(Script.Name))
+                Command.Respond StringFormat("There is no additional information for the script ""{0}""{1}.", Name, StateStr)
             Else
-                Command.Respond StringFormat("{0}{1}{2}{3}", _
-                    GetScriptName(Script.Name), _
-                    IIf(VerTotal > 0, " v" & Version, vbNullString), _
-                    IIf(LenB(Author) > 0, " by " & Author, vbNullString), _
-                    IIf(LenB(Description) > 0, ": " & Description, "."))
+                Command.Respond StringFormat("""{0}""{1}{2}{3}{4}", Name, StateStr, VerStr, AuthorStr, DescrStr)
             End If
         End If
     End If
@@ -529,30 +539,30 @@ On Error GoTo ERROR_HANDLER
     Dim retVal  As String
     Dim i       As Integer
     Dim Enabled As Boolean
+    Dim Part    As String
+    Dim Comma   As String
     Dim Name    As String
     Dim Count   As Integer
     
     If modScripting.GetScriptSystemDisabled() Then
-        Command.Respond "Error: Scripts are globally disabled via the override."
+        Command.Respond "Error: Scripts are globally disabled."
         Exit Sub
     End If
     
     If (frmChat.SControl.Modules.Count > 1) Then
+        Comma = ", "
         For i = 2 To frmChat.SControl.Modules.Count
             Name = modScripting.GetScriptName(CStr(i))
-            Enabled = Not (StrComp(GetModuleByName(Name).CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 0)
-                
-            retVal = StringFormat("{0}{1}{2}{3}{4}", _
-                retVal, _
-                IIf(Enabled, vbNullString, "("), _
-                Name, _
-                IIf(Enabled, vbNullString, ")"), _
-                IIf(i = frmChat.SControl.Modules.Count, vbNullString, ", "))
-                
+            Enabled = modScripting.IsScriptEnabled(Name)
+            Part = "{0}{1}{2}"
+            If Not Enabled Then Part = "{0}{3}{1}{4}{2}"
+            If (i = frmChat.SControl.Modules.Count) Then Comma = vbNullString
+
+            retVal = StringFormat(Part, retVal, Name, Comma, "(", ")")
             Count = (Count + 1)
         Next i
         
-        Command.Respond StringFormat("Loaded Scripts ({0}): {1}", Count, retVal)
+        Command.Respond StringFormat("Scripts ({0}): {1}", Count, retVal)
     Else
         Command.Respond "There are no scripts currently loaded."
     End If
@@ -811,7 +821,7 @@ Public Sub OnWhoIs(Command As clsCommandObj)
 End Sub
 
 Private Function GetAllCommandsFor(ByRef commandDoc As clsCommandDocObj, Optional Rank As Integer = -1, Optional Flags As String = vbNullString) As String
-On Error GoTo ERROR_HANDLER
+    On Error GoTo ERROR_HANDLER
     
     Dim tmpbuf      As String
     Dim i           As Integer
@@ -822,6 +832,10 @@ On Error GoTo ERROR_HANDLER
     Dim thisCommand As String
     Dim xFunction   As String
     Dim Flag        As String
+    Dim CommandNode As IXMLDOMNode
+    Dim NameNode    As IXMLDOMNode
+    Dim OwnerNode   As IXMLDOMNode
+    Dim Owner       As String
     
     'If (LenB(Dir$(GetFilePath(FILE_COMMANDS))) = 0) Then
     '    Command.Respond "Error: The XML database could not be found in the working directory."
@@ -845,9 +859,9 @@ On Error GoTo ERROR_HANDLER
                 StringFormat(xFunction, Flag), _
                 IIf(i = Len(Flags), vbNullString, " or "))
         Next i
-        xpath = StringFormat("./command/access/flags/flag[{0}]", xpath)
+        xpath = StringFormat("./command[not(@enabled) or @enabled='1']/access/flags/flag[{0}]", xpath)
     Else
-        xpath = StringFormat("./command/access/rank[number() <= {0}]", Rank)
+        xpath = StringFormat("./command[not(@enabled) or @enabled='1']/access/rank[number() <= {0}]", Rank)
     End If
     
     Set xmlDoc = commandDoc.XMLDocument
@@ -857,19 +871,36 @@ On Error GoTo ERROR_HANDLER
     If (commands.Length > 0) Then
         For i = 0 To commands.Length - 1
             If (LenB(Flags) > 0) Then
-                thisCommand = commands(i).parentNode.parentNode.parentNode.Attributes.getNamedItem("name").Text
+                Set CommandNode = commands(i).parentNode.parentNode.parentNode
             Else
-                thisCommand = commands(i).parentNode.parentNode.Attributes.getNamedItem("name").Text
+                Set CommandNode = commands(i).parentNode.parentNode
             End If
-            
-            If (StrComp(thisCommand, lastCommand, vbTextCompare) <> 0) Then
-                tmpbuf = StringFormat("{0}{1}, ", tmpbuf, thisCommand)
+            Set NameNode = CommandNode.Attributes.getNamedItem("name")
+            If (Not NameNode Is Nothing) Then
+                thisCommand = NameNode.Text
+
+                If (StrComp(thisCommand, lastCommand, vbTextCompare) <> 0) Then
+                    Owner = vbNullString
+                    Set OwnerNode = CommandNode.Attributes.getNamedItem("owner")
+                    If (Not OwnerNode Is Nothing) Then
+                        Owner = OwnerNode.Text
+                    End If
+                    If LenB(Owner) > 0 Then
+                        If modScripting.IsScriptEnabled(Owner) Then
+                            tmpbuf = StringFormat("{0}{1}, ", tmpbuf, thisCommand)
+                        End If
+                    Else
+                        tmpbuf = StringFormat("{0}{1}, ", tmpbuf, thisCommand)
+                    End If
+                End If
+
+                lastCommand = thisCommand
             End If
-        
-            lastCommand = thisCommand
         Next i
-        
-        tmpbuf = Left$(tmpbuf, Len(tmpbuf) - 2)
+
+        If (LenB(tmpbuf) > 0) Then
+            tmpbuf = Left$(tmpbuf, Len(tmpbuf) - 2)
+        End If
     End If
     GetAllCommandsFor = tmpbuf
     Exit Function

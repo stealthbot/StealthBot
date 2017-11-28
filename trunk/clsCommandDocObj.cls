@@ -1146,25 +1146,33 @@ End Function
 
 Private Function GetRequirementsString(Optional bShort As Boolean = False)
 
-    Dim retVal As String
+    Dim retVal    As String
     Dim DetailReq As String
-    
-    If bShort Then
-        DetailReq = "Requires"
-    Else
-        DetailReq = "Command requires"
-    End If
+    Dim StateStr  As String
     
     If (m_command_node Is Nothing) Then
         Exit Function
     End If
 
-    If (Me.RequiredRank <> -1) Or (Len(Me.RequiredFlags) > 0) Then
+    retVal = vbNullString
+    StateStr = vbNullString
+
+    If bShort Then
+        DetailReq = "Requires"
+    Else
+        DetailReq = "Command requires"
+    End If
+
+    If (LenB(Me.Owner) > 0) Then
+        If (modScripting.IsScriptEnabled(Me.Owner) = False) Then StateStr = " (disabled)"
+        retVal = StringFormat("From script ""{0}""{1}. ", Me.Owner, StateStr)
+        If (Not bShort) Then retVal = retVal & vbCrLf
+    End If
+
+    If (Me.RequiredRank > -1) Or (Len(Me.RequiredFlags) > 0) Then
         '// available outside the console
-        retVal = vbNullString
-        
         '// add access requirements if necessary
-        If (Me.RequiredRank <> -1) Then
+        If (Me.RequiredRank > -1) Then
             retVal = StringFormat("{0}{2} rank {1}", retVal, Me.RequiredRank, DetailReq)
             If (Len(Me.RequiredFlags) = 0) Then
                 retVal = StringFormat("{0}.", retVal)
@@ -1173,7 +1181,7 @@ Private Function GetRequirementsString(Optional bShort As Boolean = False)
         
         '// add flag requirements, if necessary, taking into account the existinance of an access requirements
         If (Len(Me.RequiredFlags) <> 0) Then
-            If (Me.RequiredRank <> -1) Then
+            If (Me.RequiredRank > -1) Then
                 retVal = StringFormat("{0} or one of the following flags: {1}.", retVal, Me.RequiredFlags)
             Else
                 retVal = StringFormat("{0}{2} one of the following flags: {1}.", retVal, Me.RequiredFlags, DetailReq)
@@ -1182,9 +1190,10 @@ Private Function GetRequirementsString(Optional bShort As Boolean = False)
     
     Else
         '// console only, lets show the generic blurb
-        retVal = "Only available to the console."
-        If (Not bShort) Then
-            retVal = "Command is only available to the console. Set a rank or flag requirement to make this command available to external sources."
+        If (bShort) Then
+            retVal = StringFormat("{0}Only available to the console.", retVal)
+        Else
+            retVal = StringFormat("{0}Command is only available to the console. Set a rank or flag requirement to make this command available to external sources.", retVal)
         End If
     End If
 

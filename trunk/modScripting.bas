@@ -525,11 +525,7 @@ Public Sub InitScripts()
     End If
     
     For i = 2 To m_sc_control.Modules.Count
-        If (i > 1) Then
-            tmp = m_sc_control.Modules(i).CodeObject.GetSettingsEntry("Enabled")
-        End If
-
-        If (StrComp(tmp, "False", vbTextCompare) <> 0) Then
+        If modScripting.IsScriptEnabled(modScripting.GetScriptName(CStr(i))) = True Then
             InitScript m_sc_control.Modules(i)
         End If
     Next i
@@ -575,7 +571,6 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
     Dim SC      As ScriptControl
     Dim i       As Integer
     Dim arr()   As Variant
-    Dim str     As String
     Dim oldVeto As Boolean
     Dim veto    As Boolean
     Dim oldEM   As Module
@@ -602,9 +597,7 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
         Set obj = SC.Modules(i)
         Set m_ExecutingMdl = obj
         
-        str = obj.CodeObject.GetSettingsEntry("Enabled")
-        
-        If (StrComp(str, "False", vbTextCompare) <> 0) Then
+        If modScripting.IsScriptEnabled(modScripting.GetScriptName(CStr(i))) = True Then
             
             ' check if module has the procedure before calling it!
             'For Each Proc In obj.Procedures
@@ -642,7 +635,7 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
     Dim i       As Integer
     Dim x       As Integer
     Dim arr()   As Variant
-    Dim str     As String
+    Dim Enabled As Boolean
     Dim oldVeto As Boolean
     Dim oldEM   As Module
     Dim Proc    As Procedure
@@ -671,14 +664,14 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
     'If Obj is nothing then we are 'running' an internal event
     'This is so scriptors can observe internal events, like Internal Commands
     If (obj Is Nothing) Then
-        str = "True"
+        Enabled = True
         mname = vbNullString
     Else
-        str = obj.CodeObject.GetSettingsEntry("Enabled")
+        Enabled = modScripting.IsScriptEnabled(modScripting.GetScriptName(obj.Name))
         mname = GetScriptName(obj.Name)
     End If
     
-    If (Not StrComp(str, "False", vbTextCompare) = 0) Then
+    If Enabled Then
         If (Not obj Is Nothing) Then CallByNameEx obj, "Run", VbMethod, arr()
         RunInSingle = GetVeto 'Was this particular event vetoed?
         
@@ -688,8 +681,7 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
         For i = 1 To sobsers.Count
             Set obser = GetModuleByName(sobsers.Item(i))
             If (Not obser Is Nothing) Then 'Is the script real/loaded?
-                str = obser.CodeObject.GetSettingsEntry("Enabled")
-                If (Not StrComp(str, "False", vbTextCompare) = 0) Then 'Is it off?
+                If modScripting.IsScriptEnabled(modScripting.GetScriptName(CStr(i))) = True Then
                     Set m_ExecutingMdl = obser
                     CallByNameEx obser, "Run", VbMethod, arr
                 End If
@@ -715,8 +707,7 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
             If (cobser) Then
                 Set obser = GetModuleByName(fobsers.Item(i))
                 If (Not obser Is Nothing) Then
-                    str = obser.CodeObject.GetSettingsEntry("Enabled")
-                    If (Not StrComp(str, "False", vbTextCompare) = 0) Then
+                    If modScripting.IsScriptEnabled(modScripting.GetScriptName(obser.Name)) = True Then
                         Set m_ExecutingMdl = obser
                         CallByNameEx obser, "Run", VbMethod, arr
                     End If
@@ -1211,9 +1202,7 @@ Public Function InitMenus()
         tmp.Parent = DynamicMenus("mnu" & Name)
         tmp.Caption = "Enabled"
         
-        If (StrComp(GetModuleByName(Name).CodeObject.GetSettingsEntry("Enabled"), _
-                "False", vbTextCompare) <> 0) Then
-                
+        If modScripting.IsScriptEnabled(Name) Then
             tmp.Checked = True
         End If
         
@@ -1313,15 +1302,30 @@ Public Function Scripts() As Object
 
 End Function
 
-Public Function GetModuleByName(ByVal ScriptName As String) As Module
+Public Function GetModuleByName(ByVal ScriptName As String, Optional ByVal TrySearch As Boolean = False) As Module
     Dim i As Integer
-    
+
+    ' search for exact matches
     For i = 2 To frmChat.SControl.Modules.Count
         If (StrComp(GetScriptName(CStr(i)), ScriptName, vbTextCompare) = 0) Then
             Set GetModuleByName = frmChat.SControl.Modules(i)
             Exit Function
         End If
     Next i
+
+    ' search for "starts with"
+    If TrySearch And LenB(ScriptName) > 0 Then
+        For i = 2 To frmChat.SControl.Modules.Count
+            If (StrComp(Left$(GetScriptName(CStr(i)), Len(ScriptName)), ScriptName, vbTextCompare) = 0) Then
+                If Not GetModuleByName Is Nothing Then
+                    ' multiple choices
+                    Set GetModuleByName = Nothing
+                    Exit Function
+                End If
+                Set GetModuleByName = frmChat.SControl.Modules(i)
+            End If
+        Next i
+    End If
 End Function
 
 Public Sub SetVeto(ByVal b As Boolean)
@@ -1423,7 +1427,6 @@ Public Sub SC_Error()
     Dim Text        As String
     Dim IncIndex    As Integer
     Dim i           As Integer
-    Dim tmp         As String
     
     ' check whether the override is disabling the script system
     ' (this function is being called in that case due to /exec)
@@ -1482,14 +1485,7 @@ Public Sub SC_Error()
     End If
     
     ' display error if script enabled
-    If InStr(Name, "#") > 0 Then
-        tmp = Left$(Name, InStr(Name, "#") - 1)
-    Else
-        tmp = Name
-    End If
-    tmp = SharedScriptSupport.GetSettingsEntry("Enabled", CleanFileName(tmp))
-    
-    If (StrComp(tmp, "False", vbTextCompare) <> 0) Then
+    If modScripting.IsScriptEnabled(modScripting.GetScriptName(m_ExecutingMdl.Name)) = True Then
         frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Scripting {0} error #{1} in {2}: (line {3}; column {4})", _
             ErrType, Number, Name, Line, Column)
         frmChat.AddChat RTBColors.ErrorMessageText, Description
@@ -1772,12 +1768,6 @@ ERROR_HANDLER:
         " in SetScriptSystemDisabled()."
 End Sub
 
-Public Function GetScriptSystemDisabled() As Boolean
-
-    GetScriptSystemDisabled = m_SystemDisabled
-    
-End Function
-
 ' call this function to get a script module's CodeObject.Script dictionary.
 ' this will make sure that the CodeObject.Script is of type Dictionary and
 ' can be accessed as such
@@ -1805,3 +1795,34 @@ Private Function SetScriptDictionary(ByRef mdl As Module)
     Set mdl.CodeObject.Script = Dict
 End Function
 
+Public Function GetScriptSystemDisabled() As Boolean
+
+    GetScriptSystemDisabled = m_SystemDisabled
+    
+End Function
+
+
+Public Function IsScriptEnabled(ByVal Name As String) As Boolean
+On Error GoTo ERROR_HANDLER
+    Dim Script  As Module
+    Dim Setting As String
+
+    If m_SystemDisabled Then
+        IsScriptEnabled = False
+    ElseIf (LenB(Name) = 0) Then
+        IsScriptEnabled = False
+    Else
+        Set Script = GetModuleByName(Name)
+        If (Script Is Nothing) Then
+            IsScriptEnabled = False
+        Else
+            Setting = SharedScriptSupport.GetSettingsEntry("Enabled", Name)
+            IsScriptEnabled = CBool(StrComp(Setting, "False", vbTextCompare) <> 0)
+        End If
+        Set Script = Nothing
+    End If
+        
+    Exit Function
+ERROR_HANDLER:
+    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.IsScriptEnabled()."
+End Function

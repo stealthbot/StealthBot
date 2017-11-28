@@ -137,23 +137,24 @@ Public Sub OnDisable(Command As clsCommandObj)
     Dim mnu    As clsMenuObj
     
     If modScripting.GetScriptSystemDisabled() Then
-        Command.Respond "Error: Scripts are globally disabled via the override."
+        Command.Respond "Error: Scripts are globally disabled."
         Exit Sub
     End If
     
     If (Command.IsValid) Then
-        Set Module = modScripting.GetModuleByName(Command.Argument("Script"))
+        Name = Command.Argument("Script")
+        Set Module = modScripting.GetModuleByName(Name, True)
         If (Module Is Nothing) Then
-            Command.Respond "Error: Could not find specified script."
+            Command.Respond StringFormat("Error: Could not find the script ""{0}"".", Name)
         Else
             Name = modScripting.GetScriptName(Module.Name)
-            If (StrComp(SharedScriptSupport.GetSettingsEntry("Enabled", Name), "False", vbTextCompare) = 0) Then
-                Command.Respond Name & " is already disabled."
+            If (modScripting.IsScriptEnabled(Name) = False) Then
+                Command.Respond StringFormat("Error: Script ""{0}"" is already disabled.", Name)
             Else
                 RunInSingle Module, "Event_Close"
                 SharedScriptSupport.WriteSettingsEntry "Enabled", "False", , Name
                 modScripting.DestroyObjs Module
-                Command.Respond Name & " has been disabled."
+                Command.Respond StringFormat("Script ""{0}"" has been disabled.", Name)
                 For i = 1 To DynamicMenus.Count
                     Set mnu = DynamicMenus(i)
                     If (StrComp(mnu.Name, Chr$(0) & Name & Chr$(0) & "ENABLE|DISABLE", vbTextCompare) = 0) Then
@@ -182,22 +183,23 @@ Public Sub OnEnable(Command As clsCommandObj)
     Dim mnu    As clsMenuObj
     
     If modScripting.GetScriptSystemDisabled() Then
-        Command.Respond "Error: Scripts are globally disabled via the override."
+        Command.Respond "Error: Scripts are globally disabled."
         Exit Sub
     End If
     
     If (Command.IsValid) Then
-        Set Module = modScripting.GetModuleByName(Command.Argument("Script"))
+        Name = Command.Argument("Script")
+        Set Module = modScripting.GetModuleByName(Name, True)
         If (Module Is Nothing) Then
-            Command.Respond "Error: Could not find specified script."
+            Command.Respond StringFormat("Error: Could not find the script ""{0}"".", Name)
         Else
             Name = modScripting.GetScriptName(Module.Name)
-            If (StrComp(SharedScriptSupport.GetSettingsEntry("Enabled", Name), "True", vbTextCompare) = 0) Then
-                Command.Respond Name & " is already enabled."
+            If (modScripting.IsScriptEnabled(Name) = True) Then
+                Command.Respond StringFormat("Error: Script ""{0}"" is already enabled.", Name)
             Else
                 SharedScriptSupport.WriteSettingsEntry "Enabled", "True", , Name
+                Command.Respond StringFormat("Script ""{0}"" has been enabled.", Name)
                 modScripting.InitScript Module
-                Command.Respond Name & " has been enabled."
                 For i = 1 To DynamicMenus.Count
                     Set mnu = DynamicMenus(i)
                     If (StrComp(mnu.Name, Chr$(0) & Name & Chr$(0) & "ENABLE|DISABLE", vbTextCompare) = 0) Then
