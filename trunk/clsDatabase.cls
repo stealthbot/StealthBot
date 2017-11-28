@@ -852,6 +852,7 @@ End Function
 ' Entry format: username access flags createdby createdon modifiedby modifiedon entrytype banmessage
 '                  0        1     2       3         4          5          6         7         8
 Private Function ParseEntry(ByVal sEntryData As String) As clsDBEntryObj
+    On Error GoTo ERROR_HANDLER
     Dim e()         As String   ' entry elements
     Dim i, j        As Integer  ' counters
     Dim aGroups()   As String   ' group list
@@ -885,7 +886,9 @@ Private Function ParseEntry(ByVal sEntryData As String) As clsDBEntryObj
                         Case 8
                             aGroups = Split(e(i), ENTRY_GROUP_SPLIT)
                             For j = 0 To UBound(aGroups)
-                                .Groups.Add aGroups(j), aGroups(j)
+                                If LenB(aGroups(j)) > 0 Then
+                                    .Groups.Add aGroups(j), LCase$(aGroups(j))
+                                End If
                             Next j
                         Case 9
                             .BanMessage = e(i)
@@ -907,6 +910,14 @@ Private Function ParseEntry(ByVal sEntryData As String) As clsDBEntryObj
                 .EntryType = DB_TYPE_USER
             End If
         End With
+    End If
+
+    Exit Function
+ERROR_HANDLER:
+    If Err.Number = 457 Then
+        ' entry with two groups with the same name
+        Err.Clear
+        Resume Next
     End If
 End Function
 
