@@ -135,7 +135,7 @@ Private Sub Form_Load()
         .SelHangingIndent = .SelTabs(0)
     End With
     
-    #If (COMPILE_DEBUG = 0) Then
+    #If (COMPILE_DEBUG <> 1) Then
         HookWindowProc Me.hWnd
     #End If
 
@@ -154,7 +154,7 @@ Private Sub Form_Unload(Cancel As Integer)
     Call DestroyWW(m_imyIndex)
 
     DisableURLDetect rtbWhispers.hWnd
-    #If (COMPILE_DEBUG = 0) Then
+    #If (COMPILE_DEBUG <> 1) Then
         UnhookWindowProc Me.hWnd
     #End If
 End Sub

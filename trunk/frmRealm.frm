@@ -753,7 +753,7 @@ Private Sub Form_Load()
     End With
 
     ' subclass for listview...
-    #If COMPILE_DEBUG = 0 Then
+    #If (COMPILE_DEBUG <> 1) Then
         HookWindowProc hWnd
         'm_OldWndProc = SetWindowLong(hWnd, GWL_WNDPROC, AddressOf SkipDragLVItem)
     #End If
@@ -1197,7 +1197,7 @@ Public Sub UnloadAfterBNCSClose()
     m_Unload_SuccessfulLogin = True
     ds.MCPHandler.IsRealmError = False
     
-    #If COMPILE_DEBUG = 0 Then
+    #If (COMPILE_DEBUG <> 1) Then
         UnhookWindowProc hWnd
     #End If
     
@@ -1211,7 +1211,7 @@ Public Sub UnloadRealmError()
     
     ds.MCPHandler.IsRealmError = True
     
-    #If COMPILE_DEBUG = 0 Then
+    #If (COMPILE_DEBUG <> 1) Then
         UnhookWindowProc hWnd
     #End If
     
@@ -1219,7 +1219,7 @@ Public Sub UnloadRealmError()
 End Sub
 
 Private Sub UnloadNormal()
-    #If COMPILE_DEBUG = 0 Then
+    #If (COMPILE_DEBUG <> 1) Then
         UnhookWindowProc hWnd
     #End If
     

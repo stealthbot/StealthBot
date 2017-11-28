@@ -1117,6 +1117,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1142,6 +1143,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1801,7 +1803,7 @@ Private Sub Form_Load()
         Set crc = Nothing
     #End If
 
-    #If (COMPILE_DEBUG = 0) Then
+    #If (COMPILE_DEBUG <> 1) Then
         HookWindowProc frmChat.hWnd
     #End If
     
@@ -2001,7 +2003,7 @@ Private Sub Form_Load()
         Call Config.Save
     End If
     
-    #If COMPILE_DEBUG = 0 Then
+    #If (COMPILE_DEBUG <> 1) Then
         If Config.MinimizeOnStartup Then
             frmChat.WindowState = vbMinimized
             Call Form_Resize
@@ -6023,7 +6025,7 @@ End Sub
 ' BNCS.SID_CLANMOTD (10 minutes - may change)
 ' BNCS.SID_FRIENDSLIST (5 minutes - for D1,W2,D2 [no update], SC,W3 [bug in SID_FRIENDSUPDATE])
 Private Sub tmrIdleTimer_Timer()
-    #If COMPILE_DEBUG = 0 Then
+    #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
 
@@ -6169,7 +6171,7 @@ ERROR_HANDLER:
 End Sub
 
 Private Sub tmrIdleTimer_Timer_IdleMsg()
-    #If COMPILE_DEBUG = 0 Then
+    #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
 
@@ -6265,7 +6267,7 @@ ERROR_HANDLER:
 End Sub
 
 Private Sub tmrSilentChannel_Timer(Index As Integer)
-    #If COMPILE_DEBUG = 0 Then
+    #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
 
@@ -8101,7 +8103,7 @@ Public Function IsPriorityUser(ByVal Flags As Long) As Boolean
 End Function
 
 Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal Position As Integer = 0)
-    #If COMPILE_DEBUG = 0 Then
+    #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
 
@@ -8198,7 +8200,7 @@ End Sub
 
 Private Sub AddFriendItem(ByVal Name As String, ByVal Game As String, _
         ByVal Status As Byte, ByVal LocationID As Byte, ByVal EntryNumber As Integer)
-    #If COMPILE_DEBUG = 0 Then
+    #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
     Dim ListItem As ListItem
@@ -8217,7 +8219,7 @@ End Sub
 Private Sub SetFriendItem(ByVal ListItem As ListItem, ByVal EntryNumber As Integer, _
         Optional ByVal SettingFields As Boolean = False, Optional ByVal Game As String, _
         Optional ByVal Status As Byte, Optional ByVal LocationID As Byte)
-    #If COMPILE_DEBUG = 0 Then
+    #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
     Dim OnlineIcon As Integer
@@ -8288,7 +8290,7 @@ Private Function GetFriendItem(ByVal EntryNumber As Integer) As ListItem
 End Function
 
 Private Sub AddClanMember(ByVal Name As String, ByVal DisplayName As String, ByVal Rank As Integer, ByVal Status As Integer)
-    #If COMPILE_DEBUG = 0 Then
+    #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
     Dim ListItem As ListItem
@@ -8311,7 +8313,7 @@ ERROR_HANDLER:
 End Sub
 
 Private Sub SetClanMember(ByVal ListItem As ListItem, ByVal DisplayName As String, ByVal Rank As Integer, ByVal Status As Integer)
-    #If COMPILE_DEBUG = 0 Then
+    #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
     Dim RankIcon   As Integer
