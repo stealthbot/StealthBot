@@ -78,7 +78,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                 .Statstring = Message
             End With
         Else
-            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Warning! Phantom user {0} has received a flags update.", UserObj.DisplayName)
+            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Warning! Phantom user {0} has received a flags update.", CleanUsername(Username))
             Exit Sub
         End If
     End If
@@ -124,13 +124,11 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                     Dim NewFlags As Long
                     Dim LostFlags As Long
                     
-                    frmChat.lvChannel.ListItems.Remove pos
+                    frmChat.AddName UserObj, pos
                     
                     ' voodoo magic: only show flags that are new
                     NewFlags = Not (Flags Imp PreviousFlags)
                     LostFlags = Not (PreviousFlags Imp Flags)
-                
-                    frmChat.AddName UserObj
                     
                     ' default to display this event
                     Displayed = False
@@ -1059,7 +1057,6 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         On Error GoTo ERROR_HANDLER
     #End If
     
-    Static LastUsername As String
     Static LastPing     As Long
 
     Dim UserEvent    As clsUserEventObj
@@ -1089,10 +1086,10 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     ' phantom UserInChannel detection:
     ' conditions:
     '   other user is a phantom: we haven't seen g_Channel.Self yet and there's a duplicate
-    '   we have a phantom of ourself: LastUsername is the same but LastPing is different (not guarenteed to work!)
+    '   we have a phantom of ourself: Username is our name but LastPing is different (not guarenteed to work!)
     ' mark the latest not-you as a phantom, and proceed as if new user
-    If (UserIndex > 0) And (LenB(g_Channel.Self.Name) = 0 Or _
-            (StrComp(Username, LastUsername, vbTextCompare) = 0 And LastPing <> Ping)) Then
+    If (UserIndex > 0) And (LenB(g_Channel.Self.Name) = 0 Xor _
+            (StrComp(Username, g_Channel.Self.Name, vbTextCompare) = 0 And LastPing <> Ping)) Then
         Dim UserObjPhantom As clsUserObj
         Set UserObjPhantom = g_Channel.Users(UserIndex)
         frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Warning! Phantom user {0} detected.", UserObjPhantom.DisplayName)
@@ -1102,8 +1099,9 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         UserIndex = 0
     End If
 
-    LastUsername = Username
-    LastPing = Ping
+    If (StrComp(Username, g_Channel.Self.Name, vbTextCompare) = 0) Then
+        LastPing = Ping
+    End If
 
     If (UserIndex > 0) Then
         Set UserObj = g_Channel.Users(UserIndex)

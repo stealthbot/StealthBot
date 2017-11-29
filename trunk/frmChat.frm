@@ -7194,7 +7194,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             Set ChannelUser = g_Channel.PriorityUsers(i)
             If (ChannelUser.Queue.Count = 0) Then
                 pos = pos + 1
-                AddName ChannelUser, pos
+                AddName ChannelUser
             End If
         Next i
 
@@ -8102,16 +8102,19 @@ Public Function IsPriorityUser(ByVal Flags As Long) As Boolean
     IsPriorityUser = IsPriorityUser Or ((Flags And USER_SPEAKER) = USER_SPEAKER)
 End Function
 
-Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal Position As Integer = 0)
+Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal OldPosition As Integer = 0)
     #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
 
-    Dim i        As Integer
-    Dim LagIcon  As Integer
-    Dim Weight   As Long
-    Dim IsSelf   As Boolean
-    Dim ListItem As ListItem
+    Dim i           As Integer
+    Dim LagIcon     As Integer
+    Dim Weight      As Long
+    Dim Position    As Integer
+    Dim IsSelf      As Boolean
+    Dim ListItem    As ListItem
+    Dim OtherUser   As clsUserObj
+    Dim OtherWeight As Long
     
     If (StrComp(UserObj.DisplayName, GetCurrentUsername, vbTextCompare) = 0) Then
         MyFlags = UserObj.Flags
@@ -8126,19 +8129,25 @@ Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal Position As Integ
     'End If
     
     Weight = UserObj.UserlistWeight
-    'Debug.Print UserObj.Name & " WEIGHT: " & Weight
     If IsPriorityUser(UserObj.Flags) Then Weight = Weight * -1
     
-    If Position = 0 Then
-        Position = 1
-        For i = 1 To g_Channel.PriorityUsers.Count
-            If g_Channel.PriorityUsers(i).UserlistWeight > Weight Then
+    Position = 1
+    For i = 1 To g_Channel.PriorityUsers.Count
+        Set OtherUser = g_Channel.PriorityUsers(i)
+        OtherWeight = OtherUser.UserlistWeight
+        If OtherUser.IsOperator() Then OtherWeight = OtherWeight * -1
+        If OtherUser.Queue.Count = 0 Then
+            If OtherWeight < Weight Then
+                Position = Position + 1
+            Else
                 Exit For
             End If
-            Position = i
-        Next i
-        If Position > lvChannel.ListItems.Count + 1 Then Position = lvChannel.ListItems.Count + 1
-    End If
+        End If
+        Set OtherUser = Nothing
+    Next i
+    If Position > lvChannel.ListItems.Count + 1 Then Position = lvChannel.ListItems.Count + 1
+    
+    'Debug.Print UserObj.Name & " WEIGHT: " & Weight & " POSITION: " & Position
     
     i = GetSmallIcon(UserObj.Game, UserObj.Flags, UserObj.Stats.IconCode)
     
@@ -8166,7 +8175,18 @@ Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal Position As Integ
     With frmChat.lvChannel
         .Enabled = False
         
-        Set ListItem = .ListItems.Add(Position, , UserObj.DisplayName, , i)
+        If OldPosition > 0 Then
+            If OldPosition = Position Then
+                Set ListItem = .ListItems(OldPosition)
+                ListItem.Text = UserObj.DisplayName
+                ListItem.SmallIcon = i
+            Else
+                .ListItems.Remove OldPosition
+                Set ListItem = .ListItems.Add(Position, , UserObj.DisplayName, , i)
+            End If
+        Else
+            Set ListItem = .ListItems.Add(Position, , UserObj.DisplayName, , i)
+        End If
         
         ' store account name here so popup menus work
         ListItem.Tag = UserObj.Name
