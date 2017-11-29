@@ -2879,7 +2879,7 @@ Private Sub ClanHandler_MemberUpdate(ByVal Member As clsClanMemberObj)
     Set ListItem = lvClanList.FindItem(Member.Name)
     If Not (ListItem Is Nothing) Then
         ' set the icon and status in place
-        SetClanMember ListItem, Member.DisplayName, Member.Rank, Member.Status
+        SetClanMember ListItem, Member.Name, Member.DisplayName, Member.Rank, Member.Status
         Set ListItem = Nothing
     Else
         ' wasn't found...
@@ -8319,7 +8319,7 @@ Private Sub AddClanMember(ByVal Name As String, ByVal DisplayName As String, ByV
     ListItem.ListSubItems.Add , , , IC_CLAN_UNKNOWN
     ListItem.ListSubItems.Add , , vbNullString
     ListItem.Tag = CStr(Name)
-    SetClanMember ListItem, DisplayName, Rank, Status
+    SetClanMember ListItem, Name, DisplayName, Rank, Status
     Set ListItem = Nothing
 
     Exit Sub
@@ -8327,7 +8327,7 @@ ERROR_HANDLER:
     AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddClanMember", Err.Number, Err.Description)
 End Sub
 
-Private Sub SetClanMember(ByVal ListItem As ListItem, ByVal DisplayName As String, ByVal Rank As Integer, ByVal Status As Integer)
+Private Sub SetClanMember(ByVal ListItem As ListItem, ByVal Name As String, ByVal DisplayName As String, ByVal Rank As Integer, ByVal Status As Integer)
     #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
