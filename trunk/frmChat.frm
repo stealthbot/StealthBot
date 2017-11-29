@@ -8316,11 +8316,6 @@ Private Sub AddClanMember(ByVal Name As String, ByVal DisplayName As String, ByV
     Dim ListItem As ListItem
 
     Set ListItem = lvClanList.ListItems.Add(lvClanList.ListItems.Count + 1, , DisplayName)
-    If (Not BotVars.NoColoring) Then
-        If (StrComp(BotVars.Username, Name, vbTextCompare) = 0) Then
-            ListItem.ForeColor = FormColors.ChannelListSelf
-        End If
-    End If
     ListItem.ListSubItems.Add , , , IC_CLAN_UNKNOWN
     ListItem.ListSubItems.Add , , vbNullString
     ListItem.Tag = CStr(Name)
@@ -8353,6 +8348,16 @@ Private Sub SetClanMember(ByVal ListItem As ListItem, ByVal DisplayName As Strin
     ListItem.SmallIcon = RankIcon
     ListItem.ListSubItems.Item(1).ReportIcon = OnlineIcon
     ListItem.ListSubItems.Item(2).Text = CStr(1000 * RankIcon + ListItem.Index)
+
+    If (Not BotVars.NoColoring) Then
+        If (StrComp(BotVars.Username, Name, vbTextCompare) = 0) Then
+            ListItem.ForeColor = FormColors.ChannelListSelf
+        ElseIf Status <> 0 Then
+            ListItem.ForeColor = FormColors.ChannelListText
+        Else
+            ListItem.ForeColor = FormColors.ChannelListIdle
+        End If
+    End If
 
     Exit Sub
 ERROR_HANDLER:
