@@ -141,7 +141,10 @@ Public Sub MenuClick(hWnd As Long, lngMenuCommand As Long)
                         If (Config.ScriptViewer = vbNullString) Then
                             ShellOpenURL GetScriptDictionary(GetModuleByName(s_name))("Path"), , False
                         Else
-                            Shell Chr(34) & Config.ScriptViewer & Chr(34) & Space(1) & Chr(34) & GetScriptDictionary(GetModuleByName(s_name))("Path") & Chr(34)
+                            ' Viewer path -> args -> script path
+                            Shell Chr(34) & Config.ScriptViewer & Chr(34) & Space(1) & _
+                                IIf(Len(Config.ScriptViewerArgs) > 0, Config.ScriptViewerArgs & Space(1), vbNullString) & _
+                                Chr(34) & GetScriptDictionary(GetModuleByName(s_name))("Path") & Chr(34)
                         End If
                     End If
                 End If

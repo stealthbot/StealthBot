@@ -203,6 +203,7 @@ Private m_QueueCreditRate           As Long
 Private m_DisableScripting          As Boolean
 Private m_ScriptingAllowUI          As Boolean
 Private m_ScriptViewer              As String
+Private m_ScriptViewerArgs          As String
 
 '[EMULATION]
 Private m_IgnoreClanInvites         As Boolean
@@ -1407,6 +1408,14 @@ Public Property Let ScriptViewer(ByVal sValue As String)
     m_ScriptViewer = sValue
 End Property
 
+Public Property Get ScriptViewerArgs() As String
+    ScriptViewerArgs = m_ScriptViewerArgs
+End Property
+
+Public Property Let ScriptViewerArgs(ByVal sValue As String)
+    m_ScriptViewerArgs = sValue
+End Property
+
 
 '-------------------------
 '   SECTION: EMULATION
@@ -1893,6 +1902,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_SCRIPTING, "DisableScripts", m_DisableScripting
     WriteSetting SECTION_SCRIPTING, "AllowUI", m_ScriptingAllowUI
     WriteSetting SECTION_SCRIPTING, "ScriptViewer", m_ScriptViewer
+    WriteSetting SECTION_SCRIPTING, "ScriptViewerArgs", m_ScriptViewerArgs
  
     WriteSetting SECTION_EMULATION, "IgnoreClanInvites", m_IgnoreClanInvites
     WriteSetting SECTION_EMULATION, "IgnoreKeyLength", m_IgnoreCDKeyLength
@@ -2098,6 +2108,7 @@ Private Sub LoadDefaults()
     m_DisableScripting = False
     m_ScriptingAllowUI = True
     m_ScriptViewer = vbNullString
+    m_ScriptViewerArgs = vbNullString
 
     '[Emulation]
     m_IgnoreClanInvites = False
@@ -2445,6 +2456,7 @@ Private Sub LoadVersion6Config()
     m_DisableScripting = ReadSettingB(SECTION_SCRIPTING, "DisableScripts", m_DisableScripting)
     m_ScriptingAllowUI = ReadSettingB(SECTION_SCRIPTING, "AllowUI", m_ScriptingAllowUI)
     m_ScriptViewer = ReadSetting(SECTION_SCRIPTING, "ScriptViewer", m_ScriptViewer)
+    m_ScriptViewerArgs = ReadSetting(SECTION_SCRIPTING, "ScriptViewerArgs", m_ScriptViewerArgs)
 
     m_IgnoreClanInvites = ReadSettingB(SECTION_EMULATION, "IgnoreClanInvites", m_IgnoreClanInvites)
     m_IgnoreCDKeyLength = ReadSettingB(SECTION_EMULATION, "IgnoreKeyLength", m_IgnoreCDKeyLength)
