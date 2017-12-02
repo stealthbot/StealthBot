@@ -6300,7 +6300,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
     End If
 
     If (Index = 0) Then
-        If (frmChat.mnuDisableVoidView.Checked = False) Then
+        If (Config.VoidView) Then
             'For i = 1 To g_Channel.Users.Count
             '    ' with our doevents, we can miss our cue indicating that we
             '    ' need to stop silent channel processing and cause an rte.
@@ -6320,20 +6320,13 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
             '    End If
             'Next i
             
-            Call LockWindowUpdate(&H0)
-            
+            Call EnableWindowRedraw(lvChannel.hWnd)
             Call UpdateListviewTabs
         End If
     
         tmrSilentChannel(0).Enabled = False
     ElseIf (Index = 1) Then
-        If (mnuDisableVoidView.Checked = False) Then
-            If (g_Channel.IsSilent) Then
-                Call g_Channel.ClearUsers
-                
-                frmChat.lvChannel.ListItems.Clear
-            End If
-        
+        If (Config.VoidView) Then
             Call AddQ("/unsquelch " & GetCurrentUsername, PRIORITY.SPECIAL_MESSAGE)
         End If
     End If
@@ -6743,9 +6736,11 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, _
                     If (UBound(Splt) > 0) Then
                         Command = StringFormat("{0} {1}", Splt(0), ReverseConvertUsernameGateway(Splt(1)))
 
-                        If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
+                        If ((g_Channel.IsSilent) And (Config.VoidView)) Then
                             If ((LCase$(Splt(0)) = "/unignore") Or (LCase$(Splt(0)) = "/unsquelch")) Then
                                 If (StrComp(Splt(1), GetCurrentUsername, vbTextCompare) = 0) Then
+                                    Call g_Channel.ClearUsers
+                                    DisableWindowRedraw lvChannel.hWnd
                                     lvChannel.ListItems.Clear
                                 End If
                             End If

@@ -248,7 +248,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         ' if we've joined the void, lets try to grab the list of
         ' users within the channel by attempting to force a user
         ' update message using Battle.net's unignore command.
-        If (frmChat.mnuDisableVoidView.Checked = False) Then
+        If (Config.VoidView) Then
             ' lets inform user of potential lag issues while in this channel
             frmChat.AddChat g_Color.InformationText, "If you experience a lot of lag while within " & _
                     "this channel, try selecting 'Disable Silent Channel View' from the Window menu."
@@ -918,7 +918,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
 
     ' silent channel unsquelch
     If (StrComp(Right$(Message, Len(MSG_UNSQUELCH)), MSG_UNSQUELCH, vbBinaryCompare) = 0) Then
-        If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
+        If ((g_Channel.IsSilent) And (Config.VoidView)) Then
             frmChat.lvChannel.ListItems.Clear
         End If
     End If
