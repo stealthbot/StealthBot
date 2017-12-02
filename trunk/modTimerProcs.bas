@@ -3,11 +3,10 @@ Option Explicit
 
 Public Sub Reconnect_TimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal idEvent As Long, ByVal dwTimer As Long)
     If (AutoReconnectActive) Then
+        AutoReconnectTicks = AutoReconnectTicks + 1
         If (AutoReconnectTicks >= AutoReconnectIn) Then
             Call KillTimer(0, ReconnectTimerID)
             Call frmChat.Connect
-        Else
-            AutoReconnectTicks = AutoReconnectTicks + 1
         End If
     Else
         Call KillTimer(0, ReconnectTimerID)
