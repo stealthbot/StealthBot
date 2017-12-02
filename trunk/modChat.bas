@@ -213,11 +213,11 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         ' did this RTB start invisible?
         'blnVisible = rtb.Visible
 
-        If (blnScrollAtEnd) Then
+        If (True) Then
             'rtb.Visible = False
 
             ' below causes smooth scrolling, but also screen flickers :(
-            'LockWindowUpdate rtb.hWnd
+            DisableWindowRedraw rtb.hWnd
 
             blnUnlock = True
         End If
@@ -234,7 +234,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 'rtb.Visible = False
 
                 ' below causes smooth scrolling, but also screen flickers :(
-                'LockWindowUpdate rtb.hWnd
+                'DisableWindowRedraw rtb.hWnd
             End If
 
             With rtb
@@ -256,7 +256,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 'rtb.Visible = True
 
                 ' below causes smooth scrolling, but also screen flickers :(
-                'LockWindowUpdate &H0
+                'EnableWindowRedraw rtb.hWnd
             End If
         End If
 
@@ -289,15 +289,16 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             RTBSetSelectedText rtb, vbCrLf
         End With
 
-        If (LogThis) Then
-            If (rtb = frmChat.rtbChat) Then
-                g_Logger.WriteChat LineText
-            ElseIf (rtb = frmChat.rtbWhispers) Then
-                g_Logger.WriteWhisper LineText
-            End If
-        End If
-
         'ColorModify rtb, GetRTBLength(rtb) - LineLength
+
+        ' set carat
+        If blnCaratAtEnd Then
+            ' carat was at the end before
+            SelStart = -1
+            SelLength = -1
+        End If
+        'Debug.Print "SET CARAT " & SelStart & "," & SelLength
+        SetTextSelection rtb, SelStart, SelLength
 
         ' set scrollbar
         If blnScrollAtEnd Then
@@ -311,21 +312,20 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                     SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&
         End If
 
-        ' set carat
-        If blnCaratAtEnd Then
-            ' carat was at the end before
-            SelStart = -1
-            SelLength = -1
-        End If
-        'Debug.Print "SET CARAT " & SelStart & "," & SelLength
-        SetTextSelection rtb, SelStart, SelLength
-
         If (blnUnlock) Then
             ' was invisible
             'rtb.Visible = True
 
             ' below causes smooth scrolling, but also screen flickers :(
-            'LockWindowUpdate &H0
+            EnableWindowRedraw rtb.hWnd
+        End If
+
+        If (LogThis) Then
+            If (rtb = frmChat.rtbChat) Then
+                g_Logger.WriteChat LineText
+            ElseIf (rtb = frmChat.rtbWhispers) Then
+                g_Logger.WriteWhisper LineText
+            End If
         End If
 
         'rtb.Visible = blnVisible
@@ -863,9 +863,9 @@ End Function
 
 Public Sub ScrollToBottom(cnt As Control)
 
-    LockWindowUpdate cnt.hWnd
+    'LockWindowUpdate cnt.hWnd
     SendMessageW cnt.hWnd, EM_SCROLLCARET, 0&, 0&
     'SendMessage cnt.hWnd, EM_SCROLL, SB_BOTTOM, &H0
-    LockWindowUpdate &H0
+    'LockWindowUpdate &H0
 
 End Sub

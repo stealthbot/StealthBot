@@ -39,28 +39,36 @@ Public ID_TASKBARICON       As Integer
 Public TASKBARCREATED_MSGID As Long
 
 ' windows messages
-Private Const WM_NOTIFY = &H4E
-Private Const WM_COMMAND = &H111
-Private Const WM_USER = &H400
-Private Const WM_NCDESTROY = &H82
-Private Const WM_COPYDATA = &H4A
-Public Const WM_ICONNOTIFY = WM_USER + 100
+Private Const WM_SETREDRAW      As Long = &HB
+Private Const WM_NOTIFY         As Long = &H4E
+Private Const WM_COMMAND        As Long = &H111
+Private Const WM_USER           As Long = &H400
+Private Const WM_NCDESTROY      As Long = &H82
+Private Const WM_COPYDATA       As Long = &H4A
+Public Const WM_ICONNOTIFY      As Long = WM_USER + 100
 ' RTB rich edit control messages
-Private Const EM_SETEVENTMASK = &H445
-Private Const EM_GETEVENTMASK = &H43B
-Private Const EM_GETTEXTRANGE = &H44B
-Private Const EM_AUTOURLDETECT = &H45B
+Private Const EM_SETEVENTMASK   As Long = &H445
+Private Const EM_GETEVENTMASK   As Long = &H43B
+Private Const EM_GETTEXTRANGE   As Long = &H44B
+Private Const EM_AUTOURLDETECT  As Long = &H45B
 ' RTB rich edit notifications
-Private Const EN_LINK = &H70B
+Private Const EN_LINK           As Long = &H70B
 ' EN_LINK effects
-Private Const CFE_LINK = &H20
+Private Const CFE_LINK          As Long = &H20
 ' EN_LINK message flag
-Private Const ENM_LINK = &H4000000
+Private Const ENM_LINK          As Long = &H4000000
 ' show window function
-Private Const SW_SHOW = 5
+Private Const SW_SHOW           As Long = 5
 ' list view notifications
-Private Const LVN_FIRST = -100&
-Private Const LVN_BEGINDRAG = (LVN_FIRST - 9)
+Private Const LVN_FIRST         As Long = -100&
+Private Const LVN_BEGINDRAG     As Long = (LVN_FIRST - 9)
+' WM_SETREDRAW values
+Private Const RDW_INVALIDATE    As Long = &H1
+Private Const RDW_ERASE         As Long = &H4
+Private Const RDW_ALLCHILDREN   As Long = &H80
+'Private Const RDW_ERASENOW      As Long = &H200
+'Private Const RDW_UPDATENOW     As Long = &H100
+Private Const RDW_FRAME         As Long = &H400
 
 Private hWndSet As New Dictionary
 Private hWndRTB As New Dictionary
@@ -168,4 +176,17 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wPara
     
     NewWindowProc = CallWindowProc(hWndSet(hWnd), hWnd, Msg, wParam, lParam)
     
+End Function
+
+Public Function DisableWindowRedraw(ByVal hWnd As Long)
+
+    Call SendMessage(hWnd, WM_SETREDRAW, False, 0)
+
+End Function
+
+Public Function EnableWindowRedraw(ByVal hWnd As Long)
+
+    Call SendMessage(hWnd, WM_SETREDRAW, True, 0)
+    Call RedrawWindow(hWnd, 0, 0, RDW_ERASE Or RDW_FRAME Or RDW_INVALIDATE Or RDW_ALLCHILDREN)
+
 End Function

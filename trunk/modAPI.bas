@@ -139,7 +139,8 @@ Public Declare Function ShellExecute Lib "shell32" Alias "ShellExecuteA" ( _
 
 ' Needed for the RTB scroll lock
 Public Declare Function GetScrollRange Lib "user32" (ByVal hWnd As Long, ByVal nBar As Integer, ByRef lpMinPos As Integer, ByRef lpMaxPos As Integer) As Boolean
-Public Declare Function LockWindowUpdate Lib "user32" (ByVal hwndLock As Long) As Long
+
+Public Declare Function RedrawWindow Lib "user32" (ByVal hWnd As Long, ByVal lprcUpdate As Long, ByVal hrgnUpdate As Long, ByVal Flags As Long) As Boolean
 
 Public Declare Function SetActiveWindow Lib "user32" (ByVal hWnd As Long) As Long
 
