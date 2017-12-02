@@ -1809,6 +1809,9 @@ Private Sub Form_Load()
     
     SendMessage frmChat.cboSend.hWnd, CB_LIMITTEXT, 0, 0
     
+    ' Load default color information
+    Set g_Color = New clsColor
+    
     Set colWhisperWindows = New Collection
     Set colLastSeen = New Collection
     Set BotVars = New clsBotVars
@@ -1919,9 +1922,22 @@ Private Sub Form_Load()
     Set ReceiveBuffer(stBNLS) = New clsDataBuffer
     Set ReceiveBuffer(stMCP) = New clsDataBuffer
 
+    ' If they changed their old color file location, use that for the new file.
+    Call Config.SetFilePath(FILE_COLORS, Config.GetFilePath("Colors.sclf"))
+    
+    ' Check for the old file.
+    s = GetFilePath("Colors.sclf")
+    If Dir$(s) <> vbNullString Then
+        Call g_Color.Load(s)                            ' Load existing SCLF
+        Call g_Color.Save(GetFilePath(FILE_COLORS))     ' Save to new format
+        Call Kill(s)                                    ' Delete old file
+    Else
+        ' Load the new color file.
+        Call g_Color.Load(GetFilePath(FILE_COLORS))
+    End If
+
     Call ReloadConfig
     
-    Call GetColorLists
     Call InitListviewTabs
     Call DisableListviewTabs
     
@@ -1942,13 +1958,13 @@ Private Sub Form_Load()
     Me.Show
     Me.Refresh
     
-    AddChat RTBColors.ConsoleText, "-> Welcome to " & CVERSION & ", by Stealth."
-    AddChat RTBColors.ConsoleText, "-> If you enjoy StealthBot, consider supporting its development at http://donate.stealthbot.net"
+    AddChat g_Color.ConsoleText, "-> Welcome to " & CVERSION & ", by Stealth."
+    AddChat g_Color.ConsoleText, "-> If you enjoy StealthBot, consider supporting its development at http://donate.stealthbot.net"
 
     Dim x As Integer
     For x = LBound(sStr) To UBound(sStr)
         If (LenB(sStr(x)) > 0) Then
-            AddChat RTBColors.InformationText, sStr(x)
+            AddChat g_Color.InformationText, sStr(x)
         End If
     Next x
     
@@ -1957,13 +1973,13 @@ Private Sub Form_Load()
     VoteDuration = -1
     
     If (LenB(Dir$(GetConfigFilePath())) = 0) Then
-        AddChat RTBColors.ServerInfoText, "If you're new to bots, start by choosing 'Bot Settings' " & _
+        AddChat g_Color.ServerInfoText, "If you're new to bots, start by choosing 'Bot Settings' " & _
             "under the 'Settings' menu above."
-        AddChat RTBColors.ServerInfoText, "For more help, click the 'Step-By-Step Configuration' " & _
+        AddChat g_Color.ServerInfoText, "For more help, click the 'Step-By-Step Configuration' " & _
             "button inside Settings."
-        AddChat RTBColors.ServerInfoText, "For more information and a list of commands, see the " & _
+        AddChat g_Color.ServerInfoText, "For more information and a list of commands, see the " & _
             "Readme by clicking 'Readme' under the 'Help' menu."
-        AddChat RTBColors.ServerInfoText, "Please note that any usage of this program is subject to " & _
+        AddChat g_Color.ServerInfoText, "Please note that any usage of this program is subject to " & _
             "the terms of the End-User License Agreement available at http://eula.stealthbot.net."
     End If
     
@@ -2102,7 +2118,7 @@ Private Sub Form_GotFocus()
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in Form_GotFocus()."
+    AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in Form_GotFocus()."
 
     Exit Sub
 End Sub
@@ -2133,7 +2149,7 @@ Private Function RequestInetPage(ByVal URL As String, ByVal Request As String, B
     Exit Function
     
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in RequestInetPage()."
+    AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in RequestInetPage()."
     
     RequestInetPage = False
     
@@ -2191,9 +2207,9 @@ Private Sub HandleUpdateVerbyte(ByVal Buffer As String, ByVal ResponseCode As Lo
     Dim i As Integer
     
     If Inet.ResponseCode <> 0 Then
-        AddChat RTBColors.ErrorMessageText, Buffer & ". Error retrieving version bytes from http://www.stealthbot.net. Please visit it for instructions."
+        AddChat g_Color.ErrorMessageText, Buffer & ". Error retrieving version bytes from http://www.stealthbot.net. Please visit it for instructions."
     ElseIf Len(Buffer) <> 11 Then
-        AddChat RTBColors.ErrorMessageText, "Format not understood. Error retrieving version bytes from http://www.stealthbot.net. Please visit it for instructions."
+        AddChat g_Color.ErrorMessageText, "Format not understood. Error retrieving version bytes from http://www.stealthbot.net. Please visit it for instructions."
     Else
         'W2 SC D2 W3
         Dim Keys(3) As String
@@ -2212,7 +2228,7 @@ Private Sub HandleUpdateVerbyte(ByVal Buffer As String, ByVal ResponseCode As Lo
         
         Call Config.Save
         
-        AddChat RTBColors.SuccessText, "Your config.ini file has been loaded with current version bytes."
+        AddChat g_Color.SuccessText, "Your config.ini file has been loaded with current version bytes."
     End If
 End Sub
 
@@ -2245,9 +2261,9 @@ End Sub
 'BNLS EVENTS
 Sub Event_BNetConnected()
     If (ProxyConnInfo(stBNCS).IsUsingProxy) Then
-        AddChat RTBColors.SuccessText, "[BNCS] [PROXY] Connected!"
+        AddChat g_Color.SuccessText, "[BNCS] [PROXY] Connected!"
     Else
-        AddChat RTBColors.SuccessText, "[BNCS] Connected!"
+        AddChat g_Color.SuccessText, "[BNCS] Connected!"
     End If
     
     Call SetNagelStatus(sckBNet.SocketHandle, False)
@@ -2255,9 +2271,9 @@ End Sub
 
 Sub Event_BNetConnecting()
     If (ProxyConnInfo(stBNCS).IsUsingProxy) Then
-        AddChat RTBColors.InformationText, "[BNCS] [PROXY] Connecting to the SOCKS" & ProxyConnInfo(stBNCS).Version & " proxy server at " & ProxyConnInfo(stBNCS).ProxyIP & ":" & ProxyConnInfo(stBNCS).ProxyPort & "..."
+        AddChat g_Color.InformationText, "[BNCS] [PROXY] Connecting to the SOCKS" & ProxyConnInfo(stBNCS).Version & " proxy server at " & ProxyConnInfo(stBNCS).ProxyIP & ":" & ProxyConnInfo(stBNCS).ProxyPort & "..."
     Else
-        AddChat RTBColors.InformationText, "[BNCS] Connecting to the Battle.net server at " & BotVars.Server & "..."
+        AddChat g_Color.InformationText, "[BNCS] Connecting to the Battle.net server at " & BotVars.Server & "..."
     End If
 End Sub
 
@@ -2275,26 +2291,26 @@ End Sub
 
 Sub Event_BNLSAuthEvent(Success As Boolean)
     If Success = True Then
-        AddChat RTBColors.SuccessText, "[BNLS] Authorized!"
+        AddChat g_Color.SuccessText, "[BNLS] Authorized!"
     Else
-        AddChat RTBColors.ErrorMessageText, "[BNLS] Authorization failed! Please download the latest version of StealthBot from http://www.stealthbot.net."
+        AddChat g_Color.ErrorMessageText, "[BNLS] Authorization failed! Please download the latest version of StealthBot from http://www.stealthbot.net."
         Call DoDisconnect
     End If
 End Sub
 
 Sub Event_BNLSConnected()
     If (ProxyConnInfo(stBNLS).IsUsingProxy) Then
-        AddChat RTBColors.SuccessText, "[BNLS] [PROXY] Connected!"
+        AddChat g_Color.SuccessText, "[BNLS] [PROXY] Connected!"
     Else
-        AddChat RTBColors.SuccessText, "[BNLS] Connected!"
+        AddChat g_Color.SuccessText, "[BNLS] Connected!"
     End If
 End Sub
 
 Sub Event_BNLSConnecting()
     If (ProxyConnInfo(stBNLS).IsUsingProxy) Then
-        AddChat RTBColors.InformationText, "[BNLS] [PROXY] Connecting to the SOCKS" & ProxyConnInfo(stBNLS).Version & " proxy server at " & ProxyConnInfo(stBNLS).ProxyIP & ":" & ProxyConnInfo(stBNLS).ProxyPort & "..."
+        AddChat g_Color.InformationText, "[BNLS] [PROXY] Connecting to the SOCKS" & ProxyConnInfo(stBNLS).Version & " proxy server at " & ProxyConnInfo(stBNLS).ProxyIP & ":" & ProxyConnInfo(stBNLS).ProxyPort & "..."
     Else
-        AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
+        AddChat g_Color.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
     End If
 End Sub
 
@@ -2323,10 +2339,10 @@ End Function
 ' Moves the connection to the next available BNLS server
 Private Sub RotateBnlsServer()
     'Notify user the current BNLS server failed
-    AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BNLSServer & " failed."
+    AddChat g_Color.ErrorMessageText, "[BNLS] Connection to " & BotVars.BNLSServer & " failed."
     
     'Notify user other BNLS servers are being located
-    AddChat RTBColors.InformationText, "[BNLS] Locating other BNLS servers..."
+    AddChat g_Color.InformationText, "[BNLS] Locating other BNLS servers..."
     
     Call FindBNLSServer
 End Sub
@@ -2342,10 +2358,10 @@ Public Sub HandleFindBNLSServerListResult(ByVal strReturn As String, ByVal Resul
                 Call HandleFindBNLSServerListResult("Inet is busy", -1, False)
             End If
         Else
-            AddChat RTBColors.ErrorMessageText, "[BNLS] " & strReturn & ". Unable to use BNLS server finder."
-            AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured while trying to locate an alternative BNLS server."
-            AddChat RTBColors.ErrorMessageText, "[BNLS]   You may not be connected to the internet or may be having DNS resolution issues."
-            AddChat RTBColors.ErrorMessageText, "[BNLS]   Visit http://www.stealthbot.net/ and check the Technical Support forum for more information."
+            AddChat g_Color.ErrorMessageText, "[BNLS] " & strReturn & ". Unable to use BNLS server finder."
+            AddChat g_Color.ErrorMessageText, "[BNLS] An error occured while trying to locate an alternative BNLS server."
+            AddChat g_Color.ErrorMessageText, "[BNLS]   You may not be connected to the internet or may be having DNS resolution issues."
+            AddChat g_Color.ErrorMessageText, "[BNLS]   Visit http://www.stealthbot.net/ and check the Technical Support forum for more information."
             DoDisconnect
     
             ' ensure that we update our listing on following connection(s)
@@ -2404,8 +2420,8 @@ ERROR_HANDLER:
 
     'Display the error message to the user
     If Err.Number = ERROR_FINDBNLSSERVER Then
-        AddChat RTBColors.ErrorMessageText, "[BNLS] " & Err.Description
-        AddChat RTBColors.ErrorMessageText, "[BNLS]   Visit http://www.stealthbot.net/ and check the Technical Support forum for more information."
+        AddChat g_Color.ErrorMessageText, "[BNLS] " & Err.Description
+        AddChat g_Color.ErrorMessageText, "[BNLS]   Visit http://www.stealthbot.net/ and check the Technical Support forum for more information."
         DoDisconnect
         
         ' ensure that we update our listing on following connection(s)
@@ -2628,7 +2644,7 @@ Public Sub Form_Resize()
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in Form_Resize()."
+    AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in Form_Resize()."
 End Sub
 
 Function GenerateTooltip() As String
@@ -2667,12 +2683,12 @@ Private Sub ClanHandler_CandidateListReply(ByVal Cookie As Long, ByVal Result As
     '   0x0a: Invalid clan tag specified
     
     If MDebug("debug") Then
-        AddChat RTBColors.ErrorMessageText, "CandidateList received. Status code [0x" & ZeroOffset(Result, 2) & "]."
+        AddChat g_Color.ErrorMessageText, "CandidateList received. Status code [0x" & ZeroOffset(Result, 2) & "]."
         If UBound(Users) > -1 Then
-            AddChat RTBColors.InformationText, "Potential clan members:"
+            AddChat g_Color.InformationText, "Potential clan members:"
             
             For i = 0 To UBound(Users)
-                AddChat RTBColors.InformationText, Users(i)
+                AddChat g_Color.InformationText, Users(i)
             Next i
         End If
     End If
@@ -2698,7 +2714,7 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
 
     If Not g_Clan.InClan Then Exit Sub
 
-    AddChat RTBColors.JoinText, "[CLAN] ", RTBColors.JoinUsername, Member, RTBColors.JoinText, " has left the clan."
+    AddChat g_Color.JoinText, "[CLAN] ", g_Color.JoinUsername, Member, g_Color.JoinText, " has left the clan."
 
     Dim x   As ListItem
     Dim pos As Integer
@@ -2734,7 +2750,7 @@ Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
     If Status = 1 Then
         If Not FindServerRequest(oRequest, -1, SID_CLANREMOVEMEMBER, , False) Then
             ' no pending SID_CLANREMOVEMEMBER (self leaving), mention it
-            AddChat RTBColors.ErrorMessageText, "[CLAN] You have been removed from the clan, or it has been disbanded."
+            AddChat g_Color.ErrorMessageText, "[CLAN] You have been removed from the clan, or it has been disbanded."
         End If
 
         Set g_Clan = New clsClanObj
@@ -2754,13 +2770,13 @@ Private Sub ClanHandler_MyRankChange(ByVal OldRank As enuClanRank, ByVal NewRank
     If Not g_Clan.InClan Then Exit Sub
 
     If (g_Clan.Self.Rank < NewRank) Then
-        AddChat RTBColors.JoinText, "[CLAN] You have been promoted by ", _
-                RTBColors.JoinUsername, Initiator, RTBColors.JoinText, ". Your new rank is ", _
-                RTBColors.JoinUsername, ClanHandler.GetRankName(NewRank), RTBColors.JoinText, "."
+        AddChat g_Color.JoinText, "[CLAN] You have been promoted by ", _
+                g_Color.JoinUsername, Initiator, g_Color.JoinText, ". Your new rank is ", _
+                g_Color.JoinUsername, ClanHandler.GetRankName(NewRank), g_Color.JoinText, "."
     Else
-        AddChat RTBColors.JoinText, "[CLAN] You have been demoted by ", _
-                RTBColors.JoinUsername, Initiator, RTBColors.JoinText, ". Your new rank is ", _
-                RTBColors.JoinUsername, ClanHandler.GetRankName(NewRank), RTBColors.JoinText, "."
+        AddChat g_Color.JoinText, "[CLAN] You have been demoted by ", _
+                g_Color.JoinUsername, Initiator, g_Color.JoinText, ". Your new rank is ", _
+                g_Color.JoinUsername, ClanHandler.GetRankName(NewRank), g_Color.JoinText, "."
     End If
 
     g_Clan.Self.Rank = NewRank
@@ -2789,16 +2805,16 @@ Private Sub ClanHandler_Info(ByVal ClanTag As String, ByVal Rank As enuClanRank)
     BotVars.Clan = ClanTag
 
     If FindServerRequest(oRequest, -1, SID_CLANINVITATION, , False) Then
-        AddChat RTBColors.JoinText, "[CLAN] You are now a member of ", RTBColors.JoinUsername, "Clan " & ClanTag, RTBColors.JoinText, "!"
+        AddChat g_Color.JoinText, "[CLAN] You are now a member of ", g_Color.JoinUsername, "Clan " & ClanTag, g_Color.JoinText, "!"
             
         RunInAll "Event_BotJoinedClan", ClanTag
     ElseIf FindServerRequest(oRequest, -1, SID_CLANCREATIONINVITATION, , False) Then
-        AddChat RTBColors.JoinText, "[CLAN] You are now a member of the newly created ", RTBColors.JoinUsername, "Clan " & ClanTag, RTBColors.JoinText, "!"
+        AddChat g_Color.JoinText, "[CLAN] You are now a member of the newly created ", g_Color.JoinUsername, "Clan " & ClanTag, g_Color.JoinText, "!"
             
         RunInAll "Event_BotJoinedClan", ClanTag
     Else
-        AddChat RTBColors.JoinText, "[CLAN] You are a ", RTBColors.JoinUsername, ClanHandler.GetRankName(Rank), RTBColors.JoinText, " in ", _
-                RTBColors.JoinUsername, "Clan " & ClanTag, RTBColors.JoinText, "."
+        AddChat g_Color.JoinText, "[CLAN] You are a ", g_Color.JoinUsername, ClanHandler.GetRankName(Rank), g_Color.JoinText, " in ", _
+                g_Color.JoinUsername, "Clan " & ClanTag, g_Color.JoinText, "."
         
         RunInAll "Event_BotClanInfo", ClanTag, Rank
     End If
@@ -2826,7 +2842,7 @@ Private Sub ClanHandler_InvitationReceived(ByVal Cookie As Long, ByVal ClanTag A
         g_Clan.PendingInvitation = True
         g_Clan.PendingInvitationCookie = SaveServerRequest(oRequest)
 
-        With RTBColors
+        With g_Color
             AddChat .SuccessText, "[CLAN] ", .InformationText, ConvertUsername(InvitedBy), _
                     .SuccessText, " has invited you to join ", .InformationText, "Clan " & ClanTag, _
                     .SuccessText, ": ", .InformationText, ClanName
@@ -2870,7 +2886,7 @@ Private Sub ClanHandler_MemberUpdate(ByVal Member As clsClanMemberObj)
     End If
 
     If Member.Rank <> OldRank Then
-        With RTBColors
+        With g_Color
             AddChat .JoinText, "[CLAN] Member update: ", .JoinUsername, Member.DisplayName, _
                     .JoinText, " is now a ", .JoinUsername, Member.RankName, .JoinText, "."
         End With
@@ -2971,7 +2987,7 @@ Private Sub ClanHandler_GetMemberInfo(ByVal Cookie As Long, ByVal Result As enuC
         oRequest.Command.Respond RespText
         oRequest.Command.SendResponse
     ElseIf oRequest.HandlerType = reqUserInterface Then
-        AddChat RTBColors.ConsoleText, RespText
+        AddChat g_Color.ConsoleText, RespText
     End If
 End Sub
 
@@ -2996,7 +3012,7 @@ Private Sub ClanHandler_DemoteUserReply(ByVal Cookie As Long, ByVal Result As en
         oRequest.Command.Respond ResponseText
         oRequest.Command.SendResponse
     ElseIf oRequest.HandlerType = reqUserInterface Then
-        AddChat RTBColors.ConsoleText, ResponseText
+        AddChat g_Color.ConsoleText, ResponseText
     End If
 End Sub
 
@@ -3021,7 +3037,7 @@ Private Sub ClanHandler_PromoteUserReply(ByVal Cookie As Long, ByVal Result As e
         oRequest.Command.Respond ResponseText
         oRequest.Command.SendResponse
     ElseIf oRequest.HandlerType = reqUserInterface Then
-        AddChat RTBColors.ConsoleText, ResponseText
+        AddChat g_Color.ConsoleText, ResponseText
     End If
 End Sub
 
@@ -3054,7 +3070,7 @@ Private Sub ClanHandler_RemoveMemberReply(ByVal Cookie As Long, ByVal Result As 
         oRequest.Command.Respond ResponseText
         oRequest.Command.SendResponse
     ElseIf oRequest.HandlerType = reqUserInterface Then
-        AddChat RTBColors.ConsoleText, ResponseText
+        AddChat g_Color.ConsoleText, ResponseText
     End If
 End Sub
 
@@ -3077,7 +3093,7 @@ Private Sub ClanHandler_DisbandClanReply(ByVal Cookie As Long, ByVal Result As e
         oRequest.Command.Respond ResponseText
         oRequest.Command.SendResponse
     ElseIf oRequest.HandlerType = reqUserInterface Then
-        AddChat RTBColors.ConsoleText, ResponseText
+        AddChat g_Color.ConsoleText, ResponseText
     End If
 End Sub
 
@@ -3102,7 +3118,7 @@ Private Sub ClanHandler_MakeChieftainReply(ByVal Cookie As Long, ByVal Result As
         oRequest.Command.Respond ResponseText
         oRequest.Command.SendResponse
     ElseIf oRequest.HandlerType = reqUserInterface Then
-        AddChat RTBColors.ConsoleText, ResponseText
+        AddChat g_Color.ConsoleText, ResponseText
     End If
 End Sub
 
@@ -3127,14 +3143,14 @@ Private Sub ClanHandler_InviteUserReply(ByVal Cookie As Long, ByVal Result As en
         oRequest.Command.Respond ResponseText
         oRequest.Command.SendResponse
     ElseIf oRequest.HandlerType = reqUserInterface Then
-        AddChat RTBColors.ConsoleText, ResponseText
+        AddChat g_Color.ConsoleText, ResponseText
     End If
 End Sub
 
 Private Sub ClanHandler_UnknownClanEvent(ByVal PacketID As Byte, ByVal Data As String)
     If MDebug("debug") Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "[CLAN] Unknown clan event [0x" & ZeroOffset(PacketID, 2) & "]. Data is as follows:"
-        frmChat.AddChat RTBColors.ErrorMessageText, Data
+        frmChat.AddChat g_Color.ErrorMessageText, "[CLAN] Unknown clan event [0x" & ZeroOffset(PacketID, 2) & "]. Data is as follows:"
+        frmChat.AddChat g_Color.ErrorMessageText, Data
     End If
 End Sub
 
@@ -3158,7 +3174,7 @@ End Function
 
 Sub Form_Unload(Cancel As Integer)
     ShuttingDown = True
-    AddChat RTBColors.ErrorMessageText, "Shutting down..."
+    AddChat g_Color.ErrorMessageText, "Shutting down..."
     
     If Config.FileExists Then
         If Me.WindowState <> vbMinimized Then
@@ -3936,8 +3952,8 @@ Private Sub mnuOpenScriptFolder_Click()
         If (LenB(Dir$(sPath, vbDirectory)) > 0) Then
             Shell StringFormat("explorer.exe {0}", sPath), vbNormalFocus
         Else
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Your script folder does not exist, and could not be created.")
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Script folder path: " & sPath)
+            Call frmChat.AddChat(g_Color.ErrorMessageText, "Your script folder does not exist, and could not be created.")
+            Call frmChat.AddChat(g_Color.ErrorMessageText, "Script folder path: " & sPath)
             Exit Sub
         End If
     End If
@@ -4033,7 +4049,7 @@ Private Sub mnuPopClanRemove_Click()
     LastRemoval = ClanHandler.TimeSinceLastRemoval
 
     If LastRemoval < 30 Then
-        AddChat RTBColors.ErrorMessageText, "You must wait " & 30 - LastRemoval & " more seconds before you " & _
+        AddChat g_Color.ErrorMessageText, "You must wait " & 30 - LastRemoval & " more seconds before you " & _
                 "can remove another user from your clan."
     Else
         If MsgBox("Are you sure you want to remove this user from the clan?", vbExclamation + vbYesNo, _
@@ -4171,7 +4187,7 @@ Private Sub mnuPopFLInvite_Click()
     If LenB(sPlayer) > 0 Then
         If g_Clan.Self.Rank >= 3 Then
             Call ClanHandler.InviteToClan(ReverseConvertUsernameGateway(sPlayer), reqUserInterface)
-            AddChat RTBColors.InformationText, "[CLAN] Invitation sent to " & sPlayer & ", awaiting reply."
+            AddChat g_Color.InformationText, "[CLAN] Invitation sent to " & sPlayer & ", awaiting reply."
         End If
     End If
 End Sub
@@ -4225,7 +4241,7 @@ Private Sub mnuPopFLStats_Click()
                     sProd = StrReverse$(BotVars.Product)
                 Case Else
                     ' unspecified product
-                    AddChat RTBColors.ConsoleText, "This bot and the specified friend are not on a game that stores stats viewable via the Battle.net /stats command. " & _
+                    AddChat g_Color.ConsoleText, "This bot and the specified friend are not on a game that stores stats viewable via the Battle.net /stats command. " & _
                                                    "Type /stats " & CleanUsername(GetFriendsSelectedUser) & " <desired product code> to get this user's stats for another game."
                     Exit Sub
             End Select
@@ -4271,7 +4287,7 @@ Private Sub mnuPopFLWebProfile_Click()
                     webProd = W3XP
                 Case Else
                     ' their current product does not have stats, or they are offline
-                    AddChat RTBColors.ConsoleText, "The specified friend must be online to decide which web profile to view."
+                    AddChat g_Color.ConsoleText, "The specified friend must be online to decide which web profile to view."
                     Exit Sub
             End Select
     End Select
@@ -4308,7 +4324,7 @@ Private Sub mnuPopInvite_Click()
     If LenB(sPlayer) > 0 Then
         If g_Clan.Self.Rank >= 3 Then
             Call ClanHandler.InviteToClan(ReverseConvertUsernameGateway(sPlayer), reqUserInterface)
-            AddChat RTBColors.InformationText, "[CLAN] Invitation sent to " & sPlayer & ", awaiting reply."
+            AddChat g_Color.InformationText, "[CLAN] Invitation sent to " & sPlayer & ", awaiting reply."
         End If
     End If
 End Sub
@@ -4336,7 +4352,7 @@ Private Sub mnuPopStats_Click()
             ' get stats for user on their current product
         Case Else
             ' unspecified product
-            AddChat RTBColors.ConsoleText, "The specified user is not on a game that stores stats viewable via the Battle.net /stats command. " & _
+            AddChat g_Color.ConsoleText, "The specified user is not on a game that stores stats viewable via the Battle.net /stats command. " & _
                                            "Type /stats " & CleanUsername(GetSelectedUser) & " <desired product code> to get this user's stats for another game."
             Exit Sub
     End Select
@@ -4494,7 +4510,7 @@ Private Sub mnuHideBans_Click()
     mnuHideBans.Checked = (Not mnuHideBans.Checked)
     Config.HideBanMessages = CBool(mnuHideBans.Checked)
     Call Config.Save
-    AddChat RTBColors.InformationText, "Ban messages " & IIf(mnuHideBans.Checked, "disabled", "enabled") & "."
+    AddChat g_Color.InformationText, "Ban messages " & IIf(mnuHideBans.Checked, "disabled", "enabled") & "."
 End Sub
 
 Private Sub mnuHideWhispersInrtbChat_Click()
@@ -4508,7 +4524,7 @@ Private Sub mnuLog0_Click()
     Config.LoggingMode = BotVars.Logging
     Call Config.Save
     
-    AddChat RTBColors.InformationText, "Full text logging enabled."
+    AddChat g_Color.InformationText, "Full text logging enabled."
     mnuLog1.Checked = False
     mnuLog0.Checked = True
     mnuLog2.Checked = False
@@ -4522,7 +4538,7 @@ Private Sub mnuLog1_Click()
     Config.LoggingMode = BotVars.Logging
     Call Config.Save
     
-    AddChat RTBColors.InformationText, "Partial text logging enabled."
+    AddChat g_Color.InformationText, "Partial text logging enabled."
     mnuLog1.Checked = True
     mnuLog0.Checked = False
     mnuLog2.Checked = False
@@ -4536,7 +4552,7 @@ Private Sub mnuLog2_Click()
     Config.LoggingMode = BotVars.Logging
     Call Config.Save
     
-    AddChat RTBColors.InformationText, "Logging disabled."
+    AddChat g_Color.InformationText, "Logging disabled."
     mnuLog1.Checked = False
     mnuLog0.Checked = False
     mnuLog2.Checked = True
@@ -4553,18 +4569,18 @@ Private Sub mnuPacketLog_Click()
     
     If mnuPacketLog.Checked Then
         ' turning this feature off
-        AddChat RTBColors.SuccessText, "StealthBot packet traffic will no longer be logged."
+        AddChat g_Color.SuccessText, "StealthBot packet traffic will no longer be logged."
     Else
         ' turning it on
-        AddChat RTBColors.SuccessText, "StealthBot packet traffic will be logged in the bot's folder, in a file named " & Format(Date, "yyyy-MM-dd") & "-PacketLog.txt."
-        AddChat RTBColors.SuccessText, "--"
-        AddChat RTBColors.SuccessText, "Log packets at your own risk! Please read the note below:"
-        AddChat RTBColors.ErrorMessageText, "*** CAUTION: THIS LOG MAY CONTAIN PRIVATE INFORMATION."
-        AddChat RTBColors.ErrorMessageText, "*** CAUTION: DO NOT DISTRIBUTE it in public posts on StealthBot.net or on any other website!"
-        AddChat RTBColors.ErrorMessageText, "*** CAUTION: Only produce a packet log if you're specifically instructed to by"
-        AddChat RTBColors.ErrorMessageText, "*** CAUTION: a StealthBot.net tech, or you know what you're doing!"
-        AddChat RTBColors.SuccessText, "If you wish to stop logging packets, uncheck the menu item or restart your bot."
-        AddChat RTBColors.SuccessText, "This feature only logs StealthBot traffic. It is not a system-wide packet capture utility."
+        AddChat g_Color.SuccessText, "StealthBot packet traffic will be logged in the bot's folder, in a file named " & Format(Date, "yyyy-MM-dd") & "-PacketLog.txt."
+        AddChat g_Color.SuccessText, "--"
+        AddChat g_Color.SuccessText, "Log packets at your own risk! Please read the note below:"
+        AddChat g_Color.ErrorMessageText, "*** CAUTION: THIS LOG MAY CONTAIN PRIVATE INFORMATION."
+        AddChat g_Color.ErrorMessageText, "*** CAUTION: DO NOT DISTRIBUTE it in public posts on StealthBot.net or on any other website!"
+        AddChat g_Color.ErrorMessageText, "*** CAUTION: Only produce a packet log if you're specifically instructed to by"
+        AddChat g_Color.ErrorMessageText, "*** CAUTION: a StealthBot.net tech, or you know what you're doing!"
+        AddChat g_Color.SuccessText, "If you wish to stop logging packets, uncheck the menu item or restart your bot."
+        AddChat g_Color.SuccessText, "This feature only logs StealthBot traffic. It is not a system-wide packet capture utility."
     End If
     
     mnuPacketLog.Checked = Not mnuPacketLog.Checked
@@ -4680,7 +4696,7 @@ Sub ClearChatScreen(Optional ByVal ClearOption As Integer = 3)
     If ClearOption And 2 Then
         rtbWhispers.Text = vbNullString
         ' add cleared message
-        AddWhisper RTBColors.ConsoleText, ">> Whisper window cleared."
+        AddWhisper g_Color.ConsoleText, ">> Whisper window cleared."
     End If
     
     ' check for 1 (or 3) and clear chats
@@ -4688,9 +4704,9 @@ Sub ClearChatScreen(Optional ByVal ClearOption As Integer = 3)
         rtbChat.Text = vbNullString
         ' add a sensical cleared message
         If ClearOption And 2 Then
-            AddChat RTBColors.ConsoleText, ">> Chat window cleared."
+            AddChat g_Color.ConsoleText, ">> Chat window cleared."
         Else
-            AddChat RTBColors.ConsoleText, ">> Chat and whisper windows cleared."
+            AddChat g_Color.ConsoleText, ">> Chat and whisper windows cleared."
         End If
     End If
     
@@ -4723,7 +4739,7 @@ Private Sub mnuPopWebProfile_Click()
             webProd = W3XP
         Case Else
             ' their current product does not have a web profile
-            AddChat RTBColors.ConsoleText, "The specified user must be on WarCraft III to view their web profile."
+            AddChat g_Color.ConsoleText, "The specified user must be on WarCraft III to view their web profile."
             Exit Sub
     End Select
     
@@ -4736,7 +4752,7 @@ Private Sub mnuClearedTxt_Click()
     sPath = StringFormat("{0}{1}.txt", g_Logger.LogPath, Format(Date, "yyyy-MM-dd"))
     
     If LenB(Dir$(sPath)) = 0 Then
-        AddChat RTBColors.ErrorMessageText, "The log file for today is empty."
+        AddChat g_Color.ErrorMessageText, "The log file for today is empty."
     Else
         ShellOpenURL sPath, , False
     End If
@@ -4748,14 +4764,14 @@ End Sub
 
 Private Sub mnuRepairCleanMail_Click()
     CleanUpMailFile
-    frmChat.AddChat RTBColors.SuccessText, "Delivered and invalid pieces of mail have been removed from your mail.dat file."
+    frmChat.AddChat g_Color.SuccessText, "Delivered and invalid pieces of mail have been removed from your mail.dat file."
 End Sub
 
 Private Sub mnuRepairDataFiles_Click()
     If MsgBox("Are you sure? This action will delete your mail.dat (Bot mail database) file.", vbYesNo, "Repair data files") = vbYes Then
         On Error Resume Next
         Kill GetFilePath(FILE_MAILDB)
-        AddChat RTBColors.SuccessText, "The bot's DAT data files have been removed."
+        AddChat g_Color.SuccessText, "The bot's DAT data files have been removed."
     End If
 End Sub
 
@@ -4770,7 +4786,7 @@ Private Sub mnuRepairVerbytes_Click()
     
     Call Config.Save
     
-    frmChat.AddChat RTBColors.SuccessText, "The version bytes stored in config.ini have been restored to their defaults."
+    frmChat.AddChat g_Color.SuccessText, "The version bytes stored in config.ini have been restored to their defaults."
 End Sub
 
 Private Sub mnuScripts_Click()
@@ -4805,7 +4821,7 @@ Private Sub mnuWhisperCleared_Click()
     sPath = StringFormat("{0}{1}-WHISPERS.txt", g_Logger.LogPath, Format(Date, "yyyy-MM-dd"))
     
     If LenB(Dir$(sPath)) = 0 Then
-        AddChat RTBColors.ErrorMessageText, "The whisper log file for today is empty."
+        AddChat g_Color.ErrorMessageText, "The whisper log file for today is empty."
     Else
         ShellOpenURL sPath, , False
     End If
@@ -4833,12 +4849,12 @@ ERROR_HANDLER:
 
     ' Cannot call this method while the script is executing
     If (Err.Number = -2147467259) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "Error: Script is still executing."
+        frmChat.AddChat g_Color.ErrorMessageText, "Error: Script is still executing."
         
         Exit Sub
     End If
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
         " in mnuReloadScripts_Click()."
     
 End Sub
@@ -4900,16 +4916,16 @@ End Sub
 Private Sub mnuReload_Click()
     On Error Resume Next
     Call ReloadConfig(1)
-    AddChat RTBColors.SuccessText, "Configuration file loaded."
+    AddChat g_Color.SuccessText, "Configuration file loaded."
 End Sub
 
 Private Sub mnuUTF8_Click()
     If mnuUTF8.Checked Then
         mnuUTF8.Checked = False
-        AddChat RTBColors.ConsoleText, "Messages will no longer be UTF-8-decoded."
+        AddChat g_Color.ConsoleText, "Messages will no longer be UTF-8-decoded."
     Else
         mnuUTF8.Checked = True
-        AddChat RTBColors.ConsoleText, "Messages will now be UTF-8-decoded."
+        AddChat g_Color.ConsoleText, "Messages will now be UTF-8-decoded."
     End If
     
     Config.UseUTF8 = CBool(mnuUTF8.Checked)
@@ -4995,10 +5011,10 @@ Private Sub mnuToggleFilters_Click()
     
     If Filters Then
         Filters = False
-        AddChat RTBColors.InformationText, "Chat filtering disabled."
+        AddChat g_Color.InformationText, "Chat filtering disabled."
     Else
         Filters = True
-        AddChat RTBColors.InformationText, "Chat filtering enabled."
+        AddChat g_Color.InformationText, "Chat filtering enabled."
     End If
     
     Config.ChatFilters = Filters
@@ -5050,13 +5066,13 @@ Sub mnuLock_Click()
     mnuLock.Checked = (Not (mnuLock.Checked))
     
     If BotVars.LockChat = False Then
-        AddChat RTBColors.ConsoleText, ">> Chat window locked."
-        AddChat RTBColors.ErrorMessageText, "NO MESSAGES WHATSOEVER WILL BE DISPLAYED UNTIL YOU UNLOCK THE WINDOW."
-        AddChat RTBColors.ErrorMessageText, "To return to normal mode, press CTRL+L or use the toggle under the Window menu."
+        AddChat g_Color.ConsoleText, ">> Chat window locked."
+        AddChat g_Color.ErrorMessageText, "NO MESSAGES WHATSOEVER WILL BE DISPLAYED UNTIL YOU UNLOCK THE WINDOW."
+        AddChat g_Color.ErrorMessageText, "To return to normal mode, press CTRL+L or use the toggle under the Window menu."
         BotVars.LockChat = True
     Else
         BotVars.LockChat = False
-        AddChat RTBColors.ConsoleText, ">> Chat window unlocked."
+        AddChat g_Color.ConsoleText, ">> Chat window unlocked."
     End If
 End Sub
 
@@ -5085,10 +5101,10 @@ Private Sub mnuToggle_Click()
     mnuToggle.Checked = (Not (mnuToggle.Checked))
     
     If JoinMessagesOff = False Then
-        AddChat RTBColors.InformationText, "Join/Leave messages disabled."
+        AddChat g_Color.InformationText, "Join/Leave messages disabled."
         JoinMessagesOff = True
     Else
-        AddChat RTBColors.InformationText, "Join/Leave messages enabled."
+        AddChat g_Color.InformationText, "Join/Leave messages enabled."
         JoinMessagesOff = False
     End If
     
@@ -5191,7 +5207,7 @@ Private Sub tmrAccountLock_Timer()
     ds.AccountEntryPending = False
     Call Event_LogonEvent(tmrAccountLock.Tag, -2&, vbNullString)
 
-    AddChat RTBColors.ErrorMessageText, "[BNCS] Your account appears to be locked, likely due to an excessive number of " & _
+    AddChat g_Color.ErrorMessageText, "[BNCS] Your account appears to be locked, likely due to an excessive number of " & _
         "invalid logons."
 
     Call DoDisconnect
@@ -5777,7 +5793,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     Exit Sub
 
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, "Error " & Err.Number & " (" & Err.Description & ") " & _
+    AddChat g_Color.ErrorMessageText, "Error " & Err.Number & " (" & Err.Description & ") " & _
         "in procedure cboSend_KeyDown"
         
     Exit Sub
@@ -5866,8 +5882,8 @@ Sub InitBNetConnection()
                 modBNCS.SEND_SID_CLIENTID
                 modBNCS.SEND_SID_STARTVERSIONING
             Case Else:
-                AddChat RTBColors.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", modBNCS.GetLogonSystem())
-                AddChat RTBColors.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
+                AddChat g_Color.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", modBNCS.GetLogonSystem())
+                AddChat g_Color.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
                 DoDisconnect
         End Select
     End If
@@ -5919,13 +5935,13 @@ Private Sub sckMCP_Connect()
     End If
     
     If ProxyConnInfo(stMCP).IsUsingProxy Then
-        AddChat RTBColors.SuccessText, "[REALM] [PROXY] Connected!"
+        AddChat g_Color.SuccessText, "[REALM] [PROXY] Connected!"
         
         sIP = ds.MCPHandler.RealmSelectedServerIP
         lPort = ds.MCPHandler.RealmSelectedServerPort
         modProxySupport.InitProxyConnection sckMCP, ProxyConnInfo(stMCP), sIP, lPort
     Else
-        AddChat RTBColors.SuccessText, "[REALM] Connected!"
+        AddChat g_Color.SuccessText, "[REALM] Connected!"
         
         InitMCPConnection
     End If
@@ -5933,7 +5949,7 @@ Private Sub sckMCP_Connect()
     Exit Sub
 
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, _
+    AddChat g_Color.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.Description & " in sckMCP_Connect()."
 
     Exit Sub
@@ -5981,7 +5997,7 @@ Private Sub sckMCP_DataArrival(ByVal bytesTotal As Long)
     Exit Sub
 
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, _
+    AddChat g_Color.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.Description & " in sckMCP_DataArrival()."
 
     Exit Sub
@@ -6164,7 +6180,7 @@ Private Sub tmrIdleTimer_Timer()
 
 ERROR_HANDLER:
 
-    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in tmrIdleTimer_Timer()."
+    AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in tmrIdleTimer_Timer()."
     
     Exit Sub
     
@@ -6260,7 +6276,7 @@ Private Sub tmrIdleTimer_Timer_IdleMsg()
 
 ERROR_HANDLER:
 
-    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in tmrIdleTimer_Timer_IdleMsg()."
+    AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in tmrIdleTimer_Timer_IdleMsg()."
     
     Exit Sub
     
@@ -6325,7 +6341,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, "Error: " & Err.Description & " in tmrSilentChannel_Timer(" & Index & ")."
+    AddChat g_Color.ErrorMessageText, "Error: " & Err.Description & " in tmrSilentChannel_Timer(" & Index & ")."
     
     Exit Sub
 End Sub
@@ -6345,8 +6361,8 @@ End Sub
 Sub ConnectBNLS()
     ' Don't try and connect if we don't have a server to connect to.
     If Len(BotVars.BNLSServer) = 0 Then
-        AddChat RTBColors.ErrorMessageText, "[BNLS] A working BNLS server could not be found."
-        AddChat RTBColors.ErrorMessageText, "[BNLS]   Go to Settings -> Bot Settings -> Connection Settings -> Advanced and either set a server or use the automatic server finder."
+        AddChat g_Color.ErrorMessageText, "[BNLS] A working BNLS server could not be found."
+        AddChat g_Color.ErrorMessageText, "[BNLS]   Go to Settings -> Bot Settings -> Connection Settings -> Advanced and either set a server or use the automatic server finder."
         Call DoDisconnect
         Exit Sub
     End If
@@ -6448,21 +6464,21 @@ Sub Connect()
 
         'Changed 10-07-2009 - Hdx - Are we going to have private betas anymore?
         #If (BETA = 2) Then
-            Call AddChat(RTBColors.InformationText, "Authorizing your private-release, please wait...")
+            Call AddChat(g_Color.InformationText, "Authorizing your private-release, please wait...")
             
             If (GetAuth(BotVars.Username)) Then
-                Call AddChat(RTBColors.SuccessText, "Private usage authorized, connecting your bot...")
+                Call AddChat(g_Color.SuccessText, "Private usage authorized, connecting your bot...")
                 
                 ' was auth function bypassed?
                 If (AUTH_CHECKED = False) Then BotVars.Password = Chr$(0)
             Else
-                Call AddChat(RTBColors.ErrorMessageText, "- - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -")
+                Call AddChat(g_Color.ErrorMessageText, "- - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -")
                 
                 Call DoDisconnect
                 Exit Sub
             End If
         #Else
-            AddChat RTBColors.InformationText, "Connecting your bot..."
+            AddChat g_Color.InformationText, "Connecting your bot..."
         #End If
         
         If BotVars.BNLS Then
@@ -6481,7 +6497,7 @@ Sub Connect()
         
         With sckBNet
             If .State <> sckClosed Then
-                AddChat RTBColors.ErrorMessageText, "Already connected."
+                AddChat g_Color.ErrorMessageText, "Already connected."
                 Exit Sub
             End If
     
@@ -6597,7 +6613,7 @@ Private Function GetAuth(ByVal Username As String) As Long
 
 ERROR_HANDLER:
 
-    AddChat RTBColors.ErrorMessageText, "Beta Auth Error: #", vbRed, Err.Number, vbRed, ": ", vbRed, Err.Description
+    AddChat g_Color.ErrorMessageText, "Beta Auth Error: #", vbRed, Err.Number, vbRed, ": ", vbRed, Err.Description
     Set clsCRC32 = Nothing
     GetAuth = False
     Exit Function
@@ -6920,14 +6936,17 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Dim oCommandGenerator    As clsCommandGeneratorObj
     
     If Mode <> 0 Then
-        Config.Load GetConfigFilePath()
+        Call Config.Load(GetConfigFilePath())
+        Call g_Color.Load(GetFilePath(FILE_COLORS))
     End If
     
+    Call SetFormColors(g_Color)
+        
     BotVars.TSSetting = Config.TimestampMode
 
     ' Client settings
     If LenB(BotVars.Username) > 0 And StrComp(BotVars.Username, Config.Username, vbTextCompare) <> 0 Then
-        AddChat RTBColors.ConsoleText, "Username set to " & Config.Username & "."
+        AddChat g_Color.ConsoleText, "Username set to " & Config.Username & "."
     End If
     BotVars.Username = Config.Username
     BotVars.Password = Config.Password
@@ -7284,7 +7303,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
 
 ERROR_HANDLER:
     If (Err.Number = 10049) Then
-        AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in ReloadConfig()."
+        AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in ReloadConfig()."
     End If
     
     Resume Next
@@ -7331,15 +7350,15 @@ Private Sub DisplayError(ByVal ErrorNumber As Integer, ByVal ErrorDescription As
     End If
 
     If ErrorNumber = 0 Then
-        AddChat RTBColors.ErrorMessageText, sPrefix & "Error -- " & ErrorDescription
+        AddChat g_Color.ErrorMessageText, sPrefix & "Error -- " & ErrorDescription
     Else
-        AddChat RTBColors.ErrorMessageText, sPrefix & "Error #" & ErrorNumber & " -- " & ErrorDescription
+        AddChat g_Color.ErrorMessageText, sPrefix & "Error #" & ErrorNumber & " -- " & ErrorDescription
     End If
 
     If Not ExistingConnection Then
-        AddChat RTBColors.ErrorMessageText, sPrefix & "Unable to connect to the " & sServerType & " server."
+        AddChat g_Color.ErrorMessageText, sPrefix & "Unable to connect to the " & sServerType & " server."
     Else
-        AddChat RTBColors.ErrorMessageText, sPrefix & "Disconnected."
+        AddChat g_Color.ErrorMessageText, sPrefix & "Disconnected."
     End If
 
     Call RunInAll("Event_ConnectionError", sProtocol, ErrorNumber, ErrorDescription)
@@ -7450,7 +7469,7 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
     Exit Sub
 
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, _
+    AddChat g_Color.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.Description & " in sckBNet_DataArrival()."
 
     Exit Sub
@@ -7594,7 +7613,7 @@ Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
     Exit Sub
 
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, _
+    AddChat g_Color.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.Description & " in sckBNLS_DataArrival()."
 
     Exit Sub
@@ -7981,7 +8000,7 @@ Private Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal
     '/* Self */
     If (IsSelf) Then
         'Debug.Print "Assigned color IsSelf"
-        GetNameColor = FormColors.ChannelListSelf
+        GetNameColor = g_Color.ChannelListSelf
         
         Exit Function
     End If
@@ -7989,7 +8008,7 @@ Private Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal
     '/* Squelched */
     If ((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
         'Debug.Print "Assigned color SQUELCH"
-        GetNameColor = FormColors.ChannelListSquelched
+        GetNameColor = g_Color.ChannelListSquelched
         
         Exit Function
     End If
@@ -8006,20 +8025,20 @@ Private Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal
     '/* Operator */
     If ((Flags And USER_CHANNELOP) = USER_CHANNELOP) Then
         'Debug.Print "Assigned color OP"
-        GetNameColor = FormColors.ChannelListOps
+        GetNameColor = g_Color.ChannelListOps
         Exit Function
     End If
     
     '/* Idle */
     If (IdleTime > BotVars.SecondsToIdle) Then
         'Debug.Print "Assigned color IDLE"
-        GetNameColor = FormColors.ChannelListIdle
+        GetNameColor = g_Color.ChannelListIdle
         Exit Function
     End If
     
     '/* Default */
     'Debug.Print "Assigned color NORMAL"
-    GetNameColor = FormColors.ChannelListText
+    GetNameColor = g_Color.ChannelListText
 End Function
 
 Public Function GetFlagDescription(ByVal Flags As Long, ByVal ShowAll As Boolean) As String
@@ -8215,7 +8234,7 @@ Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal OldPosition As In
 
     Exit Sub
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddName", Err.Number, Err.Description)
+    AddChat g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddName", Err.Number, Err.Description)
 End Sub
 
 Private Sub AddFriendItem(ByVal Name As String, ByVal Game As String, _
@@ -8233,7 +8252,7 @@ Private Sub AddFriendItem(ByVal Name As String, ByVal Game As String, _
 
     Exit Sub
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddFriendItem", Err.Number, Err.Description)
+    AddChat g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddFriendItem", Err.Number, Err.Description)
 End Sub
 
 Private Sub SetFriendItem(ByVal ListItem As ListItem, ByVal EntryNumber As Integer, _
@@ -8272,13 +8291,13 @@ Private Sub SetFriendItem(ByVal ListItem As ListItem, ByVal EntryNumber As Integ
 
         If (Not BotVars.NoColoring) Then
             If (Status And FRS_AWAY) = FRS_AWAY Then
-                ListItem.ForeColor = FormColors.ChannelListOps
+                ListItem.ForeColor = g_Color.ChannelListOps
             ElseIf (Status And FRS_DND) = FRS_DND Then
-                ListItem.ForeColor = FormColors.ChannelListSquelched
+                ListItem.ForeColor = g_Color.ChannelListSquelched
             ElseIf LocationID <> FRL_OFFLINE Then
-                ListItem.ForeColor = FormColors.ChannelListText
+                ListItem.ForeColor = g_Color.ChannelListText
             Else
-                ListItem.ForeColor = FormColors.ChannelListIdle
+                ListItem.ForeColor = g_Color.ChannelListIdle
             End If
         End If
 
@@ -8293,7 +8312,7 @@ Private Sub SetFriendItem(ByVal ListItem As ListItem, ByVal EntryNumber As Integ
 
     Exit Sub
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.SetFriendItem", Err.Number, Err.Description)
+    AddChat g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.SetFriendItem", Err.Number, Err.Description)
 End Sub
 
 Private Function GetFriendItem(ByVal EntryNumber As Integer) As ListItem
@@ -8324,7 +8343,7 @@ Private Sub AddClanMember(ByVal Name As String, ByVal DisplayName As String, ByV
 
     Exit Sub
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddClanMember", Err.Number, Err.Description)
+    AddChat g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddClanMember", Err.Number, Err.Description)
 End Sub
 
 Private Sub SetClanMember(ByVal ListItem As ListItem, ByVal Name As String, ByVal DisplayName As String, ByVal Rank As Integer, ByVal Status As Integer)
@@ -8351,17 +8370,17 @@ Private Sub SetClanMember(ByVal ListItem As ListItem, ByVal Name As String, ByVa
 
     If (Not BotVars.NoColoring) Then
         If (StrComp(BotVars.Username, Name, vbTextCompare) = 0) Then
-            ListItem.ForeColor = FormColors.ChannelListSelf
+            ListItem.ForeColor = g_Color.ChannelListSelf
         ElseIf Status <> 0 Then
-            ListItem.ForeColor = FormColors.ChannelListText
+            ListItem.ForeColor = g_Color.ChannelListText
         Else
-            ListItem.ForeColor = FormColors.ChannelListIdle
+            ListItem.ForeColor = g_Color.ChannelListIdle
         End If
     End If
 
     Exit Sub
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.SetClanMember", Err.Number, Err.Description)
+    AddChat g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.SetClanMember", Err.Number, Err.Description)
 End Sub
 
 Private Function GetClanSelectedUser() As String
@@ -8586,7 +8605,7 @@ Public Sub DoDisconnect(Optional ByVal ClientInitiated As Boolean = True)
 
     If (ClientInitiated And AnythingToDisconnect And Not ShuttingDown) Then
         ' display message
-        frmChat.AddChat RTBColors.ErrorMessageText, "All connections closed."
+        frmChat.AddChat g_Color.ErrorMessageText, "All connections closed."
 
         ' reset focus to send box
         If ((Me.WindowState <> vbMinimized)) Then
@@ -8608,7 +8627,7 @@ Public Sub DoDisconnect(Optional ByVal ClientInitiated As Boolean = True)
     Exit Sub
 
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in DoDisconnect()."
+    AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in DoDisconnect()."
 
     Exit Sub
 
@@ -8652,7 +8671,7 @@ Public Sub DoScheduleAutoReconnect(ByVal JustLostConnection As Boolean, Optional
     
     ReconnectTimerID = SetTimer(0, ReconnectTimerID, 1000, AddressOf Reconnect_TimerProc)
 
-    AddChat RTBColors.InformationText, _
+    AddChat g_Color.InformationText, _
             StringFormat("Attempting to reconnect in {0}...", modDateTime.ConvertTimeInterval(AutoReconnectIn, True))
 End Sub
 
@@ -8688,4 +8707,24 @@ Public Sub RecordcboSendSelInfo()
     'Debug.Print "SelStart: " & cboSend.SelStart & ", SelLength: " & cboSend.SelLength
     cboSendSelLength = cboSend.SelLength
     cboSendSelStart = cboSend.SelStart
+End Sub
+
+Public Sub SetFormColors(ByRef oColors As clsColor)
+    With oColors
+        frmChat.lvChannel.BackColor = .ChannelListBack
+        frmChat.lvChannel.ForeColor = .ChannelListText
+        frmChat.lvFriendList.BackColor = .ChannelListBack
+        frmChat.lvFriendList.ForeColor = .ChannelListText
+        frmChat.lvClanList.BackColor = .ChannelListBack
+        frmChat.lvClanList.ForeColor = .ChannelListText
+        frmChat.lblCurrentChannel.ForeColor = .ChannelLabelText
+        frmChat.lblCurrentChannel.BackColor = .ChannelLabelBack
+        frmChat.txtPost.ForeColor = .SendBoxesText
+        frmChat.txtPre.ForeColor = .SendBoxesText '.SendBoxesText
+        frmChat.cboSend.ForeColor = .SendBoxesText
+        frmChat.txtPost.BackColor = .SendBoxesBack
+        frmChat.txtPre.BackColor = .SendBoxesBack
+        frmChat.rtbChat.BackColor = .RTBBack
+        frmChat.cboSend.BackColor = .SendBoxesBack
+    End With
 End Sub

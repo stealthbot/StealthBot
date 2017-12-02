@@ -146,7 +146,7 @@ Public Sub LoadScripts()
                     If (IsScriptNameValid(CurrentModule) = False) Then
                         ' No, disable it.
                         
-                        frmChat.AddChat RTBColors.ErrorMessageText, "Scripting error: " & Paths(i) & " has been " & _
+                        frmChat.AddChat g_Color.ErrorMessageText, "Scripting error: " & Paths(i) & " has been " & _
                             "disabled due to a naming issue."
                             
                         str = strPath & "\disabled\"
@@ -170,13 +170,13 @@ Public Sub LoadScripts()
     
     InitMenus
 
-    frmChat.AddChat RTBColors.SuccessText, "Scripts loaded."
+    frmChat.AddChat g_Color.SuccessText, "Scripts loaded."
         
     Exit Sub
 
 ERROR_HANDLER:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, _
+    frmChat.AddChat g_Color.ErrorMessageText, _
         "Error (" & Err.Number & "): " & Err.Description & " in LoadScripts()."
 
 End Sub
@@ -244,7 +244,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal FilePath As St
                                     
                                     ' check if file exists to include
                                     If LenB(Dir$(strFullPath)) = 0 Then
-                                        frmChat.AddChat RTBColors.ErrorMessageText, "Scripting warning! " & Dir$(FilePath) & " is trying to include " & _
+                                        frmChat.AddChat g_Color.ErrorMessageText, "Scripting warning! " & Dir$(FilePath) & " is trying to include " & _
                                             "a file that does not exist: " & strPath
                                         blnIncIsValid = False
                                     End If
@@ -252,7 +252,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal FilePath As St
                                     ' check if file is already included by this script
                                     For i = 1 To includes.Count
                                         If StrComp(includes(i), strFullPath, vbTextCompare) = 0 Then
-                                            frmChat.AddChat RTBColors.ErrorMessageText, "Scripting warning! " & Dir$(FilePath) & " is trying to include " & _
+                                            frmChat.AddChat g_Color.ErrorMessageText, "Scripting warning! " & Dir$(FilePath) & " is trying to include " & _
                                                 "a file that has already been included: " & strPath
                                             blnIncIsValid = False
                                         End If
@@ -773,7 +773,7 @@ ERROR_HANDLER:
         Exit Sub
     End If
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
         " in CallByNameEx()."
         
     Set oTLI = Nothing
@@ -821,7 +821,7 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
     
     Set CreateObj = Nothing
     If (Not ValidObjectName(ObjName)) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "Scripting error: The variable name provided to CreateObj was not valid."
+        frmChat.AddChat g_Color.ErrorMessageText, "Scripting error: The variable name provided to CreateObj was not valid."
         Exit Function
     End If
     
@@ -965,7 +965,7 @@ Public Sub DestroyObjs(Optional ByVal SCModule As Object = Nothing)
     
 ERROR_HANDLER:
     
-    frmChat.AddChat RTBColors.ErrorMessageText, _
+    frmChat.AddChat g_Color.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.Description & " in DestroyObjs()."
         
     Resume Next
@@ -1095,7 +1095,7 @@ ERROR_HANDLER:
         Resume Next
     End If
 
-    frmChat.AddChat RTBColors.ErrorMessageText, _
+    frmChat.AddChat g_Color.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.Description & " in DestroyObj()."
         
     Resume Next
@@ -1237,7 +1237,7 @@ Public Function InitMenus()
         
 ERROR_HANDLER:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
         " in InitMenus()."
 
     Err.Clear
@@ -1270,7 +1270,7 @@ Public Function DestroyMenus()
     
 ERROR_HANDLER:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
         " in DestroyMenus()."
 
     Err.Clear
@@ -1486,11 +1486,11 @@ Public Sub SC_Error()
     
     ' display error if script enabled
     If modScripting.IsScriptEnabled(modScripting.GetScriptName(m_ExecutingMdl.Name)) = True Then
-        frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Scripting {0} error #{1} in {2}: (line {3}; column {4})", _
+        frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Scripting {0} error #{1} in {2}: (line {3}; column {4})", _
             ErrType, Number, Name, Line, Column)
-        frmChat.AddChat RTBColors.ErrorMessageText, Description
+        frmChat.AddChat g_Color.ErrorMessageText, Description
         If LenB(Trim$(Text)) > 0 Then
-            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Offending line: >> {0}", Text)
+            frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Offending line: >> {0}", Text)
         End If
     End If
     
@@ -1526,7 +1526,7 @@ Public Function GetScriptModule(Optional ByVal ScriptName As String = vbNullStri
 
 ERROR_HANDLER:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
         " in GetScriptModule()."
 
     Err.Clear
@@ -1569,7 +1569,7 @@ Public Function GetModuleID(Optional ByVal ScriptName As String = vbNullString) 
 
 ERROR_HANDLER:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
         " in GetModuleID()."
 
     Err.Clear
@@ -1606,7 +1606,7 @@ Public Function GetScriptName(Optional ByVal ModuleID As String = vbNullString) 
 
 ERROR_HANDLER:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
         " in GetScriptName()."
 
     Err.Clear
@@ -1642,7 +1642,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.AddScriptObserver()"
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.AddScriptObserver()"
 End Sub
 
 'Returns a collection of scripts that the passed script is currently observing, or being observed by
@@ -1672,7 +1672,7 @@ On Error GoTo ERROR_HANDLER
 
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.GetScriptObservers()"
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.GetScriptObservers()"
 End Function
 
 'Adds a Function/Observer pair to the Function Observer collection
@@ -1694,7 +1694,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in modScripting.AddFunctionObservers()", Err.Number, Err.Description)
+    frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Error #{0}: {1} in modScripting.AddFunctionObservers()", Err.Number, Err.Description)
 End Sub
 
 'Returns a collections of scripts who are observing this event in all scripts.
@@ -1719,7 +1719,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in modScripting.GetFunctionObservers()", Err.Number, Err.Description)
+    frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Error #{0}: {1} in modScripting.GetFunctionObservers()", Err.Number, Err.Description)
 End Function
 
 ' call this during config reload to enable/disable the system
@@ -1759,12 +1759,12 @@ ERROR_HANDLER:
 
     ' Cannot call this method while the script is executing
     If (Err.Number = -2147467259) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "Error: Script is still executing."
+        frmChat.AddChat g_Color.ErrorMessageText, "Error: Script is still executing."
         
         Exit Sub
     End If
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
         " in SetScriptSystemDisabled()."
 End Sub
 
@@ -1777,7 +1777,7 @@ End Sub
 Public Function GetScriptDictionary(ByRef mdl As Module) As Dictionary
     If (StrComp(TypeName$(mdl.CodeObject.Script), "Dictionary") <> 0) Then
         SetScriptDictionary mdl
-        frmChat.AddChat RTBColors.ErrorMessageText, "Scripting error: A Script object has been reset. " & _
+        frmChat.AddChat g_Color.ErrorMessageText, "Scripting error: A Script object has been reset. " & _
                                "Script module ID: " & mdl.Name
     End If
     Set GetScriptDictionary = mdl.CodeObject.Script
@@ -1824,5 +1824,5 @@ On Error GoTo ERROR_HANDLER
         
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.IsScriptEnabled()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.IsScriptEnabled()."
 End Function

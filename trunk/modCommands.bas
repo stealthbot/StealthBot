@@ -76,7 +76,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
 ' default (if all else fails) error handler to keep erroneous
 ' commands and/or input formats from killing me
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: #" & Err.Number & ": " & Err.Description & _
+    Call frmChat.AddChat(g_Color.ConsoleText, "Error: #" & Err.Number & ": " & Err.Description & _
         " in modCommandCode.ProcessCommand().")
 
     Set Command = Nothing

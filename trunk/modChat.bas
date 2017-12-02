@@ -271,7 +271,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 .SelItalic = False
                 .SelUnderline = False
                 .SelStrikeThru = False
-                .SelColor = RTBColors.TimeStamps
+                .SelColor = g_Color.TimeStamps
                 RTBSetSelectedText rtb, ElementText
             End With
         End If
@@ -347,7 +347,7 @@ ERROR_HANDLER:
         Exit Sub
     End If
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in DisplayRichText()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in DisplayRichText()."
     
     Exit Sub
     

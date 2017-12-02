@@ -38,6 +38,7 @@ Public g_BNCSQueue As New clsBNCSQueue
 Public g_Channel As clsChannelObj
 Public g_Friends As Collection
 Public g_Clan As clsClanObj
+Public g_Color As clsColor
 
 Public AutoReconnectActive As Boolean
 Public AutoReconnectTry    As Long

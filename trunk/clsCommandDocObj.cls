@@ -149,7 +149,7 @@ Public Function CreateCommand(ByVal strCommand As String, Optional ByVal strScri
     If Database Is Nothing Then Set Database = m_database
 
     If (Not clsCommandObj.IsValidCommandName(strCommand)) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "Error: The provided command name was not valid."
+        frmChat.AddChat g_Color.ErrorMessageText, "Error: The provided command name was not valid."
         Exit Function
     End If
 
@@ -217,7 +217,7 @@ Private Function ConvertAlias(ByVal cmdName As String, ByVal Database As DOMDocu
     Exit Function
 ERROR_HANDLER:
 
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Error: XML Database Processor has encountered an error " & _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, "Error: XML Database Processor has encountered an error " & _
         "during alias lookup.")
 
     ConvertAlias = cmdName
@@ -290,7 +290,7 @@ Private Sub ShowXMLErrors(ByRef colErrorList As Collection)
         Msg = StringFormat("{0}{2}{1}", Msg, colErrorList(i), vbNewLine)
     Next i
 
-    frmChat.AddChat RTBColors.ErrorMessageText, Msg
+    frmChat.AddChat g_Color.ErrorMessageText, Msg
 
 End Sub
 
@@ -568,7 +568,7 @@ Public Sub Delete(Optional ByVal WriteToFile As Boolean = True)
     End If
 
     If (LenB(Me.Owner) = 0) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "Error: You can not delete an internal command."
+        frmChat.AddChat g_Color.ErrorMessageText, "Error: You can not delete an internal command."
         Exit Sub
     End If
 

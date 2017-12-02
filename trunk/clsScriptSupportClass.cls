@@ -766,7 +766,7 @@ End Sub
 '// COLOR
 '//   Gets a reference to the clsColor object. This object has properties that represent the CSS color constants
 Public Function Color() As clsColor
-    Set Color = New clsColor
+    Set Color = g_Color
 End Function
 
 '// GetScriptControl
@@ -959,7 +959,7 @@ Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVa
             Me.AddQ "/me " & strMessage
         Case 3
             If Len(strUsername) = 0 Then
-                AddChat RTBColors.ErrorMessageText, "Dsp whisper error: You did not supply a username."
+                AddChat g_Color.ErrorMessageText, "Dsp whisper error: You did not supply a username."
                 Exit Sub
             End If
             Me.AddQ "/w " & strUsername & " " & strMessage
@@ -1353,7 +1353,7 @@ Public Function CreateCommand(ByVal CommandName As String, ByVal ScriptName As S
     Dim Command As clsCommandDocObj
     
     If ((LenB(ScriptName) = 0) Or ScriptName = vbNullChar) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "Error: You can not create a command without an owner."
+        frmChat.AddChat g_Color.ErrorMessageText, "Error: You can not create a command without an owner."
         Exit Function
     End If
     

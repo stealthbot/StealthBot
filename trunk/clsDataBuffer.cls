@@ -478,24 +478,24 @@ Public Function IsFullPacket(Optional ByVal st As enuServerTypes = stBNCS) As Bo
                 If lngPacketLen < 10000 Then
                     IsFullPacket = True
                 Else
-                    frmChat.AddChat RTBColors.ErrorMessageText, "Error: Packet Length of unusually high Length detected! Packet " & _
+                    frmChat.AddChat g_Color.ErrorMessageText, "Error: Packet Length of unusually high Length detected! Packet " & _
                             "dropped. Buffer content at this time: " & vbCrLf & DebugOutput()
                             
                     Call Clear
                 End If
             End If
         Else
-            frmChat.AddChat RTBColors.ErrorMessageText, "Error: The front of the buffer is not a valid packet!"
+            frmChat.AddChat g_Color.ErrorMessageText, "Error: The front of the buffer is not a valid packet!"
         
             If MDebug("showdrops") Then
-                frmChat.AddChat RTBColors.ErrorMessageText, "Error: The front of the buffer is not " & _
+                frmChat.AddChat g_Color.ErrorMessageText, "Error: The front of the buffer is not " & _
                         "a valid packet!"
-                frmChat.AddChat RTBColors.ErrorMessageText, "The following data is being purged:"
+                frmChat.AddChat g_Color.ErrorMessageText, "The following data is being purged:"
                 
                 If ByteIndex > 0 Then
-                    frmChat.AddChat RTBColors.ErrorMessageText, Space$(1) & DebugOutput()
+                    frmChat.AddChat g_Color.ErrorMessageText, Space$(1) & DebugOutput()
                 Else
-                    frmChat.AddChat RTBColors.ErrorMessageText, Space$(1) & DebugOutput()
+                    frmChat.AddChat g_Color.ErrorMessageText, Space$(1) & DebugOutput()
                 End If
             End If
             

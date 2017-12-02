@@ -309,11 +309,11 @@ Public Sub OnReconnect(Command As clsCommandObj)
         
         Call frmChat.DoDisconnect
         
-        'frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Reconnecting by command, please wait..."
+        'frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Reconnecting by command, please wait..."
         
         Pause 1
         
-        'frmChat.AddChat RTBColors.SuccessText, "Connection initialized."
+        'frmChat.AddChat g_Color.SuccessText, "Connection initialized."
         
         Call frmChat.DoConnect
         
@@ -322,7 +322,7 @@ Public Sub OnReconnect(Command As clsCommandObj)
         PrepareHomeChannelMenu
         PrepareQuickChannelMenu
     Else
-        frmChat.AddChat RTBColors.SuccessText, "Connection initialized."
+        frmChat.AddChat g_Color.SuccessText, "Connection initialized."
         
         Call frmChat.DoConnect
     End If

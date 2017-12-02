@@ -188,7 +188,7 @@ Private Sub cmdAccept_Click()
             CStr(vArray(REQUEST_TAG)), CStr(vArray(REQUEST_INV)), _
             clresAccept)
 
-    frmChat.AddChat RTBColors.SuccessText, "[CLAN] Invitation accepted."
+    frmChat.AddChat g_Color.SuccessText, "[CLAN] Invitation accepted."
 
     Unload Me
 End Sub
@@ -200,7 +200,7 @@ Private Sub cmdDecline_Click()
             CStr(vArray(REQUEST_TAG)), CStr(vArray(REQUEST_INV)), _
             clresDecline)
 
-    frmChat.AddChat RTBColors.ErrorMessageText, "[CLAN] Invitation declined."
+    frmChat.AddChat g_Color.ErrorMessageText, "[CLAN] Invitation declined."
 
     Unload Me
 End Sub
@@ -219,7 +219,7 @@ Private Sub Form_Load()
             Me.Icon = frmChat.Icon
 
             lblClan.Caption = StringFormat("Clan {0}", CStr(vArray(REQUEST_TAG)))
-            lblClan.ForeColor = RTBColors.JoinUsername
+            lblClan.ForeColor = g_Color.JoinUsername
             lblName.Caption = CStr(vArray(REQUEST_NAME))
             lblInv.Caption = StringFormat("Invited by:  {0}", CStr(vArray(REQUEST_INV)))
 

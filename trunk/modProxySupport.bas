@@ -290,11 +290,11 @@ Private Sub UpdateProxyStatus(ByRef ConnInfo As udtProxyConnectionInfo, ByVal Ne
     
     Select Case AddtlInfo
         Case PROXY_CLIENT_ERROR
-            lColor = RTBColors.ErrorMessageText
+            lColor = g_Color.ErrorMessageText
             sOut = "Unable to resolve hostname. You may ask the proxy server to resolve the hostname with ProxyServerResolve=Y. Error code: 0x" & Right(String$(8, "0") & Hex(ServerStatus), 8)
             
         Case PROXY_METHOD_ERROR
-            lColor = RTBColors.ErrorMessageText
+            lColor = g_Color.ErrorMessageText
             sOut = "Method error: "
             Select Case ServerStatus
                 Case SOCKS5_MET_USERPASS
@@ -306,19 +306,19 @@ Private Sub UpdateProxyStatus(ByRef ConnInfo As udtProxyConnectionInfo, ByVal Ne
             End Select
             
         Case PROXY_LOGGING_ON
-            lColor = RTBColors.InformationText
+            lColor = g_Color.InformationText
             sOut = "Logging on..."
             
         Case PROXY_LOGON_ERROR
-            lColor = RTBColors.ErrorMessageText
+            lColor = g_Color.ErrorMessageText
             sOut = "Logon error: "
             
         Case PROXY_LOGON_SUCCESS
-            lColor = RTBColors.SuccessText
+            lColor = g_Color.SuccessText
             sOut = "Logon successful."
         
         Case PROXY_REQUESTING_CONN
-            lColor = RTBColors.InformationText
+            lColor = g_Color.InformationText
             sHost = ConnInfo.RemoteHost
             If LenB(sHost) = 0 Then sHost = ConnInfo.RemoteHostIP
             Select Case ConnInfo.ServerType
@@ -332,7 +332,7 @@ Private Sub UpdateProxyStatus(ByRef ConnInfo As udtProxyConnectionInfo, ByVal Ne
             End Select
             
         Case PROXY_REQUEST_ERROR
-            lColor = RTBColors.ErrorMessageText
+            lColor = g_Color.ErrorMessageText
             sOut = "Request rejected: "
             If BotVars.ProxyIsSocks5 Then
                 Select Case ServerStatus
@@ -374,7 +374,7 @@ Private Sub UpdateProxyStatus(ByRef ConnInfo As udtProxyConnectionInfo, ByVal Ne
 
         
         Case PROXY_REQUEST_SUCCESS
-            lColor = RTBColors.SuccessText
+            lColor = g_Color.SuccessText
             If BotVars.ProxyIsSocks5 Then
                 sOut = "SOCKS5 request granted."
             Else

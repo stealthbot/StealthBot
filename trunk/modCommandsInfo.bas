@@ -239,7 +239,7 @@ Public Sub OnHelpAttr(Command As clsCommandObj)
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnHelpAttr()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnHelpAttr()."
 End Sub
 
 Public Sub OnHelpRank(Command As clsCommandObj)
@@ -263,7 +263,7 @@ Public Sub OnHelpRank(Command As clsCommandObj)
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnHelpRank()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnHelpRank()."
 End Sub
 
 Public Sub OnInfo(Command As clsCommandObj)
@@ -345,7 +345,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnInitPerf()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnInitPerf()."
 End Sub
 
 Public Sub OnLastSeen(Command As clsCommandObj)
@@ -530,7 +530,7 @@ On Error GoTo ERROR_HANDLER
     End If
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnScriptDetail()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnScriptDetail()."
 End Sub
 
 Public Sub OnScripts(Command As clsCommandObj)
@@ -569,7 +569,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnScripts()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.OnScripts()."
 End Sub
 
 Public Sub OnServer(Command As clsCommandObj)
@@ -906,7 +906,7 @@ Private Function GetAllCommandsFor(ByRef commandDoc As clsCommandDocObj, Optiona
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.GetAllCommandsFor()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandsInfo.GetAllCommandsFor()."
 End Function
 
 Public Function GetPing(ByVal Username As String) As Long
@@ -1030,7 +1030,7 @@ Private Sub SearchDatabase(ByRef arrReturn() As String, Optional sName As String
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandCode.SearchDatabase()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modCommandCode.SearchDatabase()."
 End Sub
 
 ' Gets the number of non-null items in a list. Optionally passes the list formatted as a string.

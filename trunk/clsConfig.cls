@@ -1745,7 +1745,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
             Call FileCopy(m_ConfigPath, backupPath)
             Call Kill(m_ConfigPath)
             
-            Call frmChat.AddChat(RTBColors.InformationText, "Your config file is being updated. A backup of your old file has been placed in your bot folder.")
+            Call frmChat.AddChat(g_Color.InformationText, "Your config file is being updated. A backup of your old file has been placed in your bot folder.")
         End If
         Set fso = Nothing
         
@@ -2606,7 +2606,7 @@ Private Sub WriteSetting(ByVal section As String, ByVal Key As String, ByVal Val
     If (m_ForceSave Or (StrComp(currentVal, Value, vbBinaryCompare) <> 0)) Then
         WritePrivateProfileString section, Key, Value, m_ConfigPath
         
-        If m_DebugConfig Then frmChat.AddChat RTBColors.InformationText, StringFormat("[CONFIG] Set setting: {0}.{1} -> {2}", section, Key, Value)
+        If m_DebugConfig Then frmChat.AddChat g_Color.InformationText, StringFormat("[CONFIG] Set setting: {0}.{1} -> {2}", section, Key, Value)
     End If
 End Sub
 

@@ -491,7 +491,7 @@ Public Sub DestroyObjs()
 
 ERROR_HANDLER:
     
-    frmChat.AddChat RTBColors.ErrorMessageText, _
+    frmChat.AddChat g_Color.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.Description & " in frmScript::DestroyObjs()."
         
     Resume Next
@@ -664,7 +664,7 @@ Public Sub DestroyObj(ByVal ObjName As String)
     
 ERROR_HANDLER:
     
-    frmChat.AddChat RTBColors.ErrorMessageText, _
+    frmChat.AddChat g_Color.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.Description & " in frmScript::DestroyObjs()."
         
     Resume Next
@@ -750,7 +750,7 @@ Public Sub ClearObjs()
 
 ERROR_HANDLER:
     
-    frmChat.AddChat RTBColors.ErrorMessageText, _
+    frmChat.AddChat g_Color.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.Description & " in ClearObjs()."
         
     Resume Next

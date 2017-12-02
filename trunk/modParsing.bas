@@ -327,13 +327,13 @@ Public Function FindServerRequest(ByRef oRequest As udtServerRequest, ByVal Cook
         With ServerRequests(Cookie)
             If PacketID > 0 Then
                 If .PacketID <> PacketID Or .PacketCommand <> PacketCommand Then
-                    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error: Received data response for a different packet: 0x{0}/0x{1} instead of 0x{2}/0x{3}", ZeroOffset(PacketID, 2), ZeroOffset(PacketCommand, 2), ZeroOffset(.PacketID, 2), ZeroOffset(.PacketCommand, 2))
+                    frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Error: Received data response for a different packet: 0x{0}/0x{1} instead of 0x{2}/0x{3}", ZeroOffset(PacketID, 2), ZeroOffset(PacketCommand, 2), ZeroOffset(.PacketID, 2), ZeroOffset(.PacketCommand, 2))
                     Exit Function
                 End If
             End If
 
             If .ResponseReceived Then
-                frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Notice: Received extra data response for packet: 0x{0}/0x{1}", ZeroOffset(PacketID, 2), ZeroOffset(PacketCommand, 2))
+                frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Notice: Received extra data response for packet: 0x{0}/0x{1}", ZeroOffset(PacketID, 2), ZeroOffset(PacketCommand, 2))
             End If
 
             .ResponseReceived = ResponseReceived

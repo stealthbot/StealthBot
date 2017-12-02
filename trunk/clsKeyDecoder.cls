@@ -170,7 +170,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error " & Err.Number & " - " & Err.Description & " in clsKeyDecoder.CalculateHash()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error " & Err.Number & " - " & Err.Description & " in clsKeyDecoder.CalculateHash()."
     CalculateHash = False
     Exit Function
 End Function

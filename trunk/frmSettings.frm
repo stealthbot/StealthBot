@@ -4949,7 +4949,6 @@ Private Sub Form_Load()
     '##########################################
     Call LoadColors
     
-    cDLG.Filter = "StealthBot ColorList Files|*.sclf"
     cboColorList.ListIndex = 0
     '##########################################
     '##########################################
@@ -5509,7 +5508,6 @@ Private Function SaveSettings() As Boolean
     '// Take care of the colors.
     If ModifiedColors Then
         Call SaveColors
-        Call GetColorLists
     End If
     
     '// Load the config into the form
@@ -5557,6 +5555,8 @@ End Sub
 
 Private Sub cmdExport_Click()
     With cDLG
+        .Filter = "Configuration Files|*.ini"
+        
         .FileName = vbNullString
         .ShowSave
         If .FileName <> vbNullString Then
@@ -5567,13 +5567,17 @@ Private Sub cmdExport_Click()
 End Sub
 
 Private Sub cmdImport_Click()
+    Dim oNewColors As clsColor
+    
     With cDLG
+        .Filter = "Configuration Files|*.ini|Legacy ColorList Files|*.sclf"
+        
         .FileName = vbNullString
         .ShowOpen
         If .FileName <> vbNullString Then
-            GetColorLists (.FileName)
-            cboColorList.Clear
-            Call Form_Load
+            Set oNewColors = New clsColor
+            oNewColors.Load .FileName
+            Call LoadColors(oNewColors)
         End If
     End With
 End Sub
@@ -5590,33 +5594,60 @@ Private Sub cmdHTMLGen_Click()
 End Sub
 
 Private Sub cmdDefaults_Click()
-    If MsgBox("Are you sure you want to restore the default Values()?" & vbCrLf & _
-            "(All current color data will be lost unless exported)", vbYesNo + vbExclamation) = vbYes Then
+    If MsgBox("Are you sure you want to restore the default color values?" & vbCrLf & _
+            "(All changes will be lost unless applied)", vbYesNo + vbExclamation) = vbYes Then
             
-        If LenB(Dir$(GetFilePath(FILE_COLORS))) > 0 Then
-            Kill GetFilePath(FILE_COLORS)
-            Call GetColorLists
-            Call LoadColors
-        End If
+        Call LoadColors(New clsColor)
     End If
 End Sub
 
-Private Sub SaveColors(Optional sPath As String)
-    Dim f As Integer
-    Dim i As Integer
+Private Sub SaveColors(Optional sPath As String = vbNullString)
+    Dim objColor As clsColor
     
-    f = FreeFile
+    If Len(sPath) = 0 Then
+        Set objColor = g_Color
+    Else
+        Set objColor = New clsColor
+    End If
     
-    If LenB(sPath) = 0 Then sPath = GetFilePath(FILE_COLORS)
-    
-    Open sPath For Random As #f Len = 4
-    
-    For i = LBound(mColors) To UBound(mColors)
-        Put #f, i + 1, CLng(mColors(i))
-        'Debug.Print "Putting color; " & i & ":" & mColors(i)
-    Next i
-    
-    Close #f
+    With objColor
+        ' Form colors
+        .ChannelLabelBack = mColors(0)
+        .ChannelLabelText = mColors(1)
+        .ChannelListBack = mColors(2)
+        .ChannelListText = mColors(3)
+        .ChannelListSelf = mColors(4)
+        .ChannelListIdle = mColors(5)
+        .ChannelListSquelched = mColors(6)
+        .ChannelListOps = mColors(7)
+        .RTBBack = mColors(8)
+        .SendBoxesBack = mColors(9)
+        .SendBoxesText = mColors(10)
+
+        ' RTB colors
+        .TalkBotUsername = mColors(11)
+        .TalkUsernameNormal = mColors(12)
+        .TalkUsernameOp = mColors(13)
+        .TalkNormalText = mColors(14)
+        .Carats = mColors(15)
+        .EmoteText = mColors(16)
+        .EmoteUsernames = mColors(17)
+        .InformationText = mColors(18)
+        .SuccessText = mColors(19)
+        .ErrorMessageText = mColors(20)
+        .TimeStamps = mColors(21)
+        .ServerInfoText = mColors(22)
+        .ConsoleText = mColors(23)
+        .JoinText = mColors(24)
+        .JoinUsername = mColors(25)
+        .JoinedChannelName = mColors(26)
+        .JoinedChannelText = mColors(27)
+        .WhisperCarats = mColors(28)
+        .WhisperText = mColors(29)
+        .WhisperUsernames = mColors(30)
+        
+        .Save sPath
+    End With
 End Sub
 
 Private Sub txtValue_Change()
@@ -6384,11 +6415,19 @@ Private Sub ChangeRTBFont(rtb As RichTextBox, ByVal NewFont As String, ByVal New
     End With
 End Sub
 
-Sub LoadColors()
+Sub LoadColors(Optional ByRef objColors As clsColor = Nothing)
+    Dim iListIndex As Integer
+    iListIndex = cboColorList.ListIndex
+    
     ReDim mColors(0)
     cboColorList.Clear
     
-    With FormColors
+    If objColors Is Nothing Then
+        Set objColors = g_Color
+    End If
+    
+    With objColors
+        ' Form colors
         CAdd "Current Channel Label | Background", .ChannelLabelBack
         CAdd "Current Channel Label | Text", .ChannelLabelText
         CAdd "Channel List | Background", .ChannelListBack
@@ -6400,9 +6439,8 @@ Sub LoadColors()
         CAdd "Chat Window | Background", .RTBBack
         CAdd "Send Boxes | Background", .SendBoxesBack
         CAdd "Send Boxes | Text", .SendBoxesText
-    End With
-    
-    With RTBColors
+
+        ' RTB colors
         CAdd "Talk - Bot Username", .TalkBotUsername, 1
         CAdd "Talk - Normal Usernames", .TalkUsernameNormal, 1
         CAdd "Talk - Op Usernames", .TalkUsernameOp, 1
@@ -6424,6 +6462,8 @@ Sub LoadColors()
         CAdd "Whisper - Text", .WhisperText, 1
         CAdd "Whisper - Usernames", .WhisperUsernames, 1
     End With
+    
+    cboColorList.ListIndex = iListIndex
 End Sub
 
 Private Function StringToNumber(ByVal sNumber As String, Optional ByVal lDefault As Long = 0) As Long

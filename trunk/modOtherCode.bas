@@ -174,7 +174,7 @@ End Function
 
 Public Function CheckPath(ByVal sPath As String) As Long
     If (LenB(Dir$(sPath)) = 0) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "[HASHES] " & _
+        frmChat.AddChat g_Color.ErrorMessageText, "[HASHES] " & _
             Mid$(sPath, InStrRev(sPath, "\") + 1) & " is missing."
             
         CheckPath = 1
@@ -250,7 +250,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in Ban()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in Ban()."
 
     Exit Function
 End Function
@@ -423,11 +423,11 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
     
     If (Left$(Message, 1) <> "/") Then
         If (g_Channel.IsSilent) Then
-            frmChat.AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, GetCurrentUsername, _
-                RTBColors.Carats, "> ", RTBColors.WhisperText, Message
+            frmChat.AddChat g_Color.Carats, "<", g_Color.TalkBotUsername, GetCurrentUsername, _
+                g_Color.Carats, "> ", g_Color.WhisperText, Message
         Else
-            frmChat.AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, GetCurrentUsername, _
-                RTBColors.Carats, "> ", RTBColors.TalkNormalText, Message
+            frmChat.AddChat g_Color.Carats, "<", g_Color.TalkBotUsername, GetCurrentUsername, _
+                g_Color.Carats, "> ", g_Color.TalkNormalText, Message
         End If
     End If
 
@@ -545,7 +545,7 @@ On Error GoTo ERROR_HANDLER:
     End Select
     Exit Function
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Voting()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
@@ -928,7 +928,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.{3}()", Err.Number, Err.Description, "modOtherCode", "GetFolderPath")
+    frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.{3}()", Err.Number, Err.Description, "modOtherCode", "GetFolderPath")
 End Function
 
 'Public Function OKToDoAutocompletion(ByRef sText As String, ByVal KeyAscii As Integer) As Boolean
@@ -1001,7 +1001,7 @@ Sub ShellOpenURL(ByVal FullURL As String, Optional ByVal Description As String =
     
     If DisplayMessage Then
         If LenB(Description) > 0 Then Description = Description & " at "
-        frmChat.AddChat RTBColors.ConsoleText, "Opening " & Description & "[ " & FullURL & " ]..."
+        frmChat.AddChat g_Color.ConsoleText, "Opening " & Description & "[ " & FullURL & " ]..."
     End If
 End Sub
 
@@ -1127,9 +1127,9 @@ Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
         
         If (iterations > 9000) Then
             If (MDebug("debug")) Then
-                frmChat.AddChat RTBColors.ErrorMessageText, "Warning! Loop size limit exceeded " & _
+                frmChat.AddChat g_Color.ErrorMessageText, "Warning! Loop size limit exceeded " & _
                     "in UnbanBanlistUser()!"
-                frmChat.AddChat RTBColors.ErrorMessageText, "The banned-user list has been reset.. " & _
+                frmChat.AddChat g_Color.ErrorMessageText, "The banned-user list has been reset.. " & _
                     "hope it works!"
             End If
             
@@ -1305,21 +1305,21 @@ On Error GoTo ERROR_HANDLER:
             lRet = SetEnvironmentVariable("PATH", StringFormat("{0};{1}", sTemp, sPath))
             AddEnvPath = (lRet = 0)
             If (MDebug("debug")) Then
-                frmChat.AddChat RTBColors.ConsoleText, "AddEnvPath failed: Set"
-                frmChat.AddChat RTBColors.ConsoleText, StringFormat("PATH: {0}", sTemp)
-                frmChat.AddChat RTBColors.ConsoleText, StringFormat("ADD:  {0}", sPath)
+                frmChat.AddChat g_Color.ConsoleText, "AddEnvPath failed: Set"
+                frmChat.AddChat g_Color.ConsoleText, StringFormat("PATH: {0}", sTemp)
+                frmChat.AddChat g_Color.ConsoleText, StringFormat("ADD:  {0}", sPath)
             End If
         End If
     Else
         If (MDebug("debug")) Then
-            frmChat.AddChat RTBColors.ConsoleText, "AddEnvPath failed: Get"
-            frmChat.AddChat RTBColors.ConsoleText, StringFormat("Ret: {0}", lRet)
+            frmChat.AddChat g_Color.ConsoleText, "AddEnvPath failed: Get"
+            frmChat.AddChat g_Color.ConsoleText, StringFormat("Ret: {0}", lRet)
         End If
     End If
 
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.{3}()", Err.Number, Err.Description, "modOtherCode", "AddEnvPath")
+    frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.{3}()", Err.Number, Err.Description, "modOtherCode", "AddEnvPath")
     Err.Clear
 End Function
 
@@ -1478,7 +1478,7 @@ Public Function ListFileLoad(ByVal sPath As String, Optional ByVal MaxItems As I
     
 ERROR_HANDLER:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.ListFileLoad()", _
+    frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.ListFileLoad()", _
         Err.Number, Err.Description, OBJECT_NAME)
 End Function
 
@@ -1503,7 +1503,7 @@ Public Sub ListFileAppendItem(ByVal sPath As String, ByVal Item As String)
     
 ERROR_HANDLER:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.ListFileAppendItem()", _
+    frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.ListFileAppendItem()", _
         Err.Number, Err.Description, OBJECT_NAME)
 End Sub
 
@@ -1526,7 +1526,7 @@ Public Sub ListFileSave(ByVal sPath As String, ByVal List As Collection)
     
 ERROR_HANDLER:
 
-    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.ListFileSave()", _
+    frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Error #{0}: {1} in {2}.ListFileSave()", _
         Err.Number, Err.Description, OBJECT_NAME)
 End Sub
 
@@ -1829,7 +1829,7 @@ Public Function SplitByLen(ByVal StringSplit As String, ByVal SplitLength As Lon
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: " & Err.Description & " in SplitByLen()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: " & Err.Description & " in SplitByLen()."
     
     Exit Function
 End Function

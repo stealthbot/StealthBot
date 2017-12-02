@@ -28,8 +28,8 @@ On Error GoTo ERROR_HANDLER:
             Case Else:
                 BNLSRecvPacket = False
                 If (MDebug("debug") And (MDebug("all") Or MDebug("unknown"))) Then
-                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNLS] Unhandled packet 0x{0}", ZeroOffset(CLng(PacketID), 2)))
-                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNLS] Packet data: {0}{1}", vbNewLine, pBuff.DebugOutput))
+                    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("[BNLS] Unhandled packet 0x{0}", ZeroOffset(CLng(PacketID), 2)))
+                    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("[BNLS] Packet data: {0}{1}", vbNewLine, pBuff.DebugOutput))
                 End If
         
         End Select
@@ -37,7 +37,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Function
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNLSRecvPacket()", Err.Number, Err.Description, OBJECT_NAME))
+    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNLSRecvPacket()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 '*******************************
@@ -52,7 +52,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_AUTHORIZE()", Err.Number, Err.Description, OBJECT_NAME))
+    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_AUTHORIZE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -71,7 +71,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_AUTHORIZE()", Err.Number, Err.Description, OBJECT_NAME))
+    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_AUTHORIZE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -91,7 +91,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_AUTHORIZEPROOF()", Err.Number, Err.Description, OBJECT_NAME))
+    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_AUTHORIZEPROOF()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '*******************************
@@ -122,7 +122,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_AUTHORIZEPROOF()", Err.Number, Err.Description, OBJECT_NAME))
+    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_AUTHORIZEPROOF()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '************************************
@@ -151,18 +151,18 @@ On Error GoTo ERROR_HANDLER:
                 modBNCS.SEND_SID_CLIENTID
                 modBNCS.SEND_SID_STARTVERSIONING lVerByte
             Case Else:
-                frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", modBNCS.GetLogonSystem())
-                frmChat.AddChat RTBColors.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
+                frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", modBNCS.GetLogonSystem())
+                frmChat.AddChat g_Color.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
                 frmChat.DoDisconnect
         End Select
     Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "[BNLS] Version byte request failed!"
+        frmChat.AddChat g_Color.ErrorMessageText, "[BNLS] Version byte request failed!"
         frmChat.DoDisconnect
     End If
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_REQUESTVERSIONBYTE()", Err.Number, Err.Description, OBJECT_NAME))
+    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_REQUESTVERSIONBYTE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '************************************
@@ -183,7 +183,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_REQUESTVERSIONBYTE()", Err.Number, Err.Description, OBJECT_NAME))
+    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_REQUESTVERSIONBYTE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '************************************
@@ -212,8 +212,8 @@ On Error GoTo ERROR_HANDLER:
             Case modBNCS.BNCS_OLS: Call modBNCS.SEND_SID_REPORTVERSION(lVersionByte)
             Case modBNCS.BNCS_LLS: Call modBNCS.SEND_SID_REPORTVERSION(lVersionByte)
             Case Else:
-                frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", modBNCS.GetLogonSystem())
-                frmChat.AddChat RTBColors.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
+                frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", modBNCS.GetLogonSystem())
+                frmChat.AddChat g_Color.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
                 frmChat.DoDisconnect
         End Select
     Else
@@ -222,7 +222,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_VERSIONCHECKEX2()", Err.Number, Err.Description, OBJECT_NAME))
+    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.RECV_BNLS_VERSIONCHECKEX2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '************************************
@@ -255,7 +255,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_VERSIONCHECKEX2()", Err.Number, Err.Description, OBJECT_NAME))
+    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.SEND_BNLS_VERSIONCHECKEX2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 '===================================================================================================

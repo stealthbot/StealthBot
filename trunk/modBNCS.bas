@@ -221,8 +221,8 @@ Public Function BNCSRecvPacket(ByVal pBuff As clsDataBuffer, Optional ByVal Scri
             Case Else:
                 BNCSRecvPacket = False
                 If (MDebug("debug") And (MDebug("all") Or MDebug("unknown"))) Then
-                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] Unhandled packet 0x{0}", ZeroOffset(CLng(PacketID), 2)))
-                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] Packet data: {0}{1}", vbNewLine, pBuff.DebugOutput))
+                    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("[BNCS] Unhandled packet 0x{0}", ZeroOffset(CLng(PacketID), 2)))
+                    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("[BNCS] Packet data: {0}{1}", vbNewLine, pBuff.DebugOutput))
                 End If
         
         End Select
@@ -230,7 +230,7 @@ Public Function BNCSRecvPacket(ByVal pBuff As clsDataBuffer, Optional ByVal Scri
     
     Exit Function
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNCSRecvPacket()", Err.Number, Err.Description, OBJECT_NAME))
+    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in {2}.BNCSRecvPacket()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 '*********************************
@@ -263,7 +263,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CLIENTID()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -288,14 +288,14 @@ On Error GoTo ERROR_HANDLER:
         ds.CRevSeed = "A=0 B=0 C=0 4 A=A+S B=B+C C=C+A A=A+B"
     End If
     
-    Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Checking version...")
+    Call frmChat.AddChat(g_Color.InformationText, "[BNCS] Checking version...")
     If (MDebug("all") Or MDebug("crev")) Then
-        frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Name: {0}", ds.CRevFileName)
-        frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Time: {0}", ds.CRevFileTime)
+        frmChat.AddChat g_Color.InformationText, StringFormat("CRev Name: {0}", ds.CRevFileName)
+        frmChat.AddChat g_Color.InformationText, StringFormat("CRev Time: {0}", ds.CRevFileTime)
         If (InStr(1, ds.CRevFileName, "lockdown", vbTextCompare) > 0) Then
-            frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Seed: {0}", StrToHex(ds.CRevSeed))
+            frmChat.AddChat g_Color.InformationText, StringFormat("CRev Seed: {0}", StrToHex(ds.CRevSeed))
         Else
-            frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Seed: {0}", ds.CRevSeed)
+            frmChat.AddChat g_Color.InformationText, StringFormat("CRev Seed: {0}", ds.CRevSeed)
         End If
     End If
     
@@ -314,7 +314,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_STARTVERSIONING()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -342,7 +342,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_STARTVERSIONING()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 '*******************************
@@ -369,7 +369,7 @@ On Error GoTo ERROR_HANDLER:
             'Call Event_VersionCheck(0, sInfo)
         Case 3: Call Event_VersionCheck(11, sInfo) 'Downgrade Version
         Case Else:
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(lResult, 8))
+            Call frmChat.AddChat(g_Color.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(lResult, 8))
             Call frmChat.DoDisconnect
     End Select
 
@@ -377,13 +377,13 @@ On Error GoTo ERROR_HANDLER:
 
     If (frmChat.sckBNet.State = sckConnected And bSuccess) Then
         If (GetCDKeyCount > 0) Then
-            'Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Sending CDKey information...")
+            'Call frmChat.AddChat(g_Color.InformationText, "[BNCS] Sending CDKey information...")
             Select Case GetLogonSystem()
                 Case BNCS_OLS: Call SEND_SID_CDKEY2
                 Case BNCS_LLS: Call SEND_SID_CDKEY
                 Case Else:
-                    frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", modBNCS.GetLogonSystem())
-                    frmChat.AddChat RTBColors.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
+                    frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Unknown Logon System Type: {0}", modBNCS.GetLogonSystem())
+                    frmChat.AddChat g_Color.ErrorMessageText, "Please visit http://www.stealthbot.net/sb/issues/?unknownLogonType for information regarding this error."
                     frmChat.DoDisconnect
             End Select
         Else
@@ -401,7 +401,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_REPORTVERSION()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -427,7 +427,7 @@ On Error GoTo ERROR_HANDLER:
     End If
         
     If (ds.CRevChecksum = 0 Or ds.CRevVersion = 0 Or LenB(ds.CRevResult) = 0) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Check Revision Failed, sanity failed"
+        frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Check Revision Failed, sanity failed"
         frmChat.DoDisconnect
         Exit Sub
     End If
@@ -446,7 +446,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_STARTVERSIONING()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -464,7 +464,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_ENTERCHAT()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -485,7 +485,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_ENTERCHAT()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -503,7 +503,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_ENTERCHAT()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -533,7 +533,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_GETCHANNELLIST()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -552,7 +552,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_GETCHANNELLIST()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -574,7 +574,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CHATCOMMAND()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -645,13 +645,13 @@ Private Sub RECV_SID_CHATEVENT(pBuff As clsDataBuffer)
         Case ID_EMOTE:       Call Event_UserEmote(sUsername, lFlags, sText)
         Case Else:
             If MDebug("debug") Then
-                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Unhandled SID_CHATEVENT Event: 0x{0}", ZeroOffset(EventID, 8)))
-                Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("Packet data: {0}{1}", vbNewLine, pBuff.DebugOutput))
+                Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Unhandled SID_CHATEVENT Event: 0x{0}", ZeroOffset(EventID, 8)))
+                Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Packet data: {0}{1}", vbNewLine, pBuff.DebugOutput))
             End If
     End Select
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CHATEVENT()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -728,7 +728,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_LOCALEINFO()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -750,7 +750,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_UDPPINGRESPONSE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -768,7 +768,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_MESSAGEBOX()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -786,7 +786,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONCHALLENGEEX()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -829,7 +829,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CLIENTID2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -865,7 +865,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_PING()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -891,7 +891,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_PING()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -919,7 +919,7 @@ Private Sub RECV_SID_READUSERDATA(pBuff As clsDataBuffer)
     Cookie = pBuff.GetDWord()       ' (DWORD) Request ID
 
     If iNumKeys < 1 Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "Notice: Received user data request with no returned keys. Cookie: " & CStr(Cookie)
+        frmChat.AddChat g_Color.ErrorMessageText, "Notice: Received user data request with no returned keys. Cookie: " & CStr(Cookie)
     Else
         ReDim aValues(iNumKeys - 1)
     
@@ -941,12 +941,12 @@ Private Sub RECV_SID_READUSERDATA(pBuff As clsDataBuffer)
         ' Raise UserDataReceived event (also raises KeyReturn in scripting)
         Event_UserDataReceived oRequest, sUsername, aKeys(), aValues()
     Else
-        frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Notice: Received unsolicited user data, # of keys: {0}, Cookie: {1}", iNumKeys, Cookie)
+        frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Notice: Received unsolicited user data, # of keys: {0}, Cookie: {1}", iNumKeys, Cookie)
     End If
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_READUSERDATA()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -962,7 +962,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONCHALLENGE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -995,14 +995,14 @@ On Error GoTo ERROR_HANDLER:
         Case 3: Call Event_VersionCheck(4, sInfo) 'CDKey is for the wrong product
         Case 4: Call Event_VersionCheck(5, sInfo) 'CDKey is Banned
         Case 5: Call Event_VersionCheck(6, sInfo) 'CDKey is In Use
-        Case Else: frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Unknown SID_CDKEY Response 0x{0}: {1}", ZeroOffset(lResult, 8), sInfo)
+        Case Else: frmChat.AddChat g_Color.ErrorMessageText, StringFormat("[BNCS] Unknown SID_CDKEY Response 0x{0}: {1}", ZeroOffset(lResult, 8), sInfo)
     End Select
 
     'Call frmChat.DoDisconnect
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CDKEY()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1022,7 +1022,7 @@ On Error GoTo ERROR_HANDLER:
 
     oKey.Initialize BotVars.CDKey
     If Not oKey.IsValid Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
+        frmChat.AddChat g_Color.ErrorMessageText, "Your CD-Key is invalid."
         frmChat.DoDisconnect
         Exit Sub
     End If
@@ -1045,7 +1045,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CDKEY()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1086,7 +1086,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CHANGEPASSWORD()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1130,7 +1130,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CHANGEPASSWORD()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1163,14 +1163,14 @@ On Error GoTo ERROR_HANDLER:
         Case 3: Call Event_VersionCheck(4, sInfo) 'CDKey is for the wrong product
         Case 4: Call Event_VersionCheck(5, sInfo) 'CDKey is Banned
         Case 5: Call Event_VersionCheck(6, sInfo) 'CDKey is In Use
-        Case Else: frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[BNCS] Unknown SID_CDKEY2 Response 0x{0}: {1}", ZeroOffset(lResult, 8), sInfo)
+        Case Else: frmChat.AddChat g_Color.ErrorMessageText, StringFormat("[BNCS] Unknown SID_CDKEY2 Response 0x{0}: {1}", ZeroOffset(lResult, 8), sInfo)
     End Select
 
     'Call frmChat.DoDisconnect
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CDKEY2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1194,13 +1194,13 @@ On Error GoTo ERROR_HANDLER:
     Set oKey = New clsKeyDecoder
     oKey.Initialize BotVars.CDKey
     If Not oKey.IsValid Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
+        frmChat.AddChat g_Color.ErrorMessageText, "Your CD-Key is invalid."
         frmChat.DoDisconnect
         Exit Sub
     End If
 
     If Not oKey.CalculateHash(ds.ClientToken, ds.ServerToken, BNCS_OLS) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key could not be hashed."
+        frmChat.AddChat g_Color.ErrorMessageText, "Your CD-Key could not be hashed."
         frmChat.DoDisconnect
         Exit Sub
     End If
@@ -1228,7 +1228,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CDKEY2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1264,7 +1264,7 @@ On Error GoTo ERROR_HANDLER:
 
             If (Not ds.WaitingForEmail) Then
                 If (Dii And BotVars.UseRealm) Then
-                    'Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Asking Battle.net for a list of Realm servers...")
+                    'Call frmChat.AddChat(g_Color.InformationText, "[BNCS] Asking Battle.net for a list of Realm servers...")
                     Call DoQueryRealms
                 Else
                     Call SendEnterChatSequence
@@ -1296,7 +1296,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONRESPONSE2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1333,7 +1333,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_LOGONRESPONSE2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1386,7 +1386,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_CREATEACCOUNT2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1417,7 +1417,7 @@ On Error GoTo ERROR_HANDLER:
         
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CREATEACCOUNT2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1460,9 +1460,9 @@ On Error GoTo ERROR_HANDLER:
             sTitle = ds.MCPHandler.RealmServerTitle(ds.MCPHandler.RealmServerSelectedIndex)
             
             If (ProxyConnInfo(stMCP).IsUsingProxy) Then
-                frmChat.AddChat RTBColors.InformationText, "[REALM] [PROXY] Connecting to the SOCKS" & ProxyConnInfo(stMCP).Version & " proxy server at " & ProxyConnInfo(stMCP).ProxyIP & ":" & ProxyConnInfo(stMCP).ProxyPort & "..."
+                frmChat.AddChat g_Color.InformationText, "[REALM] [PROXY] Connecting to the SOCKS" & ProxyConnInfo(stMCP).Version & " proxy server at " & ProxyConnInfo(stMCP).ProxyIP & ":" & ProxyConnInfo(stMCP).ProxyPort & "..."
             Else
-                frmChat.AddChat RTBColors.InformationText, StringFormat("[REALM] Connecting to the Diablo II Realm {0} at {1}:{2}...", sTitle, sIP, lPort)
+                frmChat.AddChat g_Color.InformationText, StringFormat("[REALM] Connecting to the Diablo II Realm {0} at {1}:{2}...", sTitle, sIP, lPort)
             End If
             
             With frmChat.sckMCP
@@ -1481,9 +1481,9 @@ On Error GoTo ERROR_HANDLER:
         lError = pBuff.GetDWord
         
         Select Case lError
-            Case &H80000001: frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] The Diablo II Realm is currently unavailable. Please try again later."
-            Case &H80000002: frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Diablo II Realm logon has failed. Please try again later."
-            Case Else:       frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[REALM] Logon to the Diablo II Realm has failed for an unknown reason (0x{0}). Please try again later.", ZeroOffset(lError, 8))
+            Case &H80000001: frmChat.AddChat g_Color.ErrorMessageText, "[REALM] The Diablo II Realm is currently unavailable. Please try again later."
+            Case &H80000002: frmChat.AddChat g_Color.ErrorMessageText, "[REALM] Diablo II Realm logon has failed. Please try again later."
+            Case Else:       frmChat.AddChat g_Color.ErrorMessageText, StringFormat("[REALM] Logon to the Diablo II Realm has failed for an unknown reason (0x{0}). Please try again later.", ZeroOffset(lError, 8))
         End Select
         
         If Not ds.MCPHandler Is Nothing Then
@@ -1498,7 +1498,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_LOGONREALMEX()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1522,11 +1522,11 @@ On Error GoTo ERROR_HANDLER:
     pBuff.SendPacket SID_LOGONREALMEX
     Set pBuff = Nothing
     
-    'Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Logging on to the Diablo II Realm...")
+    'Call frmChat.AddChat(g_Color.InformationText, "[BNCS] Logging on to the Diablo II Realm...")
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_LOGONREALMEX()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1552,7 +1552,7 @@ On Error GoTo ERROR_HANDLER:
     lCount = pBuff.GetDWord
     
     If (MDebug("debug") And (MDebug("all") Or MDebug("info"))) Then
-        frmChat.AddChat RTBColors.InformationText, "Received Realm List:"
+        frmChat.AddChat g_Color.InformationText, "Received Realm List:"
     End If
     
     If lCount > 0 Then
@@ -1566,7 +1566,7 @@ On Error GoTo ERROR_HANDLER:
             List(i) = Server()
             
             If (MDebug("debug") And (MDebug("all") Or MDebug("info"))) Then
-                frmChat.AddChat RTBColors.InformationText, StringFormat("  {0}: {1}", Server(0), Server(1))
+                frmChat.AddChat g_Color.InformationText, StringFormat("  {0}: {1}", Server(0), Server(1))
             End If
         Next i
         
@@ -1575,13 +1575,13 @@ On Error GoTo ERROR_HANDLER:
         End If
     End If
     
-    'Call frmChat.AddChat(RTBColors.SuccessText, "[BNCS] Received Realm list.")
+    'Call frmChat.AddChat(g_Color.SuccessText, "[BNCS] Received Realm list.")
     
     Call ds.MCPHandler.HandleQueryRealmServersResponse
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Recv_SID_QUERYREALMS2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1600,7 +1600,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_QUERYREALMS2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1633,15 +1633,15 @@ On Error GoTo ERROR_HANDLER:
         ds.CRevSeed = "A=0 B=0 C=0 4 A=A+S B=B+C C=C+A A=A+B"
     End If
     
-    Call frmChat.AddChat(RTBColors.InformationText, "[BNCS] Checking version...")
+    Call frmChat.AddChat(g_Color.InformationText, "[BNCS] Checking version...")
     
     If (MDebug("all") Or MDebug("crev")) Then
-        frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Name: {0}", ds.CRevFileName)
-        frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Time: {0}", ds.CRevFileTime)
+        frmChat.AddChat g_Color.InformationText, StringFormat("CRev Name: {0}", ds.CRevFileName)
+        frmChat.AddChat g_Color.InformationText, StringFormat("CRev Time: {0}", ds.CRevFileTime)
         If (InStr(1, ds.CRevFileName, "lockdown", vbTextCompare) > 0) Then
-            frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Seed: {0}", StrToHex(ds.CRevSeed))
+            frmChat.AddChat g_Color.InformationText, StringFormat("CRev Seed: {0}", StrToHex(ds.CRevSeed))
         Else
-            frmChat.AddChat RTBColors.InformationText, StringFormat("CRev Seed: {0}", ds.CRevSeed)
+            frmChat.AddChat g_Color.InformationText, StringFormat("CRev Seed: {0}", ds.CRevSeed)
         End If
     End If
     
@@ -1660,16 +1660,16 @@ On Error GoTo ERROR_HANDLER:
         End If
         
         If (StrComp(RemoteHostIP, "0.0.0.255", vbBinaryCompare) = 0) Then
-            frmChat.AddChat RTBColors.InformationText, "[BNCS] Note! A server signature was received but cannot be validated because of the proxy configuration."
+            frmChat.AddChat g_Color.InformationText, "[BNCS] Note! A server signature was received but cannot be validated because of the proxy configuration."
         Else
             If (ds.NLS.VerifyServerSignature(RemoteHostIP, ds.ServerSig)) Then
-                frmChat.AddChat RTBColors.SuccessText, "[BNCS] Server signature validated!"
+                frmChat.AddChat g_Color.SuccessText, "[BNCS] Server signature validated!"
             Else
-                frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Warning! The server signature is invalid. This may not be a valid server."
+                frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Warning! The server signature is invalid. This may not be a valid server."
             End If
         End If
     ElseIf (GetProductKey = "W3") Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Warning! The server signature is missing. This may not be a valid server."
+        frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Warning! The server signature is missing. This may not be a valid server."
     End If
     
     If (BotVars.BNLS) Then
@@ -1680,7 +1680,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_INFO()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1744,7 +1744,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_INFO()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1781,7 +1781,7 @@ On Error GoTo ERROR_HANDLER:
         Case &H212: Call Event_VersionCheck(9, sInfo) 'Exp CDKey is Banned
         Case &H213: Call Event_VersionCheck(10, sInfo) 'Exp CDKey is for the wrong product
         Case Else:
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown SID_AUTH_CHECK Response: 0x" & ZeroOffset(lResult, 8))
+            Call frmChat.AddChat(g_Color.ErrorMessageText, "Unknown SID_AUTH_CHECK Response: 0x" & ZeroOffset(lResult, 8))
             Call frmChat.DoDisconnect
     End Select
 
@@ -1799,7 +1799,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_CHECK()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1838,7 +1838,7 @@ On Error GoTo ERROR_HANDLER:
     End If
 
     If (ds.CRevChecksum = 0 Or ds.CRevVersion = 0 Or LenB(ds.CRevResult) = 0) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Check revision failed. Sanity check failed."
+        frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Check revision failed. Sanity check failed."
         frmChat.DoDisconnect
         Exit Sub
     End If
@@ -1859,14 +1859,14 @@ On Error GoTo ERROR_HANDLER:
             Set oKey(i) = New clsKeyDecoder
             oKey(i).Initialize sKey
             If Not oKey(i).IsValid Then
-                frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Your {0}CD-Key is invalid.", IIf(i = 2, "expansion", vbNullString))
+                frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Your {0}CD-Key is invalid.", IIf(i = 2, "expansion", vbNullString))
                 frmChat.DoDisconnect
                 Exit Sub
             End If
 
             'Calculate the hash
             If Not oKey(i).CalculateHash(ds.ClientToken, ds.ServerToken, BNCS_NLS) Then
-                frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Your {0}CD-Key could not be hashed.", IIf(i = 2, "expansion", vbNullString))
+                frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Your {0}CD-Key could not be hashed.", IIf(i = 2, "expansion", vbNullString))
                 frmChat.DoDisconnect
                 Exit Sub
             End If
@@ -1909,7 +1909,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_CHECK()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1951,7 +1951,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTCREATE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1987,7 +1987,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTCREATE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2039,7 +2039,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTLOGON()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2065,7 +2065,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTLOGON()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2095,7 +2095,7 @@ On Error GoTo ERROR_HANDLER:
             Call Event_LogonEvent(ACCOUNT_MODE_LOGON, &H0, sInfo)
 
             If (Not ds.NLS.SrpVerifyM2(M2)) Then
-                frmChat.AddChat RTBColors.InformationText, "[BNCS] Warning! The server sent an invalid password proof. It may be a fake server."
+                frmChat.AddChat g_Color.InformationText, "[BNCS] Warning! The server sent an invalid password proof. It may be a fake server."
             End If
 
             BotVars.Username = Config.Username
@@ -2112,7 +2112,7 @@ On Error GoTo ERROR_HANDLER:
             Call Event_LogonEvent(ACCOUNT_MODE_LOGON, &H0, sInfo)
 
             If (Not ds.NLS.SrpVerifyM2(M2)) Then
-                frmChat.AddChat RTBColors.InformationText, "[BNCS] Warning! The server sent an invalid password proof. It may be a fake server."
+                frmChat.AddChat g_Color.InformationText, "[BNCS] Warning! The server sent an invalid password proof. It may be a fake server."
             End If
 
             BotVars.Username = Config.Username
@@ -2139,7 +2139,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTLOGONPROOF()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2161,7 +2161,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTLOGONPROOF()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2201,7 +2201,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTCHANGE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2227,7 +2227,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTCHANGE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2258,7 +2258,7 @@ On Error GoTo ERROR_HANDLER:
             Config.Save
 
             If (Not ds.NLS.SrpVerifyM2(M2)) Then
-                frmChat.AddChat RTBColors.InformationText, "[BNCS] Warning! The server sent an invalid password proof. It may be a fake server."
+                frmChat.AddChat g_Color.InformationText, "[BNCS] Warning! The server sent an invalid password proof. It may be a fake server."
             End If
 
             If Not frmAccountManager.Visible Then
@@ -2282,7 +2282,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_AUTH_ACCOUNTCHANGEPROOF()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2318,7 +2318,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_AUTH_ACCOUNTCHANGEPROOF()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2337,7 +2337,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RECV_SID_SETEMAIL()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2359,7 +2359,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_SETEMAIL()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2383,7 +2383,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_RESETPASSWORD()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2409,7 +2409,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_SID_CHANGEEMAIL()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2422,7 +2422,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.DoRegisterEmail()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2444,13 +2444,13 @@ On Error GoTo ERROR_HANDLER:
         ds.CRevVersion = lVersion
         CompileCheckrevision = True
     Else
-        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Local hashing failed.")
+        Call frmChat.AddChat(g_Color.ErrorMessageText, "[BNCS] Local hashing failed.")
         CompileCheckrevision = False
     End If
     Exit Function
 ERROR_HANDLER:
     CompileCheckrevision = False
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.CompileCheckrevision()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
@@ -2467,7 +2467,7 @@ On Error GoTo ERROR_HANDLER:
     GetCDKeyCount = lRet
     Exit Function
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.GetCDKeyCount()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
@@ -2500,7 +2500,7 @@ On Error GoTo ERROR_HANDLER:
     GetLogonSystem = lRet
     Exit Function
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.GetLogonSystem()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
@@ -2519,7 +2519,7 @@ On Error GoTo ERROR_HANDLER:
     Exit Function
 ERROR_HANDLER:
     GetDWORDOverride = lRet
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.GetDWORDOverride()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
@@ -2531,7 +2531,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Function
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.GetDWORD()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
@@ -2572,7 +2572,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SendEnterChatSequence()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2595,7 +2595,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.DoChannelJoinHome()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2619,7 +2619,7 @@ Public Sub DoChannelJoinProductHome()
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.DoChannelJoinProductHome()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2632,7 +2632,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.DoChannelJoinHome()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2777,7 +2777,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.DoAccountAction()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2793,11 +2793,11 @@ Public Function CanSpawn(ByVal sProduct As String, ByVal iKeyLength As Integer) 
 End Function
 
 Public Sub HandleEmptyCRevSeed()
-    frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] CheckRevision seed was returned empty! This is usually due to an unrecognized verison byte."
+    frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] CheckRevision seed was returned empty! This is usually due to an unrecognized verison byte."
     If (BotVars.BNLS) Then
         Call frmChat.HandleBnlsError(0, "The BNLS server you are using may be misconfigured.", True)
     Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] You can reset your version bytes to the latest by going to Bot -> Update Version Bytes"
+        frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] You can reset your version bytes to the latest by going to Bot -> Update Version Bytes"
         frmChat.DoDisconnect
     End If
 End Sub

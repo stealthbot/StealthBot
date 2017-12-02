@@ -43,7 +43,6 @@ Module=modWindow; modWindow.bas
 Module=modMail; modMail.bas
 Module=modBNCSutil; modBNCSutil.bas
 Module=modEvents; modEvents.bas
-Module=modColors; modColors.bas
 Module=modCommandCode; modCommands.bas
 Module=modOtherCode; modOtherCode.bas
 Module=modParsing; modParsing.bas

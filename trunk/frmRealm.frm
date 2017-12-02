@@ -858,7 +858,7 @@ Private Sub Form_Unload(Cancel As Integer)
     m_Ticks = -1
     
     If ((Not (m_Unload_SuccessfulLogin)) Or (ds.MCPHandler.IsRealmError)) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Logon cancelled."
+        frmChat.AddChat g_Color.ErrorMessageText, "[REALM] Logon cancelled."
         
         If frmChat.sckMCP.State <> sckClosed Then
             frmChat.sckMCP.Close
@@ -984,7 +984,7 @@ Private Sub btnCreate_Click()
     Dim Flags As Long
     
     If lvwChars.ListItems.Count > 7 Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Your account is full! Delete a character before trying to create another."
+        frmChat.AddChat g_Color.ErrorMessageText, "[REALM] Your account is full! Delete a character before trying to create another."
     Else
         If Len(txtCharName.Text) > 2 Then
             Flags = 0
@@ -1311,7 +1311,7 @@ Private Sub btnChoose_Click()
     With lvwChars
         If Not (.SelectedItem Is Nothing) Then
             If Not CanChooseCharacter(.SelectedItem.Tag) Then
-                frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] You must use Diablo II: Lord of Destruction to choose that character."
+                frmChat.AddChat g_Color.ErrorMessageText, "[REALM] You must use Diablo II: Lord of Destruction to choose that character."
             Else
                 Call ds.MCPHandler.SEND_MCP_CHARLOGON(.SelectedItem.Key)
                 m_Unload_SuccessfulLogin = True
@@ -1423,7 +1423,7 @@ Private Sub tmrLoginTimeout_Timer()
         If m_Ticks <= 0 Then
             tmrLoginTimeout.Enabled = False
             If Not CanChooseCharacter(indexValid) Then
-                frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] You must use Diablo II: Lord of Destruction to choose that character."
+                frmChat.AddChat g_Color.ErrorMessageText, "[REALM] You must use Diablo II: Lord of Destruction to choose that character."
             Else
                 Call ds.MCPHandler.SEND_MCP_CHARLOGON(ds.MCPHandler.CharacterName(indexValid))
                 m_Unload_SuccessfulLogin = True

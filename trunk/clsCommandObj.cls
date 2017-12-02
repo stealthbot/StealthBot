@@ -395,7 +395,7 @@ On Error GoTo ERROR_HANDLER
             Next i
         Else
             For i = 1 To m_response.Count
-                frmChat.AddChat RTBColors.ConsoleText, m_response.Item(i)
+                frmChat.AddChat g_Color.ConsoleText, m_response.Item(i)
             Next i
         End If
     Else
@@ -429,5 +429,5 @@ On Error GoTo ERROR_HANDLER
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in clsCommandObj.CheckMatch()"
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in clsCommandObj.CheckMatch()"
 End Function

@@ -78,7 +78,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                 .Statstring = Message
             End With
         Else
-            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Warning! Phantom user {0} has received a flags update.", CleanUsername(Username))
+            frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Warning! Phantom user {0} has received a flags update.", CleanUsername(Username))
             Exit Sub
         End If
     End If
@@ -147,14 +147,14 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                         FDescO = frmChat.GetFlagDescription(LostFlags, False)
                         
                         If LenB(FDescN) > 0 And LenB(FDescO) > 0 Then
-                            frmChat.AddChat RTBColors.JoinUsername, "-- ", RTBColors.JoinedChannelName, _
-                                Username, RTBColors.JoinText, " is now a " & FDescN & " and no longer a " & FDescO & "."
+                            frmChat.AddChat g_Color.JoinUsername, "-- ", g_Color.JoinedChannelName, _
+                                Username, g_Color.JoinText, " is now a " & FDescN & " and no longer a " & FDescO & "."
                         ElseIf LenB(FDescN) > 0 Then
-                            frmChat.AddChat RTBColors.JoinUsername, "-- ", RTBColors.JoinedChannelName, _
-                                Username, RTBColors.JoinText, " is now a " & FDescN & "."
+                            frmChat.AddChat g_Color.JoinUsername, "-- ", g_Color.JoinedChannelName, _
+                                Username, g_Color.JoinText, " is now a " & FDescN & "."
                         ElseIf LenB(FDescO) > 0 Then
-                            frmChat.AddChat RTBColors.JoinUsername, "-- ", RTBColors.JoinedChannelName, _
-                                Username, RTBColors.JoinText, " is no longer a " & FDescO & "."
+                            frmChat.AddChat g_Color.JoinUsername, "-- ", g_Color.JoinedChannelName, _
+                                Username, g_Color.JoinText, " is no longer a " & FDescO & "."
                         End If
                     End If
                 End If
@@ -175,7 +175,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     Exit Sub
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_FlagsUpdate()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -233,8 +233,8 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     SharedScriptSupport.MyChannel = ChannelName
 
-    frmChat.AddChat RTBColors.JoinedChannelText, "-- Joined channel: ", _
-        RTBColors.JoinedChannelName, ChannelName, RTBColors.JoinedChannelText, " --"
+    frmChat.AddChat g_Color.JoinedChannelText, "-- Joined channel: ", _
+        g_Color.JoinedChannelName, ChannelName, g_Color.JoinedChannelText, " --"
     
     SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
     
@@ -250,7 +250,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         ' update message using Battle.net's unignore command.
         If (frmChat.mnuDisableVoidView.Checked = False) Then
             ' lets inform user of potential lag issues while in this channel
-            frmChat.AddChat RTBColors.InformationText, "If you experience a lot of lag while within " & _
+            frmChat.AddChat g_Color.InformationText, "If you experience a lot of lag while within " & _
                     "this channel, try selecting 'Disable Silent Channel View' from the Window menu."
             
             frmChat.tmrSilentChannel(1).Enabled = True
@@ -268,7 +268,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     mailCount = GetMailCount(GetCurrentUsername)
         
     If (mailCount) Then
-        frmChat.AddChat RTBColors.ConsoleText, "You have " & _
+        frmChat.AddChat g_Color.ConsoleText, "You have " & _
             mailCount & " new message" & IIf(mailCount = 1, "", "s") & _
                 ". Type /inbox to retrieve."
     End If
@@ -283,7 +283,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_JoinedChannel()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -336,7 +336,7 @@ Public Sub Event_UserDataReceived(ByRef oRequest As udtServerRequest, ByVal sUse
                     If oRequest.HandlerType = reqUserCommand Then
                         oRequest.Command.Respond s
                     Else
-                        frmChat.AddChat RTBColors.ServerInfoText, s
+                        frmChat.AddChat g_Color.ServerInfoText, s
                     End If
                 Else
                     aOutput = Split(sValue, Chr(13))
@@ -346,7 +346,7 @@ Public Sub Event_UserDataReceived(ByRef oRequest As udtServerRequest, ByVal sUse
                         If oRequest.HandlerType = reqUserCommand Then
                             oRequest.Command.Respond s
                         Else
-                            frmChat.AddChat RTBColors.ServerInfoText, s
+                            frmChat.AddChat g_Color.ServerInfoText, s
                         End If
                     Next
                 End If
@@ -363,7 +363,7 @@ Public Sub Event_UserDataReceived(ByRef oRequest As udtServerRequest, ByVal sUse
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_UserDataReceived()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -382,7 +382,7 @@ Public Sub Event_LeftChatEnvironment()
     
     Call frmChat.UpdateListviewTabs
     
-    frmChat.AddChat RTBColors.JoinedChannelText, "-- Left channel --"
+    frmChat.AddChat g_Color.JoinedChannelText, "-- Left channel --"
     
     On Error Resume Next
     
@@ -392,7 +392,7 @@ Public Sub Event_LeftChatEnvironment()
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_LeftChatEnvironment()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -454,8 +454,8 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
     SharedScriptSupport.myUsername = GetCurrentUsername
     
     With frmChat
-        .AddChat RTBColors.InformationText, "[BNCS] Logged on as ", RTBColors.SuccessText, Username, _
-            RTBColors.InformationText, StringFormat(" using {0}.", Stats.ToString)
+        .AddChat g_Color.InformationText, "[BNCS] Logged on as ", g_Color.SuccessText, Username, _
+            g_Color.InformationText, StringFormat(" using {0}.", Stats.ToString)
 
         Call SetNagelStatus(.sckBNet.SocketHandle, True)
 
@@ -494,7 +494,7 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_LoggedOnAs()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -507,7 +507,7 @@ Public Sub Event_LogonEvent(ByVal Action As String, ByVal Result As Long, Option
     Dim lColor       As Long
     Dim sMessage     As String
 
-    lColor = RTBColors.ErrorMessageText
+    lColor = g_Color.ErrorMessageText
     
     ' get starting text
     Select Case UCase$(Action)
@@ -522,7 +522,7 @@ Public Sub Event_LogonEvent(ByVal Action As String, ByVal Result As Long, Option
     ' choose result code
     Select Case Result
         Case &H0
-            lColor = RTBColors.SuccessText
+            lColor = g_Color.SuccessText
             ' replace with specific success message
             Select Case UCase$(Action)
                 Case ACCOUNT_MODE_LOGON
@@ -585,7 +585,7 @@ Public Sub Event_LogonEvent(ByVal Action As String, ByVal Result As Long, Option
         Case -2& ' time out
             sMessage = sMessage & "timed out."
         Case -1& ' attempt
-            lColor = RTBColors.InformationText
+            lColor = g_Color.InformationText
             ' replace with specific in-progress message
             Select Case UCase$(Action)
                 Case ACCOUNT_MODE_LOGON
@@ -604,7 +604,7 @@ Public Sub Event_LogonEvent(ByVal Action As String, ByVal Result As Long, Option
     Exit Sub
 
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_LogonEvent()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -613,12 +613,12 @@ Public Sub Event_ServerError(ByVal Message As String)
         On Error GoTo ERROR_HANDLER
     #End If
     
-    frmChat.AddChat RTBColors.ErrorMessageText, Message
+    frmChat.AddChat g_Color.ErrorMessageText, Message
     
     RunInAll "Event_ServerError", Message
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_ServerError()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -633,7 +633,7 @@ Public Sub Event_ChannelJoinError(ByVal EventID As Integer, ByVal ChannelName As
     Dim Message As String
     Dim ChannelCreateOption As String
 
-    'frmChat.AddChat RTBColors.ErrorMessageText, Message
+    'frmChat.AddChat g_Color.ErrorMessageText, Message
     
     If (LenB(BotVars.Gateway) = 0) Then
         ' continue gateway discovery
@@ -674,7 +674,7 @@ Public Sub Event_ChannelJoinError(ByVal EventID As Integer, ByVal ChannelName As
                         Message = "[BNCS] Channel is restricted."
                 End Select
                 
-                frmChat.AddChat RTBColors.ErrorMessageText, Message
+                frmChat.AddChat g_Color.ErrorMessageText, Message
                 
         End Select
         
@@ -684,7 +684,7 @@ Public Sub Event_ChannelJoinError(ByVal EventID As Integer, ByVal ChannelName As
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_ChannelJoinError()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -740,7 +740,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     If g_Clan.InClan Then
         If (StrComp(g_Channel.Name, "Clan " & g_Clan.Name, vbTextCompare) = 0) Then
             If (g_Clan.PendingClanMOTD And StrComp(Message, g_Clan.MOTD, vbBinaryCompare) = 0) Then
-                Call frmChat.AddChat(RTBColors.ServerInfoText, Message)
+                Call frmChat.AddChat(g_Color.ServerInfoText, Message)
                 g_Clan.PendingClanMOTD = False
                 On Error Resume Next
                 RunInAll "Event_ServerInfo", Message
@@ -933,7 +933,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         If (Not (BotVars.ShowOfflineFriends)) Then
             ' display it early and append the hiding indicator
             If (Not (Hidden)) Then
-                frmChat.AddChat RTBColors.ServerInfoText, Message & "  " & Chr$(255) & "ci(StealthBot is hiding your offline friends)"
+                frmChat.AddChat g_Color.ServerInfoText, Message & "  " & Chr$(255) & "ci(StealthBot is hiding your offline friends)"
                 ' hide it next time
                 Hidden = True
             End If
@@ -947,13 +947,13 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
 
     ' display
     If (Not (Hidden)) Then
-        frmChat.AddChat RTBColors.ServerInfoText, Message
+        frmChat.AddChat g_Color.ServerInfoText, Message
     End If
 
     RunInAll "Event_ServerInfo", Message
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_ServerInfo()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1024,8 +1024,8 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
             End If
 
             ' display to screen
-            frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, Username & _
-                    Space$(1), RTBColors.EmoteText, Message & ">"
+            frmChat.AddChat g_Color.EmoteText, "<", g_Color.EmoteUsernames, Username & _
+                    Space$(1), g_Color.EmoteText, Message & ">"
 
             ' vote check
             If (VoteDuration > 0) Then
@@ -1048,7 +1048,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_UserEmote()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1092,7 +1092,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             (StrComp(Username, g_Channel.Self.Name, vbTextCompare) = 0 And LastPing <> Ping)) Then
         Dim UserObjPhantom As clsUserObj
         Set UserObjPhantom = g_Channel.Users(UserIndex)
-        frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Warning! Phantom user {0} detected.", UserObjPhantom.DisplayName)
+        frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Warning! Phantom user {0} detected.", UserObjPhantom.DisplayName)
         UserObjPhantom.IsPhantom = True
         Set UserObjPhantom = Nothing
 
@@ -1151,11 +1151,11 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     'ParseStatstring OriginalStatstring, Stats, Clan
     If (StatUpdate = False) Then
         'frmChat.AddChat vbRed, UserObj.Stats.IconCode
-        'frmChat.AddChat RTBColors.JoinText, "-- User in channel: ", _
-        '    RTBColors.JoinUsername, Username, _
-        '    RTBColors.JoinUsername, " [" & Format$(Ping, "#,##0") & "ms]", _
-        '    RTBColors.JoinText, " is using " & UserObj.Stats.ToString, _
-        '    RTBColors.JoinText, "."
+        'frmChat.AddChat g_Color.JoinText, "-- User in channel: ", _
+        '    g_Color.JoinUsername, Username, _
+        '    g_Color.JoinUsername, " [" & Format$(Ping, "#,##0") & "ms]", _
+        '    g_Color.JoinText, " is using " & UserObj.Stats.ToString, _
+        '    g_Color.JoinText, "."
     
         frmChat.AddName UserObj
         
@@ -1190,17 +1190,17 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                     ElseIf (Flags And USER_SYSOP) Then
                         UserColor = RGB(97, 105, 255)
                     ElseIf (Flags And USER_CHANNELOP) Then
-                        UserColor = RTBColors.TalkUsernameOp
+                        UserColor = g_Color.TalkUsernameOp
                     Else
-                        UserColor = RTBColors.JoinUsername
+                        UserColor = g_Color.JoinUsername
                     End If
                     
-                    frmChat.AddChat RTBColors.JoinText, "-- Stats updated: ", _
+                    frmChat.AddChat g_Color.JoinText, "-- Stats updated: ", _
                         UserColor, Username, _
-                        RTBColors.JoinUsername, " [" & Format$(Ping, "#,##0") & "ms]", _
-                        RTBColors.JoinText, " is using " & UserObj.Stats.ToString, _
-                        RTBColors.JoinUsername, FDesc, _
-                        RTBColors.JoinText, "."
+                        g_Color.JoinUsername, " [" & Format$(Ping, "#,##0") & "ms]", _
+                        g_Color.JoinText, " is using " & UserObj.Stats.ToString, _
+                        g_Color.JoinUsername, FDesc, _
+                        g_Color.JoinText, "."
                 End If
             End If
             
@@ -1267,13 +1267,13 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     End If
     
     If (MDebug("statstrings")) Then
-        frmChat.AddChat RTBColors.InformationText, "Username: " & Username & ", Statstring: " & _
+        frmChat.AddChat g_Color.InformationText, "Username: " & Username & ", Statstring: " & _
             Statstring
     End If
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_UserInChannel()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1309,7 +1309,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     
     If (QueuedEventID > 0) Then
         If (UserIndex = 0) Then
-            frmChat.AddChat RTBColors.ErrorMessageText, "Error: We have received a queued join event for a user that we " & _
+            frmChat.AddChat g_Color.ErrorMessageText, "Error: We have received a queued join event for a user that we " & _
                 "couldn't find in the channel."
         
             Exit Sub
@@ -1321,7 +1321,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         If (UserIndex > 0) Then
             Dim UserObjPhantom As clsUserObj
             Set UserObjPhantom = g_Channel.Users(UserIndex)
-            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Warning! Phantom user {0} detected.", UserObjPhantom.DisplayName)
+            frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Warning! Phantom user {0} detected.", UserObjPhantom.DisplayName)
             UserObjPhantom.IsPhantom = True
             Set UserObjPhantom = Nothing
         End If
@@ -1439,17 +1439,17 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                 ElseIf (AcqFlags And USER_SYSOP) Or (Flags And USER_SYSOP) Then
                     UserColor = RGB(97, 105, 255)
                 ElseIf (AcqFlags And USER_CHANNELOP) Or (Flags And USER_CHANNELOP) Then
-                    UserColor = RTBColors.TalkUsernameOp
+                    UserColor = g_Color.TalkUsernameOp
                 Else
-                    UserColor = RTBColors.JoinUsername
+                    UserColor = g_Color.JoinUsername
                 End If
                 
-                frmChat.AddChat RTBColors.JoinText, "-- ", _
+                frmChat.AddChat g_Color.JoinText, "-- ", _
                     UserColor, Username, _
-                    RTBColors.JoinUsername, " [" & Format$(Ping, "#,##0") & "ms]", _
-                    RTBColors.JoinText, " has joined the channel using " & UserObj.Stats.ToString, _
-                    RTBColors.JoinUsername, FDesc, _
-                    RTBColors.JoinText, "."
+                    g_Color.JoinUsername, " [" & Format$(Ping, "#,##0") & "ms]", _
+                    g_Color.JoinText, " has joined the channel using " & UserObj.Stats.ToString, _
+                    g_Color.JoinUsername, FDesc, _
+                    g_Color.JoinText, "."
             End If
         End If
         
@@ -1505,7 +1505,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             
         ' print their statstring, if desired
         If (MDebug("statstrings")) Then
-            frmChat.AddChat RTBColors.ErrorMessageText, Statstring
+            frmChat.AddChat g_Color.ErrorMessageText, Statstring
         End If
         
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1522,7 +1522,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_UserJoins()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1539,7 +1539,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     UserIndex = g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     If (UserIndex = 0) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("Warning! Phantom user {0} has left the channel.", CleanUsername(Username))
+        frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Warning! Phantom user {0} has left the channel.", CleanUsername(Username))
         Exit Sub
     End If
     
@@ -1561,14 +1561,14 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
             ElseIf (Flags And USER_SYSOP) Then
                 UserColor = RGB(97, 105, 255)
             ElseIf (Flags And USER_CHANNELOP) Then
-                UserColor = RTBColors.TalkUsernameOp
+                UserColor = g_Color.TalkUsernameOp
             Else
-                UserColor = RTBColors.JoinUsername
+                UserColor = g_Color.JoinUsername
             End If
             
-            frmChat.AddChat RTBColors.JoinText, "-- ", _
+            frmChat.AddChat g_Color.JoinText, "-- ", _
                 UserColor, UserObj.DisplayName, _
-                RTBColors.JoinText, " has left the channel."
+                g_Color.JoinText, " has left the channel."
             'End If
         End If
     End If
@@ -1613,7 +1613,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_UserLeaves()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1700,12 +1700,12 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
                 ' are we watching the user?
                 'If (StrComp(WatchUser, Username, vbTextCompare) = 0) Then
                 If (PrepareCheck(Username) Like PrepareCheck(WatchUser)) Then
-                    UsernameColor = RTBColors.ErrorMessageText
+                    UsernameColor = g_Color.ErrorMessageText
                 ' is user an operator?
                 ElseIf ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
-                    UsernameColor = RTBColors.TalkUsernameOp
+                    UsernameColor = g_Color.TalkUsernameOp
                 Else
-                    UsernameColor = RTBColors.TalkUsernameNormal
+                    UsernameColor = g_Color.TalkUsernameNormal
                 End If
                 
                 If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or ((Flags And USER_SYSOP&) = _
@@ -1713,8 +1713,8 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
                     TextColor = RGB(97, 105, 255)
                     CaratColor = RGB(97, 105, 255)
                 Else
-                    TextColor = RTBColors.TalkNormalText
-                    CaratColor = RTBColors.Carats
+                    TextColor = g_Color.TalkNormalText
+                    CaratColor = g_Color.Carats
                 End If
 
                 ' display to screen
@@ -1754,7 +1754,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_UserTalk()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1803,7 +1803,7 @@ Private Function CheckMessage(Username As String, Message As String) As Boolean
     
     Exit Function
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.CheckMessage()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
@@ -1814,7 +1814,7 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
     
     Select Case (Message)
         Case 0:
-            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Client version accepted!"
+            frmChat.AddChat g_Color.SuccessText, "[BNCS] Client version accepted!"
             
             ' if using server finder
             If ((BotVars.BNLS) And (BotVars.UseAltBnls)) Then
@@ -1826,7 +1826,7 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
             End If
         
         Case 1:
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Version check failed! " & _
+            frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Version check failed! " & _
                 "The version byte for this attempt was 0x" & Hex(GetVerByte(BotVars.Product)) & "." & _
                 IIf(LenB(ExtraInfo) = 0, vbNullString, " Extra Information: " & ExtraInfo)
 
@@ -1837,68 +1837,68 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
                     Message = 0
                 End If
             Else
-                frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Please ensure you " & _
+                frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Please ensure you " & _
                     "have updated your hash files using more current ones from the directory " & _
                         "of the game you're connecting with."
                 
-                frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] In addition, you can try " & _
+                frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] In addition, you can try " & _
                     "choosing ""Update version bytes from StealthBot.net"" from the Bot menu."
             End If
         
         Case 2:
-            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
+            frmChat.AddChat g_Color.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your CD-key is invalid!"
+            frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Your CD-key is invalid!"
         
         Case 3:
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Version check failed! " & _
+            frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Version check failed! " & _
                 "BNLS has not been updated yet.. Try reconnecting in an hour or two."
         
         Case 4:
-            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
+            frmChat.AddChat g_Color.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your CD-key is for another game."
+            frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Your CD-key is for another game."
         
         Case 5:
-            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
+            frmChat.AddChat g_Color.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your CD-key is banned. " & _
+            frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Your CD-key is banned. " & _
                 "For more information, visit http://us.blizzard.com/support/article.xml?locale=en_US&articleId=20637 ."
         
         Case 6:
-            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
+            frmChat.AddChat g_Color.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your CD-key is currently in " & _
+            frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Your CD-key is currently in " & _
                 "use under the owner name: " & ExtraInfo & "."
         
         Case 7:
-            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
+            frmChat.AddChat g_Color.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your expansion CD-key is invalid."
+            frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Your expansion CD-key is invalid."
         
         Case 8:
-            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
+            frmChat.AddChat g_Color.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your expansion CD-key is currently " & _
+            frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Your expansion CD-key is currently " & _
                 "in use under the owner name: " & ExtraInfo & "."
         
         Case 9:
-            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
+            frmChat.AddChat g_Color.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your expansion CD-key is banned. " & _
+            frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Your expansion CD-key is banned. " & _
                 "For more information, visit http://us.blizzard.com/support/article.xml?locale=en_US&articleId=20637 ."
         
         Case 10:
-            frmChat.AddChat RTBColors.SuccessText, "[BNCS] Version check passed!"
+            frmChat.AddChat g_Color.SuccessText, "[BNCS] Version check passed!"
             
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Your expansion CD-key is for another game."
+            frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Your expansion CD-key is for another game."
         
         Case 11:
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNCS] Version check failed! " & _
+            frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Version check failed! " & _
                 "The Battle.net server says your version must be downgraded."
         
         Case Else
-            frmChat.AddChat RTBColors.ErrorMessageText, "Unhandled 0x51 response! Value: " & Message
+            frmChat.AddChat g_Color.ErrorMessageText, "Unhandled 0x51 response! Value: " & Message
     End Select
     
     If (Message > 0) Then
@@ -1920,7 +1920,7 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_VersionCheck()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -1974,19 +1974,19 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         End If
 
         ' display to screen
-        lCarats = RTBColors.WhisperCarats
+        lCarats = g_Color.WhisperCarats
 
         If (Flags And &H1) Then
             lCarats = COLOR_BLUE
         End If
 
         If (Not (frmChat.mnuHideWhispersInrtbChat.Checked)) Then
-            frmChat.AddChat lCarats, "<From ", RTBColors.WhisperUsernames, _
-                Username, lCarats, "> ", RTBColors.WhisperText, Message
+            frmChat.AddChat lCarats, "<From ", g_Color.WhisperUsernames, _
+                Username, lCarats, "> ", g_Color.WhisperText, Message
         End If
 
-        frmChat.AddWhisper lCarats, "<From ", RTBColors.WhisperUsernames, _
-            Username, lCarats, "> ", RTBColors.WhisperText, Message
+        frmChat.AddWhisper lCarats, "<From ", g_Color.WhisperUsernames, _
+            Username, lCarats, "> ", g_Color.WhisperText, Message
 
         ' individual whisper windows
         If (Not SkipPr And frmChat.mnuToggleWWUse.Checked) Then
@@ -2002,8 +2002,8 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
                 End If
 
                 .Caption = "Whisper Window: " & Username
-                .AddWhisper lCarats, "<", RTBColors.WhisperUsernames, _
-                    Username, lCarats, "> ", RTBColors.WhisperText, Message
+                .AddWhisper lCarats, "<", g_Color.WhisperUsernames, _
+                    Username, lCarats, "> ", g_Color.WhisperText, Message
             End With
         End If
 
@@ -2071,7 +2071,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_WhisperFromUser()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2096,18 +2096,18 @@ Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, By
         LastWhisperTo = "%f%"
     End If
     
-    lCarats = RTBColors.WhisperCarats
+    lCarats = g_Color.WhisperCarats
 
     If (Not (frmChat.mnuHideWhispersInrtbChat.Checked)) Then
-        frmChat.AddChat lCarats, "<To ", RTBColors.WhisperUsernames, _
-            Username, lCarats, "> ", RTBColors.WhisperText, Message
+        frmChat.AddChat lCarats, "<To ", g_Color.WhisperUsernames, _
+            Username, lCarats, "> ", g_Color.WhisperText, Message
     End If
     
     If ((frmChat.mnuHideWhispersInrtbChat.Checked) Or _
         (frmChat.mnuToggleShowOutgoing.Checked)) Then
         
-        frmChat.AddWhisper lCarats, "<To ", RTBColors.WhisperUsernames, _
-            Username, lCarats, "> ", RTBColors.WhisperText, Message
+        frmChat.AddWhisper lCarats, "<To ", g_Color.WhisperUsernames, _
+            Username, lCarats, "> ", g_Color.WhisperText, Message
     End If
 
     If (frmChat.mnuToggleWWUse.Checked) Then
@@ -2120,15 +2120,15 @@ Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, By
             
             With colWhisperWindows.Item(WWIndex)
                 .Caption = "Whisper Window: " & Username
-                .AddWhisper lCarats, "<", RTBColors.TalkBotUsername, _
-                    GetCurrentUsername, lCarats, "> ", RTBColors.WhisperText, Message
+                .AddWhisper lCarats, "<", g_Color.TalkBotUsername, _
+                    GetCurrentUsername, lCarats, "> ", g_Color.WhisperText, Message
             End With
         End If
     End If
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_WhisperToUser()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2143,7 +2143,7 @@ Public Sub Event_ChannelList(sChannels() As String)
     Dim sChannel As String
         
     If (MDebug("all")) Then
-        frmChat.AddChat RTBColors.InformationText, "Received Channel List: "
+        frmChat.AddChat g_Color.InformationText, "Received Channel List: "
     End If
     
     ' save public channels
@@ -2162,7 +2162,7 @@ Public Sub Event_ChannelList(sChannels() As String)
     RunInAll "Event_ChannelList", ConvertStringArray(sChannels)
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_ChannelList()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -2175,7 +2175,7 @@ On Error GoTo ERROR_HANDLER:
 
     Exit Function
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.Event_MessageBox()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
@@ -2218,7 +2218,7 @@ Public Function CleanUsername(ByVal Username As String, Optional ByVal PrependNa
     
     Exit Function
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.CleanUsername()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 

@@ -244,7 +244,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal inBuf As clsDataBuffer)
     Exit Sub
 
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: " & Err.Description & " in ParseClanPacket()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: " & Err.Description & " in ParseClanPacket()."
 
     Exit Sub
 End Sub

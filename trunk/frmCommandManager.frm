@@ -575,7 +575,7 @@ Private Sub Form_Load()
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, _
+    frmChat.AddChat g_Color.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.Description & " in frmCommandManager.Form_Load()."
 
     Call ResetCommandForm
@@ -634,7 +634,7 @@ Private Sub PopulateOwnerComboBox()
     Exit Sub
 
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, _
+    frmChat.AddChat g_Color.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.Description & " in frmCommandManager.PopulateOwnerComboBox()."
 
     Call ResetCommandForm
@@ -853,7 +853,7 @@ Private Sub trvCommands_SelectedNodeChanged()
     Exit Sub
 
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, _
+    frmChat.AddChat g_Color.ErrorMessageText, _
         "Error (#" & Err.Number & "): " & Err.Description & " in frmCommandManager.trvCommands_SelectedNodeChanged()."
 
     Call ResetCommandForm
@@ -1224,7 +1224,7 @@ Private Sub ResetCommandForm()
     cmdDeleteCommand.Visible = False
 
     lblSyntax.Caption = vbNullString
-    lblSyntax.ForeColor = RTBColors.ConsoleText
+    lblSyntax.ForeColor = g_Color.ConsoleText
 
     fraCommand.Caption = vbNullString
     Me.Caption = "Command Manager"

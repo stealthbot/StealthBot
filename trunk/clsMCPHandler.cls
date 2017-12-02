@@ -128,7 +128,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Function
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.ChooseRealm()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
@@ -150,16 +150,16 @@ On Error GoTo ERROR_HANDLER
                 Call ds.MCPHandler.RealmServerLogon(sTitle)
             Else
                 ' shouldn't happen
-                Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] Realm logon error: That character was not found.")
+                Call frmChat.AddChat(g_Color.ErrorMessageText, "[BNCS] Realm logon error: That character was not found.")
                 Call SendEnterChatSequence
                 frmChat.mnuRealmSwitch.Enabled = True
             End If
         ElseIf LenB(sUserChoice) > 0 Then
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[BNCS] The realm {0}{1}{0} is offline or doesn't exist.", Chr$(34), sUserChoice))
+            Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("[BNCS] The realm {0}{1}{0} is offline or doesn't exist.", Chr$(34), sUserChoice))
             Call SendEnterChatSequence
             frmChat.mnuRealmSwitch.Enabled = True
         Else
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNCS] All Diablo II realms are currently offline.")
+            Call frmChat.AddChat(g_Color.ErrorMessageText, "[BNCS] All Diablo II realms are currently offline.")
             Call SendEnterChatSequence
             frmChat.mnuRealmSwitch.Enabled = True
         End If
@@ -167,7 +167,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.HandleQueryRealmServersResponse()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -197,7 +197,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.RealmServerLogon()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -251,8 +251,8 @@ On Error GoTo ERROR_HANDLER:
             Case Else:
                 MCPRecvPacket = False
                 If (MDebug("debug") And (MDebug("all") Or MDebug("unknown"))) Then
-                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[REALM] Unhandled packet 0x{0}", ZeroOffset(CLng(PacketID), 2)))
-                    Call frmChat.AddChat(RTBColors.ErrorMessageText, StringFormat("[REALM] Packet data: {0}{1}", vbNewLine, pBuff.DebugOutput))
+                    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("[REALM] Unhandled packet 0x{0}", ZeroOffset(CLng(PacketID), 2)))
+                    Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("[REALM] Packet data: {0}{1}", vbNewLine, pBuff.DebugOutput))
                 End If
         
         End Select
@@ -260,7 +260,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Function
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.ParsePacket()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
@@ -405,7 +405,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_STARTUP()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -473,7 +473,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_CHARCREATE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -496,7 +496,7 @@ On Error GoTo ERROR_HANDLER
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_CHARLOGON()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -521,7 +521,7 @@ On Error GoTo ERROR_HANDLER
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_CHARDELETE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -540,7 +540,7 @@ On Error GoTo ERROR_HANDLER
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_MOTD()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -563,7 +563,7 @@ On Error GoTo ERROR_HANDLER
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_CHARUPGRADE()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -583,7 +583,7 @@ On Error GoTo ERROR_HANDLER
 
     Exit Sub
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.SEND_MCP_CHARLIST2()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
@@ -698,7 +698,7 @@ End Property
 
 Private Sub Event_RealmStartup(ByVal Success As Boolean, ByVal Message As String)
     If Success Then
-        'frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
+        'frmChat.AddChat g_Color.SuccessText, "[REALM] " & Message
         
         If m_RealmCharacterPromptActive Then
             frmRealm.RealmStartupResponse
@@ -706,7 +706,7 @@ Private Sub Event_RealmStartup(ByVal Success As Boolean, ByVal Message As String
         
         Call DoRequestCharacters
     Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
+        frmChat.AddChat g_Color.ErrorMessageText, "[REALM] " & Message
         
         If ds.MCPHandler.FormActive Then
             frmRealm.UnloadRealmError
@@ -721,9 +721,9 @@ Private Sub Event_CharCreateResponse(ByVal Success As Boolean, ByVal Message As 
     m_RequestPending = False
 
     If Success Then
-        frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
+        frmChat.AddChat g_Color.SuccessText, "[REALM] " & Message
     Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
+        frmChat.AddChat g_Color.ErrorMessageText, "[REALM] " & Message
     End If
     
     If m_RealmCharacterPromptActive Then
@@ -735,9 +735,9 @@ Private Sub Event_CharDeleteResponse(ByVal Success As Boolean, ByVal Message As 
     m_RequestPending = False
 
     If Success Then
-        frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
+        frmChat.AddChat g_Color.SuccessText, "[REALM] " & Message
     Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
+        frmChat.AddChat g_Color.ErrorMessageText, "[REALM] " & Message
     End If
     
     If m_RealmCharacterPromptActive Then
@@ -749,14 +749,14 @@ Private Sub Event_CharLogonResponse(ByVal Success As Boolean, ByVal Message As S
     m_RequestPending = False
 
     If Success Then
-        frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
+        frmChat.AddChat g_Color.SuccessText, "[REALM] " & Message
         
         SEND_MCP_MOTD
         
         Call SendEnterChatSequence
         frmChat.mnuRealmSwitch.Enabled = True
     Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
+        frmChat.AddChat g_Color.ErrorMessageText, "[REALM] " & Message
         
         m_RealmError = True
     End If
@@ -772,7 +772,7 @@ Private Sub Event_RealmMOTD(ByVal Message As String)
     RealmHideMotd = Config.RealmHideMotd
     
     If Not RealmHideMotd Then
-        frmChat.AddChat RTBColors.ServerInfoText, "[REALM] " & Message
+        frmChat.AddChat g_Color.ServerInfoText, "[REALM] " & Message
     End If
 End Sub
 
@@ -780,9 +780,9 @@ Private Sub Event_CharUpgradeResponse(ByVal Success As Boolean, ByVal Message As
     m_RequestPending = False
 
     If Success Then
-        frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
+        frmChat.AddChat g_Color.SuccessText, "[REALM] " & Message
     Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
+        frmChat.AddChat g_Color.ErrorMessageText, "[REALM] " & Message
     End If
     
     If m_RealmCharacterPromptActive Then
@@ -844,9 +844,9 @@ Private Sub Event_CharListResponse()
     If m_RealmCharacterPromptActive Then
         ' if the form is already open, tell the form to re-read the character list
         If m_CharacterList.Count = 0 Then
-            frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] There are no characters on this account."
+            frmChat.AddChat g_Color.ErrorMessageText, "[REALM] There are no characters on this account."
         Else
-            frmChat.AddChat RTBColors.SuccessText, "[REALM] Listed " & m_CharacterList.Count & " characters."
+            frmChat.AddChat g_Color.SuccessText, "[REALM] Listed " & m_CharacterList.Count & " characters."
         End If
         frmRealm.CharListResponse
         ' set focus
@@ -865,30 +865,30 @@ Private Sub Event_CharListResponse()
                 If (Sgn(DateDiff("s", UtcNow, CharDate)) >= 0) Then
                     ' must be PX2D if isExpansion, otherwise doesn't matter
                     If (CharStats.IsExpansionCharacter() Imp (BotVars.Product = "PX2D")) Then
-                        frmChat.AddChat RTBColors.InformationText, "[REALM] Automatically logging on as " & Character(0) & "..."
+                        frmChat.AddChat g_Color.InformationText, "[REALM] Automatically logging on as " & Character(0) & "..."
                         Call SEND_MCP_CHARLOGON(Character(0))
                         Exit Sub
                     Else
-                        frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Character auto-logon fail: You must use Diablo II: Lord of Destruction to choose that character."
+                        frmChat.AddChat g_Color.ErrorMessageText, "[REALM] Character auto-logon fail: You must use Diablo II: Lord of Destruction to choose that character."
                     End If
                 Else
-                    frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Character auto-logon fail: That character has expired."
+                    frmChat.AddChat g_Color.ErrorMessageText, "[REALM] Character auto-logon fail: That character has expired."
                 End If
             Else
-                frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Character auto-logon fail: Empty character name."
+                frmChat.AddChat g_Color.ErrorMessageText, "[REALM] Character auto-logon fail: Empty character name."
             End If
         End If
         
-        frmChat.AddChat RTBColors.SuccessText, "[REALM] Listed " & m_CharacterList.Count & " characters."
+        frmChat.AddChat g_Color.SuccessText, "[REALM] Listed " & m_CharacterList.Count & " characters."
         
         m_AutoChooseWait = -1
         frmRealm.Show
         
     Else
         If m_CharacterList.Count = 0 Then
-            frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] There are no characters on this account."
+            frmChat.AddChat g_Color.ErrorMessageText, "[REALM] There are no characters on this account."
         ElseIf Not m_RealmCharacterPromptActive Then
-            frmChat.AddChat RTBColors.ErrorMessageText, StringFormat("[REALM] There are no characters matching {0}{1}{0} to use.", Chr$(34), RealmCharacter)
+            frmChat.AddChat g_Color.ErrorMessageText, StringFormat("[REALM] There are no characters matching {0}{1}{0} to use.", Chr$(34), RealmCharacter)
         End If
         ' invalid entry: show realms list, choose nothing after X seconds
         m_AutoChooseWait = RealmAutoChooseWait

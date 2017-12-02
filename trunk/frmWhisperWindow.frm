@@ -239,16 +239,16 @@ Private Sub mnuSave_Click()
                         End If
 
                         If StrComp(tUsername, GetCurrentUsername, vbTextCompare) = 0 Then
-                            Print #f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.TalkBotUsername)) & "'><b>";
+                            Print #f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(g_Color.TalkBotUsername)) & "'><b>";
                         Else
-                            Print #f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.WhisperUsernames)) & "'><b>";
+                            Print #f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(g_Color.WhisperUsernames)) & "'><b>";
                         End If
                         Print #f, Chr(187) & Space(1) & tUsername & "</b></font>"
                         
-                        Print #f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.WhisperCarats)) & "'><b>";
+                        Print #f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(g_Color.WhisperCarats)) & "'><b>";
                             Print #f, ":</b></font> "
                             
-                        Print #f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.WhisperText)) & "'>";
+                        Print #f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(g_Color.WhisperText)) & "'>";
                             Print #f, tMessage & "</font><br />"
                               
                     End If

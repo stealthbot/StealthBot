@@ -88,7 +88,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByVal inBuf As clsDataBuffer)
     Exit Sub
 
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error: " & Err.Description & " in clsFriendlistHandler.ParsePacket()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: " & Err.Description & " in clsFriendlistHandler.ParsePacket()."
 
     Exit Sub
 

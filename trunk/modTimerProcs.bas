@@ -85,7 +85,7 @@ Public Sub QueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal idEvent 
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in QueueTimer_Timer()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in QueueTimer_Timer()."
 
     Exit Sub
 End Sub
