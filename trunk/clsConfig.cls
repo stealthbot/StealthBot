@@ -2396,7 +2396,7 @@ Private Sub LoadVersion6Config()
     m_AutoSafelistLevel = ReadSettingL(SECTION_MODERATION, "AutoSafelistLevel", m_AutoSafelistLevel)
     m_ChannelProtection = ReadSettingB(SECTION_MODERATION, "ChannelProtect", m_ChannelProtection)
     m_QuietTime = ReadSettingB(SECTION_MODERATION, "QuietTime", m_QuietTime)
-    m_QuietTime = ReadSettingB(SECTION_MODERATION, "QuietTimeKick", m_QuietTime)
+    m_QuietTimeKick = ReadSettingB(SECTION_MODERATION, "QuietTimeKick", m_QuietTimeKick)
     m_PingBan = ReadSettingB(SECTION_MODERATION, "PingBan", m_PingBan)
     m_PingBanLevel = ReadSettingL(SECTION_MODERATION, "PingBanLevel", m_PingBanLevel)
     
