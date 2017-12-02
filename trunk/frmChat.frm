@@ -7442,12 +7442,6 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
     
     If bytesTotal = 0 Then Exit Sub
 
-    g_ConnectionAlive = True
-    If AutoReconnectActive Then
-        AutoReconnectActive = False
-        AutoReconnectTry = 0
-    End If
-
     ' read buffer as Byte()
     sckBNet.GetData buf(), vbArray + vbByte, bytesTotal
     ' add data to buffer
@@ -7456,6 +7450,12 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
     If ProxyConnInfo(stBNCS).IsUsingProxy And ProxyConnInfo(stBNCS).Status <> psOnline Then
         Call modProxySupport.ProxyRecvPacket(sckBNet, ProxyConnInfo(stBNCS), ReceiveBuffer(stBNCS))
     Else
+        g_ConnectionAlive = True
+        If AutoReconnectActive Then
+            AutoReconnectActive = False
+            AutoReconnectTry = 0
+        End If
+
         Do While ReceiveBuffer(stBNCS).IsFullPacket(stBNCS)
             ' retrieve BNLS packet
             Set pBuff = ReceiveBuffer(stBNCS).TakePacket(stBNCS)
@@ -7585,12 +7585,6 @@ Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
     Dim pBuff As clsDataBuffer
     
     If bytesTotal = 0 Then Exit Sub
-
-    g_ConnectionAlive = True
-    If AutoReconnectActive Then
-        AutoReconnectActive = False
-        AutoReconnectTry = 0
-    End If
     
     ' read buffer as Byte()
     sckBNLS.GetData buf(), vbArray + vbByte, bytesTotal
