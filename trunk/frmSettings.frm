@@ -4886,9 +4886,9 @@ Private Sub Form_Load()
     End With
     
     With cboReconn
-        .AddItem "Disabled (do not retry)"
-        .AddItem "Retry in DELAY sec."
-        .AddItem "Retry in DELAY * TRY sec."
+        .AddItem "Disabled"
+        .AddItem "After DELAY sec"
+        .AddItem "After DELAY x TRY sec"
         .ListIndex = 2
     End With
     
@@ -5084,7 +5084,7 @@ Private Sub cboConnMethod_Click()
     chkProxyBNLS.Enabled = CBool(cboConnMethod.ListIndex = 0) And chkUseProxies.Value
 End Sub
 
-Private Sub cboReconn_Change()
+Private Sub cboReconn_Click()
     'Disables the delay boxes depending on reconnect method
     txtReconDelay.Enabled = CBool(cboReconn.ListIndex > 0)
     txtReconDelayMax.Enabled = CBool(cboReconn.ListIndex > 1)
