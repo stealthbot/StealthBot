@@ -243,7 +243,7 @@ Private Sub mnuSave_Click()
                         Else
                             Print #f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.WhisperUsernames)) & "'><b>";
                         End If
-                            Print #f, "» " & tUsername & "</b></font>"
+                        Print #f, Chr(187) & Space(1) & tUsername & "</b></font>"
                         
                         Print #f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.WhisperCarats)) & "'><b>";
                             Print #f, ":</b></font> "
@@ -258,7 +258,7 @@ Private Sub mnuSave_Click()
                 Print #f, "</body></html>"
             Close #f
             
-            AddWhisper vbGreen, "» Conversation saved."
+            AddWhisper vbGreen, "Â» Conversation saved."
         End If
     End With
 End Sub
