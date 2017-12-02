@@ -169,7 +169,7 @@ Public Sub SetProfile(ByVal Location As String, ByVal Description As String, Opt
     Dim pBuf As clsDataBuffer
     Dim Encoding As STRINGENCODING
 
-    If (frmChat.mnuUTF8.Checked) Then
+    If (Config.UseUTF8) Then
         Encoding = UTF8
     Else
         Encoding = ANSI

@@ -403,7 +403,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
     If (frmChat.sckBNet.State = sckConnected) Then
         Set pBuf = New clsDataBuffer
         With pBuf
-            If (frmChat.mnuUTF8.Checked) Then
+            If (Config.UseUTF8) Then
                 .InsertNTString Message, UTF8
             Else
                 .InsertNTString Message

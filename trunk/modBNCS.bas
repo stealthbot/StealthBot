@@ -619,7 +619,7 @@ Private Sub RECV_SID_CHATEVENT(pBuff As clsDataBuffer)
         Case ID_JOIN, ID_LEAVE, ID_USER, ID_USERFLAGS: ' user events: always encode statstring ANSI
             Encoding = ANSI
         Case Else
-            If (frmChat.mnuUTF8.Checked) Then
+            If (Config.UseUTF8) Then
                 Encoding = UTF8
             Else
                 Encoding = ANSI
@@ -925,7 +925,7 @@ Private Sub RECV_SID_READUSERDATA(pBuff As clsDataBuffer)
     
         ' Read each of the keys
         For i = 0 To UBound(aValues)
-            aValues(i) = pBuff.GetString(IIf(frmChat.mnuUTF8.Checked, UTF8, ANSI))
+            aValues(i) = pBuff.GetString(IIf(Config.UseUTF8, UTF8, ANSI))
         Next i
     End If
 

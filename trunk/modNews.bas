@@ -25,8 +25,8 @@ Public Sub HandleNews(ByVal Buffer As String, ByVal ResponseCode As Long)
     ElseIf UBound(Splt) <> 4 Then
         frmChat.AddChat g_Color.ErrorMessageText, "Format not understood. Error retrieving news from http://www.stealthbot.net."
     Else
-        OldValue = frmChat.mnuUTF8.Checked ' old value of UTF8 encoding setting
-        frmChat.mnuUTF8.Checked = False
+        OldValue = Config.UseUTF8 ' old value of UTF8 encoding setting
+        Config.UseUTF8 = False
         
         If StrictIsNumeric(Splt(0)) Then
             '############# Beta only
@@ -77,6 +77,6 @@ Public Sub HandleNews(ByVal Buffer As String, ByVal ResponseCode As Long)
             End If
         End If
     
-        frmChat.mnuUTF8.Checked = OldValue
+        Config.UseUTF8 = OldValue
     End If
 End Sub
