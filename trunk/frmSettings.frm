@@ -5173,6 +5173,14 @@ Private Sub lblHashPath_GotFocus()
     lblHashPath.SelLength = Len(lblHashPath.Text)
 End Sub
 
+Private Sub lblHashPath_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode = vbKeyC And Shift = vbCtrlMask Then
+        Clipboard.Clear
+        Clipboard.SetText lblHashPath.SelText
+        KeyCode = 0
+    End If
+End Sub
+
 Private Sub lblManageKeys_Click()
     If LenB(txtCDKey.Text) > 0 Then
         Call lblAddCurrentKey_Click
