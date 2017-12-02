@@ -1643,10 +1643,15 @@ Public Property Let DebugConfig(ByVal sValue As Boolean)
     m_DebugConfig = sValue
 End Property
 
-' Returns the path to the specified file if it is overriden by this configuration.
+' Returns the path to the directory the file should be found in it is overriden by this configuration.
 Public Function GetFilePath(ByVal sFileName As String) As String
     GetFilePath = ReadSetting(SECTION_FILEPATH, sFileName)
 End Function
+
+' Sets the directory to search for the file in.
+Public Sub SetFilePath(ByVal sFileName As String, ByVal sDirectory As String)
+    WriteSetting SECTION_FILEPATH, sFileName, sDirectory
+End Sub
 
 Public Function GetVersionByte(ByVal sProductCode As String) As Long
     Dim iIndex As Integer
