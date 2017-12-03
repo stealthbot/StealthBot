@@ -68,7 +68,7 @@ ERROR_HANDLER:
     With frmChat.SControl
         ErrType = "runtime"
         
-        If InStr(1, .Error.source, "compilation", vbBinaryCompare) > 0 Then ErrType = "parsing"
+        If InStr(1, .Error.Source, "compilation", vbBinaryCompare) > 0 Then ErrType = "parsing"
         
         Command.Respond StringFormat("Execution {0} error #{1}: {2}", ErrType, .Error.Number, .Error.Description)
         
@@ -253,7 +253,7 @@ Public Sub OnMath(Command As clsCommandObj)
         sStatement = Command.Argument("Expression")
         
         If (InStr(1, sStatement, "CreateObject", vbTextCompare)) Then
-            Command.Respond "Evaluation error, CreateObject is restricted."
+            Command.Respond "Evaluation error: CreateObject is restricted."
         Else
             With frmChat.SCRestricted
                 .AllowUI = False

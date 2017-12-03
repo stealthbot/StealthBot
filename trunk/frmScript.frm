@@ -492,7 +492,7 @@ Public Sub DestroyObjs()
 ERROR_HANDLER:
     
     frmChat.AddChat g_Color.ErrorMessageText, _
-        "Error (#" & Err.Number & "): " & Err.Description & " in frmScript::DestroyObjs()."
+        "Error (#" & Err.Number & "): " & Err.Description & " in frmScript.DestroyObjs()."
         
     Resume Next
     
@@ -587,6 +587,7 @@ Public Sub DestroyObj(ByVal ObjName As String)
             End If
             
         Case "MENU"
+            m_arrObjs(Index).obj.Class_Terminate
         
         Case "OPTIONBUTTON"
             If (m_arrObjs(Index).obj.Index > 0) Then
@@ -613,6 +614,8 @@ Public Sub DestroyObj(ByVal ObjName As String)
             End If
         
         Case "RICHTEXTBOX"
+            DisableURLDetect m_arrObjs(Index).obj.hWnd
+
             If (m_arrObjs(Index).obj.Index > 0) Then
                 Unload rtb(m_arrObjs(Index).obj.Index)
             Else
@@ -665,7 +668,7 @@ Public Sub DestroyObj(ByVal ObjName As String)
 ERROR_HANDLER:
     
     frmChat.AddChat g_Color.ErrorMessageText, _
-        "Error (#" & Err.Number & "): " & Err.Description & " in frmScript::DestroyObjs()."
+        "Error (#" & Err.Number & "): " & Err.Description & " in frmScript.DestroyObjs()."
         
     Resume Next
     
@@ -734,8 +737,6 @@ Public Sub ClearObjs()
             
             Case "RICHTEXTBOX"
                 rtb(m_arrObjs(i).obj.Index).Text = ""
-                
-                DisableURLDetect m_arrObjs(i).obj.hWnd
                 
             Case "TEXTBOX"
                 txt(m_arrObjs(i).obj.Index).Text = ""

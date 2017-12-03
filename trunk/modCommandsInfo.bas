@@ -307,8 +307,8 @@ On Error GoTo ERROR_HANDLER
             Command.Respond StringFormat("Error: Could not find the script ""{0}"".", Name)
         Else
             Name = modScripting.GetScriptName(Script.Name)
-            If (modScripting.IsScriptEnabled(Name) = False) Then
-                Command.Respond StringFormat("Error: Script ""{0}"" is currently disabled.", Name)
+            If (modScripting.IsScriptModuleEnabled(Script) = False) Then
+                Command.Respond StringFormat("Error: Script ""{0}"" is currently disabled or failed to load.", Name)
             Else
                 Command.Respond StringFormat("The script ""{0}"" loaded in {1}ms.", _
                         Name, Format$(GetScriptDictionary(Script)("InitPerf"), "#,##0"))
@@ -324,7 +324,7 @@ On Error GoTo ERROR_HANDLER
             For i = 2 To frmChat.SControl.Modules.Count
                 Set Script = frmChat.SControl.Modules(i)
                 Name = modScripting.GetScriptName(CStr(i))
-                If (modScripting.IsScriptEnabled(Name)) Then
+                If (modScripting.IsScriptModuleEnabled(Script)) Then
                     If (Command.IsLocal And Not Command.PublicOutput) Then
                         Command.Respond StringFormat("    ""{0}"": {1}ms.", _
                             Name, Format$(GetScriptDictionary(Script)("InitPerf"), "#,##0"))
@@ -515,7 +515,11 @@ On Error GoTo ERROR_HANDLER
             Author = ScriptInfo("Author")
             Description = ScriptInfo("Description")
 
-            If modScripting.IsScriptEnabled(Name) = False Then StateStr = " (disabled)"
+            If modScripting.IsScriptModuleEnabled(Module, True) = False Then
+                StateStr = " (disabled)"
+            ElseIf ScriptInfo("LoadError") Then
+                StateStr = " (parsing error)"
+            End If
             If VerTotal > 0 Then VerStr = " v" & Version
             If LenB(Author) > 0 Then AuthorStr = " by " & Author
             If LenB(Description) > 0 Then DescrStr = ": " & Description
@@ -542,6 +546,7 @@ On Error GoTo ERROR_HANDLER
     Dim Part    As String
     Dim Comma   As String
     Dim Name    As String
+    Dim EnCount As Integer
     Dim Count   As Integer
     
     If modScripting.GetScriptSystemDisabled() Then
@@ -553,16 +558,17 @@ On Error GoTo ERROR_HANDLER
         Comma = ", "
         For i = 2 To frmChat.SControl.Modules.Count
             Name = modScripting.GetScriptName(CStr(i))
-            Enabled = modScripting.IsScriptEnabled(Name)
+            Enabled = modScripting.IsScriptModuleEnabled(frmChat.SControl.Modules(i))
             Part = "{0}{1}{2}"
             If Not Enabled Then Part = "{0}{3}{1}{4}{2}"
             If (i = frmChat.SControl.Modules.Count) Then Comma = vbNullString
 
             retVal = StringFormat(Part, retVal, Name, Comma, "(", ")")
             Count = (Count + 1)
+            If Enabled Then EnCount = EnCount + 1
         Next i
         
-        Command.Respond StringFormat("Scripts ({0}): {1}", Count, retVal)
+        Command.Respond StringFormat("Scripts ({0}/{1}): {2}", EnCount, Count, retVal)
     Else
         Command.Respond "There are no scripts currently loaded."
     End If

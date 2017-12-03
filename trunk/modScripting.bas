@@ -35,13 +35,11 @@ Private VetoNextMessage     As Boolean
 Private VetoNextPacket      As Boolean
 Private m_ScriptObservers   As Collection
 Private m_FunctionObservers As Collection
+Private m_ScriptData()      As Dictionary
 Private m_SystemDisabled    As Boolean
 Private m_SCInitialized     As Boolean
 
 Public Sub InitScriptControl(ByVal SC As ScriptControl)
-
-    ' check whether the override is disabling the script system
-    If m_SystemDisabled Then Exit Sub
     
     m_is_reloading = True
 
@@ -52,15 +50,16 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
     
     DestroyObjs
 
-    If Config.ScriptingAllowUI Then
-        SC.AllowUI = True
-    End If
+    SC.AllowUI = (Config.ScriptingAllowUI And Not m_SystemDisabled)
 
     '// Create scripting objects
     SC.addObject "ssc", SharedScriptSupport, True
     SC.addObject "scTimer", frmChat.scTimer
     SC.addObject "scInet", frmChat.Inet
     SC.addObject "BotVars", BotVars
+
+    ' check whether the override is disabling the script system
+    If m_SystemDisabled Then Exit Sub
 
     Set m_sc_control = SC
     
@@ -88,89 +87,98 @@ Public Sub LoadScripts()
     Dim str           As String
     Dim tmp           As String
     Dim res           As Boolean
+    Dim EnabledCount  As Integer
 
     ' check whether the override is disabling the script system
     If m_SystemDisabled Then Exit Sub
-    
+
     Set Paths = New Collection
 
     ' ********************************
     '      LOAD SCRIPTS
     ' ********************************
-    
+
+    ' enabled scripts count
+    EnabledCount = 0
+
     ' set script folder path
     strPath = GetFolderPath("Scripts")
-       
+
     ' ensure scripts folder exists
     If (LenB(Dir$(strPath)) > 0) Then
         ' grab initial script file name
         FileName = Dir$(strPath)
-        
+
         ' grab script files
         ' note: if we don't enumerate this list prior to script loading,
         ' scripting errors can kill further script loading.
         Do While (FileName <> vbNullString)
             ' add script file to collection
             Paths.Add FileName
-        
+
             ' grab next script file name
             FileName = Dir$()
         Loop
 
-        ' Cycle through each of the files.
-        For i = 1 To Paths.Count
-            ' Does the file have the extension for a script?
-            If (IsValidFileExtension(GetFileExtension(Paths(i)))) Then
-                ' Add a new module to the script control.
-                Set CurrentModule = _
-                    m_sc_control.Modules.Add(m_sc_control.Modules.Count + 1)
-                
-                ' store the temporary name of the module for parsing errors
-                m_TempMdlName = Paths(i)
-                
-                ' set executing module reference for parsing errors and module-specific functions
-                Set m_ExecutingMdl = CurrentModule
-                
-                ' Load the file into the module.
-                res = FileToModule(CurrentModule, strPath & Paths(i))
-                
-                ' set executing module to nothing
-                Set m_ExecutingMdl = Nothing
-                
-                ' Does the script have a valid name?
-                If (IsScriptNameValid(CurrentModule) = False) Then
-                    ' No. Try to fix it.
-                    GetScriptDictionary(CurrentModule)("Name") = CleanFileName(m_TempMdlName)
-                
-                    ' Is it valid now?
+        If Paths.Count > 0 Then
+            ' prepare our data array
+            ReDim m_ScriptData(1 To Paths.Count)
+
+            ' Cycle through each of the files.
+            For i = 1 To Paths.Count
+                ' Does the file have the extension for a script?
+                If (IsValidFileExtension(GetFileExtension(Paths(i)))) Then
+                    ' Add a new module to the script control.
+                    Set CurrentModule = _
+                        m_sc_control.Modules.Add(m_sc_control.Modules.Count + 1)
+
+                    ' store the temporary name of the module for parsing errors
+                    m_TempMdlName = Paths(i)
+
+                    ' set executing module reference for parsing errors and module-specific functions
+                    Set m_ExecutingMdl = CurrentModule
+
+                    ' Load the file into the module.
+                    res = FileToModule(CurrentModule, strPath & Paths(i))
+
+                    ' set executing module to nothing
+                    Set m_ExecutingMdl = Nothing
+
+                    ' Does the script have a valid name?
                     If (IsScriptNameValid(CurrentModule) = False) Then
-                        ' No, disable it.
-                        
-                        frmChat.AddChat g_Color.ErrorMessageText, "Scripting error: " & Paths(i) & " has been " & _
-                            "disabled due to a naming issue."
-                            
-                        str = strPath & "\disabled\"
-                        
-                        MkDir str
-                            
-                        Kill str & Paths(i)
-    
-                        Name strPath & Paths(i) As str & Paths(i)
-    
-                        InitScriptControl m_sc_control
-                        
-                        LoadScripts
-                        
-                        Exit Sub
+                        ' No. Try to fix it.
+                        GetScriptDictionary(CurrentModule)("Name") = CleanFileName(m_TempMdlName)
+
+                        ' Is it valid now?
+                        If (IsScriptNameValid(CurrentModule) = False) Then
+                            ' No, disable it.
+                            str = strPath & "\disabled\"
+                            MkDir str
+                            Kill str & Paths(i)
+                            Name strPath & Paths(i) As str & Paths(i)
+
+                            frmChat.AddChat g_Color.ErrorMessageText, "Scripting error: " & Paths(i) & " has been " & _
+                                "disabled due to a naming issue."
+
+                            InitScriptControl m_sc_control
+                            LoadScripts
+
+                            Exit Sub
+                        End If
+                    End If
+
+                    ' script loaded without error and is enabled
+                    If res Then
+                        EnabledCount = EnabledCount + 1
                     End If
                 End If
-            End If
-        Next i
+            Next i
+        End If
     End If
     
     InitMenus
 
-    frmChat.AddChat g_Color.SuccessText, "Scripts loaded."
+    frmChat.AddChat g_Color.SuccessText, StringFormat("Scripts loaded: {1} enabled of {0} total.", m_sc_control.Modules.Count - 1, EnabledCount)
         
     Exit Sub
 
@@ -181,12 +189,12 @@ ERROR_HANDLER:
 
 End Sub
 
-Private Function FileToModule(ByRef ScriptModule As Module, ByVal FilePath As String, Optional ByVal defaults As Boolean = True) As Boolean
+Private Function FileToModule(ByVal ScriptModule As Module, ByVal FilePath As String, Optional ByVal IsPrimary As Boolean = True) As Boolean
 
     On Error GoTo ERROR_HANDLER
 
     Static strContent    As String
-    Static includes      As Collection
+    Static Includes      As Collection
     
     Dim strLine          As String
     Dim f                As Integer
@@ -197,13 +205,16 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal FilePath As St
     Dim lineCount        As Integer
     Dim blnIncIsValid    As Boolean
     Dim strInclude       As String
+    Dim ScriptName       As String
+    Dim ScriptDict       As Dictionary
+    Dim IsEnabled        As Boolean
 
     blnCheckOperands = True
     
     f = FreeFile
     
-    If (defaults) Then
-        Set includes = New Collection
+    If (IsPrimary) Then
+        Set Includes = New Collection
     End If
 
     Open FilePath For Input As #f
@@ -250,8 +261,8 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal FilePath As St
                                     End If
                                     
                                     ' check if file is already included by this script
-                                    For i = 1 To includes.Count
-                                        If StrComp(includes(i), strFullPath, vbTextCompare) = 0 Then
+                                    For i = 1 To Includes.Count
+                                        If StrComp(Includes(i), strFullPath, vbTextCompare) = 0 Then
                                             frmChat.AddChat g_Color.ErrorMessageText, "Scripting warning! " & Dir$(FilePath) & " is trying to include " & _
                                                 "a file that has already been included: " & strPath
                                             blnIncIsValid = False
@@ -260,7 +271,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal FilePath As St
                                     
                                     If blnIncIsValid Then
                                         ' store the file path to an include
-                                        includes.Add strFullPath
+                                        Includes.Add strFullPath
                                     End If
                                 End If
                             End If
@@ -298,54 +309,69 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal FilePath As St
         Loop
     Close #f
   
-    ' if we are not loading an include, set it up
-    If (defaults) Then
-        ' store module-level functions
-        ScriptModule.ExecuteStatement GetDefaultModuleProcs()
-        
-        ' initialize the variables globally
-        ScriptModule.ExecuteStatement "Public Script, DataBuffer"
-        
-        ' store Script dictionary into script
-        SetScriptDictionary ScriptModule
-        
-        ' create default DataBuffer object
-        Set ScriptModule.CodeObject.DataBuffer = SharedScriptSupport.DataBufferEx()
-        
-        ' set the Script("Path") value
-        GetScriptDictionary(ScriptModule)("Path") = FilePath
-        
+    ' if we are not loading an include (primary script file), set it up
+    If (IsPrimary) Then
         ' add this as the "first" include for this script, with no name so that later it is changed to "scriptname"
         AddInclude ScriptModule, vbNullString, lineCount
-        
+
         ' add includes to end of code, process the same for includes in includes
         i = 1
-        Do While i <= includes.Count
-            FileToModule ScriptModule, includes(i), False
+        Do While i <= Includes.Count
+            FileToModule ScriptModule, Includes(i), False
             i = i + 1
         Loop
-        
+
+        ' initialize these variables globally
+        ScriptModule.ExecuteStatement "Public Script, DataBuffer"
+        ' store module-level functions
+        ScriptModule.ExecuteStatement GetDefaultModuleProcs()
+        ' store Script dictionary into script with initial values
+        Set ScriptDict = SetScriptDictionary(ScriptModule)
+        ' create default DataBuffer object
+        Set ScriptModule.CodeObject.DataBuffer = SharedScriptSupport.DataBufferEx()
+
+        ' set default name to clean filename
+        ScriptDict("Name") = CleanFileName(m_TempMdlName)
+        ' save path for script menu
+        ScriptDict("Path") = FilePath
+        ' there has not been a load error yet
+        ScriptDict("LoadError") = False
+        ' "loading" is set until LoadScripts() has gone through this script
+        ScriptDict("Loading") = True
         ' store the position in the arrInc array where this script's line number information starts
         ' the line number information will be in order of #include directives
         ' the error handler will use this information to continually subtract linecounts until
         ' the line number is in the bounds of the include information where the file actually is
         ' so that we know what include is causing an error
-        GetScriptDictionary(ScriptModule)("IncludeLBound") = m_incCount - includes.Count - 1
-        
+        ScriptDict("IncludeLBound") = m_incCount - Includes.Count - 1
+        ' enabled is what the settings says
+        IsEnabled = IsScriptEnabledSetting(ScriptName)
+        ScriptDict("Enabled") = IsEnabled
+
         ' add content
         ScriptModule.AddCode strContent
+
+        ' get name, will check for validity once we leave this function...
+        ScriptName = GetScriptName(ScriptModule)
+        ' enabled is what the settings says (make sure we are using updated Name if applicable)
+        IsEnabled = IsScriptEnabledSetting(ScriptName)
+        ScriptDict("Enabled") = IsEnabled
+        
+        ' is it enabled? did we have errors?
+        ScriptDict("Loading") = False
         
         ' clean up object
-        Set includes = Nothing
-        
+        Set Includes = Nothing
+
         ' clean up content for next call to this function
         strContent = vbNullString
     Else
         ' this is an #include, store our information
         AddInclude ScriptModule, "#" & Mid$(FilePath, InStrRev(FilePath, "\", -1, vbBinaryCompare) + 1), lineCount
+        IsEnabled = True
     End If
-    
-    FileToModule = True
+
+    FileToModule = IsEnabled
     
     Exit Function
     
@@ -353,14 +379,14 @@ ERROR_HANDLER:
 
     strContent = vbNullString
     
-    Set includes = Nothing
+    Set Includes = Nothing
 
     FileToModule = False
 
 End Function
 
 ' stores information about an include for more accurate error handling!
-Private Sub AddInclude(ByRef SCModule As Module, ByVal Name As String, ByVal Lines As Integer)
+Private Sub AddInclude(ByVal SCModule As Module, ByVal Name As String, ByVal Lines As Integer)
     Dim inc As scInc
     
     ' redefine array size
@@ -464,7 +490,7 @@ Private Function GetDefaultModuleProcs() As String
 
 End Function
 
-Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
+Private Function IsScriptNameValid(ByVal CurrentModule As Module) As Boolean
 
     On Error Resume Next
 
@@ -525,7 +551,7 @@ Public Sub InitScripts()
     End If
     
     For i = 2 To m_sc_control.Modules.Count
-        If modScripting.IsScriptEnabled(modScripting.GetScriptName(CStr(i))) = True Then
+        If modScripting.IsScriptModuleEnabled(m_sc_control.Modules(i)) = True Then
             InitScript m_sc_control.Modules(i)
         End If
     Next i
@@ -593,23 +619,23 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
 
     arr() = Parameters()
 
-    For i = 2 To SC.Modules.Count
-        Set obj = SC.Modules(i)
+    For i = 2 To m_sc_control.Modules.Count
+        Set obj = m_sc_control.Modules(i)
         Set m_ExecutingMdl = obj
         
-        If modScripting.IsScriptEnabled(modScripting.GetScriptName(CStr(i))) = True Then
+        If modScripting.IsScriptModuleEnabled(obj) = True Then
             
             ' check if module has the procedure before calling it!
-            'For Each Proc In obj.Procedures
-            '    If StrComp(Proc.Name, arr(0), vbTextCompare) = 0 Then
-            '        ' it does, count args
-            '        If Proc.numArgs = UBound(arr) Then
-            '            ' call it
-            CallByNameEx obj, "Run", VbMethod, arr()
-            '        End If
-            '        Exit For
-            '    End If
-            'Next Proc
+            For Each Proc In obj.Procedures
+                If StrComp(Proc.Name, arr(0), vbTextCompare) = 0 Then
+                    ' it does, count args
+                    If Proc.numArgs = UBound(arr) Then
+                        ' call it
+                        CallByNameEx obj, "Run", VbMethod, arr()
+                    End If
+                    Exit For
+                End If
+            Next Proc
             
             veto = veto Or GetVeto 'Did they veto it, or was it already vetod?
         End If
@@ -628,7 +654,7 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
     End If
 End Function
 
-Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Variant) As Boolean
+Public Function RunInSingle(ByVal obj As Module, ParamArray Parameters() As Variant) As Boolean
 
     On Error Resume Next
 
@@ -667,7 +693,7 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
         Enabled = True
         mname = vbNullString
     Else
-        Enabled = modScripting.IsScriptEnabled(modScripting.GetScriptName(obj.Name))
+        Enabled = modScripting.IsScriptModuleEnabled(obj)
         mname = GetScriptName(obj.Name)
     End If
     
@@ -681,7 +707,7 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
         For i = 1 To sobsers.Count
             Set obser = GetModuleByName(sobsers.Item(i))
             If (Not obser Is Nothing) Then 'Is the script real/loaded?
-                If modScripting.IsScriptEnabled(modScripting.GetScriptName(CStr(i))) = True Then
+                If modScripting.IsScriptModuleEnabled(obser) = True Then
                     Set m_ExecutingMdl = obser
                     CallByNameEx obser, "Run", VbMethod, arr
                 End If
@@ -707,7 +733,7 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
             If (cobser) Then
                 Set obser = GetModuleByName(fobsers.Item(i))
                 If (Not obser Is Nothing) Then
-                    If modScripting.IsScriptEnabled(modScripting.GetScriptName(obser.Name)) = True Then
+                    If modScripting.IsScriptModuleEnabled(obser) = True Then
                         Set m_ExecutingMdl = obser
                         CallByNameEx obser, "Run", VbMethod, arr
                     End If
@@ -786,7 +812,7 @@ Public Function Objects(objIndex As Integer) As scObj
 
 End Function
 
-Private Function ObjCount(Optional ObjType As String, Optional ByVal SCModule As Module = Nothing) As Integer
+Private Function ObjCount(Optional ByVal ObjType As String, Optional ByVal SCModule As Module = Nothing) As Integer
     
     Dim i As Integer
 
@@ -810,7 +836,7 @@ Private Function ObjCount(Optional ObjType As String, Optional ByVal SCModule As
 
 End Function
 
-Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByVal ObjName As String) As Object
+Public Function CreateObj(ByVal SCModule As Module, ByVal ObjType As String, ByVal ObjName As String) As Object
 
     On Error Resume Next
 
@@ -1079,7 +1105,7 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
     If (m_objCount > 1) Then
         ReDim Preserve m_arrObjs(0 To m_objCount - 1)
     Else
-        ReDim m_arrObjs(0)
+        ReDim Preserve m_arrObjs(0)
     End If
     
     SCModule.ExecuteStatement "Set " & ObjName & " = Nothing"
@@ -1102,7 +1128,7 @@ ERROR_HANDLER:
     
 End Sub
 
-Public Function GetObjByName(ByRef SCModule As Module, ByVal ObjName As String) As Object
+Public Function GetObjByName(ByVal SCModule As Module, ByVal ObjName As String) As Object
 
     Dim i As Integer
     
@@ -1202,7 +1228,7 @@ Public Function InitMenus()
         tmp.Parent = DynamicMenus("mnu" & Name)
         tmp.Caption = "Enabled"
         
-        If modScripting.IsScriptEnabled(Name) Then
+        If modScripting.IsScriptModuleEnabled(frmChat.SControl.Modules(i), True) Then
             tmp.Checked = True
         End If
         
@@ -1427,6 +1453,7 @@ Public Sub SC_Error()
     Dim Text        As String
     Dim IncIndex    As Integer
     Dim i           As Integer
+    Dim IsEnabled   As Boolean
     
     ' check whether the override is disabling the script system
     ' (this function is being called in that case due to /exec)
@@ -1484,13 +1511,22 @@ Public Sub SC_Error()
         End If
     End If
     
+    If GetScriptDictionary(m_ExecutingMdl)("Loading") Then
+        GetScriptDictionary(m_ExecutingMdl)("LoadError") = True
+        ' if loading, get script module setting from file
+        IsEnabled = modScripting.IsScriptEnabledSetting(modScripting.GetScriptName(m_ExecutingMdl.Name))
+    Else
+        ' otherwise, get it from module's Script Dictionary
+        IsEnabled = modScripting.IsScriptModuleEnabled(m_ExecutingMdl, True)
+    End If
+    
     ' display error if script enabled
-    If modScripting.IsScriptEnabled(modScripting.GetScriptName(m_ExecutingMdl.Name)) = True Then
+    If IsEnabled Then
         frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Scripting {0} error #{1} in {2}: (line {3}; column {4})", _
             ErrType, Number, Name, Line, Column)
         frmChat.AddChat g_Color.ErrorMessageText, Description
         If LenB(Trim$(Text)) > 0 Then
-            frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Offending line: >> {0}", Text)
+            frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Offending line: >> {0}", Trim$(Text))
         End If
     End If
     
@@ -1594,6 +1630,7 @@ Public Function GetScriptName(Optional ByVal ModuleID As String = vbNullString) 
     End If
     
     If StrictIsNumeric(ModuleID) = False Then Exit Function
+    If CInt(ModuleID) < 2 Then Exit Function
     
     Set Module = m_sc_control.Modules(ModuleID)
     
@@ -1774,18 +1811,19 @@ End Sub
 ' if not, the CodeObject.Script object will be restored (but all data was lost)
 ' prevents RTE due to CodeObject.Script(key) accesses failing when Script not
 ' of type Dictionary ~Ribose
-Public Function GetScriptDictionary(ByRef mdl As Module) As Dictionary
-    If (StrComp(TypeName$(mdl.CodeObject.Script), "Dictionary") <> 0) Then
-        SetScriptDictionary mdl
-        frmChat.AddChat g_Color.ErrorMessageText, "Scripting error: A Script object has been reset. " & _
-                               "Script module ID: " & mdl.Name
-    End If
-    Set GetScriptDictionary = mdl.CodeObject.Script
+Public Function GetScriptDictionary(ByVal mdl As Module) As Dictionary
+    'If (StrComp(TypeName$(mdl.CodeObject.Script), "Dictionary") <> 0) Then
+    '    SetScriptDictionary mdl
+    '    frmChat.AddChat g_Color.ErrorMessageText, "Scripting error: A Script object has been reset. " & _
+    '                           "Script module ID: " & mdl.Name
+    'End If
+    If CInt(mdl.Name) < 2 Then Exit Function
+    Set GetScriptDictionary = m_ScriptData(CInt(mdl.Name) - 1)
 End Function
 
 ' call this function to set or reset the contents of the CodeObject.Script
 ' dictionary for the specified module
-Private Function SetScriptDictionary(ByRef mdl As Module)
+Private Function SetScriptDictionary(ByVal mdl As Module) As Dictionary
     ' let's store a dictionary into the specified CodeObject.Script
     Dim Dict As Scripting.Dictionary
     Set Dict = New Scripting.Dictionary
@@ -1793,6 +1831,8 @@ Private Function SetScriptDictionary(ByRef mdl As Module)
     Dict.CompareMode = TextCompare
     ' store it
     Set mdl.CodeObject.Script = Dict
+    Set m_ScriptData(CInt(mdl.Name) - 1) = Dict
+    Set SetScriptDictionary = Dict
 End Function
 
 Public Function GetScriptSystemDisabled() As Boolean
@@ -1801,11 +1841,26 @@ Public Function GetScriptSystemDisabled() As Boolean
     
 End Function
 
+Public Function IsScriptModuleEnabled(ByVal Script As Module, Optional ByVal DontCheckLoadErrors As Boolean = False) As Boolean
+On Error GoTo ERROR_HANDLER
+    If m_SystemDisabled Then
+        IsScriptModuleEnabled = False
+    ElseIf Script Is Nothing Then
+        IsScriptModuleEnabled = False
+    ElseIf DontCheckLoadErrors Then
+        IsScriptModuleEnabled = GetScriptDictionary(Script)("Enabled")
+    Else
+        IsScriptModuleEnabled = GetScriptDictionary(Script)("Enabled") And Not GetScriptDictionary(Script)("LoadError")
+    End If
+        
+    Exit Function
+ERROR_HANDLER:
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.IsScriptModuleEnabled()."
+End Function
 
 Public Function IsScriptEnabled(ByVal Name As String) As Boolean
 On Error GoTo ERROR_HANDLER
     Dim Script  As Module
-    Dim Setting As String
 
     If m_SystemDisabled Then
         IsScriptEnabled = False
@@ -1813,16 +1868,71 @@ On Error GoTo ERROR_HANDLER
         IsScriptEnabled = False
     Else
         Set Script = GetModuleByName(Name)
-        If (Script Is Nothing) Then
-            IsScriptEnabled = False
-        Else
-            Setting = SharedScriptSupport.GetSettingsEntry("Enabled", Name)
-            IsScriptEnabled = CBool(StrComp(Setting, "False", vbTextCompare) <> 0)
-        End If
+        IsScriptEnabled = GetScriptDictionary(Script)("Enabled") And Not GetScriptDictionary(Script)("LoadError")
         Set Script = Nothing
     End If
         
     Exit Function
 ERROR_HANDLER:
     frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.IsScriptEnabled()."
+End Function
+
+Public Function IsScriptEnabledSetting(ByVal Name As String) As Boolean
+On Error GoTo ERROR_HANDLER
+    Dim Script  As Module
+    Dim Setting As String
+
+    If m_SystemDisabled Then
+        IsScriptEnabledSetting = False
+    ElseIf (LenB(Name) = 0) Then
+        IsScriptEnabledSetting = False
+    Else
+        Set Script = GetModuleByName(Name)
+        If (Script Is Nothing) Then
+            IsScriptEnabledSetting = False
+        Else
+            Setting = SharedScriptSupport.GetSettingsEntry("Enabled", Name)
+            IsScriptEnabledSetting = CBool(StrComp(Setting, "False", vbTextCompare) <> 0)
+        End If
+        Set Script = Nothing
+    End If
+        
+    Exit Function
+ERROR_HANDLER:
+    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.IsScriptEnabledSetting()."
+End Function
+
+Public Function EnableScriptModule(ByVal Name As String, ByVal Module As Module)
+    Dim i      As Integer
+    Dim mnu    As clsMenuObj
+
+    SharedScriptSupport.WriteSettingsEntry "Enabled", "True", , Name
+    GetScriptDictionary(Module)("Enabled") = True
+    modScripting.InitScript Module
+    For i = 1 To DynamicMenus.Count
+        Set mnu = DynamicMenus(i)
+        If (StrComp(mnu.Name, Chr$(0) & Name & Chr$(0) & "ENABLE|DISABLE", vbTextCompare) = 0) Then
+            mnu.Checked = True
+            Exit For
+        End If
+    Next i
+    Set mnu = Nothing
+End Function
+
+Public Function DisableScriptModule(ByVal Name As String, ByVal Module As Module)
+    Dim i      As Integer
+    Dim mnu    As clsMenuObj
+
+    modScripting.RunInSingle Module, "Event_Close"
+    modScripting.DestroyObjs Module
+    For i = 1 To DynamicMenus.Count
+        Set mnu = DynamicMenus(i)
+        If (StrComp(mnu.Name, Chr$(0) & Name & Chr$(0) & "ENABLE|DISABLE", vbTextCompare) = 0) Then
+            mnu.Checked = False
+            Exit For
+        End If
+    Next i
+    Set mnu = Nothing
+    SharedScriptSupport.WriteSettingsEntry "Enabled", "False", , Name
+    GetScriptDictionary(Module)("Enabled") = False
 End Function
