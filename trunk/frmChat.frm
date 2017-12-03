@@ -1111,13 +1111,11 @@ Begin VB.Form frmChat
       TabIndex        =   4
       TabStop         =   0   'False
       Top             =   6960
-      Visible         =   0   'False
       Width           =   12375
       _ExtentX        =   21828
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1143,7 +1141,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1876,7 +1873,7 @@ Private Sub Form_Load()
     ' whisper panel show/hide button
     ShowHideChangeHeight = False
     rtbWhispers_Visible = False
-    rtbWhispers.Visible = False 'default
+    'rtbWhispers.Visible = False 'default
     cmdShowHide.Caption = CAP_HIDE
 
     SkipResize = True
@@ -2533,26 +2530,28 @@ Public Sub Form_Resize()
         With cmdShowHide
             If rtbWhispers_Visible Then
                 'Debug.Print "-> " & rtbWhispers.Height
-                .Height = rtbWhispers.Height + 285
+                .Height = rtbWhispers.Height + ListviewTabs.Height
                 .Caption = CAP_HIDE
                 .ToolTipText = TIP_HIDE
             Else
-                .Height = txtPre.Height - Screen.TwipsPerPixelY
+                .Height = ListviewTabs.Height
                 .Caption = CAP_SHOW
                 .ToolTipText = TIP_SHOW
             End If
-            
+
             .ZOrder vbBringToFront
         End With
         
         'height is based on rtbchat.height + cmdshowhide.height
         If rtbWhispers_Visible Then
-            rtbChat.Height = ((Me.ScaleHeight / Screen.TwipsPerPixelY) - (txtPre.Height / _
+            rtbChat.Height = Me.ScaleHeight - cboSend.Height - rtbWhispers.Height
+            'rtbChat.Height = ((Me.ScaleHeight / Screen.TwipsPerPixelY) - (txtPre.Height / _
                 Screen.TwipsPerPixelY) - (rtbWhispers.Height / Screen.TwipsPerPixelY)) * _
                     (Screen.TwipsPerPixelY)
             rtbWhispers.Move rtbChat.Left, cboSend.Top + cboSend.Height
         Else
-            rtbChat.Height = ((Me.ScaleHeight / Screen.TwipsPerPixelY) - (txtPre.Height / _
+            rtbChat.Height = Me.ScaleHeight - cboSend.Height
+            'rtbChat.Height = ((Me.ScaleHeight / Screen.TwipsPerPixelY) - (txtPre.Height / _
                 Screen.TwipsPerPixelY)) * (Screen.TwipsPerPixelY)
         End If
         
@@ -2586,12 +2585,11 @@ Public Sub Form_Resize()
         End With
         
         ListviewTabs.Height = cboSend.Height
-        ListviewTabs.Move lvChannel.Left, cboSend.Top + Screen.TwipsPerPixelY, lvChannel.Width - _
-            cmdShowHide.Width - Screen.TwipsPerPixelX, cboSend.Height '+ 2 * Screen.TwipsPerPixelY
+        ListviewTabs.Move lvChannel.Left, cboSend.Top, lvChannel.Width - _
+            cmdShowHide.Width, cboSend.Height '+ 2 * Screen.TwipsPerPixelY
         
         If rtbWhispers_Visible Then
-            cmdShowHide.Move (((rtbWhispers.Left + rtbWhispers.Width) / Screen.TwipsPerPixelX) + 1) * _
-                Screen.TwipsPerPixelX, lvChannel.Top + lvChannel.Height + Screen.TwipsPerPixelY
+            cmdShowHide.Move rtbWhispers.Left + rtbWhispers.Width, lvChannel.Top + lvChannel.Height
         Else
             cmdShowHide.Move ListviewTabs.Left + ListviewTabs.Width, lvChannel.Top + lvChannel.Height
         End If
@@ -7861,7 +7859,7 @@ End Sub
 'SHOW/HIDE STUFF
 Public Sub cmdShowHide_Click()
     rtbWhispers_Visible = (Not rtbWhispers_Visible)
-    If rtbWhispers_Visible Then rtbWhispers.Visible = True
+    'If rtbWhispers_Visible Then rtbWhispers.Visible = True
 
     If Me.WindowState = vbNormal And ShowHideChangeHeight Then
         SkipResize = True
@@ -7875,7 +7873,7 @@ Public Sub cmdShowHide_Click()
 
     'Debug.Print ShowHideChangeHeight
     Call Form_Resize
-    If Not rtbWhispers_Visible Then rtbWhispers.Visible = False
+    'If Not rtbWhispers_Visible Then rtbWhispers.Visible = False
 
     Config.ShowWhisperBox = rtbWhispers_Visible
     Call Config.Save
