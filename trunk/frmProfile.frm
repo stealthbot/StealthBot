@@ -304,7 +304,12 @@ Private Sub Form_Unload(Cancel As Integer)
     For i = rtbField.LBound To rtbField.UBound
         rtbField(i).Text = vbNullString
     Next i
-    
+    If Not m_IsWriting Then
+        DisableURLDetect rtbField(FIELD_SEX).hWnd
+        DisableURLDetect rtbField(FIELD_LOC).hWnd
+        DisableURLDetect rtbField(FIELD_PRF).hWnd
+    End If
+
     frmChat.cboSendHadFocus = True
 End Sub
 
@@ -327,10 +332,17 @@ Public Sub PrepareForProfile(ByVal Username As String, ByVal IsWriting As Boolea
 
     ' set locked based on mode
     rtbField(FIELD_AGE).Locked = True 'Not IsWriting - always fixed
-    rtbField(FIELD_AGE).TabStop = Not IsWriting
+    rtbField(FIELD_AGE).TabStop = False 'IsWriting
     rtbField(FIELD_SEX).Locked = Not IsWriting
     rtbField(FIELD_LOC).Locked = Not IsWriting
     rtbField(FIELD_PRF).Locked = Not IsWriting
+    
+    ' if not writing, then set URL detection
+    If Not IsWriting And Config.UrlDetection Then
+        EnableURLDetect rtbField(FIELD_SEX).hWnd
+        EnableURLDetect rtbField(FIELD_LOC).hWnd
+        EnableURLDetect rtbField(FIELD_PRF).hWnd
+    End If
 
     ' if we are writing, request our own profile
     If IsWriting Then
@@ -371,7 +383,7 @@ Public Sub SetKey(ByVal KeyName As String, ByVal KeyValue As String)
         .SelColor = vbWhite
 
         If m_IsWriting Then
-            RTBSetSelectedText rtbField(Index), KeyValue
+            SetSelectedRTBText rtbField(Index), KeyValue
         Else
             ReDim saElements(0 To 2)
             saElements(0) = vbNullString
@@ -437,7 +449,7 @@ Private Sub rtbField_KeyDown(Index As Integer, KeyCode As Integer, Shift As Inte
         Exit Sub
     End If
     
-    If (rtbField(Index).SelColor <> vbWhite) Then rtbField(Index).SelColor = vbWhite
+    'If (rtbField(Index).SelColor <> vbWhite) Then rtbField(Index).SelColor = vbWhite
     
     Select Case (KeyCode)
         Case vbKeyB
