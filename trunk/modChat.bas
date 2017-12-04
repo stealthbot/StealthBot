@@ -249,7 +249,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 If SelStart < 0 Then SelStart = 0
                 If SelLength < 0 Then SelLength = 0
                 'Debug.Print "S " & SelStart & ", L " & SelLength
-                RTBSetSelectedText rtb, vbNullString
+                SetSelectedRTBText rtb, vbNullString
             End With
 
             If (blnUnlock = False) Then
@@ -272,7 +272,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 .SelUnderline = False
                 .SelStrikeThru = False
                 .SelColor = g_Color.TimeStamps
-                RTBSetSelectedText rtb, ElementText
+                SetSelectedRTBText rtb, ElementText
             End With
         End If
 
@@ -286,7 +286,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
         With rtb
             SetTextSelection rtb, -1, -1
-            RTBSetSelectedText rtb, vbCrLf
+            SetSelectedRTBText rtb, vbCrLf
         End With
 
         'ColorModify rtb, GetRTBLength(rtb) - LineLength
@@ -299,8 +299,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         Else
             ' set to scroll specific position
             'Debug.Print "SCROLL TO " & lngVerticalPos
-            SendMessage rtb.hWnd, WM_VSCROLL, _
-                    SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&
+            ScrollToPosition rtb, lngVerticalPos
         End If
 
         ' set carat
@@ -420,7 +419,7 @@ Public Sub DisplayRichTextElement(rtb As RichTextBox, saElements() As Variant, B
                 .SelFontName = FontName
             End If
             .SelColor = saElements(i + 1)
-            RTBSetSelectedText rtb, s
+            SetSelectedRTBText rtb, s
         End With
     End If
 End Sub
@@ -794,10 +793,10 @@ Public Function GetRTBText(rtb As RichTextBox) As String
 
 End Function
 
-Public Sub RTBSetSelectedText(rtb As RichTextBox, ByVal sText As String)
-    
+Public Sub SetSelectedRTBText(rtb As RichTextBox, ByVal sText As String)
+
     Dim SetTextObj As SETTEXTEX
-    
+
     SetTextObj.Flags = RTBW_SELECTION
     SetTextObj.Codepage = CP_UNICODE
     SendMessageW rtb.hWnd, EM_SETTEXTEX, ByVal VarPtr(SetTextObj), ByVal StrPtr(sText)
@@ -817,7 +816,7 @@ End Sub
 Public Sub SetTextSelection(cnt As Control, ByVal sParam As Long, ByVal eParam As Long)
 
     Dim CharRangeObj As CHARRANGE
-    
+
     CharRangeObj.cpMin = sParam
     CharRangeObj.cpMax = eParam
     SendMessageW cnt.hWnd, EM_EXSETSEL, 0, ByVal VarPtr(CharRangeObj)
@@ -833,9 +832,9 @@ Public Function GetVScrollPosition(cnt As Control) As Long
     If (g_OSVersion.IsWin2000Plus()) Then
 
         GetScrollRange cnt.hWnd, SB_VERT, 0, Range
-        
+
         lngVerticalPos = SendMessage(cnt.hWnd, EM_GETTHUMB, 0&, 0&)
-        
+
         If ((lngVerticalPos = 0) And (Range > 0)) Then
             lngVerticalPos = 1
         End If
@@ -848,7 +847,7 @@ Public Function GetVScrollPosition(cnt As Control) As Long
         If (Difference < 0) Then
             GetVScrollPosition = lngVerticalPos
         End If
-        
+
     End If
 
 End Function
@@ -869,3 +868,11 @@ Public Sub ScrollToBottom(cnt As Control)
     'LockWindowUpdate &H0
 
 End Sub
+
+Public Sub ScrollToPosition(cnt As Control, ByVal lngVerticalPos As Long)
+
+    SendMessage rtb.hWnd, WM_VSCROLL, _
+            SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&
+
+End Sub
+
