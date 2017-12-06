@@ -871,7 +871,7 @@ End Sub
 
 Public Sub ScrollToPosition(cnt As Control, ByVal lngVerticalPos As Long)
 
-    SendMessage rtb.hWnd, WM_VSCROLL, _
+    SendMessage cnt.hWnd, WM_VSCROLL, _
             SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&
 
 End Sub
