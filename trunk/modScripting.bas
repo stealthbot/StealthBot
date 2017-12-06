@@ -121,9 +121,7 @@ Public Sub LoadScripts()
         Loop
 
         If Paths.Count > 0 Then
-            ' prepare our data array
-            ReDim m_ScriptData(1 To Paths.Count)
-
+            ReDim m_ScriptData(1 To 1)
             ' Cycle through each of the files.
             For i = 1 To Paths.Count
                 ' Does the file have the extension for a script?
@@ -183,13 +181,12 @@ Public Sub LoadScripts()
     Exit Sub
 
 ERROR_HANDLER:
-
-    frmChat.AddChat g_Color.ErrorMessageText, _
-        "Error (" & Err.Number & "): " & Err.Description & " in LoadScripts()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in LoadScripts()."
 
 End Sub
 
-Private Function FileToModule(ByVal ScriptModule As Module, ByVal FilePath As String, Optional ByVal IsPrimary As Boolean = True) As Boolean
+Private Function FileToModule(ByVal ScriptModule As Module, ByVal FilePath As String, _
+        Optional ByVal IsPrimary As Boolean = True, Optional ByVal IsRetry = False) As Boolean
 
     On Error GoTo ERROR_HANDLER
 
@@ -208,6 +205,7 @@ Private Function FileToModule(ByVal ScriptModule As Module, ByVal FilePath As St
     Dim ScriptName       As String
     Dim ScriptDict       As Dictionary
     Dim IsEnabled        As Boolean
+    Dim PreProcError     As Boolean
 
     blnCheckOperands = True
     
@@ -220,6 +218,28 @@ Private Function FileToModule(ByVal ScriptModule As Module, ByVal FilePath As St
     Open FilePath For Input As #f
         Do While (EOF(f) = False)
             Line Input #f, strLine
+            
+            If InStr(1, strLine, vbCr, vbBinaryCompare) <> 0 Or InStr(1, strLine, vbLf, vbBinaryCompare) <> 0 Then
+                If Not IsRetry Then
+                    Close #f
+                    If NormalizeLineEndings(FilePath) Then
+                        strContent = vbNullString
+                        Set Includes = Nothing
+
+                        frmChat.AddChat g_Color.ErrorMessageText, "Scripting warning! " & CleanFileName(Dir$(FilePath)) & " has incorrect line endings. This interferes with pre-processing. They have been changed to CRLF."
+
+                        FileToModule = FileToModule(ScriptModule, FilePath, IsPrimary, True)
+                        Exit Function
+                    Else
+                        frmChat.AddChat g_Color.ErrorMessageText, "Scripting error! " & CleanFileName(Dir$(FilePath)) & " has incorrect line endings. This interferes with pre-processing. They could not be corrected."
+                        PreProcError = True
+                        GoTo Prepare_Module
+                        ' if that failed, then continue loading this module...
+                        ' an error has probably been displayed to screen by this point,
+                        ' but at least it won't be recursive
+                    End If
+                End If
+            End If
             
             strLine = Trim$(strLine)
             
@@ -239,11 +259,17 @@ Private Function FileToModule(ByVal ScriptModule As Module, ByVal FilePath As St
     
                             If (strCommand = "include") Then
                                 If (Len(strLine) >= 12) Then
-                                    Dim strPath As String
+                                    Dim strPath     As String
                                     Dim strFullPath As String
+                                    Dim strPathDisp As String
                                     
                                     strPath = _
                                         Mid$(strLine, 11, Len(strLine) - 11)
+                                    If Len(strPath) > 100 Then
+                                        strPathDisp = Left$(strPath, 97) & "..."
+                                    Else
+                                        strPathDisp = strPath
+                                    End If
                                     
                                     If (Left$(strPath, 1) = "\") Then
                                         strFullPath = StringFormat("{0}\Scripts{1}", CurDir$(), strPath)
@@ -254,17 +280,17 @@ Private Function FileToModule(ByVal ScriptModule As Module, ByVal FilePath As St
                                     blnIncIsValid = True
                                     
                                     ' check if file exists to include
-                                    If LenB(Dir$(strFullPath)) = 0 Then
-                                        frmChat.AddChat g_Color.ErrorMessageText, "Scripting warning! " & Dir$(FilePath) & " is trying to include " & _
-                                            "a file that does not exist: " & strPath
+                                    If Not IncludeFileExists(strFullPath) Then
+                                        frmChat.AddChat g_Color.ErrorMessageText, "Scripting warning! " & CleanFileName(Dir$(FilePath)) & " is trying to include " & _
+                                                "a file that does not exist: " & strPathDisp
                                         blnIncIsValid = False
                                     End If
                                     
                                     ' check if file is already included by this script
                                     For i = 1 To Includes.Count
                                         If StrComp(Includes(i), strFullPath, vbTextCompare) = 0 Then
-                                            frmChat.AddChat g_Color.ErrorMessageText, "Scripting warning! " & Dir$(FilePath) & " is trying to include " & _
-                                                "a file that has already been included: " & strPath
+                                            frmChat.AddChat g_Color.ErrorMessageText, "Scripting warning! " & CleanFileName(Dir$(FilePath)) & " is trying to include " & _
+                                                    "a file that has already been included: " & strPathDisp
                                             blnIncIsValid = False
                                         End If
                                     Next i
@@ -293,12 +319,10 @@ Private Function FileToModule(ByVal ScriptModule As Module, ByVal FilePath As St
             ' if this line is not an #include
             If (blnKeepLine) Then
                 ' keep it, append it to content
-                strContent = _
-                    strContent & strLine & vbCrLf
+                strContent = strContent & strLine & vbCrLf
             Else
                 ' remove it, but keep line numbers consistant in errors
-                strContent = _
-                    strContent & vbCrLf
+                strContent = strContent & vbCrLf
             End If
             
             ' increment counter
@@ -308,18 +332,17 @@ Private Function FileToModule(ByVal ScriptModule As Module, ByVal FilePath As St
             strLine = vbNullString
         Loop
     Close #f
-  
+
+Prepare_Module:
     ' if we are not loading an include (primary script file), set it up
     If (IsPrimary) Then
         ' add this as the "first" include for this script, with no name so that later it is changed to "scriptname"
         AddInclude ScriptModule, vbNullString, lineCount
 
         ' add includes to end of code, process the same for includes in includes
-        i = 1
-        Do While i <= Includes.Count
+        For i = 1 To Includes.Count
             FileToModule ScriptModule, Includes(i), False
-            i = i + 1
-        Loop
+        Next i
 
         ' initialize these variables globally
         ScriptModule.ExecuteStatement "Public Script, DataBuffer"
@@ -335,7 +358,7 @@ Private Function FileToModule(ByVal ScriptModule As Module, ByVal FilePath As St
         ' save path for script menu
         ScriptDict("Path") = FilePath
         ' there has not been a load error yet
-        ScriptDict("LoadError") = False
+        ScriptDict("LoadError") = PreProcError
         ' "loading" is set until LoadScripts() has gone through this script
         ScriptDict("Loading") = True
         ' store the position in the arrInc array where this script's line number information starts
@@ -376,13 +399,54 @@ Private Function FileToModule(ByVal ScriptModule As Module, ByVal FilePath As St
     Exit Function
     
 ERROR_HANDLER:
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in FileToModule()."
+
+    On Error Resume Next
+    frmChat.AddChat g_Color.ErrorMessageText, "Scripting error! " & CleanFileName(Dir$(FilePath)) & " could not be prepared. Many other errors may follow."
+    On Error GoTo 0
 
     strContent = vbNullString
-    
     Set Includes = Nothing
-
     FileToModule = False
 
+End Function
+
+Private Function NormalizeLineEndings(ByVal FilePath As String) As Boolean
+    Dim strData As String
+    Dim f       As Integer
+
+    On Error GoTo ERROR_HANDLER
+
+    f = FreeFile
+    Open FilePath For Input As #f
+        strData = input(LOF(f), #f)
+    Close #f
+
+    strData = Replace(strData, vbCrLf, vbLf, 1, -1, vbBinaryCompare)
+    strData = Replace(strData, vbLf, vbCr, 1, -1, vbBinaryCompare)
+    strData = Replace(strData, vbCr, vbCrLf, 1, -1, vbBinaryCompare)
+
+    f = FreeFile
+    Open FilePath For Output As #f
+        Print #f, strData
+    Close #f
+
+    NormalizeLineEndings = True
+
+    Exit Function
+ERROR_HANDLER:
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in NormalizeLineEndings()."
+    NormalizeLineEndings = False
+End Function
+
+Private Function IncludeFileExists(ByVal sFileName As String) As Boolean
+    On Error GoTo ERROR_HANDLER
+    Call GetAttr(sFileName)
+    IncludeFileExists = True
+    
+    Exit Function
+ERROR_HANDLER:
+    IncludeFileExists = False
 End Function
 
 ' stores information about an include for more accurate error handling!
@@ -492,7 +556,7 @@ End Function
 
 Private Function IsScriptNameValid(ByVal CurrentModule As Module) As Boolean
 
-    On Error Resume Next
+    On Error GoTo ERROR_HANDLER
 
     Dim j            As Integer
     Dim str          As String
@@ -530,6 +594,11 @@ Private Function IsScriptNameValid(ByVal CurrentModule As Module) As Boolean
     Next j
     
     IsScriptNameValid = True
+    
+    Exit Function
+
+ERROR_HANDLER:
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in IsScriptNameValid()."
 
 End Function
 
@@ -683,9 +752,10 @@ Public Function RunInSingle(ByVal obj As Module, ParamArray Parameters() As Vari
     Set oldEM = m_ExecutingMdl ' keep old module reference, for recursion
     
     Set m_ExecutingMdl = obj
-    m_IsEventError = (StrComp(arr(0), "Event_Error", vbBinaryCompare) = 0)
 
     arr() = Parameters()
+    
+    m_IsEventError = (StrComp(arr(0), "Event_Error", vbBinaryCompare) = 0)
     
     'If Obj is nothing then we are 'running' an internal event
     'This is so scriptors can observe internal events, like Internal Commands
@@ -799,8 +869,7 @@ ERROR_HANDLER:
         Exit Sub
     End If
 
-    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
-        " in CallByNameEx()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in CallByNameEx()."
         
     Set oTLI = Nothing
     
@@ -991,8 +1060,7 @@ Public Sub DestroyObjs(Optional ByVal SCModule As Object = Nothing)
     
 ERROR_HANDLER:
     
-    frmChat.AddChat g_Color.ErrorMessageText, _
-        "Error (#" & Err.Number & "): " & Err.Description & " in DestroyObjs()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in DestroyObjs()."
         
     Resume Next
     
@@ -1121,11 +1189,10 @@ ERROR_HANDLER:
         Resume Next
     End If
 
-    frmChat.AddChat g_Color.ErrorMessageText, _
-        "Error (#" & Err.Number & "): " & Err.Description & " in DestroyObj()."
-        
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in DestroyObj()."
+
     Resume Next
-    
+
 End Sub
 
 Public Function GetObjByName(ByVal SCModule As Module, ByVal ObjName As String) As Object
@@ -1263,8 +1330,7 @@ Public Function InitMenus()
         
 ERROR_HANDLER:
 
-    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
-        " in InitMenus()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in InitMenus()."
 
     Err.Clear
     
@@ -1296,8 +1362,7 @@ Public Function DestroyMenus()
     
 ERROR_HANDLER:
 
-    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
-        " in DestroyMenus()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in DestroyMenus()."
 
     Err.Clear
     
@@ -1526,7 +1591,7 @@ Public Sub SC_Error()
             ErrType, Number, Name, Line, Column)
         frmChat.AddChat g_Color.ErrorMessageText, Description
         If LenB(Trim$(Text)) > 0 Then
-            frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Offending line: >> {0}", Trim$(Text))
+            frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Offending line: >> {0}", Text)
         End If
     End If
     
@@ -1562,8 +1627,7 @@ Public Function GetScriptModule(Optional ByVal ScriptName As String = vbNullStri
 
 ERROR_HANDLER:
 
-    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
-        " in GetScriptModule()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in GetScriptModule()."
 
     Err.Clear
     
@@ -1605,8 +1669,7 @@ Public Function GetModuleID(Optional ByVal ScriptName As String = vbNullString) 
 
 ERROR_HANDLER:
 
-    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
-        " in GetModuleID()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in GetModuleID()."
 
     Err.Clear
     
@@ -1643,8 +1706,7 @@ Public Function GetScriptName(Optional ByVal ModuleID As String = vbNullString) 
 
 ERROR_HANDLER:
 
-    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
-        " in GetScriptName()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in GetScriptName()."
 
     Err.Clear
     
@@ -1679,7 +1741,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.AddScriptObserver()"
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in AddScriptObserver()."
 End Sub
 
 'Returns a collection of scripts that the passed script is currently observing, or being observed by
@@ -1709,7 +1771,7 @@ On Error GoTo ERROR_HANDLER
 
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.GetScriptObservers()"
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in GetScriptObservers()."
 End Function
 
 'Adds a Function/Observer pair to the Function Observer collection
@@ -1731,12 +1793,12 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Error #{0}: {1} in modScripting.AddFunctionObservers()", Err.Number, Err.Description)
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in AddFunctionObservers()."
 End Sub
 
 'Returns a collections of scripts who are observing this event in all scripts.
 Public Function GetFunctionObservers(sFunctionName As String) As Collection
-On Error GoTo ERROR_HANDLER:
+On Error GoTo ERROR_HANDLER
     Dim i As Integer
     Dim sFunction As String
     Dim sObserver As String
@@ -1756,7 +1818,7 @@ On Error GoTo ERROR_HANDLER:
     
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Error #{0}: {1} in modScripting.GetFunctionObservers()", Err.Number, Err.Description)
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in GetFunctionObservers()."
 End Function
 
 ' call this during config reload to enable/disable the system
@@ -1801,8 +1863,7 @@ ERROR_HANDLER:
         Exit Sub
     End If
 
-    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & _
-        " in SetScriptSystemDisabled()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in SetScriptSystemDisabled()."
 End Sub
 
 ' call this function to get a script module's CodeObject.Script dictionary.
@@ -1824,6 +1885,7 @@ End Function
 ' call this function to set or reset the contents of the CodeObject.Script
 ' dictionary for the specified module
 Private Function SetScriptDictionary(ByVal mdl As Module) As Dictionary
+    ReDim Preserve m_ScriptData(1 To CInt(mdl.Name) - 1)
     ' let's store a dictionary into the specified CodeObject.Script
     Dim Dict As Scripting.Dictionary
     Set Dict = New Scripting.Dictionary
@@ -1855,7 +1917,7 @@ On Error GoTo ERROR_HANDLER
         
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.IsScriptModuleEnabled()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in IsScriptModuleEnabled()."
 End Function
 
 Public Function IsScriptEnabled(ByVal Name As String) As Boolean
@@ -1874,7 +1936,7 @@ On Error GoTo ERROR_HANDLER
         
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.IsScriptEnabled()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in IsScriptEnabled()."
 End Function
 
 Public Function IsScriptEnabledSetting(ByVal Name As String) As Boolean
@@ -1899,7 +1961,7 @@ On Error GoTo ERROR_HANDLER
         
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat g_Color.ErrorMessageText, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.IsScriptEnabledSetting()."
+    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in IsScriptEnabledSetting()."
 End Function
 
 Public Function EnableScriptModule(ByVal Name As String, ByVal Module As Module)

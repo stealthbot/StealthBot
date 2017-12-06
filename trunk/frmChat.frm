@@ -6893,7 +6893,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, _
     Exit Function
     
 ERROR_HANDLER:
-    Call AddChat(vbRed, "Error: " & Err.Description & " in AddQ().")
+    Call AddChat(vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in AddQ().")
 
     Exit Function
 End Function
@@ -8221,7 +8221,7 @@ Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal OldPosition As In
 
     Exit Sub
 ERROR_HANDLER:
-    AddChat g_Color.ErrorMessageText, StringFormat("Error: #{0}: {1} in frmChat.AddName", Err.Number, Err.Description)
+    AddChat g_Color.ErrorMessageText, StringFormat("Error (#{0}): {1} in frmChat.AddName", Err.Number, Err.Description)
 End Sub
 
 Private Sub AddFriendItem(ByVal Name As String, ByVal Game As String, _
