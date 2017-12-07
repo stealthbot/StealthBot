@@ -131,7 +131,7 @@ Public Sub LoadScripts()
                         m_sc_control.Modules.Add(m_sc_control.Modules.Count + 1)
 
                     ' store the temporary name of the module for parsing errors
-                    m_TempMdlName = Paths(i)
+                    m_TempMdlName = CleanFileName(Paths(i))
 
                     ' set executing module reference for parsing errors and module-specific functions
                     Set m_ExecutingMdl = CurrentModule
@@ -145,7 +145,7 @@ Public Sub LoadScripts()
                     ' Does the script have a valid name?
                     If (IsScriptNameValid(CurrentModule) = False) Then
                         ' No. Try to fix it.
-                        GetScriptDictionary(CurrentModule)("Name") = CleanFileName(m_TempMdlName)
+                        GetScriptDictionary(CurrentModule)("Name") = m_TempMdlName
 
                         ' Is it valid now?
                         If (IsScriptNameValid(CurrentModule) = False) Then
@@ -354,7 +354,7 @@ Prepare_Module:
         Set ScriptModule.CodeObject.DataBuffer = SharedScriptSupport.DataBufferEx()
 
         ' set default name to clean filename
-        ScriptDict("Name") = CleanFileName(m_TempMdlName)
+        ScriptDict("Name") = m_TempMdlName
         ' save path for script menu
         ScriptDict("Path") = FilePath
         ' there has not been a load error yet
@@ -368,7 +368,7 @@ Prepare_Module:
         ' so that we know what include is causing an error
         ScriptDict("IncludeLBound") = m_incCount - Includes.Count - 1
         ' enabled is what the settings says
-        IsEnabled = IsScriptEnabledSetting(ScriptName)
+        IsEnabled = IsScriptEnabledSetting(m_TempMdlName)
         ScriptDict("Enabled") = IsEnabled
 
         ' add content
@@ -399,11 +399,14 @@ Prepare_Module:
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in FileToModule()."
 
-    On Error Resume Next
-    frmChat.AddChat g_Color.ErrorMessageText, "Scripting error! " & CleanFileName(Dir$(FilePath)) & " could not be prepared. Many other errors may follow."
-    On Error GoTo 0
+    If (m_sc_control.Error.Number <> 0) Then
+        frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in FileToModule()."
+
+        On Error Resume Next
+        frmChat.AddChat g_Color.ErrorMessageText, "Scripting error! " & CleanFileName(Dir$(FilePath)) & " could not be prepared. Many other errors may follow."
+        On Error GoTo 0
+    End If
 
     strContent = vbNullString
     Set Includes = Nothing
@@ -865,7 +868,7 @@ Public Sub CallByNameEx(obj As Object, ProcName As String, CallType As VbCallTyp
 
 ERROR_HANDLER:
 
-    If (frmChat.SControl.Error) Then
+    If (m_sc_control.Error.Number = 0) Then
         Exit Sub
     End If
 
@@ -1914,7 +1917,9 @@ On Error GoTo ERROR_HANDLER
     Else
         IsScriptModuleEnabled = GetScriptDictionary(Script)("Enabled") And Not GetScriptDictionary(Script)("LoadError")
     End If
-        
+
+    'Debug.Print "Enabled InternalM " & Script.Name & " = " & IsScriptModuleEnabled
+
     Exit Function
 ERROR_HANDLER:
     frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in IsScriptModuleEnabled()."
@@ -1933,7 +1938,9 @@ On Error GoTo ERROR_HANDLER
         IsScriptEnabled = GetScriptDictionary(Script)("Enabled") And Not GetScriptDictionary(Script)("LoadError")
         Set Script = Nothing
     End If
-        
+
+    'Debug.Print "Enabled Internal " & Name & " = " & IsScriptEnabled
+
     Exit Function
 ERROR_HANDLER:
     frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in IsScriptEnabled()."
@@ -1958,7 +1965,9 @@ On Error GoTo ERROR_HANDLER
         End If
         Set Script = Nothing
     End If
-        
+
+    'Debug.Print "Enabled Setting " & Name & " = " & IsScriptEnabledSetting
+
     Exit Function
 ERROR_HANDLER:
     frmChat.AddChat g_Color.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.Description & " in IsScriptEnabledSetting()."
