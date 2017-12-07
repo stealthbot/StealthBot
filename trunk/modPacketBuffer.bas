@@ -7,11 +7,12 @@ Option Explicit
 Private Const MAX_PACKET_CACHE_SIZE = 100
 
 Public Enum enuServerTypes
-    stBNCS = 0
-    stBNLS = 1
-    stMCP = 2
-    stBNFTP = 3
-    stPROXY = 4
+    stGEN = 0
+    stBNCS = 1
+    stBNLS = 2
+    stMCP = 3
+    stBNFTP = 4
+    stPROXY = 5
 End Enum
 
 Public Enum enuPacketHeaderTypes
@@ -63,6 +64,7 @@ End Function
 
 Public Function NamePacketType(ByVal PktType As enuServerTypes) As String
     Select Case PktType
+        Case stGEN:   NamePacketType = "SCRIPTING"
         Case stBNCS:  NamePacketType = "BNCS"
         Case stBNLS:  NamePacketType = "BNLS"
         Case stMCP:   NamePacketType = "MCP"
@@ -225,7 +227,7 @@ End Function
 ' PacketType: value sent to NamePacketType() shown in packet logs
 ' HeaderType: what kind of header to prepend
 Public Function SendData(ByRef Data() As Byte, ByVal DataLen As Long, _
-        ByVal HasPktID As Boolean, Optional ByVal PktID As Byte, Optional ByRef Socket As Winsock, _
+        ByVal HasPktID As Boolean, Optional ByVal PktID As Byte, Optional ByVal Socket As Winsock, _
         Optional ByVal PktType As enuServerTypes, Optional ByVal HeaderType As enuPacketHeaderTypes) As Boolean
     Dim buf()    As Byte
     Dim HLen     As Byte
@@ -285,9 +287,11 @@ Public Function SendData(ByRef Data() As Byte, ByVal DataLen As Long, _
         Socket.SendData buf
 
         ' only log if sent
-        Pkt = MakePacket(buf, PktLen, HasPktID, PktID, PktType, CtoS)
-        Call CachePacket(Pkt)
-        Call WritePacketData(Pkt)
+        If PktType <> stGEN Then
+            Pkt = MakePacket(buf, PktLen, HasPktID, PktID, PktType, CtoS)
+            Call CachePacket(Pkt)
+            Call WritePacketData(Pkt)
+        End If
     End If
 End Function
 

@@ -3,10 +3,6 @@ Option Explicit
 
 Public Const COLOR_BLUE2 = 12092001
 
-Public Sub SendHeader()
-    frmChat.sckBNet.SendData ChrW(1)
-End Sub
-
 Public Function StrToHex(ByVal String1 As String, Optional ByVal NoSpaces As Boolean = False) As String
     Dim strTemp As String, strReturn As String, i As Long
     

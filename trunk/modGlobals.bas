@@ -21,8 +21,8 @@ Public ProductList(12) As udtProductInfo
 Public g_Queue As New clsQueue
 Public g_OSVersion As New clsOSVersion
 Public SharedScriptSupport As New clsScriptSupportClass
-Public ReceiveBuffer(0 To 2) As clsDataBuffer
-Public ProxyConnInfo(0 To 2) As udtProxyConnectionInfo
+Public ReceiveBuffer(1 To 3) As clsDataBuffer
+Public ProxyConnInfo(1 To 3) As udtProxyConnectionInfo
 
 Public ConfigOverride As String
 Public CommandLine As String

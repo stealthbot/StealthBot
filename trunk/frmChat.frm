@@ -5966,23 +5966,19 @@ End Sub
 
 Private Sub sckMCP_DataArrival(ByVal bytesTotal As Long)
     On Error GoTo ERROR_HANDLER
-    
-    Dim buf() As Byte
+
     Dim pBuff As clsDataBuffer
-    
+
     If bytesTotal = 0 Then Exit Sub
-    
-    ' read buffer as Byte()
-    sckMCP.GetData buf(), vbArray + vbByte, bytesTotal
-    ' add data to buffer
-    ReceiveBuffer(stMCP).InsertByteArr buf()
+
+    ReceiveBuffer(stMCP).GetDataAndAppend sckMCP, bytesTotal
 
     If ProxyConnInfo(stMCP).IsUsingProxy And ProxyConnInfo(stMCP).Status <> psOnline Then
         Call modProxySupport.ProxyRecvPacket(sckMCP, ProxyConnInfo(stMCP), ReceiveBuffer(stMCP))
     Else
-        Do While ReceiveBuffer(stMCP).IsFullPacket(stMCP)
+        Do While ReceiveBuffer(stMCP).IsFullPacket(0)
             ' retrieve MCP packet
-            Set pBuff = ReceiveBuffer(stMCP).TakePacket(stMCP)
+            Set pBuff = ReceiveBuffer(stMCP).TakePacket(0)
             ' if MCP handler exists, parse
             If Not ds.MCPHandler Is Nothing Then
                 Call ds.MCPHandler.MCPRecvPacket(pBuff)
@@ -5991,7 +5987,7 @@ Private Sub sckMCP_DataArrival(ByVal bytesTotal As Long)
             Set pBuff = Nothing
         Loop
     End If
-    
+
     Exit Sub
 
 ERROR_HANDLER:
@@ -6431,7 +6427,7 @@ Sub Connect()
             Exit Sub
         End If
         
-        For i = 0 To 2
+        For i = LBound(ProxyConnInfo) To UBound(ProxyConnInfo)
             ProxyConnInfo(i).IsUsingProxy = ProxyConnInfo(i).UseProxy
             If ProxyConnInfo(i).IsUsingProxy And (ProxyConnInfo(i).ProxyPort = 0 Or LenB(ProxyConnInfo(i).ProxyIP) = 0) Then
                 MsgBox "You have selected to use a proxy for one or more connections, but no proxy is configured. Please set one up in the Advanced " & _
@@ -7239,7 +7235,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         Call UpdateListviewTabs
     End If
     
-    For i = 0 To 2
+    For i = LBound(ProxyConnInfo) To UBound(ProxyConnInfo)
         With ProxyConnInfo(i)
             .ServerType = i
             Select Case i
@@ -7429,17 +7425,13 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
     #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
-    
-    Dim buf() As Byte
+
     Dim pBuff As clsDataBuffer
-    
+
     If bytesTotal = 0 Then Exit Sub
 
-    ' read buffer as Byte()
-    sckBNet.GetData buf(), vbArray + vbByte, bytesTotal
-    ' add data to buffer
-    ReceiveBuffer(stBNCS).InsertByteArr buf()
-    
+    ReceiveBuffer(stBNCS).GetDataAndAppend sckBNet, bytesTotal
+
     If ProxyConnInfo(stBNCS).IsUsingProxy And ProxyConnInfo(stBNCS).Status <> psOnline Then
         Call modProxySupport.ProxyRecvPacket(sckBNet, ProxyConnInfo(stBNCS), ReceiveBuffer(stBNCS))
     Else
@@ -7449,16 +7441,16 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
             AutoReconnectTry = 0
         End If
 
-        Do While ReceiveBuffer(stBNCS).IsFullPacket(stBNCS)
+        Do While ReceiveBuffer(stBNCS).IsFullPacket(2)
             ' retrieve BNLS packet
-            Set pBuff = ReceiveBuffer(stBNCS).TakePacket(stBNCS)
+            Set pBuff = ReceiveBuffer(stBNCS).TakePacket(2)
             ' parse
             Call modBNCS.BNCSRecvPacket(pBuff)
             ' clean up
             Set pBuff = Nothing
         Loop
     End If
-    
+
     Exit Sub
 
 ERROR_HANDLER:
@@ -7573,30 +7565,26 @@ End Sub
 
 Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
     On Error GoTo ERROR_HANDLER
-    
-    Dim buf() As Byte
+
     Dim pBuff As clsDataBuffer
     
     If bytesTotal = 0 Then Exit Sub
-    
-    ' read buffer as Byte()
-    sckBNLS.GetData buf(), vbArray + vbByte, bytesTotal
-    ' add data to buffer
-    ReceiveBuffer(stBNLS).InsertByteArr buf()
+
+    ReceiveBuffer(stBNLS).GetDataAndAppend sckBNLS, bytesTotal
 
     If ProxyConnInfo(stBNLS).IsUsingProxy And ProxyConnInfo(stBNLS).Status <> psOnline Then
         Call modProxySupport.ProxyRecvPacket(sckBNLS, ProxyConnInfo(stBNLS), ReceiveBuffer(stBNLS))
     Else
-        Do While ReceiveBuffer(stBNLS).IsFullPacket(stBNLS)
+        Do While ReceiveBuffer(stBNLS).IsFullPacket(0)
             ' retrieve BNLS packet
-            Set pBuff = ReceiveBuffer(stBNLS).TakePacket(stBNLS)
+            Set pBuff = ReceiveBuffer(stBNLS).TakePacket(0)
             ' parse
             Call modBNLS.BNLSRecvPacket(pBuff)
             ' clean up
             Set pBuff = Nothing
         Loop
     End If
-    
+
     Exit Sub
 
 ERROR_HANDLER:

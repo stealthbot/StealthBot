@@ -380,7 +380,7 @@ Public Function DebugOutput(Optional ByVal Start As Long = 0, Optional ByVal Len
     DebugOutput = modPacketBuffer.DebugOutput(Data, Start, Length)
 End Function
 
-Public Function SendData(ByRef Socket As Winsock, Optional ByVal PacketID As Byte, Optional ByVal ServerType As enuServerTypes = stBNCS, Optional ByVal HeaderType As enuPacketHeaderTypes = phtBNCS) As Boolean
+Public Function SendData(ByVal Socket As Winsock, Optional ByVal PacketID As Byte, Optional ByVal ServerType As enuServerTypes = stGEN, Optional ByVal HeaderType As enuPacketHeaderTypes = phtNONE) As Boolean
     If (Socket Is frmChat.sckBNet) Then
         ' catch packets being sent with their header
         If HeaderType = phtNONE And m_bufsize >= 4 Then PacketID = m_buf(1)
@@ -426,6 +426,14 @@ Public Function vLSendPacket(Optional ByVal PacketID As Byte) As Boolean
     vLSendPacket = Me.SendData(frmChat.sckBNLS, PacketID, stBNLS, phtMCP)
 End Function
 
+Public Sub GetDataAndAppend(ByVal Socket As Winsock, Optional ByVal Length As Long)
+    Dim buf() As Byte
+    ' read buffer as Byte()
+    Socket.GetData buf(), vbArray + vbByte, Length
+    ' add data to buffer
+    Me.InsertByteArr buf()
+End Sub
+
 Public Function HandleRecvData(Optional ByRef PacketID As Byte, Optional ByRef PacketLength As Long, Optional ByVal ServerType As enuServerTypes = stBNCS, Optional ByVal HeaderType As enuPacketHeaderTypes = phtBNCS, Optional ByVal ScriptSource As Boolean = False) As Boolean
     Dim HasPacketID As Boolean
 
@@ -459,76 +467,74 @@ Public Function FindByte(ByVal Value As Integer) As Long
     FindByte = 0
 End Function
 
-Public Function IsFullPacket(Optional ByVal st As enuServerTypes = stBNCS) As Boolean
+Public Function IsFullPacket(ByVal HeaderLenStart As Integer) As Boolean
     Dim lngPacketLen As Long, ByteIndex As Long
     
     IsFullPacket = False
     
     If m_bufsize > 0 Then
-        ByteIndex = FindByte(&HFF)
+        lngPacketLen = GetPacketLength(HeaderLenStart)
         
-        If st <> stBNCS Or ByteIndex = 1 Then
-            lngPacketLen = GetPacketLength(st)
-            
-            If (lngPacketLen = 0) Then
-                Exit Function
-            End If
+        If (lngPacketLen = 0) Then
+            Exit Function
+        End If
 
-            If (m_bufsize >= lngPacketLen) Then
-                If lngPacketLen < 10000 Then
-                    IsFullPacket = True
-                Else
-                    frmChat.AddChat g_Color.ErrorMessageText, "Error: Packet Length of unusually high Length detected! Packet " & _
-                            "dropped. Buffer content at this time: " & vbCrLf & DebugOutput()
-                            
-                    Call Clear
-                End If
-            End If
-        Else
-            frmChat.AddChat g_Color.ErrorMessageText, "Error: The front of the buffer is not a valid packet!"
-        
-            If MDebug("showdrops") Then
-                frmChat.AddChat g_Color.ErrorMessageText, "Error: The front of the buffer is not " & _
-                        "a valid packet!"
-                frmChat.AddChat g_Color.ErrorMessageText, "The following data is being purged:"
-                
-                If ByteIndex > 0 Then
-                    frmChat.AddChat g_Color.ErrorMessageText, Space$(1) & DebugOutput()
-                Else
-                    frmChat.AddChat g_Color.ErrorMessageText, Space$(1) & DebugOutput()
-                End If
-            End If
-            
-            If ByteIndex > 0 Then
-                m_bufpos = ByteIndex
-                Call Clear
+        If (m_bufsize >= lngPacketLen) Then
+            If lngPacketLen < 10000 Then
+                IsFullPacket = True
             Else
+                frmChat.AddChat g_Color.ErrorMessageText, "Error: Packet Length of unusually high Length detected! Packet " & _
+                        "dropped. Buffer content at this time: " & vbCrLf & DebugOutput()
+
                 Call Clear
             End If
         End If
+       'Else
+       '    frmChat.AddChat g_Color.ErrorMessageText, "Error: The front of the buffer is not a valid packet!"
+       '
+       '    If MDebug("showdrops") Then
+       '        frmChat.AddChat g_Color.ErrorMessageText, "Error: The front of the buffer is not " & _
+       '                "a valid packet!"
+       '        frmChat.AddChat g_Color.ErrorMessageText, "The following data is being purged:"
+       '
+       '        If ByteIndex > 0 Then
+       '            frmChat.AddChat g_Color.ErrorMessageText, Space$(1) & DebugOutput()
+       '        Else
+       '            frmChat.AddChat g_Color.ErrorMessageText, Space$(1) & DebugOutput()
+       '        End If
+       '    End If
+       '
+       '    If ByteIndex > 0 Then
+       '        m_bufpos = ByteIndex
+       '        Call Clear
+       '    Else
+       '        Call Clear
+       '    End If
+       'End If
     End If
 End Function
 
-Public Function GetPacketLength(Optional ByVal st As enuServerTypes = stBNCS) As Long
+Public Function GetPacketLength(ByVal HeaderLenStart As Integer) As Long
     Dim Value As Long
-    
-    Select Case st
-        Case stBNCS
-            Value = GetDWord(True)
-            Value = CLng(Value \ 65536)
-        Case stBNLS, stMCP
-            Value = GetWord(True)
-    End Select
-    
+    If HeaderLenStart = 0 Then
+        Value = GetWord(True)
+    ElseIf HeaderLenStart = 2 Then
+        Value = GetDWord(True)
+        Value = CLng(Value \ &H10000)
+    ElseIf HeaderLenStart = 1 Then
+        ' this one's unlikely but...
+        Value = GetDWord(True)
+        Value = CLng(Value \ &H100) And &HFFFF&
+    End If
     GetPacketLength = Value
 End Function
 
-Public Function TakePacket(Optional ByVal st As enuServerTypes = stBNCS) As clsDataBuffer
+Public Function TakePacket(ByVal HeaderLenStart As Integer) As clsDataBuffer
     Dim tmpbuf() As Byte
     Dim lngPacketLen As Long
     Dim pBuff As clsDataBuffer
 
-    lngPacketLen = GetPacketLength(st)
+    lngPacketLen = GetPacketLength(HeaderLenStart)
     
     ' returns new buffer
     Set TakePacket = New clsDataBuffer
