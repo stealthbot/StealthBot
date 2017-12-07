@@ -331,20 +331,27 @@ Public Function GetUserIndex(ByVal Username As String, Optional ByVal SearchLimi
 
 End Function
 
-Public Function GetUserIndexByPriority(ByVal Username As String, Optional ByVal SearchLimit As Integer = 0) As Integer
+Public Function GetUserIndexByPriority(ByVal Username As String, Optional ByVal SearchLimit As Integer = 0, Optional ByVal SkipDelayed As Boolean = False) As Integer
 
-    Dim i As Integer
+    Dim i     As Integer
+    Dim pos   As Integer
+    Dim PUser As clsUserObj
 
+    pos = 0
     For i = 1 To PriorityUsers.Count
-        If (SearchLimit > 0) Then
-            If (i >= SearchLimit) Then
-                Exit For
+        Set PUser = PriorityUsers(i)
+        If SkipDelayed Imp (PUser.Queue.Count = 0) Then
+            pos = pos + 1
+            If (SearchLimit > 0) Then
+                If (pos >= SearchLimit) Then
+                    Exit For
+                End If
             End If
-        End If
-    
-        If (StrComp(PriorityUsers(i).Name, Username, vbTextCompare) = 0) And (PriorityUsers(i).IsPhantom = False) Then
-            GetUserIndexByPriority = i
-            Exit Function
+
+            If (StrComp(PUser.Name, Username, vbTextCompare) = 0) And (PUser.IsPhantom = False) Then
+                GetUserIndexByPriority = pos
+                Exit Function
+            End If
         End If
     Next i
     

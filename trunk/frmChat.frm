@@ -6158,7 +6158,7 @@ Private Sub tmrIdleTimer_Timer()
 
                     If (.Queue.Count = 0) Then
                         pos = pos + 1
-                        If (Not BotVars.NoColoring) Then
+                        If (pos <= lvChannel.ListItems.Count And Not BotVars.NoColoring) Then
                             NewColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
                                     GetCurrentUsername, vbBinaryCompare) = 0)
 
@@ -8142,12 +8142,12 @@ Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal OldPosition As In
         Set OtherUser = g_Channel.PriorityUsers(i)
         OtherWeight = OtherUser.UserlistWeight
         If OtherUser.IsOperator() Then OtherWeight = OtherWeight * -1
-        If OtherUser.Queue.Count = 0 Then
-            If OtherWeight < Weight Then
+        If OtherWeight < Weight Then
+            If OtherUser.Queue.Count = 0 Then
                 Position = Position + 1
-            Else
-                Exit For
             End If
+        Else
+            Exit For
         End If
         Set OtherUser = Nothing
     Next i

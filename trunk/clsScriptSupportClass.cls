@@ -546,7 +546,7 @@ End Function
 '// Returns the channel list position of a user by their username
 '// Returns 0 if the user is not present or the only ones present are marked a duplicate/phantom user
 Public Function GetPositionByName(ByVal sUser As String) As Integer
-    GetPositionByName = g_Channel.GetUserIndexByPriority(sUser)
+    GetPositionByName = g_Channel.GetUserIndexByPriority(sUser, , True)
 End Function
 
 

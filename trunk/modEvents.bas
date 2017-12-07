@@ -82,13 +82,14 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
             Exit Sub
         End If
     End If
-    
-    ' get channel list position
-    pos = g_Channel.GetUserIndexByPriority(CleanUsername(Username))
-    
+
     ' convert user name
     Username = UserObj.DisplayName
-    
+
+    ' get channel list position
+    pos = g_Channel.GetUserIndexByPriority(UserObj.Name, , True)
+    'Debug.Print "OLD POS: " & pos
+
     With UserObj
         .Flags = Flags
         .Ping = Ping
@@ -1202,7 +1203,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 End If
             End If
             
-            pos = g_Channel.GetUserIndexByPriority(Username)
+            pos = g_Channel.GetUserIndexByPriority(Username, , True)
 
             If (pos > 0) Then
             
@@ -1581,7 +1582,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     
     RemoveBanFromQueue Username
     
-    pos = g_Channel.GetUserIndexByPriority(Username)
+    pos = g_Channel.GetUserIndexByPriority(Username, , True)
     
     'Debug.Print "Remove " & Username & " Index: " & UserIndex
     g_Channel.Users.Remove UserIndex
@@ -1593,9 +1594,11 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         End If
     
         With frmChat.lvChannel
-            .ListItems.Remove pos
-
-            .Refresh
+            If pos <= .ListItems.Count Then
+                .ListItems.Item(pos).ListSubItems(2).ReportIcon = 0
+                .ListItems.Item(pos).SmallIcon = 0
+                .ListItems.Remove pos
+            End If
         End With
         
         Call frmChat.UpdateListviewTabs
