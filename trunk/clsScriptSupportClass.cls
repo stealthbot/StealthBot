@@ -1623,10 +1623,14 @@ Public Function GetCurrentUsername()
 End Function
 
 '// GETCURRENTSERVERIP
-'// Returns the IP of the server the bot is currently connected to.
+'// Returns the IP of the server the bot is currently connected to, bypassing proxies.
 Public Function GetCurrentServerIP()
     If modGlobals.g_Online Then
-        GetCurrentServerIP = frmChat.sckBNet.RemoteHostIP
+        If ProxyConnInfo(stBNCS).IsUsingProxy Then
+            GetCurrentServerIP = ProxyConnInfo(stBNCS).RemoteHostIP
+        Else
+            GetCurrentServerIP = frmChat.sckBNet.RemoteHostIP
+        End If
     Else
         GetCurrentServerIP = vbNullString
     End If
