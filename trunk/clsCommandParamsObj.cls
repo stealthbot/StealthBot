@@ -16,25 +16,25 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_name           As String
-Private m_optional       As Boolean
-Private m_required_rank  As Integer
-Private m_required_flags As String
-Private m_description    As String
-Private m_special_notes  As String
-Private m_restrictions   As Collection
-Private m_data_type      As String
-Private m_matchmessage   As String
-Private m_casesensitive  As Boolean
-Private m_error          As String
-Private m_rserror        As String
+Private m_Name           As String
+Private m_Optional       As Boolean
+Private m_RequiredRank   As Integer
+Private m_RequiredFlags  As String
+Private m_Description    As String
+Private m_SpecialNotes   As String
+Private m_Restrictions   As Collection
+Private m_DataType       As String
+Private m_MatchMessage   As String
+Private m_CaseSensitive  As Boolean
+Private m_Error          As String
+Private m_RSError        As String
 
 Private Sub Class_Initialize()
-    Set m_restrictions = New Collection
+    Set m_Restrictions = New Collection
 End Sub
 
 Private Sub Class_Terminate()
-    Set m_restrictions = Nothing
+    Set m_Restrictions = Nothing
 End Sub
 
 
@@ -55,15 +55,15 @@ Public Function GetRestrictionByName(ByVal sRestrictionName As String) As clsCom
 End Function
 
 Public Property Get Restrictions() As Collection
-    Set Restrictions = m_restrictions
+    Set Restrictions = m_Restrictions
 End Property
 
 Public Property Let Restrictions(col As Collection)
-    Set m_restrictions = col
+    Set m_Restrictions = col
 End Property
 
 Public Property Get DataType() As String
-    DataType = m_data_type
+    DataType = m_DataType
 End Property
 
 Public Property Let DataType(strType As String)
@@ -75,71 +75,71 @@ Public Property Let DataType(strType As String)
             '// default to string
             strType = "string"
     End Select
-    m_data_type = strType
+    m_DataType = strType
 End Property
 
 Public Property Get Name() As String
-    Name = m_name
+    Name = m_Name
 End Property
 
 Public Property Let Name(str As String)
-    m_name = str
+    m_Name = str
 End Property
 
 Public Property Get Description() As String
-    Description = m_description
+    Description = m_Description
 End Property
 
 Public Property Let Description(str As String)
-    m_description = str
+    m_Description = str
 End Property
 
 Public Property Get SpecialNotes() As String
-    SpecialNotes = m_special_notes
+    SpecialNotes = m_SpecialNotes
 End Property
 
 Public Property Let SpecialNotes(str As String)
-    m_special_notes = str
+    m_SpecialNotes = str
 End Property
 
 Public Property Get IsOptional() As Boolean
-    IsOptional = m_optional
+    IsOptional = m_Optional
 End Property
 
 Public Property Let IsOptional(bln As Boolean)
-    m_optional = bln
+    m_Optional = bln
 End Property
 
 Public Property Get MatchMessage() As String
-    MatchMessage = m_matchmessage
+    MatchMessage = m_MatchMessage
 End Property
 
 Public Property Let MatchMessage(str As String)
-    m_matchmessage = str
+    m_MatchMessage = str
 End Property
 
 Public Property Get MatchError() As String
-    MatchError = m_error
+    MatchError = m_Error
 End Property
 
 Public Property Let MatchError(str As String)
-    m_error = str
+    m_Error = str
 End Property
 
 Public Property Get RestrictionsSharedError() As String
-    RestrictionsSharedError = m_rserror
+    RestrictionsSharedError = m_RSError
 End Property
 
 Public Property Let RestrictionsSharedError(str As String)
-    m_rserror = str
+    m_RSError = str
 End Property
 
 Public Property Get MatchCaseSensitive() As Boolean
-    MatchCaseSensitive = m_casesensitive
+    MatchCaseSensitive = m_CaseSensitive
 End Property
 
 Public Property Let MatchCaseSensitive(bln As Boolean)
-    m_casesensitive = bln
+    m_CaseSensitive = bln
 End Property
 
 Public Function ToString(Optional ByVal ShowLong As Boolean = False) As String

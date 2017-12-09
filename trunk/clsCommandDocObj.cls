@@ -18,26 +18,26 @@ Attribute VB_Exposed = False
 Option Explicit
 
 
-Private m_database       As DOMDocument60
-Private m_command_node   As IXMLDOMNode
+Private m_Database       As DOMDocument60
+Private m_CommandNode    As IXMLDOMNode
 
-Private m_aliases        As Collection
-Private m_params         As Collection
-Private m_name           As String
-Private m_required_rank  As Integer
-Private m_required_flags As String
-Private m_description    As String
-Private m_special_notes  As String
-Private m_enabled        As Boolean
-Private m_owner          As String
+Private m_Aliases        As Collection
+Private m_Params         As Collection
+Private m_Name           As String
+Private m_RequiredRank   As Integer
+Private m_RequiredFlags  As String
+Private m_Description    As String
+Private m_SpecialNotes   As String
+Private m_Enabled        As Boolean
+Private m_Owner          As String
 
-Private m_defaultXMLPath As String
+Private m_DefaultXMLPath As String
 
 Private Sub Class_Initialize()
 
-    Set m_database = New DOMDocument60
+    Set m_Database = New DOMDocument60
     
-    m_defaultXMLPath = GetFilePath(FILE_COMMANDS)
+    m_DefaultXMLPath = GetFilePath(FILE_COMMANDS)
     
     Call OpenDatabase(, True)
     
@@ -48,33 +48,33 @@ End Sub
 
 Private Sub Class_Terminate()
 
-    Set m_database = Nothing
-    Set m_params = Nothing
-    Set m_aliases = Nothing
+    Set m_Database = Nothing
+    Set m_Params = Nothing
+    Set m_Aliases = Nothing
     
 End Sub
 
 Private Sub ResetInstance()
         
-    Set m_command_node = Nothing
-    Set m_aliases = Nothing
-    Set m_params = Nothing
-    Let m_name = vbNullString
-    Let m_required_rank = -1
-    Let m_required_flags = vbNullString
-    Let m_description = vbNullString
-    Let m_special_notes = vbNullString
-    Let m_enabled = False
-    Let m_owner = vbNullString
+    Set m_CommandNode = Nothing
+    Set m_Aliases = Nothing
+    Set m_Params = Nothing
+    Let m_Name = vbNullString
+    Let m_RequiredRank = -1
+    Let m_RequiredFlags = vbNullString
+    Let m_Description = vbNullString
+    Let m_SpecialNotes = vbNullString
+    Let m_Enabled = False
+    Let m_Owner = vbNullString
 
 End Sub
 
 Public Function OpenDatabase(Optional ByVal DatabasePath As String = vbNullString, Optional ByVal forceLoad As Boolean = False, Optional ByVal Database As DOMDocument60 = Nothing)
 
-    If Database Is Nothing Then Set Database = m_database
+    If Database Is Nothing Then Set Database = m_Database
 
     If (DatabasePath = vbNullString) Then
-        DatabasePath = m_defaultXMLPath
+        DatabasePath = m_DefaultXMLPath
     End If
 
     If Not FileExists(DatabasePath) And Database.childNodes.Length = 0 Then
@@ -104,7 +104,7 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal strScript
     Dim attrs                 As IXMLDOMAttribute
     Dim xpath                 As String
 
-    If Database Is Nothing Then Set Database = m_database
+    If Database Is Nothing Then Set Database = m_Database
 
     Call OpenDatabase(, , Database)
     Call ResetInstance
@@ -116,21 +116,21 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal strScript
 
     xpath = clsCommandObj.GetCommandXPath(strCommand, strScriptOwner, EnabledOnly)
 
-    Set m_command_node = Database.selectSingleNode(xpath)
+    Set m_CommandNode = Database.selectSingleNode(xpath)
 
-    If (m_command_node Is Nothing) Then
+    If (m_CommandNode Is Nothing) Then
         'Lets try an alias
         xpath = clsCommandObj.GetCommandXPath(ConvertAlias(strCommand, Database), strScriptOwner, EnabledOnly)
-        Set m_command_node = Database.documentElement.selectSingleNode(xpath)
+        Set m_CommandNode = Database.documentElement.selectSingleNode(xpath)
 
-        If (m_command_node Is Nothing) Then
+        If (m_CommandNode Is Nothing) Then
             OpenCommand = False
             Exit Function
         End If
     End If
 
-    Set m_aliases = GetAliases(m_command_node)
-    Set m_params = GetParameters(m_command_node)
+    Set m_Aliases = GetAliases(m_CommandNode)
+    Set m_Params = GetParameters(m_CommandNode)
 
     OpenCommand = True
 
@@ -146,7 +146,7 @@ Public Function CreateCommand(ByVal strCommand As String, Optional ByVal strScri
     Dim l_Parameters          As IXMLDOMElement
     Dim l_Access              As IXMLDOMElement
 
-    If Database Is Nothing Then Set Database = m_database
+    If Database Is Nothing Then Set Database = m_Database
 
     If (Not clsCommandObj.IsValidCommandName(strCommand)) Then
         frmChat.AddChat g_Color.ErrorMessageText, "Error: The provided command name was not valid."
@@ -186,7 +186,7 @@ End Function
 Private Function ConvertAlias(ByVal cmdName As String, ByVal Database As DOMDocument60) As String
     On Error GoTo ERROR_HANDLER
     
-    If Database Is Nothing Then Set Database = m_database
+    If Database Is Nothing Then Set Database = m_Database
     Dim xpath As String
     Dim AliasNode As IXMLDOMNode
 
@@ -483,13 +483,13 @@ Public Function Save(Optional ByVal WriteToFile As Boolean = True) As Boolean
 
     Dim colErrorList As Collection
 
-    SetAliases m_command_node, m_aliases
-    SetParameters m_command_node, m_params
+    SetAliases m_CommandNode, m_Aliases
+    SetParameters m_CommandNode, m_Params
 
     If WriteToFile = True Then
 
-        If clsCommandDocObj.ValidateXMLFromStrings(m_database.xml, GetXSD()) Then
-            If Not CommandsSanityCheck(m_database, colErrorList) Then
+        If clsCommandDocObj.ValidateXMLFromStrings(m_Database.xml, GetXSD()) Then
+            If Not CommandsSanityCheck(m_Database, colErrorList) Then
                 Save = False
                 Exit Function
             End If
@@ -538,7 +538,7 @@ Private Sub WriteDocToFile(ByVal FilePath As String)
     reader.putProperty "http://xml.org/sax/properties/declaration-handler", writer
 
     '// parse the DOMDocument object
-    reader.Parse m_database
+    reader.Parse m_Database
 
     '// open the file for writing
     iFileNo = FreeFile
@@ -563,7 +563,7 @@ End Sub
 
 Public Sub Delete(Optional ByVal WriteToFile As Boolean = True)
 
-    If (m_command_node Is Nothing) Then
+    If (m_CommandNode Is Nothing) Then
         Exit Sub
     End If
 
@@ -572,7 +572,7 @@ Public Sub Delete(Optional ByVal WriteToFile As Boolean = True)
         Exit Sub
     End If
 
-    m_command_node.parentNode.removeChild m_command_node
+    m_CommandNode.parentNode.removeChild m_CommandNode
 
     Call Save(WriteToFile)
 
@@ -723,29 +723,29 @@ Private Sub SetParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol As Co
 
             Set Parameter = ParameterCol(i)
 
-            Set ArgumentNode = m_database.createNode("element", "argument", vbNullString)
+            Set ArgumentNode = m_Database.createNode("element", "argument", vbNullString)
 
             '// @name
-            Set NewNode = m_database.createNode("attribute", "name", vbNullString)
+            Set NewNode = m_Database.createNode("attribute", "name", vbNullString)
             NewNode.Text = Parameter.Name
             ArgumentNode.Attributes.setNamedItem NewNode
 
             '// documentation
-            Set NewNode = m_database.createNode("element", "documentation", vbNullString)
+            Set NewNode = m_Database.createNode("element", "documentation", vbNullString)
             ArgumentNode.appendChild NewNode
 
             '// create the match element if necessary
             If Len(Parameter.MatchMessage) <> 0 Then
                 '// add the match element
-                Set MatchNode = ArgumentNode.appendChild(m_database.createNode("element", "match", vbNullString))
+                Set MatchNode = ArgumentNode.appendChild(m_Database.createNode("element", "match", vbNullString))
 
                 '// match[@message]
-                Set NewNode = m_database.createNode("attribute", "message", vbNullString)
+                Set NewNode = m_Database.createNode("attribute", "message", vbNullString)
                 NewNode.Text = Parameter.MatchMessage
                 MatchNode.Attributes.setNamedItem NewNode
 
                 '// match[@case-sensitive]
-                Set NewNode = m_database.createNode("attribute", "case-sensitive", vbNullString)
+                Set NewNode = m_Database.createNode("attribute", "case-sensitive", vbNullString)
                 NewNode.Text = IIf(Parameter.MatchCaseSensitive, "1", "0")
                 MatchNode.Attributes.setNamedItem NewNode
 
@@ -754,7 +754,7 @@ Private Sub SetParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol As Co
             '// create the error element if necessary
             If Len(Parameter.MatchError) <> 0 Then
                 '// add the error element
-                Set NewNode = ArgumentNode.appendChild(m_database.createNode("element", "error", vbNullString))
+                Set NewNode = ArgumentNode.appendChild(m_Database.createNode("element", "error", vbNullString))
                 NewNode.Text = Parameter.MatchError
             End If
 
@@ -770,13 +770,13 @@ Private Sub SetParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol As Co
             End If
 
             If Parameter.IsOptional Then
-                Set NewNode = m_database.createNode("attribute", "optional", vbNullString)
+                Set NewNode = m_Database.createNode("attribute", "optional", vbNullString)
                 NewNode.Text = "1"
                 ArgumentNode.Attributes.setNamedItem NewNode
             End If
             
             If (Not StrComp(Parameter.DataType, "string", vbTextCompare) = 0) Then
-                Set NewNode = m_database.createNode("attribute", "type", vbNullString)
+                Set NewNode = m_Database.createNode("attribute", "type", vbNullString)
                 NewNode.Text = Parameter.DataType
                 ArgumentNode.Attributes.setNamedItem NewNode
             End If
@@ -803,25 +803,25 @@ Private Sub SetRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef RestrictionCol A
     End If
 
     '// add our restrictions node
-    Set RestrictionsNode = AnyNode.appendChild(m_database.createNode("element", "restrictions", vbNullString))
+    Set RestrictionsNode = AnyNode.appendChild(m_Database.createNode("element", "restrictions", vbNullString))
 
-    Set SharedErrorNode = RestrictionsNode.appendChild(m_database.createNode("element", "shared-error", vbNullString))
+    Set SharedErrorNode = RestrictionsNode.appendChild(m_Database.createNode("element", "shared-error", vbNullString))
     SharedErrorNode.Text = SharedError
 
     '// loop through argument restrictions
     For Each Restriction In RestrictionCol
 
         '// create our restriction node
-        Set RestrictionNode = m_database.createNode("element", "restriction", vbNullString)
+        Set RestrictionNode = m_Database.createNode("element", "restriction", vbNullString)
         RestrictionsNode.appendChild RestrictionNode
 
         '// name attribute
-        Set NewNode = m_database.createNode("attribute", "name", vbNullString)
+        Set NewNode = m_Database.createNode("attribute", "name", vbNullString)
         NewNode.Text = Restriction.Name
         RestrictionNode.Attributes.setNamedItem NewNode
 
         If (Restriction.Fatal) Then
-            Set NewNode = m_database.createNode("attribute", "nonfatal", vbNullString)
+            Set NewNode = m_Database.createNode("attribute", "nonfatal", vbNullString)
             NewNode.Text = IIf(Restriction.Fatal, "0", "1")
             RestrictionNode.Attributes.setNamedItem NewNode
         End If
@@ -835,16 +835,16 @@ Private Sub SetRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef RestrictionCol A
         '// create the match element if necessary
         If Len(Restriction.MatchMessage) > 0 Then
             '// add the match element
-            Set MatchNode = RestrictionNode.appendChild(m_database.createNode("element", "match", vbNullString))
+            Set MatchNode = RestrictionNode.appendChild(m_Database.createNode("element", "match", vbNullString))
 
             '// set the message attribute
             '// match[@message]
-            Set NewNode = m_database.createNode("attribute", "message", vbNullString)
+            Set NewNode = m_Database.createNode("attribute", "message", vbNullString)
             NewNode.Text = Restriction.MatchMessage
             MatchNode.Attributes.setNamedItem NewNode
 
             '// match[@case-sensitive]
-            Set NewNode = m_database.createNode("attribute", "case-sensitive", vbNullString)
+            Set NewNode = m_Database.createNode("attribute", "case-sensitive", vbNullString)
             NewNode.Text = IIf(Restriction.MatchCaseSensitive, "1", "0")
             MatchNode.Attributes.setNamedItem NewNode
 
@@ -853,7 +853,7 @@ Private Sub SetRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef RestrictionCol A
         '// create the error element if necessary
         If Len(Restriction.MatchError) <> 0 Then
             '// add the error element
-            Set NewNode = RestrictionNode.appendChild(m_database.createNode("element", "error", vbNullString))
+            Set NewNode = RestrictionNode.appendChild(m_Database.createNode("element", "error", vbNullString))
             NewNode.Text = Restriction.MatchError
         End If
 
@@ -888,7 +888,7 @@ Private Sub SetAliases(ByRef AnyNode As IXMLDOMNode, ByRef AliasCol As Collectio
     For i = 1 To AliasCol.Count
         '// 09/03/2008 JSM - Modified code to use the <aliases> element
         Set Alias = _
-            AnyNode.selectSingleNode("aliases").appendChild(m_database.createNode("element", "alias", vbNullString))
+            AnyNode.selectSingleNode("aliases").appendChild(m_Database.createNode("element", "alias", vbNullString))
 
         Alias.Text = AliasCol(i)
     Next i
@@ -1043,7 +1043,7 @@ Private Sub SetEnabled(ByRef AnyNode As IXMLDOMNode, ByVal Enabled As Boolean)
 
     Set EnabledNode = AnyNode.Attributes.getNamedItem("enabled")
     If (EnabledNode Is Nothing) Then
-        Set EnabledNode = AnyNode.Attributes.setNamedItem(m_database.createAttribute("enabled"))
+        Set EnabledNode = AnyNode.Attributes.setNamedItem(m_Database.createAttribute("enabled"))
     End If
 
     If (Enabled = True) Then
@@ -1111,7 +1111,7 @@ Private Function GetSyntaxString(Optional IsLocal As Boolean = False) As String
     Dim retVal  As String
     Dim P       As clsCommandParamsObj
 
-    If (m_command_node Is Nothing) Then
+    If (m_CommandNode Is Nothing) Then
         Exit Function
     End If
 
@@ -1150,7 +1150,7 @@ Private Function GetRequirementsString(Optional bShort As Boolean = False)
     Dim DetailReq As String
     Dim StateStr  As String
     
-    If (m_command_node Is Nothing) Then
+    If (m_CommandNode Is Nothing) Then
         Exit Function
     End If
 
@@ -1214,9 +1214,9 @@ Private Sub SetDescription(ByRef AnyNode As IXMLDOMNode, ByVal Description As St
     If (DescNode Is Nothing) Then
         Set DocNode = AnyNode.selectSingleNode("documentation")
         If (DocNode Is Nothing) Then
-            Set DocNode = AnyNode.appendChild(m_database.createNode("element", "documentation", vbNullString))
+            Set DocNode = AnyNode.appendChild(m_Database.createNode("element", "documentation", vbNullString))
         End If
-        Set DescNode = DocNode.appendChild(m_database.createNode("element", "description", vbNullString))
+        Set DescNode = DocNode.appendChild(m_Database.createNode("element", "description", vbNullString))
     End If
 
     DescNode.Text = Description
@@ -1252,10 +1252,10 @@ Private Sub SetNotes(ByRef AnyNode As IXMLDOMNode, ByVal Notes As String)
     If (NotesNode Is Nothing) Then
         Set DocNode = AnyNode.selectSingleNode("documentation")
         If (DocNode Is Nothing) Then
-            Set DocNode = AnyNode.appendChild(m_database.createNode("element", "documentation", vbNullString))
+            Set DocNode = AnyNode.appendChild(m_Database.createNode("element", "documentation", vbNullString))
         End If
 
-        Set NotesNode = DocNode.appendChild(m_database.createNode("element", "specialnotes", vbNullString))
+        Set NotesNode = DocNode.appendChild(m_Database.createNode("element", "specialnotes", vbNullString))
     End If
 
     NotesNode.Text = Notes
@@ -1314,14 +1314,14 @@ Private Sub SetRank(ByRef AnyNode As IXMLDOMNode, ByVal Rank As Integer)
     Set AccessNode = AnyNode.selectSingleNode("access")
     
     If (AccessNode Is Nothing) Then
-        Set AccessNode = AnyNode.appendChild(m_database.createNode("element", "access", vbNullString))
+        Set AccessNode = AnyNode.appendChild(m_Database.createNode("element", "access", vbNullString))
     End If
     
     Set RankNode = AccessNode.selectSingleNode("rank")
     
     If (Rank >= 0) Then
         If (RankNode Is Nothing) Then
-            Set RankNode = AccessNode.appendChild(m_database.createNode("element", "rank", vbNullString))
+            Set RankNode = AccessNode.appendChild(m_Database.createNode("element", "rank", vbNullString))
         End If
         RankNode.Text = Rank
     Else
@@ -1367,14 +1367,14 @@ Private Sub SetFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String)
     Set AccessNode = AnyNode.selectSingleNode("access")
 
     If (AccessNode Is Nothing) Then
-        Set AccessNode = AnyNode.appendChild(m_database.createNode("element", "access", vbNullString))
+        Set AccessNode = AnyNode.appendChild(m_Database.createNode("element", "access", vbNullString))
     End If
 
     Set FlagsNode = AccessNode.selectSingleNode("flags")
 
     If (Len(Flags) > 0) Then
         If (FlagsNode Is Nothing) Then
-            Set FlagsNode = AccessNode.appendChild(m_database.createNode("element", "flags", vbNullString))
+            Set FlagsNode = AccessNode.appendChild(m_Database.createNode("element", "flags", vbNullString))
         End If
 
         For i = FlagsNode.childNodes.Length - 1 To 0 Step -1
@@ -1383,7 +1383,7 @@ Private Sub SetFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String)
 
         For i = 1 To Len(Flags)
             Set FlagNode = _
-                FlagsNode.appendChild(m_database.createNode("element", "flag", vbNullString))
+                FlagsNode.appendChild(m_Database.createNode("element", "flag", vbNullString))
 
             FlagNode.Text = Mid$(Flags, i, 1)
         Next i
@@ -1397,83 +1397,83 @@ End Sub
 
 Public Property Get Name() As String
     
-    Name = GetName(m_command_node)
+    Name = GetName(m_CommandNode)
 
 End Property
 
 Public Property Get Owner() As String
     
-    Owner = GetOwner(m_command_node)
+    Owner = GetOwner(m_CommandNode)
     
 End Property
 
 Public Property Get Aliases() As Collection
 
-    If (m_aliases Is Nothing) Then
-        Set m_aliases = GetAliases(m_command_node)
+    If (m_Aliases Is Nothing) Then
+        Set m_Aliases = GetAliases(m_CommandNode)
     End If
     
-    Set Aliases = m_aliases
+    Set Aliases = m_Aliases
     
 End Property
 
 Public Property Get IsEnabled() As Boolean
     
-    IsEnabled = GetEnabled(m_command_node)
+    IsEnabled = GetEnabled(m_CommandNode)
 
 End Property
 
 Public Property Let IsEnabled(bln As Boolean)
     
-    SetEnabled m_command_node, bln
+    SetEnabled m_CommandNode, bln
 
 End Property
 
 Public Property Let Name(strName As String)
 
-    m_name = strName
+    m_Name = strName
 
 End Property
 
 Public Property Let Owner(strOwner As String)
 
-    m_owner = strOwner
+    m_Owner = strOwner
     
 End Property
 
 Public Property Get RequiredRank() As Integer
     
-    RequiredRank = GetRank(m_command_node)
+    RequiredRank = GetRank(m_CommandNode)
 
 End Property
 
 Public Property Let RequiredRank(ByVal Rank As Integer)
     
-    SetRank m_command_node, Rank
+    SetRank m_CommandNode, Rank
 
 End Property
 
 Public Property Get RequiredFlags() As String
     
-    RequiredFlags = GetFlags(m_command_node)
+    RequiredFlags = GetFlags(m_CommandNode)
 
 End Property
 
 Public Property Let RequiredFlags(ByVal str As String)
    
-   SetFlags m_command_node, str
+   SetFlags m_CommandNode, str
 
 End Property
 
 Public Property Get Description() As String
     
-    Description = GetDescription(m_command_node)
+    Description = GetDescription(m_CommandNode)
 
 End Property
 
 Public Property Let Description(ByVal strDescription As String)
     
-    SetDescription m_command_node, strDescription
+    SetDescription m_CommandNode, strDescription
 
 End Property
 
@@ -1518,13 +1518,13 @@ End Property
 
 Public Property Get SpecialNotes() As String
     
-    SpecialNotes = GetNotes(m_command_node)
+    SpecialNotes = GetNotes(m_CommandNode)
 
 End Property
 
 Public Property Let SpecialNotes(ByVal strNotes As String)
     
-    SetNotes m_command_node, strNotes
+    SetNotes m_CommandNode, strNotes
 
 End Property
 
@@ -1548,16 +1548,16 @@ End Function
 
 Public Property Get Parameters() As Collection
 
-    If (m_params Is Nothing) Then
-        Set m_params = GetParameters(m_command_node)
+    If (m_Params Is Nothing) Then
+        Set m_Params = GetParameters(m_CommandNode)
     End If
 
-    Set Parameters = m_params
+    Set Parameters = m_Params
 
 End Property
 
 Public Property Get XMLDocument() As DOMDocument60
 
-    Set XMLDocument = m_database
+    Set XMLDocument = m_Database
 
 End Property

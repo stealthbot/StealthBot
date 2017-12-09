@@ -3972,7 +3972,7 @@ End Sub
 Private Sub mnuPopClanAddToFList_Click()
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/f a " & CleanUsername(GetClanSelectedUser), PRIORITY.CONSOLE_MESSAGE
+    AddQ "/f a " & CleanUsername(GetClanSelectedUser), enuPriority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopClanCopy_Click()
@@ -4074,7 +4074,7 @@ Private Sub mnuPopClanStatsWAR3_Click()
         sProd = Space$(1) & sProd
     End If
     
-    AddQ "/stats " & CleanUsername(GetClanSelectedUser) & sProd, PRIORITY.CONSOLE_MESSAGE
+    AddQ "/stats " & CleanUsername(GetClanSelectedUser) & sProd, enuPriority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopClanStatsW3XP_Click()
@@ -4090,7 +4090,7 @@ Private Sub mnuPopClanStatsW3XP_Click()
         sProd = Space$(1) & sProd
     End If
     
-    AddQ "/stats " & CleanUsername(GetClanSelectedUser) & sProd, PRIORITY.CONSOLE_MESSAGE
+    AddQ "/stats " & CleanUsername(GetClanSelectedUser) & sProd, enuPriority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopClanUserlistWhois_Click()
@@ -4122,7 +4122,7 @@ Private Sub mnuPopClanWhisper_Click()
     If LenB(Value) > 0 Then
         Value = "/w " & CleanUsername(GetClanSelectedUser, True) & Space(1) & Value
 
-        AddQ Value, PRIORITY.CONSOLE_MESSAGE
+        AddQ Value, enuPriority.CONSOLE_MESSAGE
 
         cboSend.AddItem Value, 0
         cboSend.Text = vbNullString
@@ -4135,7 +4135,7 @@ End Sub
 Private Sub mnuPopClanWhois_Click()
     If Not PopupMenuCLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    AddQ "/whois " & lvClanList.SelectedItem.Text, PRIORITY.CONSOLE_MESSAGE
+    AddQ "/whois " & lvClanList.SelectedItem.Text, enuPriority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopFLAddLeft_Click()
@@ -4170,7 +4170,7 @@ Private Sub mnuPopFLDemote_Click()
     
     With lvFriendList.SelectedItem
         If (.Index < lvFriendList.ListItems.Count) Then
-            AddQ "/f d " & GetFriendsSelectedUser, PRIORITY.CONSOLE_MESSAGE
+            AddQ "/f d " & GetFriendsSelectedUser, enuPriority.CONSOLE_MESSAGE
             'MoveFriend .index, .index + 1
         End If
     End With
@@ -4204,7 +4204,7 @@ Private Sub mnuPopFLPromote_Click()
     
     With lvFriendList.SelectedItem
         If (.Index > 1) Then
-            AddQ "/f p " & GetFriendsSelectedUser, PRIORITY.CONSOLE_MESSAGE
+            AddQ "/f p " & GetFriendsSelectedUser, enuPriority.CONSOLE_MESSAGE
             'MoveFriend .index, .index - 1
         End If
     End With
@@ -4217,7 +4217,7 @@ End Sub
 Private Sub mnuPopFLRemove_Click()
     If Not PopupMenuFLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    AddQ "/f r " & GetFriendsSelectedUser, PRIORITY.CONSOLE_MESSAGE
+    AddQ "/f r " & GetFriendsSelectedUser, enuPriority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopFLStats_Click()
@@ -4251,7 +4251,7 @@ Private Sub mnuPopFLStats_Click()
         sProd = Space$(1) & sProd
     End If
     
-    AddQ "/stats " & CleanUsername(GetFriendsSelectedUser) & sProd, PRIORITY.CONSOLE_MESSAGE
+    AddQ "/stats " & CleanUsername(GetFriendsSelectedUser) & sProd, enuPriority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopFLUserlistWhois_Click()
@@ -4303,7 +4303,7 @@ Private Sub mnuPopFLWhisper_Click()
     If LenB(Value) > 0 Then
         Value = "/w " & CleanUsername(GetFriendsSelectedUser, True) & Space$(1) & Value
         
-        AddQ Value, PRIORITY.CONSOLE_MESSAGE
+        AddQ Value, enuPriority.CONSOLE_MESSAGE
         
         cboSend.AddItem Value, 0
         cboSend.Text = vbNullString
@@ -4361,7 +4361,7 @@ Private Sub mnuPopStats_Click()
         sProd = Space$(1) & sProd
     End If
     
-    AddQ "/stats " & StripAccountNumber(CleanUsername(GetSelectedUser)) & sProd, PRIORITY.CONSOLE_MESSAGE
+    AddQ "/stats " & StripAccountNumber(CleanUsername(GetSelectedUser)) & sProd, enuPriority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopUserlistWhois_Click()
@@ -4418,7 +4418,7 @@ Private Sub mnuPublicChannels_Click(Index As Integer)
                     Call FullJoin(BotVars.PublicChannels.Item(Index + 1), 2)
             End Select
         End If
-        'AddQ "/join " & PublicChannels.Item(Index + 1), PRIORITY.CONSOLE_MESSAGE
+        'AddQ "/join " & PublicChannels.Item(Index + 1), enuPriority.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -4434,7 +4434,7 @@ Private Sub mnuCustomChannels_Click(Index As Integer)
             Call FullJoin(QC(Index + 1), 2)
     End Select
     
-    'AddQ "/join " & QC(Index + 1), PRIORITY.CONSOLE_MESSAGE
+    'AddQ "/join " & QC(Index + 1), enuPriority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuCommandManager_Click()
@@ -4605,21 +4605,21 @@ End Sub
 Private Sub mnuPopAddToFList_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/f a " & StripAccountNumber(CleanUsername(GetSelectedUser)), PRIORITY.CONSOLE_MESSAGE
+    AddQ "/f a " & StripAccountNumber(CleanUsername(GetSelectedUser)), enuPriority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopDes_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
 
     If g_Channel.Self.IsOperator() Then
-        AddQ "/designate " & CleanUsername(GetSelectedUser, True), PRIORITY.CONSOLE_MESSAGE
+        AddQ "/designate " & CleanUsername(GetSelectedUser, True), enuPriority.CONSOLE_MESSAGE
     End If
 End Sub
 
 Private Sub mnuPopFLWhois_Click()
     If Not PopupMenuFLUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on.
     
-    AddQ "/whois " & lvFriendList.SelectedItem.Text, PRIORITY.CONSOLE_MESSAGE
+    AddQ "/whois " & lvFriendList.SelectedItem.Text, enuPriority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopSafelist_Click()
@@ -4643,14 +4643,14 @@ End Sub
 Private Sub mnuPopSquelch_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/squelch " & GetSelectedUser, PRIORITY.CONSOLE_MESSAGE, PRIORITY.CONSOLE_MESSAGE
+    AddQ "/squelch " & GetSelectedUser, enuPriority.CONSOLE_MESSAGE, enuPriority.CONSOLE_MESSAGE
 End Sub
 
 
 Private Sub mnuPopUnsquelch_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/unsquelch " & GetSelectedUser, PRIORITY.CONSOLE_MESSAGE
+    AddQ "/unsquelch " & GetSelectedUser, enuPriority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopWhisper_Click()
@@ -4663,7 +4663,7 @@ Private Sub mnuPopWhisper_Click()
     If LenB(Value) > 0 Then
         Value = "/w " & CleanUsername(GetSelectedUser, True) & Space(1) & Value
 
-        AddQ Value, PRIORITY.CONSOLE_MESSAGE
+        AddQ Value, enuPriority.CONSOLE_MESSAGE
 
         cboSend.AddItem Value, 0
         cboSend.Text = vbNullString
@@ -4716,7 +4716,7 @@ End Sub
 Private Sub mnuPopWhois_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/whois " & CleanUsername(GetSelectedUser, True), PRIORITY.CONSOLE_MESSAGE
+    AddQ "/whois " & CleanUsername(GetSelectedUser, True), enuPriority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopWebProfile_Click()
@@ -5027,7 +5027,7 @@ Private Sub mnuPopKick_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     If g_Channel.Self.IsOperator() Then
-        AddQ "/kick " & CleanUsername(GetSelectedUser, True), PRIORITY.CONSOLE_MESSAGE
+        AddQ "/kick " & CleanUsername(GetSelectedUser, True), enuPriority.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -5035,7 +5035,7 @@ Private Sub mnuPopBan_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     If g_Channel.Self.IsOperator() Then
-        AddQ "/ban " & CleanUsername(GetSelectedUser, True), PRIORITY.CONSOLE_MESSAGE
+        AddQ "/ban " & CleanUsername(GetSelectedUser, True), enuPriority.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -5496,12 +5496,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                             
                             If (x(n) <> vbNullString) Then
                                 If (n <> LBound(x)) Then
-                                    AddQ txtPre.Text & x(n) & txtPost.Text, PRIORITY.CONSOLE_MESSAGE
+                                    AddQ txtPre.Text & x(n) & txtPost.Text, enuPriority.CONSOLE_MESSAGE
                                     
                                     cboSend.AddItem txtPre.Text & x(n) & txtPost.Text, 0
                                 Else
                                     AddQ txtPre.Text & cboSend.Text & x(n) & txtPost.Text, _
-                                        PRIORITY.CONSOLE_MESSAGE
+                                        enuPriority.CONSOLE_MESSAGE
                                     
                                     cboSend.AddItem txtPre.Text & cboSend.Text & x(n) & txtPost.Text, 0
                                 End If
@@ -5764,7 +5764,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 '  and don't replace text in the command itself or the target username
                 Value = Left$(Value, StartOutfilterPos) & OutFilterMsg(Mid$(Value, StartOutfilterPos + 1))
                 
-                Call AddQ(Value, PRIORITY.CONSOLE_MESSAGE)
+                Call AddQ(Value, enuPriority.CONSOLE_MESSAGE)
             End If
             
             'Ignore rest of code as the bot is closing
@@ -6321,7 +6321,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
         tmrSilentChannel(0).Enabled = False
     ElseIf (Index = 1) Then
         If (Config.VoidView) Then
-            Call AddQ("/unsquelch " & GetCurrentUsername, PRIORITY.SPECIAL_MESSAGE)
+            Call AddQ("/unsquelch " & GetCurrentUsername, enuPriority.SPECIAL_MESSAGE)
         End If
     End If
     
@@ -6806,14 +6806,14 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, _
             End If
             
             Select Case (cmdName)
-                Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
-                Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
-                Case "who":       msg_priority = PRIORITY.SPECIAL_MESSAGE
-                Case "unban":     msg_priority = PRIORITY.SPECIAL_MESSAGE
-                Case "clan", "c": msg_priority = PRIORITY.SPECIAL_MESSAGE
-                Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
+                Case "designate": msg_priority = enuPriority.SPECIAL_MESSAGE
+                Case "resign":    msg_priority = enuPriority.SPECIAL_MESSAGE
+                Case "who":       msg_priority = enuPriority.SPECIAL_MESSAGE
+                Case "unban":     msg_priority = enuPriority.SPECIAL_MESSAGE
+                Case "clan", "c": msg_priority = enuPriority.SPECIAL_MESSAGE
+                Case "ban":       msg_priority = enuPriority.CHANNEL_MODERATION_MESSAGE
+                Case "kick":      msg_priority = enuPriority.CHANNEL_MODERATION_MESSAGE
+                Case Else:        msg_priority = enuPriority.MESSAGE_DEFAULT
             End Select
         End If
         
@@ -6845,7 +6845,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, _
             
             With Q
                 .Message = Send
-                .PRIORITY = msg_priority
+                .Priority = msg_priority
                 .Tag = Tag
             End With
 
@@ -6863,7 +6863,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, _
                     delay = 10
                     
                     ' are we issuing a ban or kick command?
-                    If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
+                    If (msg_priority = enuPriority.CHANNEL_MODERATION_MESSAGE) Then
                         delay = g_BNCSQueue.BanDelay()
                     End If
                 End If

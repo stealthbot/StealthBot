@@ -53,7 +53,7 @@ Public Sub QueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal idEvent 
         With g_Queue.Peek
             Message = .Message
             Tag = .Tag
-            pri = .PRIORITY
+            pri = .Priority
             ID = .ID
         End With
         
@@ -70,7 +70,7 @@ Public Sub QueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal idEvent 
                 With g_Queue.Peek()
                     NewDelay = g_BNCSQueue.GetDelay(.Message)
                     
-                    If .PRIORITY = PRIORITY.CHANNEL_MODERATION_MESSAGE Then
+                    If .Priority = enuPriority.CHANNEL_MODERATION_MESSAGE Then
                         ExtraDelay = g_BNCSQueue.BanDelay()
                     End If
                 End With

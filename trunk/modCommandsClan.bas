@@ -12,7 +12,7 @@ Public Sub OnClan(Command As clsCommandObj)
                 If (LCase$(Left$(g_Channel.Name, 5)) = "clan ") Then
                     If (g_Channel.Self.IsOperator) Then
                         Command.Respond "The clan channel is now public."
-                        Call frmChat.AddQ("/c pub", PRIORITY.CHANNEL_MODERATION_MESSAGE, Command.Username)
+                        Call frmChat.AddQ("/c pub", enuPriority.CHANNEL_MODERATION_MESSAGE, Command.Username)
                     Else
                         Command.Respond "Error: The bot must have ops to change the clan privacy status."
                     End If
@@ -23,7 +23,7 @@ Public Sub OnClan(Command As clsCommandObj)
                 If (LCase$(Left$(g_Channel.Name, 5)) = "clan ") Then
                     If (g_Channel.Self.IsOperator) Then
                         Command.Respond "The clan channel is now private."
-                        Call frmChat.AddQ("/c priv", PRIORITY.CHANNEL_MODERATION_MESSAGE, Command.Username)
+                        Call frmChat.AddQ("/c priv", enuPriority.CHANNEL_MODERATION_MESSAGE, Command.Username)
                     Else
                         Command.Respond "Error: The bot must have ops to change the clan privacy status."
                     End If
@@ -37,7 +37,7 @@ Public Sub OnClan(Command As clsCommandObj)
                             Command.Respond "You must specify a message to set."
                         Else
                             Command.Respond "The clan MOTD has been set to: " & Command.Argument("Message")
-                            Call frmChat.AddQ("/c motd " & Command.Argument("Message"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+                            Call frmChat.AddQ("/c motd " & Command.Argument("Message"), enuPriority.COMMAND_RESPONSE_MESSAGE, Command.Username)
                         End If
                     ElseIf (g_Clan.Self.Rank > 0) Then
                         Command.Respond "Error: The bot must be a shaman or chieftain in its clan to set the MOTD"
@@ -52,7 +52,7 @@ Public Sub OnClan(Command As clsCommandObj)
                             Command.Respond "You must specify a message to send."
                         Else
                             Command.Respond "Emails have been sent to everyone in the clan who have choosen to receive them."
-                            Call frmChat.AddQ("/c mail " & Command.Argument("Message"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+                            Call frmChat.AddQ("/c mail " & Command.Argument("Message"), enuPriority.COMMAND_RESPONSE_MESSAGE, Command.Username)
                         End If
                     ElseIf (g_Clan.Self.Rank > 0) Then
                         Command.Respond "Error: The bot must be a shaman or chieftain in its clan to send Clan mail."
@@ -224,7 +224,7 @@ Public Sub OnSetMOTD(Command As clsCommandObj)
         If (g_Clan.InClan) Then
             If (g_Clan.Self.Rank > 2) Then
                 Command.Respond "The clan MOTD has been set to: " & Command.Argument("Message")
-                Call frmChat.AddQ("/c motd " & Command.Argument("Message"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+                Call frmChat.AddQ("/c motd " & Command.Argument("Message"), enuPriority.COMMAND_RESPONSE_MESSAGE, Command.Username)
                 Call frmChat.ClanHandler.RequestClanMOTD(reqInternal)
             ElseIf (g_Clan.Self.Rank > 0) Then
                 Command.Respond "Error: The bot must be a shaman or chieftain in its clan to set the MOTD."

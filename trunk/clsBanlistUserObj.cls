@@ -16,67 +16,67 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_name          As String
-Private m_banned_date   As Date
-Private m_ban_reason    As String
-Private m_operator      As String
-Private m_duplicate_ban As Boolean
-Private m_active_ban    As Boolean
+Private m_Name         As String
+Private m_BannedDate   As Date
+Private m_BanReason    As String
+Private m_Operator     As String
+Private m_DuplicateBan As Boolean
+Private m_ActiveBan    As Boolean
 
 Private Sub Class_Initialize()
-    m_active_ban = True
+    m_ActiveBan = True
 End Sub
 
 Public Property Get Name() As String
-    Name = modEvents.CleanUsername(m_name)
+    Name = modEvents.CleanUsername(m_Name)
 End Property
 
 Public Property Let Name(ByVal str As String)
-    m_name = str
+    m_Name = str
 End Property
 
 Public Property Get DisplayName() As String
-    DisplayName = convertUsername(Name)
+    DisplayName = ConvertUsername(Name)
 End Property
 
 Public Property Get Operator() As String
-    Operator = m_operator
+    Operator = m_Operator
 End Property
 
 Public Property Let Operator(ByVal str As String)
-    m_operator = str
+    m_Operator = str
 End Property
 
 Public Property Get DateOfBan() As Date
-    DateOfBan = m_banned_date
+    DateOfBan = m_BannedDate
 End Property
 
 Public Property Let DateOfBan(ByVal BanDate As Date)
-    m_banned_date = BanDate
+    m_BannedDate = BanDate
 End Property
 
 Public Property Get Reason() As String
-    Reason = m_ban_reason
+    Reason = m_BanReason
 End Property
 
 Public Property Let Reason(ByVal str As String)
-    m_ban_reason = str
+    m_BanReason = str
 End Property
 
 Public Property Let IsDuplicateBan(ByVal bln As Boolean)
-    m_duplicate_ban = bln
+    m_DuplicateBan = bln
 End Property
 
 Public Property Get IsDuplicateBan() As Boolean
-    IsDuplicateBan = m_duplicate_ban
+    IsDuplicateBan = m_DuplicateBan
 End Property
 
 Public Property Let IsActive(ByVal bln As Boolean)
-    m_active_ban = bln
+    m_ActiveBan = bln
 End Property
 
 Public Property Get IsActive() As Boolean
-    IsActive = m_active_ban
+    IsActive = m_ActiveBan
 End Property
 
 Public Function Clone() As Object

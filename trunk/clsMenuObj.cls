@@ -13,22 +13,22 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Private m_hWnd         As Long
-Private m_command_id   As Long
-Private m_name         As String
-Private m_parent       As Object
-Private m_enabled      As Boolean
-Private m_visible      As Boolean
-Private m_help_id      As Long
-Private m_checked      As Boolean
-Private m_tag          As String
-Private m_window_list  As Boolean
-Private m_subs         As Collection
-Private m_has_children As Boolean
+Private m_hWnd        As Long
+Private m_CommandID   As Long
+Private m_Name        As String
+Private m_Parent      As Object
+Private m_Enabled     As Boolean
+Private m_Visible     As Boolean
+Private m_HelpID      As Long
+Private m_Checked     As Boolean
+Private m_Tag         As String
+Private m_WindowList  As Boolean
+Private m_Subs        As Collection
+Private m_HasChildren As Boolean
 
 Private Sub Class_Initialize()
-    m_enabled = True
-    m_visible = True
+    m_Enabled = True
+    m_Visible = True
 End Sub
 
 Public Sub Class_Terminate()
@@ -36,11 +36,11 @@ Public Sub Class_Terminate()
 End Sub
 
 Public Property Get Name() As String
-    Name = m_name
+    Name = m_Name
 End Property
 
 Public Property Let Name(ByVal str As String)
-    m_name = str
+    m_Name = str
 End Property
 
 Public Property Get hWnd() As Long
@@ -58,25 +58,25 @@ Public Property Let hWnd(ByVal lng As Long)
 End Property
 
 Public Property Get HasChildren() As Boolean
-    HasChildren = m_has_children
+    HasChildren = m_HasChildren
 End Property
 
 Public Property Let HasChildren(ByVal bln As Boolean)
-    m_has_children = bln
+    m_HasChildren = bln
     
     Enabled = Enabled
 End Property
 
 Public Property Get Parent() As Object
-    Set Parent = m_parent
+    Set Parent = m_Parent
 End Property
 
 Public Property Let Parent(ByRef obj As Object)
-    If (Not (m_parent Is Nothing)) Then
+    If (Not (m_Parent Is Nothing)) Then
         DeleteMenu
     End If
 
-    Set m_parent = obj
+    Set m_Parent = obj
     
     If (TypeOf obj Is Form) Then
         m_hWnd = GetMenu(obj.hWnd)
@@ -90,53 +90,53 @@ Public Property Let Parent(ByRef obj As Object)
 End Property
 
 Public Property Get ID() As Long
-    ID = m_command_id
+    ID = m_CommandID
 End Property
 
 Public Property Let ID(ByVal lng As Long)
-    If (m_command_id = 0) Then
-        m_command_id = lng
+    If (m_CommandID = 0) Then
+        m_CommandID = lng
     End If
 End Property
 
 Public Property Get Caption() As String
-    Dim str As String 
-    Dim lng As Long  
+    Dim str As String
+    Dim lng As Long
     
     str = String$(256, Chr$(0))
 
-    lng = GetMenuString(m_hWnd, m_command_id, str, Len(str), MF_BYCOMMAND)
+    lng = GetMenuString(m_hWnd, m_CommandID, str, Len(str), MF_BYCOMMAND)
 
     Caption = Left$(str, lng)
 End Property
 
 Public Property Let Caption(ByVal str As String)
     If (str = "-") Then
-        ModifyMenu m_hWnd, m_command_id, MF_BYCOMMAND Or MF_SEPARATOR, m_command_id, str
+        ModifyMenu m_hWnd, m_CommandID, MF_BYCOMMAND Or MF_SEPARATOR, m_CommandID, str
     Else
-        ModifyMenu m_hWnd, m_command_id, MF_BYCOMMAND, m_command_id, str
+        ModifyMenu m_hWnd, m_CommandID, MF_BYCOMMAND, m_CommandID, str
     End If
     
     DrawMenuBar m_hWnd
 End Property
 
 Public Property Get Enabled() As Boolean
-    Enabled = m_enabled
+    Enabled = m_Enabled
 End Property
 
 Public Property Let Enabled(ByVal bln As Boolean)
     If (bln = True) Then
         If (ModifyMenu(m_hWnd, _
-                m_command_id, MF_BYCOMMAND Or IIf(HasChildren, MF_POPUP, MF_STRING), _
-                    m_command_id, Caption()) <> -1) Then
+                m_CommandID, MF_BYCOMMAND Or IIf(HasChildren, MF_POPUP, MF_STRING), _
+                    m_CommandID, Caption()) <> -1) Then
                 
-            m_enabled = True
+            m_Enabled = True
         End If
     Else
         If (ModifyMenu(m_hWnd, _
-                m_command_id, MF_BYCOMMAND Or MF_GRAYED, m_command_id, Caption()) <> -1) Then
+                m_CommandID, MF_BYCOMMAND Or MF_GRAYED, m_CommandID, Caption()) <> -1) Then
                 
-            m_enabled = False
+            m_Enabled = False
         End If
     End If
     
@@ -144,17 +144,17 @@ Public Property Let Enabled(ByVal bln As Boolean)
 End Property
 
 Public Property Get Checked() As Boolean
-    Checked = m_checked
+    Checked = m_Checked
 End Property
 
 Public Property Let Checked(ByVal bln As Boolean)
     If (bln = True) Then
-        If (CheckMenuItem(m_hWnd, m_command_id, MF_BYCOMMAND Or MF_CHECKED) <> -1) Then
-            m_checked = True
+        If (CheckMenuItem(m_hWnd, m_CommandID, MF_BYCOMMAND Or MF_CHECKED) <> -1) Then
+            m_Checked = True
         End If
     Else
-        If (CheckMenuItem(m_hWnd, m_command_id, MF_BYCOMMAND Or MF_UNCHECKED) <> -1) Then
-            m_checked = False
+        If (CheckMenuItem(m_hWnd, m_CommandID, MF_BYCOMMAND Or MF_UNCHECKED) <> -1) Then
+            m_Checked = False
         End If
     End If
     
@@ -162,7 +162,7 @@ Public Property Let Checked(ByVal bln As Boolean)
 End Property
 
 Public Property Get Visible() As Boolean
-    Visible = m_visible
+    Visible = m_Visible
 End Property
 
 Public Property Let Visible(ByVal bln As Boolean)
@@ -182,11 +182,11 @@ Public Property Let HelpContextID(ByVal bln As Long)
 End Property
 
 Public Property Get Tag() As String
-    Tag = m_tag
+    Tag = m_Tag
 End Property
 
 Public Property Let Tag(ByVal str As String)
-    m_tag = str
+    m_Tag = str
 End Property
 
 'To-Do: Complete this Function
@@ -194,25 +194,25 @@ Public Property Get WindowList() As Boolean
 End Property
 
 Private Function CreateMenu() As Long
-    If (m_command_id = 0) Then
+    If (m_CommandID = 0) Then
     
-        m_command_id = CreatePopupMenu()
+        m_CommandID = CreatePopupMenu()
     
-        AppendMenu m_hWnd, IIf(HasChildren, MF_POPUP, MF_STRING), m_command_id, ""
+        AppendMenu m_hWnd, IIf(HasChildren, MF_POPUP, MF_STRING), m_CommandID, ""
         
         DrawMenuBar m_hWnd
         
-        CreateMenu = m_command_id
+        CreateMenu = m_CommandID
         
     End If
 End Function
 
 Private Function DeleteMenu() As Long
-    If (m_command_id <> 0) Then
+    If (m_CommandID <> 0) Then
     
-        RemoveMenu m_hWnd, m_command_id, MF_BYCOMMAND
+        RemoveMenu m_hWnd, m_CommandID, MF_BYCOMMAND
             
-        m_command_id = 0
+        m_CommandID = 0
 
-    End If    
+    End If
 End Function

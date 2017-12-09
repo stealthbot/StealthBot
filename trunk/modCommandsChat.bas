@@ -6,24 +6,24 @@ Private m_AwayMessage As String
 
 Public Sub OnAway(Command As clsCommandObj)
     If (LenB(m_AwayMessage) > 0) Then
-        Call frmChat.AddQ("/away", PRIORITY.COMMAND_RESPONSE_MESSAGE)
+        Call frmChat.AddQ("/away", enuPriority.COMMAND_RESPONSE_MESSAGE)
         If (Not Command.IsLocal) Then
             If (m_AwayMessage = " - ") Then
-                Call frmChat.AddQ("/me is back.", PRIORITY.COMMAND_RESPONSE_MESSAGE)
+                Call frmChat.AddQ("/me is back.", enuPriority.COMMAND_RESPONSE_MESSAGE)
             Else
-                Call frmChat.AddQ("/me is back from (" & m_AwayMessage & ")", PRIORITY.COMMAND_RESPONSE_MESSAGE)
+                Call frmChat.AddQ("/me is back from (" & m_AwayMessage & ")", enuPriority.COMMAND_RESPONSE_MESSAGE)
             End If
         End If
         m_AwayMessage = vbNullString
     Else
         If (LenB(Command.Argument("Message")) > 0) Then
             m_AwayMessage = Command.Argument("Message")
-            Call frmChat.AddQ("/away " & m_AwayMessage, PRIORITY.COMMAND_RESPONSE_MESSAGE)
+            Call frmChat.AddQ("/away " & m_AwayMessage, enuPriority.COMMAND_RESPONSE_MESSAGE)
             
             If (Command.IsLocal) Then Call frmChat.AddQ("/me is away (" & m_AwayMessage & ")")
         Else
             m_AwayMessage = " - "
-            Call frmChat.AddQ("/away", PRIORITY.COMMAND_RESPONSE_MESSAGE)
+            Call frmChat.AddQ("/away", enuPriority.COMMAND_RESPONSE_MESSAGE)
             If (Not Command.IsLocal) Then Call frmChat.AddQ("/me is away.")
         End If
     End If
@@ -31,13 +31,13 @@ End Sub
 
 Public Sub OnBack(Command As clsCommandObj)
     If (LenB(m_AwayMessage) > 0) Then
-        Call frmChat.AddQ("/away", PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+        Call frmChat.AddQ("/away", enuPriority.COMMAND_RESPONSE_MESSAGE, Command.Username)
         
         If (Not Command.IsLocal) Then
             If (m_AwayMessage = " - ") Then
-                Call frmChat.AddQ("/me is back.", PRIORITY.COMMAND_RESPONSE_MESSAGE)
+                Call frmChat.AddQ("/me is back.", enuPriority.COMMAND_RESPONSE_MESSAGE)
             Else
-                Call frmChat.AddQ("/me is back from (" & m_AwayMessage & ")", PRIORITY.COMMAND_RESPONSE_MESSAGE)
+                Call frmChat.AddQ("/me is back from (" & m_AwayMessage & ")", enuPriority.COMMAND_RESPONSE_MESSAGE)
             End If
             m_AwayMessage = vbNullString
         End If
@@ -109,7 +109,7 @@ End Sub
 
 Public Sub OnFAdd(Command As clsCommandObj)
     If (Command.IsValid) Then
-        Call frmChat.AddQ("/f a " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+        Call frmChat.AddQ("/f a " & Command.Argument("Username"), enuPriority.COMMAND_RESPONSE_MESSAGE, Command.Username)
         Command.Respond StringFormat("Added user {0}{1}{0} to this account's friends list.", Chr$(34), Command.Argument("Username"))
     End If
 End Sub
@@ -148,7 +148,7 @@ End Sub
 
 Public Sub OnFRem(Command As clsCommandObj)
     If (Command.IsValid) Then
-        Call frmChat.AddQ("/f r " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+        Call frmChat.AddQ("/f r " & Command.Argument("Username"), enuPriority.COMMAND_RESPONSE_MESSAGE, Command.Username)
         Command.Respond StringFormat("Removed user {0}{1}{0} from this account's friends list.", Chr$(34), Command.Argument("Username"))
     End If
 End Sub
@@ -174,7 +174,7 @@ Public Sub OnIgnore(Command As clsCommandObj)
     If (Command.IsValid) Then
         If (Command.IsLocal) Then
             Command.Respond StringFormat("Ignoring messages from {0}{1}{0}.", Chr$(34), Command.Argument("Username"))
-            frmChat.AddQ "/ignore " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE
+            frmChat.AddQ "/ignore " & Command.Argument("Username"), enuPriority.COMMAND_RESPONSE_MESSAGE
         Else
             Dim dbTarget As udtUserAccess
             Dim dbCaller As udtUserAccess
@@ -187,20 +187,20 @@ Public Sub OnIgnore(Command As clsCommandObj)
                 Command.Respond "That user has the same rank as you."
             Else
                 Command.Respond StringFormat("Ignoring messages from {0}{1}{0}.", Chr$(34), Command.Argument("Username"))
-                frmChat.AddQ "/ignore " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE
+                frmChat.AddQ "/ignore " & Command.Argument("Username"), enuPriority.COMMAND_RESPONSE_MESSAGE
             End If
         End If
     End If
 End Sub
 
 Public Sub OnIgPriv(Command As clsCommandObj)
-    Call frmChat.AddQ("/o igpriv", PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+    Call frmChat.AddQ("/o igpriv", enuPriority.COMMAND_RESPONSE_MESSAGE, Command.Username)
     Command.Respond "Ignoring messages from non-friends in private channels."
 End Sub
 
 Public Sub OnJoin(Command As clsCommandObj)
     If (Command.IsValid) Then
-        Call frmChat.AddQ("/join " & Command.Argument("Channel"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+        Call frmChat.AddQ("/join " & Command.Argument("Channel"), enuPriority.COMMAND_RESPONSE_MESSAGE, Command.Username)
     End If
 End Sub
 
@@ -282,12 +282,12 @@ End Sub
 Public Sub OnUnIgnore(Command As clsCommandObj)
     If (Command.IsValid) Then
         Command.Respond StringFormat("Receiving messages from {0}{1}{0}.", Chr$(34), Command.Argument("Username"))
-        frmChat.AddQ "/unignore " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE
+        frmChat.AddQ "/unignore " & Command.Argument("Username"), enuPriority.COMMAND_RESPONSE_MESSAGE
     End If
 End Sub
 
 Public Sub OnUnIgPriv(Command As clsCommandObj)
-    Call frmChat.AddQ("/o unigpriv", PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+    Call frmChat.AddQ("/o unigpriv", enuPriority.COMMAND_RESPONSE_MESSAGE, Command.Username)
     Command.Respond "Allowing messages from non-friends in private channels."
 End Sub
 
@@ -329,8 +329,8 @@ Public Sub OnReconnect(Command As clsCommandObj)
 End Sub
 
 Public Sub OnReJoin(Command As clsCommandObj)
-    Call frmChat.AddQ(StringFormat("/join {0} Rejoin", GetCurrentUsername), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
-    Call frmChat.AddQ("/join " & g_Channel.Name, PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+    Call frmChat.AddQ(StringFormat("/join {0} Rejoin", GetCurrentUsername), enuPriority.COMMAND_RESPONSE_MESSAGE, Command.Username)
+    Call frmChat.AddQ("/join " & g_Channel.Name, enuPriority.COMMAND_RESPONSE_MESSAGE, Command.Username)
 End Sub
 
 Public Sub OnSay(Command As clsCommandObj)

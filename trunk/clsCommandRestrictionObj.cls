@@ -16,86 +16,86 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_name           As String
-Private m_req_rank       As Integer
-Private m_req_flags      As String
-Private m_matchmessage   As String
-Private m_casesensitive  As Boolean
-Private m_error          As String
-Private m_description    As String
-Private m_special_notes  As String
-Private m_fatal          As Boolean
+Private m_Name           As String
+Private m_RequiredRank   As Integer
+Private m_RequiredFlags  As String
+Private m_MatchMessage   As String
+Private m_CaseSensitive  As Boolean
+Private m_Error          As String
+Private m_Description    As String
+Private m_SpecialNotes   As String
+Private m_Fatal          As Boolean
 
 Public Property Get Name() As String
-    Name = m_name
+    Name = m_Name
 End Property
 
 Public Property Let Name(strName As String)
-    m_name = strName
+    m_Name = strName
 End Property
 
 Public Property Get RequiredRank() As Integer
-    RequiredRank = m_req_rank
+    RequiredRank = m_RequiredRank
 End Property
 
 Public Property Let RequiredRank(Rank As Integer)
-    m_req_rank = Rank
+    m_RequiredRank = Rank
 End Property
 
 Public Property Get RequiredFlags() As String
-    RequiredFlags = m_req_flags
+    RequiredFlags = m_RequiredFlags
 End Property
 
 Public Property Let RequiredFlags(Flags As String)
-    m_req_flags = Flags
+    m_RequiredFlags = Flags
 End Property
 
 Public Property Get MatchMessage() As String
-    MatchMessage = m_matchmessage
+    MatchMessage = m_MatchMessage
 End Property
 
 Public Property Let MatchMessage(str As String)
-    m_matchmessage = str
+    m_MatchMessage = str
 End Property
 
 Public Property Get MatchError() As String
-    MatchError = m_error
+    MatchError = m_Error
 End Property
 
 Public Property Let MatchError(str As String)
-    m_error = str
+    m_Error = str
 End Property
 
 Public Property Get MatchCaseSensitive() As Boolean
-    MatchCaseSensitive = m_casesensitive
+    MatchCaseSensitive = m_CaseSensitive
 End Property
 
 Public Property Let MatchCaseSensitive(bln As Boolean)
-    m_casesensitive = bln
+    m_CaseSensitive = bln
 End Property
 
 Public Property Get Description() As String
-    Description = m_description
+    Description = m_Description
 End Property
 
 Public Property Let Description(str As String)
-    m_description = str
+    m_Description = str
 End Property
 
 Public Property Get SpecialNotes() As String
-    SpecialNotes = m_special_notes
+    SpecialNotes = m_SpecialNotes
 End Property
 
 Public Property Let SpecialNotes(str As String)
-    m_special_notes = str
+    m_SpecialNotes = str
 End Property
 
 Public Property Let Fatal(bFatal As Boolean)
-    m_fatal = bFatal
+    m_Fatal = bFatal
 End Property
 
 Public Property Get Fatal() As Boolean
-    Fatal = m_fatal
+    Fatal = m_Fatal
 End Property
 
 Public Function ToString() As String

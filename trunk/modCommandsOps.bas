@@ -206,7 +206,7 @@ End Sub
 Public Sub OnDes(Command As clsCommandObj)
     If (g_Channel.Self.IsOperator) Then
         If (LenB(Command.Argument("Username")) > 0) Then
-            Call frmChat.AddQ("/designate " & Command.Argument("Username"), PRIORITY.COMMAND_RESPONSE_MESSAGE, Command.Username)
+            Call frmChat.AddQ("/designate " & Command.Argument("Username"), enuPriority.COMMAND_RESPONSE_MESSAGE, Command.Username)
             Command.Respond StringFormat("I have designated {0}.", Command.Argument("Username"))
         Else
             If (LenB(g_Channel.OperatorHeir) > 0) Then
@@ -752,7 +752,7 @@ End Sub
 
 Public Sub OnResign(Command As clsCommandObj)
     If (Not g_Channel.Self.IsOperator) Then Exit Sub
-    Call frmChat.AddQ("/resign", PRIORITY.SPECIAL_MESSAGE, Command.Username)
+    Call frmChat.AddQ("/resign", enuPriority.SPECIAL_MESSAGE, Command.Username)
 End Sub
 
 Public Sub OnSafeAdd(Command As clsCommandObj)
@@ -831,7 +831,7 @@ Public Sub OnSweepBan(Command As clsCommandObj)
             ' Changed 08-18-09 - Hdx - Uses the new Channel cache function, Eventually to beremoved to script
             'Call CacheChannelList(vbNullString, 255, "ban ")
             Call CacheChannelList(enReset, "ban ")
-            Call frmChat.AddQ("/who " & Command.Argument("Channel"), PRIORITY.CHANNEL_MODERATION_MESSAGE, Command.Username, "request_receipt")
+            Call frmChat.AddQ("/who " & Command.Argument("Channel"), enuPriority.CHANNEL_MODERATION_MESSAGE, Command.Username, "request_receipt")
         Else
             Command.Respond ERROR_NOT_OPS
         End If
@@ -851,7 +851,7 @@ Public Sub OnSweepIgnore(Command As clsCommandObj)
         ' Changed 08-18-09 - Hdx - Uses the new Channel cache function, Eventually to be removed to script
         'Call CacheChannelList(vbNullString, 255, "squelch ")
         Call CacheChannelList(enReset, "squelch ")
-        Call frmChat.AddQ("/who " & Command.Argument("Channel"), PRIORITY.CHANNEL_MODERATION_MESSAGE, Command.Username, "request_receipt")
+        Call frmChat.AddQ("/who " & Command.Argument("Channel"), enuPriority.CHANNEL_MODERATION_MESSAGE, Command.Username, "request_receipt")
     End If
 End Sub
 
@@ -913,7 +913,7 @@ Public Sub OnUnBan(Command As clsCommandObj)
             If (InStr(1, sTargetUser, "*", vbBinaryCompare) <> 0) Then
                 Call WildCardBan(sTargetUser, vbNullString, 2)
             Else
-                Call frmChat.AddQ("/unban " & sTargetUser, PRIORITY.CHANNEL_MODERATION_MESSAGE, Command.Username)
+                Call frmChat.AddQ("/unban " & sTargetUser, enuPriority.CHANNEL_MODERATION_MESSAGE, Command.Username)
             End If
         Else
             Command.Respond ERROR_NOT_OPS

@@ -4,7 +4,7 @@ Attribute VB_Name = "modQueueObj"
 
 Option Explicit
 
-Public Enum PRIORITY
+Public Enum enuPriority
     SPECIAL_MESSAGE = 0
     CONSOLE_MESSAGE = 1
     CHANNEL_MODERATION_MESSAGE = 2

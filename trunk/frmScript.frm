@@ -309,7 +309,7 @@ End Sub
 '
 'End Function
 
-Public Function ObjCount(Optional ObjType As String) As Integer
+Public Function ObjCount(Optional ByVal ObjType As String) As Integer
     Dim i As Integer
     If (ObjType <> vbNullString) Then
         For i = 0 To m_objCount - 1

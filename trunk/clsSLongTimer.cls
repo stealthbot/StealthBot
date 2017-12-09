@@ -13,84 +13,84 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Private m_tmrObj   As Object
-Private m_interval As Integer
-Private m_counter  As Double
+Private m_TmrObj   As Object
+Private m_Interval As Integer
+Private m_Counter  As Double
 
 Public Property Get tmr() As Object
 
-    Set tmr = m_tmrObj
+    Set tmr = m_TmrObj
 
 End Property
 
 Public Property Let tmr(ByRef o As Object)
 
-    Set m_tmrObj = o
+    Set m_TmrObj = o
 
 End Property
 
 Public Property Get Parent() As Form
 
-    Set Parent = m_tmrObj.Parent
+    Set Parent = m_TmrObj.Parent
 
 End Property
 
 Public Property Get Index() As Integer
 
-    Index = m_tmrObj.Index
+    Index = m_TmrObj.Index
 
 End Property
 
 Public Property Get Name() As String
 
-    Name = m_tmrObj.Name
+    Name = m_TmrObj.Name
 
 End Property
 
 Public Property Get Tag() As String
 
-    Tag = m_tmrObj.Tag
+    Tag = m_TmrObj.Tag
 
 End Property
 
 Public Property Let Tag(ByVal str As String)
 
-    m_tmrObj.Tag = str
+    m_TmrObj.Tag = str
 
 End Property
 
 Public Property Get Interval() As Integer
 
-    Interval = m_interval
+    Interval = m_Interval
 
 End Property
 
-Public Property Let Interval(ByVal I As Integer)
+Public Property Let Interval(ByVal i As Integer)
 
-    m_interval = I
+    m_Interval = i
 
 End Property
 
 Public Property Get Enabled() As Boolean
 
-    Enabled = m_tmrObj.Enabled
+    Enabled = m_TmrObj.Enabled
 
 End Property
 
 Public Property Let Enabled(ByVal bln As Boolean)
 
-    m_tmrObj.Enabled = bln
+    m_TmrObj.Enabled = bln
 
 End Property
 
 Public Property Get Counter() As Double
 
-    Counter = m_counter
+    Counter = m_Counter
 
 End Property
 
-Public Property Let Counter(ByVal I As Double)
+Public Property Let Counter(ByVal i As Double)
 
-    m_counter = I
+    m_Counter = i
     
 End Property

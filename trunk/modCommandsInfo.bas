@@ -754,7 +754,7 @@ End Sub
 
 Public Sub OnWhere(Command As clsCommandObj)
     If (Command.IsLocal) Then
-        Call frmChat.AddQ("/where " & Command.Args, PRIORITY.COMMAND_RESPONSE_MESSAGE, "(console)")
+        Call frmChat.AddQ("/where " & Command.Args, enuPriority.COMMAND_RESPONSE_MESSAGE, "(console)")
     End If
 
     Command.Respond StringFormat("I am currently in channel {0} ({1} users present)", g_Channel.Name, g_Channel.Users.Count)
@@ -767,7 +767,7 @@ Public Sub OnWhoAmI(Command As clsCommandObj)
         Command.Respond "You are the bot console."
         
         If (g_Online) Then
-            Call frmChat.AddQ("/whoami", PRIORITY.CONSOLE_MESSAGE)
+            Call frmChat.AddQ("/whoami", enuPriority.CONSOLE_MESSAGE)
         End If
     Else
         dbAccess = Database.GetUserAccess(Command.Username)
@@ -800,7 +800,7 @@ Public Sub OnWhoIs(Command As clsCommandObj)
     
     If (Command.IsValid) Then
         If (Command.IsLocal And g_Online) Then
-            Call frmChat.AddQ("/whois " & Command.Argument("Username"), PRIORITY.CONSOLE_MESSAGE)
+            Call frmChat.AddQ("/whois " & Command.Argument("Username"), enuPriority.CONSOLE_MESSAGE)
         End If
 
         ' Check if we know who this is.

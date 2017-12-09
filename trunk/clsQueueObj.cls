@@ -13,73 +13,73 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Private m_obj_id   As Double
-Private m_message  As String
-Private m_priority As Integer
-Private m_response As String
-Private m_tag      As String
+Private m_ObjID    As Double
+Private m_Message  As String
+Private m_Priority As Integer
+Private m_Response As String
+Private m_Tag      As String
 
-Public Property Let id(ByVal i As Double)
+Public Property Let ID(ByVal i As Double)
 
-    If (m_obj_id > 0) Then
+    If (m_ObjID > 0) Then
         Exit Property
     End If
     
-    m_obj_id = i
+    m_ObjID = i
     
 End Property
 
-Public Property Get id() As Double
+Public Property Get ID() As Double
 
-    id = m_obj_id
+    ID = m_ObjID
     
 End Property
 
 Public Property Let Message(ByVal Msg As String)
 
-    m_message = Msg
+    m_Message = Msg
     
 End Property
 
 Public Property Get Message() As String
 
-    Message = m_message
+    Message = m_Message
     
 End Property
 
-Public Property Let PRIORITY(ByVal pri As Integer)
+Public Property Let Priority(ByVal pri As Integer)
 
-    m_priority = pri
+    m_Priority = pri
     
 End Property
 
-Public Property Get PRIORITY() As Integer
+Public Property Get Priority() As Integer
 
-    PRIORITY = m_priority
+    Priority = m_Priority
     
 End Property
 
 Public Property Let Tag(ByVal Tag As String)
 
-    m_tag = Tag
+    m_Tag = Tag
 
 End Property
 
 Public Property Get Tag() As String
 
-    Tag = m_tag
+    Tag = m_Tag
 
 End Property
 
 Public Property Let ResponseTo(ByVal sUser As String)
 
-    m_response = sUser
+    m_Response = sUser
 
 End Property
 
 Public Property Get ResponseTo() As String
 
-    ResponseTo = m_response
+    ResponseTo = m_Response
 
 End Property
 

@@ -20,20 +20,20 @@ Option Explicit
 '// is returned to a script module by using the abstract IsCommand() method.
 
 
-Private m_valid        As Boolean
-Private m_command_docs As clsCommandDocObj
-Private m_name         As String
+Private m_Valid        As Boolean
+Private m_CommandDocs  As clsCommandDocObj
+Private m_Name         As String
 Private m_Username     As String
-Private m_args         As String
-Private m_arguments    As Collection
-Private m_local        As Boolean
-Private m_publicOutput As Boolean
-Private m_xmlarguments As Dictionary
-Private m_hasaccess    As Boolean
-Private m_splithasrun  As Boolean
-Private m_waswhispered As Boolean
-Private m_response     As Collection
-Private m_restrictions As Dictionary
+Private m_Args         As String
+Private m_Arguments    As Collection
+Private m_Local        As Boolean
+Private m_PublicOutput As Boolean
+Private m_XmlArguments As Dictionary
+Private m_HasAccess    As Boolean
+Private m_SplitHasRun  As Boolean
+Private m_WasWhispered As Boolean
+Private m_Response     As Collection
+Private m_Restrictions As Dictionary
 
 Public Property Get Username() As String
     Username = m_Username
@@ -42,58 +42,58 @@ Public Property Let Username(strName As String)
     m_Username = strName
 End Property
 Public Property Get Name() As String
-    Name = m_name
+    Name = m_Name
 End Property
 Public Property Let Name(strName As String)
-    m_name = strName
+    m_Name = strName
 End Property
 Public Property Get Args() As String
-    Args = m_args
+    Args = m_Args
 End Property
 Public Property Let Args(strArgs As String)
-    m_args = strArgs
+    m_Args = strArgs
 End Property
 Public Property Get Arguments() As Collection
-    Set Arguments = m_arguments
+    Set Arguments = m_Arguments
 End Property
 Public Property Let Arguments(col As Collection)
-    Set m_arguments = col
+    Set m_Arguments = col
 End Property
 Public Property Get IsLocal() As Boolean
-    IsLocal = m_local
+    IsLocal = m_Local
 End Property
 Public Property Let IsLocal(bln As Boolean)
-    m_local = bln
+    m_Local = bln
 End Property
 Public Property Get PublicOutput() As Boolean
-    PublicOutput = m_publicOutput
+    PublicOutput = m_PublicOutput
 End Property
 Public Property Let PublicOutput(bln As Boolean)
-    m_publicOutput = bln
+    m_PublicOutput = bln
 End Property
 Public Property Get IsValid() As Boolean
-    If (Not m_splithasrun) Then SplitArguments
-    IsValid = m_valid
+    If (Not m_SplitHasRun) Then SplitArguments
+    IsValid = m_Valid
 End Property
 Public Property Let IsValid(bln As Boolean)
-    m_valid = bln
+    m_Valid = bln
 End Property
 Public Property Get HasAccess() As Boolean
-    If (Not m_splithasrun) Then SplitArguments
-    HasAccess = m_hasaccess
+    If (Not m_SplitHasRun) Then SplitArguments
+    HasAccess = m_HasAccess
 End Property
 Public Property Get WasWhispered() As Boolean
-    WasWhispered = m_waswhispered
+    WasWhispered = m_WasWhispered
 End Property
 Public Property Let WasWhispered(bValue As Boolean)
-    m_waswhispered = bValue
+    m_WasWhispered = bValue
 End Property
 
 Public Property Get Source() As Integer
-    If m_local = True Then
+    If m_Local = True Then
         Source = 4
     Else
-        If m_waswhispered = True Then
+        If m_WasWhispered = True Then
             Source = 3
         Else
             Source = 1
@@ -104,51 +104,51 @@ End Property
 
 Public Sub Class_Initialize()
     '// initialize values
-    m_valid = False
-    Set m_command_docs = New clsCommandDocObj
-    m_name = vbNullString
+    m_Valid = False
+    Set m_CommandDocs = New clsCommandDocObj
+    m_Name = vbNullString
     m_Username = vbNullString
-    m_args = vbNullString
-    Set m_arguments = New Collection
-    m_local = False
-    m_publicOutput = False
-    Set m_xmlarguments = New Dictionary
-    m_xmlarguments.CompareMode = TextCompare
-    m_hasaccess = False
-    m_splithasrun = False
-    m_waswhispered = False
-    Set m_response = New Collection
-    Set m_restrictions = New Dictionary
+    m_Args = vbNullString
+    Set m_Arguments = New Collection
+    m_Local = False
+    m_PublicOutput = False
+    Set m_XmlArguments = New Dictionary
+    m_XmlArguments.CompareMode = TextCompare
+    m_HasAccess = False
+    m_SplitHasRun = False
+    m_WasWhispered = False
+    Set m_Response = New Collection
+    Set m_Restrictions = New Dictionary
 End Sub
 
 Public Sub Class_Terminate()
     '// clean up
-    Set m_command_docs = Nothing
-    Set m_arguments = Nothing
+    Set m_CommandDocs = Nothing
+    Set m_Arguments = Nothing
 End Sub
 
 Public Property Get docs() As clsCommandDocObj
-    If m_command_docs Is Nothing Then
+    If m_CommandDocs Is Nothing Then
         '// this command is nothing, lets create it
-        Set m_command_docs = New clsCommandDocObj
-        Call m_command_docs.OpenCommand(m_name, vbNullChar)
-        Set docs = m_command_docs
+        Set m_CommandDocs = New clsCommandDocObj
+        Call m_CommandDocs.OpenCommand(m_Name, vbNullChar)
+        Set docs = m_CommandDocs
     Else
         '// this command already has a value, lets make sure its still valid
-        If StrComp(m_command_docs.Name, m_name, TextCompare) = 0 Then
+        If StrComp(m_CommandDocs.Name, m_Name, TextCompare) = 0 Then
             '// all good, lets return it
-            Set docs = m_command_docs
+            Set docs = m_CommandDocs
         Else
             '// ugh, this doc object is for a different command, we need to
             '// destroy it and start all over again
-            Set m_command_docs = Nothing
+            Set m_CommandDocs = Nothing
             Set docs = Me.docs
         End If
     End If
 End Property
 
 Public Property Let docs(ByRef cmd As clsCommandDocObj)
-    Set m_command_docs = cmd
+    Set m_CommandDocs = cmd
 End Property
 
 'Strips (removes) and returns a Numeric argument from the passed string
@@ -237,11 +237,11 @@ On Error GoTo ERROR_HANDLER
     
     
     If (dbAccess.Rank >= Me.docs.RequiredRank And Me.docs.RequiredRank > -1) Then
-        m_hasaccess = True
+        m_HasAccess = True
     End If
     
     If (CheckForAnyFlags(Me.docs.RequiredFlags, dbAccess.Flags)) Then
-        m_hasaccess = True
+        m_HasAccess = True
     End If
     
     IsValid = True
@@ -257,7 +257,7 @@ On Error GoTo ERROR_HANDLER
         
         If (LenB(Param.MatchMessage)) Then
             If (Not CheckMatch(Param.MatchMessage, sTemp, Param.MatchCaseSensitive)) Then
-                If m_hasaccess Then
+                If m_HasAccess Then
                     If LenB(Param.MatchError) > 0 Then
                         sError = Replace$(Param.MatchError, "%Value", sTemp)
                         sError = Replace$(sError, "%Rank", dbAccess.Rank)
@@ -268,7 +268,7 @@ On Error GoTo ERROR_HANDLER
                         Respond "That command is restricted."
                     End If
                     
-                    m_splithasrun = True
+                    m_SplitHasRun = True
                     IsValid = False
                 Else
                     If (LCase$(Param.DataType) = "string") Then
@@ -282,12 +282,12 @@ On Error GoTo ERROR_HANDLER
         
         If (LenB(sTemp) > 0) Then
             For Each Restriction In Param.Restrictions 'Loop Through the Restrictions
-                m_restrictions(Restriction.Name) = True
+                m_Restrictions(Restriction.Name) = True
                 If (CheckMatch(Restriction.MatchMessage, sTemp, Restriction.MatchCaseSensitive)) Then 'If they match (regex)
                     'If Rank = -1 It means it's missing, and it MUST have Flags. Or if Rank > User's Access
                     If (Restriction.RequiredRank = -1 Or Restriction.RequiredRank > dbAccess.Rank) Then
                         If (Not CheckForAnyFlags(Restriction.RequiredFlags, dbAccess.Flags)) Then
-                            If m_hasaccess Then
+                            If m_HasAccess Then
                                 If LenB(Restriction.MatchError) > 0 Then
                                     sError = Replace$(Restriction.MatchError, "%Value", sTemp)
                                     sError = Replace$(sError, "%Rank", dbAccess.Rank)
@@ -304,8 +304,8 @@ On Error GoTo ERROR_HANDLER
                                     Respond "That command is restricted."
                                 End If
                                 
-                                If (Restriction.Fatal) Then m_hasaccess = False
-                                m_restrictions(Restriction.Name) = False
+                                If (Restriction.Fatal) Then m_HasAccess = False
+                                m_Restrictions(Restriction.Name) = False
                             End If
                         End If
                     End If
@@ -316,11 +316,11 @@ On Error GoTo ERROR_HANDLER
         If (LenB(sTemp) = 0 And Not Param.IsOptional) Then
             IsValid = False
         End If
-        m_xmlarguments(Param.Name) = sTemp
+        m_XmlArguments(Param.Name) = sTemp
     Next
     
-    If (IsLocal) Then m_hasaccess = True
-    m_splithasrun = True
+    If (IsLocal) Then m_HasAccess = True
+    m_SplitHasRun = True
 
     Exit Sub
     
@@ -329,18 +329,18 @@ ERROR_HANDLER:
 End Sub
 
 Public Function Argument(sName As String) As String
-    If (Not m_splithasrun) Then SplitArguments
-    If (m_xmlarguments.Exists(sName)) Then
-        Argument = m_xmlarguments.Item(sName)
+    If (Not m_SplitHasRun) Then SplitArguments
+    If (m_XmlArguments.Exists(sName)) Then
+        Argument = m_XmlArguments.Item(sName)
     Else
         Argument = vbNullString
     End If
 End Function
 
 Public Function Restriction(sName As String) As Boolean
-    If (Not m_splithasrun) Then SplitArguments
-    If (m_restrictions.Exists(sName)) Then
-        Restriction = m_restrictions.Item(sName)
+    If (Not m_SplitHasRun) Then SplitArguments
+    If (m_Restrictions.Exists(sName)) Then
+        Restriction = m_Restrictions.Item(sName)
     Else
         Restriction = False
     End If
@@ -367,19 +367,19 @@ End Function
 
 'Adds a line to the response queue
 Public Sub Respond(strResponse As Variant)
-    If (LenB(strResponse) > 0) Then m_response.Add CStr(strResponse)
+    If (LenB(strResponse) > 0) Then m_Response.Add CStr(strResponse)
 End Sub
 
 'Cleares the response queue
 Public Sub ClearResponse()
-    Do While m_response.Count
-      m_response.Remove 1
+    Do While m_Response.Count
+      m_Response.Remove 1
     Loop
 End Sub
 
 'Gets the Response Queue
 Public Function GetResponse() As Collection
-    Set GetResponse = m_response
+    Set GetResponse = m_Response
 End Function
 
 'This will respond in the proper style based on how the command was used.
@@ -390,22 +390,22 @@ On Error GoTo ERROR_HANDLER
     Dim i As Integer
     If (IsLocal) Then
         If (PublicOutput) Then
-            For i = 1 To m_response.Count
-                frmChat.AddQ m_response.Item(i), PRIORITY.CONSOLE_MESSAGE
+            For i = 1 To m_Response.Count
+                frmChat.AddQ m_Response.Item(i), enuPriority.CONSOLE_MESSAGE
             Next i
         Else
-            For i = 1 To m_response.Count
-                frmChat.AddChat g_Color.ConsoleText, m_response.Item(i)
+            For i = 1 To m_Response.Count
+                frmChat.AddChat g_Color.ConsoleText, m_Response.Item(i)
             Next i
         End If
     Else
         If ((BotVars.WhisperCmds Or WasWhispered) And (PublicOutput = False)) Then
-            For i = 1 To m_response.Count
-                frmChat.AddQ "/w " & Username & Space$(1) & m_response.Item(i), PRIORITY.COMMAND_RESPONSE_MESSAGE
+            For i = 1 To m_Response.Count
+                frmChat.AddQ "/w " & Username & Space$(1) & m_Response.Item(i), enuPriority.COMMAND_RESPONSE_MESSAGE
             Next i
         Else
-            For i = 1 To m_response.Count
-                frmChat.AddQ m_response.Item(i), PRIORITY.COMMAND_RESPONSE_MESSAGE
+            For i = 1 To m_Response.Count
+                frmChat.AddQ m_Response.Item(i), enuPriority.COMMAND_RESPONSE_MESSAGE
             Next i
         End If
     End If
