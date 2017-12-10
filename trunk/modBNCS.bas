@@ -332,8 +332,8 @@ On Error GoTo ERROR_HANDLER:
     Dim pBuff As clsDataBuffer
     Set pBuff = New clsDataBuffer
     With pBuff
-        .InsertDWord GetDWORDOverride(Config.PlatformID)                      'Platform ID
-        .InsertDWord GetDWord(BotVars.Product)                                'Product ID
+        .InsertDWord GetDWordOverride(Config.PlatformID)                      'Platform ID
+        .InsertDWord StringRToDWord(BotVars.Product)                          'Product ID
         .InsertDWord IIf(lVerByte = 0, GetVerByte(BotVars.Product), lVerByte) 'VersionByte
         .InsertDWord 0  'Unknown
         .SendPacket SID_STARTVERSIONING
@@ -434,8 +434,8 @@ On Error GoTo ERROR_HANDLER:
     
     Set pBuff = New clsDataBuffer
     With pBuff
-        .InsertDWord GetDWORDOverride(Config.PlatformID)                      'Platform ID
-        .InsertDWord GetDWord(BotVars.Product)                                'Product ID
+        .InsertDWord GetDWordOverride(Config.PlatformID)                      'Platform ID
+        .InsertDWord StringRToDWord(BotVars.Product)                          'Product ID
         .InsertDWord IIf(lVerByte = 0, GetVerByte(BotVars.Product), lVerByte) 'VersionByte
         .InsertDWord ds.CRevVersion                                           'Exe Version
         .InsertDWord ds.CRevChecksum                                          'Checksum
@@ -546,7 +546,7 @@ Private Sub SEND_SID_GETCHANNELLIST()
 On Error GoTo ERROR_HANDLER:
     Dim pBuff As clsDataBuffer
     Set pBuff = New clsDataBuffer
-    pBuff.InsertDWord GetDWord(BotVars.Product)
+    pBuff.InsertDWord StringRToDWord(BotVars.Product)
     pBuff.SendPacket SID_GETCHANNELLIST
     Set pBuff = Nothing
     
@@ -743,7 +743,7 @@ On Error GoTo ERROR_HANDLER:
     Dim pBuff As clsDataBuffer
     Set pBuff = New clsDataBuffer
 
-    pBuff.InsertDWord GetDWORDOverride(Config.UDPString, &H626E6574)    'default: bnet
+    pBuff.InsertDWord GetDWordOverride(Config.UDPString, &H626E6574)    'default: bnet
     pBuff.SendPacket SID_UDPPINGRESPONSE
     
     Set pBuff = Nothing
@@ -1718,10 +1718,10 @@ On Error GoTo ERROR_HANDLER:
     With pBuff
     
         .InsertDWord Config.ProtocolID                                        'ProtocolID
-        .InsertDWord GetDWORDOverride(Config.PlatformID, PLATFORM_INTEL)      'Platform ID
-        .InsertDWord GetDWord(BotVars.Product)                                'Product ID
+        .InsertDWord GetDWordOverride(Config.PlatformID, PLATFORM_INTEL)      'Platform ID
+        .InsertDWord StringRToDWord(BotVars.Product)                           'Product ID
         .InsertDWord IIf(lVerByte = 0, GetVerByte(BotVars.Product), lVerByte) 'VersionByte
-        .InsertDWord GetDWORDOverride(Config.ProductLanguage)                 'Product Language
+        .InsertDWord GetDWordOverride(Config.ProductLanguage)                 'Product Language
         .InsertDWord LocalIP                                                  'Local IP
         .InsertDWord GetTimeZoneBias                                          'Time Zone Bias
         If Config.ForceDefaultLocaleID Then
@@ -2505,34 +2505,22 @@ ERROR_HANDLER:
 End Function
 
 'Converts the normalized (forward: IX86, STAR, etc) string representation of a DWORD into it's numeric equivalent.
-Private Function GetDWORDOverride(ByVal sDwordString As String, Optional ByVal lDefault As Long = 0) As Long
+Private Function GetDWordOverride(ByVal sDWordString As String, Optional ByVal lDefault As Long = 0) As Long
 On Error GoTo ERROR_HANDLER:
 
     Dim lRet      As Long
     lRet = lDefault
     
-    If ((LenB(sDwordString) > 0) And (Len(sDwordString) < 5)) Then
-        lRet = GetDWord(StrReverse(sDwordString))
+    If ((LenB(sDWordString) > 0) And (Len(sDWordString) < 5)) Then
+        lRet = StringToDWord(sDWordString)
     End If
     
-    GetDWORDOverride = lRet
+    GetDWordOverride = lRet
     Exit Function
 ERROR_HANDLER:
-    GetDWORDOverride = lRet
+    GetDWordOverride = lRet
     Call frmChat.AddChat(g_Color.ErrorMessageText, _
         StringFormat("Error: #{0}: {1} in {2}.GetDWORDOverride()", Err.Number, Err.Description, OBJECT_NAME))
-End Function
-
-Private Function GetDWord(sData As String) As Long
-On Error GoTo ERROR_HANDLER:
-    
-    sData = Left$(StringFormat("{0}{1}", sData, String$(4, Chr$(0))), 4)
-    CopyMemory GetDWord, ByVal sData, 4
-    
-    Exit Function
-ERROR_HANDLER:
-    Call frmChat.AddChat(g_Color.ErrorMessageText, _
-        StringFormat("Error: #{0}: {1} in {2}.GetDWORD()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
 Public Sub SendEnterChatSequence()
