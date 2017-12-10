@@ -313,7 +313,6 @@ End Sub
 
 ' Battle.net packet-level functions (use these to populate a DataBuffer automatically)
 ' this is more for scripts-- they must pass a clsDataBuffer into the Buffer As Variant arguments
-' (defining them As clsDataBuffer resulted in scripting type mismatch errors)
 
 ' populates your databuffer for SID_AUTH_ACCOUNTCREATE->S
 Public Sub AccountCreate(ByRef Buffer As Variant)

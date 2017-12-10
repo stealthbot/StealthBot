@@ -990,7 +990,7 @@ Public Sub OnVoteKick(Command As clsCommandObj)
     End If
 End Sub
 
-Private Function GetOpsCount(Optional strIgnore As String = vbNullString) As Integer
+Private Function GetOpsCount(Optional ByVal strIgnore As String = vbNullString) As Integer
     Dim i As Integer
     For i = 1 To g_Channel.Users.Count
         If (Not StrComp(g_Channel.Users(i).DisplayName, strIgnore, vbBinaryCompare) = 0) Then

@@ -139,14 +139,14 @@ Public Sub Save(Optional ByVal sPath As String = vbNullString)
 End Sub
 
 ' Adds an entry to the database
-Public Sub AddEntry(ByRef oEntry As clsDBEntryObj)
+Public Sub AddEntry(ByVal oEntry As clsDBEntryObj)
     On Error Resume Next
     m_Entries.Add oEntry, oEntry.ToString()
     On Error GoTo 0
 End Sub
 
 ' Removes an entry from the database.
-Public Sub RemoveEntry(ByRef oEntry As clsDBEntryObj)
+Public Sub RemoveEntry(ByVal oEntry As clsDBEntryObj)
     Dim i As Integer
     
     If oEntry Is Nothing Then Exit Sub
@@ -416,7 +416,7 @@ End Sub
 
 ' Returns the first matching entry for the specified name from the database.
 '   If a type is supplied then only an entry of the specified type will be returned.
-Public Function GetEntry(ByVal sName As String, Optional ByRef sType As String = vbNullString) As clsDBEntryObj
+Public Function GetEntry(ByVal sName As String, Optional ByRef sType As Variant = vbNullString) As clsDBEntryObj
     Dim i As Integer
     
     Set GetEntry = Nothing      ' default value
@@ -429,7 +429,7 @@ Public Function GetEntry(ByVal sName As String, Optional ByRef sType As String =
                 ' Check entry type (if null then any type is accepted)
                 If ((Len(sType) = 0) Or (StrComp(.EntryType, sType, vbBinaryCompare) = 0)) Then
                     Set GetEntry = m_Entries.Item(i)
-                    sType = GetEntry.EntryType
+                    sType = CStr(GetEntry.EntryType)
                     Exit Function
                 End If
             End If
@@ -437,22 +437,38 @@ Public Function GetEntry(ByVal sName As String, Optional ByRef sType As String =
     Next i
 End Function
 
-' Returns a collection of entries for the specified name collection from the database.
+' Returns a collection of entries for the specified array of names from the database.
 '   If a type is supplied then only entries oif the specified type will be returned.
-Public Function GetEntries(ByRef cNameList As Collection, Optional ByVal sType As String = vbNullString) As Collection
-    Dim i, j    As Integer
+Public Function GetEntries(ByRef aNameList() As Variant, Optional ByVal sType As String = vbNullString) As Collection
+    Dim NameCol As Collection
+    Dim x       As Integer
 
-    Set GetEntries = New Collection
-    
+    Set NameCol = New Collection
+
+    For x = LBound(aNameList) To UBound(aNameList)
+        On Error Resume Next
+        NameCol.Add CStr(aNameList(x)), CStr(aNameList(x))
+        On Error GoTo 0
+    Next x
+
+    Set GetEntries = GetEntriesFromCollection(NameCol, sType)
+End Function
+
+' same as the above but from an Entry.Groups collection
+Public Function GetEntriesFromCollection(ByVal NameCol As Collection, Optional ByVal sType As String = vbNullString) As Collection
+    Dim i As Integer
+    Dim j As Integer
+
+    Set GetEntriesFromCollection = New Collection
+
     For i = 1 To m_Entries.Count
         With m_Entries.Item(i)
-            For j = 1 To cNameList.Count
+            For j = 1 To NameCol.Count
                 ' Compare names
-                If StrComp(.Name, cNameList.Item(j), vbTextCompare) = 0 Then
-                
+                If StrComp(.Name, NameCol.Item(j), vbTextCompare) = 0 Then
                     ' Compare types
                     If ((Len(sType) = 0) Or (StrComp(.EntryType, sType, vbBinaryCompare) = 0)) Then
-                        GetEntries.Add m_Entries.Item(i), .ToString()
+                        GetEntriesFromCollection.Add m_Entries.Item(i), .ToString()
                     End If
                 End If
             Next j
@@ -463,7 +479,7 @@ End Function
 
 ' Returns TRUE if the database contains an item with the specified name and type.
 '   If no name is supplied, any entry with the specified name will match.
-Public Function ContainsEntry(ByVal sName As String, Optional ByRef sType As String = vbNullString) As Boolean
+Public Function ContainsEntry(ByVal sName As String, Optional ByVal sType As String = vbNullString) As Boolean
     ContainsEntry = Not CBool(GetEntry(sName, sType) Is Nothing)
 End Function
 
@@ -507,9 +523,9 @@ End Function
 '  If no type is specified then any entry with a matching name will be returned and the type param will be set.
 Friend Function HasAccess(ByVal sName As String, Optional ByRef sType As String = vbNullString) As Boolean
     Dim oAccess As udtUserAccess
-    
+
     oAccess = GetAccess(sName, sType)
-    
+
     ' Did we find access?
     If ((oAccess.Rank > 0) Or (Len(oAccess.Flags) > 0)) Then
         HasAccess = True
@@ -518,31 +534,31 @@ End Function
 
 ' Returns the level of access available to a given database entry.
 '   This level considers all of the groups the entry is assigned to, but not context-based access.
-Friend Function GetEntryAccess(ByRef oEntry As clsDBEntryObj) As udtUserAccess
+Friend Function GetEntryAccess(ByVal oEntry As clsDBEntryObj) As udtUserAccess
     Dim i       As Integer
     Dim cGroups As Collection
 
     ' Get default values
     GetEntryAccess = GetDefaultAccessResponse()
-    
+
     ' Was an entry provided?
     If oEntry Is Nothing Then Exit Function
-    
+
     With GetEntryAccess
         .Username = oEntry.ToString()
-        
+
         .Rank = oEntry.Rank
         .Flags = oEntry.Flags
-        
+
         .BanMessage = oEntry.BanMessage
-        
+
         Set .Groups = New Collection
         If oEntry.Groups.Count > 0 Then
-            Set cGroups = GetEntries(oEntry.Groups, DB_TYPE_GROUP)
-            
+            Set cGroups = GetEntriesFromCollection(oEntry.Groups, DB_TYPE_GROUP)
+
             ' Include access for each group this entry is a member of.
             For i = 1 To cGroups.Count
-                 Call MergeAccess(GetEntryAccess, GetEntryAccess(cGroups.Item(i)))
+                Call MergeAccess(GetEntryAccess, GetEntryAccess(cGroups.Item(i)))
                 .Groups.Add cGroups.Item(i).ToString()
             Next i
         End If
@@ -748,7 +764,7 @@ Public Function CreateNewEntry(ByVal sName As String, Optional ByVal sCreator As
 End Function
 
 ' Returns TRUE if the specified username has sufficient access to modify the given database entry.
-Public Function CanUserModifyEntry(ByVal sUsername As String, ByRef oEntry As clsDBEntryObj) As Boolean
+Public Function CanUserModifyEntry(ByVal sUsername As String, ByVal oEntry As clsDBEntryObj) As Boolean
     Dim oUserAccess     As udtUserAccess        ' Access available to the user making modifications.
     Dim oEntryAccess    As udtUserAccess        ' Access available to the entry being modified.
     
@@ -922,7 +938,7 @@ ERROR_HANDLER:
 End Function
 
 ' Returns a string used to store the specified entry in the database file.
-Private Function GetEntryData(ByRef oEntry As clsDBEntryObj) As String
+Private Function GetEntryData(ByVal oEntry As clsDBEntryObj) As String
     Dim e()         As Variant
     Dim i           As Integer
     Dim DDate       As Date
@@ -1009,7 +1025,7 @@ End Function
 ' Determines the operation indicated by the specified string.
 '   This parses the +/- from flags and group arguments.
 '   Updates the provided string with the indicator removed.
-Private Function CheckOperation(ByRef sOpString As String) As enuDatabaseOperation
+Private Function CheckOperation(ByVal sOpString As String) As enuDatabaseOperation
     If Len(sOpString) = 0 Then
         CheckOperation = dbopNothing
         Exit Function

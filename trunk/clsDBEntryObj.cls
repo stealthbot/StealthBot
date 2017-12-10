@@ -123,7 +123,7 @@ Public Property Get CreatedOn() As Date
     CreatedOn = m_CreatedOn
 End Property
 
-Public Property Let CreatedOn(ByRef dCreatedOn As Date)
+Public Property Let CreatedOn(ByVal dCreatedOn As Date)
     m_CreatedOn = dCreatedOn
 End Property
 
@@ -139,7 +139,7 @@ Public Property Get ModifiedOn() As Date
     ModifiedOn = m_ModifiedOn
 End Property
 
-Public Property Let ModifiedOn(ByRef dModifiedOn As Date)
+Public Property Let ModifiedOn(ByVal dModifiedOn As Date)
     m_ModifiedOn = dModifiedOn
 End Property
 
@@ -155,7 +155,7 @@ Public Property Get LastSeen() As Date
     LastSeen = m_LastSeen
 End Property
 
-Public Property Let LastSeen(ByRef dLastSeen As Date)
+Public Property Let LastSeen(ByVal dLastSeen As Date)
     m_LastSeen = dLastSeen
 End Property
 

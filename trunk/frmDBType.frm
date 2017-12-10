@@ -76,6 +76,6 @@ Private Sub btnSave_Click(Index As Integer)
     Unload Me
 End Sub
 
-Public Sub setFilePath(strPath As String)
+Public Sub SetFilePath(strPath As String)
     m_path = strPath
 End Sub

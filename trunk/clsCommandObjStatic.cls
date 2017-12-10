@@ -551,7 +551,7 @@ Public Function GetCommandXPath(ByVal strCommand As String, Optional ByVal strSc
 End Function
 
 'Function to check if command names are valid
-Public Function IsValidCommandName(sName As String) As Boolean
+Public Function IsValidCommandName(ByVal sName As String) As Boolean
     Dim x As Integer
     Dim sValid As String
     

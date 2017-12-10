@@ -100,7 +100,7 @@ Public Sub KickOut()
     Call frmChat.ClanHandler.RemoveMember(m_Name, IsSelf, reqScriptingCall)
 End Sub
 
-Public Function Clone() As Object
+Public Function Clone() As clsClanMemberObj
     Set Clone = New clsClanMemberObj
     
     Clone.Name = Name

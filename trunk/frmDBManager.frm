@@ -1919,7 +1919,7 @@ End Sub
 '
 '    If (Data.GetFormat(15) = True) Then
 '        With frmDBType
-'            .setFilePath Data.Files(1)
+'            .SetFilePath Data.Files(1)
 '            .Show
 '        End With
 '    Else

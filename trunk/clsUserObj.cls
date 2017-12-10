@@ -299,7 +299,7 @@ Public Sub ClearQueue()
 End Sub
 
 
-Public Function Clone() As Object
+Public Function Clone() As clsUserObj
     Dim i As Integer
 
     Set Clone = New clsUserObj

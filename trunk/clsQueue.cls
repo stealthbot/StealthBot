@@ -33,7 +33,7 @@ Private Sub Class_Terminate()
     Clear
 End Sub
 
-Public Function Push(ByRef obj As clsQueueOBj)
+Public Sub Push(ByVal obj As clsQueueObj)
     On Error GoTo ERROR_HANDLER
     
     Dim Index As Long
@@ -68,7 +68,7 @@ Public Function Push(ByRef obj As clsQueueOBj)
 
     RunInAll "Event_MessageQueued", obj.ID, obj.Message, obj.Tag
     
-    Exit Function
+    Exit Sub
 
 ERROR_HANDLER:
 
@@ -79,10 +79,10 @@ ERROR_HANDLER:
         Resume Next
     End If
 
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsQueue::Push().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsQueue.Push().")
 
-    Exit Function
-End Function
+    Exit Sub
+End Sub
 
 Public Function Pop() As clsQueueObj
     Set Pop = New clsQueueObj
@@ -99,7 +99,7 @@ Public Function Peek() As clsQueueObj
     Set Peek = m_QueueObjs(0)
 End Function ' end function Peek
 
-Public Function Item(ByVal Index As Long) As Object
+Public Function Item(ByVal Index As Long) As clsQueueObj
     If ((Index < 0) Or (Index > m_ObjCount - 1)) Then
         Set Item = New clsQueueObj
     
@@ -109,7 +109,7 @@ Public Function Item(ByVal Index As Long) As Object
     Set Item = m_QueueObjs(Index)
 End Function
 
-Public Function ItemByID(ByVal i As Double) As Object
+Public Function ItemByID(ByVal i As Double) As clsQueueObj
     Dim j As Long
 
     For j = 0 To m_ObjCount - 1

@@ -94,7 +94,7 @@ Public Property Get DisplayName() As String
     DisplayName = ConvertUsername(m_Username)
 End Property
 
-Public Function Clone() As Object
+Public Function Clone() As clsFriendObj
     Set Clone = New clsFriendObj
     
     Clone.Name = Name

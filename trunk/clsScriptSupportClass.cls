@@ -308,8 +308,8 @@ End Function
 '// Returns a dummy database entry object representing the total level of access available to the identified entry.
 '//   If no entry type is specified, the first one with a matching name will be returned and the type argument will be set.
 '//   If the returned entry is for a user, the access will include that provided by context-based sources, like clan and game.
-Public Function GetDBEntry(ByVal sName As String, Optional ByRef iRank As Integer, Optional ByRef sFlags As String, _
-    Optional ByRef sEntryType As String = DB_TYPE_USER) As Object
+Public Function GetDBEntry(ByVal sName As String, Optional ByRef iRank As Variant, Optional ByRef sFlags As Variant, _
+    Optional ByRef sEntryType As Variant = vbNullString) As clsDBEntryObj
 
     Dim oBase       As clsDBEntryObj    ' The actual entry the fake one is based off.
     Dim oGroup      As clsDBEntryObj    ' Temporary object for groups
@@ -318,7 +318,7 @@ Public Function GetDBEntry(ByVal sName As String, Optional ByRef iRank As Intege
     Dim i           As Integer          ' counter
     
     ' Retrieve info from the database
-    Set oBase = Database.GetEntry(sName, sEntryType)
+    Set oBase = Database.GetEntry(sName, CStr(sEntryType))
     oAccess = Database.GetEntryAccess(oBase)
     
     If oBase Is Nothing Then
@@ -356,18 +356,19 @@ Public Function GetDBEntry(ByVal sName As String, Optional ByRef iRank As Intege
     End If
     
     ' Set output parameters
-    iRank = GetDBEntry.Rank
-    sFlags = GetDBEntry.Flags
+    iRank = CInt(GetDBEntry.Rank)
+    sFlags = CStr(GetDBEntry.Flags)
+    sEntryType = CStr(GetDBEntry.EntryType)
 End Function
 
 '// GETSTDDBENTRY
 '// Gets the base rank and flags from the entry identified by the given name and type.
 '//   These values do not include access derived from group membership.
-Public Sub GetStdDBEntry(ByVal sName As String, ByRef iRank As Integer, ByRef sFlags As String, _
-    Optional ByRef sEntryType As String = DB_TYPE_USER)
+Public Sub GetStdDBEntry(ByVal sName As String, ByRef iRank As Variant, ByRef sFlags As Variant, _
+    Optional ByRef sEntryType As Variant = vbNullString)
 
     Dim oAccess As udtUserAccess
-    oAccess = Database.GetEntryAccess(Database.GetEntry(sName, sEntryType))
+    oAccess = Database.GetEntryAccess(Database.GetEntry(sName, CStr(sEntryType)))
     
     With oAccess
         iRank = .Rank
@@ -408,14 +409,14 @@ End Function
 '// Allows VBScripters to use the Like comparison operator in VB
 '// Specify TRUE to the third argument (DoPreparation) to automatically prepare both inbound strings
 '//     for compatibility with Like
-Public Function match(ByVal sString As String, ByVal sPattern As String, ByVal DoPreparation As Boolean) As Boolean
+Public Function Match(ByVal sString As String, ByVal sPattern As String, ByVal DoPreparation As Boolean) As Boolean
 
     If DoPreparation Then
         sString = PrepareCheck(sString)
         sPattern = PrepareCheck(sPattern)
     End If
     
-    match = (sString Like sPattern)
+    Match = (sString Like sPattern)
 End Function
 
 
@@ -454,7 +455,7 @@ End Sub
 
 
 '// BOTPATH
-'// Returns the bot's current path. Future compatibility with multiple user profiles is already in place.
+'// Returns the bot's current profile folder path.
 '//     Return value includes the trailing "\".
 Public Function BotPath() As String
     BotPath = GetProfilePath()
@@ -771,7 +772,7 @@ End Function
 
 '// GetScriptControl
 '// Returns the Script Control as an object
-Public Function GetScriptControl() As Object
+Public Function GetScriptControl() As ScriptControl
     Set GetScriptControl = frmChat.SControl
 End Function
 
@@ -801,9 +802,9 @@ End Function
 '//   1 = clear chat window
 '//   2 = clear whisper window
 '//   3 (default) = clear both chat and whisper window
-Public Function ClearScreen(Optional ByVal ClearOption As Integer) As String
+Public Sub ClearScreen(Optional ByVal ClearOption As Integer)
     Call frmChat.ClearChatScreen(ClearOption)
-End Function
+End Sub
 
 
 
@@ -821,17 +822,20 @@ End Sub
 '//  ip-ban you for requesting some keys.
 '//  The result will come back to you in an Event_KeyReturn.
 Public Sub RequestProfileKey(ByVal sUsername As String, ByVal sKey As String)
-    Dim aKeys(0) As String
-    aKeys(0) = sKey
+    Dim sKeys(0) As String
+    sKeys(0) = sKey
 
-    modParsing.RequestUserData sUsername, aKeys, reqScriptingCall
+    modParsing.RequestUserData sUsername, sKeys(), reqScriptingCall
 End Sub
 
 '// REQUESTUSERDATA
 '//  Requests several user profile keys. Same as RequestProfileKey but allows
 '//  you to request multiple keys at the same time.
-Public Sub RequestUserData(ByVal sUsername As String, ByRef aKeys() As String)
-    modParsing.RequestUserData sUsername, aKeys, reqScriptingCall
+Public Sub RequestUserData(ByVal sUsername As String, ByRef aKeys() As Variant)
+    Dim sKeys() As String
+    sKeys() = ConvertToStringArray(aKeys())
+
+    modParsing.RequestUserData sUsername, sKeys(), reqScriptingCall
 End Sub
 
 
@@ -870,7 +874,7 @@ End Function
 '// GETUSERSTATS
 '//     Parses a statstring given to you by GetInerrnalData
 '//     Returns the parsed stats object.
-Public Function GetUserStats(ByVal sStatstring As String) As Object
+Public Function GetUserStats(ByVal sStatstring As String) As clsUserStats
     Dim UserStats As clsUserStats
     
     ' create userstats object
@@ -889,13 +893,13 @@ End Function
 
 '// GETWINCURSORPOS
 '//     Mirror function for the Windows API function GetCursorPos()
-Public Sub GetWinCursorPos(ByRef lCursorX As Long, ByRef lCursorY As Long)
+Public Sub GetWinCursorPos(ByRef lCursorX As Variant, ByRef lCursorY As Variant)
     Dim PAPI As POINTAPI
     
     GetCursorPos PAPI
     
-    lCursorX = PAPI.x
-    lCursorY = PAPI.y
+    lCursorX = CLng(PAPI.x)
+    lCursorY = CLng(PAPI.y)
 End Sub
 
 
@@ -923,7 +927,7 @@ End Function
 '// WINSENDMESSAGE
 '//     Mirror function for the Windows API function
 Public Function WinSendMessage(ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-    WinSendMessage = SendMessage(hWnd, wMsg, wParam, lParam)
+    WinSendMessage = SendMessageW(hWnd, wMsg, wParam, lParam)
 End Function
 
 '// WINGETWINDOWLONG
@@ -972,9 +976,10 @@ End Sub
 '// STRINGFORMAT
 '// Replaces {#} parameters in source with the elements passed after it.
 '// EX: StringFormat("Hello {1}, your ping is {2}ms", Username, Ping)
-Public Function StringFormat(Source As String, ParamArray params() As Variant) As String
+Public Function StringFormat(ByVal Source As String, ParamArray params() As Variant) As String
     Dim arr() As Variant
     arr() = params
+
     StringFormat = modOtherCode.StringFormatA(Source, arr)
 End Function
 
@@ -987,7 +992,7 @@ End Function
 
 '// LOGGER
 '// Returns the logger object
-Public Function Logger() As Object
+Public Function Logger() As clsLogger
     Set Logger = g_Logger
 End Function
 
@@ -1021,7 +1026,7 @@ End Function
 
 '// QUOTES
 '// Returns the quotes object
-Public Function Quotes() As Object
+Public Function Quotes() As clsQuotesObj
     Set Quotes = g_Quotes
 End Function
 
@@ -1031,25 +1036,25 @@ Public Function MediaPlayer() As Object
     Set MediaPlayer = modMediaPlayer.MediaPlayer()
 End Function
 
-Public Function Config() As Object
+Public Function Config() As clsConfig
     Set Config = modGlobals.Config
 End Function
 
 '// CHANNEL
 '// Returns the channel object
-Public Function Channel() As Object
+Public Function Channel() As clsChannelObj
     Set Channel = g_Channel.Clone()
 End Function
 
 '// CLAN
 '// Returns the clan object
-Public Function Clan() As Object
+Public Function Clan() As clsClanObj
     Set Clan = g_Clan.Clone()
 End Function
 
 '// FRIENDS
 '// Returns a collection of friends objects
-Public Function Friends() As Object
+Public Function Friends() As Collection
     Dim i As Integer
 
     Set Friends = New Collection
@@ -1061,13 +1066,13 @@ End Function
 
 '// QUEUE
 '// Returns the queue object
-Public Function Queue() As Object
+Public Function Queue() As clsQueue
     Set Queue = g_Queue
 End Function
 
 '// OSVERSION
 '// Returns an object with properties returning operating system information
-Public Function OSVersion() As Object
+Public Function OSVersion() As clsOSVersion
     Set OSVersion = New clsOSVersion
 End Function
 
@@ -1097,7 +1102,7 @@ End Function
 
 '// CRC32
 '// Returns the result of a standard CRC32 hash
-Public Function CRC32(ByRef str As String) As Long
+Public Function CRC32(ByVal str As String) As Long
     Dim clsCRC32 As clsCRC32
     Set clsCRC32 = New clsCRC32
     
@@ -1108,7 +1113,7 @@ End Function
 
 '// SHA1
 '// Returns the result of a standard Sha-1 hash
-Public Function SHA1(ByRef Data As String, Optional ByVal inHex As Boolean = False, Optional Spacer As String = vbNullString) As String
+Public Function SHA1(ByVal Data As String, Optional ByVal inHex As Boolean = False, Optional ByVal Spacer As String = vbNullString) As String
     Dim Message() As Byte
     Dim Result()  As Byte
     Dim s         As String
@@ -1130,7 +1135,7 @@ End Function
 
 '// XSHA1
 '// Returns the result of a non-standard Battle.net "broken" Sha-1 hash
-Public Function XSHA1(ByRef Data As String, Optional ByVal inHex As Boolean = False, Optional Spacer As String = vbNullString) As String
+Public Function XSHA1(ByVal Data As String, Optional ByVal inHex As Boolean = False, Optional ByVal Spacer As String = vbNullString) As String
     Dim Message() As Byte
     Dim Result()  As Byte
     Dim s         As String
@@ -1191,7 +1196,7 @@ End Function
 
 '// GETALLFONTS
 '// Gets an array of all currently installed fonts on this system.
-Public Function GetAllFonts() As String()
+Public Function GetAllFonts() As Variant()
     Dim Fonts() As String
     Dim i As Integer
     
@@ -1200,7 +1205,7 @@ Public Function GetAllFonts() As String()
         Fonts(i) = Screen.Fonts(i)
     Next i
     
-    GetAllFonts = Fonts
+    GetAllFonts = ConvertStringArray(Fonts)
 End Function
 
 '// CLIPBOARD
@@ -1237,7 +1242,7 @@ End Function
 '// Returns the currently executing script module object
 '// PARAMETERS
 '//     ScriptName - this function will return that script's module
-Public Function GetScriptModule(ByVal ScriptName As String) As Object
+Public Function GetScriptModule(ByVal ScriptName As String) As Module
     Set GetScriptModule = modScripting.GetScriptModule(ScriptName)
 End Function
 
@@ -1349,11 +1354,11 @@ End Function
 '//     ScriptName -  this function will create the command for the specified script
 '//                   vbNullString to get internal commands
 '//                   Chr(0) to get commands from any script
-Public Function CreateCommand(ByVal CommandName As String, ByVal ScriptName As String) As Object
+Public Function CreateCommand(ByVal CommandName As String, ByVal ScriptName As String) As clsCommandDocObj
     Dim Command As clsCommandDocObj
     
     If ((LenB(ScriptName) = 0) Or ScriptName = vbNullChar) Then
-        frmChat.AddChat g_Color.ErrorMessageText, "Error: You can not create a command without an owner."
+        frmChat.AddChat g_Color.ErrorMessageText, "Error: You cannot create a command without an owner."
         Exit Function
     End If
     
@@ -1374,7 +1379,7 @@ End Function
 '//     ScriptName -  this function will get the command for the specified script
 '//                   vbNullString to get internal commands
 '//                   Chr(0) to get commands from any script that is enabled
-Public Function OpenCommand(ByVal CommandName As String, ByVal ScriptName As String) As Object
+Public Function OpenCommand(ByVal CommandName As String, ByVal ScriptName As String) As clsCommandDocObj
     Dim Command As clsCommandDocObj
     
     Set Command = New clsCommandDocObj
@@ -1393,7 +1398,7 @@ End Function
 '//     ScriptName -  this function will delete the command for the specified script
 '//                   vbNullString to get internal commands
 '//                   Chr(0) to get commands from any script
-Public Function DeleteCommand(ByVal CommandName As String, ByVal ScriptName As String) As Object
+Public Function DeleteCommand(ByVal CommandName As String, ByVal ScriptName As String) As clsCommandDocObj
     Dim Command As clsCommandDocObj
     
     Set Command = New clsCommandDocObj
@@ -1510,7 +1515,7 @@ End Sub
 
 '// SCRIPTS
 '// Gets a collection of all script CodeObjects, allowing direct access via the object.method syntax
-Public Function Scripts() As Object
+Public Function Scripts() As Collection
     On Error Resume Next
 
     Set Scripts = modScripting.Scripts()
@@ -1526,14 +1531,14 @@ End Function
 
 '// STRCONVEX
 '// Mirrors the VB6 StrConv function
-Public Function StrConvEx(ByVal str As String, ByVal Conv As VbStrConv, Optional ByVal locale As Long) As Variant
+Public Function StrConvEx(ByVal str As Variant, ByVal Conv As VbStrConv, Optional ByVal locale As Long) As Variant
     StrConvEx = StrConv(str, Conv, locale)
 End Function
 
 '// DATABUFFEREX
 '// Gets an instance of a databuffer for the currently executing script
 '// This will return a new one everytime!
-Public Function DataBufferEx() As Object
+Public Function DataBufferEx() As clsDataBuffer
     Set DataBufferEx = New clsDataBuffer
     
     DataBufferEx.SetCripple
@@ -1541,11 +1546,11 @@ End Function
 
 '// RESOLVEHOSTNAME
 '// Returns the IP address resolved from the given host
-Public Function ResolveHostName(ByVal strHostName As String, Optional ByRef errCode As Long = 0) As String
+Public Function ResolveHostName(ByVal strHostName As String, Optional ByRef errCode As Variant = 0) As String
     Dim Result As String
     Result = ResolveHost(strHostName)
     If Result = vbNullString Then
-        errCode = WSAGetLastError()
+        errCode = CLng(WSAGetLastError())
     End If
     ResolveHostName = Result
 End Function
@@ -1618,13 +1623,13 @@ End Function
 
 '// GETCURRENTUSERNAME
 '// Will return the current username for the bot, as Battle.net sees it
-Public Function GetCurrentUsername()
+Public Function GetCurrentUsername() As String
     GetCurrentUsername = modGlobals.CurrentUsername
 End Function
 
 '// GETCURRENTSERVERIP
 '// Returns the IP of the server the bot is currently connected to, bypassing proxies.
-Public Function GetCurrentServerIP()
+Public Function GetCurrentServerIP() As String
     If modGlobals.g_Online Then
         If ProxyConnInfo(stBNCS).IsUsingProxy Then
             GetCurrentServerIP = ProxyConnInfo(stBNCS).RemoteHostIP
@@ -1678,12 +1683,6 @@ Public Function Switch(ParamArray pVarExpr() As Variant) As Variant
         End If
     Next i
 End Function
-
-'Class_Terminate doesn't run when a UI form is created via a script. I made this sub so the bot's Unload sub can explicitly _
-    call the code within Class_Terminate to kill all the objects. - FrOzeN
-Public Sub Dispose()
-    Call Class_Terminate
-End Sub
 
 'Re-coded this sub so it properly kills all the UI forms created that are still open. - FrOzeN
 Private Sub Class_Terminate()

@@ -8,7 +8,7 @@ Private Const MAXINT_4 = 2147483647
 Private Const OFFSET_2 = 65536
 Private Const MAXINT_2 = 32767
 
-Function UnsignedToLong(Value As Double) As Long
+Function UnsignedToLong(ByVal Value As Double) As Long
     If Value < 0 Or Value >= OFFSET_4 Then Error 6 ' Overflow
     If Value <= MAXINT_4 Then
         UnsignedToLong = Value
@@ -17,7 +17,7 @@ Function UnsignedToLong(Value As Double) As Long
     End If
 End Function
 
-Function LongToUnsigned(Value As Long) As Double
+Function LongToUnsigned(ByVal Value As Long) As Double
     If Value < 0 Then
         LongToUnsigned = Value + OFFSET_4
     Else
@@ -25,7 +25,7 @@ Function LongToUnsigned(Value As Long) As Double
     End If
 End Function
 
-'Function UnsignedToInteger(Value As Long) As Integer
+'Function UnsignedToInteger(ByVal Value As Long) As Integer
 '  If Value < 0 Or Value >= OFFSET_2 Then Error 6 ' Overflow
 '  If Value <= MAXINT_2 Then
 '    UnsignedToInteger = Value
@@ -34,7 +34,7 @@ End Function
 '  End If
 'End Function
 
-'Function IntegerToUnsigned(Value As Integer) As Long
+'Function IntegerToUnsigned(ByVal Value As Integer) As Long
 '  If Value < 0 Then
 '    IntegerToUnsigned = Value + OFFSET_2
 '  Else

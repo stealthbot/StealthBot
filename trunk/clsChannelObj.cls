@@ -248,7 +248,7 @@ Public Property Get Self() As clsUserObj
 
 End Property
 
-Public Function GetUserEx(ByVal AccountName As String, Optional ByVal SearchLimit As Integer = 0) As Object
+Public Function GetUserEx(ByVal AccountName As String, Optional ByVal SearchLimit As Integer = 0) As clsUserObj
 
     Dim Index As Integer
     
@@ -289,7 +289,7 @@ Public Function GetUserIndexEx(ByVal AccountName As String, Optional ByVal Searc
 
 End Function
 
-Public Function GetUser(ByVal Username As String, Optional ByVal SearchLimit As Integer = 0) As Object
+Public Function GetUser(ByVal Username As String, Optional ByVal SearchLimit As Integer = 0) As clsUserObj
 
     Dim Index As Integer
     
@@ -467,7 +467,7 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
 
 End Sub
 
-Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsUserObj = Nothing) As Integer
+Public Function CheckUser(ByVal Username As String, Optional ByVal CurrentUser As clsUserObj = Nothing) As Integer
 
     Dim doCheck As Boolean
 
@@ -712,7 +712,7 @@ Public Function CheckQueue(ByVal Username As String) As Boolean
 
 End Function
 
-Public Function Clone() As Object
+Public Function Clone() As clsChannelObj
 
     Dim i As Integer
 

@@ -281,7 +281,7 @@ Public Sub RemoveLogsCreated()
     Next i
 End Sub
 
-Private Function Datestamp(Optional TimeDate As Date) As String
+Private Function Datestamp(Optional ByVal TimeDate As Date) As String
     If (DateDiff("s", TimeDate, "00:00:00 12/30/1899") = 0) Then
         TimeDate = Now
     End If
@@ -289,7 +289,7 @@ Private Function Datestamp(Optional TimeDate As Date) As String
     Datestamp = Format(TimeDate, "YYYY-MM-DD")
 End Function
 
-Private Function Timestamp(Optional TimeDate As Date) As String
+Private Function Timestamp(Optional ByVal TimeDate As Date) As String
     If (DateDiff("s", TimeDate, "00:00:00 12/30/1899") = 0) Then
         TimeDate = Now
     End If

@@ -1373,7 +1373,7 @@ ERROR_HANDLER:
     
 End Function
 
-Public Function Scripts() As Object
+Public Function Scripts() As Collection
 
     On Error Resume Next
 
@@ -1507,6 +1507,16 @@ Public Function ConvertStringArray(sArr() As String) As Variant()
         vArr(x) = CVar(sArr(x))
     Next x
     ConvertStringArray = vArr
+End Function
+
+Public Function ConvertToStringArray(vArr() As Variant) As String()
+    Dim sArr() As String
+    Dim x As Integer
+    ReDim sArr(LBound(vArr) To UBound(vArr))
+    For x = LBound(vArr) To UBound(vArr)
+        sArr(x) = CStr(vArr(x))
+    Next x
+    ConvertToStringArray = sArr
 End Function
 
 Public Sub SC_Error()

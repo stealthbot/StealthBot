@@ -307,28 +307,31 @@ Public Function StripInvalidNameChars(ByVal Username As String) As String
     End If
 End Function
 
+
 '// Utility Function for joining strings
 '// EXAMPLE
-'// StringFormat("This is an {1} of its {0}.", Array("use", "example")) '// OUTPUT: This is an example of its use.
-'// 08/29/2008 JSM - Created
-Public Function StringFormatA(Source As String, params() As Variant) As String
-    
+'// StringFormat("This is an {1} of its {0}.", "use", "example") '// OUTPUT: This is an example of its use.
+'// 08/14/2009 JSM - Created
+Public Function StringFormatA(ByVal Source As String, params() As Variant) As String
+
     On Error GoTo ERROR_HANDLER:
 
-    Dim retVal As String, i As Integer
+    Dim retVal As String
+    Dim i      As Integer
+
     retVal = Source
     For i = LBound(params) To UBound(params)
         retVal = Replace(retVal, "{" & i & "}", CStr(params(i)))
-    Next
+    Next i
     StringFormatA = retVal
-    
+
     Exit Function
-    
+
 ERROR_HANDLER:
     Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in StringFormatA().")
 
     StringFormatA = vbNullString
-    
+
 End Function
 
 
@@ -336,25 +339,26 @@ End Function
 '// EXAMPLE
 '// StringFormat("This is an {1} of its {0}.", "use", "example") '// OUTPUT: This is an example of its use.
 '// 08/14/2009 JSM - Created
-Public Function StringFormat(Source As String, ParamArray params() As Variant)
+Public Function StringFormat(ByVal Source As String, ParamArray params() As Variant) As String
 
     On Error GoTo ERROR_HANDLER:
 
-    Dim retVal As String, i As Integer
+    Dim retVal As String
+    Dim i      As Integer
+
     retVal = Source
     For i = LBound(params) To UBound(params)
         retVal = Replace(retVal, "{" & i & "}", CStr(params(i)))
-    Next
+    Next i
     StringFormat = retVal
-    
+
     Exit Function
-    
+
 ERROR_HANDLER:
     Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in StringFormat().")
 
-
     StringFormat = vbNullString
-    
+
 End Function
 
 Public Function StripAccountNumber(ByVal Username As String) As String

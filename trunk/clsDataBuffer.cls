@@ -228,7 +228,7 @@ Public Sub InsertNonNTString(ByVal Data As String)
     m_bufsize = (m_bufsize + UBound(arrStr) + 1)
 End Sub
 
-Public Sub InsertNTString(ByRef Data As String, _
+Public Sub InsertNTString(ByVal Data As String, _
     Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI)
     
     Dim arrStr() As Byte

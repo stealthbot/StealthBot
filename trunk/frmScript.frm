@@ -215,23 +215,23 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private m_name      As String
+Private m_Name      As String
 Private m_sc_module As Module
 Private m_arrObjs() As modScripting.scObj
 Private m_objCount  As Integer
-Private m_hidden    As Boolean
+Private m_Hidden    As Boolean
 
 Public Function SetName(ByVal str As String)
 
-    If (m_name = vbNullString) Then
-        m_name = str
+    If (m_Name = vbNullString) Then
+        m_Name = str
     End If
 
 End Function
 
 Public Function GetName() As String
 
-    GetName = m_name
+    GetName = m_Name
 
 End Function
 
@@ -309,7 +309,7 @@ End Sub
 '
 'End Function
 
-Public Function ObjCount(Optional ByVal ObjType As String) As Integer
+Public Function ObjCount(Optional ObjType As String) As Integer
     Dim i As Integer
     If (ObjType <> vbNullString) Then
         For i = 0 To m_objCount - 1
@@ -772,50 +772,50 @@ End Sub
 Public Sub Initialize()
     On Error Resume Next
     
-    RunInSingle m_sc_module, m_name & "_Initialize"
-    RunInSingle m_sc_module, m_name & "_Load"
+    RunInSingle m_sc_module, m_Name & "_Initialize"
+    RunInSingle m_sc_module, m_Name & "_Load"
 End Sub
 
 Private Sub Form_Activate()
     On Error Resume Next
     
-    RunInSingle m_sc_module, m_name & "_Activate"
+    RunInSingle m_sc_module, m_Name & "_Activate"
 End Sub
 
 Private Sub Form_Click()
     On Error Resume Next
 
-    RunInSingle m_sc_module, m_name & "_Click"
+    RunInSingle m_sc_module, m_Name & "_Click"
 End Sub
 
 Private Sub Form_DblClick()
     On Error Resume Next
 
-    RunInSingle m_sc_module, m_name & "_DblClick"
+    RunInSingle m_sc_module, m_Name & "_DblClick"
 End Sub
 
 Private Sub Form_Deactivate()
     On Error Resume Next
 
-    RunInSingle m_sc_module, m_name & "_Deactivate"
+    RunInSingle m_sc_module, m_Name & "_Deactivate"
 End Sub
 
 Private Sub Form_GotFocus()
     On Error Resume Next
 
-    RunInSingle m_sc_module, m_name & "_GotFocus"
+    RunInSingle m_sc_module, m_Name & "_GotFocus"
 End Sub
 
 Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
     On Error Resume Next
 
-    RunInSingle m_sc_module, m_name & "_KeyDown", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_KeyDown", KeyCode, Shift
 End Sub
 
 Private Sub Form_KeyPress(KeyAscii As Integer)
     On Error Resume Next
 
-    If (RunInSingle(m_sc_module, m_name & "_KeyPress", KeyAscii)) Then
+    If (RunInSingle(m_sc_module, m_Name & "_KeyPress", KeyAscii)) Then
         ' vetoed
         KeyAscii = 0
     End If
@@ -824,7 +824,7 @@ End Sub
 Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
     On Error Resume Next
 
-    RunInSingle m_sc_module, m_name & "_KeyUp", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_KeyUp", KeyCode, Shift
 End Sub
 
 Private Sub Form_Load()
@@ -834,43 +834,43 @@ End Sub
 Private Sub Form_LostFocus()
     On Error Resume Next
 
-    RunInSingle m_sc_module, m_name & "_LostFocus"
+    RunInSingle m_sc_module, m_Name & "_LostFocus"
 End Sub
 
 Private Sub Form_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
     On Error Resume Next
 
-    RunInSingle m_sc_module, m_name & "_MouseDown", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_MouseDown", Button, Shift, x, y
 End Sub
 
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     On Error Resume Next
 
-    RunInSingle m_sc_module, m_name & "_MouseMove", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_MouseMove", Button, Shift, x, y
 End Sub
 
 Private Sub Form_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     On Error Resume Next
 
-    RunInSingle m_sc_module, m_name & "_MouseUp", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_MouseUp", Button, Shift, x, y
 End Sub
 
 Private Sub Form_Paint()
     On Error Resume Next
     
-    If (m_hidden = True) Then
-        RunInSingle m_sc_module, m_name & "_Load"
+    If (m_Hidden = True) Then
+        RunInSingle m_sc_module, m_Name & "_Load"
         
-        m_hidden = False
+        m_Hidden = False
     End If
 
-    RunInSingle m_sc_module, m_name & "_Paint"
+    RunInSingle m_sc_module, m_Name & "_Paint"
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     On Error Resume Next
 
-    If (RunInSingle(m_sc_module, m_name & "_QueryUnload", UnloadMode)) Then
+    If (RunInSingle(m_sc_module, m_Name & "_QueryUnload", UnloadMode)) Then
         ' vetoed
         Cancel = 1
     End If
@@ -879,26 +879,26 @@ End Sub
 Private Sub Form_Resize()
     On Error Resume Next
 
-    RunInSingle m_sc_module, m_name & "_Resize"
+    RunInSingle m_sc_module, m_Name & "_Resize"
 End Sub
 
 Private Sub Form_Terminate()
     On Error Resume Next
 
-    RunInSingle m_sc_module, m_name & "_Terminate"
+    RunInSingle m_sc_module, m_Name & "_Terminate"
 End Sub
 
 Public Sub Form_Unload(Cancel As Integer)
     On Error Resume Next
 
-    If (m_hidden = False) Then
-        If (RunInSingle(m_sc_module, m_name & "_Unload")) Then
+    If (m_Hidden = False) Then
+        If (RunInSingle(m_sc_module, m_Name & "_Unload")) Then
             ' vetoed
             Exit Sub
         End If
         
         Me.Hide
-        m_hidden = True
+        m_Hidden = True
         Cancel = 1
     End If
 End Sub
@@ -909,7 +909,7 @@ Private Sub cmd_LostFocus(Index As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Button", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_LostFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_LostFocus"
 End Sub
 
 Private Sub cmd_GotFocus(Index As Integer)
@@ -918,7 +918,7 @@ Private Sub cmd_GotFocus(Index As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Button", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_GotFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_GotFocus"
 End Sub
 
 Private Sub cmd_KeyPress(Index As Integer, KeyAscii As Integer)
@@ -927,7 +927,7 @@ Private Sub cmd_KeyPress(Index As Integer, KeyAscii As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Button", Index)
-    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+    If (RunInSingle(m_sc_module, m_Name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
         ' vetoed
         KeyAscii = 0
     End If
@@ -939,7 +939,7 @@ Private Sub cmd_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Button", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 End Sub
 
 Private Sub cmd_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -948,7 +948,7 @@ Private Sub cmd_MouseDown(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Button", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
 End Sub
 
 Private Sub cmd_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -957,7 +957,7 @@ Private Sub cmd_MouseMove(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Button", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
 End Sub
 
 Private Sub cmd_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -966,7 +966,7 @@ Private Sub cmd_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Button", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
 End Sub
 
 Private Sub cmd_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
@@ -975,7 +975,7 @@ Private Sub cmd_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Button", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 End Sub
 
 Private Sub cmd_Click(Index As Integer)
@@ -984,7 +984,7 @@ Private Sub cmd_Click(Index As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Button", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Click"
 End Sub
 
 Private Sub lbl_Change(Index As Integer)
@@ -994,7 +994,7 @@ Private Sub lbl_Change(Index As Integer)
     
     obj = GetScriptObjByIndex("Label", Index)
     
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Change"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Change"
 End Sub
 
 Private Sub lbl_Click(Index As Integer)
@@ -1003,7 +1003,7 @@ Private Sub lbl_Click(Index As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Label", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Click"
 End Sub
 
 Private Sub lbl_DblClick(Index As Integer)
@@ -1012,7 +1012,7 @@ Private Sub lbl_DblClick(Index As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Label", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_DblClick"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_DblClick"
 End Sub
 
 Private Sub lbl_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1022,7 +1022,7 @@ Private Sub lbl_MouseDown(Index As Integer, Button As Integer, Shift As Integer,
     
     obj = GetScriptObjByIndex("Label", Index)
     
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
 End Sub
 
 Private Sub lbl_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1031,7 +1031,7 @@ Private Sub lbl_MouseMove(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Label", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
 End Sub
 
 Private Sub lbl_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1040,7 +1040,7 @@ Private Sub lbl_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Label", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
 End Sub
 
 Private Sub lst_Click(Index As Integer)
@@ -1049,7 +1049,7 @@ Private Sub lst_Click(Index As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("ListBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Click"
 End Sub
 
 Private Sub lst_DblClick(Index As Integer)
@@ -1058,7 +1058,7 @@ Private Sub lst_DblClick(Index As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("ListBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_DblClick"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_DblClick"
 End Sub
 
 Private Sub lst_GotFocus(Index As Integer)
@@ -1067,7 +1067,7 @@ Private Sub lst_GotFocus(Index As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("ListBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_GotFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_GotFocus"
 End Sub
 
 Private Sub lst_ItemCheck(Index As Integer, Item As Integer)
@@ -1076,7 +1076,7 @@ Private Sub lst_ItemCheck(Index As Integer, Item As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("ListBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_ItemCheck", Item
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_ItemCheck", Item
 End Sub
 
 Private Sub lst_ItemClick(Index As Integer, Item As Integer)
@@ -1085,7 +1085,7 @@ Private Sub lst_ItemClick(Index As Integer, Item As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("ListBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_ItemClick", Item
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_ItemClick", Item
 End Sub
 
 Private Sub lst_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
@@ -1094,7 +1094,7 @@ Private Sub lst_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("ListBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 End Sub
 
 Private Sub lst_KeyPress(Index As Integer, KeyAscii As Integer)
@@ -1103,7 +1103,7 @@ Private Sub lst_KeyPress(Index As Integer, KeyAscii As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("ListBox", Index)
-    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+    If (RunInSingle(m_sc_module, m_Name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
         ' vetoed
         KeyAscii = 0
     End If
@@ -1115,7 +1115,7 @@ Private Sub lst_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("ListBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 End Sub
 
 Private Sub lst_LostFocus(Index As Integer)
@@ -1124,7 +1124,7 @@ Private Sub lst_LostFocus(Index As Integer)
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("ListBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_LostFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_LostFocus"
 End Sub
 
 Private Sub lst_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1133,7 +1133,7 @@ Private Sub lst_MouseDown(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("ListBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
 End Sub
 
 Private Sub lst_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1142,7 +1142,7 @@ Private Sub lst_MouseMove(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("ListBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
 End Sub
 
 Private Sub lst_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1151,7 +1151,7 @@ Private Sub lst_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
 End Sub
 
 Private Sub lst_Scroll(Index As Integer)
@@ -1160,7 +1160,7 @@ Private Sub lst_Scroll(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Scroll"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Scroll"
 End Sub
 
 Private Sub lsv_ItemClick(Index As Integer, ByVal Item As ListItem)
@@ -1169,7 +1169,7 @@ Private Sub lsv_ItemClick(Index As Integer, ByVal Item As ListItem)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_ItemClick", Item
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_ItemClick", Item
 End Sub
 
 Private Sub lsv_ColumnClick(Index As Integer, ByVal ColumnHeader As ColumnHeader)
@@ -1178,7 +1178,7 @@ Private Sub lsv_ColumnClick(Index As Integer, ByVal ColumnHeader As ColumnHeader
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_ColumnClick", ColumnHeader
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_ColumnClick", ColumnHeader
 End Sub
 
 Private Sub lsv_AfterLabelEdit(Index As Integer, Cancel As Integer, NewString As String)
@@ -1187,7 +1187,7 @@ Private Sub lsv_AfterLabelEdit(Index As Integer, Cancel As Integer, NewString As
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListView", Index)
-    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_AfterLabelEdit", NewString)) Then
+    If (RunInSingle(m_sc_module, m_Name & "_" & obj.ObjName & "_AfterLabelEdit", NewString)) Then
         ' vetoed
         Cancel = 1
     End If
@@ -1199,7 +1199,7 @@ Private Sub lsv_BeforeLabelEdit(Index As Integer, Cancel As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListView", Index)
-    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_BeforeLabelEdit")) Then
+    If (RunInSingle(m_sc_module, m_Name & "_" & obj.ObjName & "_BeforeLabelEdit")) Then
         ' vetoed
         Cancel = 1
     End If
@@ -1211,7 +1211,7 @@ Private Sub lsv_Click(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Click"
 End Sub
 
 Private Sub lsv_DblClick(Index As Integer)
@@ -1220,7 +1220,7 @@ Private Sub lsv_DblClick(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_DblClick"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_DblClick"
 End Sub
 
 Private Sub lsv_GotFocus(Index As Integer)
@@ -1229,7 +1229,7 @@ Private Sub lsv_GotFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_GotFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_GotFocus"
 End Sub
 
 Private Sub lsv_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
@@ -1238,7 +1238,7 @@ Private Sub lsv_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 End Sub
 
 Private Sub lsv_KeyPress(Index As Integer, KeyAscii As Integer)
@@ -1247,7 +1247,7 @@ Private Sub lsv_KeyPress(Index As Integer, KeyAscii As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListView", Index)
-    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+    If (RunInSingle(m_sc_module, m_Name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
         ' vetoed
         KeyAscii = 0
     End If
@@ -1259,7 +1259,7 @@ Private Sub lsv_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 End Sub
 
 Private Sub lsv_LostFocus(Index As Integer)
@@ -1268,7 +1268,7 @@ Private Sub lsv_LostFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_LostFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_LostFocus"
 End Sub
 
 Private Sub lsv_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1277,7 +1277,7 @@ Private Sub lsv_MouseDown(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
 End Sub
 
 Private Sub lsv_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1286,7 +1286,7 @@ Private Sub lsv_MouseMove(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
 End Sub
 
 Private Sub lsv_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1295,7 +1295,7 @@ Private Sub lsv_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ListView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
 End Sub
 
 Private Sub opt_Click(Index As Integer)
@@ -1304,7 +1304,7 @@ Private Sub opt_Click(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("OptionButton", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Click"
 End Sub
 
 Private Sub opt_DblClick(Index As Integer)
@@ -1313,7 +1313,7 @@ Private Sub opt_DblClick(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("OptionButton", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_DblClick"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_DblClick"
 End Sub
 
 Private Sub opt_GotFocus(Index As Integer)
@@ -1322,7 +1322,7 @@ Private Sub opt_GotFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("OptionButton", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_GotFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_GotFocus"
 End Sub
 
 Private Sub opt_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
@@ -1331,7 +1331,7 @@ Private Sub opt_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("OptionButton", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 End Sub
 
 Private Sub opt_KeyPress(Index As Integer, KeyAscii As Integer)
@@ -1340,7 +1340,7 @@ Private Sub opt_KeyPress(Index As Integer, KeyAscii As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("OptionButton", Index)
-    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+    If (RunInSingle(m_sc_module, m_Name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
         ' vetoed
         KeyAscii = 0
     End If
@@ -1352,7 +1352,7 @@ Private Sub opt_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("OptionButton", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 End Sub
 
 Private Sub opt_LostFocus(Index As Integer)
@@ -1361,7 +1361,7 @@ Private Sub opt_LostFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("OptionButton", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_LostFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_LostFocus"
 End Sub
 
 Private Sub opt_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1370,7 +1370,7 @@ Private Sub opt_MouseDown(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("OptionButton", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
 End Sub
 
 Private Sub opt_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1379,7 +1379,7 @@ Private Sub opt_MouseMove(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("OptionButton", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
 End Sub
 
 Private Sub opt_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1388,7 +1388,7 @@ Private Sub opt_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("OptionButton", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
 End Sub
 
 Private Sub pic_Change(Index As Integer)
@@ -1397,7 +1397,7 @@ Private Sub pic_Change(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Change"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Change"
 End Sub
 
 Private Sub pic_Click(Index As Integer)
@@ -1406,7 +1406,7 @@ Private Sub pic_Click(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Click"
 End Sub
 
 Private Sub pic_DblClick(Index As Integer)
@@ -1415,7 +1415,7 @@ Private Sub pic_DblClick(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_DblClick"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_DblClick"
 End Sub
 
 Private Sub pic_GotFocus(Index As Integer)
@@ -1424,7 +1424,7 @@ Private Sub pic_GotFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_GotFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_GotFocus"
 End Sub
 
 Private Sub pic_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
@@ -1433,7 +1433,7 @@ Private Sub pic_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 End Sub
 
 Private Sub pic_KeyPress(Index As Integer, KeyAscii As Integer)
@@ -1442,7 +1442,7 @@ Private Sub pic_KeyPress(Index As Integer, KeyAscii As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+    If (RunInSingle(m_sc_module, m_Name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
         ' vetoed
         KeyAscii = 0
     End If
@@ -1454,7 +1454,7 @@ Private Sub pic_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 End Sub
 
 Private Sub pic_LinkClose(Index As Integer)
@@ -1463,7 +1463,7 @@ Private Sub pic_LinkClose(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_LinkClose"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_LinkClose"
 End Sub
 
 Private Sub pic_LinkError(Index As Integer, LinkErr As Integer)
@@ -1472,7 +1472,7 @@ Private Sub pic_LinkError(Index As Integer, LinkErr As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_LinkError", LinkErr
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_LinkError", LinkErr
 End Sub
 
 Private Sub pic_LinkNotify(Index As Integer)
@@ -1481,7 +1481,7 @@ Private Sub pic_LinkNotify(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_LinkNotify"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_LinkNotify"
 End Sub
 
 Private Sub pic_LinkOpen(Index As Integer, Cancel As Integer)
@@ -1491,7 +1491,7 @@ Private Sub pic_LinkOpen(Index As Integer, Cancel As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_LinkOpen")) Then
+    If (RunInSingle(m_sc_module, m_Name & "_" & obj.ObjName & "_LinkOpen")) Then
         ' vetoed
         Cancel = 1
     End If
@@ -1503,7 +1503,7 @@ Private Sub pic_LostFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_LostFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_LostFocus"
 End Sub
 
 Private Sub pic_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1512,7 +1512,7 @@ Private Sub pic_MouseDown(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
 End Sub
 
 Private Sub pic_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1521,7 +1521,7 @@ Private Sub pic_MouseMove(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
 End Sub
 
 Private Sub pic_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1531,7 +1531,7 @@ Private Sub pic_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
 End Sub
 
 Private Sub pic_Paint(Index As Integer)
@@ -1540,7 +1540,7 @@ Private Sub pic_Paint(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Paint"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Paint"
 End Sub
 
 Private Sub pic_Resize(Index As Integer)
@@ -1549,7 +1549,7 @@ Private Sub pic_Resize(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("PictureBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Resize"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Resize"
     
 End Sub
 
@@ -1559,7 +1559,7 @@ Private Sub rtb_Change(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("RichTextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Change"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Change"
 End Sub
 
 Private Sub rtb_Click(Index As Integer)
@@ -1568,7 +1568,7 @@ Private Sub rtb_Click(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("RichTextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Click"
 End Sub
 
 Private Sub rtb_DblClick(Index As Integer)
@@ -1577,7 +1577,7 @@ Private Sub rtb_DblClick(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("RichTextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_DblClick"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_DblClick"
 End Sub
 
 Private Sub rtb_GotFocus(Index As Integer)
@@ -1586,7 +1586,7 @@ Private Sub rtb_GotFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("RichTextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_GotFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_GotFocus"
 End Sub
 
 Private Sub rtb_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
@@ -1595,7 +1595,7 @@ Private Sub rtb_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("RichTextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 End Sub
 
 Private Sub rtb_KeyPress(Index As Integer, KeyAscii As Integer)
@@ -1604,7 +1604,7 @@ Private Sub rtb_KeyPress(Index As Integer, KeyAscii As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("RichTextBox", Index)
-    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+    If (RunInSingle(m_sc_module, m_Name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
         ' vetoed
         KeyAscii = 0
     End If
@@ -1617,7 +1617,7 @@ Private Sub rtb_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("RichTextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 End Sub
 
 Private Sub rtb_LostFocus(Index As Integer)
@@ -1626,7 +1626,7 @@ Private Sub rtb_LostFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("RichTextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_LostFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_LostFocus"
 End Sub
 
 Private Sub rtb_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1635,7 +1635,7 @@ Private Sub rtb_MouseDown(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("RichTextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
 End Sub
 
 Private Sub rtb_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1645,7 +1645,7 @@ Private Sub rtb_MouseMove(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("RichTextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
 End Sub
 
 Private Sub rtb_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1654,7 +1654,7 @@ Private Sub rtb_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("RichTextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
 End Sub
 
 Private Sub rtb_SelChange(Index As Integer)
@@ -1663,7 +1663,7 @@ Private Sub rtb_SelChange(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("RichTextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_SelChange"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_SelChange"
 End Sub
 
 Private Sub txt_Change(Index As Integer)
@@ -1672,7 +1672,7 @@ Private Sub txt_Change(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Change"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Change"
 End Sub
 
 Private Sub txt_Click(Index As Integer)
@@ -1681,7 +1681,7 @@ Private Sub txt_Click(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Click"
 End Sub
 
 Private Sub txt_DblClick(Index As Integer)
@@ -1690,7 +1690,7 @@ Private Sub txt_DblClick(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_DblClick"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_DblClick"
 End Sub
 
 Private Sub txt_LostFocus(Index As Integer)
@@ -1699,7 +1699,7 @@ Private Sub txt_LostFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_LostFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_LostFocus"
 End Sub
 
 Private Sub txt_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1708,7 +1708,7 @@ Private Sub txt_MouseDown(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
 End Sub
 
 Private Sub txt_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1717,7 +1717,7 @@ Private Sub txt_MouseMove(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
 End Sub
 
 Private Sub txt_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1727,7 +1727,7 @@ Private Sub txt_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
 End Sub
 
 Private Sub txt_GotFocus(Index As Integer)
@@ -1736,7 +1736,7 @@ Private Sub txt_GotFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_GotFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_GotFocus"
 End Sub
 
 Private Sub txt_KeyPress(Index As Integer, KeyAscii As Integer)
@@ -1745,7 +1745,7 @@ Private Sub txt_KeyPress(Index As Integer, KeyAscii As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TextBox", Index)
-    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+    If (RunInSingle(m_sc_module, m_Name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
         ' vetoed
         KeyAscii = 0
     End If
@@ -1757,7 +1757,7 @@ Private Sub txt_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 End Sub
 
 Private Sub txt_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
@@ -1766,7 +1766,7 @@ Private Sub txt_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TextBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 End Sub
 
 Private Sub chk_Click(Index As Integer)
@@ -1775,7 +1775,7 @@ Private Sub chk_Click(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("CheckBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Click"
 End Sub
 
 Private Sub chk_GotFocus(Index As Integer)
@@ -1784,7 +1784,7 @@ Private Sub chk_GotFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("CheckBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_GotFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_GotFocus"
 End Sub
 
 Private Sub chk_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
@@ -1793,7 +1793,7 @@ Private Sub chk_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("CheckBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 End Sub
 
 Private Sub chk_KeyPress(Index As Integer, KeyAscii As Integer)
@@ -1802,7 +1802,7 @@ Private Sub chk_KeyPress(Index As Integer, KeyAscii As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("CheckBox", Index)
-    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+    If (RunInSingle(m_sc_module, m_Name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
         ' vetoed
         KeyAscii = 0
     End If
@@ -1814,7 +1814,7 @@ Private Sub chk_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("CheckBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 End Sub
 
 Private Sub chk_LostFocus(Index As Integer)
@@ -1823,7 +1823,7 @@ Private Sub chk_LostFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("CheckBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_LostFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_LostFocus"
 End Sub
 
 Private Sub chk_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1832,7 +1832,7 @@ Private Sub chk_MouseDown(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("CheckBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
 End Sub
 
 Private Sub chk_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1841,7 +1841,7 @@ Private Sub chk_MouseMove(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("CheckBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseMode", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseMode", Button, Shift, x, y
 End Sub
 
 Private Sub chk_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1850,7 +1850,7 @@ Private Sub chk_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("CheckBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
 End Sub
 
 Private Sub cmb_Change(Index As Integer)
@@ -1859,7 +1859,7 @@ Private Sub cmb_Change(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ComboBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Change"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Change"
 End Sub
 
 Private Sub cmb_Click(Index As Integer)
@@ -1868,7 +1868,7 @@ Private Sub cmb_Click(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ComboBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Click"
 End Sub
 
 Private Sub cmb_DblClick(Index As Integer)
@@ -1877,7 +1877,7 @@ Private Sub cmb_DblClick(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ComboBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_DblClick"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_DblClick"
 End Sub
 
 Private Sub cmb_GotFocus(Index As Integer)
@@ -1886,7 +1886,7 @@ Private Sub cmb_GotFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ComboBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_GotFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_GotFocus"
 End Sub
 
 Private Sub cmb_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
@@ -1895,7 +1895,7 @@ Private Sub cmb_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ComboBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 End Sub
 
 Private Sub cmb_KeyPress(Index As Integer, KeyAscii As Integer)
@@ -1904,7 +1904,7 @@ Private Sub cmb_KeyPress(Index As Integer, KeyAscii As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ComboBox", Index)
-    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+    If (RunInSingle(m_sc_module, m_Name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
         ' vetoed
         KeyAscii = 0
     End If
@@ -1916,7 +1916,7 @@ Private Sub cmb_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ComboBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 End Sub
 
 Private Sub cmb_LostFocus(Index As Integer)
@@ -1925,7 +1925,7 @@ Private Sub cmb_LostFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ComboBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_LostFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_LostFocus"
 End Sub
 
 Private Sub cmb_Scroll(Index As Integer)
@@ -1934,7 +1934,7 @@ Private Sub cmb_Scroll(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("ComboBox", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Scroll"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Scroll"
 End Sub
 
 Private Sub trv_AfterLabelEdit(Index As Integer, Cancel As Integer, NewString As String)
@@ -1943,7 +1943,7 @@ Private Sub trv_AfterLabelEdit(Index As Integer, Cancel As Integer, NewString As
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_AfterLabelEdit", NewString)) Then
+    If (RunInSingle(m_sc_module, m_Name & "_" & obj.ObjName & "_AfterLabelEdit", NewString)) Then
         ' vetoed
         Cancel = 1
     End If
@@ -1955,7 +1955,7 @@ Private Sub trv_BeforeLabelEdit(Index As Integer, Cancel As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_BeforeLabelEdit")) Then
+    If (RunInSingle(m_sc_module, m_Name & "_" & obj.ObjName & "_BeforeLabelEdit")) Then
         ' vetoed
         Cancel = 1
     End If
@@ -1969,7 +1969,7 @@ Private Sub trv_Click(Index As Integer)
     
     obj = GetScriptObjByIndex("TreeView", Index)
     
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Click"
 End Sub
 
 Private Sub trv_Collapse(Index As Integer, ByVal Node As Node)
@@ -1978,7 +1978,7 @@ Private Sub trv_Collapse(Index As Integer, ByVal Node As Node)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Collapse", Node
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Collapse", Node
     
 End Sub
 
@@ -1988,7 +1988,7 @@ Private Sub trv_DblClick(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_DblClick"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_DblClick"
 End Sub
 
 Private Sub trv_Expand(Index As Integer, ByVal Node As Node)
@@ -1997,7 +1997,7 @@ Private Sub trv_Expand(Index As Integer, ByVal Node As Node)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Expand", Node
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Expand", Node
     
 End Sub
 
@@ -2007,7 +2007,7 @@ Private Sub trv_GotFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_GotFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_GotFocus"
 End Sub
 
 Private Sub trv_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
@@ -2016,7 +2016,7 @@ Private Sub trv_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 End Sub
 
 Private Sub trv_KeyPress(Index As Integer, KeyAscii As Integer)
@@ -2025,7 +2025,7 @@ Private Sub trv_KeyPress(Index As Integer, KeyAscii As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    If (RunInSingle(m_sc_module, m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
+    If (RunInSingle(m_sc_module, m_Name & "_" & obj.ObjName & "_KeyPress", KeyAscii)) Then
         ' vetoed
         KeyAscii = 0
     End If
@@ -2037,7 +2037,7 @@ Private Sub trv_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 End Sub
 
 Private Sub trv_LostFocus(Index As Integer)
@@ -2046,7 +2046,7 @@ Private Sub trv_LostFocus(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_LostFocus"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_LostFocus"
 End Sub
 
 Private Sub trv_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -2056,7 +2056,7 @@ Private Sub trv_MouseDown(Index As Integer, Button As Integer, Shift As Integer,
     
     obj = GetScriptObjByIndex("TreeView", Index)
     
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
 End Sub
 
 Private Sub trv_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -2066,7 +2066,7 @@ Private Sub trv_MouseMove(Index As Integer, Button As Integer, Shift As Integer,
     
     obj = GetScriptObjByIndex("TreeView", Index)
     
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
 End Sub
 
 Private Sub trv_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -2076,7 +2076,7 @@ Private Sub trv_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
     
     obj = GetScriptObjByIndex("TreeView", Index)
     
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
 End Sub
 
 Private Sub trv_NodeCheck(Index As Integer, ByVal Node As Node)
@@ -2085,7 +2085,7 @@ Private Sub trv_NodeCheck(Index As Integer, ByVal Node As Node)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_NodeCheck", Node
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_NodeCheck", Node
     
 End Sub
 
@@ -2095,7 +2095,7 @@ Private Sub trv_NodeClick(Index As Integer, ByVal Node As Node)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("TreeView", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_NodeClick", Node
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_NodeClick", Node
     
 End Sub
 
@@ -2107,7 +2107,7 @@ Private Sub prg_Click(Index As Integer)
     
     obj = GetScriptObjByIndex("ProgressBar", Index)
     
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Click"
 End Sub
 
 Private Sub prg_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -2117,7 +2117,7 @@ Private Sub prg_MouseDown(Index As Integer, Button As Integer, Shift As Integer,
     
     obj = GetScriptObjByIndex("ProgressBar", Index)
     
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
 End Sub
 
 Private Sub prg_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -2127,7 +2127,7 @@ Private Sub prg_MouseMove(Index As Integer, Button As Integer, Shift As Integer,
     
     obj = GetScriptObjByIndex("ProgressBar", Index)
     
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
 End Sub
 
 Private Sub prg_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -2137,7 +2137,7 @@ Private Sub prg_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
     
     obj = GetScriptObjByIndex("ProgressBar", Index)
     
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
 End Sub
 
 Private Sub fra_Click(Index As Integer)
@@ -2148,7 +2148,7 @@ Private Sub fra_Click(Index As Integer)
     
     obj = GetScriptObjByIndex("Frame", Index)
     
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_Click"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_Click"
 End Sub
 
 Private Sub fra_DblClick(Index As Integer)
@@ -2157,7 +2157,7 @@ Private Sub fra_DblClick(Index As Integer)
     Dim obj As scObj
 
     obj = GetScriptObjByIndex("Frame", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_DblClick"
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_DblClick"
 End Sub
 
 Private Sub fra_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -2166,7 +2166,7 @@ Private Sub fra_MouseDown(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Frame", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseDown", Button, Shift, x, y
 End Sub
 
 Private Sub fra_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -2175,7 +2175,7 @@ Private Sub fra_MouseMove(Index As Integer, Button As Integer, Shift As Integer,
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Frame", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseMove", Button, Shift, x, y
 End Sub
 
 Private Sub fra_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -2184,6 +2184,6 @@ Private Sub fra_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x
     Dim obj As scObj
     
     obj = GetScriptObjByIndex("Frame", Index)
-    RunInSingle m_sc_module, m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
+    RunInSingle m_sc_module, m_Name & "_" & obj.ObjName & "_MouseUp", Button, Shift, x, y
 End Sub
 

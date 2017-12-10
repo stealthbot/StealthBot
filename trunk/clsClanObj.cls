@@ -164,11 +164,11 @@ Public Property Get Peons() As Collection
 End Property
 
 ' alias for GetUser()
-Public Function GetMember(ByVal Username As String) As Object
+Public Function GetMember(ByVal Username As String) As clsClanMemberObj
     Set GetMember = GetUser(Username)
 End Function
 
-Public Function GetUser(ByVal Username As String) As Object
+Public Function GetUser(ByVal Username As String) As clsClanMemberObj
     Dim Index As Integer
     
     If (StrictIsNumeric(Username)) Then
@@ -204,11 +204,11 @@ Public Function GetUserIndex(ByVal Username As String) As Integer
 End Function
 
 ' alias for GetUserEx()
-Public Function GetMemberEx(ByVal Username As String) As Object
+Public Function GetMemberEx(ByVal Username As String) As clsClanMemberObj
     Set GetMemberEx = GetUserEx(Username)
 End Function
 
-Public Function GetUserEx(ByVal Username As String) As Object
+Public Function GetUserEx(ByVal Username As String) As clsClanMemberObj
     Dim Index As Integer
     
     If (StrictIsNumeric(Username)) Then
@@ -260,15 +260,12 @@ Public Sub FindCandidates(ByVal ClanTag As String)
 End Sub
 
 Public Sub Create(ByVal ClanTag As String, ByVal ClanName As String, ByRef Users() As Variant)
-    Dim Candidates() As String
+    Dim sArray() As String
     Dim i As Integer
 
     If LBound(Users) < UBound(Users) Then
-        ReDim Candidates(0 To UBound(Users) - LBound(Users))
-        For i = LBound(Users) To UBound(Users)
-            Candidates(i) = CStr(Users(i + LBound(Users)))
-        Next i
-        Call frmChat.ClanHandler.CreateInviteMultiple(ClanTag, ClanName, Candidates(), reqScriptingCall)
+        sArray = modScripting.ConvertToStringArray(Users())
+        Call frmChat.ClanHandler.CreateInviteMultiple(ClanTag, ClanName, sArray(), reqScriptingCall)
     End If
 End Sub
 
@@ -288,7 +285,7 @@ Public Sub SetMOTD(ByVal MOTD As String)
     Call frmChat.ClanHandler.SetClanMOTD(MOTD, reqScriptingCall)
 End Sub
 
-Public Function Clone() As Object
+Public Function Clone() As clsClanObj
     Dim i As Integer
     Set Clone = New clsClanObj
     

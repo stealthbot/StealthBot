@@ -2454,7 +2454,7 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.CompileCheckrevision()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
-Public Function GetCDKeyCount(Optional sProduct As String = vbNullString) As Long
+Public Function GetCDKeyCount(Optional ByVal sProduct As String = vbNullString) As Long
 On Error GoTo ERROR_HANDLER:
 
     Dim sOverride As String
@@ -2471,7 +2471,7 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.GetCDKeyCount()", Err.Number, Err.Description, OBJECT_NAME))
 End Function
 
-Public Function GetLogonSystem(Optional sProduct As String = vbNullString) As Long
+Public Function GetLogonSystem(Optional ByVal sProduct As String = vbNullString) As Long
 On Error GoTo ERROR_HANDLER:
 
     Dim sOverride As String
