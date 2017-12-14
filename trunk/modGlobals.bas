@@ -45,9 +45,6 @@ Public AutoReconnectTry    As Long
 Public AutoReconnectTicks  As Long
 Public AutoReconnectIn     As Long
 
-'For closing the bot with the quit command
-Public BotIsClosing As Boolean
-
 'To determine when to reset the BNLS list for the auto-BNLS server locator
 Public BNLSFinderGotList   As Boolean
 Public BNLSFinderEntries() As String

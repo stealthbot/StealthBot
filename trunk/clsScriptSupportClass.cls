@@ -685,8 +685,8 @@ End Sub
 
 
 '// VETOTHISMESSAGE
-'// Used with PressedEnter event to prevent a message from being sent to Battle.net
-'// For use processing scripts entirely internally
+'// Call this from any function that supports it to stop future internal
+'// processing of the Event after calling the script.
 Public Sub VetoThisMessage()
     SetVeto True
 End Sub

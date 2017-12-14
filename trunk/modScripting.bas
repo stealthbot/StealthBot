@@ -31,8 +31,7 @@ Private m_is_reloading      As Boolean
 Private m_ExecutingMdl      As Module
 Private m_TempMdlName       As String
 Private m_IsEventError      As Boolean
-Private VetoNextMessage     As Boolean
-Private VetoNextPacket      As Boolean
+Private m_VetoNextMessage   As Boolean
 Private m_ScriptObservers   As Collection
 Private m_FunctionObservers As Collection
 Private m_ScriptData()      As Dictionary
@@ -1424,15 +1423,15 @@ End Function
 
 Public Sub SetVeto(ByVal b As Boolean)
 
-    VetoNextMessage = b
+    m_VetoNextMessage = b
     
 End Sub
 
 Public Function GetVeto() As Boolean
 
-    GetVeto = VetoNextMessage
+    GetVeto = m_VetoNextMessage
     
-    VetoNextMessage = False
+    m_VetoNextMessage = False
     
 End Function
 

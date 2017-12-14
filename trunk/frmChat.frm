@@ -1744,7 +1744,7 @@ Attribute FriendListHandler.VB_VarHelpID = -1
 
 'Variables
 Private m_lCurItemIndex As Long
-Private MultiLinePaste As Boolean
+Private m_HandlingPaste As Boolean
 Private doAuth As Boolean
 Private AUTH_CHECKED As Boolean
 
@@ -1755,7 +1755,7 @@ Private SkipResize As Boolean
 Public cboSendHadFocus As Boolean
 Private cboSendSelStart As Long
 Private cboSendSelLength As Long
-Private ShuttingDown As Boolean
+Public ShuttingDown As Boolean
 
 'Forms
 Public SettingsForm As frmSettings
@@ -5321,20 +5321,19 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     Static ACWordEnd   As Long
     Static ACUserPLen  As Long
     Static ACUserIndex As Integer
-    
-    Dim AccessAmount As udtUserAccess
-    
-    Dim Vetoed As Boolean '
-    
-    Dim i           As Integer
-    Dim j           As Integer
-    Dim SavedSelPos As Long
-    Dim SavedSelLen As Long
-    Dim CurrentTab  As Integer
-    Dim CurrentList As ListView
-    Dim CurrentUser As Long
-    Dim Value       As String
-    
+
+    Dim i                   As Integer
+    Dim j                   As Integer
+    Dim SavedSelPos         As Long
+    Dim SavedSelLen         As Long
+    Dim CurrentTab          As Integer
+    Dim CurrentList         As ListView
+    Dim CurrentUser         As Long
+    Dim Value               As String
+    Dim StartOutfilterPos   As Long
+    Dim Vetoed              As Boolean
+    Dim AccessAmount        As udtUserAccess
+
     SavedSelPos = cboSend.SelStart
     SavedSelLen = cboSend.SelLength
     
@@ -5475,46 +5474,6 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 End If
             End If
 
-        Case vbKeyV 'PASTE
-            Dim x() As String
-            Dim n As Long
-
-            If (GetVScrollPosition(rtbChat)) Then
-                SetTextSelection rtbChat, -1, -1
-                ScrollToBottom rtbChat
-            End If
-
-            If (Shift = vbCtrlMask) Then
-                On Error Resume Next
-                
-                If (InStr(1, Clipboard.GetText, Chr(13), vbTextCompare) <> 0) Then
-                    x() = Split(Clipboard.GetText, Chr(10))
-                    
-                    If UBound(x) > 0 Then
-                        For n = LBound(x) To UBound(x)
-                            x(n) = Replace(x(n), Chr(13), vbNullString)
-                            
-                            If (x(n) <> vbNullString) Then
-                                If (n <> LBound(x)) Then
-                                    AddQ txtPre.Text & x(n) & txtPost.Text, enuPriority.CONSOLE_MESSAGE
-                                    
-                                    cboSend.AddItem txtPre.Text & x(n) & txtPost.Text, 0
-                                Else
-                                    AddQ txtPre.Text & cboSend.Text & x(n) & txtPost.Text, _
-                                        enuPriority.CONSOLE_MESSAGE
-                                    
-                                    cboSend.AddItem txtPre.Text & cboSend.Text & x(n) & txtPost.Text, 0
-                                End If
-                            End If
-                        Next n
-                        
-                        cboSend.Text = vbNullString
-                        
-                        MultiLinePaste = True
-                    End If
-                End If
-            End If
-            
         Case vbKeyA
             If (Shift = vbCtrlMask) Then
                 If (CurrentTab <> LVW_BUTTON_CHANNEL) Then
@@ -5666,38 +5625,124 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     End If
                 End With
             End If
-            
-        Case vbKeyReturn
-            Dim DoRunCommands     As Boolean
-            Dim NoProcs()         As String
-            Dim StartOutfilterPos As Long
 
+        Case vbKeyV
+            If Shift = vbCtrlMask Then
+                Dim MultiLine() As String
+                Dim PrefixText  As String
+                Dim PostfixText As String
+                Dim TrimStart   As Long
+                Dim TrimLength  As Long
+
+                On Error Resume Next
+                Value = Clipboard.GetText
+                On Error GoTo 0
+    
+                ' trim any vbCr or vbLf (\r or \n character) from the start and end
+                TrimStart = 1
+                TrimLength = Len(Value)
+                Do While (Mid$(Value, TrimStart, 1) = vbCr Or Mid$(Value, TrimStart, 1) = vbLf) And TrimStart < TrimLength
+                    TrimStart = TrimStart + 1
+                Loop
+                Do While (Mid$(Value, TrimLength - 1, 1) = vbCr Or Mid$(Value, TrimLength - 1, 1) = vbLf) And TrimLength > TrimStart
+                    TrimLength = TrimLength - 1
+                Loop
+                Value = Mid$(Value, TrimStart, TrimLength - TrimStart + 1)
+
+                ' still linebreaks? multiline paste
+                If (InStr(1, Value, vbLf, vbTextCompare) <> 0) Then
+                    MultiLine() = Split(Value, vbLf)
+
+                    ' prefix box
+                    If txtPre.Visible Then PrefixText = txtPre.Text
+                    ' suffix box
+                    If txtPost.Visible Then PostfixText = txtPost.Text
+
+                    If UBound(MultiLine) > LBound(MultiLine) Then
+                        If (GetVScrollPosition(rtbChat)) Then
+                            SetTextSelection rtbChat, -1, -1
+                            ScrollToBottom rtbChat
+                        End If
+
+                        For i = LBound(MultiLine) To UBound(MultiLine)
+                            MultiLine(i) = Replace(MultiLine(i), vbCr, vbNullString)
+
+                            If (LenB(MultiLine(i)) > 0) Then
+                                If (i = LBound(MultiLine)) Then
+                                    Value = PrefixText & Left$(cboSend.Text, cboSend.SelStart) & MultiLine(i) & PostfixText
+                                ElseIf (i = UBound(MultiLine)) Then
+                                    Value = PrefixText & MultiLine(i) & Mid$(cboSend.Text, cboSend.SelStart + cboSend.SelLength + 1) & PostfixText
+                                Else
+                                    Value = PrefixText & MultiLine(i) & PostfixText
+                                End If
+
+                                On Error Resume Next
+                                Vetoed = RunInAll("Event_PressedEnter", Value)
+                                On Error GoTo 0
+
+                                ' process / command here
+                                ' use saved list of "server commands" to never process
+                                ' and if it's one of those, skip this
+                                If Not Vetoed Then
+                                    Vetoed = ProcessInternalCommand(Value, StartOutfilterPos)
+                                End If
+
+                                ' wasn't processed above AND wasn't veto'd by scripting
+                                If Not Vetoed Then
+                                    ' Don't do replacements for a command unless it involves text that will be seen by someone else
+                                    '  and don't replace text in the command itself or the target username
+                                    Value = Left$(Value, StartOutfilterPos) & OutFilterMsg(Mid$(Value, StartOutfilterPos + 1))
+
+                                    Call AddQ(Value, enuPriority.CONSOLE_MESSAGE)
+                                End If
+
+                                cboSend.AddItem Value, 0
+                            End If
+                        Next i
+
+                        cboSend.Text = vbNullString
+                        m_HandlingPaste = True
+                    Else
+                        ' failsafe: text contained only \r characters
+                        cboSend.SelText = Replace(Value, vbCr, vbNullString)
+                        m_HandlingPaste = True
+                    End If
+                Else
+                    ' text did not contain \n characters
+                    cboSend.SelText = Value
+                    m_HandlingPaste = True
+                End If
+
+                KeyCode = 0
+            End If
+
+        Case vbKeyReturn
             If (GetVScrollPosition(rtbChat)) Then
                 SetTextSelection rtbChat, -1, -1
                 ScrollToBottom rtbChat
             End If
 
-            DoRunCommands = True
+            Vetoed = False
 
             Select Case (Shift)
                 Case vbShiftMask 'CTRL+ENTER - rewhisper
                     If LenB(cboSend.Text) > 0 Then
                         Value = "/w " & LastWhisperTo & Space(1)
-                        DoRunCommands = False
+                        Vetoed = True
                     End If
-                    
+
                 Case vbShiftMask Or vbCtrlMask 'CTRL+SHIFT+ENTER - reply
                     If LenB(cboSend.Text) > 0 Then
                         Value = "/w " & LastWhisper & Space(1)
-                        DoRunCommands = False
+                        Vetoed = True
                     End If
-            
+
                 Case Else 'normal ENTER - old rules apply
                     If LenB(cboSend.Text) > 0 Then
                         Value = vbNullString
                     End If
             End Select
-            
+
             ' prefix box
             If txtPre.Visible Then Value = Value & txtPre.Text
             ' sendbox
@@ -5708,74 +5753,40 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             If LenB(Value) = 0 Then
                 Exit Sub
             End If
-            
-            If DoRunCommands Then
-                On Error Resume Next
-                DoRunCommands = Not RunInAll("Event_PressedEnter", Value)
-                On Error GoTo 0
-            End If
-            
+
             If (Left$(Value, 6) = "/tell ") Then
                 Value = "/w " & Mid$(Value, 7)
             End If
-            
-            If DoRunCommands Then
-                If (Left$(Value, 1) = "/") Then
-                    If (LenB(Config.ServerCommandList) > 0) Then
-                        Dim Args() As String
-                        Dim UserArg As String
-                        Dim CommandList As String
-                        
-                        CommandList = Config.ServerCommandList
-                        
-                        ' please note: only commands with "%" as the first argument (or no "%" arguments)
-                        ' (i.e. "/w %", "/ban %") are supported to be correctly no-processed
-                        ' complexify here if that is needed
-                        Args() = Split(Value, Space(1), 3)
-                        If UBound(Args) > 0 Then UserArg = Args(1)
-                        
-                        CommandList = Replace(CommandList, "%", UserArg)
-                        
-                        NoProcs() = Split(CommandList, ",")
-                    Else
-                        ReDim NoProcs(0)
-                    End If
-                    
-                    For i = LBound(NoProcs) To UBound(NoProcs)
-                        If (LenB(NoProcs(i)) > 0) And (StrComp(Left$(Value, Len(NoProcs(i)) + 2), "/" & NoProcs(i) & Space$(1), vbTextCompare) = 0) Then
-                            DoRunCommands = False
-                            StartOutfilterPos = Len(NoProcs(i)) + 3
-                            Exit For
-                        End If
-                    Next i
-                    
-                    If DoRunCommands Then
-                        ProcessCommand GetCurrentUsername, Value, True, False
-                    Else
-                        DoRunCommands = False
-                    End If
-                Else
-                    DoRunCommands = False
-                End If
+
+            ' pass to script for pressed-enter
+            On Error Resume Next
+            Vetoed = RunInAll("Event_PressedEnter", Value) Or Vetoed
+            On Error GoTo 0
+
+            ' process / command here
+            ' use saved list of "server commands" to never process
+            ' and if it's one of those, skip this
+            If Not Vetoed Then
+                Vetoed = ProcessInternalCommand(Value, StartOutfilterPos)
             End If
-            
-            If Not DoRunCommands Then
+
+            ' wasn't processed above AND wasn't veto'd by scripting
+            If Not Vetoed Then
                 ' Don't do replacements for a command unless it involves text that will be seen by someone else
                 '  and don't replace text in the command itself or the target username
                 Value = Left$(Value, StartOutfilterPos) & OutFilterMsg(Mid$(Value, StartOutfilterPos + 1))
-                
+
                 Call AddQ(Value, enuPriority.CONSOLE_MESSAGE)
             End If
-            
+
             'Ignore rest of code as the bot is closing
-            If BotIsClosing Then
+            If ShuttingDown Then
                 Exit Sub
             End If
-            
+
             cboSend.AddItem Value, 0
-            
             cboSend.Text = vbNullString
-            
+
             If Me.WindowState <> vbMinimized Then
                 On Error Resume Next
                 cboSend.SetFocus
@@ -5807,9 +5818,9 @@ Private Sub cboSend_KeyPress(KeyAscii As Integer)
         Case 1, 19, 4, 2, 9, 21, 13, 10
             KeyAscii = 0
         Case 22
-            If MultiLinePaste Then
+            If m_HandlingPaste Then
                 KeyAscii = 0
-                MultiLinePaste = False
+                m_HandlingPaste = False
             End If
             
     End Select
@@ -5828,6 +5839,52 @@ Private Sub cboSend_KeyPress(KeyAscii As Integer)
         cboSend.ForeColor = vbWhite
     End If
 End Sub
+
+' handle / commands
+' return True to "veto", false otherwise
+Private Function ProcessInternalCommand(ByVal Value As String, ByRef StartOutfilterPos As Long) As Boolean
+    Dim i               As Integer
+    Dim NoProcs()       As String
+    Dim Args()          As String
+    Dim UserArg         As String
+    Dim CommandList     As String
+
+    ProcessInternalCommand = False
+
+    If (Left$(Value, 1) = "/") Then
+        If (LenB(Config.ServerCommandList) > 0) Then
+            CommandList = Config.ServerCommandList
+
+            ' please note: only commands with "%" as the first argument (or no "%" arguments)
+            ' (i.e. "/w %", "/ban %") are supported to be correctly no-processed
+            ' complexify here if that is needed
+            Args() = Split(Value, Space(1), 3)
+            If UBound(Args) > 0 Then UserArg = Args(1)
+
+            CommandList = Replace(CommandList, "%", UserArg)
+
+            NoProcs() = Split(CommandList, ",")
+        Else
+            ReDim NoProcs(0)
+        End If
+
+        For i = LBound(NoProcs) To UBound(NoProcs)
+            If (LenB(NoProcs(i)) > 0) And (StrComp(Left$(Value, Len(NoProcs(i)) + 2), "/" & NoProcs(i) & Space$(1), vbTextCompare) = 0) Then
+                ' veto processing
+                ProcessInternalCommand = True
+                StartOutfilterPos = Len(NoProcs(i)) + 3
+                Exit For
+            End If
+        Next i
+
+        If Not ProcessInternalCommand Then
+            ' process command
+            ProcessCommand GetCurrentUsername, Value, True, False
+            ' veto sending / command
+            ProcessInternalCommand = True
+        End If
+    End If
+End Function
 
 Public Sub SControl_Error()
     Call modScripting.SC_Error

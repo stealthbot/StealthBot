@@ -1740,6 +1740,8 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         ' call event script function
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
+        If frmChat.ShuttingDown Then Exit Sub
+
         On Error Resume Next
         
         ' fudge trigger for scripts?
@@ -2063,7 +2065,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
     ' call event script function
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
-    If BotIsClosing Then Exit Sub
+    If frmChat.ShuttingDown Then Exit Sub
     
     On Error Resume Next
     

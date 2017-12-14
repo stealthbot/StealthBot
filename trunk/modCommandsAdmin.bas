@@ -205,7 +205,6 @@ Public Sub OnLockText(Command As clsCommandObj)
 End Sub
 
 Public Sub OnQuit(Command As clsCommandObj)
-    BotIsClosing = True
     Unload frmChat
     Set frmChat = Nothing
 End Sub
