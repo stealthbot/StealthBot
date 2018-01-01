@@ -6244,7 +6244,7 @@ Private Sub tmrIdleTimer_Timer_IdleMsg()
 
     Dim U As String, IdleMsg As String, s() As String
     Dim IdleWaitS As String, IdleType As String
-    Dim IdleWait As Integer, UDP As Byte
+    Dim IdleWait As Long, UDP As Byte
     Dim IsError As Boolean
 
     BotVars.JoinWatch = 0

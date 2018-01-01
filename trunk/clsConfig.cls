@@ -90,7 +90,7 @@ Private m_GreetMessageText          As String
 Private m_WhisperGreet              As Boolean
 Private m_IdleMessage               As Boolean
 Private m_IdleMessageText           As String
-Private m_IdleMessageDelay          As Integer
+Private m_IdleMessageDelay          As Long
 Private m_IdleMessageType           As String
 Private m_Trigger                   As String
 Private m_BotOwner                  As String
@@ -571,11 +571,11 @@ Public Property Let IdleMessageText(ByVal sValue As String)
     m_IdleMessageText = sValue
 End Property
 
-Public Property Get IdleMessageDelay() As Integer
+Public Property Get IdleMessageDelay() As Long
     IdleMessageDelay = m_IdleMessageDelay
 End Property
 
-Public Property Let IdleMessageDelay(ByVal sValue As Integer)
+Public Property Let IdleMessageDelay(ByVal sValue As Long)
     m_IdleMessageDelay = sValue
 End Property
 

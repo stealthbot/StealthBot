@@ -162,7 +162,7 @@ Public Sub OnIdle(Command As clsCommandObj)
 End Sub
 
 Public Sub OnIdleTime(Command As clsCommandObj)
-    Dim delay As Integer
+    Dim delay As Long
     If (Command.IsValid) Then
         If (LenB(Command.Argument("Delay")) > 0) Then
             delay = Val(Command.Argument("Delay"))
