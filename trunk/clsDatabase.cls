@@ -373,7 +373,6 @@ Friend Sub HandleAddCommand(Command As clsCommandObj, _
             End If
             
             If doGroupOp = dbopAdd Then
-                MsgBox "ADD~!"
                 .Groups.Add sGroup, sGroup
                 sResponse = sResponse & "made a member of "
             ElseIf doGroupOp = dbopRemove Then
