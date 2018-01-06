@@ -2034,7 +2034,7 @@ Private Sub LoadDefaults()
     m_SafelistGroup = vbNullString
     m_RetainOldBans = False
     m_StoreAllBans = False
-    m_ChannelProtectionMessage = vbNullString
+    m_ChannelProtectionMessage = "Lockdown"
     m_IdleBan = False
     m_IdleBanDelay = 300
     m_IdleBanKick = False
