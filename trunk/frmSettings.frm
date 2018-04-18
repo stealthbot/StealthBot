@@ -6534,6 +6534,14 @@ Private Function StringToNumber(ByVal sNumber As String, Optional ByVal lDefault
     Else
         StringToNumber = lDefault
     End If
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    If Err.Number = 6 Then
+        StringToNumber = lDefault
+    End If
+    Exit Function
 End Function
 
 
