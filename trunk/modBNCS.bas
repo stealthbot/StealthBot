@@ -37,7 +37,9 @@ Public Const SID_CREATEACCOUNT2         As Byte = &H3D
 Public Const SID_LOGONREALMEX           As Byte = &H3E
 Public Const SID_QUERYREALMS2           As Byte = &H40
 Public Const SID_WARCRAFTGENERAL        As Byte = &H44
-Public Const SID_EXTRAWORK              As Byte = &H4C
+Public Const SID_OPTIONALWORK           As Byte = &H4A
+Public Const SID_EXTRAWORK              As Byte = &H4B
+Public Const SID_REQUIREDWORK           As Byte = &H4C
 Public Const SID_AUTH_INFO              As Byte = &H50
 Public Const SID_AUTH_CHECK             As Byte = &H51
 Public Const SID_AUTH_ACCOUNTCREATE     As Byte = &H52
@@ -186,7 +188,6 @@ Public Function BNCSRecvPacket(ByVal pBuff As clsDataBuffer, Optional ByVal Scri
             Case SID_CREATEACCOUNT2:          Call RECV_SID_CREATEACCOUNT2(pBuff)          '0x3D
             Case SID_LOGONREALMEX:            Call RECV_SID_LOGONREALMEX(pBuff)            '0x3C
             Case SID_QUERYREALMS2:            Call RECV_SID_QUERYREALMS2(pBuff)            '0x40
-            Case SID_EXTRAWORK:               'Don't Throw Unknown Error                   '0x4C
             Case SID_AUTH_INFO:               Call RECV_SID_AUTH_INFO(pBuff)               '0x50
             Case SID_AUTH_CHECK:              Call RECV_SID_AUTH_CHECK(pBuff)              '0x51
             Case SID_AUTH_ACCOUNTCREATE:      Call RECV_SID_AUTH_ACCOUNTCREATE(pBuff)      '0x52
@@ -195,6 +196,13 @@ Public Function BNCSRecvPacket(ByVal pBuff As clsDataBuffer, Optional ByVal Scri
             Case SID_AUTH_ACCOUNTCHANGE:      Call RECV_SID_AUTH_ACCOUNTCHANGE(pBuff)      '0x55
             Case SID_AUTH_ACCOUNTCHANGEPROOF: Call RECV_SID_AUTH_ACCOUNTCHANGEPROOF(pBuff) '0x56
             Case SID_SETEMAIL:                Call RECV_SID_SETEMAIL(pBuff)                '0x59
+            
+            Case SID_OPTIONALWORK, SID_REQUIREDWORK                                        '0x4A/0x4C
+                ' The bot is supposed to download the specified MPQ and run a function from the DLL contained within,
+                '   but this functionality is not supported.
+                If MDebug("all") Then
+                    Call frmChat.AddChat(g_Color.ErrorMessageText, "[NOTICE] Received extra work (0x" & ZeroOffset(CLng(PacketID), 2) & "): " & pBuff.GetString())
+                End If
             
             Case Is >= &H65 'Friends List or Clan-related packet
                 ' Hand the packet off to the appropriate handler
