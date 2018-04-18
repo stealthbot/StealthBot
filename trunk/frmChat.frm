@@ -6378,7 +6378,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
         tmrSilentChannel(0).Enabled = False
     ElseIf (Index = 1) Then
         If (Config.VoidView) Then
-            Call AddQ("/unsquelch " & GetCurrentUsername, enuPriority.SPECIAL_MESSAGE)
+            Call AddQ("/unignore " & GetCurrentUsername, enuPriority.SPECIAL_MESSAGE)
         End If
     End If
     
