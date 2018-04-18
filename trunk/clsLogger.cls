@@ -56,8 +56,9 @@ Public Property Let LogPath(ByVal Value As String)
     End If
 End Property
 
-Public Function WriteWarning(ByVal sWarning As String, Optional ByVal Source As String, Optional TimeDate As Date)
+Public Function WriteWarning(ByVal sWarning As String, Optional ByVal Source As String, Optional TimeDate As Variant)
     Source = LCase$(Source)
+    If IsMissing(TimeDate) Then TimeDate = Now()
 
     If (LenB(Source) > 0) Then
         WriteLine WARNING_MSG, "warning " & Source & " " & sWarning, TimeDate
@@ -66,8 +67,9 @@ Public Function WriteWarning(ByVal sWarning As String, Optional ByVal Source As 
     End If
 End Function
 
-Public Function WriteError(ByVal sError As String, Optional ByVal Source As String, Optional TimeDate As Date)
+Public Function WriteError(ByVal sError As String, Optional ByVal Source As String, Optional TimeDate As Variant)
     Source = LCase$(Source)
+    If IsMissing(TimeDate) Then TimeDate = Now()
     
     If (LenB(Source) > 0) Then
         WriteLine ERROR_MSG, "error " & Source & " " & sError, TimeDate
@@ -76,8 +78,9 @@ Public Function WriteError(ByVal sError As String, Optional ByVal Source As Stri
     End If
 End Function
 
-Public Function WriteEvent(ByVal sTitle As String, ByVal sEvent As String, Optional ByVal Source As String, Optional TimeDate As Date)
+Public Function WriteEvent(ByVal sTitle As String, ByVal sEvent As String, Optional ByVal Source As String, Optional TimeDate As Variant)
     Source = LCase$(Source)
+    If IsMissing(TimeDate) Then TimeDate = Now()
     
     If (LenB(Source) > 0) Then
         WriteLine EVENT_MSG, "event " & sTitle & " " & Source & " " & sEvent, TimeDate
@@ -86,20 +89,23 @@ Public Function WriteEvent(ByVal sTitle As String, ByVal sEvent As String, Optio
     End If
 End Function
 
-Public Function WriteCommand(ByVal sCommand As String, Optional TimeDate As Date)
+Public Function WriteCommand(ByVal sCommand As String, Optional TimeDate As Variant)
+    If IsMissing(TimeDate) Then TimeDate = Now()
     If (BotVars.LogCommands) Then
         WriteEvent "command", sCommand, TimeDate
     End If
 End Function
 
-Public Function WriteDatabase(ByVal sEvent As String, Optional TimeDate As Date)
+Public Function WriteDatabase(ByVal sEvent As String, Optional TimeDate As Variant)
+    If IsMissing(TimeDate) Then TimeDate = Now()
     If (BotVars.LogDBActions) Then
         WriteEvent "database", sEvent, TimeDate
     End If
 End Function
 
-Public Function WriteDebug(ByVal sDebugMessage As String, Optional ByVal Source As String, Optional TimeDate As Date)
+Public Function WriteDebug(ByVal sDebugMessage As String, Optional ByVal Source As String, Optional TimeDate As Variant)
     Source = LCase$(Source)
+    If IsMissing(TimeDate) Then TimeDate = Now()
     
     If (isDebug) Then
         If (LenB(Source) > 0) Then
@@ -110,29 +116,34 @@ Public Function WriteDebug(ByVal sDebugMessage As String, Optional ByVal Source 
     End If
 End Function
 
-Public Function WriteChat(ByVal sMessage As String, Optional TimeDate As Date)
+Public Function WriteChat(ByVal sMessage As String, Optional TimeDate As Variant)
+    If IsMissing(TimeDate) Then TimeDate = Now()
     If (BotVars.Logging >= 1) Then
         WriteLine CHAT_MSG, sMessage, TimeDate
     End If
 End Function
 
-Public Function WriteWhisper(ByVal sMessage As String, Optional TimeDate As Date)
+Public Function WriteWhisper(ByVal sMessage As String, Optional TimeDate As Variant)
+    If IsMissing(TimeDate) Then TimeDate = Now()
     If (BotVars.Logging >= 1) Then
         WriteLine WHISPER_MSG, sMessage, TimeDate
     End If
 End Function
 
-Public Function WriteSckData(ByVal sMessage As String, Optional TimeDate As Date)
+Public Function WriteSckData(ByVal sMessage As String, Optional TimeDate As Variant)
+    If IsMissing(TimeDate) Then TimeDate = Now()
     If (LogPacketTraffic) Then
         WriteLine SCK_MSG, sMessage, TimeDate
     End If
 End Function
 
-Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal Line As String, Optional TimeDate As Date)
+Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal Line As String, Optional TimeDate As Variant)
     On Error GoTo ERROR_HANDLER
 
     Dim f         As Integer
     Dim FilePath  As String
+    
+    If IsMissing(TimeDate) Then TimeDate = Now()
     
     Select Case (ltype)
         Case WARNING_MSG, ERROR_MSG, EVENT_MSG, DEBUG_MSG
@@ -281,19 +292,15 @@ Public Sub RemoveLogsCreated()
     Next i
 End Sub
 
-Private Function Datestamp(Optional ByVal TimeDate As Date) As String
-    If (DateDiff("s", TimeDate, "00:00:00 12/30/1899") = 0) Then
-        TimeDate = Now
-    End If
+Private Function Datestamp(Optional ByVal TimeDate As Variant) As String
+    If IsMissing(TimeDate) Then TimeDate = Now()
 
     Datestamp = Format(TimeDate, "YYYY-MM-DD")
 End Function
 
-Private Function Timestamp(Optional ByVal TimeDate As Date) As String
-    If (DateDiff("s", TimeDate, "00:00:00 12/30/1899") = 0) Then
-        TimeDate = Now
-    End If
-
+Private Function Timestamp(Optional ByVal TimeDate As Variant) As String
+    If IsMissing(TimeDate) Then TimeDate = Now()
+    
     Select Case (BotVars.TSSetting)
         Case 0
             Timestamp = Format(TimeDate, "HH:MM:SS AM/PM")

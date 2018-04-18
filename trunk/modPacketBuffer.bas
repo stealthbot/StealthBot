@@ -47,7 +47,7 @@ Private m_cache_count As Integer
 
 Private Function MakePacket(ByRef Data() As Byte, ByVal PktLen As Long, _
         ByVal HasPktID As Boolean, ByVal PktID As Byte, ByVal PktType As enuServerTypes, ByVal Direction As enuDirectionTypes, _
-        Optional ByVal TimeDate As Date) As PACKETCACHEITEM
+        Optional ByVal TimeDate As Variant) As PACKETCACHEITEM
     If IsMissing(TimeDate) Then TimeDate = Now
 
     With MakePacket
