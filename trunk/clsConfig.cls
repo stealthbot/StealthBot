@@ -2591,8 +2591,17 @@ Private Function ReadSettingL(ByVal section As String, ByVal Key As String, Opti
     
     sVal = ReadSetting(section, Key, CStr(DefaultValue))
     If IsNumeric(sVal) Then
+        On Error GoTo ERR_HANDLER
         ReadSettingL = Val(sVal)
+        On Error GoTo 0
     Else
+        ReadSettingL = DefaultValue
+    End If
+    
+    Exit Function
+ERR_HANDLER:
+    If Err.Number = 6 Then
+        ' Overflow, set the default
         ReadSettingL = DefaultValue
     End If
 End Function
