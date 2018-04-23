@@ -19,8 +19,8 @@ Attribute VB_Ext_KEY = "Top_Level" ,"Yes"
 Option Explicit
 
 Private m_buf()    As Byte
-Private m_bufpos   As Integer
-Private m_bufsize  As Integer
+Private m_bufpos   As Long
+Private m_bufsize  As Long
 Private m_cripple  As Boolean
 
 Private Sub Class_Initialize()
@@ -114,7 +114,7 @@ Public Sub InsertByteArr(ByRef Data() As Byte)
     m_bufsize = (m_bufsize + (UBound(Data) + 1))
 End Sub
 
-Public Sub GetByteArr(ByRef Data() As Byte, Optional ByVal Length As Integer = -1, Optional Peek As Boolean = False)
+Public Sub GetByteArr(ByRef Data() As Byte, Optional ByVal Length As Long = -1, Optional Peek As Boolean = False)
     If (Length = -1) Then
         Length = m_bufsize - m_bufpos
     End If
@@ -325,7 +325,7 @@ Public Function GetStringArr(Optional ByVal Encoding As STRINGENCODING = STRINGE
     GetStringArr = sArray()
 End Function
 
-Public Function GetRaw(Optional ByVal Length As Integer = -1, Optional Peek As Boolean = False) As String
+Public Function GetRaw(Optional ByVal Length As Long = -1, Optional Peek As Boolean = False) As String
     Dim arrStr() As Byte
     
     If (Length = -1) Then
