@@ -5875,9 +5875,9 @@ Private Function ProcessInternalCommand(ByVal Value As String, ByRef StartOutfil
         For i = LBound(NoProcs) To UBound(NoProcs)
             If (LenB(NoProcs(i)) > 0) And (StrComp(Left$(Value, Len(NoProcs(i)) + 2), "/" & NoProcs(i) & Space$(1), vbTextCompare) = 0) Then
                 ' veto processing
-                ProcessInternalCommand = True
+                ProcessInternalCommand = False
                 StartOutfilterPos = Len(NoProcs(i)) + 3
-                Exit For
+                Exit Function
             End If
         Next i
 
