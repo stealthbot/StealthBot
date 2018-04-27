@@ -852,7 +852,7 @@ Begin VB.Form frmChat
    Begin VB.Timer tmrSilentChannel 
       Enabled         =   0   'False
       Index           =   1
-      Interval        =   30000
+      Interval        =   60000
       Left            =   5760
       Top             =   4560
    End
@@ -6358,48 +6358,38 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
     #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
-
-    Dim User    As clsUserObj
-    Dim Item    As ListItem
     
-    Dim i       As Integer
-    Dim j       As Integer
-    Dim found   As Boolean
-    Dim WasZero As Boolean
+    Dim pBuff As clsDataBuffer
+    
+    Static bCleared As Boolean
+    Static bSkipRefresh As Boolean
     
     If (g_Channel.IsSilent = False) Then
+        tmrSilentChannel(0).Enabled = False
         Exit Sub
     End If
 
     If (Index = 0) Then
-        If (Config.VoidView) Then
-            'For i = 1 To g_Channel.Users.Count
-            '    ' with our doevents, we can miss our cue indicating that we
-            '    ' need to stop silent channel processing and cause an rte.
-            '    If (i > g_Channel.Users.Count) Then
-            '        Exit For
-            '    End If
-            '
-            '     Set user = g_Channel.Users(i)
-            '
-            '    If (lvChannel.FindItem(user.DisplayName) Is Nothing) Then
-            '        Dim Stats As String
-            '        Dim Clan  As String
-            '
-            '        ParseStatstring user.Statstring, Stats, Clan
-            '
-            '        AddName User
-            '    End If
-            'Next i
-            
-            Call EnableWindowRedraw(lvChannel.hWnd)
-            Call UpdateListviewTabs
+        ' If we've received users
+        If g_Channel.Users.Count > 0 Then
+            ' If we haven't marked the buffer as cleared, and it is cleared.
+            If ((bCleared = False) And (ReceiveBuffer(stBNCS).IsFullPacket(2) = False)) Then
+                bCleared = True
+                bSkipRefresh = True
+                
+                Call UpdateListviewTabs
+            End If
         End If
-    
-        tmrSilentChannel(0).Enabled = False
     ElseIf (Index = 1) Then
-        If (Config.VoidView) Then
-            Call AddQ("/unignore " & GetCurrentUsername, enuPriority.SPECIAL_MESSAGE)
+        ' If we haven't received users, or the receive buffer is cleared.
+        If g_Channel.Users.Count = 0 Or bCleared = True Then
+            If bSkipRefresh = True Then
+                bSkipRefresh = False
+            Else
+                bCleared = False
+                ' Go ahead and refresh.
+                If Config.VoidView Then Call AddQ("/unignore " & GetCurrentUsername, enuPriority.SPECIAL_MESSAGE)
+            End If
         End If
     End If
     

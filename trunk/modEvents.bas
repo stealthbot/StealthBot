@@ -42,41 +42,42 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         Exit Sub
     End If
 
-    UserIndex = g_Channel.GetUserIndexEx(CleanUsername(Username))
-    
-    If (UserIndex > 0) Then
-        Set UserObj = g_Channel.Users(UserIndex)
+    If (g_Channel.IsSilent) Then
+        Set UserObj = New clsUserObj
+
+        With UserObj
+            .Name = Username
+            .Statstring = Message
+        End With
         
-        If (QueuedEventID = 0) Then
-            If (UserObj.Queue.Count > 0) Then
-                Set UserEvent = New clsUserEventObj
-                
-                With UserEvent
-                    .EventID = ID_USERFLAGS
-                    .Flags = Flags
-                    .Ping = Ping
-                    .GameID = UserObj.Game
-                End With
-                
-                UserObj.Queue.Add UserEvent
-            Else
-                PreviousFlags = UserObj.Flags
-            End If
-        Else
-            PreviousFlags = UserObj.Queue(QueuedEventID - 1).Flags
+        g_Channel.Users.Add UserObj
+        If Config.VoidView Then
+            frmChat.AddName UserObj
         End If
     Else
-        If (g_Channel.IsSilent) Then
-            If (g_Channel.Users.Count >= 200) Then
-                Exit Sub
-            End If
+        UserIndex = g_Channel.GetUserIndexEx(CleanUsername(Username))
+    
+        If (UserIndex > 0) Then
+            Set UserObj = g_Channel.Users(UserIndex)
         
-            Set UserObj = New clsUserObj
-
-            With UserObj
-                .Name = Username
-                .Statstring = Message
-            End With
+            If (QueuedEventID = 0) Then
+                If (UserObj.Queue.Count > 0) Then
+                    Set UserEvent = New clsUserEventObj
+                
+                    With UserEvent
+                        .EventID = ID_USERFLAGS
+                        .Flags = Flags
+                        .Ping = Ping
+                        .GameID = UserObj.Game
+                    End With
+                
+                    UserObj.Queue.Add UserEvent
+                Else
+                    PreviousFlags = UserObj.Flags
+                End If
+            Else
+                PreviousFlags = UserObj.Queue(QueuedEventID - 1).Flags
+            End If
         Else
             frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Warning! Phantom user {0} has received a flags update.", CleanUsername(Username))
             Exit Sub
@@ -85,10 +86,6 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
 
     ' convert user name
     Username = UserObj.DisplayName
-
-    ' get channel list position
-    pos = g_Channel.GetUserIndexByPriority(UserObj.Name, , True)
-    'Debug.Print "OLD POS: " & pos
 
     With UserObj
         .Flags = Flags
@@ -106,57 +103,55 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         SharedScriptSupport.BotFlags = MyFlags
     End If
     
-    ' we aren't in a silent channel, are we?
-    If (g_Channel.IsSilent) Then
-        g_Channel.Users.Add UserObj
-        frmChat.AddName UserObj
-    Else
-        If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
-            If (Flags <> PreviousFlags) Then
-                If (g_Channel.Self.IsOperator) Then
-                    If ((StrComp(Username, GetCurrentUsername, vbBinaryCompare) = 0) And (Not frmChat.IsPriorityUser(PreviousFlags))) Then
-                        g_Channel.CheckUsers
-                    Else
-                        g_Channel.CheckUser Username
-                    End If
+    If (g_Channel.IsSilent = False) And ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
+        If (Flags <> PreviousFlags) Then
+            If (g_Channel.Self.IsOperator) Then
+                If ((StrComp(Username, GetCurrentUsername, vbBinaryCompare) = 0) And (Not frmChat.IsPriorityUser(PreviousFlags))) Then
+                    g_Channel.CheckUsers
+                Else
+                    g_Channel.CheckUser Username
+                End If
+            End If
+            
+            ' get channel list position
+            pos = g_Channel.GetUserIndexByPriority(UserObj.Name, , True)
+            'Debug.Print "OLD POS: " & pos
+            
+            If (pos) Then
+                Dim NewFlags As Long
+                Dim LostFlags As Long
+                
+                frmChat.AddName UserObj, pos
+                
+                ' voodoo magic: only show flags that are new
+                NewFlags = Not (Flags Imp PreviousFlags)
+                LostFlags = Not (PreviousFlags Imp Flags)
+                
+                ' default to display this event
+                Displayed = False
+                
+                ' check whether it has been
+                If QueuedEventID > 0 And UserObj.Queue.Count >= QueuedEventID Then
+                    Set UserEvent = UserObj.Queue(QueuedEventID)
+                    Displayed = UserEvent.Displayed
                 End If
                 
-                If (pos) Then
-                    Dim NewFlags As Long
-                    Dim LostFlags As Long
+                ' display if it has not
+                If Not Displayed Then
+                    Dim FDescN As String
+                    Dim FDescO As String
+                    FDescN = frmChat.GetFlagDescription(NewFlags, False)
+                    FDescO = frmChat.GetFlagDescription(LostFlags, False)
                     
-                    frmChat.AddName UserObj, pos
-                    
-                    ' voodoo magic: only show flags that are new
-                    NewFlags = Not (Flags Imp PreviousFlags)
-                    LostFlags = Not (PreviousFlags Imp Flags)
-                    
-                    ' default to display this event
-                    Displayed = False
-                    
-                    ' check whether it has been
-                    If QueuedEventID > 0 And UserObj.Queue.Count >= QueuedEventID Then
-                        Set UserEvent = UserObj.Queue(QueuedEventID)
-                        Displayed = UserEvent.Displayed
-                    End If
-                    
-                    ' display if it has not
-                    If Not Displayed Then
-                        Dim FDescN As String
-                        Dim FDescO As String
-                        FDescN = frmChat.GetFlagDescription(NewFlags, False)
-                        FDescO = frmChat.GetFlagDescription(LostFlags, False)
-                        
-                        If LenB(FDescN) > 0 And LenB(FDescO) > 0 Then
-                            frmChat.AddChat g_Color.JoinUsername, "-- ", g_Color.JoinedChannelName, _
-                                Username, g_Color.JoinText, " is now a " & FDescN & " and no longer a " & FDescO & "."
-                        ElseIf LenB(FDescN) > 0 Then
-                            frmChat.AddChat g_Color.JoinUsername, "-- ", g_Color.JoinedChannelName, _
-                                Username, g_Color.JoinText, " is now a " & FDescN & "."
-                        ElseIf LenB(FDescO) > 0 Then
-                            frmChat.AddChat g_Color.JoinUsername, "-- ", g_Color.JoinedChannelName, _
-                                Username, g_Color.JoinText, " is no longer a " & FDescO & "."
-                        End If
+                    If LenB(FDescN) > 0 And LenB(FDescO) > 0 Then
+                        frmChat.AddChat g_Color.JoinUsername, "-- ", g_Color.JoinedChannelName, _
+                            Username, g_Color.JoinText, " is now a " & FDescN & " and no longer a " & FDescO & "."
+                    ElseIf LenB(FDescN) > 0 Then
+                        frmChat.AddChat g_Color.JoinUsername, "-- ", g_Color.JoinedChannelName, _
+                            Username, g_Color.JoinText, " is now a " & FDescN & "."
+                    ElseIf LenB(FDescO) > 0 Then
+                        frmChat.AddChat g_Color.JoinUsername, "-- ", g_Color.JoinedChannelName, _
+                            Username, g_Color.JoinText, " is no longer a " & FDescO & "."
                     End If
                 End If
             End If
@@ -254,11 +249,14 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
             frmChat.AddChat g_Color.InformationText, "If you experience a lot of lag while within " & _
                     "this channel, try selecting 'Disable Silent Channel View' from the Window menu."
             
+            ' Enable timers for handling VoidView state.
+            frmChat.tmrSilentChannel(0).Enabled = True
             frmChat.tmrSilentChannel(1).Enabled = True
         
             frmChat.AddQ "/unignore " & GetCurrentUsername
         End If
     Else
+        frmChat.tmrSilentChannel(0).Enabled = False
         frmChat.tmrSilentChannel(1).Enabled = False
     End If
     
