@@ -25,9 +25,6 @@ Public Function ChatQueueTimerProc()
     End If
     
     For i = 1 To g_Channel.Users.Count
-        If (i > g_Channel.Users.Count) Then
-            Exit For
-        End If
     
         Set CurrentUser = g_Channel.Users(i)
     
