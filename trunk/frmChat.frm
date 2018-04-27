@@ -2257,10 +2257,14 @@ End Sub
 
 'BNLS EVENTS
 Sub Event_BNetConnected()
+    Dim sRemoteHostIP As String
+
     If (ProxyConnInfo(stBNCS).IsUsingProxy) Then
-        AddChat g_Color.SuccessText, "[BNCS] [PROXY] Connected!"
+        sRemoteHostIP = ProxyConnInfo(stBNCS).RemoteHostIP
+        AddChat g_Color.SuccessText, StringFormat("[BNCS] [PROXY] Connected to {0}!", sRemoteHostIP)
     Else
-        AddChat g_Color.SuccessText, "[BNCS] Connected!"
+        sRemoteHostIP = sckBNet.RemoteHostIP
+        AddChat g_Color.SuccessText, StringFormat("[BNCS] Connected to {0}!", sRemoteHostIP)
     End If
     
     Call SetNagelStatus(sckBNet.SocketHandle, False)
