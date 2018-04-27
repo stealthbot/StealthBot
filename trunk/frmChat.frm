@@ -8181,6 +8181,9 @@ Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal OldPosition As In
         IsSelf = True
     End If
     
+    ' Only add items if we are under the limit.
+    If ((Config.MaxUserlistSize > -1) And (lvChannel.ListItems.Count >= Config.MaxUserlistSize)) Then Exit Sub
+    
     'If (GetChannelItemIndex(Username) > 0) Then
     '    Exit Sub
     'End If

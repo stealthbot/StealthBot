@@ -172,6 +172,7 @@ Private m_DisableRTBAutoCopy        As Boolean
 Private m_HideBanMessages           As Boolean
 Private m_NameAutoComplete          As Boolean
 Private m_RealmHideMotd             As Boolean
+Private m_MaxUserlistSize           As Integer
 
 '[UI-POSITION]
 Private m_PositionLeft              As Long
@@ -1204,6 +1205,14 @@ Public Property Let RealmHideMotd(ByVal sValue As Boolean)
     m_RealmHideMotd = sValue
 End Property
 
+Public Property Get MaxUserlistSize() As Integer
+    MaxUserlistSize = m_MaxUserlistSize
+End Property
+
+Public Property Let MaxUserlistSize(ByVal iValue As Integer)
+    m_MaxUserlistSize = iValue
+End Property
+
 
 '-------------------------
 '   SECTION: UI-POSITION
@@ -1880,6 +1889,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_UI, "NoRTBAutomaticCopy", m_DisableRTBAutoCopy
     WriteSetting SECTION_UI, "HideBanMessages", m_HideBanMessages
     WriteSetting SECTION_UI, "RealmHideMotd", m_RealmHideMotd
+    WriteSetting SECTION_UI, "MaxUserlistSize", m_MaxUserlistSize
     
     WriteSetting SECTION_UI_POS, "Left", m_PositionLeft
     WriteSetting SECTION_UI_POS, "Top", m_PositionTop
@@ -2082,6 +2092,7 @@ Private Sub LoadDefaults()
     m_DisableRTBAutoCopy = False
     m_HideBanMessages = False
     m_RealmHideMotd = False
+    m_MaxUserlistSize = 255
 
     '[UI-Position]
     m_PositionLeft = 0
@@ -2434,6 +2445,7 @@ Private Sub LoadVersion6Config()
     m_DisableRTBAutoCopy = ReadSettingB(SECTION_UI, "NoRTBAutomaticCopy", m_DisableRTBAutoCopy)
     m_HideBanMessages = ReadSettingB(SECTION_UI, "HideBanMessages", m_HideBanMessages)
     m_RealmHideMotd = ReadSettingB(SECTION_UI, "RealmHideMotd", m_RealmHideMotd)
+    m_MaxUserlistSize = ReadSettingL(SECTION_UI, "MaxUserlistSize", m_MaxUserlistSize)
 
     m_PositionLeft = ReadSettingL(SECTION_UI_POS, "Left", m_PositionLeft)
     m_PositionTop = ReadSettingL(SECTION_UI_POS, "Top", m_PositionTop)
