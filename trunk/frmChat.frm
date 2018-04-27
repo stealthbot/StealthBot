@@ -19,6 +19,11 @@ Begin VB.Form frmChat
    ScaleHeight     =   7965
    ScaleWidth      =   11400
    StartUpPosition =   3  'Windows Default
+   Begin VB.Timer tmrParseBNCS 
+      Interval        =   1
+      Left            =   6720
+      Top             =   4080
+   End
    Begin MSComctlLib.ListView lvChannel 
       Height          =   6375
       Left            =   8880
@@ -5217,6 +5222,18 @@ Private Sub tmrAccountLock_Timer()
     Call DoScheduleAutoReconnect(False, 1800)
 End Sub
 
+Private Sub tmrParseBNCS_Timer()
+    If (sckBNet.State <> sckConnected) Then Exit Sub
+    
+    Dim pBuff As clsDataBuffer
+    
+    If ReceiveBuffer(stBNCS).IsFullPacket(2) Then
+        Set pBuff = ReceiveBuffer(stBNCS).TakePacket(2)
+        Call modBNCS.BNCSRecvPacket(pBuff)
+        Set pBuff = Nothing
+    End If
+End Sub
+
 Private Sub tmrScript_Timer(Index As Integer)
     On Error Resume Next
 
@@ -7501,15 +7518,10 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
             AutoReconnectActive = False
             AutoReconnectTry = 0
         End If
-
-        Do While ReceiveBuffer(stBNCS).IsFullPacket(2)
-            ' retrieve BNLS packet
-            Set pBuff = ReceiveBuffer(stBNCS).TakePacket(2)
-            ' parse
-            Call modBNCS.BNCSRecvPacket(pBuff)
-            ' clean up
-            Set pBuff = Nothing
-        Loop
+        
+        If tmrParseBNCS.Enabled = False Then
+            tmrParseBNCS.Enabled = True
+        End If
     End If
 
     Exit Sub
