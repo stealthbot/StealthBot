@@ -8013,17 +8013,17 @@ Private Function GetLagIcon(ByVal Ping As Long, ByVal Flags As Long) As Long
     Select Case (Ping)
         Case 0
             GetLagIcon = 0
-        Case 1 To 199
+        Case 1 To 150
             GetLagIcon = LAG_1
-        Case 200 To 299
+        Case 151 To 250
             GetLagIcon = LAG_2
-        Case 300 To 399
+        Case 251 To 350
             GetLagIcon = LAG_3
-        Case 400 To 499
+        Case 351 To 450
             GetLagIcon = LAG_4
-        Case 500 To 599
+        Case 451 To 550
             GetLagIcon = LAG_5
-        Case Is >= 600 Or -1
+        Case Is >= 551 Or -1
             GetLagIcon = LAG_6
         Case Else
             GetLagIcon = ICUNKNOWN
