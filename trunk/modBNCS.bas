@@ -885,6 +885,9 @@ End Sub
 Private Sub SEND_SID_PING(ByVal lPingValue As Long)
 On Error GoTo ERROR_HANDLER:
 
+    Static cLastPing As Currency
+    If (cLastPing > 0) And ((modDateTime.GetTickCountMS() - cLastPing) < 1000) Then Exit Sub
+    
     Dim pBuff As clsDataBuffer
     Set pBuff = New clsDataBuffer
     
@@ -892,6 +895,7 @@ On Error GoTo ERROR_HANDLER:
     
     pBuff.InsertDWord lPingValue
     pBuff.SendPacket SID_PING
+    cLastPing = modDateTime.GetTickCountMS()
     
     SetNagelStatus frmChat.sckBNet.SocketHandle, True
     
