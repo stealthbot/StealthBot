@@ -2301,7 +2301,7 @@ Sub Event_BNLSAuthEvent(Success As Boolean)
     If Success = True Then
         AddChat g_Color.SuccessText, "[BNLS] Authorized!"
     Else
-        AddChat g_Color.ErrorMessageText, "[BNLS] Authorization failed! Please download the latest version of StealthBot from http://www.stealthbot.net."
+        AddChat g_Color.ErrorMessageText, "[BNLS] Authorization failed! You are not authorized to use this BNLS server."
         Call DoDisconnect
     End If
 End Sub
