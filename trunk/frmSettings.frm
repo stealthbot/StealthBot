@@ -6008,11 +6008,11 @@ Private Sub InitConnBasic()
     txtHomeChan.Text = Config.HomeChannel
 
     With cboServer
-        ' add the 4 default servers
-        .AddItem "useast.battle.net"
-        .AddItem "uswest.battle.net"
-        .AddItem "europe.battle.net"
-        .AddItem "asia.battle.net"
+        ' add the 4 default "gateways" (translated to servers on connect)
+        .AddItem "USEast"
+        .AddItem "USWest"
+        .AddItem "Europe"
+        .AddItem "Asia"
         
         ' get additional servers
         Set AdditionalServerList = ListFileLoad(GetFilePath(FILE_SERVER_LIST))

@@ -225,8 +225,8 @@ Private Sub Form_Load()
         .Clear
         .AddItem "USEast / Azeroth"
         .AddItem "USWest / Lordaeron"
-        .AddItem "Asia / Kalimdor"
         .AddItem "Europe / Northrend"
+        .AddItem "Asia / Kalimdor"
         .Text = "- choose one -"
         .Visible = False
     End With
@@ -304,12 +304,12 @@ Private Sub cmdNext_Click()
 '            .AddItem "USWest / Lordaeron"
 '            .AddItem "Asia / Kalimdor"
 '            .AddItem "Europe / Northrend"
-
+            
             Select Case cboServer.ListIndex
-                Case 0: .cboServer.Text = "useast.battle.net"
-                Case 1: .cboServer.Text = "uswest.battle.net"
-                Case 2: .cboServer.Text = "asia.battle.net"
-                Case 3: .cboServer.Text = "europe.battle.net"
+                Case 0: .cboServer.Text = "USEast"
+                Case 1: .cboServer.Text = "USWest"
+                Case 2: .cboServer.Text = "Europe"
+                Case 3: .cboServer.Text = "Asia"
             End Select
             
             .txtOwner.Text = InputValues(STEP_OWNR)

@@ -2281,7 +2281,7 @@ Sub Event_BNetConnecting()
     If (ProxyConnInfo(stBNCS).IsUsingProxy) Then
         AddChat g_Color.InformationText, "[BNCS] [PROXY] Connecting to the SOCKS" & ProxyConnInfo(stBNCS).Version & " proxy server at " & ProxyConnInfo(stBNCS).ProxyIP & ":" & ProxyConnInfo(stBNCS).ProxyPort & "..."
     Else
-        AddChat g_Color.InformationText, "[BNCS] Connecting to the Battle.net server at " & BotVars.Server & "..."
+        AddChat g_Color.InformationText, "[BNCS] Connecting to the Battle.net server at " & sckBNet.RemoteHost & "..."
     End If
 End Sub
 
@@ -5931,7 +5931,7 @@ Private Sub sckBNet_Connect()
     ds.Reset
     
     If (ProxyConnInfo(stBNCS).IsUsingProxy) Then
-        modProxySupport.InitProxyConnection sckBNet, ProxyConnInfo(stBNCS), BotVars.Server, 6112
+        modProxySupport.InitProxyConnection sckBNet, ProxyConnInfo(stBNCS), GetBNetServer(Config.Server), 6112
     Else
         InitBNetConnection
     End If
@@ -6562,7 +6562,7 @@ Sub Connect()
                 .RemoteHost = ProxyConnInfo(stBNCS).ProxyIP
                 .RemotePort = ProxyConnInfo(stBNCS).ProxyPort
             Else
-                .RemoteHost = BotVars.Server
+                .RemoteHost = GetBNetServer(Config.Server)
                 .RemotePort = 6112
             End If
 
@@ -6582,6 +6582,25 @@ Error:
     
     Exit Sub
 End Sub
+
+' Translates the user friendly "region" name (USEast, USWest, etc) to a server hostname.
+Private Function GetBNetServer(ByVal sSetting As String) As String
+    Dim sRegion As String
+    sRegion = vbNullString
+    
+    Select Case sSetting
+        Case "USEast": sRegion = "use"
+        Case "USWest": sRegion = "usw"
+        Case "Europe": sRegion = "eur"
+        Case "Asia": sRegion = "kor"
+    End Select
+                
+    If Len(sRegion) > 0 Then
+        GetBNetServer = StringFormat("connect-{0}.classic.blizzard.com", sRegion)
+    Else
+        GetBNetServer = sSetting
+    End If
+End Function
 
 Public Sub Pause(ByVal fSeconds As Single, Optional ByVal AllowEvents As Boolean = True)
     Dim i As Integer
