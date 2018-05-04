@@ -162,6 +162,8 @@ Private Const OBJECT_NAME As String = "frmLauncher"
 
 Private Sub Form_Load()
 On Error GoTo ERROR_HANDLER
+    Dim LastProfile As Integer
+
     Me.Caption = StringFormat("StealthBot Launcher v{0}.{1}.{2}", App.Major, App.Minor, App.Revision)
     
     'CheckForUpdates
@@ -194,6 +196,13 @@ On Error GoTo ERROR_HANDLER
     LoadProfiles
     
     If (lstProfiles.ListItems.Count > 0) Then ' UI: if count > 0 then enable btns
+        LastProfile = cConfig.LastProfile
+
+        ' Make sure the list index is valid
+        If (LastProfile > 0 And LastProfile <= lstProfiles.ListItems.Count) Then
+            lstProfiles.ListItems(LastProfile).Selected = True
+        End If
+
         EnableButtons
     Else ' UI: if count = 0 then show informative item
         SetupColumns lvwColumnCenter
@@ -231,7 +240,13 @@ On Error GoTo ERROR_HANDLER
     'Unload frmConfig
     'Unload frmstatus
     
-    If (Not cConfig Is Nothing) Then cConfig.SaveConfig
+    If (Not cConfig Is Nothing) Then
+        If (Not lstProfiles.SelectedItem Is Nothing) Then
+            cConfig.LastProfile = lstProfiles.SelectedItem.Index
+        End If
+
+        cConfig.SaveConfig
+    End If
     
     Exit Sub
 ERROR_HANDLER:

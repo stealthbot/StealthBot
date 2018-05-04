@@ -16,9 +16,10 @@ Private Const OBJECT_NAME As String = "clsConfig"
 Private Declare Function GetPrivateProfileString Lib "kernel32" Alias "GetPrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpDefault As String, ByVal lpReturnedString As String, ByVal nSize As Long, ByVal lpFileName As String) As Long
 Private Declare Function WritePrivateProfileString Lib "kernel32" Alias "WritePrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpString As Any, ByVal lpFileName As String) As Long
 
-Private m_loaded     As Boolean
-Private m_configpath As String
-Private m_autoclose  As Boolean
+Private m_loaded      As Boolean
+Private m_configpath  As String
+Private m_autoclose   As Boolean
+Private m_lastprofile As Integer
 
 Private Sub WriteConfig(ByVal sSection As String, ByVal sKey As String, ByVal sValue As String, ByVal sFile As String)
 On Error GoTo ERROR_HANDLER:
@@ -60,11 +61,25 @@ ERROR_HANDLER:
     ReadBoolean = bDefault
 End Function
 
+Private Function ReadInteger(ByVal sSection As String, ByVal sKey As String, ByVal iDefault As Integer) As Integer
+On Error GoTo ERROR_HANDLER:
+    Dim sValue As String
+    sValue = ReadConfig(sSection, sKey, m_configpath, iDefault)
+
+    ReadInteger = Int(sValue)
+
+    Exit Function
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "ReadInteger"
+    ReadInteger = iDefault
+End Function
+
 Public Sub LoadConfig()
 On Error GoTo ERROR_HANDLER:
     m_configpath = ReplaceEnvironmentVars("%APPDATA%\StealthBot\Launcher.ini")
     
     m_autoclose = ReadBoolean("Launcher", "AutoClose", False)
+    m_lastprofile = ReadInteger("Launcher", "LastProfile", 1)
     
     m_loaded = True
     Exit Sub
@@ -75,12 +90,31 @@ End Sub
 Public Sub SaveConfig()
 On Error GoTo ERROR_HANDLER:
     WriteConfig "Launcher", "AutoClose", IIf(m_autoclose, "True", "False"), m_configpath
+    WriteConfig "Launcher", "LastProfile", m_lastprofile, m_configpath
     
     Exit Sub
 ERROR_HANDLER:
     ErrorHandler Err.Number, OBJECT_NAME, "SaveConfig"
 End Sub
 
+Public Property Let LastProfile(ByVal data As Integer)
+On Error GoTo ERROR_HANDLER:
+    m_lastprofile = data
+
+    Exit Property
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "LastProfile Let"
+End Property
+
+Public Property Get LastProfile() As Integer
+On Error GoTo ERROR_HANDLER:
+    If (Not m_loaded) Then LoadConfig
+    LastProfile = m_lastprofile
+
+    Exit Property
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "LastProfile Get"
+End Property
 
 Public Property Let AutoClose(ByVal bData As Boolean)
 On Error GoTo ERROR_HANDLER:
