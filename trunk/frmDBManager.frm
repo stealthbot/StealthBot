@@ -199,7 +199,7 @@ Begin VB.Form frmDBManager
          Enabled         =   0   'False
          Height          =   300
          Left            =   960
-         TabIndex        =   23
+         TabIndex        =   24
          Top             =   5160
          Width           =   615
       End
@@ -208,7 +208,7 @@ Begin VB.Form frmDBManager
          Enabled         =   0   'False
          Height          =   300
          Left            =   240
-         TabIndex        =   24
+         TabIndex        =   23
          Top             =   5160
          Width           =   735
       End

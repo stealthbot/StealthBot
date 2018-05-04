@@ -28,7 +28,7 @@ Begin VB.Form frmCatch
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   600
-      TabIndex        =   8
+      TabIndex        =   6
       Top             =   4920
       Width           =   2775
    End
@@ -46,7 +46,7 @@ Begin VB.Form frmCatch
       ForeColor       =   &H00FFFFFF&
       Height          =   3375
       Left            =   120
-      TabIndex        =   6
+      TabIndex        =   1
       Top             =   480
       Width           =   3735
    End
@@ -63,7 +63,7 @@ Begin VB.Form frmCatch
       EndProperty
       Height          =   255
       Left            =   2040
-      TabIndex        =   3
+      TabIndex        =   7
       Top             =   4560
       Width           =   1815
    End
@@ -80,7 +80,7 @@ Begin VB.Form frmCatch
       EndProperty
       Height          =   255
       Left            =   2040
-      TabIndex        =   1
+      TabIndex        =   5
       Top             =   4320
       Width           =   1815
    End
@@ -98,7 +98,7 @@ Begin VB.Form frmCatch
       ForeColor       =   &H00FFFFFF&
       Height          =   285
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   4
       Top             =   3960
       Width           =   3735
    End
@@ -115,7 +115,7 @@ Begin VB.Form frmCatch
       EndProperty
       Height          =   255
       Left            =   120
-      TabIndex        =   2
+      TabIndex        =   3
       Top             =   4560
       Width           =   1935
    End
@@ -132,7 +132,7 @@ Begin VB.Form frmCatch
       EndProperty
       Height          =   255
       Left            =   120
-      TabIndex        =   4
+      TabIndex        =   2
       Top             =   4320
       Width           =   1935
    End
@@ -152,7 +152,7 @@ Begin VB.Form frmCatch
       ForeColor       =   &H00FFFFFF&
       Height          =   615
       Left            =   120
-      TabIndex        =   7
+      TabIndex        =   8
       Top             =   5280
       UseMnemonic     =   0   'False
       Width           =   3735
@@ -172,7 +172,7 @@ Begin VB.Form frmCatch
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   600
-      TabIndex        =   5
+      TabIndex        =   0
       Top             =   120
       UseMnemonic     =   0   'False
       Width           =   2655
