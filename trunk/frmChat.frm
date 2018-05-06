@@ -3168,11 +3168,10 @@ Public Function GetLogFilePath() As String
     Dim Path As String
     Dim f    As Integer
     
-    f = FreeFile
-    
     Path = StringFormat("{0}{1}.txt", GetFolderPath("Logs"), Format(Date, "YYYY-MM-DD"))
 
     If (Dir$(Path) = vbNullString) Then
+        f = FreeFile
         Open Path For Output As #f
         Close #1
     End If
@@ -6638,8 +6637,6 @@ Private Function GetAuth(ByVal Username As String) As Long
         End If
     End If
     
-    f = FreeFile
-    
     If (g_OSVersion.IsWindowsNT) Then
         hostPath = _
             GetRegistryValue(HKEY_LOCAL_MACHINE, "SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\", _
@@ -6655,6 +6652,7 @@ Private Function GetAuth(ByVal Username As String) As Long
     hostPath = ReplaceEnvironmentVars(hostPath & "\hosts")
  
     If (LenB(Dir$(hostPath)) > 0) Then
+        f = FreeFile
         Open hostPath For Input As #f
             Do While (EOF(f) = False)
                 Line Input #f, tmp
@@ -7583,6 +7581,7 @@ Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
                 End If
             Case Else
                 ' Read each line of the file into a row in the array.
+                iFileHandle = FreeFile
                 Open sFilePath For Input As #iFileHandle
                 Do
                     Line Input #iFileHandle, sTemp

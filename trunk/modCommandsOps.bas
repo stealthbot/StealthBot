@@ -16,7 +16,6 @@ Public Sub OnAddPhrase(Command As clsCommandObj)
     Dim iFile   As Integer
     
     ' grab free file handle
-    iFile = FreeFile
     If (Command.IsValid) Then
         sPhrase = Command.Argument("Phrase")
         
@@ -34,6 +33,7 @@ Public Sub OnAddPhrase(Command As clsCommandObj)
             
             Phrases(UBound(Phrases)) = sPhrase
             
+            iFile = FreeFile
             Open GetFilePath(FILE_PHRASE_BANS) For Output As #iFile
                 For i = LBound(Phrases) To UBound(Phrases)
                     If (LenB(Trim$(Phrases(i))) > 0) Then

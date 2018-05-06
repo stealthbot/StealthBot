@@ -1446,14 +1446,16 @@ Public Function GetSettingsEntry(ByVal sEntryName As String, ByVal ScriptName As
     On Error Resume Next
     
     Dim Path As String
+    Dim iFile As Integer
     
     If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
 
     Path = GetFilePath(FILE_SCRIPT_INI, GetFolderPath("Scripts"))
     
     If (LenB(Dir(Path)) = 0) Then
-        Open Path For Output As #1
-        Close #1
+        iFile = FreeFile
+        Open Path For Output As #iFile
+        Close #iFile
     End If
     
     GetSettingsEntry = ReadINI(ScriptName, sEntryName, Path)
@@ -1479,14 +1481,16 @@ Public Sub WriteSettingsEntry(ByVal sEntryName As String, ByVal sValue As String
     On Error GoTo ERROR_HANDLER
 
     Dim Path As String
+    Dim iFile As Integer
     
     If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
     
     Path = GetFilePath(FILE_SCRIPT_INI, GetFolderPath("Scripts"))
 
     If (LenB(Dir(Path)) = 0) Then
-        Open Path For Output As #1
-        Close #1
+        iFile = FreeFile
+        Open Path For Output As #iFile
+        Close #iFile
     End If
     
     WriteINI ScriptName, sEntryName, sValue & _
