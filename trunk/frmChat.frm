@@ -2829,7 +2829,7 @@ Private Sub ClanHandler_Info(ByVal ClanTag As String, ByVal Rank As enuClanRank)
     End If
     
     Call ClanHandler.RequestClanList(reqInternal)
-    Call ClanHandler.RequestClanMOTD(reqInternal)
+    'Call ClanHandler.RequestClanMOTD(reqInternal)  ' broken server-side as of 2018-05-05
     
     Call UpdateListviewTabs
 End Sub
