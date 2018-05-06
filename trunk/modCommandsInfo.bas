@@ -1052,7 +1052,11 @@ Public Function GetListCount(ByRef aList() As String, Optional ByRef sList As St
             iCount = iCount + 1
         End If
     Next i
-    sList = Left$(sList, Len(sList) - 2)
+    
+    ' Trim the extra separator off the end of the list.
+    If iCount > 0 And Len(sList) > 1 Then
+        sList = Left$(sList, Len(sList) - 2)
+    End If
     GetListCount = iCount
 End Function
 
