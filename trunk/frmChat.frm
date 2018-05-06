@@ -1752,8 +1752,6 @@ Attribute FriendListHandler.VB_VarHelpID = -1
 'Variables
 Private m_lCurItemIndex As Long
 Private m_HandlingPaste As Boolean
-Private doAuth As Boolean
-Private AUTH_CHECKED As Boolean
 
 ' window state
 Private ShowHideChangeHeight As Boolean
@@ -1774,7 +1772,6 @@ Private Const SB_INET_NEWS  As String = "SBNEWS"
 Private Const SB_INET_BNLS1 As String = "BNLSFINDER"
 Private Const SB_INET_BNLS2 As String = "BNLSFINDER_DEFAULT"
 Private Const SB_INET_VBYTE As String = "VERBYTE"
-Private Const SB_INET_BETA  As String = "AUTHBETA"
 
 ' LET IT BEGIN
 Private Sub Form_Load()
@@ -6518,24 +6515,7 @@ Sub Connect()
             Dii = False
         End If
 
-        'Changed 10-07-2009 - Hdx - Are we going to have private betas anymore?
-        #If (BETA = 2) Then
-            Call AddChat(g_Color.InformationText, "Authorizing your private-release, please wait...")
-            
-            If (GetAuth(BotVars.Username)) Then
-                Call AddChat(g_Color.SuccessText, "Private usage authorized, connecting your bot...")
-                
-                ' was auth function bypassed?
-                If (AUTH_CHECKED = False) Then BotVars.Password = Chr$(0)
-            Else
-                Call AddChat(g_Color.ErrorMessageText, "- - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -")
-                
-                Call DoDisconnect
-                Exit Sub
-            End If
-        #Else
-            AddChat g_Color.InformationText, "Connecting your bot..."
-        #End If
+        AddChat g_Color.InformationText, "Connecting your bot..."
         
         If BotVars.BNLS Then
             If Len(BotVars.BNLSServer) = 0 Then
@@ -6612,87 +6592,6 @@ Public Sub Pause(ByVal fSeconds As Single, Optional ByVal AllowEvents As Boolean
         Sleep fSeconds * 1000
     End If
 End Sub
-
-'StealthLock (c) 2003 Stealth, Please do not remove this header
-Private Function GetAuth(ByVal Username As String) As Long
-    On Error GoTo ERROR_HANDLER
-
-    Static lastAuth     As Long
-    Static lastAuthName As String
-    
-    Dim clsCRC32 As clsCRC32
-    Dim hostFile As String
-    Dim hostPath As String
-    Dim f        As Integer
-    Dim tmp      As String
-    Dim Result   As Integer      ' string variable for storing beta authorization result
-                                 ' 0  == unauthorized
-                                 ' >0 == authorized
-    Set clsCRC32 = New clsCRC32
-    If (lastAuth) Then
-        If (StrComp(Username, lastAuthName, vbTextCompare) = 0) Then
-            GetAuth = lastAuth
-            
-            Exit Function
-        End If
-    End If
-    
-    If (g_OSVersion.IsWindowsNT) Then
-        hostPath = _
-            GetRegistryValue(HKEY_LOCAL_MACHINE, "SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\", _
-                "DatabasePath")
-        
-        If (Len(hostPath) = 0) Then
-            hostPath = "%SystemRoot%\system32\drivers\etc\"
-        End If
-    Else
-        hostPath = "%WinDir%"
-    End If
-    
-    hostPath = ReplaceEnvironmentVars(hostPath & "\hosts")
- 
-    If (LenB(Dir$(hostPath)) > 0) Then
-        f = FreeFile
-        Open hostPath For Input As #f
-            Do While (EOF(f) = False)
-                Line Input #f, tmp
-                
-                hostFile = hostFile & tmp
-            Loop
-        Close #f
-    End If
-    
-    If (clsCRC32.CRC32(StringToByteArr(BETA_AUTH_URL)) = BETA_AUTH_URL_CRC32) Then
-        If (InStr(1, hostFile, Split(BETA_AUTH_URL, ".")(1), vbTextCompare) = 0) Then
-            Result = CInt(Val(Inet.OpenURL(BETA_AUTH_URL & Username)))
-        End If
-    End If
-    
-    Do While Inet.StillExecuting
-        DoEvents
-    Loop
-    
-    If (Result = 1) Then
-        lastAuth = Result
-        lastAuthName = Username
-    
-        GetAuth = True
-        
-        AUTH_CHECKED = True
-    End If
-    
-    Set clsCRC32 = Nothing
-
-    Exit Function
-
-ERROR_HANDLER:
-
-    AddChat g_Color.ErrorMessageText, "Beta Auth Error: #", vbRed, Err.Number, vbRed, ": ", vbRed, Err.Description
-    Set clsCRC32 = Nothing
-    GetAuth = False
-    Exit Function
-    
-End Function
 
 ' http://www.go4expert.com/forums/showthread.php?t=208
 Private Function ReplaceEnvironmentVars(ByVal str As String) As String
