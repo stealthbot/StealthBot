@@ -1318,6 +1318,9 @@ Begin VB.Form frmChat
          Begin VB.Menu mnuOpenBotFolder 
             Caption         =   "Open Bot &Folder"
          End
+         Begin VB.Menu mnuOpenInstallFolder 
+            Caption         =   "Open &Install Folder"
+         End
          Begin VB.Menu mnuSepA 
             Caption         =   "-"
          End
@@ -3943,6 +3946,10 @@ End Sub
 
 Private Sub mnuChangeLog_Click()
     ShellOpenURL "http://www.stealthbot.net/wiki/changelog", "the StealthBot Changelog"
+End Sub
+
+Private Sub mnuOpenInstallFolder_Click()
+    Shell StringFormat("explorer.exe {0}", App.Path), vbNormalFocus
 End Sub
 
 Private Sub mnuOpenScriptFolder_Click()
