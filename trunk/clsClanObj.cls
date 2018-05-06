@@ -290,7 +290,12 @@ Public Function Clone() As clsClanObj
     Set Clone = New clsClanObj
     
     Clone.Name = Name
+    Clone.FullName = FullName
     Clone.MOTD = MOTD
+    Clone.InClan = InClan
+    Clone.PendingInvitation = PendingInvitation
+    Clone.PendingInvitationCookie = PendingInvitationCookie
+    Clone.PendingClanMOTD = PendingClanMOTD
     
     For i = 1 To Members.Count
         Clone.Members.Add Members(i).Clone()
