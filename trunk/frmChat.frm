@@ -7580,16 +7580,17 @@ Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
                     Next i
                 End If
             Case Else
-                ' Read each line of the file into a row in the array.
                 iFileHandle = FreeFile
+                
+                ' Read each line of the file into a row in the array.
                 Open sFilePath For Input As #iFileHandle
-                Do
-                    Line Input #iFileHandle, sTemp
-                    If LenB(sTemp) > 0 Then
-                        tArray(UBound(tArray)) = sTemp
-                        ReDim Preserve tArray(UBound(tArray) + 1)
-                    End If
-                Loop While Not EOF(iFileHandle)
+                    Do While Not EOF(iFileHandle)
+                        Line Input #iFileHandle, sTemp
+                        If LenB(sTemp) > 0 Then
+                            tArray(UBound(tArray)) = sTemp
+                            ReDim Preserve tArray(UBound(tArray) + 1)
+                        End If
+                    Loop
                 Close #iFileHandle
         End Select
         

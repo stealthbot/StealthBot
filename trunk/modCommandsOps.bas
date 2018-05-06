@@ -15,7 +15,6 @@ Public Sub OnAddPhrase(Command As clsCommandObj)
     Dim i       As Integer
     Dim iFile   As Integer
     
-    ' grab free file handle
     If (Command.IsValid) Then
         sPhrase = Command.Argument("Phrase")
         
