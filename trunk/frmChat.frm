@@ -2939,7 +2939,12 @@ Private Sub ClanHandler_GetMemberList(ByVal Cookie As Long, ByVal Members As Col
     Dim Member As clsClanMemberObj
 
     Call FindServerRequest(oRequest, Cookie)
+    
+    ' Clear the existing lists
+    g_Clan.Clear
+    lvClanList.ListItems.Clear
 
+    ' Copy members to internal list and UI listview
     For i = 1 To Members.Count
         Set Member = Members.Item(i)
         g_Clan.Members.Add Member

@@ -300,9 +300,6 @@ Public Sub RequestClanList(Optional ByVal eType As enuServerRequestHandlerType =
 
     Cookie = SaveServerRequest(oRequest)
 
-    g_Clan.Clear
-    frmChat.lvClanList.ListItems.Clear
-
     Set pBuf = New clsDataBuffer
     With pBuf
         .InsertDWord Cookie
