@@ -47,7 +47,7 @@ Begin VB.Form frmLauncher
    Begin VB.CommandButton cmdRemoveProfile 
       Caption         =   "&Remove Profile"
       Enabled         =   0   'False
-      Height          =   240
+      Height          =   255
       Left            =   1800
       TabIndex        =   2
       Top             =   3240
@@ -58,7 +58,7 @@ Begin VB.Form frmLauncher
       Height          =   240
       Left            =   240
       TabIndex        =   3
-      Top             =   3480
+      Top             =   3510
       Width           =   3135
    End
    Begin VB.CommandButton cmdLaunchThis 
@@ -245,7 +245,6 @@ On Error GoTo ERROR_HANDLER
     'UnHookAllProcs
     
     Unload frmNameDialog
-    Unload frmRenameProfile
     'Unload frmConfig
     'Unload frmstatus
     
@@ -311,6 +310,7 @@ Private Sub cmdCreateProfile_Click()
 On Error GoTo ERROR_HANDLER
     Load frmNameDialog
     frmNameDialog.Show
+    frmNameDialog.setWindowData "Create Profile", "Enter the name of the new profile below.", ProfileOption.CREATE_PROFILE
     
     Exit Sub
 ERROR_HANDLER:
@@ -392,8 +392,9 @@ On Error GoTo ERROR_HANDLER
 
     If (Not lstProfiles.SelectedItem Is Nothing) Then
         If (modLauncher.ProfileExists(lstProfiles.SelectedItem.Text)) Then
-            frmRenameProfile.Show
-            frmRenameProfile.setOriginalProfile lstProfiles.SelectedItem.Text, lstProfiles.SelectedItem.Index
+            frmNameDialog.Show
+            frmNameDialog.setWindowData "Rename Profile", "Enter the name you want to rename the profile to.", ProfileOption.RENAME_PROFILE
+            frmNameDialog.setOldProfileInfo lstProfiles.SelectedItem.Text, lstProfiles.SelectedItem.Index
         End If
     End If
     
