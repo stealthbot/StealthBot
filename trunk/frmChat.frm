@@ -6580,14 +6580,14 @@ Private Function GetBNetServer(ByVal sSetting As String) As String
     sRegion = vbNullString
     
     Select Case sSetting
-        Case "USEast": sRegion = "use"
-        Case "USWest": sRegion = "usw"
-        Case "Europe": sRegion = "eur"
-        Case "Asia": sRegion = "kor"
+        Case "USEast": sRegion = "useast"
+        Case "USWest": sRegion = "uswest"
+        Case "Europe": sRegion = "europe"
+        Case "Asia": sRegion = "asia"
     End Select
                 
     If Len(sRegion) > 0 Then
-        GetBNetServer = StringFormat("connect-{0}.classic.blizzard.com", sRegion)
+        GetBNetServer = StringFormat("{0}.battle.net", LCase(sRegion))
     Else
         GetBNetServer = sSetting
     End If
