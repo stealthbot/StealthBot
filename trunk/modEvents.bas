@@ -1080,47 +1080,37 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
 
     UserIndex = g_Channel.GetUserIndexEx(CleanUsername(Username))
 
-    ' phantom UserInChannel detection:
-    ' mark the latest not-you as a phantom, and proceed as if new user
-    If (UserIndex > 0) Then
-        Dim UserObjPhantom As clsUserObj
-        Set UserObjPhantom = g_Channel.Users(UserIndex)
-        '   other user is a phantom: we haven't seen g_Channel.Self yet and there's a duplicate
-        If (LenB(g_Channel.Self.Name) = 0) Then
-            frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Warning! Phantom user {0} detected.", UserObjPhantom.DisplayName)
-            UserObjPhantom.IsPhantom = True
-            UserIndex = 0
-        '   we have a phantom of ourself: Username is our name but Ping is different
-        ElseIf (StrComp(CleanUsername(Username), g_Channel.Self.Name, vbTextCompare) = 0) And (UserObjPhantom.Ping <> Ping) Then
-            frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Warning! Phantom user {0} detected.", UserObjPhantom.DisplayName)
-            UserObjPhantom.IsPhantom = True
-            UserIndex = 0
-        '   anything else should be considered a stats update
-        End If
-        Set UserObjPhantom = Nothing
-    End If
-
     If (UserIndex > 0) Then
         Set UserObj = g_Channel.Users(UserIndex)
         
         If (QueuedEventID = 0) Then
             If (UserObj.Queue.Count > 0) Then
-                If (UserObj.Stats.Statstring = vbNullString) Then
-                    showUpdate = True
+                If (UserObj.Stats.Statstring = vbNullString) And (UserObj.Statstring <> Statstring) Then
+                    StatUpdate = True
+                
+                    Set UserEvent = New clsUserEventObj
+                
+                    With UserEvent
+                        .EventID = ID_USER
+                        .Flags = Flags
+                        .Ping = Ping
+                        .GameID = UserObj.Game
+                        .Clan = UserObj.Clan
+                        .Statstring = Statstring
+                    End With
+                
+                    UserObj.Queue.Add UserEvent
+                Else
+                    ' This is likely a phantom user situation. Remove the old user and replace with this new one.
+                    Call Event_UserLeaves(Username, Flags, True)
+                    Set UserObj = New clsUserObj
+                    UserObj.UserlistWeight = g_Channel.JoinCount
+                    
+                    If Not g_Channel.HasPhantomUsers Then
+                        Call frmChat.AddChat(g_Color.ErrorMessageText, "Warning! One or more phantom users have been detected in this channel. The server may be experiencing technical difficulties.")
+                        g_Channel.HasPhantomUsers = True
+                    End If
                 End If
-                
-                Set UserEvent = New clsUserEventObj
-                
-                With UserEvent
-                    .EventID = ID_USER
-                    .Flags = Flags
-                    .Ping = Ping
-                    .GameID = UserObj.Game
-                    .Clan = UserObj.Clan
-                    .Statstring = Statstring
-                End With
-                
-                UserObj.Queue.Add UserEvent
             End If
         End If
         
@@ -1314,13 +1304,14 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     
         Set UserObj = g_Channel.Users(UserIndex)
     Else
-        ' mark the first as a phantom, and proceed as if new user
+        ' If this user is already in the channel, that instance is probably a phantom. Remove them silently.
         If (UserIndex > 0) Then
-            Dim UserObjPhantom As clsUserObj
-            Set UserObjPhantom = g_Channel.Users(UserIndex)
-            frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Warning! Phantom user {0} detected.", UserObjPhantom.DisplayName)
-            UserObjPhantom.IsPhantom = True
-            Set UserObjPhantom = Nothing
+            Call Event_UserLeaves(Username, Flags, True)
+            
+            If Not g_Channel.HasPhantomUsers Then
+                Call frmChat.AddChat(g_Color.ErrorMessageText, "Warning! One or more phantom users have been detected in this channel. The server may be experiencing technical difficulties.")
+                g_Channel.HasPhantomUsers = True
+            End If
         End If
         
         g_Channel.JoinCount = g_Channel.JoinCount + 1
@@ -1523,7 +1514,7 @@ ERROR_HANDLER:
         StringFormat("Error: #{0}: {1} in {2}.Event_UserJoins()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
-Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
+Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long, Optional ByVal Silent As Boolean = False)
     #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
@@ -1548,7 +1539,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     
     If (UserObj.Queue.Count = 0) Then
         PassJoinDelay = True
-        If ((Not JoinMessagesOff) And ((Not Filters) Or (Not CheckBlock(Username)))) Then
+        If ((Not Silent) And (Not JoinMessagesOff) And ((Not Filters) Or (Not CheckBlock(Username)))) Then
             'If (GetVeto = False) Then
             Dim UserColor As Long
             
@@ -1587,7 +1578,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Set UserObj = Nothing
     
     If (PassJoinDelay And pos > 0) Then
-        If (frmChat.mnuFlash.Checked) Then
+        If (Not Silent) And (frmChat.mnuFlash.Checked) Then
             FlashWindow
         End If
     
@@ -1604,10 +1595,11 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' call event script function
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        If Not Silent Then
+            On Error Resume Next
         
-        On Error Resume Next
-        
-        RunInAll "Event_UserLeaves", CleanUsername(Username), Flags
+            RunInAll "Event_UserLeaves", CleanUsername(Username), Flags
+        End If
     End If
 
     Exit Sub

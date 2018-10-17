@@ -33,6 +33,7 @@ Private m_NumKicks       As Long
 Private m_JoinDate       As Date
 Private m_Users          As Collection
 Private m_Banlist        As Collection
+Private m_HasPhantoms    As Boolean     ' TRUE if a phantom user has been seen in the channel.
 
 Public Property Get sType() As String
     
@@ -180,6 +181,15 @@ Public Property Let KickCount(ByVal lng As Long)
     m_NumKicks = lng
 
 End Property
+
+Public Property Get HasPhantomUsers() As Boolean
+    HasPhantomUsers = m_HasPhantoms
+End Property
+
+Public Property Let HasPhantomUsers(ByVal bln As Boolean)
+    m_HasPhantoms = bln
+End Property
+
 
 Public Property Get Users() As Collection
 
@@ -725,6 +735,7 @@ Public Function Clone() As clsChannelObj
     Clone.KickCount = KickCount
     Clone.JoinCount = JoinCount
     Clone.OperatorHeir = OperatorHeir
+    Clone.HasPhantomUsers = HasPhantomUsers
     
     For i = 1 To Users.Count
         Clone.Users.Add Users(i).Clone()
