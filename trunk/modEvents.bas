@@ -86,6 +86,10 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
 
     ' convert user name
     Username = UserObj.DisplayName
+    
+    ' Get the current userlist position
+    '  This needs to happen before the flags are updated on the user object otherwise it changes.
+    pos = g_Channel.GetUserIndexByPriority(UserObj.Name, , True)
 
     With UserObj
         .Flags = Flags
@@ -112,10 +116,6 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                     g_Channel.CheckUser Username
                 End If
             End If
-            
-            ' get channel list position
-            pos = g_Channel.GetUserIndexByPriority(UserObj.Name, , True)
-            'Debug.Print "OLD POS: " & pos
             
             If (pos) Then
                 Dim NewFlags As Long
