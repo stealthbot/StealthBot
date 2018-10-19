@@ -250,7 +250,7 @@ Public Property Get Self() As clsUserObj
     Set Self = New clsUserObj
     
     For i = Users.Count To 1 Step -1
-        If (StrComp(Users(i).Name, CleanUsername(CurrentUsername), vbTextCompare) = 0) And (Users(i).IsPhantom = False) Then
+        If (StrComp(Users(i).Name, CleanUsername(CurrentUsername), vbTextCompare) = 0) Then
             Set Self = Users(i)
             Exit Property
         End If
@@ -289,7 +289,7 @@ Public Function GetUserIndexEx(ByVal AccountName As String, Optional ByVal Searc
             End If
         End If
     
-        If (StrComp(Users(i).Name, AccountName, vbTextCompare) = 0) And (Users(i).IsPhantom = False) Then
+        If (StrComp(Users(i).Name, AccountName, vbTextCompare) = 0) Then
             GetUserIndexEx = i
             Exit Function
         End If
@@ -331,7 +331,7 @@ Public Function GetUserIndex(ByVal Username As String, Optional ByVal SearchLimi
             End If
         End If
     
-        If (StrComp(m_Users(i).DisplayName, Username, vbTextCompare) = 0) And (Users(i).IsPhantom = False) Then
+        If (StrComp(m_Users(i).DisplayName, Username, vbTextCompare) = 0) Then
             GetUserIndex = i
             Exit Function
         End If
@@ -358,7 +358,7 @@ Public Function GetUserIndexByPriority(ByVal Username As String, Optional ByVal 
                 End If
             End If
 
-            If (StrComp(PUser.Name, Username, vbTextCompare) = 0) And (PUser.IsPhantom = False) Then
+            If (StrComp(PUser.Name, Username, vbTextCompare) = 0) Then
                 GetUserIndexByPriority = pos
                 Exit Function
             End If
@@ -671,7 +671,7 @@ Public Function CheckUsers() As Integer
             For i = Users.Count To 1 Step -1
                 Set CurrentUser = Users(i)
             
-                If (CurrentUser.IsOperator = False) And (CurrentUser.IsPhantom = False) Then
+                If (CurrentUser.IsOperator = False) Then
                     DBEntry = _
                         Database.GetUserAccess(CurrentUser.DisplayName)
                 
@@ -693,7 +693,7 @@ Public Function CheckUsers() As Integer
         For i = Users.Count To 1 Step -1
             Set CurrentUser = Users(i)
         
-            If (CurrentUser.IsOperator = False) And (CurrentUser.IsPhantom = False) Then
+            If (CurrentUser.IsOperator = False) Then
                 If (CheckUser(CurrentUser.DisplayName, CurrentUser)) Then
                     Count = (Count + 1)
                 End If
@@ -712,7 +712,7 @@ Public Function CheckQueue(ByVal Username As String) As Boolean
 
     For i = Users.Count To 1 Step -1
         Set CurrentUser = Users(i)
-        If (StrComp(CurrentUser.DisplayName, Username, vbTextCompare) = 0) And (CurrentUser.IsPhantom = False) Then
+        If (StrComp(CurrentUser.DisplayName, Username, vbTextCompare) = 0) Then
             If (CurrentUser.Queue.Count) Then
                 CheckQueue = True
             End If
