@@ -1085,7 +1085,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         
         If (QueuedEventID = 0) Then
             If (UserObj.Queue.Count > 0) Then
-                If (UserObj.Stats.Statstring = vbNullString) And (UserObj.Statstring <> Statstring) Then
+                If (UserObj.Statstring <> Statstring) Then
                     StatUpdate = True
                 
                     Set UserEvent = New clsUserEventObj
