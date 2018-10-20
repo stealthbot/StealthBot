@@ -1102,14 +1102,17 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                     UserObj.Queue.Add UserEvent
                 Else
                     ' This is likely a phantom user situation. Remove the old user and replace with this new one.
+                    If Not g_Channel.HasPhantomUsers Then
+                        Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Warning! Received a presence event for user '{0}', who was already in the channel. Diagnostic info:", UserObj.Name))
+                        Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat(" -> Phantom - ping: {0}, flags: {1}, stats: {2}", UserObj.Ping, UserObj.Flags, UserObj.Statstring))
+                        Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat(" -> Current - ping: {0}, flags: {1}, stats: {2}", Ping, Flags, Statstring))
+                        
+                        g_Channel.HasPhantomUsers = True
+                    End If
+                    
                     Call Event_UserLeaves(Username, Flags, True)
                     Set UserObj = New clsUserObj
                     UserObj.UserlistWeight = g_Channel.JoinCount
-                    
-                    If Not g_Channel.HasPhantomUsers Then
-                        Call frmChat.AddChat(g_Color.ErrorMessageText, "Warning! One or more phantom users have been detected in this channel. The server may be experiencing technical difficulties.")
-                        g_Channel.HasPhantomUsers = True
-                    End If
                 End If
             End If
         End If
@@ -1306,12 +1309,17 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Else
         ' If this user is already in the channel, that instance is probably a phantom. Remove them silently.
         If (UserIndex > 0) Then
-            Call Event_UserLeaves(Username, Flags, True)
+            Set UserObj = g_Channel.Users(UserIndex)
             
             If Not g_Channel.HasPhantomUsers Then
-                Call frmChat.AddChat(g_Color.ErrorMessageText, "Warning! One or more phantom users have been detected in this channel. The server may be experiencing technical difficulties.")
+                Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Warning! Received a join event for user '{0}', who was already in the channel. Diagnostic info:", UserObj.Name))
+                Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat(" -> Phantom - ping: {0}, flags: {1}, stats: {2}", UserObj.Ping, UserObj.Flags, UserObj.Statstring))
+                Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat(" -> Current - ping: {0}, flags: {1}, stats: {2}", Ping, Flags, Statstring))
+                        
                 g_Channel.HasPhantomUsers = True
             End If
+            
+            Call Event_UserLeaves(Username, Flags, True)
         End If
         
         g_Channel.JoinCount = g_Channel.JoinCount + 1
