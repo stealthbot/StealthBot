@@ -1612,6 +1612,26 @@ Public Sub ForcePacketParse(ByVal PacketData As String, ByVal Protocol As String
     Set pBuff = Nothing
 End Sub
 
+'// CHECKCHATFILTER
+'// Checks if a message or user is filtered.
+'// Returns True even if filtering is disabled.
+Public Function CheckChatFilter(ByVal sMessage As String, Optional ByVal sUser As String = vbNullString) As Boolean
+    CheckChatFilter = False
+    
+    If Len(sUser) > 0 Then
+        If modOtherCode.CheckBlock(sUser) Then
+            CheckChatFilter = True
+            Exit Function
+        End If
+    End If
+    
+    If modOtherCode.CheckMsg(sMessage, sUser, -5) Then
+        CheckChatFilter = True
+        Exit Function
+    End If
+End Function
+
+
 '// GETUSERDATABASE
 '// Gets a collection of users in the database
 '// 10/10/2009 B#003 52 - Changed code to destroy the temp object after each use
