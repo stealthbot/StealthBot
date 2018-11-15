@@ -1024,7 +1024,7 @@ End Function
 ' Determines the operation indicated by the specified string.
 '   This parses the +/- from flags and group arguments.
 '   Updates the provided string with the indicator removed.
-Private Function CheckOperation(ByVal sOpString As String) As enuDatabaseOperation
+Private Function CheckOperation(ByRef sOpString As String) As enuDatabaseOperation
     If Len(sOpString) = 0 Then
         CheckOperation = dbopNothing
         Exit Function
