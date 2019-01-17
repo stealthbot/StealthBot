@@ -433,12 +433,6 @@ On Error GoTo ERROR_HANDLER:
             Exit Sub
         End If
     End If
-        
-    If (ds.CRevChecksum = 0 Or ds.CRevVersion = 0 Or LenB(ds.CRevResult) = 0) Then
-        frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Check Revision Failed, sanity failed"
-        frmChat.DoDisconnect
-        Exit Sub
-    End If
     
     Set pBuff = New clsDataBuffer
     With pBuff
@@ -1847,12 +1841,6 @@ On Error GoTo ERROR_HANDLER:
             frmChat.DoDisconnect
             Exit Sub
         End If
-    End If
-
-    If (ds.CRevChecksum = 0 Or ds.CRevVersion = 0 Or LenB(ds.CRevResult) = 0) Then
-        frmChat.AddChat g_Color.ErrorMessageText, "[BNCS] Check revision failed. Sanity check failed."
-        frmChat.DoDisconnect
-        Exit Sub
     End If
 
     Keys = GetCDKeyCount
