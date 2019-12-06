@@ -2237,3 +2237,21 @@ End Function
 '    GetDiablo2CharacterName = tmp
 '
 'End Function
+
+Public Sub DebugPhantomUser(ByRef User As clsUserObj, ByVal Flags As Long, ByVal Statstring As String, ByVal Ping As Long)
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
+        StringFormat("NOTICE! A phantom user has been detected in the channel. Name: {0} - joined: {1}", User.DisplayName, modDateTime.UtcToLocal(User.JoinTime)))
+        
+    If User.Flags <> Flags Then
+        Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat(" - Flags: 0x{0} -> 0x{1}", Hex(User.Flags), Hex(Flags)))
+    End If
+    If User.Ping <> Ping Then
+        Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat(" - Ping: {0} -> {1}", User.Ping, Ping))
+    End If
+    If User.Statstring <> Statstring Then
+        Dim NewStats As New clsUserStats
+        NewStats.Statstring = Statstring
+        
+        Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat(" - Stats: {0} -> {1}", User.Stats.ToString(), NewStats.ToString()))
+    End If
+End Sub
