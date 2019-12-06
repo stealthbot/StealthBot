@@ -9,15 +9,15 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7965
-   ClientLeft      =   225
-   ClientTop       =   855
-   ClientWidth     =   11400
+   ClientLeft      =   165
+   ClientTop       =   735
+   ClientWidth     =   13080
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
    ScaleHeight     =   7965
-   ScaleWidth      =   11400
+   ScaleWidth      =   13080
    StartUpPosition =   3  'Windows Default
    Begin VB.Timer tmrParseBNCS 
       Interval        =   1
@@ -26,7 +26,7 @@ Begin VB.Form frmChat
    End
    Begin MSComctlLib.ListView lvChannel 
       Height          =   6375
-      Left            =   8880
+      Left            =   9375
       TabIndex        =   1
       TabStop         =   0   'False
       Top             =   240
@@ -879,7 +879,7 @@ Begin VB.Form frmChat
       Left            =   600
       TabIndex        =   7
       Top             =   6600
-      Width           =   7695
+      Width           =   8175
    End
    Begin VB.TextBox txtPost 
       BackColor       =   &H00000000&
@@ -894,7 +894,7 @@ Begin VB.Form frmChat
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   315
-      Left            =   8280
+      Left            =   8760
       TabIndex        =   9
       Top             =   6600
       Width           =   615
@@ -919,7 +919,7 @@ Begin VB.Form frmChat
    End
    Begin TabDlg.SSTab ListviewTabs 
       Height          =   375
-      Left            =   8880
+      Left            =   9360
       TabIndex        =   0
       Top             =   6600
       Width           =   3705
@@ -970,7 +970,7 @@ Begin VB.Form frmChat
          Strikethrough   =   0   'False
       EndProperty
       Height          =   1695
-      Left            =   12360
+      Left            =   12840
       TabIndex        =   3
       TabStop         =   0   'False
       Top             =   6600
@@ -1014,7 +1014,7 @@ Begin VB.Form frmChat
    End
    Begin MSComctlLib.ListView lvClanList 
       Height          =   6375
-      Left            =   8880
+      Left            =   9375
       TabIndex        =   5
       TabStop         =   0   'False
       Top             =   240
@@ -1063,7 +1063,7 @@ Begin VB.Form frmChat
    End
    Begin MSComctlLib.ListView lvFriendList 
       Height          =   6375
-      Left            =   8880
+      Left            =   9375
       TabIndex        =   2
       TabStop         =   0   'False
       Top             =   240
@@ -1116,12 +1116,11 @@ Begin VB.Form frmChat
       TabIndex        =   4
       TabStop         =   0   'False
       Top             =   6960
-      Width           =   12375
-      _ExtentX        =   21828
+      Width           =   12855
+      _ExtentX        =   22675
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1142,17 +1141,16 @@ Begin VB.Form frmChat
       TabIndex        =   6
       TabStop         =   0   'False
       Top             =   0
-      Width           =   8895
-      _ExtentX        =   15690
+      Width           =   9375
+      _ExtentX        =   16536
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
       OLEDropMode     =   0
-      TextRTF         =   $"frmChat.frx":4E709
+      TextRTF         =   $"frmChat.frx":4E6F3
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   9
@@ -1176,7 +1174,7 @@ Begin VB.Form frmChat
          Strikethrough   =   0   'False
       EndProperty
       Height          =   255
-      Left            =   8880
+      Left            =   9375
       TabIndex        =   10
       Top             =   0
       UseMnemonic     =   0   'False
@@ -2131,7 +2129,10 @@ End Sub
 Private Function RequestInetPage(ByVal URL As String, ByVal Request As String, ByVal CancelStillExecuting As Boolean) As Boolean
     On Error GoTo ERROR_HANDLER:
 
-    Dim ret As String
+    Dim UserAgent As String
+    UserAgent = "Mozilla/5.0 (compatible; StealthBot/{0}.{1}; +https://github.com/stealthbot/StealthBot)"
+    UserAgent = StringFormat(UserAgent, App.Major, App.Minor)
+    
     With Inet
         If .StillExecuting Then
             If CancelStillExecuting Then
@@ -2145,7 +2146,7 @@ Private Function RequestInetPage(ByVal URL As String, ByVal Request As String, B
         
         .RequestTimeout = 5
         .Tag = Request
-        .Execute URL
+        .Execute URL, "GET", , "User-Agent: " & UserAgent
         
         RequestInetPage = True
     End With
