@@ -990,6 +990,12 @@ Public Function UtcNow() As Date
     UtcNow = modDateTime.UtcNow
 End Function
 
+'// UTCTOLOCAL
+'// Converts a UTC time and date to local time.
+Public Function UtcToLocal(ByVal UtcDate As Date) As Date
+    UtcToLocal = modDateTime.UtcToLocal(UtcDate)
+End Function
+
 '// LOGGER
 '// Returns the logger object
 Public Function Logger() As clsLogger
