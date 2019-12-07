@@ -1103,10 +1103,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 Else
                     ' This is likely a phantom user situation. Remove the old user and replace with this new one.
                     If Not g_Channel.HasPhantomUsers Then
-                        Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Warning! Received a presence event for user '{0}', who was already in the channel. Diagnostic info:", UserObj.Name))
-                        Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat(" -> Phantom - ping: {0}, flags: {1}, stats: {2}", UserObj.Ping, UserObj.Flags, UserObj.Statstring))
-                        Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat(" -> Current - ping: {0}, flags: {1}, stats: {2}", Ping, Flags, Statstring))
-                        
+                        Call DebugPhantomUser(UserObj, Flags, Statstring, Ping)
                         g_Channel.HasPhantomUsers = True
                     End If
                     
@@ -1312,10 +1309,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             Set UserObj = g_Channel.Users(UserIndex)
             
             If Not g_Channel.HasPhantomUsers Then
-                Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat("Warning! Received a join event for user '{0}', who was already in the channel. Diagnostic info:", UserObj.Name))
-                Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat(" -> Phantom - ping: {0}, flags: {1}, stats: {2}", UserObj.Ping, UserObj.Flags, UserObj.Statstring))
-                Call frmChat.AddChat(g_Color.ErrorMessageText, StringFormat(" -> Current - ping: {0}, flags: {1}, stats: {2}", Ping, Flags, Statstring))
-                        
+                Call DebugPhantomUser(UserObj, Flags, Statstring, Ping)
                 g_Channel.HasPhantomUsers = True
             End If
             
