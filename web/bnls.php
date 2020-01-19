@@ -5,11 +5,7 @@ $url = 'https://bnetdocs.org/servers.json?type_id=4&status=1';
 header('Content-Type: text/plain;charset=utf-8');
 
 function exit_here($message, $code = 500) {
-  if (function_exists('http_response_code')) {
-    http_response_code($code); // introduced in PHP 5.4
-  } else {
-    header($_SERVER['SERVER_PROTOCOL'] . ' ' . $code);
-  }
+  http_response_code($code);
   die($message . "\n");
 }
 
