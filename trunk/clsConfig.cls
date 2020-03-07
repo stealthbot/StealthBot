@@ -2526,6 +2526,12 @@ Private Sub ConformValues()
     
     m_Game = GetProductInfo(m_Game).Code
     
+    ' Fix server values from a dumb patch.
+    If m_Server = "USEast" Then m_Server = "useast.battle.net"
+    If m_Server = "USWest" Then m_Server = "uswest.battle.net"
+    If m_Server = "Europe" Then m_Server = "europe.battle.net"
+    If m_Server = "Asia" Then m_Server = "asia.battle.net"
+    
     If m_AutoSafelistLevel < 1 Or m_AutoSafelistLevel > 200 Then m_AutoSafelistLevel = 20
     If m_NamespaceConvention < 0 Or m_NamespaceConvention > 3 Then m_NamespaceConvention = 0
     If m_SecondsToIdle > 1000000 Then m_SecondsToIdle = 600
