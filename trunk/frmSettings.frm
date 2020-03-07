@@ -4795,6 +4795,8 @@ Private InitChanSize        As Integer
 Private InitChatSize        As Integer
 Private PanelsInitialized   As Boolean
 Private OldBotOwner         As String
+Private DefaultServers      As Dictionary
+Private NoLongerSupported() As String
 
 Const SC    As Byte = 0
 Const BW    As Byte = 1
@@ -4815,9 +4817,25 @@ Private Sub Form_Load()
     Dim nOptLevel As cTreeViewNodes
     Dim lMouseOver As Long
     Dim s As String
-    Dim serverList() As String
     Dim i As Long, j As Long, K As Long
     Dim colBNLS As Collection
+    
+    ' Initialize default server lookup
+    Set DefaultServers = New Dictionary
+    DefaultServers.Add "useast.battle.net", "USEast / Azeroth"
+    DefaultServers.Add "uswest.battle.net", "USWest / Lordaeron"
+    DefaultServers.Add "europe.battle.net", "Europe / Northrend"
+    DefaultServers.Add "asia.battle.net", "Asia / Kalimdor"
+    DefaultServers.Add "connect-forever.classic.blizzard.com", "GoG - Legacy"
+    
+    ' Set games no longer supported on official servers.
+    ReDim NoLongerSupported(5)
+    NoLongerSupported(0) = PRODUCT_STAR
+    NoLongerSupported(1) = PRODUCT_SEXP
+    NoLongerSupported(2) = PRODUCT_JSTR
+    NoLongerSupported(3) = PRODUCT_SSHR
+    NoLongerSupported(4) = PRODUCT_WAR3
+    NoLongerSupported(5) = PRODUCT_W3XP
     
     '##########################################
     ' TREEVIEW INITIALIZATION CODE
@@ -5301,6 +5319,7 @@ End Function
 
 Private Function SaveSettings() As Boolean
     Dim s As String
+    Dim Server As Variant
     Dim Clients(6) As String
     Dim i As Long, j As Long
     Dim colBNLS As Collection
@@ -5350,13 +5369,36 @@ Private Function SaveSettings() As Boolean
     
     Config.Game = s
     
+    ' Translate default server names
+    Config.Server = ""
+    For Each Server In DefaultServers.Keys()
+        If StrComp(DefaultServers.Item(Server), cboServer.Text, vbBinaryCompare) = 0 Then
+            ' Check if the selected game is supported on this server
+            For i = 0 To UBound(NoLongerSupported)
+                If StrComp(NoLongerSupported(i), Config.Game, vbBinaryCompare) = 0 Then
+                    If MsgBox("The game you selected is no longer supported on official servers. Connecting may result in an IP ban. Do you want to continue?", vbExclamation + vbYesNo, "StealthBot Settings") = vbNo Then
+                        ShowPanel spConnectionConfig
+                        SaveSettings = False
+                        Exit Function
+                    End If
+                End If
+            Next
+            
+            Config.Server = Server
+            Exit For
+        End If
+    Next
+    
+    If Len(Config.Server) = 0 Then
+        Config.Server = cboServer.Text
+    End If
+    
     ' The rest of the basic config now
     Config.Username = txtUsername.Text
     Config.Password = txtPassword.Text
     Config.CDKey = CDKeyReplacements(txtCDKey.Text)
     Config.ExpKey = CDKeyReplacements(txtExpKey.Text)
     Config.HomeChannel = txtHomeChan.Text
-    Config.Server = cboServer.Text
 
     Config.UseSpawn = CBool(CanSpawn(Config.Game, Len(Config.CDKey)) And CBool(chkSpawn.Value))
     Config.UseD2Realms = CBool(chkUseRealm.Value)
@@ -5997,7 +6039,8 @@ End Sub
 Private Sub InitConnBasic()
     Dim i As Integer
     Dim AddCurrent As Boolean
-    Dim Item As String
+    Dim Server As Variant
+    Dim Item As String, CurrentServer As String
     Dim AdditionalServerList As Collection
     
     txtUsername.Text = Config.Username
@@ -6008,11 +6051,10 @@ Private Sub InitConnBasic()
     txtHomeChan.Text = Config.HomeChannel
 
     With cboServer
-        ' add the 4 default "gateways" (translated to servers on connect)
-        .AddItem "USEast"
-        .AddItem "USWest"
-        .AddItem "Europe"
-        .AddItem "Asia"
+        ' add the default gateway options (translated on save)
+        For Each Server In DefaultServers.Items()
+            .AddItem Server
+        Next
         
         ' get additional servers
         Set AdditionalServerList = ListFileLoad(GetFilePath(FILE_SERVER_LIST))
@@ -6028,11 +6070,15 @@ Private Sub InitConnBasic()
         
         ' check if "currently selected" is in list
         AddCurrent = True
+        CurrentServer = Config.Server
+        If DefaultServers.Exists(CurrentServer) Then
+            CurrentServer = DefaultServers.Item(CurrentServer)
+        End If
         
         For i = 0 To .ListCount - 1
             Item = .List(i)
             
-            If StrComp(Item, Config.Server, vbBinaryCompare) = 0 Then
+            If StrComp(Item, CurrentServer, vbBinaryCompare) = 0 Then
                 AddCurrent = False
                 .ListIndex = i
             End If

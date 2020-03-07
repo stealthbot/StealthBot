@@ -5940,7 +5940,7 @@ Private Sub sckBNet_Connect()
     ds.Reset
     
     If (ProxyConnInfo(stBNCS).IsUsingProxy) Then
-        modProxySupport.InitProxyConnection sckBNet, ProxyConnInfo(stBNCS), GetBNetServer(Config.Server), 6112
+        modProxySupport.InitProxyConnection sckBNet, ProxyConnInfo(stBNCS), Config.Server, 6112
     Else
         InitBNetConnection
     End If
@@ -6554,7 +6554,7 @@ Sub Connect()
                 .RemoteHost = ProxyConnInfo(stBNCS).ProxyIP
                 .RemotePort = ProxyConnInfo(stBNCS).ProxyPort
             Else
-                .RemoteHost = GetBNetServer(Config.Server)
+                .RemoteHost = Config.Server
                 .RemotePort = 6112
             End If
 
@@ -6574,25 +6574,6 @@ Error:
     
     Exit Sub
 End Sub
-
-' Translates the user friendly "region" name (USEast, USWest, etc) to a server hostname.
-Private Function GetBNetServer(ByVal sSetting As String) As String
-    Dim sRegion As String
-    sRegion = vbNullString
-    
-    Select Case sSetting
-        Case "USEast": sRegion = "useast"
-        Case "USWest": sRegion = "uswest"
-        Case "Europe": sRegion = "europe"
-        Case "Asia": sRegion = "asia"
-    End Select
-                
-    If Len(sRegion) > 0 Then
-        GetBNetServer = StringFormat("{0}.battle.net", LCase(sRegion))
-    Else
-        GetBNetServer = sSetting
-    End If
-End Function
 
 Public Sub Pause(ByVal fSeconds As Single, Optional ByVal AllowEvents As Boolean = True)
     Dim i As Integer

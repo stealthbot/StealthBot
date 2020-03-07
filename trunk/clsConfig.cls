@@ -1975,7 +1975,7 @@ Private Sub LoadDefaults()
     m_EXPKey = vbNullString
     m_UseSpawn = False
     m_Game = PRODUCT_STAR
-    m_Server = "USEast"
+    m_Server = "useast.battle.net"
     m_HomeChannel = vbNullString
     m_AutoConnect = False
     m_UseD2Realms = False
