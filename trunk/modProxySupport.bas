@@ -52,6 +52,8 @@ Public Sub InitProxyConnection(ByVal ds As Winsock, ByRef ConnInfo As udtProxyCo
     ConnInfo.RemoteHost = vbNullString
     ConnInfo.RemoteHostIP = RemoteIP
     ConnInfo.RemotePort = RemotePort
+    ConnInfo.Username = Config.ProxyUsername
+    ConnInfo.Password = Config.ProxyPassword
     
     If Not IsValidIPAddress(ConnInfo.RemoteHostIP) Then
         ' not a valid IP - store it in hostname instead
