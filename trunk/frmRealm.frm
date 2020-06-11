@@ -983,7 +983,7 @@ Private Sub btnCreate_Click()
     Dim i As Integer
     Dim Flags As Long
     
-    If lvwChars.ListItems.Count > 7 Then
+    If lvwChars.ListItems.Count > 17 Then
         frmChat.AddChat g_Color.ErrorMessageText, "[REALM] Your account is full! Delete a character before trying to create another."
     Else
         If Len(txtCharName.Text) > 2 Then
@@ -1109,7 +1109,7 @@ Public Sub CharListResponse()
         
         Next i
         
-        optCreateNew.Enabled = (ds.MCPHandler.CharacterCount < 8)
+        optCreateNew.Enabled = (ds.MCPHandler.CharacterCount < 18)
         
         If LenB(m_NewCharacterName) > 0 Then
             NewSelection = FindCharacter(m_NewCharacterName)
