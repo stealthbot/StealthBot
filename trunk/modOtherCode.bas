@@ -367,7 +367,7 @@ Public Function StripAccountNumber(ByVal Username As String) As String
     
     numpos = InStr(1, Username, "#", vbBinaryCompare)
     If numpos > 0 Then
-        atpos = InStr(numpos, Username, Config.GatewayDelimiter, vbBinaryCompare)
+        atpos = InStr(numpos + 1, Username, Config.GatewayDelimiter, vbBinaryCompare)
         If atpos > 0 Then
             StripAccountNumber = Left$(Username, numpos - 1) & Mid$(Username, atpos)
         Else

@@ -318,7 +318,7 @@ Public Sub PrepareForProfile(ByVal Username As String, ByVal IsWriting As Boolea
     m_IsWriting = IsWriting
 
     ' correct caps
-    If IsWriting Then Username = GetCurrentUsername
+    If IsWriting Then Username = BotVars.Username
 
     ' set caption
     Caption = StringFormat("{0}Profile - {1}", IIf(IsWriting, "Edit ", vbNullString), Username)
@@ -346,7 +346,7 @@ Public Sub PrepareForProfile(ByVal Username As String, ByVal IsWriting As Boolea
 
     ' if we are writing, request our own profile
     If IsWriting Then
-        Call RequestProfile(GetCurrentUsername, reqUserInterface)
+        Call RequestProfile(BotVars.Username, reqUserInterface)
     End If
 End Sub
 

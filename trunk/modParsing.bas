@@ -189,7 +189,7 @@ Public Sub SetProfile(ByVal Location As String, ByVal Description As String, Opt
         .InsertDWord &H1                    '// #accounts
         .InsertDWord 3                      '// #keys
         
-        .InsertNTString CurrentUsername     '// account to update
+        .InsertNTString BotVars.Username    '// account to update
                                             '// keys
         .InsertNTString "Profile\Location"
         .InsertNTString "Profile\Description"
@@ -247,7 +247,7 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
         With pBuf
             .InsertDWord &H1                    '// #accounts
             .InsertDWord nKeys                  '// #keys
-            .InsertNTString CurrentUsername     '// account to update
+            .InsertNTString BotVars.Username    '// account to update
                                                 '// keys
             For i = 1 To nKeys
                 .InsertNTString pKeys(i)
