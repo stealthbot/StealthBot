@@ -19,6 +19,6 @@ You'll need Microsoft Visual Basic 6.0.
 
 ##### Visual Basic 6 Scroll Wheel Fix
 The Visual Basic 6 IDE does not have built-in support for scrolling by using the mouse wheel.
-To fix this, you need to download and follow instructions from [this KB article](https://support.microsoft.com/en-us/kb/837910).
+To fix this, you need to download and follow instructions from [this KB article](https://web.archive.org/web/20150312195640/https://support.microsoft.com/en-us/kb/837910).
 
 If you are on 64-bit Windows, you will need to use the 32-bit version of regsvr32, located in `%systemroot%\SysWoW64\` (see [this KB article](https://support.microsoft.com/en-us/kb/249873)).
