@@ -6,3 +6,5 @@ trunk/Logs/
 *.suo
 *.tmp
 Installer/StealthBotInstaller.cache
+*.oca
+*.log
