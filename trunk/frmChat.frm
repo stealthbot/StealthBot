@@ -6530,20 +6530,6 @@ Sub Connect()
 
         AddChat g_Color.InformationText, "Connecting your bot..."
         
-        If BotVars.BNLS Then
-            If Len(BotVars.BNLSServer) = 0 Then
-                If BotVars.UseAltBnls Then
-                    Call FindBNLSServer
-                    
-                    Exit Sub
-                End If
-            End If
-            
-            Call ConnectBNLS
-        Else
-            Call Event_BNetConnecting
-        End If
-        
         With sckBNet
             If .State <> sckClosed Then
                 AddChat g_Color.ErrorMessageText, "Already connected."
@@ -6557,8 +6543,18 @@ Sub Connect()
                 .RemoteHost = Config.Server
                 .RemotePort = 6112
             End If
-
-            If Not BotVars.BNLS Then .Connect
+            
+            If BotVars.BNLS Then
+                If Len(BotVars.BNLSServer) = 0 And BotVars.UseAltBnls Then
+                    Call FindBNLSServer
+                Else
+                    Call ConnectBNLS
+                End If
+            Else
+                Call Event_BNetConnecting
+                
+                .Connect
+            End If
 
         End With
         
