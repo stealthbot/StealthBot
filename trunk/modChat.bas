@@ -529,6 +529,7 @@ End Function
 Private Function IsColorCode(ByVal sInput As String, ByRef IsColor As Boolean, ByRef Color As Long, ByRef StyleSpec As String, ByRef CodeLength As Long) As Long
 
     Dim i      As Long
+    Dim j      As Long
     Dim c      As String * 1
     Dim CodeID As String
     Dim IsCode As Boolean
@@ -596,6 +597,46 @@ Private Function IsColorCode(ByVal sInput As String, ByRef IsColor As Boolean, B
                     CodeLength = 3
                     Exit Function
                 End If
+            End If
+        End If
+
+        If c = "|" Then
+            ' WARCRAFT III
+            ' |c######## to set color
+            IsCode = True
+            Select Case LCase$(Mid$(sInput, i + 1, 1))
+                Case "c"
+                    CodeID = Mid$(sInput, i + 2, 8)
+                    If Len(CodeID) <> 8 Then
+                        IsCode = False
+                    Else
+                        IsCode = True
+                        For j = 1 To 8
+                            Select Case LCase$(Mid$(CodeID, j, 1))
+                                Case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"
+                                Case Else
+                                    IsCode = False
+                                    Exit For
+                            End Select
+                        Next j
+                        If IsCode Then
+                            IsColor = True
+                            Color = g_Color.FromHex(Mid$(CodeID, 3, 6))
+                            CodeLength = 10
+                        End If
+                    End If
+
+                Case "b":  StyleSpec = "B": CodeLength = 2
+                Case "i":  StyleSpec = "I": CodeLength = 2
+                Case "u":  StyleSpec = "U": CodeLength = 2
+                Case "r":  IsColor = True: Color = g_Color.White: StyleSpec = "R": CodeLength = 2
+                Case Else: IsCode = False
+
+            End Select
+
+            If IsCode Then
+                IsColorCode = i
+                Exit Function
             End If
         End If
     Next i
