@@ -1106,6 +1106,18 @@ Public Function GetConnectionUptimeMS() As Double
     GetConnectionUptimeMS = modBNCS.GetConnectionUptime()
 End Function
 
+'// CONVERTSECONDSTOSTRING
+'// Returns a human-readable string describing the number of seconds
+Public Function ConvertSecondsToString(ByVal sInput As String) As String
+    ConvertSecondsToString = ConvertTimeInterval(CCur(sInput), True)
+End Function
+
+'// CONVERTMILLISECONDSTOSTRING
+'// Returns a human-readable string describing the number of milliseconds
+Public Function ConvertMillisecondsToString(ByVal sInput As String, Optional ByVal PrintMS As Boolean = True) As String
+    ConvertMillisecondsToString = ConvertTimeInterval(CCur(sInput), False, PrintMS)
+End Function
+
 '// CRC32
 '// Returns the result of a standard CRC32 hash
 Public Function CRC32(ByVal str As String) As Long
