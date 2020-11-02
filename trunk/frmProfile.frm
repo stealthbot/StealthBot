@@ -17,7 +17,6 @@ Begin VB.Form frmProfile
    StartUpPosition =   1  'CenterOwner
    Begin VB.CommandButton cmdOK 
       Caption         =   "&Write"
-      Default         =   -1  'True
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -34,14 +33,14 @@ Begin VB.Form frmProfile
       Width           =   975
    End
    Begin RichTextLib.RichTextBox rtbField 
-      Height          =   285
+      Height          =   345
       Index           =   3
       Left            =   1200
       TabIndex        =   7
       Top             =   1200
       Width           =   6615
       _ExtentX        =   11668
-      _ExtentY        =   503
+      _ExtentY        =   609
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
@@ -49,7 +48,7 @@ Begin VB.Form frmProfile
       TextRTF         =   $"frmProfile.frx":0CCA
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   8.25
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -58,7 +57,6 @@ Begin VB.Form frmProfile
       EndProperty
    End
    Begin VB.CommandButton cmdCancel 
-      Cancel          =   -1  'True
       Caption         =   "&Cancel"
       BeginProperty Font 
          Name            =   "Tahoma"
@@ -89,10 +87,10 @@ Begin VB.Form frmProfile
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
-      TextRTF         =   $"frmProfile.frx":0D5B
+      TextRTF         =   $"frmProfile.frx":0D45
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   8.25
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -101,22 +99,22 @@ Begin VB.Form frmProfile
       EndProperty
    End
    Begin RichTextLib.RichTextBox rtbField 
-      Height          =   285
+      Height          =   345
       Index           =   2
       Left            =   1200
       TabIndex        =   5
       Top             =   840
       Width           =   6615
       _ExtentX        =   11668
-      _ExtentY        =   503
+      _ExtentY        =   609
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
       AutoVerbMenu    =   -1  'True
-      TextRTF         =   $"frmProfile.frx":0DEC
+      TextRTF         =   $"frmProfile.frx":0DC0
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   8.25
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -125,22 +123,23 @@ Begin VB.Form frmProfile
       EndProperty
    End
    Begin RichTextLib.RichTextBox rtbField 
-      Height          =   285
+      Height          =   345
       Index           =   1
       Left            =   1200
       TabIndex        =   3
       Top             =   480
       Width           =   6615
       _ExtentX        =   11668
-      _ExtentY        =   503
+      _ExtentY        =   609
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
+      ReadOnly        =   -1  'True
       AutoVerbMenu    =   -1  'True
-      TextRTF         =   $"frmProfile.frx":0E7D
+      TextRTF         =   $"frmProfile.frx":0E3B
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   8.25
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -221,7 +220,7 @@ Begin VB.Form frmProfile
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   255
+      Height          =   375
       Index           =   3
       Left            =   120
       TabIndex        =   6
@@ -284,70 +283,95 @@ Private Const FIELD_PRF As Integer = 4
 Private m_IsWriting As Boolean
 
 Private Sub cmdCancel_Click()
+    
     Unload Me
+
 End Sub
 
 Private Sub cmdOK_Click()
+    
     If m_IsWriting Then
-        Call SetProfile(GetRTBText(rtbField(FIELD_LOC)), GetRTBText(rtbField(FIELD_PRF)), GetRTBText(rtbField(FIELD_SEX)))
+        Call SetProfile(GetRTBText(rtbField(FIELD_LOC).hWnd), _
+                        GetRTBText(rtbField(FIELD_PRF).hWnd), _
+                        GetRTBText(rtbField(FIELD_SEX).hWnd))
     End If
+    
     Unload Me
+
 End Sub
 
 Private Sub Form_Load()
+    Dim i As Integer
+
     Me.Icon = frmChat.Icon
+
+    #If COMPILE_DEBUG <> 1 Then
+        HookWindowProc Me.hWnd
+    #End If
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     Dim i As Integer
+    
     lblUsername.Caption = vbNullString
-    For i = rtbField.LBound To rtbField.UBound
-        rtbField(i).Text = vbNullString
-    Next i
-    If Not m_IsWriting Then
-        DisableURLDetect rtbField(FIELD_SEX).hWnd
-        DisableURLDetect rtbField(FIELD_LOC).hWnd
-        DisableURLDetect rtbField(FIELD_PRF).hWnd
-    End If
 
     frmChat.cboSendHadFocus = True
+
+    #If COMPILE_DEBUG <> 1 Then
+        UnhookWindowProc Me.hWnd
+    #End If
 End Sub
 
 Public Sub PrepareForProfile(ByVal Username As String, ByVal IsWriting As Boolean)
+    Dim i As Integer
+    
     ' store for later
     m_IsWriting = IsWriting
 
     ' correct caps
     If IsWriting Then Username = BotVars.Username
 
-    ' set caption
-    Caption = StringFormat("{0}Profile - {1}", IIf(IsWriting, "Edit ", vbNullString), Username)
-
     ' set Username
-    lblUsername.Caption = Username
+    With lblUsername
+        .Caption = Username
+        .Font = Config.ChatFont
+        .Font.Size = Config.ChatFontSize
+    End With
 
-    ' set up command buttons
-    cmdCancel.Visible = IsWriting
-    cmdOK.Caption = IIf(IsWriting, "&Write", "&Done")
-
-    ' set locked based on mode
-    rtbField(FIELD_AGE).Locked = True 'Not IsWriting - always fixed
-    rtbField(FIELD_AGE).TabStop = False 'IsWriting
-    rtbField(FIELD_SEX).Locked = Not IsWriting
-    rtbField(FIELD_LOC).Locked = Not IsWriting
-    rtbField(FIELD_PRF).Locked = Not IsWriting
-    
-    ' if not writing, then set URL detection
-    If Not IsWriting And Config.UrlDetection Then
-        EnableURLDetect rtbField(FIELD_SEX).hWnd
-        EnableURLDetect rtbField(FIELD_LOC).hWnd
-        EnableURLDetect rtbField(FIELD_PRF).hWnd
-    End If
-
-    ' if we are writing, request our own profile
+    ' set caption
     If IsWriting Then
-        Call RequestProfile(BotVars.Username, reqUserInterface)
+        Caption = StringFormat("Editing Profile - {0}", Username)
+    Else
+        Caption = StringFormat("Profile - {0}", Username)
     End If
+
+    ' command buttons
+    cmdOK.Caption = IIf(IsWriting, "&Write", "&Done")
+    cmdOK.Cancel = IsWriting
+    cmdCancel.Visible = IsWriting
+
+    ' set up fields
+    For i = rtbField.LBound To rtbField.UBound
+        With rtbField(i)
+            .Font = Config.ChatFont
+            .Font.Size = Config.ChatFontSize
+            .Text = vbNullString
+            .Locked = Not IsWriting Or i = FIELD_AGE
+            If .Locked Then
+                ' reading
+                EnableRichText .hWnd
+                EnableURLDetect .hWnd
+            Else
+                ' writing
+                DisableRichText .hWnd
+                DisableURLDetect .hWnd
+            End If
+        End With
+    Next i
+
+    ' request own profile
+    If IsWriting Then Call RequestProfile(Username, reqUserInterface)
+
 End Sub
 
 Public Sub SetKey(ByVal KeyName As String, ByVal KeyValue As String)
@@ -366,25 +390,38 @@ Public Sub SetKey(ByVal KeyName As String, ByVal KeyValue As String)
     'frmChat.AddChat vbWhite, "[Profile] " & KeyName & " == " & KeyValue
 
     Select Case KeyName
-        Case "Profile\Age":         Index = 1
-        Case "Profile\Sex":         Index = 2
-        Case "Profile\Location":    Index = 3
-        Case "Profile\Description": Index = 4
+        Case "Profile\Age":         Index = FIELD_AGE
+        Case "Profile\Sex":         Index = FIELD_SEX
+        Case "Profile\Location":    Index = FIELD_LOC
+        Case "Profile\Description": Index = FIELD_PRF
         Case Else:                  Exit Sub
     End Select
 
     With rtbField(Index)
-        .Text = vbNullString
-        SetTextSelection rtbField(Index), 0, 0
-        .SelBold = False
-        .SelItalic = False
-        .SelUnderline = False
-        .SelFontName = rtbField(Index).Font.Name
-        .SelColor = vbWhite
-
-        If m_IsWriting Then
-            SetSelectedRTBText rtbField(Index), KeyValue
+        If Not .Locked Then
+            ' writing
+            .HideSelection = True
+            SetTextSelection .hWnd, 0, -1
+            SetSelectedRTBText .hWnd, KeyValue
+            SetTextSelection .hWnd, 0, -1
+            .SelBold = False
+            .SelItalic = False
+            .SelUnderline = False
+            .SelFontName = .Font.Name
+            .SelColor = vbWhite
+            SetTextSelection .hWnd, -1, -1
+            .HideSelection = False
         Else
+            ' reading
+            .HideSelection = True
+            .Text = vbNullString
+            SetTextSelection .hWnd, 0, 0
+            .SelBold = False
+            .SelItalic = False
+            .SelUnderline = False
+            .SelFontName = .Font.Name
+            .SelColor = vbWhite
+
             ReDim saElements(0 To 2)
             saElements(0) = vbNullString
             saElements(1) = vbWhite
@@ -392,101 +429,117 @@ Public Sub SetKey(ByVal KeyName As String, ByVal KeyValue As String)
             If ApplyGameColors(saElements(), arr()) Then
                 saElements() = arr()
             End If
+
             ' place each element
             For i = LBound(saElements) To UBound(saElements) Step 3
                 DisplayRichTextElement rtbField(Index), saElements(), i, StyleBold, StyleItal, StyleUndl, StyleStri
             Next i
+            SetTextSelection .hWnd, -1, -1
+            .HideSelection = False
         End If
     End With
 
     SetFocus
+
 End Sub
 
-'RTB ADDCHAT SUBROUTINE - originally written by Grok[vL] - modified to support
-'                         logging and timestamps, as well as color decoding.
-'Sub AddText(ByRef rtb As RichTextBox, ParamArray saElements() As Variant)
-'    On Error Resume Next
-'    Dim L As Long
-'    Dim I As Integer
-'
-'    For I = LBound(saElements) To UBound(saElements) Step 2
-'        If InStr(1, saElements(I), vbNullChar, vbBinaryCompare) > 0 Then _
-'            KillNull saElements(I)
-'
-'        If Len(saElements(I + 1)) > 0 Then
-'            With rtb
-'                .selStart = Len(.Text)
-'                L = .selStart
-'                .selLength = 0
-'                .SelColor = saElements(I)
-'                .SelText = saElements(I + 1) & Left$(vbCrLf, -2 * CLng((I + 1) = UBound(saElements)))
-'                .selStart = Len(.Text)
-'            End With
-'        End If
-'    Next I
-'
-'    Call ColorModify(rtb, L)
-'End Sub
-
 Private Sub rtbField_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
-    If (rtbField(Index).Locked) Then
-    
-        Select Case (KeyCode)
-            Case vbKeyReturn
-                cmdOK_Click
-                
-            Case vbKeyEscape
-                cmdCancel_Click
-        
-            Case vbKeyA, vbKeyC, vbKeyX, vbKeyV, vbKeyReturn, vbKeyUp, vbKeyDown, vbKeyLeft, vbKeyRight, vbKeyHome, vbKeyEnd, vbKeyPageDown, vbKeyPageUp
-                ' don't disable these
-                
-            Case Else
-                ' disable CTRL+L, CTRL+E, CTRL+R, CTRL+I and lots of funny ones
-                If (Shift = vbCtrlMask) Then KeyCode = 0
-        End Select
-        
-        Exit Sub
-    End If
-    
-    'If (rtbField(Index).SelColor <> vbWhite) Then rtbField(Index).SelColor = vbWhite
-    
-    Select Case (KeyCode)
-        Case vbKeyB
-            If (Shift = vbCtrlMask) Then
-                rtbField(Index).SelText = Chr$(255) & "cb"
-            End If
-            
-        Case vbKeyU
-            If (Shift = vbCtrlMask) Then
-                rtbField(Index).SelText = Chr$(255) & "cu"
-            End If
-            
-        Case vbKeyI
-            If (Shift = vbCtrlMask) Then
-                rtbField(Index).SelText = Chr$(255) & "ci"
-            End If
-            
-        Case vbKeyReturn
-            If (Shift = vbCtrlMask) Then
-                cmdOK_Click
-            End If
-                
-        Case vbKeyEscape
-            cmdCancel_Click
-            
-        Case vbKeyA, vbKeyC, vbKeyX, vbKeyV, vbKeyUp, vbKeyDown, vbKeyLeft, vbKeyRight, vbKeyHome, vbKeyEnd, vbKeyPageDown, vbKeyPageUp
-            ' don't disable these
-            
-        Case Else
-            ' disable CTRL+L, CTRL+E, CTRL+R, CTRL+I and lots of funny ones
-            If (Shift = vbCtrlMask) Then KeyCode = 0
-            
-    End Select
+    With rtbField(Index)
+        If Not .Locked Then
+            ' writing
+            Select Case KeyCode
+                Case vbKeyB
+                    If Shift = vbCtrlMask Then
+                        SetSelectedRTBText .hWnd, Chr$(255) & "cb"
+                        KeyCode = 0
+                    End If
+
+                Case vbKeyU
+                    If Shift = vbCtrlMask Then
+                        SetSelectedRTBText .hWnd, Chr$(255) & "cu"
+                        KeyCode = 0
+                    End If
+
+                Case vbKeyI
+                    If Shift = vbCtrlMask Then
+                        SetSelectedRTBText .hWnd, Chr$(255) & "ci"
+                        KeyCode = 0
+                    End If
+
+                Case vbKeyReturn
+                    If Shift = vbCtrlMask Then
+                        ' CTRL+ENTER: OK
+                        KeyCode = 0
+                        cmdOK_Click
+                    End If
+
+                Case vbKeyC
+                    If Shift = vbCtrlMask Then
+                        SetClipboardText GetRTBText(.hWnd, True), .hWnd
+                        KeyCode = 0
+                    End If
+
+                Case vbKeyV
+                    If Shift = vbCtrlMask Then
+                        Dim sParam As Long, eParam As Long, sLength As Long
+                        GetTextSelection .hWnd, sParam, eParam
+                        SetSelectedRTBText .hWnd, GetClipboardText(.hWnd, sLength)
+                        SetTextSelection .hWnd, 0, -1
+                        .SelFontName = .Font.Name
+                        SetTextSelection .hWnd, eParam + sLength, eParam + sLength
+                        KeyCode = 0
+                    End If
+
+                Case vbKeyX
+                    If Shift = vbCtrlMask Then
+                        SetClipboardText GetRTBText(.hWnd, True), .hWnd
+                        SetSelectedRTBText .hWnd, vbNullString
+                        KeyCode = 0
+                    End If
+
+                Case vbKeyA, vbKeyReturn, vbKeyUp, vbKeyDown, vbKeyLeft, vbKeyRight, vbKeyHome, vbKeyEnd, vbKeyPageDown, vbKeyPageUp
+                    ' don't disable these
+
+                Case Else
+                    ' disable CTRL+L, CTRL+E, CTRL+R, CTRL+I and lots of funny ones
+                    If (Shift = vbCtrlMask) Then KeyCode = 0
+
+            End Select
+        Else
+            ' reading
+            Select Case KeyCode
+                Case vbKeyReturn
+                    If Shift = vbCtrlMask Or Index = rtbField.UBound Then
+                        ' CTRL+ENTER or ENTER in last field: OK
+                        cmdOK_Click
+                    End If
+
+                Case vbKeyC, vbKeyX
+                    If Shift = vbCtrlMask Then
+                        SetClipboardText GetRTBText(.hWnd, True), Me.hWnd
+                        KeyCode = 0
+                    End If
+
+                Case vbKeyV
+                    If Shift = vbCtrlMask Then
+                        KeyCode = 0
+                    End If
+
+                Case vbKeyA, vbKeyUp, vbKeyDown, vbKeyLeft, vbKeyRight, vbKeyHome, vbKeyEnd, vbKeyPageDown, vbKeyPageUp
+                    ' don't disable these
+
+                Case Else
+                    ' disable CTRL+L, CTRL+E, CTRL+R, CTRL+I and lots of funny ones
+                    If Shift = vbCtrlMask Then KeyCode = 0
+
+            End Select
+        End If
+    End With
+
 End Sub
 
 Private Sub rtbField_KeyPress(Index As Integer, KeyAscii As Integer)
-    If (KeyAscii = vbKeyReturn) And Index < rtbField.UBound Then
+    If KeyAscii = vbKeyReturn And Index < rtbField.UBound Then
         KeyAscii = 0
         rtbField(Index + 1).SetFocus
     End If

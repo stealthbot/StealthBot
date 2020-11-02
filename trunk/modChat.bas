@@ -8,6 +8,21 @@ Option Explicit
 Private Declare Function MultiByteToWideChar Lib "Kernel32.dll" (ByVal Codepage As Long, ByVal dwFlags As Long, ByVal lpMultiByteStr As Long, ByVal cchMultiByte As Long, ByVal lpWideCharStr As Long, ByVal cchWideChar As Long) As Long
 Private Declare Function WideCharToMultiByte Lib "Kernel32.dll" (ByVal Codepage As Long, ByVal dwFlags As Long, ByVal lpWideCharStr As Long, ByVal cchWideChar As Long, ByVal lpMultiByteStr As Long, ByVal cchMultiByte As Long, ByVal lpDefaultChar As Long, ByVal lpUsedDefaultChar As Long) As Long
 
+' Unicode interaction
+' https://stackoverflow.com/questions/540361/whats-the-best-option-to-display-unicode-text-hebrew-etc-in-vb6
+Private Declare Function SysAllocStringLen Lib "oleaut32" (ByVal OleStr As Long, ByVal bLen As Long) As Long
+Private Declare Function OpenClipboard Lib "user32.dll" (ByVal hWnd As Long) As Long
+Private Declare Function EmptyClipboard Lib "user32.dll" () As Long
+Private Declare Function CloseClipboard Lib "user32.dll" () As Long
+Private Declare Function IsClipboardFormatAvailable Lib "user32.dll" (ByVal wFormat As Long) As Long
+Private Declare Function GetClipboardData Lib "user32.dll" (ByVal wFormat As Long) As Long
+Private Declare Function SetClipboardData Lib "user32.dll" (ByVal wFormat As Long, ByVal hMem As Long) As Long
+Private Declare Function GlobalAlloc Lib "Kernel32.dll" (ByVal wFlags As Long, ByVal dwBytes As Long) As Long
+Private Declare Function GlobalLock Lib "Kernel32.dll" (ByVal hMem As Long) As Long
+Private Declare Function GlobalUnlock Lib "Kernel32.dll" (ByVal hMem As Long) As Long
+Private Declare Function GlobalSize Lib "kernel32" (ByVal hMem As Long) As Long
+Private Declare Function lstrcpy Lib "Kernel32.dll" Alias "lstrcpyW" (ByVal lpString1 As Long, ByVal lpString2 As Long) As Long
+
 Private Enum RTBC_FLAGS ' CharFormat (SCF_) flags for EM_SETCHARFORMAT message.
     RTBC_DEFAULT = 0
     RTBC_SELECTION = 1
@@ -44,13 +59,17 @@ Private Type CHARRANGE
     cpMax As Long
 End Type
 
-Private Const WM_VSCROLL = &H115
-Private Const WM_USER As Long = &H400
+Private Const WM_SETTEXT         As Long = &HC
+Private Const WM_GETTEXT         As Long = &HD
+Private Const WM_GETTEXTLENGTH   As Long = &HE
+Private Const WM_VSCROLL         As Long = &H115
+Private Const WM_USER            As Long = &H400
 
-Private Const EM_EXGETSEL As Long = WM_USER + 52
-Private Const EM_EXSETSEL As Long = WM_USER + 55
-Private Const EM_SETTEXTEX As Long = WM_USER + 97
-Private Const EM_GETTEXTEX As Long = WM_USER + 94
+Private Const EM_GETSEL          As Long = &HB0
+Private Const EM_SETSEL          As Long = &HB1
+Private Const EM_REPLACESEL      As Long = &HC2
+Private Const EM_SETTEXTEX       As Long = WM_USER + 97
+Private Const EM_GETTEXTEX       As Long = WM_USER + 94
 Private Const EM_GETTEXTLENGTHEX As Long = WM_USER + 95
 
 Private Const EM_SCROLL      As Long = &HB5
@@ -69,10 +88,14 @@ Private Const WS_HSCROLL   As Long = &H100000
 Private Const WS_VSCROLL   As Long = &H200000
 Private Const GWL_STYLE    As Long = (-16)
 
-Private Const GT_USECRLF As Long = 1&
+Private Const GT_DEFAULT      As Long = 0&
+Private Const GT_USECRLF      As Long = 1&
+Private Const GT_SELECTION    As Long = 2&
+Private Const GT_RAWTEXT      As Long = 4&
+Private Const GT_NOHIDDENTEXT As Long = 8&
 
-Private Const GTL_USECRLF As Long = 1&
-Private Const GTL_PRECISE As Long = 2&
+Private Const GTL_USECRLF  As Long = 1&
+Private Const GTL_PRECISE  As Long = 2&
 Private Const GTL_NUMCHARS As Long = 8&
 
 Private Const MB_ERR_INVALID_CHARS As Long = &H8
@@ -200,14 +223,14 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
     If ((BotVars.LockChat = False) Or (rtb <> frmChat.rtbChat)) Then
         ' store rtb carat and whether rtb has focus
-        GetTextSelection rtb, SelStart, SelLength
+        GetTextSelection rtb.hWnd, SelStart, SelLength
 
         ' whether carat is at the end or within one vbCrLf of the end
-        blnCaratAtEnd = (SelStart >= GetRTBLength(rtb) - 2)
+        blnCaratAtEnd = (SelStart >= GetRTBLength(rtb.hWnd) - 2)
 
         ' is the RTB at the bottom?
         lngVerticalPos = GetVScrollPosition(rtb)
-        blnCanVScroll = CanVScroll(rtb)
+        blnCanVScroll = CanVScroll(rtb.hWnd)
         blnScrollAtEnd = (Not blnCanVScroll) Or (lngVerticalPos = 0)
 
         ' did this RTB start invisible?
@@ -228,7 +251,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         End If
 
         ' remove from backlog if overflow
-        Length = GetRTBLength(rtb)
+        Length = GetRTBLength(rtb.hWnd)
         If ((BotVars.MaxBacklogSize) And (Length > BotVars.MaxBacklogSize)) Then
             If (blnUnlock = False) Then
                 'rtb.Visible = False
@@ -239,8 +262,8 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
             With rtb
                 'Debug.Print "S " & SelStart & ", L " & SelLength
-                RemoveLength = InStr(Length - BotVars.MaxBacklogSize, GetRTBText(rtb), vbLf, vbBinaryCompare)
-                SetTextSelection rtb, 0, RemoveLength
+                RemoveLength = InStr(Length - BotVars.MaxBacklogSize, GetRTBText(rtb.hWnd), vbLf, vbBinaryCompare)
+                SetTextSelection rtb.hWnd, 0, RemoveLength
                 ' remove line from stored selection
                 SelStart = SelStart - RemoveLength
                 SelLength = SelLength - RemoveLength
@@ -249,7 +272,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 If SelStart < 0 Then SelStart = 0
                 If SelLength < 0 Then SelLength = 0
                 'Debug.Print "S " & SelStart & ", L " & SelLength
-                SetSelectedRTBText rtb, vbNullString
+                SetSelectedRTBText rtb.hWnd, vbNullString
             End With
 
             If (blnUnlock = False) Then
@@ -264,7 +287,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         ElementText = GetTimeStamp()
         If LenB(ElementText) > 0 Then
             With rtb
-                SetTextSelection rtb, -1, -1
+                SetTextSelection rtb.hWnd, -1, -1
                 .SelFontName = rtb.Font.Name
                 .SelFontSize = rtb.Font.Size
                 .SelBold = False
@@ -272,7 +295,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 .SelUnderline = False
                 .SelStrikeThru = False
                 .SelColor = g_Color.TimeStamps
-                SetSelectedRTBText rtb, ElementText
+                SetSelectedRTBText rtb.hWnd, ElementText
             End With
         End If
 
@@ -285,17 +308,17 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         Next i
 
         With rtb
-            SetTextSelection rtb, -1, -1
-            SetSelectedRTBText rtb, vbCrLf
+            SetTextSelection rtb.hWnd, -1, -1
+            SetSelectedRTBText rtb.hWnd, vbCrLf
         End With
 
-        'ColorModify rtb, GetRTBLength(rtb) - LineLength
+        'ColorModify rtb, GetRTBLength(rtb.hWnd) - LineLength
 
         ' set scrollbar
         If blnScrollAtEnd Then
             ' scroll to end
             'Debug.Print "SCROLL TO BOTTOM"
-            ScrollToBottom rtb
+            ScrollToBottom rtb.hWnd
         Else
             ' set to scroll specific position
             'Debug.Print "SCROLL TO " & lngVerticalPos
@@ -309,7 +332,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             SelLength = -1
         End If
         'Debug.Print "SET CARAT " & SelStart & "," & SelLength
-        SetTextSelection rtb, SelStart, SelLength
+        SetTextSelection rtb.hWnd, SelStart, SelLength
 
         If (blnUnlock) Then
             ' was invisible
@@ -389,7 +412,7 @@ Public Sub DisplayRichTextElement(rtb As RichTextBox, saElements() As Variant, B
         s = KillNull(saElements(i + 2))
 
         With rtb
-            SetTextSelection rtb, -1, -1
+            SetTextSelection rtb.hWnd, -1, -1
             StyleSep = InStr(1, saElements(i), ":", vbBinaryCompare)
             If StyleSep > 1 Then
                 For j = 1 To StyleSep - 1
@@ -419,7 +442,7 @@ Public Sub DisplayRichTextElement(rtb As RichTextBox, saElements() As Variant, B
                 .SelFontName = FontName
             End If
             .SelColor = saElements(i + 1)
-            SetSelectedRTBText rtb, s
+            SetSelectedRTBText rtb.hWnd, s
         End With
     End If
 End Sub
@@ -822,64 +845,117 @@ Public Function StringRToDWord(ByVal Value As String) As Long
 
 End Function
 
-Public Function GetRTBLength(rtb As RichTextBox) As Long
+Public Function GetRTBLength(ByVal hWnd As Long) As Long
 
     Dim GetTextLengthObj As GETTEXTLENGTHEX
     
     GetTextLengthObj.Flags = GTL_USECRLF Or GTL_PRECISE Or GTL_NUMCHARS
     GetTextLengthObj.Codepage = CP_UNICODE
-    GetRTBLength = SendMessageW(rtb.hWnd, EM_GETTEXTLENGTHEX, VarPtr(GetTextLengthObj), 0)
+    GetRTBLength = SendMessageW(hWnd, EM_GETTEXTLENGTHEX, VarPtr(GetTextLengthObj), 0)
 
 End Function
 
-Public Function GetRTBText(rtb As RichTextBox) As String
-    
+Public Function GetRTBText(ByVal hWnd As Long, Optional ByVal OnlySelection As Boolean = False) As String
+
     Dim GetTextObj As GETTEXTEX
     Dim iChars As Long
-    
-    iChars = GetRTBLength(rtb)
-    
+
+    iChars = GetRTBLength(hWnd)
+
     If iChars > 0 Then
         GetTextObj.cb = (iChars + 1) * 2
         GetTextObj.Flags = GT_USECRLF
+        If OnlySelection Then GetTextObj.Flags = GetTextObj.Flags Or GT_SELECTION
         GetTextObj.Codepage = CP_UNICODE
         GetRTBText = String$(iChars, vbNullChar)
-        SendMessageW rtb.hWnd, EM_GETTEXTEX, VarPtr(GetTextObj), StrPtr(GetRTBText)
+        SendMessageW hWnd, EM_GETTEXTEX, VarPtr(GetTextObj), StrPtr(GetRTBText)
     Else
         GetRTBText = vbNullString
     End If
 
 End Function
 
-Public Sub SetSelectedRTBText(rtb As RichTextBox, ByVal sText As String)
+Public Sub SetSelectedRTBText(ByVal hWnd As Long, ByVal sText As String)
 
     Dim SetTextObj As SETTEXTEX
 
     SetTextObj.Flags = RTBW_SELECTION
     SetTextObj.Codepage = CP_UNICODE
-    SendMessageW rtb.hWnd, EM_SETTEXTEX, ByVal VarPtr(SetTextObj), ByVal StrPtr(sText)
+    SendMessageW hWnd, EM_SETTEXTEX, ByVal VarPtr(SetTextObj), ByVal StrPtr(sText)
 
 End Sub
 
-Public Sub GetTextSelection(cnt As Control, sParam As Long, eParam As Long)
+Public Sub GetTextSelection(ByVal hWnd As Long, ByRef sParam As Long, ByRef eParam As Long)
 
-    Dim CharRangeObj As CHARRANGE
-
-    SendMessageW cnt.hWnd, EM_EXGETSEL, 0, ByVal VarPtr(CharRangeObj)
-    sParam = CharRangeObj.cpMin
-    eParam = CharRangeObj.cpMax
+    SendMessageW hWnd, EM_GETSEL, VarPtr(sParam), VarPtr(eParam)
 
 End Sub
 
-Public Sub SetTextSelection(cnt As Control, ByVal sParam As Long, ByVal eParam As Long)
+Public Sub SetTextSelection(ByVal hWnd As Long, ByVal sParam As Long, ByVal eParam As Long)
 
-    Dim CharRangeObj As CHARRANGE
-
-    CharRangeObj.cpMin = sParam
-    CharRangeObj.cpMax = eParam
-    SendMessageW cnt.hWnd, EM_EXSETSEL, 0, ByVal VarPtr(CharRangeObj)
+    SendMessageW hWnd, EM_SETSEL, sParam, eParam
 
 End Sub
+
+Public Sub SetClipboardText(ByVal sUniText As String, Optional ByVal hWnd As Long = 0&)
+    ' Puts a VB string in the clipboard without converting it to ASCII.
+    On Error GoTo ERROR_HANDLER
+
+    Dim iStrPtr As Long
+    Dim iLen As Long
+    Dim iLock As Long
+    Const GMEM_MOVEABLE As Long = &H2
+    Const GMEM_ZEROINIT As Long = &H40
+    Const CF_UNICODETEXT As Long = &HD
+
+    OpenClipboard hWnd
+    EmptyClipboard
+    iLen = LenB(sUniText) + 2&
+    iStrPtr = GlobalAlloc(GMEM_MOVEABLE Or GMEM_ZEROINIT, iLen)
+    iLock = GlobalLock(iStrPtr)
+    lstrcpy iLock, StrPtr(sUniText)
+    GlobalUnlock iStrPtr
+    SetClipboardData CF_UNICODETEXT, iStrPtr
+
+ERROR_HANDLER:
+    If Err.Number Then
+        Call frmChat.AddChat(g_Color.ConsoleText, "Error: #" & Err.Number & ": " & Err.Description & _
+                " in modClipboard.SetClipboardText().")
+    End If
+
+    CloseClipboard
+End Sub
+
+Public Function GetClipboardText(Optional ByVal hWnd As Long = 0&, Optional ByRef iLen As Long = 0&) As String
+    ' Gets a UNICODE string from the clipboard and puts it in a standard VB string (which is UNICODE).
+    On Error GoTo ERROR_HANDLER
+
+    Dim iStrPtr As Long
+    Dim iLock As Long
+    Const CF_UNICODETEXT As Long = 13&
+
+    GetClipboardText = vbNullString
+    OpenClipboard hWnd
+    If IsClipboardFormatAvailable(CF_UNICODETEXT) Then
+        iStrPtr = GetClipboardData(CF_UNICODETEXT)
+        If iStrPtr Then
+            iLock = GlobalLock(iStrPtr)
+            iLen = GlobalSize(iStrPtr)
+            GetClipboardText = String$(iLen \ 2& - 1&, vbNullChar)
+            lstrcpy StrPtr(GetClipboardText), iLock
+            GlobalUnlock iStrPtr
+        End If
+    End If
+
+ERROR_HANDLER:
+    If Err.Number Then
+        Call frmChat.AddChat(g_Color.ConsoleText, "Error: #" & Err.Number & ": " & Err.Description & _
+                " in modClipboard.GetClipboardText().")
+        GetClipboardText = vbNullString
+    End If
+
+    CloseClipboard
+End Function
 
 Public Function GetVScrollPosition(cnt As Control) As Long
 
@@ -910,26 +986,26 @@ Public Function GetVScrollPosition(cnt As Control) As Long
 
 End Function
 
-Public Function CanVScroll(cnt As Control) As Boolean
+Public Function CanVScroll(ByVal hWnd As Long) As Boolean
 
     Dim Style As Long
-    Style = GetWindowLong(cnt.hWnd, GWL_STYLE)
+    Style = GetWindowLong(hWnd, GWL_STYLE)
     CanVScroll = CBool((Style And WS_VSCROLL) = WS_VSCROLL)
 
 End Function
 
-Public Sub ScrollToBottom(cnt As Control)
+Public Sub ScrollToBottom(ByVal hWnd As Long)
 
-    'LockWindowUpdate cnt.hWnd
-    SendMessageW cnt.hWnd, EM_SCROLLCARET, 0&, 0&
-    'SendMessage cnt.hWnd, EM_SCROLL, SB_BOTTOM, &H0
+    'LockWindowUpdate hWnd
+    SendMessageW hWnd, EM_SCROLLCARET, 0&, 0&
+    'SendMessage hWnd, EM_SCROLL, SB_BOTTOM, &H0
     'LockWindowUpdate &H0
 
 End Sub
 
-Public Sub ScrollToPosition(cnt As Control, ByVal lngVerticalPos As Long)
+Public Sub ScrollToPosition(ByVal hWnd As Long, ByVal lngVerticalPos As Long)
 
-    SendMessage cnt.hWnd, WM_VSCROLL, _
+    SendMessage hWnd, WM_VSCROLL, _
             SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&
 
 End Sub

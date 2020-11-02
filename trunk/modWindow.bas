@@ -52,6 +52,10 @@ Private Const EM_GETEVENTMASK   As Long = &H43B
 Private Const EM_GETTEXTRANGE   As Long = &H44B
 Private Const EM_AUTOURLDETECT  As Long = &H45B
 ' RTB rich edit notifications
+Private Const TM_PLAINTEXT      As Long = &H1
+Private Const TM_RICHTEXT       As Long = &H2
+Private Const TM_MULTICODEPAGE  As Long = &H20
+Private Const EM_SETTEXTMODE    As Long = &H459
 Private Const EN_LINK           As Long = &H70B
 ' EN_LINK effects
 Private Const CFE_LINK          As Long = &H20
@@ -71,7 +75,6 @@ Private Const RDW_ALLCHILDREN   As Long = &H80
 Private Const RDW_FRAME         As Long = &H400
 
 Private hWndSet As New Dictionary
-Private hWndRTB As New Dictionary
 
 Public Sub HookWindowProc(ByVal hWnd As Long)
 
@@ -91,16 +94,28 @@ Public Sub UnhookWindowProc(ByVal hWnd As Long)
 
 End Sub
 
-Public Sub EnableURLDetect(ByVal hWndTextbox As Long)
+Public Sub EnableURLDetect(ByVal hWnd As Long)
 
-    SendMessage hWndTextbox, EM_SETEVENTMASK, 0, ByVal ENM_LINK Or SendMessage(hWndTextbox, EM_GETEVENTMASK, 0, 0)
-    SendMessage hWndTextbox, EM_AUTOURLDETECT, 1, ByVal 0
+    SendMessage hWnd, EM_SETEVENTMASK, 0, ByVal ENM_LINK Or SendMessage(hWnd, EM_GETEVENTMASK, 0, 0)
+    SendMessage hWnd, EM_AUTOURLDETECT, 1, 0
 
 End Sub
 
-Public Sub DisableURLDetect(ByVal hWndTextbox As Long)
+Public Sub DisableURLDetect(ByVal hWnd As Long)
 
-    SendMessage hWndTextbox, EM_AUTOURLDETECT, 0, ByVal 0
+    SendMessage hWnd, EM_AUTOURLDETECT, 0, 0
+
+End Sub
+
+Public Sub DisableRichText(ByVal hWnd As Long)
+
+    SendMessage hWnd, EM_SETTEXTMODE, TM_PLAINTEXT Or TM_MULTICODEPAGE, 0
+
+End Sub
+
+Public Sub EnableRichText(ByVal hWnd As Long)
+
+    SendMessage hWnd, EM_SETTEXTMODE, TM_RICHTEXT Or TM_MULTICODEPAGE, 0
 
 End Sub
 
@@ -115,67 +130,78 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wPara
     Dim cds As COPYDATASTRUCT
     Dim buf(0 To 255) As Byte
     Dim Data As String
-    
-    If Msg = TASKBARCREATED_MSGID Then
-        Shell_NotifyIcon NIM_ADD, nid
-    End If
-    
-    If wParam = ID_TASKBARICON Then
-        Select Case lParam
-            Case WM_LBUTTONUP
-                frmChat.WindowState = vbNormal
-                Rezult = SetForegroundWindow(frmChat.hWnd)
-                frmChat.Show
-            Case WM_RBUTTONUP
-                SetForegroundWindow frmChat.hWnd
-                frmChat.PopupMenu frmChat.mnuTray
-        End Select
-    End If
-    
-    If Msg = WM_NOTIFY Then
-        CopyMemory uHead, ByVal lParam, LenB(uHead)
-       
-        If (uHead.Code = EN_LINK) Then
-            CopyMemory eLink, ByVal lParam, LenB(eLink)
-       
-            With eLink
-                If .Msg = WM_LBUTTONDBLCLK Then
-                    eText.chrg.cpMin = .chrg.cpMin
-                    eText.chrg.cpMax = .chrg.cpMax
-                    eText.lpstrText = Space$(1024)
-       
-                    lLen = SendMessageAny(uHead.hWndFrom, EM_GETTEXTRANGE, 0, eText)
-                    sText = Left$(eText.lpstrText, lLen)
-       
-                    ShellOpenURL sText, , False
-                End If
-            End With
-            
-        ' See if this is the start of a drag.
-        ElseIf uHead.Code = LVN_BEGINDRAG Then
-            ' A drag is beginning. Ignore this event.
-            ' Indicate we have handled this.
-            NewWindowProc = 1
-            ' Do nothing else.
-            Exit Function
-        End If
-    ElseIf Msg = WM_COMMAND Then
-        If lParam = 0 Then
-            MenuClick hWnd, wParam
-        End If
-    ElseIf Msg = WM_COPYDATA Then
-        Call CopyMemory(cds, ByVal lParam, Len(cds))
-        If (cds.cbData < UBound(buf)) Then
-            Call CopyMemory(buf(0), ByVal cds.lpData, cds.cbData)
-            Data = NTByteArrToString(buf)
-            If (StrComp(Data, "-reloadscripts", vbTextCompare) = 0) Then
-                SharedScriptSupport.ReloadScript
+
+    Select Case Msg
+        ' (custom message) taskbar notify icon: create
+        Case TASKBARCREATED_MSGID
+            Shell_NotifyIcon NIM_ADD, nid
+
+        ' taskbar notify icon: left click/right click the icon
+        Case WM_ICONNOTIFY
+            If wParam = ID_TASKBARICON Then
+                Select Case lParam
+                    Case WM_LBUTTONUP
+                        frmChat.WindowState = vbNormal
+                        Rezult = SetForegroundWindow(frmChat.hWnd)
+                        frmChat.Show
+                    Case WM_RBUTTONUP
+                        SetForegroundWindow frmChat.hWnd
+                        frmChat.PopupMenu frmChat.mnuTray
+                End Select
             End If
-        End If
-    End If
-    
+
+        ' various common controls behaviors
+        Case WM_NOTIFY
+            CopyMemory uHead, ByVal lParam, LenB(uHead)
+
+            ' richtextbox: double click a link
+            If (uHead.Code = EN_LINK) Then
+                CopyMemory eLink, ByVal lParam, LenB(eLink)
+
+                With eLink
+                    If .Msg = WM_LBUTTONDBLCLK Then
+                        eText.chrg.cpMin = .chrg.cpMin
+                        eText.chrg.cpMax = .chrg.cpMax
+                        eText.lpstrText = Space$(1024)
+
+                        lLen = SendMessageAny(uHead.hWndFrom, EM_GETTEXTRANGE, 0, eText)
+                        sText = Left$(eText.lpstrText, lLen)
+
+                        ShellOpenURL sText, , False
+                    End If
+                End With
+
+            ' listview: don't allow dragging icons around in icon view
+            ' See if this is the start of a drag.
+            ElseIf uHead.Code = LVN_BEGINDRAG Then
+                ' A drag is beginning. Ignore this event.
+                ' Indicate we have handled this.
+                NewWindowProc = 1
+                ' Do nothing else.
+                Exit Function
+            End If
+
+        ' dynamic scripting menu item: click
+        Case WM_COMMAND
+            If lParam = 0 Then
+                MenuClick hWnd, wParam
+            End If
+
+        ' IPC: handle data from another application
+        Case WM_COPYDATA
+            Call CopyMemory(cds, ByVal lParam, Len(cds))
+            If (cds.cbData < UBound(buf)) Then
+                Call CopyMemory(buf(0), ByVal cds.lpData, cds.cbData)
+                Data = NTByteArrToString(buf)
+                If (StrComp(Data, "-reloadscripts", vbTextCompare) = 0) Then
+                    SharedScriptSupport.ReloadScript
+                End If
+            End If
+
+    End Select
+
     NewWindowProc = CallWindowProc(hWndSet(hWnd), hWnd, Msg, wParam, lParam)
-    
+
 End Function
 
 Public Function DisableWindowRedraw(ByVal hWnd As Long)

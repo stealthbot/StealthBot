@@ -125,7 +125,6 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
-      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -218,7 +217,7 @@ Option Explicit
 Private m_Name      As String
 Private m_sc_module As Module
 Private m_arrObjs() As modScripting.scObj
-Private m_objCount  As Integer
+Private m_ObjCount  As Integer
 Private m_Hidden    As Boolean
 
 Public Function SetName(ByVal str As String)
@@ -312,13 +311,13 @@ End Sub
 Public Function ObjCount(Optional ObjType As String) As Integer
     Dim i As Integer
     If (ObjType <> vbNullString) Then
-        For i = 0 To m_objCount - 1
+        For i = 0 To m_ObjCount - 1
             If (StrComp(ObjType, m_arrObjs(i).ObjType, vbTextCompare) = 0) Then
                 ObjCount = (ObjCount + 1)
             End If
         Next i
     Else
-        ObjCount = m_objCount
+        ObjCount = m_ObjCount
     End If
 End Function
 
@@ -331,10 +330,10 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
     If (Not ValidObjectName(ObjName)) Then Exit Function
     
     ' redefine array size & check for duplicate controls
-    If (m_objCount) Then
+    If (m_ObjCount) Then
         Dim i As Integer ' loop counter variable
 
-        For i = 0 To m_objCount - 1
+        For i = 0 To m_ObjCount - 1
             If (StrComp(m_arrObjs(i).ObjType, ObjType, vbTextCompare) = 0) Then
                 If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
                     Set CreateObj = m_arrObjs(i).obj
@@ -344,7 +343,7 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
             End If
         Next i
         
-        ReDim Preserve m_arrObjs(0 To m_objCount)
+        ReDim Preserve m_arrObjs(0 To m_ObjCount)
     Else
         ReDim m_arrObjs(0)
     End If
@@ -443,7 +442,9 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
             
             Set obj.obj = rtb(ObjCount(ObjType))
             
-            EnableURLDetect obj.obj.hWnd
+            If Config.UrlDetection Then
+                EnableURLDetect obj.obj.hWnd
+            End If
         
         Case "TEXTBOX"
             If (ObjCount(ObjType) > 0) Then
@@ -468,10 +469,10 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
     obj.ObjType = ObjType
 
     ' store object
-    m_arrObjs(m_objCount) = obj
+    m_arrObjs(m_ObjCount) = obj
     
     ' increment object counter
-    m_objCount = (m_objCount + 1)
+    m_ObjCount = (m_ObjCount + 1)
 
     ' return object
     Set CreateObj = obj.obj
@@ -483,7 +484,7 @@ Public Sub DestroyObjs()
 
     Dim i As Integer
     
-    For i = m_objCount - 1 To 0 Step -1
+    For i = m_ObjCount - 1 To 0 Step -1
         DestroyObj m_arrObjs(i).ObjName
     Next i
     
@@ -505,13 +506,13 @@ Public Sub DestroyObj(ByVal ObjName As String)
     Dim i     As Integer
     Dim Index As Integer
     
-    If (m_objCount = 0) Then
+    If (m_ObjCount = 0) Then
         Exit Sub
     End If
     
-    Index = m_objCount
+    Index = m_ObjCount
     
-    For i = 0 To m_objCount - 1
+    For i = 0 To m_ObjCount - 1
         If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
             Index = i
         
@@ -519,7 +520,7 @@ Public Sub DestroyObj(ByVal ObjName As String)
         End If
     Next i
     
-    If (Index >= m_objCount) Then
+    If (Index >= m_ObjCount) Then
         Exit Sub
     End If
     
@@ -649,19 +650,19 @@ Public Sub DestroyObj(ByVal ObjName As String)
     
     Set m_arrObjs(Index).obj = Nothing
     
-    If (Index < m_objCount) Then
-        For i = Index To ((m_objCount - 1) - 1)
+    If (Index < m_ObjCount) Then
+        For i = Index To ((m_ObjCount - 1) - 1)
             m_arrObjs(i) = m_arrObjs(i + 1)
         Next i
     End If
     
-    If (m_objCount > 1) Then
-        ReDim Preserve m_arrObjs(0 To m_objCount - 1)
+    If (m_ObjCount > 1) Then
+        ReDim Preserve m_arrObjs(0 To m_ObjCount - 1)
     Else
         ReDim m_arrObjs(0)
     End If
     
-    m_objCount = (m_objCount - 1)
+    m_ObjCount = (m_ObjCount - 1)
     
     Exit Sub
     
@@ -677,7 +678,7 @@ End Sub
 Public Function GetObjByName(ByVal ObjName As String) As Object
     Dim i As Integer
     
-    For i = 0 To m_objCount - 1
+    For i = 0 To m_ObjCount - 1
         If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
             Set GetObjByName = m_arrObjs(i).obj
 
@@ -689,7 +690,7 @@ End Function
 Private Function GetScriptObjByIndex(ByVal ObjType As String, ByVal Index As Integer) As scObj
     Dim i As Integer
 
-    For i = 0 To m_objCount - 1
+    For i = 0 To m_ObjCount - 1
         If (StrComp(ObjType, m_arrObjs(i).ObjType, vbTextCompare) = 0) Then
             If (m_arrObjs(i).obj.Index = Index) Then
                 GetScriptObjByIndex = m_arrObjs(i)
@@ -705,7 +706,7 @@ Public Sub ClearObjs()
 
     Dim i As Integer
     
-    For i = m_objCount - 1 To 0 Step -1
+    For i = m_ObjCount - 1 To 0 Step -1
         Select Case (UCase$(m_arrObjs(i).ObjType))
             Case "CHECKBOX"
                 chk(m_arrObjs(i).obj.Index).Value = vbUnchecked

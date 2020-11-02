@@ -1121,6 +1121,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1146,6 +1147,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -5692,8 +5694,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
 
                     If UBound(MultiLine) > LBound(MultiLine) Then
                         If (GetVScrollPosition(rtbChat)) Then
-                            SetTextSelection rtbChat, -1, -1
-                            ScrollToBottom rtbChat
+                            SetTextSelection rtbChat.hWnd, -1, -1
+                            ScrollToBottom rtbChat.hWnd
                         End If
 
                         For i = LBound(MultiLine) To UBound(MultiLine)
@@ -5750,8 +5752,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
 
         Case vbKeyReturn
             If (GetVScrollPosition(rtbChat)) Then
-                SetTextSelection rtbChat, -1, -1
-                ScrollToBottom rtbChat
+                SetTextSelection rtbChat.hWnd, -1, -1
+                ScrollToBottom rtbChat.hWnd
             End If
 
             Vetoed = False
@@ -7278,7 +7280,7 @@ Private Sub ChangeRTBFont(rtb As RichTextBox, ByVal NewFont As String, ByVal New
     Dim tmpBuffer As String
     
     With rtb
-        SetTextSelection rtb, 0, -1
+        SetTextSelection rtb.hWnd, 0, -1
         .SelFontSize = NewSize
         .SelFontName = NewFont
         tmpBuffer = .TextRTF
@@ -7286,7 +7288,7 @@ Private Sub ChangeRTBFont(rtb As RichTextBox, ByVal NewFont As String, ByVal New
         .Font.Name = NewFont
         .Font.Size = NewSize
         .TextRTF = tmpBuffer
-        SetTextSelection rtb, -1, -1
+        SetTextSelection rtb.hWnd, -1, -1
     End With
 End Sub
 
