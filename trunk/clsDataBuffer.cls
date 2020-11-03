@@ -114,7 +114,7 @@ Public Sub InsertByteArr(ByRef Data() As Byte)
     m_bufsize = (m_bufsize + (UBound(Data) + 1))
 End Sub
 
-Public Sub GetByteArr(ByRef Data() As Byte, Optional ByVal Length As Long = -1, Optional Peek As Boolean = False)
+Public Sub GetByteArr(ByRef Data() As Byte, Optional ByVal Length As Long = -1, Optional ByVal Peek As Boolean = False)
     If (Length = -1) Then
         Length = m_bufsize - m_bufpos
     End If
@@ -136,7 +136,7 @@ Public Sub GetByteArr(ByRef Data() As Byte, Optional ByVal Length As Long = -1, 
     If (Not Peek) Then m_bufpos = (m_bufpos + Length)
 End Sub
 
-Public Function GetByte(Optional Peek As Boolean = False) As Byte
+Public Function GetByte(Optional ByVal Peek As Boolean = False) As Byte
     If ((m_bufpos + 1) > m_bufsize) Then
         Exit Function
     End If
@@ -157,7 +157,7 @@ Public Function InsertWord(ByVal Data As Integer)
     m_bufsize = (m_bufsize + 2)
 End Function
 
-Public Function GetWord(Optional Peek As Boolean = False) As Integer
+Public Function GetWord(Optional ByVal Peek As Boolean = False) As Integer
     If ((m_bufpos + 2) > m_bufsize) Then
         Exit Function
     End If
@@ -179,7 +179,7 @@ Public Sub InsertDWord(ByVal Data As Long)
     m_bufsize = (m_bufsize + 4)
 End Sub
 
-Public Function GetDWord(Optional Peek As Boolean = False) As Long
+Public Function GetDWord(Optional ByVal Peek As Boolean = False) As Long
     If ((m_bufpos + 4) > m_bufsize) Then
         Exit Function
     End If
@@ -194,11 +194,11 @@ Public Sub InsertBool(ByVal Data As Boolean)
     InsertDWord Abs(CLng(Data))
 End Sub
 
-Public Function GetBool(Optional Peek As Boolean = False) As Boolean
+Public Function GetBool(Optional ByVal Peek As Boolean = False) As Boolean
     GetBool = Not CBool(GetDWord(Peek) = 0)
 End Function
 
-Public Function GetFileTime(Optional Peek As Boolean = False) As Date
+Public Function GetFileTime(Optional ByVal Peek As Boolean = False) As Date
     Dim ft As FILETIME
 
     If ((m_bufpos + 8) > m_bufsize) Then
@@ -229,7 +229,7 @@ Public Sub InsertNonNTString(ByVal Data As String)
 End Sub
 
 Public Sub InsertNTString(ByVal Data As String, _
-    Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI)
+        Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI)
     
     Dim arrStr() As Byte
     
@@ -259,7 +259,8 @@ Public Sub InsertNTString(ByVal Data As String, _
     m_bufsize = (m_bufsize + (UBound(arrStr) + 1))
 End Sub
 
-Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI, Optional Peek As Boolean = False) As String
+Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI, _
+        Optional ByVal Peek As Boolean = False) As String
     Dim i As Integer
     Dim arrStr() As Byte
 
@@ -325,7 +326,7 @@ Public Function GetStringArr(Optional ByVal Encoding As STRINGENCODING = STRINGE
     GetStringArr = sArray()
 End Function
 
-Public Function GetRaw(Optional ByVal Length As Long = -1, Optional Peek As Boolean = False) As String
+Public Function GetRaw(Optional ByVal Length As Long = -1, Optional ByVal Peek As Boolean = False) As String
     Dim arrStr() As Byte
     
     If (Length = -1) Then
@@ -516,16 +517,16 @@ End Function
 
 Public Function GetPacketLength(ByVal HeaderLenStart As Integer) As Long
     Dim Value As Long
-    If HeaderLenStart = 0 Then
-        Value = GetWord(True)
-    ElseIf HeaderLenStart = 2 Then
-        Value = GetDWord(True)
-        Value = CLng(Value \ &H10000)
-    ElseIf HeaderLenStart = 1 Then
-        ' this one's unlikely but...
-        Value = GetDWord(True)
-        Value = CLng(Value \ &H100) And &HFFFF&
+
+    ' if buffer not long enough, return -1
+    If ((m_bufpos + HeaderLenStart + 2) > m_bufsize) Then
+        GetPacketLength = -1
+        Exit Function
     End If
+
+    ' copy data to buffer
+    CopyMemory Value, m_buf(m_bufpos + HeaderLenStart), 2
+
     GetPacketLength = Value
 End Function
 
