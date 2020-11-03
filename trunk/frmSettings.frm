@@ -1270,7 +1270,7 @@ Begin VB.Form frmSettings
          Height          =   255
          Left            =   3480
          TabIndex        =   68
-         ToolTipText     =   "Determines whether or not offline friends are hidden from the /f list command."
+         ToolTipText     =   "Determines whether the friends tab is enabled and populated."
          Top             =   3360
          Value           =   1  'Checked
          Width           =   2775

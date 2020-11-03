@@ -234,10 +234,8 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
     
-    frmChat.UpdateTrayTooltip
-    
-    frmChat.ListviewTabs.Tab = LVW_BUTTON_CHANNEL
-    Call frmChat.UpdateListviewTabs
+    Call frmChat.UpdateTrayTooltip
+    Call frmChat.UpdateListviewLabel
     
     ' have we just joined the void?
     If (g_Channel.IsSilent) Then
@@ -379,7 +377,7 @@ Public Sub Event_LeftChatEnvironment()
     
     SetTitle GetCurrentUsername & ", online on " & BotVars.Gateway
     
-    Call frmChat.UpdateListviewTabs
+    Call frmChat.InitListviewTabs
     
     frmChat.AddChat g_Color.JoinedChannelText, "-- Left channel --"
     
@@ -1146,7 +1144,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
         frmChat.AddName UserObj
         
-        Call frmChat.UpdateListviewTabs
+        Call frmChat.UpdateListviewLabel
         
         DoLastSeen Username
     Else
@@ -1447,7 +1445,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         frmChat.AddName UserObj
         
         ' if focus on channel tab, update header
-        Call frmChat.UpdateListviewTabs
+        Call frmChat.UpdateListviewLabel
         
         ' flash window
         If (frmChat.mnuFlash.Checked) Then
@@ -1592,7 +1590,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long, Optio
             End If
         End With
         
-        Call frmChat.UpdateListviewTabs
+        Call frmChat.UpdateListviewLabel
         
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' call event script function

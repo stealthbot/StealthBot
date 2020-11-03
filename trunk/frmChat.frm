@@ -928,7 +928,6 @@ Begin VB.Form frmChat
       _Version        =   393216
       TabOrientation  =   1
       Style           =   1
-      Tab             =   1
       TabHeight       =   520
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -941,11 +940,11 @@ Begin VB.Form frmChat
       EndProperty
       TabCaption(0)   =   "Channel  "
       TabPicture(0)   =   "frmChat.frx":4E624
-      Tab(0).ControlEnabled=   0   'False
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).ControlCount=   0
       TabCaption(1)   =   "Friends  "
       TabPicture(1)   =   "frmChat.frx":4E640
-      Tab(1).ControlEnabled=   -1  'True
+      Tab(1).ControlEnabled=   0   'False
       Tab(1).ControlCount=   0
       TabCaption(2)   =   "Clan  "
       TabPicture(2)   =   "frmChat.frx":4E65C
@@ -1942,11 +1941,6 @@ Private Sub Form_Load()
 
     Call ReloadConfig
     
-    Call InitListviewTabs
-    Call DisableListviewTabs
-    
-    ListviewTabs.Tab = 0
-    
     With ListToolTip
         .Style = TTStandard
         .Icon = TTNoIcon
@@ -1986,7 +1980,6 @@ Private Sub Form_Load()
         AddChat g_Color.ServerInfoText, "Please note that any usage of this program is subject to " & _
             "the terms of the End-User License Agreement available at http://eula.stealthbot.net."
     End If
-    
     
     Randomize
  
@@ -2767,10 +2760,8 @@ Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
 
         Set g_Clan = New clsClanObj
 
-        ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
         lvClanList.ListItems.Clear
-        ListviewTabs.Tab = LVW_BUTTON_CHANNEL
-        Call UpdateListviewTabs
+        Call InitListviewTabs
 
         On Error Resume Next
         RunInAll "Event_BotRemovedFromClan"
@@ -2834,7 +2825,7 @@ Private Sub ClanHandler_Info(ByVal ClanTag As String, ByVal Rank As enuClanRank)
     Call ClanHandler.RequestClanList(reqInternal)
     'Call ClanHandler.RequestClanMOTD(reqInternal)  ' broken server-side as of 2018-05-05
     
-    Call UpdateListviewTabs
+    Call UpdateListviewLabel
 End Sub
 
 Private Sub ClanHandler_InvitationReceived(ByVal Cookie As Long, ByVal ClanTag As String, ByVal ClanName As String, ByVal InvitedBy As String, ByVal IsNewClan As Boolean, ByRef Users() As String)
@@ -2917,7 +2908,7 @@ Private Sub ClanHandler_MemberUpdate(ByVal Member As clsClanMemberObj)
     ' re-sort
     lvClanList.Sorted = True
 
-    Call UpdateListviewTabs
+    Call UpdateListviewLabel
     
     On Error Resume Next
     RunInAll "Event_ClanMemberUpdate", Member.Name, Member.Rank, Member.IsOnline
@@ -2963,7 +2954,7 @@ Private Sub ClanHandler_GetMemberList(ByVal Cookie As Long, ByVal Members As Col
     ' re-sort
     lvClanList.Sorted = True
     
-    Call UpdateListviewTabs
+    Call UpdateListviewLabel
 End Sub
 
 Private Sub ClanHandler_GetMemberInfo(ByVal Cookie As Long, ByVal Result As enuClanResponseValue, ByVal ClanName As String, ByVal Rank As enuClanRank, ByVal JoinDate As Date)
@@ -2988,7 +2979,7 @@ Private Sub ClanHandler_GetMemberInfo(ByVal Cookie As Long, ByVal Result As enuC
         End If
         Set Member = Nothing
 
-        Call UpdateListviewTabs
+        Call UpdateListviewLabel
     End If
 
     If Result = clresSuccess Then
@@ -3297,7 +3288,7 @@ Private Sub FriendListHandler_FriendsListReply(ByVal Friends As Collection)
         ' re-sort
         lvFriendList.Sorted = True
 
-        Call UpdateListviewTabs
+        Call UpdateListviewLabel
     End If
 End Sub
 
@@ -3341,7 +3332,7 @@ Private Sub FriendListHandler_FriendsUpdate(ByVal EntryNumber As Byte, ByVal Fri
         ' re-sort
         lvFriendList.Sorted = True
 
-        Call UpdateListviewTabs
+        Call UpdateListviewLabel
     End If
 End Sub
 
@@ -3359,7 +3350,7 @@ Private Sub FriendListHandler_FriendsAdd(ByVal FriendObj As clsFriendObj)
         ' re-sort
         lvFriendList.Sorted = True
 
-        Call UpdateListviewTabs
+        Call UpdateListviewLabel
     End If
 End Sub
 
@@ -3387,7 +3378,7 @@ Private Sub FriendListHandler_FriendsRemove(ByVal EntryNumber As Byte)
 
         lvFriendList.Refresh
 
-        Call UpdateListviewTabs
+        Call UpdateListviewLabel
     End If
 End Sub
 
@@ -3438,7 +3429,7 @@ Private Sub FriendListHandler_FriendsPosition(ByVal EntryNumber As Byte, ByVal N
         ' re-sort
         lvFriendList.Sorted = True
 
-        Call UpdateListviewTabs
+        Call UpdateListviewLabel
     End If
 End Sub
 
@@ -3495,10 +3486,6 @@ Private Sub ListviewTabs_Click(PreviousTab As Integer)
             End Select
         End If
     End With
-End Sub
-
-Public Sub UpdateListviewTabs()
-    Call ListviewTabs_Click(ListviewTabs.Tab)
 End Sub
 
 ' This procedure relies on code in RecordcboSendSelInfo() that sets global variables
@@ -5511,8 +5498,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
         Case vbKeyA
             If (Shift = vbCtrlMask) Then
                 If (CurrentTab <> LVW_BUTTON_CHANNEL) Then
-                    ListviewTabs.Tab = LVW_BUTTON_CHANNEL
-                    Call UpdateListviewTabs
+                    Call SetListviewTab(LVW_BUTTON_CHANNEL)
                 Else
                     cboSend.SelStart = 0
                     cboSend.SelLength = Len(cboSend.Text)
@@ -5522,16 +5508,14 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
         Case vbKeyS
             If (Shift = vbCtrlMask) Then
                 If (CurrentTab <> LVW_BUTTON_FRIENDS) And (ListviewTabs.TabEnabled(LVW_BUTTON_FRIENDS)) Then
-                    ListviewTabs.Tab = LVW_BUTTON_FRIENDS
-                    Call UpdateListviewTabs
+                    Call SetListviewTab(LVW_BUTTON_FRIENDS)
                 End If
             End If
             
         Case vbKeyD
             If (Shift = vbCtrlMask) Then
                 If (CurrentTab <> LVW_BUTTON_CLAN) And (ListviewTabs.TabEnabled(LVW_BUTTON_CLAN)) Then
-                    ListviewTabs.Tab = LVW_BUTTON_CLAN
-                    Call UpdateListviewTabs
+                    Call SetListviewTab(LVW_BUTTON_CLAN)
                 End If
             End If
             
@@ -5570,7 +5554,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Call txtPre.SetFocus
                 Else
                     Call ListviewTabs.SetFocus
-                    Call UpdateListviewTabs
+                    Call UpdateListviewLabel
                 End If
             Else
             
@@ -6390,7 +6374,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
                 bCleared = True
                 bSkipRefresh = True
                 
-                Call UpdateListviewTabs
+                Call UpdateListviewLabel
             End If
         End If
     ElseIf (Index = 1) Then
@@ -7209,9 +7193,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             ' re-sort
             lvClanList.Sorted = True
         End If
-
-        Call UpdateListviewTabs
     End If
+
+    Call InitListviewTabs
     
     For i = LBound(ProxyConnInfo) To UBound(ProxyConnInfo)
         With ProxyConnInfo(i)
@@ -7657,11 +7641,11 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     End If
     
     Select Case (ListviewTabs.Tab)
-        Case 0:
+        Case LVW_BUTTON_CHANNEL:
             Set lstView = lvChannel
-        Case 1:
+        Case LVW_BUTTON_FRIENDS:
             Set lstView = lvFriendList
-        Case 2:
+        Case LVW_BUTTON_CLAN:
             Set lstView = lvClanList
     End Select
     
@@ -7844,14 +7828,31 @@ End Sub
 
 '// to be called on every successful login
 Public Sub InitListviewTabs()
-    ListviewTabs.TabEnabled(LVW_BUTTON_FRIENDS) = Config.FriendsListTab
-    ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = g_Clan.InClan
+    ListviewTabs.TabEnabled(LVW_BUTTON_FRIENDS) = g_Online And Config.FriendsListTab
+    ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = g_Online And g_Clan.InClan
+    If Not ListviewTabs.TabEnabled(ListviewTabs.Tab) Then
+        Call SetListviewTab(LVW_BUTTON_CHANNEL)
+    End If
 End Sub
 
 '// to be called at disconnect time
 Public Sub DisableListviewTabs()
     ListviewTabs.TabEnabled(LVW_BUTTON_FRIENDS) = False
     ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
+    Call SetListviewTab(LVW_BUTTON_CHANNEL)
+End Sub
+
+'// call this to programmatically set the tab
+Public Sub SetListviewTab(ByVal Index As Integer)
+    Dim LastTab As Integer
+    LastTab = ListviewTabs.Tab
+    ListviewTabs.Tab = Index
+    Call ListviewTabs_Click(LastTab)
+End Sub
+
+'// call this to go to same tab in order to set the label (if currently visible)
+Public Sub UpdateListviewLabel()
+    Call SetListviewTab(ListviewTabs.Tab)
 End Sub
 
 Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long, IconCode As Integer) As Long
@@ -8180,10 +8181,6 @@ Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal OldPosition As In
         
         '.Refresh
     End With
-    
-    If IsSelf Then
-        Call frmChat.UpdateListviewTabs
-    End If
 
     Exit Sub
 ERROR_HANDLER:
@@ -8508,11 +8505,11 @@ Public Sub DoDisconnect(Optional ByVal ClientInitiated As Boolean = True)
     CurrentUsername = vbNullString
 
     ' reset UI
-    DisableListviewTabs
+    Call DisableListviewTabs
+    Call SetListviewTab(LVW_BUTTON_CHANNEL)
     Call ClearChannel
     lvClanList.ListItems.Clear
     lvFriendList.ListItems.Clear
-    ListviewTabs.Tab = 0
 
     mnuProfile.Enabled = False
     mnuClanCreate.Visible = False
