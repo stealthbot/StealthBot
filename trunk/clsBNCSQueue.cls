@@ -49,13 +49,16 @@ Private Credits As Long
 ' Returns the amount of time you should wait before sending the next message in the queue
 Public Function GetDelay(ByVal sText As String) As Long
     Dim ThisByteDelay As Long, ThisPacketCost As Long
-    Dim byteCost As Long, RequiredDelay As Long
+    Dim ByteCost As Long, RequiredDelay As Long
+    Dim CreditRate As Long
     
-    byteCost = BotVars.QueueCostPerByte
+    ByteCost = BotVars.QueueCostPerByte
     
     If Credits < BotVars.QueueMaxCredits Then
         ' Adjust credits up
-        Credits = Credits + ((modDateTime.GetTickCountMS() - LastSent) / BotVars.QueueCreditRate)
+        CreditRate = BotVars.QueueCreditRate
+        If CreditRate <= 0 Then CreditRate = 1
+        Credits = Credits + ((modDateTime.GetTickCountMS() - LastSent) / CreditRate)
         
         If Credits > BotVars.QueueMaxCredits Then
             Credits = BotVars.QueueMaxCredits
@@ -64,10 +67,10 @@ Public Function GetDelay(ByVal sText As String) As Long
     
     LastSent = modDateTime.GetTickCountMS()
     '        int thisByteDelay = byteCost;
-    ThisByteDelay = byteCost
+    ThisByteDelay = ByteCost
     
     If (Len(sText) > BotVars.QueueThreshholdBytes) Then
-        byteCost = BotVars.QueueCostPerByteOverThreshhold
+        ByteCost = BotVars.QueueCostPerByteOverThreshhold
     End If
     
     ThisPacketCost = BotVars.QueueCostPerPacket + (ThisByteDelay * Len(sText))
