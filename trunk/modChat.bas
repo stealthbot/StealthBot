@@ -941,7 +941,8 @@ Public Function GetClipboardText(Optional ByVal hWnd As Long = 0&, Optional ByRe
         If iStrPtr Then
             iLock = GlobalLock(iStrPtr)
             iLen = GlobalSize(iStrPtr)
-            GetClipboardText = String$(iLen \ 2& - 1&, vbNullChar)
+            iLen = iLen \ 2&
+            GetClipboardText = String$(iLen - 1&, vbNullChar)
             lstrcpy StrPtr(GetClipboardText), iLock
             GlobalUnlock iStrPtr
         End If

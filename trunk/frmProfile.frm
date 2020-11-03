@@ -44,7 +44,8 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
-      AutoVerbMenu    =   -1  'True
+      Enabled         =   -1  'True
+      MultiLine       =   0   'False
       TextRTF         =   $"frmProfile.frx":0CCA
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -84,9 +85,9 @@ Begin VB.Form frmProfile
       _ExtentY        =   4895
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
-      AutoVerbMenu    =   -1  'True
       TextRTF         =   $"frmProfile.frx":0D45
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -110,7 +111,8 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
-      AutoVerbMenu    =   -1  'True
+      Enabled         =   -1  'True
+      MultiLine       =   0   'False
       TextRTF         =   $"frmProfile.frx":0DC0
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -134,8 +136,9 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
+      Enabled         =   -1  'True
+      MultiLine       =   0   'False
       ReadOnly        =   -1  'True
-      AutoVerbMenu    =   -1  'True
       TextRTF         =   $"frmProfile.frx":0E3B
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -355,7 +358,7 @@ Public Sub PrepareForProfile(ByVal Username As String, ByVal IsWriting As Boolea
         With rtbField(i)
             .Font = Config.ChatFont
             .Font.Size = Config.ChatFontSize
-            .Text = vbNullString
+            .TextRTF = vbNullString
             .Locked = Not IsWriting Or i = FIELD_AGE
             If .Locked Then
                 ' reading
@@ -414,13 +417,7 @@ Public Sub SetKey(ByVal KeyName As String, ByVal KeyValue As String)
         Else
             ' reading
             .HideSelection = True
-            .Text = vbNullString
-            SetTextSelection .hWnd, 0, 0
-            .SelBold = False
-            .SelItalic = False
-            .SelUnderline = False
-            .SelFontName = .Font.Name
-            .SelColor = vbWhite
+            .TextRTF = vbNullString
 
             ReDim saElements(0 To 2)
             saElements(0) = vbNullString
@@ -481,13 +478,15 @@ Private Sub rtbField_KeyDown(Index As Integer, KeyCode As Integer, Shift As Inte
 
                 Case vbKeyV
                     If Shift = vbCtrlMask Then
-                        Dim sParam As Long, eParam As Long, sLength As Long
+                        .HideSelection = True
+                        Dim sParam As Long, eParam As Long, iLength As Long
                         GetTextSelection .hWnd, sParam, eParam
-                        SetSelectedRTBText .hWnd, GetClipboardText(.hWnd, sLength)
+                        SetSelectedRTBText .hWnd, GetClipboardText(.hWnd, iLength)
                         SetTextSelection .hWnd, 0, -1
                         .SelFontName = .Font.Name
-                        SetTextSelection .hWnd, eParam + sLength, eParam + sLength
+                        SetTextSelection .hWnd, eParam + iLength, eParam + iLength
                         KeyCode = 0
+                        .HideSelection = False
                     End If
 
                 Case vbKeyX
