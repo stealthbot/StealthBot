@@ -5679,7 +5679,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     If UBound(MultiLine) > LBound(MultiLine) Then
                         If (GetVScrollPosition(rtbChat)) Then
                             SetTextSelection rtbChat.hWnd, -1, -1
-                            ScrollToBottom rtbChat.hWnd
+                            ScrollToCaret rtbChat.hWnd
                         End If
 
                         For i = LBound(MultiLine) To UBound(MultiLine)
@@ -5737,7 +5737,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
         Case vbKeyReturn
             If (GetVScrollPosition(rtbChat)) Then
                 SetTextSelection rtbChat.hWnd, -1, -1
-                ScrollToBottom rtbChat.hWnd
+                ScrollToCaret rtbChat.hWnd
             End If
 
             Vetoed = False

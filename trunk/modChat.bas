@@ -82,6 +82,7 @@ Private Const SB_BOTH As Long = 3
 
 Private Const SB_THUMBPOSITION As Long = &H4
 
+Private Const SB_TOP       As Long = 8
 Private Const SB_BOTTOM    As Long = 7
 
 Private Const WS_HSCROLL   As Long = &H100000
@@ -318,7 +319,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         If blnScrollAtEnd Then
             ' scroll to end
             'Debug.Print "SCROLL TO BOTTOM"
-            ScrollToBottom rtb.hWnd
+            ScrollToCaret rtb.hWnd
         Else
             ' set to scroll specific position
             'Debug.Print "SCROLL TO " & lngVerticalPos
@@ -997,7 +998,18 @@ End Function
 
 Public Sub ScrollToBottom(ByVal hWnd As Long)
 
-    'LockWindowUpdate hWnd
+    SendMessage hWnd, EM_SCROLL, SB_BOTTOM, &H0
+
+End Sub
+
+Public Sub ScrollToTop(ByVal hWnd As Long)
+    
+    SendMessage hWnd, EM_SCROLL, SB_TOP, &H0
+
+End Sub
+
+Public Sub ScrollToCaret(ByVal hWnd As Long)
+
     SendMessageW hWnd, EM_SCROLLCARET, 0&, 0&
     'SendMessage hWnd, EM_SCROLL, SB_BOTTOM, &H0
     'LockWindowUpdate &H0
