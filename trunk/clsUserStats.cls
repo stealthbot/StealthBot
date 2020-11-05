@@ -435,7 +435,7 @@ Public Property Get CurrentActAndDifficulty() As String
     If CurrentDifficultyID() >= 3 Then
         CurrentActAndDifficulty = CurrentDifficulty()
     Else
-        CurrentActAndDifficulty = CurrentActName() & " of " & CurrentDifficulty()
+        CurrentActAndDifficulty = StringFormat("{0} of {1}", CurrentActName(), CurrentDifficulty())
     End If
 End Property
 
@@ -611,8 +611,6 @@ Attribute ToString.VB_UserMemId = 0
         Case PRODUCT_WAR3, PRODUCT_W3XP
             buf = buf & WarCraftIII_ToString()
     End Select
-    
-    'buf = buf & "."
     
     ToString = buf
 End Property
@@ -925,9 +923,16 @@ Private Function StarCraft_ToString() As String
     ElseIf (IsValid = False) Then
         buf = " (Unrecognized stats)"
     Else
+        Dim lWins As Long, lRating As Long
+        lWins = Wins()
+        lRating = LadderRating()
         buf = _
-            " (" & Wins() & " wins" & IIf(LadderRating(), ", with a rating of " & LadderRating() & _
-                " on the ladder", "") & ")"
+            StringFormat(" ({0} win{1}{2})", _
+                lWins, _
+                IIf(lWins <> 1, "s", vbNullString), _
+                IIf(lRating, ", with a rating of ", vbNullString), _
+                IIf(lRating, lRating, vbNullString), _
+                IIf(lRating, " on the ladder", vbNullString))
         
         If (IsSpawn()) Then
             buf = buf & " (spawn)"
@@ -946,9 +951,10 @@ Private Function Diablo_ToString() As String
         buf = " (Unrecognized stats)"
     Else
         buf = _
-            " (Level " & Level() & " " & CharacterClass() & " with " & Dots() & " dots, " & Strength() & _
-                " strength, " & Magic() & " magic, " & Dexterity() & " dexterity, " & Vitality() & _
-                    " vitality, and " & Gold() & " gold)"
+            StringFormat(" (Level {0} {1} with {2} dot{3}, {4} strength, {5} magic, {6} dexterity, {7} vitality, and {8} gold)", _
+                Level(), CharacterClass(), Dots(), _
+                IIf(Dots() <> 1, "s", vbNullString), _
+                Strength(), Magic(), Dexterity(), Vitality(), Gold())
         
         If (IsSpawn()) Then
             buf = buf & " (spawn)"
@@ -966,15 +972,12 @@ Private Function DiabloII_ToString() As String
     ElseIf (IsValid = False) Then
         buf = " (Unrecognized stats)"
     Else
-        buf = " ("
-
         buf = _
-            buf & CharacterTitleAndName() & ", a " & IIf(IsCharacterDead(), "dead ", vbNullString) & _
-                IIf(IsHardcoreCharacter(), "hardcore ", vbNullString) & "level " & Level() & " " & _
-                    IIf(IsLadderCharacter(), "ladder ", vbNullString) & CharacterClass()
-        
-        buf = _
-            buf & " on Realm " & Realm() & ")"
+            StringFormat(" ({0}, a {5}{4}level {1} {6}{2} on Realm {3})", _
+                CharacterTitleAndName(), Level(), CharacterClass(), Realm(), _
+                IIf(IsCharacterDead(), "dead ", vbNullString), _
+                IIf(IsHardcoreCharacter(), "hardcore ", vbNullString), _
+                IIf(IsLadderCharacter(), "ladder ", vbNullString))
     End If
     
     DiabloII_ToString = buf
@@ -992,18 +995,18 @@ Private Function WarCraftIII_ToString() As String
     ElseIf (IsValid = False) Then
         buf = " (Unrecognized stats)"
     Else
-        buf = " (Level " & Level()
+        Dim sIconText As String, sClanText As String
         If (IsWCG) Then
-            buf = buf & ", " & IconName() & " icon"
-        ElseIf (LenB(Icon()) > 0 And StrComp(Icon(), StrReverse$(Game()), vbBinaryCompare) <> 0) Then
-            buf = buf & ", icon tier " & IconTier() & ", " & IconName() & " icon"
+            sIconText = StringFormat(", {0} icon", IconName())
+        ElseIf LenB(Icon()) > 0 And StrComp(Icon(), StrReverse$(Game()), vbBinaryCompare) <> 0 Then
+            sIconText = StringFormat(", icon tier {0}, {1} icon", IconTier(), IconName())
         End If
-        
         If (Clan() <> vbNullString) Then
-            buf = buf & ", in Clan " & Clan()
+            sClanText = StringFormat(", in Clan {0}", Clan())
         End If
-        
-        buf = buf & ")"
+        buf = _
+            StringFormat(" (Level {0}{1}{2})", _
+                Level(), sIconText, sClanText)
     End If
             
     WarCraftIII_ToString = buf

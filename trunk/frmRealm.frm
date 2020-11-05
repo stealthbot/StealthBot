@@ -1580,30 +1580,17 @@ Private Function GetCharacterExpireText(ByVal CharIndex As Integer) As String
 End Function
 
 Private Function GetCharacterDetailText(ByVal CharIndex As Integer) As String
-    Dim Stats        As clsUserStats
-    Dim NonExpansion As String
-    Dim NonLadder    As String
-    Dim IsDead       As String
-    Dim NonHardcore  As String
-    
+    Dim Stats As clsUserStats
+
     Set Stats = ds.MCPHandler.CharacterStats(CharIndex)
-    
-    If Not Stats.IsLadderCharacter Then
-        NonLadder = "non-"
-    End If
-    
-    If Not Stats.IsHardcoreCharacter Then
-        NonHardcore = "non-"
-    ElseIf Stats.IsCharacterDead Then
-        IsDead = "dead "
-    End If
-    
-    If Not Stats.IsExpansionCharacter Then
-        NonExpansion = "non-"
-    End If
-    
-    GetCharacterDetailText = StringFormat("{0} is a {1}ladder, {2}hardcore, {3}expansion {4} in {5}.", _
-            Stats.CharacterTitleAndName, NonLadder, NonHardcore, NonExpansion, Stats.CharacterClass, Stats.CurrentActAndDifficulty)
+
+    GetCharacterDetailText = _
+        StringFormat("{0} is a {5}{4}level {1} {6}{2} in {3}.", _
+            Stats.CharacterTitleAndName(), Stats.Level(), _
+            Stats.CharacterClass(), Stats.CurrentActAndDifficulty(), _
+            IIf(Stats.IsCharacterDead(), "dead ", vbNullString), _
+            IIf(Stats.IsHardcoreCharacter(), "hardcore ", "non-hardcore "), _
+            IIf(Stats.IsLadderCharacter(), "ladder ", "non-ladder "))
 End Function
 
 
