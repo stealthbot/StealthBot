@@ -758,18 +758,13 @@ Private Sub Form_Load()
         'm_OldWndProc = SetWindowLong(hWnd, GWL_WNDPROC, AddressOf SkipDragLVItem)
     #End If
 
-    ' read auto choose settings from handler
-    m_Ticks = ds.MCPHandler.AutoChooseWait
-    m_Choice = ds.MCPHandler.AutoChooseTarget
-    m_Selection = m_Choice
-
     ' UI setup
     Call RealmStartupResponse
 
     ' set up char creation defaults
     chkExpansion.Enabled = m_IsExpansion
-    chkExpansion.Value = IIf(m_IsExpansion, 1, 0)
-    chkLadder.Value = 1
+    chkExpansion.Value = IIf(m_IsExpansion, vbChecked, vbUnchecked)
+    chkLadder.Value = vbChecked
     optNewCharType(6).Enabled = m_IsExpansion
     optNewCharType(7).Enabled = m_IsExpansion
     optNewCharType(1).Value = True
@@ -781,6 +776,11 @@ Private Sub Form_Load()
 
     ' MCP handler state
     ds.MCPHandler.FormActive = True
+
+    ' read auto choose settings from handler
+    m_Ticks = ds.MCPHandler.AutoChooseWait
+    m_Choice = ds.MCPHandler.AutoChooseTarget
+    m_Selection = m_Choice
 
     ' setup timer
     If m_Ticks > 0 Then
@@ -983,14 +983,14 @@ Private Sub btnCreate_Click()
     Dim i As Integer
     Dim Flags As Long
     
-    If lvwChars.ListItems.Count > 17 Then
+    If lvwChars.ListItems.Count >= Config.RealmAccountMaxCharacters Then
         frmChat.AddChat g_Color.ErrorMessageText, "[REALM] Your account is full! Delete a character before trying to create another."
     Else
         If Len(txtCharName.Text) > 2 Then
             Flags = 0
-            If chkLadder.Value = 1 Then Flags = Flags Or &H40
-            If chkExpansion.Value = 1 Then Flags = Flags Or &H20
-            If chkHardcore.Value = 1 Then Flags = Flags Or &H4
+            If chkLadder.Value = vbChecked Then Flags = Flags Or &H40
+            If chkExpansion.Value = vbChecked Then Flags = Flags Or &H20
+            If chkHardcore.Value = vbChecked Then Flags = Flags Or &H4
             
             For i = optNewCharType.LBound To optNewCharType.UBound
                 If optNewCharType(i).Value = True Then
@@ -1109,7 +1109,7 @@ Public Sub CharListResponse()
         
         Next i
         
-        optCreateNew.Enabled = (ds.MCPHandler.CharacterCount < 18)
+        optCreateNew.Enabled = (ds.MCPHandler.CharacterCount < Config.RealmAccountMaxCharacters)
         
         If LenB(m_NewCharacterName) > 0 Then
             NewSelection = FindCharacter(m_NewCharacterName)
@@ -1381,28 +1381,28 @@ Sub StopLoginTimer()
 End Sub
 
 Private Sub tmrLoginTimeout_Timer()
-    Static indexValid As Integer
+    Static IndexValid As Integer
 
-    indexValid = m_Choice
+    IndexValid = m_Choice
 
     ' if selecting nothing, find first unexpired account (no choose setting)
-    If (indexValid = -1) Then
+    If (IndexValid = -1) Then
         Dim i As Integer
         
         For i = 0 To ds.MCPHandler.CharacterCount - 1
-            If CanChooseCharacter(indexValid) Then
+            If CanChooseCharacter(IndexValid) Then
                 If Not IsDateExpired(ds.MCPHandler.CharacterExpires(i)) Then
-                    indexValid = i
+                    IndexValid = i
                     Exit For
                 End If
             End If
         Next i
     ' if choose setting, then select only if not expired
     Else
-        If Not CanChooseCharacter(indexValid) Then
-            indexValid = -1
-        ElseIf IsDateExpired(ds.MCPHandler.CharacterExpires(indexValid)) Then
-            indexValid = -1
+        If Not CanChooseCharacter(IndexValid) Then
+            IndexValid = -1
+        ElseIf IsDateExpired(ds.MCPHandler.CharacterExpires(IndexValid)) Then
+            IndexValid = -1
         End If
     End If
 
@@ -1411,9 +1411,9 @@ Private Sub tmrLoginTimeout_Timer()
     ' seconds cap label (part 2 of timer labels)
     lblRealm(4).Caption = "second" & IIf(m_Ticks <> 1, "s", vbNullString) & "."
 
-    If (indexValid >= 0) Then
+    If (IndexValid >= 0) Then
         ' warning label (part 1 of timer labels)
-        lblRealm(2).Caption = lvwChars.ListItems(indexValid + 1).Text & vbCrLf & " will be chosen automatically in"
+        lblRealm(2).Caption = lvwChars.ListItems(IndexValid + 1).Text & vbCrLf & " will be chosen automatically in"
 
         'If m_Selection < 0 Then
         '    lvwChars.ListItems.Item(indexValid + 1).Selected = True
@@ -1422,10 +1422,10 @@ Private Sub tmrLoginTimeout_Timer()
 
         If m_Ticks <= 0 Then
             tmrLoginTimeout.Enabled = False
-            If Not CanChooseCharacter(indexValid) Then
+            If Not CanChooseCharacter(IndexValid) Then
                 frmChat.AddChat g_Color.ErrorMessageText, "[REALM] You must use Diablo II: Lord of Destruction to choose that character."
             Else
-                Call ds.MCPHandler.SEND_MCP_CHARLOGON(ds.MCPHandler.CharacterName(indexValid))
+                Call ds.MCPHandler.SEND_MCP_CHARLOGON(ds.MCPHandler.CharacterName(IndexValid))
                 m_Unload_SuccessfulLogin = True
                 ds.MCPHandler.IsRealmError = False
             End If

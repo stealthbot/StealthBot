@@ -225,6 +225,7 @@ Private m_RegisterEmailAction       As String
 Private m_RegisterEmailDefault      As String
 Private m_RegisterEmailChange       As String
 Private m_RealmServerPassword       As String
+Private m_RealmAccountMaxCharacters As Long
 Private m_ProtocolID                As Long
 Private m_PlatformID                As String
 Private m_ProductLanguage           As String
@@ -1574,6 +1575,14 @@ Public Property Let RealmServerPassword(ByVal sValue As String)
     m_RealmServerPassword = sValue
 End Property
 
+Public Property Get RealmAccountMaxCharacters() As Long
+    RealmAccountMaxCharacters = m_RealmAccountMaxCharacters
+End Property
+
+Public Property Let RealmAccountMaxCharacters(ByVal sValue As Long)
+    m_RealmAccountMaxCharacters = sValue
+End Property
+
 Public Property Get ProtocolID() As Long
     ProtocolID = m_ProtocolID
 End Property
@@ -1937,6 +1946,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteSetting SECTION_EMULATION, "RegisterEmailDefault", m_RegisterEmailDefault
     WriteSetting SECTION_EMULATION, "RegisterEmailChange", m_RegisterEmailChange
     WriteSetting SECTION_EMULATION, "RealmServerPassword", m_RealmServerPassword
+    WriteSetting SECTION_EMULATION, "RealmAccountMaxCharacters", m_RealmAccountMaxCharacters
     WriteSetting SECTION_EMULATION, "ProtocolID", m_ProtocolID
     WriteSetting SECTION_EMULATION, "PlatformID", m_PlatformID
     WriteSetting SECTION_EMULATION, "ProductLanguage", m_ProductLanguage
@@ -2145,6 +2155,7 @@ Private Sub LoadDefaults()
     m_RegisterEmailDefault = vbNullString
     m_RegisterEmailChange = vbNullString
     m_RealmServerPassword = "password"
+    m_RealmAccountMaxCharacters = 8
     m_ProtocolID = 0
     m_PlatformID = "IX86"
     m_ProductLanguage = vbNullString
@@ -2493,6 +2504,7 @@ Private Sub LoadVersion6Config()
     m_RegisterEmailDefault = ReadSetting(SECTION_EMULATION, "RegisterEmailDefault", m_RegisterEmailDefault)
     m_RegisterEmailChange = ReadSetting(SECTION_EMULATION, "RegisterEmailChange", m_RegisterEmailChange)
     m_RealmServerPassword = ReadSetting(SECTION_EMULATION, "RealmServerPassword", m_RealmServerPassword)
+    m_RealmAccountMaxCharacters = ReadSettingL(SECTION_EMULATION, "RealmAccountMaxCharacters", m_RealmAccountMaxCharacters)
     m_ProtocolID = ReadSettingL(SECTION_EMULATION, "ProtocolID", m_ProtocolID)
     m_PlatformID = ReadSetting(SECTION_EMULATION, "PlatformID", m_PlatformID)
     m_ProductLanguage = ReadSetting(SECTION_EMULATION, "ProductLanguage", m_ProductLanguage)

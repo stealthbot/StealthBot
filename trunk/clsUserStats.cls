@@ -451,16 +451,16 @@ Public Property Get CurrentDifficulty() As String
 End Property
 
 Public Property Get CurrentDifficultyID() As Integer
-    Dim difficulty As Integer
+    Dim Difficulty As Integer
     
     If ((Game = PRODUCT_D2DV) Or (Game = PRODUCT_D2XP)) Then
         If (IsExpansionCharacter = False) Then
-            difficulty = Fix(ActsCompleted / 4)
+            Difficulty = Fix(ActsCompleted / 4)
         Else
-            difficulty = Fix(ActsCompleted / 5)
+            Difficulty = Fix(ActsCompleted / 5)
         End If
     End If
-    CurrentDifficultyID = difficulty
+    CurrentDifficultyID = Difficulty
 End Property
 
 Public Property Get CharacterTitle() As String

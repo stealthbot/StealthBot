@@ -226,7 +226,7 @@ Public Sub DoRequestCharacters()
     If m_RetrievingCharacterList Then Exit Sub
     m_RetrievingCharacterList = True
 
-    SEND_MCP_CHARLIST2
+    Call SEND_MCP_CHARLIST2(Config.RealmAccountMaxCharacters)
 End Sub
 
 ' parses packets as received from sckMCP
@@ -279,11 +279,16 @@ Private Sub RECV_MCP_STARTUP(pBuff As clsDataBuffer)
     'Debug.Print n
     
     Select Case Result
-        Case &H0: Call Event_RealmStartup(True, "Connected to Diablo II realm.")
-        Case &H2, &HA, &HB, &HC, &HD: Call Event_RealmStartup(False, "The server thinks you're not connected to Battle.net! Please try your connection again later.")
-        Case &H7E: Call Event_RealmStartup(False, "The Diablo II realm rejected your connection. Your CD-Key may have been banned from realm play. Please try your connection again later.")
-        Case &H7F: Call Event_RealmStartup(False, "You have been temporarily IP-banned from the Realm server. Please try connecting again later.")
-        Case Else: Call Event_RealmStartup(False, "Unknown response to MCP_STARTUP: 0x" & Right$("00000000" & Hex(Result), 4))
+        Case &H0
+            Call Event_RealmStartup(True, "Connected to Diablo II realm.")
+        Case &H2, &HA, &HB, &HC, &HD
+            Call Event_RealmStartup(False, "The server thinks you're not connected to Battle.net! Please try your connection again later.")
+        Case &H7E
+            Call Event_RealmStartup(False, "The Diablo II realm rejected your connection. Your CD-Key may have been banned from realm play. Please try your connection again later.")
+        Case &H7F
+            Call Event_RealmStartup(False, "You have been temporarily IP banned from the Realm server. Please try connecting again later.")
+        Case Else
+            Call Event_RealmStartup(False, "Unknown response to MCP_STARTUP: 0x" & Right$("00000000" & Hex(Result), 4))
     End Select
 End Sub
 
@@ -302,10 +307,14 @@ Private Sub RECV_MCP_CHARCREATE(pBuff As clsDataBuffer)
     '0x15: Invalid Name
     
     Select Case Result
-        Case &H0: Call Event_CharCreateResponse(True, "Character created.")
-        Case &H14: Call Event_CharCreateResponse(False, "That character name already exists.")
-        Case &H15: Call Event_CharCreateResponse(False, "That character name is invalid.")
-        Case Else: Call Event_CharCreateResponse(False, "Unknown response to MCP_CHARCREATE: 0x" & Right$("00000000" & Hex(Result), 4))
+        Case &H0
+            Call Event_CharCreateResponse(True, "Character created.")
+        Case &H14
+            Call Event_CharCreateResponse(False, "That character name already exists.")
+        Case &H15
+            Call Event_CharCreateResponse(False, "That character name is invalid.")
+        Case Else
+            Call Event_CharCreateResponse(False, "Unknown response to MCP_CHARCREATE: 0x" & Right$("00000000" & Hex(Result), 4))
     End Select
 End Sub
 
@@ -323,11 +332,16 @@ Private Sub RECV_MCP_CHARLOGON(pBuff As clsDataBuffer)
     '0 x46: Player Not Found
     
     Select Case Result
-        Case &H0: Call Event_CharLogonResponse(True, "Realm logon successful.")
-        Case &H46: Call Event_CharLogonResponse(False, "That character was not found.")
-        Case &H7A: Call Event_CharLogonResponse(False, "Unable to log on to realm character!")
-        Case &H7B: Call Event_CharLogonResponse(False, "That character has expired.")
-        Case Else: Call Event_CharLogonResponse(False, "Unknown response to MCP_CHARLOGON: 0x" & Right$("00000000" & Hex(Result), 4))
+        Case &H0
+            Call Event_CharLogonResponse(True, "Realm logon successful.")
+        Case &H46
+            Call Event_CharLogonResponse(False, "That character was not found.")
+        Case &H7A
+            Call Event_CharLogonResponse(False, "Unable to log on to realm character!")
+        Case &H7B
+            Call Event_CharLogonResponse(False, "That character has expired.")
+        Case Else
+            Call Event_CharLogonResponse(False, "Unknown response to MCP_CHARLOGON: 0x" & Right$("00000000" & Hex(Result), 4))
     End Select
 End Sub
 
@@ -343,9 +357,12 @@ Private Sub RECV_MCP_CHARDELETE(pBuff As clsDataBuffer)
     Result = pBuff.GetDWord
     
     Select Case Result
-        Case &H0: Call Event_CharDeleteResponse(True, "Character deleted.")
-        Case &H49: Call Event_CharDeleteResponse(False, "That character was not found.")
-        Case Else: Call Event_CharDeleteResponse(False, "Unknown response to RECV_MCP_CHARDELETE: 0x" & Right$("00000000" & Hex(Result), 4))
+        Case &H0
+            Call Event_CharDeleteResponse(True, "Character deleted.")
+        Case &H49
+            Call Event_CharDeleteResponse(False, "That character was not found.")
+        Case Else
+            Call Event_CharDeleteResponse(False, "Unknown response to RECV_MCP_CHARDELETE: 0x" & Right$("00000000" & Hex(Result), 4))
     End Select
 End Sub
 
@@ -378,12 +395,18 @@ Private Sub RECV_MCP_CHARUPDGRADE(pBuff As clsDataBuffer)
     Result = pBuff.GetDWord
     
     Select Case Result
-        Case &H0: Call Event_CharUpgradeResponse(True, "Character upgrade successful.")
-        Case &H46: Call Event_CharUpgradeResponse(False, "That character was not found.")
-        Case &H7A: Call Event_CharUpgradeResponse(False, "Upgrade failed.")
-        Case &H7B: Call Event_CharUpgradeResponse(False, "That character has expired.")
-        Case &H7C: Call Event_CharUpgradeResponse(False, "That is already an expansion character.")
-        Case Else: Call Event_CharUpgradeResponse(False, "Unknown response to RECV_MCP_CHARDELETE: 0x" & Right$("00000000" & Hex(Result), 4))
+        Case &H0
+            Call Event_CharUpgradeResponse(True, "Character upgrade successful.")
+        Case &H46
+            Call Event_CharUpgradeResponse(False, "That character was not found.")
+        Case &H7A
+            Call Event_CharUpgradeResponse(False, "Upgrade failed.")
+        Case &H7B
+            Call Event_CharUpgradeResponse(False, "That character has expired.")
+        Case &H7C
+            Call Event_CharUpgradeResponse(False, "That is already an expansion character.")
+        Case Else
+            Call Event_CharUpgradeResponse(False, "Unknown response to RECV_MCP_CHARDELETE: 0x" & Right$("00000000" & Hex(Result), 4))
     End Select
 End Sub
 
@@ -442,8 +465,9 @@ Private Sub RECV_MCP_CHARLIST2(pBuff As clsDataBuffer)
         CharStats = pBuff.GetString
 
         Set CharStatsObj = New clsUserStats
-        CharStatsObj.Statstring = BotVars.Product & RealmServerTitle(RealmServerSelectedIndex) & "," & _
-                CharName & "," & CharStats
+        CharStatsObj.Statstring = StringFormat("{0}{1},{2},{3}", _
+                BotVars.Product, RealmServerTitle(RealmServerSelectedIndex), _
+                CharName, CharStats)
         Expiry = DateAdd("s", Seconds, #1/1/1970#)
 
         m_CharacterList.Add Array(CharName, CharStatsObj, Expiry)
@@ -844,9 +868,12 @@ Private Sub Event_CharListResponse()
     If m_RealmCharacterPromptActive Then
         ' if the form is already open, tell the form to re-read the character list
         If m_CharacterList.Count = 0 Then
-            frmChat.AddChat g_Color.ErrorMessageText, "[REALM] There are no characters on this account."
+            frmChat.AddChat g_Color.ErrorMessageText, _
+                    "[REALM] There are no characters on this account."
         Else
-            frmChat.AddChat g_Color.SuccessText, "[REALM] Listed " & m_CharacterList.Count & " characters."
+            frmChat.AddChat g_Color.SuccessText, _
+                    StringFormat("[REALM] Listed {0} character{1}.", _
+                    m_CharacterList.Count, IIf(m_CharacterList.Count <> 1, "s", vbNullString))
         End If
         frmRealm.CharListResponse
         ' set focus
@@ -865,30 +892,39 @@ Private Sub Event_CharListResponse()
                 If (Sgn(DateDiff("s", UtcNow, CharDate)) >= 0) Then
                     ' must be PX2D if isExpansion, otherwise doesn't matter
                     If (CharStats.IsExpansionCharacter() Imp (BotVars.Product = "PX2D")) Then
-                        frmChat.AddChat g_Color.InformationText, "[REALM] Automatically logging on as " & Character(0) & "..."
+                        frmChat.AddChat g_Color.InformationText, _
+                                StringFormat("[REALM] Automatically logging on as {0}...", _
+                                Character(0))
                         Call SEND_MCP_CHARLOGON(Character(0))
                         Exit Sub
                     Else
-                        frmChat.AddChat g_Color.ErrorMessageText, "[REALM] Character auto-logon fail: You must use Diablo II: Lord of Destruction to choose that character."
+                        frmChat.AddChat g_Color.ErrorMessageText, _
+                                "[REALM] Character auto-logon fail: You must use Diablo II: Lord of Destruction to choose that character."
                     End If
                 Else
-                    frmChat.AddChat g_Color.ErrorMessageText, "[REALM] Character auto-logon fail: That character has expired."
+                    frmChat.AddChat g_Color.ErrorMessageText, _
+                            "[REALM] Character auto-logon fail: That character has expired."
                 End If
             Else
-                frmChat.AddChat g_Color.ErrorMessageText, "[REALM] Character auto-logon fail: Empty character name."
+                frmChat.AddChat g_Color.ErrorMessageText, _
+                        "[REALM] Character auto-logon fail: Empty character name."
             End If
         End If
         
-        frmChat.AddChat g_Color.SuccessText, "[REALM] Listed " & m_CharacterList.Count & " characters."
+        frmChat.AddChat g_Color.SuccessText, _
+                StringFormat("[REALM] Listed {0} character{1}.", _
+                m_CharacterList.Count, IIf(m_CharacterList.Count <> 1, "s", vbNullString))
         
-        m_AutoChooseWait = -1
         frmRealm.Show
         
     Else
         If m_CharacterList.Count = 0 Then
-            frmChat.AddChat g_Color.ErrorMessageText, "[REALM] There are no characters on this account."
+            frmChat.AddChat g_Color.ErrorMessageText, _
+                    "[REALM] There are no characters on this account."
         ElseIf Not m_RealmCharacterPromptActive Then
-            frmChat.AddChat g_Color.ErrorMessageText, StringFormat("[REALM] There are no characters matching {0}{1}{0} to use.", Chr$(34), RealmCharacter)
+            frmChat.AddChat g_Color.ErrorMessageText, _
+                    StringFormat("[REALM] There are no characters matching {0}{1}{0} to use.", _
+                    Chr$(34), RealmCharacter)
         End If
         ' invalid entry: show realms list, choose nothing after X seconds
         m_AutoChooseWait = RealmAutoChooseWait

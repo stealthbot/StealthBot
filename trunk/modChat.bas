@@ -1011,8 +1011,6 @@ End Sub
 Public Sub ScrollToCaret(ByVal hWnd As Long)
 
     SendMessageW hWnd, EM_SCROLLCARET, 0&, 0&
-    'SendMessage hWnd, EM_SCROLL, SB_BOTTOM, &H0
-    'LockWindowUpdate &H0
 
 End Sub
 
