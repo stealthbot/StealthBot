@@ -1322,7 +1322,7 @@ Private Function HandleRenameEvent(oTarget As cTreeViewNode, sNewString As Strin
     End If
     
     If sNewString = oTarget.Text Or LenB(sNewString) = 0 Then
-        ' same name succeeds (no chnage); empty name success (cancelled)
+        ' same name succeeds (no chnage); empty name success (canceled)
         Exit Function
     End If
     

@@ -885,6 +885,7 @@ Private Sub Event_CharListResponse()
         m_AutoChooseWait = RealmAutoChooseWait
         m_AutoChooseTarget = RealmCharIndex
         If m_AutoChooseWait = 0 Then
+            ' 0 wait: choose immediately (or fail and present form)
             Character() = m_CharacterList.Item(m_AutoChooseTarget + 1)
             Set CharStats = Character(1)
             CharDate = Character(2)
@@ -900,14 +901,17 @@ Private Sub Event_CharListResponse()
                     Else
                         frmChat.AddChat g_Color.ErrorMessageText, _
                                 "[REALM] Character auto-logon fail: You must use Diablo II: Lord of Destruction to choose that character."
+                        RealmAutoChooseWait = -1
                     End If
                 Else
                     frmChat.AddChat g_Color.ErrorMessageText, _
                             "[REALM] Character auto-logon fail: That character has expired."
+                    RealmAutoChooseWait = -1
                 End If
             Else
                 frmChat.AddChat g_Color.ErrorMessageText, _
                         "[REALM] Character auto-logon fail: Empty character name."
+                RealmAutoChooseWait = -1
             End If
         End If
         

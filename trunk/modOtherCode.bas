@@ -491,7 +491,7 @@ On Error GoTo ERROR_HANDLER:
         
         Case BVT_VOTE_END
             If (Mode2 = BVT_VOTE_CANCEL) Then
-                Voting = "Vote cancelled. Final results: [" & VotesYes & "] YES, " & _
+                Voting = "Vote canceled. Final results: [" & VotesYes & "] YES, " & _
                     "[" & VotesNo & "] NO. "
             Else
                 Select Case (VoteMode)

@@ -15,6 +15,27 @@ Begin VB.Form frmRealm
    ScaleHeight     =   4755
    ScaleWidth      =   10920
    StartUpPosition =   1  'CenterOwner
+   Begin VB.CheckBox chkAutoChoose 
+      BackColor       =   &H00000000&
+      Caption         =   "Auto-choose"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   255
+      Left            =   9480
+      TabIndex        =   9
+      ToolTipText     =   "Immediately choose the character selected here on next log on."
+      Top             =   3120
+      Visible         =   0   'False
+      Width           =   1335
+   End
    Begin VB.ComboBox cboOtherRealms 
       BackColor       =   &H00993300&
       Enabled         =   0   'False
@@ -50,7 +71,7 @@ Begin VB.Form frmRealm
       EndProperty
       Height          =   300
       Left            =   8040
-      TabIndex        =   29
+      TabIndex        =   31
       Top             =   4320
       Width           =   1455
    End
@@ -68,7 +89,7 @@ Begin VB.Form frmRealm
       EndProperty
       Height          =   300
       Left            =   9480
-      TabIndex        =   28
+      TabIndex        =   30
       Top             =   4320
       Width           =   1335
    End
@@ -170,7 +191,7 @@ Begin VB.Form frmRealm
       Caption         =   "&Upgrade"
       Height          =   300
       Left            =   9480
-      TabIndex        =   9
+      TabIndex        =   11
       Top             =   2400
       Visible         =   0   'False
       Width           =   1335
@@ -179,7 +200,7 @@ Begin VB.Form frmRealm
       Caption         =   "&Delete"
       Height          =   300
       Left            =   9480
-      TabIndex        =   10
+      TabIndex        =   12
       Top             =   2760
       Visible         =   0   'False
       Width           =   1335
@@ -189,7 +210,7 @@ Begin VB.Form frmRealm
       ForeColor       =   &H00FFFFFF&
       Height          =   4095
       Left            =   120
-      TabIndex        =   11
+      TabIndex        =   13
       Top             =   120
       Width           =   9255
       Begin VB.TextBox txtCharName 
@@ -207,7 +228,7 @@ Begin VB.Form frmRealm
          Height          =   285
          Left            =   4800
          MaxLength       =   15
-         TabIndex        =   21
+         TabIndex        =   23
          Top             =   720
          Width           =   1815
       End
@@ -227,7 +248,7 @@ Begin VB.Form frmRealm
          Height          =   375
          Left            =   4800
          Style           =   1  'Graphical
-         TabIndex        =   25
+         TabIndex        =   27
          Top             =   2280
          Width           =   1815
       End
@@ -247,7 +268,7 @@ Begin VB.Form frmRealm
          Height          =   375
          Left            =   4800
          Style           =   1  'Graphical
-         TabIndex        =   24
+         TabIndex        =   26
          Top             =   1800
          Width           =   1815
       End
@@ -267,7 +288,7 @@ Begin VB.Form frmRealm
          Height          =   375
          Left            =   4800
          Style           =   1  'Graphical
-         TabIndex        =   23
+         TabIndex        =   25
          Top             =   1320
          Width           =   1815
       End
@@ -284,7 +305,7 @@ Begin VB.Form frmRealm
          EndProperty
          Height          =   375
          Left            =   4800
-         TabIndex        =   26
+         TabIndex        =   28
          Top             =   2760
          Width           =   1815
       End
@@ -305,7 +326,7 @@ Begin VB.Form frmRealm
          Index           =   7
          Left            =   600
          Style           =   1  'Graphical
-         TabIndex        =   19
+         TabIndex        =   21
          Top             =   2880
          Width           =   1815
       End
@@ -326,7 +347,7 @@ Begin VB.Form frmRealm
          Index           =   6
          Left            =   600
          Style           =   1  'Graphical
-         TabIndex        =   18
+         TabIndex        =   20
          Top             =   2520
          Width           =   1815
       End
@@ -347,7 +368,7 @@ Begin VB.Form frmRealm
          Index           =   5
          Left            =   600
          Style           =   1  'Graphical
-         TabIndex        =   17
+         TabIndex        =   19
          Top             =   2160
          Width           =   1815
       End
@@ -368,7 +389,7 @@ Begin VB.Form frmRealm
          Index           =   4
          Left            =   600
          Style           =   1  'Graphical
-         TabIndex        =   16
+         TabIndex        =   18
          Top             =   1800
          Width           =   1815
       End
@@ -389,7 +410,7 @@ Begin VB.Form frmRealm
          Index           =   3
          Left            =   600
          Style           =   1  'Graphical
-         TabIndex        =   15
+         TabIndex        =   17
          Top             =   1440
          Width           =   1815
       End
@@ -410,7 +431,7 @@ Begin VB.Form frmRealm
          Index           =   2
          Left            =   600
          Style           =   1  'Graphical
-         TabIndex        =   14
+         TabIndex        =   16
          Top             =   1080
          Width           =   1815
       End
@@ -431,7 +452,7 @@ Begin VB.Form frmRealm
          Index           =   1
          Left            =   600
          Style           =   1  'Graphical
-         TabIndex        =   13
+         TabIndex        =   15
          Top             =   720
          Width           =   1815
       End
@@ -451,7 +472,7 @@ Begin VB.Form frmRealm
          Height          =   255
          Index           =   9
          Left            =   600
-         TabIndex        =   12
+         TabIndex        =   14
          Top             =   480
          Width           =   1815
       End
@@ -471,7 +492,7 @@ Begin VB.Form frmRealm
          Height          =   255
          Index           =   8
          Left            =   4800
-         TabIndex        =   22
+         TabIndex        =   24
          Top             =   1080
          Width           =   1815
       End
@@ -492,7 +513,7 @@ Begin VB.Form frmRealm
          Height          =   255
          Index           =   7
          Left            =   2400
-         TabIndex        =   27
+         TabIndex        =   29
          Top             =   3600
          UseMnemonic     =   0   'False
          Width           =   2535
@@ -513,7 +534,7 @@ Begin VB.Form frmRealm
          Height          =   255
          Index           =   6
          Left            =   4800
-         TabIndex        =   20
+         TabIndex        =   22
          Top             =   480
          Width           =   1815
       End
@@ -591,7 +612,7 @@ Begin VB.Form frmRealm
       Height          =   855
       Index           =   1
       Left            =   9480
-      TabIndex        =   8
+      TabIndex        =   10
       Top             =   3360
       Width           =   1335
    End
@@ -633,8 +654,8 @@ Begin VB.Form frmRealm
       Height          =   255
       Index           =   4
       Left            =   9480
-      TabIndex        =   7
-      Top             =   3000
+      TabIndex        =   8
+      Top             =   2700
       Width           =   1335
    End
    Begin VB.Label lblRealm 
@@ -654,8 +675,8 @@ Begin VB.Form frmRealm
       Height          =   255
       Index           =   3
       Left            =   9480
-      TabIndex        =   30
-      Top             =   2640
+      TabIndex        =   7
+      Top             =   2520
       Width           =   1335
    End
    Begin VB.Label lblRealm 
@@ -672,7 +693,7 @@ Begin VB.Form frmRealm
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   735
+      Height          =   615
       Index           =   2
       Left            =   9480
       TabIndex        =   6
@@ -786,8 +807,9 @@ Private Sub Form_Load()
     If m_Ticks > 0 Then
         ' hide delete button here as it's been made visible (over seconds remaining in timer)
         ' will be made visible by stopping timer (if character is selected)
-        btnUpgrade.Visible = False
         btnDelete.Visible = False
+        btnUpgrade.Visible = False
+        chkAutoChoose.Visible = False
 
         ' enable the timer and call in last to avoid infinite loops
         tmrLoginTimeout.Enabled = True
@@ -858,7 +880,7 @@ Private Sub Form_Unload(Cancel As Integer)
     m_Ticks = -1
     
     If ((Not (m_Unload_SuccessfulLogin)) Or (ds.MCPHandler.IsRealmError)) Then
-        frmChat.AddChat g_Color.ErrorMessageText, "[REALM] Logon cancelled."
+        frmChat.AddChat g_Color.ErrorMessageText, "[REALM] Logon canceled."
         
         If frmChat.sckMCP.State <> sckClosed Then
             frmChat.sckMCP.Close
@@ -910,6 +932,7 @@ Private Sub DisableGUI()
     btnDisconnect.Enabled = False
     btnDelete.Visible = False
     btnUpgrade.Visible = False
+    chkAutoChoose.Visible = False
     cboOtherRealms.Enabled = False
     optCreateNew.Enabled = False
     btnCreate.Enabled = False
@@ -950,16 +973,18 @@ Private Sub lvwChars_ItemClick(ByVal Item As ListItem)
         End With
         
         btnChoose.Enabled = CanChooseCharacter(lvwChars.SelectedItem.Tag)
-        btnDelete.Visible = True
         btnUpgrade.Visible = CanUpgradeCharacter(lvwChars.SelectedItem.Tag)
+        btnDelete.Visible = True
+        chkAutoChoose.Visible = CanChooseCharacter(lvwChars.SelectedItem.Tag)
     Else
         ' clear detail
         lblRealm(0).Caption = vbNullString
         ' clear expires
         lblRealm(1).Caption = vbNullString
         btnChoose.Enabled = False
-        btnDelete.Visible = False
         btnUpgrade.Visible = False
+        btnDelete.Visible = False
+        chkAutoChoose.Visible = False
     End If
 End Sub
 
@@ -1086,6 +1111,8 @@ Public Sub CharListResponse()
     lblRealm(1).Caption = vbNullString
     btnDelete.Visible = False
     btnUpgrade.Visible = False
+    chkAutoChoose.Value = IIf(Config.RealmAutoChooseDelay = 0, vbChecked, vbUnchecked)
+    chkAutoChoose.Visible = False
     
     cboOtherRealms.Enabled = True
     btnDisconnect.Enabled = True
@@ -1313,6 +1340,26 @@ Private Sub btnChoose_Click()
             If Not CanChooseCharacter(.SelectedItem.Tag) Then
                 frmChat.AddChat g_Color.ErrorMessageText, "[REALM] You must use Diablo II: Lord of Destruction to choose that character."
             Else
+                If chkAutoChoose.Value = vbChecked Then
+                    ' set delay to 0 and set character to current selection
+                    If Config.RealmAutoChooseDelay <> 0 Or _
+                           StrComp(Config.RealmAutoChooseCharacter, .SelectedItem.Key, vbTextCompare) <> 0 Then
+                        ' only notify if this is different from previous setting
+                        frmChat.AddChat g_Color.InformationText, _
+                                StringFormat("[REALM] Will automatically choose {0} next log on. Use Bot > Switch Realm Character to change this behavior.", _
+                                .SelectedItem.Key)
+                    End If
+                    Config.RealmAutoChooseDelay = 0
+                    Config.RealmAutoChooseCharacter = .SelectedItem.Key
+                Else
+                    If Config.RealmAutoChooseDelay = 0 Then
+                        ' only reset delay if already auto-choosing
+                        frmChat.AddChat g_Color.InformationText, _
+                                "[REALM] Will not automatically choose a character next log on."
+                        Config.RealmAutoChooseDelay = 30
+                        Config.RealmAutoChooseCharacter = vbNullString
+                    End If
+                End If
                 Call ds.MCPHandler.SEND_MCP_CHARLOGON(.SelectedItem.Key)
                 m_Unload_SuccessfulLogin = True
                 ds.MCPHandler.IsRealmError = False
@@ -1370,6 +1417,7 @@ Private Sub optCreateNew_Click()
     btnChoose.Enabled = False
     btnDelete.Visible = False
     btnUpgrade.Visible = False
+    chkAutoChoose.Visible = False
 End Sub
 
 Sub StopLoginTimer()
@@ -1378,6 +1426,8 @@ Sub StopLoginTimer()
     lblRealm(2).Caption = vbNullString
     lblRealm(3).Caption = vbNullString
     lblRealm(4).Caption = vbNullString
+    ' pretend current selection selected
+    Call lvwChars_ItemClick(lvwChars.SelectedItem)
 End Sub
 
 Private Sub tmrLoginTimeout_Timer()
@@ -1432,7 +1482,7 @@ Private Sub tmrLoginTimeout_Timer()
         End If
     Else
         ' warning label
-        lblRealm(2).Caption = "No unexpired characters! Realm logon will be cancelled in"
+        lblRealm(2).Caption = "No unexpired characters! Realm logon will be canceled in"
 
         If m_Ticks <= 0 Then
             tmrLoginTimeout.Enabled = False
