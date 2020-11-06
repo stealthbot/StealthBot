@@ -68,6 +68,7 @@ Private Const WM_USER            As Long = &H400
 Private Const EM_GETSEL          As Long = &HB0
 Private Const EM_SETSEL          As Long = &HB1
 Private Const EM_REPLACESEL      As Long = &HC2
+Private Const EM_GETSELTEXT      As Long = WM_USER + 62
 Private Const EM_SETTEXTEX       As Long = WM_USER + 97
 Private Const EM_GETTEXTEX       As Long = WM_USER + 94
 Private Const EM_GETTEXTLENGTHEX As Long = WM_USER + 95
@@ -860,18 +861,28 @@ End Function
 
 Public Function GetRTBText(ByVal hWnd As Long, Optional ByVal OnlySelection As Boolean = False) As String
 
-    Dim GetTextObj As GETTEXTEX
     Dim iChars As Long
 
     iChars = GetRTBLength(hWnd)
 
     If iChars > 0 Then
+        Dim GetTextObj As GETTEXTEX
         GetTextObj.cb = (iChars + 1) * 2
         GetTextObj.Flags = GT_USECRLF
-        If OnlySelection Then GetTextObj.Flags = GetTextObj.Flags Or GT_SELECTION
-        GetTextObj.Codepage = CP_UNICODE
-        GetRTBText = String$(iChars, vbNullChar)
-        SendMessageW hWnd, EM_GETTEXTEX, VarPtr(GetTextObj), StrPtr(GetRTBText)
+        If OnlySelection Then
+            Dim sParam As Long, eParam As Long
+            GetTextObj.Flags = GT_USECRLF Or GT_SELECTION
+            GetTextSelection hWnd, sParam, eParam
+            iChars = (eParam - sParam)
+            GetTextObj.cb = (iChars + 1) * 2
+        End If
+        If iChars > 0 Then
+            GetTextObj.Codepage = CP_UNICODE
+            GetRTBText = String$(iChars, vbNullChar)
+            iChars = SendMessageW(hWnd, EM_GETTEXTEX, VarPtr(GetTextObj), StrPtr(GetRTBText))
+        Else
+            GetRTBText = vbNullString
+        End If
     Else
         GetRTBText = vbNullString
     End If

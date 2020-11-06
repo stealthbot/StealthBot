@@ -44,7 +44,6 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
-      Enabled         =   -1  'True
       MultiLine       =   0   'False
       TextRTF         =   $"frmProfile.frx":0CCA
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -85,7 +84,6 @@ Begin VB.Form frmProfile
       _ExtentY        =   4895
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmProfile.frx":0D45
@@ -111,7 +109,6 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
-      Enabled         =   -1  'True
       MultiLine       =   0   'False
       TextRTF         =   $"frmProfile.frx":0DC0
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -136,7 +133,6 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
-      Enabled         =   -1  'True
       MultiLine       =   0   'False
       ReadOnly        =   -1  'True
       TextRTF         =   $"frmProfile.frx":0E3B
@@ -441,6 +437,9 @@ Public Sub SetKey(ByVal KeyName As String, ByVal KeyValue As String)
 End Sub
 
 Private Sub rtbField_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+    Dim sClipboard As String
+    Dim sParam As Long, eParam As Long, iLength As Long
+
     With rtbField(Index)
         If Not .Locked Then
             ' writing
@@ -472,26 +471,31 @@ Private Sub rtbField_KeyDown(Index As Integer, KeyCode As Integer, Shift As Inte
 
                 Case vbKeyC
                     If Shift = vbCtrlMask Then
-                        SetClipboardText GetRTBText(.hWnd, True), .hWnd
+                        sClipboard = GetRTBText(.hWnd, True)
+                        If Len(sClipboard) > 0 Then SetClipboardText sClipboard, .hWnd
                         KeyCode = 0
                     End If
 
                 Case vbKeyV
                     If Shift = vbCtrlMask Then
-                        .HideSelection = True
-                        Dim sParam As Long, eParam As Long, iLength As Long
-                        GetTextSelection .hWnd, sParam, eParam
-                        SetSelectedRTBText .hWnd, GetClipboardText(.hWnd, iLength)
-                        SetTextSelection .hWnd, 0, -1
-                        .SelFontName = .Font.Name
-                        SetTextSelection .hWnd, eParam + iLength, eParam + iLength
-                        KeyCode = 0
-                        .HideSelection = False
+                        sClipboard = GetClipboardText(.hWnd, iLength)
+                        If iLength > 0 Then
+                            DisableWindowRedraw .hWnd
+                            GetTextSelection .hWnd, sParam, eParam
+                            SetSelectedRTBText .hWnd, sClipboard
+                            SetTextSelection .hWnd, 0, -1
+                            .SelFontName = .Font.Name
+                            SetTextSelection .hWnd, eParam + iLength, eParam + iLength
+                            KeyCode = 0
+                            EnableWindowRedraw .hWnd
+                            PerformWindowRedraw .hWnd
+                        End If
                     End If
 
                 Case vbKeyX
                     If Shift = vbCtrlMask Then
-                        SetClipboardText GetRTBText(.hWnd, True), .hWnd
+                        sClipboard = GetRTBText(.hWnd, True)
+                        If Len(sClipboard) > 0 Then SetClipboardText sClipboard, .hWnd
                         SetSelectedRTBText .hWnd, vbNullString
                         KeyCode = 0
                     End If
@@ -515,7 +519,8 @@ Private Sub rtbField_KeyDown(Index As Integer, KeyCode As Integer, Shift As Inte
 
                 Case vbKeyC, vbKeyX
                     If Shift = vbCtrlMask Then
-                        SetClipboardText GetRTBText(.hWnd, True), Me.hWnd
+                        sClipboard = GetRTBText(.hWnd, True)
+                        If Len(sClipboard) > 0 Then SetClipboardText sClipboard, .hWnd
                         KeyCode = 0
                     End If
 
