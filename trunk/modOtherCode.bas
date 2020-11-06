@@ -1839,18 +1839,7 @@ ERROR_HANDLER:
 End Function
 
 Public Function UsernameRegex(ByVal Username As String, ByVal sPattern As String) As Boolean
-    Dim prepName As String
-    Dim prepPatt As String
-
-    prepName = Replace(Username, "[", "{")
-    prepName = Replace(prepName, "]", "}")
-    prepName = LCase$(prepName)
-    
-    prepPatt = Replace(sPattern, "\[", "{")
-    prepPatt = Replace(prepPatt, "\]", "}")
-    prepPatt = LCase$(prepPatt)
-
-    UsernameRegex = (prepName Like prepPatt)
+    UsernameRegex = LCase$(PrepareCheck(Username)) Like LCase$(PrepareCheck(sPattern))
 End Function
 
 Public Sub BuildProductInfo()
