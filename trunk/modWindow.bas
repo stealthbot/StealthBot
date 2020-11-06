@@ -213,6 +213,11 @@ End Function
 Public Function EnableWindowRedraw(ByVal hWnd As Long)
 
     Call SendMessage(hWnd, WM_SETREDRAW, True, 0)
+
+End Function
+
+Public Function PerformWindowRedraw(ByVal hWnd As Long)
+
     Call RedrawWindow(hWnd, 0, 0, RDW_ERASE Or RDW_FRAME Or RDW_INVALIDATE Or RDW_ALLCHILDREN)
 
 End Function

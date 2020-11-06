@@ -1763,6 +1763,7 @@ Public cboSendHadFocus As Boolean
 Private cboSendSelStart As Long
 Private cboSendSelLength As Long
 Public ShuttingDown As Boolean
+Public ListViewDrawDisabled As Boolean
 
 'Forms
 Public SettingsForm As frmSettings
@@ -6696,7 +6697,10 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, _
                             If ((LCase$(Splt(0)) = "/unignore") Or (LCase$(Splt(0)) = "/unsquelch")) Then
                                 If (StrComp(Splt(1), GetCurrentUsername, vbTextCompare) = 0) Then
                                     Call g_Channel.ClearUsers
-                                    DisableWindowRedraw lvChannel.hWnd
+                                    If Not ListViewDrawDisabled Then
+                                        ListViewDrawDisabled = True
+                                        DisableWindowRedraw frmChat.lvChannel.hWnd
+                                    End If
                                     lvChannel.ListItems.Clear
                                 End If
                             End If
@@ -8093,6 +8097,11 @@ Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal OldPosition As In
         
         IsSelf = True
     End If
+
+    If Not IsSelf And Not frmChat.ListViewDrawDisabled Then
+        frmChat.ListViewDrawDisabled = True
+        DisableWindowRedraw frmChat.lvChannel.hWnd
+    End If
     
     ' Only add items if we are under the limit.
     If ((Config.MaxUserlistSize > -1) And (lvChannel.ListItems.Count >= Config.MaxUserlistSize)) Then Exit Sub
@@ -8179,7 +8188,10 @@ Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal OldPosition As In
         
         .Enabled = True
         
-        '.Refresh
+        'If IsSelf And frmChat.ListViewDrawDisabled Then
+        '    frmChat.ListViewDrawDisabled = False
+        '    EnableWindowRedraw frmChat.lvChannel.hWnd
+        'End If
     End With
 
     Exit Sub

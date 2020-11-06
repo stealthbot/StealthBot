@@ -14,21 +14,24 @@ Public Sub ChatQueue_Initialize()
 End Sub
 
 Public Function ChatQueueTimerProc()
-    
+
     Dim CurrentUser  As clsUserObj
     Dim i            As Integer
-    Dim j            As Integer
     Dim lastTimer    As Long
-    
+
     If (g_Channel.IsSilent) Then
         Exit Function
     End If
-    
+
     For i = 1 To g_Channel.Users.Count
     
         Set CurrentUser = g_Channel.Users(i)
     
         If (CurrentUser.Queue.Count > 0) Then
+            If Not frmChat.ListViewDrawDisabled Then
+                frmChat.ListViewDrawDisabled = True
+                DisableWindowRedraw frmChat.lvChannel.hWnd
+            End If
             If ((modDateTime.GetTickCountMS() - CurrentUser.Queue(1).EventTick) >= BotVars.ChatDelay) Then
                 CurrentUser.DisplayQueue
             End If
@@ -36,4 +39,9 @@ Public Function ChatQueueTimerProc()
     Next i
     
     Set CurrentUser = Nothing
+    If frmChat.ListViewDrawDisabled Then
+        frmChat.ListViewDrawDisabled = False
+        EnableWindowRedraw frmChat.lvChannel.hWnd
+    End If
+
 End Function

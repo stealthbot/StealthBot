@@ -42,6 +42,11 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         Exit Sub
     End If
 
+    If Not frmChat.ListViewDrawDisabled Then
+        frmChat.ListViewDrawDisabled = True
+        DisableWindowRedraw frmChat.lvChannel.hWnd
+    End If
+
     If (g_Channel.IsSilent) Then
         Set UserObj = New clsUserObj
 
@@ -194,6 +199,10 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     LastChannel = g_Channel.Name
     
     Call frmChat.ClearChannel
+    If Not frmChat.ListViewDrawDisabled Then
+        frmChat.ListViewDrawDisabled = True
+        DisableWindowRedraw frmChat.lvChannel.hWnd
+    End If
     
     ' we want to reset our filter
     ' Values() when we join a new channel
@@ -1076,6 +1085,11 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         Exit Sub
     End If
 
+    If Not frmChat.ListViewDrawDisabled Then
+        frmChat.ListViewDrawDisabled = True
+        DisableWindowRedraw frmChat.lvChannel.hWnd
+    End If
+
     UserIndex = g_Channel.GetUserIndexEx(CleanUsername(Username))
 
     If (UserIndex > 0) Then
@@ -1288,6 +1302,11 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     
     If (Len(Username) < 1) Then
         Exit Sub
+    End If
+
+    If Not frmChat.ListViewDrawDisabled Then
+        frmChat.ListViewDrawDisabled = True
+        DisableWindowRedraw frmChat.lvChannel.hWnd
     End If
 
     UserIndex = g_Channel.GetUserIndexEx(CleanUsername(Username))
@@ -1529,6 +1548,11 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long, Optio
     If (UserIndex = 0) Then
         frmChat.AddChat g_Color.ErrorMessageText, StringFormat("Warning! Phantom user {0} has left the channel.", CleanUsername(Username))
         Exit Sub
+    End If
+
+    If Not frmChat.ListViewDrawDisabled Then
+        frmChat.ListViewDrawDisabled = True
+        DisableWindowRedraw frmChat.lvChannel.hWnd
     End If
     
     Set UserObj = g_Channel.Users(UserIndex)

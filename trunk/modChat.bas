@@ -281,6 +281,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
                 ' below causes smooth scrolling, but also screen flickers :(
                 'EnableWindowRedraw rtb.hWnd
+                'PerformWindowRedraw rtb.hWnd
             End If
         End If
 
@@ -341,6 +342,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
             ' below causes smooth scrolling, but also screen flickers :(
             EnableWindowRedraw rtb.hWnd
+            PerformWindowRedraw rtb.hWnd
         End If
 
         If (LogThis) Then
