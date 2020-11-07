@@ -2046,7 +2046,7 @@ Private Sub LoadDefaults()
     m_Phrasekick = False
     m_LevelBanW3 = 0
     m_LevelBanD2 = 0
-    m_LevelBanMessage = vbNullString
+    m_LevelBanMessage = "You are below the required level for entry."
     m_PeonBan = False
     m_KickOnYell = False
     m_ShitlistGroup = vbNullString
