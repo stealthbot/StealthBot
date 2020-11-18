@@ -45,7 +45,7 @@ Private Const MCP_CHARLIST2     As Byte = &H19
 Private Const REALM_PASSWORD    As String = "password"
 
 Private m_RealmError As Boolean
-Private m_RealmServerList As Collection
+Private m_RealmServerList As New Collection
 Private m_RealmServerIndex As Integer
 Private m_MCPData As String
 Private m_UniqueUsername As String
