@@ -5059,9 +5059,10 @@ Sub ShowPanel(ByVal Index As enuSettingsPanels, Optional ByVal SavePanel As Bool
         ' set the selected node
         If Index <> spSplash Then
             For i = 1 To lvw.ListItems.Count
-                With lvw.ListItems.Item(i)
-                    If Not .Selected And KeyToIndex(.Key) = Index Then
-                        .Selected = True
+                With lvw.ListItems
+                    If Not .Item(i).Selected And KeyToIndex(.Item(i).Key) = Index Then
+                        .Item(i).Selected = True
+                        lvw_ItemClick .Item(i)
                         Exit For
                     End If
                 End With
