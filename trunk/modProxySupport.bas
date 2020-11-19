@@ -244,7 +244,7 @@ Public Sub ProxyRecvPacket(ByVal ds As Winsock, ByRef ConnInfo As udtProxyConnec
                     AddrType = pBuff.GetByte ' (BYTE) address type
                     Select Case AddrType
                         Case SOCKS5_ADDR_IPV4
-                            pBuff.GetDWORD
+                            pBuff.GetDWord
                         Case SOCKS5_ADDR_DOMAIN
                             DomainLen = pBuff.GetByte
                             Call pBuff.GetRaw(DomainLen)
@@ -267,7 +267,7 @@ Public Sub ProxyRecvPacket(ByVal ds As Winsock, ByRef ConnInfo As udtProxyConnec
             pBuff.GetByte          ' (BYTE) null
             Status = pBuff.GetByte ' (BYTE) status
             pBuff.GetWord          ' (WORD) port [unused]
-            pBuff.GetDWORD         ' (DWORD) ip (unused)
+            pBuff.GetDWord         ' (DWORD) ip (unused)
             
             If Status = SOCKS4_REQ_SUCCESS Then
                 UpdateProxyStatus ConnInfo, psOnline, PROXY_REQUEST_SUCCESS
@@ -329,7 +329,7 @@ Private Sub UpdateProxyStatus(ByRef ConnInfo As udtProxyConnectionInfo, ByVal Ne
                 Case stBNLS
                     sOut = "Requesting connection to the BNLS server at " & sHost & "..."
                 Case stMCP
-                    sTitle = ds.MCPHandler.RealmServerTitle(ds.MCPHandler.RealmServerSelectedIndex)
+                    sTitle = ds.MCPHandler.RealmSelectedServerTitle
                     sOut = StringFormat("Requesting connection to the Diablo II Realm {0} at {1}:{2}...", sTitle, sHost, ConnInfo.RemotePort)
             End Select
             

@@ -2097,7 +2097,7 @@ Private Sub LoadDefaults()
     m_DisablePrefixBox = False
     m_DisableSuffixBox = False
     m_MathAllowUI = False
-    m_D2NamingFormat = vbNullString
+    m_D2NamingFormat = "title char (*name)"
     m_SecondsToIdle = 600
     m_DisableRTBAutoCopy = False
     m_HideBanMessages = False

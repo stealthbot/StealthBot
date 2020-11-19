@@ -897,17 +897,11 @@ Private Sub Form_Unload(Cancel As Integer)
 End Sub
 
 Private Sub cboOtherRealms_Click()
-    Dim CurrRealmIndex As Integer
-    Dim CurrRealmTitle As String
     Dim NewRealmTitle  As String
-    Dim RealmPassword  As String
 
     Call StopLoginTimer
     
-    CurrRealmIndex = ds.MCPHandler.RealmServerSelectedIndex
-    CurrRealmTitle = ds.MCPHandler.RealmServerTitle(CurrRealmIndex)
-    
-    If (StrComp(cboOtherRealms.Text, CurrRealmTitle, vbTextCompare) <> 0) Then
+    If (StrComp(cboOtherRealms.Text, ds.MCPHandler.RealmSelectedServerTitle, vbTextCompare) <> 0) Then
         NewRealmTitle = cboOtherRealms.Text
         
         DisableGUI
@@ -1054,15 +1048,13 @@ End Sub
 
 Public Sub RealmStartupResponse()
     Dim i          As Integer
-    Dim RealmIndex As Integer
     Dim RealmTitle As String
     Dim RealmDescr As String
     Dim RealmIP    As String
     Dim RealmPort  As Integer
     
-    RealmIndex = ds.MCPHandler.RealmServerSelectedIndex
-    RealmTitle = ds.MCPHandler.RealmServerTitle(RealmIndex)
-    RealmDescr = ds.MCPHandler.RealmServerDescription(RealmIndex)
+    RealmTitle = ds.MCPHandler.RealmSelectedServerTitle
+    RealmDescr = ds.MCPHandler.RealmSelectedServerDescription
     RealmIP = ds.MCPHandler.RealmSelectedServerIP
     RealmPort = ds.MCPHandler.RealmSelectedServerPort
     
@@ -1360,7 +1352,7 @@ Private Sub btnChoose_Click()
                         Config.RealmAutoChooseCharacter = vbNullString
                     End If
                 End If
-                Call ds.MCPHandler.SEND_MCP_CHARLOGON(.SelectedItem.Key)
+                Call ds.MCPHandler.CharacterLogon(.SelectedItem.Key)
                 m_Unload_SuccessfulLogin = True
                 ds.MCPHandler.IsRealmError = False
             End If
@@ -1475,7 +1467,7 @@ Private Sub tmrLoginTimeout_Timer()
             If Not CanChooseCharacter(IndexValid) Then
                 frmChat.AddChat g_Color.ErrorMessageText, "[REALM] You must use Diablo II: Lord of Destruction to choose that character."
             Else
-                Call ds.MCPHandler.SEND_MCP_CHARLOGON(ds.MCPHandler.CharacterName(IndexValid))
+                Call ds.MCPHandler.CharacterLogon(ds.MCPHandler.CharacterName(IndexValid))
                 m_Unload_SuccessfulLogin = True
                 ds.MCPHandler.IsRealmError = False
             End If

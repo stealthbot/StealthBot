@@ -17,6 +17,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private m_Name         As String
+Private m_DisplayName  As String
 Private m_BannedDate   As Date
 Private m_BanReason    As String
 Private m_Operator     As String
@@ -33,10 +34,11 @@ End Property
 
 Public Property Let Name(ByVal str As String)
     m_Name = str
+    m_DisplayName = ConvertUsername(Name)
 End Property
 
 Public Property Get DisplayName() As String
-    DisplayName = ConvertUsername(Name)
+    DisplayName = m_DisplayName
 End Property
 
 Public Property Get Operator() As String

@@ -450,15 +450,15 @@ Private Function CheckUser(ByVal User As String, Optional ByVal allow_illegal As
 End Function
 
 ' this fully converts a username based on naming conventions
-Public Function ConvertUsername(ByVal Username As String, Optional ByVal iConvention As Integer = -1) As String
+Public Function ConvertUsername(ByVal Username As String, Optional ByVal iConvention As Integer = -1, Optional ByVal UserObj As clsUserObj = Nothing) As String
     If (LenB(Username) = 0) Then
         ConvertUsername = Username
     Else
-        ' handle namespace conversions (@gateways)
+        ' handle namespace conversions (#gateways)
         ConvertUsername = ConvertUsernameGateway(Username, iConvention)
         
         ' handle D2 naming conventions
-        ConvertUsername = ConvertUsernameD2(ConvertUsername, Username)
+        ConvertUsername = ConvertUsernameD2(ConvertUsername, Username, UserObj)
     End If
 End Function
 
@@ -556,11 +556,10 @@ Public Function ConvertUsernameGateway(ByVal Username As String, Optional ByVal 
 End Function
 
 ' this converts a username only on D2 naming conventions
-Public Function ConvertUsernameD2(ByVal Username As String, Optional ByVal RealUsername As String) As String
+Public Function ConvertUsernameD2(ByVal Username As String, ByVal RealUsername As String, ByVal UserObj As clsUserObj) As String
     Dim Index          As Long       ' index of substring in string
     Dim strFormat      As String     ' D2 naming format
     Dim Title          As String     ' D2 character title
-    Dim UserObj        As clsUserObj ' user object to get more D2 information
     Dim Char           As String     ' D2 character name
     Dim Name           As String     ' D2 account name
     
@@ -589,6 +588,7 @@ Public Function ConvertUsernameD2(ByVal Username As String, Optional ByVal RealU
             
             ' get d2 naming format
             strFormat = BotVars.D2NamingFormat
+            If Len(strFormat) = 0 Then strFormat = "title char (*name)"
             strFormat = Replace$(strFormat, "title ", "{0}", 1, 1, vbTextCompare)
             strFormat = Replace$(strFormat, "char", "{1}", 1, 1, vbTextCompare)
             strFormat = Replace$(strFormat, "name", "{2}", 1, 1, vbTextCompare)
@@ -598,10 +598,9 @@ Public Function ConvertUsernameD2(ByVal Username As String, Optional ByVal RealU
             Name = Mid$(Username, Index + 1)
             
             ' get D2 character title, if available
-            Set UserObj = g_Channel.GetUserEx(RealUsername)
+            If UserObj Is Nothing Then Set UserObj = g_Channel.GetUserEx(RealUsername)
             Title = UserObj.Stats.CharacterTitle
             If (LenB(Title) > 0) Then Title = Title & " "
-            Set UserObj = Nothing
             
             ' return formatted name
             ConvertUsernameD2 = StringFormat(strFormat, Title, Char, Name)
@@ -613,27 +612,27 @@ Public Function ConvertUsernameD2(ByVal Username As String, Optional ByVal RealU
             Else
                 ' if not on D2, get any D2 info we can anyway
                 
-                ' get d2 naming format
-                strFormat = BotVars.D2NamingFormat
-                strFormat = Replace$(strFormat, "title ", "{0}", 1, 1, vbTextCompare)
-                strFormat = Replace$(strFormat, "char", "{1}", 1, 1, vbTextCompare)
-                strFormat = Replace$(strFormat, "name", "{2}", 1, 1, vbTextCompare)
-                
                 ' get name from username
                 Name = Username
                 
                 ' get D2 character name and title, if available
-                Set UserObj = g_Channel.GetUserEx(RealUsername)
+                If UserObj Is Nothing Then Set UserObj = g_Channel.GetUserEx(RealUsername)
                 Title = UserObj.Stats.CharacterTitle
                 If (LenB(Title) > 0) Then Title = Title & " "
                 Char = UserObj.Stats.CharacterName
-                Set UserObj = Nothing
                 
                 ' if character name found
                 If (LenB(Char) = 0) Then
                     ' if no character name, return *name
                     ConvertUsernameD2 = "*" & Username
                 Else
+                    ' get d2 naming format
+                    strFormat = BotVars.D2NamingFormat
+                    If Len(strFormat) = 0 Then strFormat = "title char (*name)"
+                    strFormat = Replace$(strFormat, "title ", "{0}", 1, 1, vbTextCompare)
+                    strFormat = Replace$(strFormat, "char", "{1}", 1, 1, vbTextCompare)
+                    strFormat = Replace$(strFormat, "name", "{2}", 1, 1, vbTextCompare)
+                    
                     ' if character name, return formatted name
                     ConvertUsernameD2 = StringFormat(strFormat, Title, Char, Name)
                 End If
@@ -643,6 +642,8 @@ Public Function ConvertUsernameD2(ByVal Username As String, Optional ByVal RealU
             ConvertUsernameD2 = Username
         End If
     End If
+
+    Set UserObj = Nothing
 End Function
 
 ' reverses converting username gateways

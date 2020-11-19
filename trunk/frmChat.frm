@@ -2077,7 +2077,7 @@ Public Sub cacheTimer_Timer()
             ' [CHANNELOP]  -  [*CHANNELOP]  -  [CHARACTER@USEast (*CHANNELOP)]
             If StrComp(UCase(strArray(c)), strArray(c), vbBinaryCompare) = 0 Then
                 If Left$(strArray(c), 1) = "[" And Right$(strArray(c), 1) = "]" Then
-                    strArray(c) = Mid(strArray(c), 2, Len(strArray(c)) - 2)
+                    strArray(c) = Mid$(strArray(c), 2, Len(strArray(c)) - 2)
                 End If
             End If
             

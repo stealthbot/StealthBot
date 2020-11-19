@@ -16,11 +16,12 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_Name     As String
-Private m_Rank     As enuClanRank
-Private m_JoinDate As Date
-Private m_Status   As Byte
-Private m_Location As String
+Private m_Name        As String
+Private m_DisplayName As String
+Private m_Rank        As enuClanRank
+Private m_JoinDate    As Date
+Private m_Status      As Byte
+Private m_Location    As String
 
 Public Property Get Name() As String
     Name = m_Name
@@ -28,10 +29,11 @@ End Property
 
 Public Property Let Name(ByVal str As String)
     m_Name = str
+    m_DisplayName = ConvertUsername(Name)
 End Property
 
 Public Property Get DisplayName() As String
-    DisplayName = ConvertUsername(Name)
+    DisplayName = m_DisplayName
 End Property
 
 Public Property Get Rank() As enuClanRank

@@ -47,17 +47,18 @@ Private Const REALM_PASSWORD    As String = "password"
 Private m_RealmError As Boolean
 Private m_RealmServerList As New Collection
 Private m_RealmServerIndex As Integer
-Private m_MCPData As String
+Private m_MCPData() As Byte
 Private m_UniqueUsername As String
 Private m_IP As String
 Private m_Port As Long
-Private m_CharacterList As Collection
+Private m_CharacterList As New Collection
 Private m_RealmCharacterPromptActive As Boolean
 Private m_AutoChooseWait As Long
 Private m_AutoChooseTarget As Integer
 Private m_RetrievingCharacterList As Boolean
 Private m_RealmServerConnected As Boolean
 Private m_RequestPending As Boolean
+Private m_CharacterIndex As Integer
 
 Private Sub Class_Terminate()
     Set m_RealmServerList = Nothing
@@ -80,7 +81,7 @@ Public Sub SetRealmServerInfo(List() As Variant)
     Next i
 End Sub
 
-' asks for the relam to join
+' asks for the realm to join
 ' saves the information of the chosen realm as the one "chosen" or if index is 0 there were no realms
 ' uses [Override] RealmServer= value if present
 Public Function ChooseRealm(ByRef sTitle As String, ByRef ChoiceValue As String) As Boolean
@@ -189,7 +190,7 @@ On Error GoTo ERROR_HANDLER
             
             sPass = GetRealmPassword()
             
-            SEND_SID_LOGONREALMEX sTitle, sPass
+            SEND_SID_LOGONREALMEX Realm(0), sPass
             
             Exit Sub
         End If
@@ -203,7 +204,7 @@ End Sub
 
 ' sets the data to store for the realm server connection
 ' call this after receiving SID_LOGONREALMEX
-Public Sub SetStartupData(MCPData As String, UniqueUsername As String, IP As String, Port As Long)
+Public Sub SetStartupData(MCPData() As Byte, UniqueUsername As String, IP As String, Port As Long)
     m_MCPData = MCPData
     m_UniqueUsername = UniqueUsername
     m_IP = IP
@@ -227,6 +228,31 @@ Public Sub DoRequestCharacters()
     m_RetrievingCharacterList = True
 
     Call SEND_MCP_CHARLIST2(Config.RealmAccountMaxCharacters)
+End Sub
+
+' call this to log onto a character
+' the given character must be known by name
+Public Sub CharacterLogon(ByVal sCharName As String)
+On Error GoTo ERROR_HANDLER
+
+    Dim i           As Integer
+    Dim Character() As Variant
+    
+    For i = 1 To m_CharacterList.Count
+        Character = m_CharacterList.Item(i)
+        If (StrComp(Character(0), sCharName, vbTextCompare) = 0) Then
+            m_CharacterIndex = i
+            
+            SEND_MCP_CHARLOGON Character(0)
+            
+            Exit Sub
+        End If
+    Next i
+    
+    Exit Sub
+ERROR_HANDLER:
+    Call frmChat.AddChat(g_Color.ErrorMessageText, _
+        StringFormat("Error: #{0}: {1} in {2}.CharacterLogon()", Err.Number, Err.Description, OBJECT_NAME))
 End Sub
 
 ' parses packets as received from sckMCP
@@ -421,7 +447,7 @@ On Error GoTo ERROR_HANDLER
 
     Dim pBuff As clsDataBuffer
     Set pBuff = New clsDataBuffer
-    pBuff.InsertNonNTString m_MCPData
+    pBuff.InsertByteArr m_MCPData
     pBuff.InsertNTString m_UniqueUsername
     pBuff.SendPacketMCP MCP_STARTUP
     Set pBuff = Nothing
@@ -466,7 +492,7 @@ Private Sub RECV_MCP_CHARLIST2(pBuff As clsDataBuffer)
 
         Set CharStatsObj = New clsUserStats
         CharStatsObj.Statstring = StringFormat("{0}{1},{2},{3}", _
-                BotVars.Product, RealmServerTitle(RealmServerSelectedIndex), _
+                BotVars.Product, RealmSelectedServerTitle, _
                 CharName, CharStats)
         Expiry = DateAdd("s", Seconds, #1/1/1970#)
 
@@ -619,10 +645,6 @@ Public Property Get RealmServerCount() As Integer
     RealmServerCount = m_RealmServerList.Count
 End Property
 
-Public Property Get RealmServerSelectedIndex() As Integer
-    RealmServerSelectedIndex = m_RealmServerIndex - 1
-End Property
-
 Public Property Get RealmServerTitle(ByVal RealmIndex As Integer) As String
     Dim Server() As String
 
@@ -645,12 +667,24 @@ Public Property Get RealmServerDescription(ByVal RealmIndex As Integer) As Strin
     End If
 End Property
 
+Public Property Get RealmSelectedServerIndex() As Integer
+    RealmSelectedServerIndex = m_RealmServerIndex - 1
+End Property
+
 Public Property Get RealmSelectedServerIP() As String
     RealmSelectedServerIP = m_IP
 End Property
 
 Public Property Get RealmSelectedServerPort() As Long
     RealmSelectedServerPort = m_Port
+End Property
+
+Public Property Get RealmSelectedServerTitle() As String
+    RealmSelectedServerTitle = RealmServerTitle(RealmSelectedServerIndex)
+End Property
+
+Public Property Get RealmSelectedServerDescription() As String
+    RealmSelectedServerDescription = RealmServerDescription(RealmSelectedServerIndex)
 End Property
 
 Public Property Get CharacterCount() As Integer
@@ -688,6 +722,22 @@ Public Property Get CharacterExpires(ByVal Index As Integer) As Date
     Else
         CharacterExpires = CDate(0)
     End If
+End Property
+
+Public Property Get SelectedCharacterIndex() As Integer
+    SelectedCharacterIndex = m_CharacterIndex
+End Property
+
+Public Property Get SelectedCharacterName() As String
+    SelectedCharacterName = CharacterName(SelectedCharacterIndex)
+End Property
+
+Public Property Get SelectedCharacterStats() As clsUserStats
+    Set SelectedCharacterStats = CharacterStats(SelectedCharacterIndex)
+End Property
+
+Public Property Get SelectedCharacterExpires() As Date
+    SelectedCharacterExpires = CharacterExpires(SelectedCharacterIndex)
 End Property
 
 Public Property Get AutoChooseWait() As Long
@@ -896,7 +946,7 @@ Private Sub Event_CharListResponse()
                         frmChat.AddChat g_Color.InformationText, _
                                 StringFormat("[REALM] Automatically logging on as {0}...", _
                                 Character(0))
-                        Call SEND_MCP_CHARLOGON(Character(0))
+                        Call CharacterLogon(Character(0))
                         Exit Sub
                     Else
                         frmChat.AddChat g_Color.ErrorMessageText, _

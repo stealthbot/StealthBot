@@ -51,8 +51,8 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         Set UserObj = New clsUserObj
 
         With UserObj
-            .Name = Username
             .Statstring = Message
+            .Name = Username
         End With
         
         g_Channel.Users.Add UserObj
@@ -1134,11 +1134,11 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     End If
     
     With UserObj
-        .Name = Username
         .Flags = Flags
         .Ping = Ping
         .JoinTime = g_Channel.JoinTime
         .Statstring = Statstring
+        .Name = Username
     End With
     
     If (UserIndex = 0) Then
@@ -1338,12 +1338,12 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         Set UserObj = New clsUserObj
 
         With UserObj
-            .Name = Username
             .Flags = Flags
             .Ping = Ping
             .JoinTime = UtcNow
             .Statstring = Statstring
             .UserlistWeight = g_Channel.JoinCount
+            .Name = Username
         End With
 
         If (BotVars.ChatDelay > 0) Then

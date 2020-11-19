@@ -473,15 +473,25 @@ End Sub
 '*******************************
 'SID_ENTERCHAT (0x0A) C->S
 '*******************************
-' (STRING) Username *
-' (STRING) Statstring **
+' (STRING) Username
+' (STRING) Statstring
 '*******************************
 Private Sub SEND_SID_ENTERCHAT()
 On Error GoTo ERROR_HANDLER:
     Dim pBuff As clsDataBuffer
     Set pBuff = New clsDataBuffer
     pBuff.InsertNTString BotVars.Username
-    pBuff.InsertNTString Config.CustomStatstring
+    If Len(Config.CustomStatstring) > 0 Then
+        pBuff.InsertNTString Config.CustomStatstring
+    ElseIf BotVars.Product = "VD2D" Or BotVars.Product = "PX2D" Then
+        If Not ds.MCPHandler Is Nothing Then
+            pBuff.InsertNTString ds.MCPHandler.RealmSelectedServerTitle & "," & ds.MCPHandler.SelectedCharacterName
+        Else
+            pBuff.InsertNTString "," & BotVars.Username
+        End If
+    Else
+        pBuff.InsertNTString vbNullString
+    End If
     pBuff.SendPacket SID_ENTERCHAT
     Set pBuff = Nothing
 
@@ -1441,7 +1451,8 @@ End Sub
 Private Sub RECV_SID_LOGONREALMEX(pBuff As clsDataBuffer)
 On Error GoTo ERROR_HANDLER:
     Dim lError   As Long
-    Dim sMCPData As String
+    Dim tmpBuf() As Byte
+    Dim MCPData(64) As Byte
     Dim sTitle   As String
     Dim ptrIP    As Long
     Dim sIP      As String
@@ -1450,20 +1461,19 @@ On Error GoTo ERROR_HANDLER:
     Dim x        As Integer
 
     If (Len(pBuff.GetRaw(, True)) > 8) Then
-        sMCPData = pBuff.GetRaw(16)
-        
+        pBuff.GetByteArr tmpBuf(), 16
+        CopyMemory MCPData(0), tmpBuf(0), 16
         sIP = GetAddressFromLong(pBuff.GetDWord)
-        
         lPort = ntohs(pBuff.GetDWord)
-        
-        sMCPData = StringFormat("{0}{1}", sMCPData, pBuff.GetRaw(48))
+        pBuff.GetByteArr tmpBuf(), 48
+        CopyMemory MCPData(16), tmpBuf(0), 48
         sUniq = pBuff.GetString(UTF8)
         
         If (Not frmChat.sckMCP.State = sckClosed) Then frmChat.sckMCP.Close
         
         If Not ds.MCPHandler Is Nothing Then
-            Call ds.MCPHandler.SetStartupData(sMCPData, sUniq, sIP, lPort)
-            sTitle = ds.MCPHandler.RealmServerTitle(ds.MCPHandler.RealmServerSelectedIndex)
+            Call ds.MCPHandler.SetStartupData(MCPData, sUniq, sIP, lPort)
+            sTitle = ds.MCPHandler.RealmSelectedServerTitle
             
             If (ProxyConnInfo(stMCP).IsUsingProxy) Then
                 frmChat.AddChat g_Color.InformationText, "[REALM] [PROXY] Connecting to the SOCKS" & ProxyConnInfo(stMCP).Version & " proxy server at " & ProxyConnInfo(stMCP).ProxyIP & ":" & ProxyConnInfo(stMCP).ProxyPort & "..."

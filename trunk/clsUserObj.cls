@@ -67,7 +67,7 @@ Public Property Let Name(ByVal sValue As String)
     
     ' Update derived names
     m_CleanName = modEvents.CleanUsername(m_ActualName)
-    m_DisplayName = ConvertUsername(m_ActualName)
+    m_DisplayName = ConvertUsername(m_ActualName, , Me)
     m_FullName = ConvertUsername(m_ActualName, 3)       ' 3 = show all gateways
 End Property
 

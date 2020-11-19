@@ -20,11 +20,12 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_Username   As String
-Private m_Status     As Byte
-Private m_LocationID As Byte
-Private m_Location   As String
-Private m_Game       As String
+Private m_Username    As String
+Private m_DisplayName As String
+Private m_Status      As Byte
+Private m_LocationID  As Byte
+Private m_Location    As String
+Private m_Game        As String
 
 Public Property Get Location() As String
     Location = m_Location
@@ -88,10 +89,11 @@ End Property
 
 Public Property Let Name(ByVal sUsername As String)
     m_Username = KillNull(sUsername)
+    m_DisplayName = ConvertUsername(m_Username)
 End Property
 
 Public Property Get DisplayName() As String
-    DisplayName = ConvertUsername(m_Username)
+    DisplayName = m_DisplayName
 End Property
 
 Public Function Clone() As clsFriendObj
