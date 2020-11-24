@@ -235,13 +235,8 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         blnCanVScroll = CanVScroll(rtb.hWnd)
         blnScrollAtEnd = (Not blnCanVScroll) Or (lngVerticalPos = 0)
 
-        ' did this RTB start invisible?
-        'blnVisible = rtb.Visible
-
         If (rtb.Visible) Then
-            'rtb.Visible = False
-
-            ' below causes smooth scrolling, but also screen flickers :(
+            ' disallow redraw
             DisableWindowRedraw rtb.hWnd
 
             blnUnlock = True
@@ -255,13 +250,6 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         ' remove from backlog if overflow
         Length = GetRTBLength(rtb.hWnd)
         If ((BotVars.MaxBacklogSize) And (Length > BotVars.MaxBacklogSize)) Then
-            If (blnUnlock = False) Then
-                'rtb.Visible = False
-
-                ' below causes smooth scrolling, but also screen flickers :(
-                'DisableWindowRedraw rtb.hWnd
-            End If
-
             With rtb
                 'Debug.Print "S " & SelStart & ", L " & SelLength
                 RemoveLength = InStr(Length - BotVars.MaxBacklogSize, GetRTBText(rtb.hWnd), vbLf, vbBinaryCompare)
@@ -276,14 +264,6 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 'Debug.Print "S " & SelStart & ", L " & SelLength
                 SetSelectedRTBText rtb.hWnd, vbNullString
             End With
-
-            If (blnUnlock = False) Then
-                'rtb.Visible = True
-
-                ' below causes smooth scrolling, but also screen flickers :(
-                'EnableWindowRedraw rtb.hWnd
-                'PerformWindowRedraw rtb.hWnd
-            End If
         End If
 
         ' place timestamp
@@ -315,8 +295,6 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             SetSelectedRTBText rtb.hWnd, vbCrLf
         End With
 
-        'ColorModify rtb, GetRTBLength(rtb.hWnd) - LineLength
-
         ' set scrollbar
         If blnScrollAtEnd Then
             ' scroll to end
@@ -338,10 +316,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         SetTextSelection rtb.hWnd, SelStart, SelLength
 
         If (blnUnlock) Then
-            ' was invisible
-            'rtb.Visible = True
-
-            ' below causes smooth scrolling, but also screen flickers :(
+            ' allow redraw
             EnableWindowRedraw rtb.hWnd
             PerformWindowRedraw rtb.hWnd
         End If
@@ -362,6 +337,12 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Exit Sub
     
 ERROR_HANDLER:
+
+    If (blnUnlock) Then
+        ' allow redraw
+        EnableWindowRedraw rtb.hWnd
+        PerformWindowRedraw rtb.hWnd
+    End If
 
     RichTextErrorCounter = RichTextErrorCounter + 1
     If RichTextErrorCounter > 2 Then
