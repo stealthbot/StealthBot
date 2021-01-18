@@ -1,13 +1,13 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmLauncher 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "StealthBot Launcher v0.0.000"
-   ClientHeight    =   5205
+   ClientHeight    =   5475
    ClientLeft      =   150
    ClientTop       =   435
-   ClientWidth     =   3600
+   ClientWidth     =   3570
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -21,37 +21,45 @@ Begin VB.Form frmLauncher
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   347
+   ScaleHeight     =   365
    ScaleMode       =   3  'Pixel
-   ScaleWidth      =   240
+   ScaleWidth      =   238
    StartUpPosition =   3  'Windows Default
+   Begin VB.CommandButton cmdRenameProfile 
+      Caption         =   "R&ename Profile"
+      Height          =   255
+      Left            =   240
+      TabIndex        =   1
+      Top             =   3240
+      Width           =   1575
+   End
    Begin VB.CheckBox chkAutoClose 
       BackColor       =   &H00000000&
       Caption         =   "&Automatically close this launcher after loading the profile"
       ForeColor       =   &H00FFFFFF&
       Height          =   495
       Left            =   240
-      TabIndex        =   4
+      TabIndex        =   5
       ToolTipText     =   "Leaving the launcher open will allow you to create and launch additional profiles."
-      Top             =   4080
+      Top             =   4320
       Width           =   3135
    End
    Begin VB.CommandButton cmdRemoveProfile 
       Caption         =   "&Remove Profile"
       Enabled         =   0   'False
-      Height          =   240
-      Left            =   1920
+      Height          =   255
+      Left            =   1800
       TabIndex        =   2
       Top             =   3240
-      Width           =   1455
+      Width           =   1575
    End
    Begin VB.CommandButton cmdCreateProfile 
       Caption         =   "&Create Profile"
       Height          =   240
       Left            =   240
-      TabIndex        =   1
-      Top             =   3240
-      Width           =   1695
+      TabIndex        =   3
+      Top             =   3510
+      Width           =   3135
    End
    Begin VB.CommandButton cmdLaunchThis 
       Caption         =   "&Launch Selected Profile"
@@ -68,8 +76,8 @@ Begin VB.Form frmLauncher
       EndProperty
       Height          =   360
       Left            =   240
-      TabIndex        =   5
-      Top             =   4680
+      TabIndex        =   6
+      Top             =   4920
       Width           =   3135
    End
    Begin VB.CommandButton cmdCreateShortcut 
@@ -77,8 +85,8 @@ Begin VB.Form frmLauncher
       Enabled         =   0   'False
       Height          =   360
       Left            =   240
-      TabIndex        =   3
-      Top             =   3600
+      TabIndex        =   4
+      Top             =   3840
       Width           =   1695
    End
    Begin MSComctlLib.ListView lstProfiles 
@@ -113,8 +121,8 @@ Begin VB.Form frmLauncher
       ForeColor       =   &H00FFFFFF&
       Height          =   465
       Left            =   2040
-      TabIndex        =   7
-      Top             =   3600
+      TabIndex        =   8
+      Top             =   3840
       Width           =   1335
       WordWrap        =   -1  'True
    End
@@ -126,7 +134,7 @@ Begin VB.Form frmLauncher
       ForeColor       =   &H00FFFFFF&
       Height          =   195
       Left            =   240
-      TabIndex        =   6
+      TabIndex        =   7
       Top             =   120
       Width           =   2955
    End
@@ -302,6 +310,7 @@ Private Sub cmdCreateProfile_Click()
 On Error GoTo ERROR_HANDLER
     Load frmNameDialog
     frmNameDialog.Show
+    frmNameDialog.setWindowData "Create Profile", "Enter the name of the new profile below.", ProfileOption.CREATE_PROFILE
     
     Exit Sub
 ERROR_HANDLER:
@@ -378,26 +387,15 @@ ERROR_HANDLER:
     ErrorHandler Err.Number, OBJECT_NAME, "cmdLaunchThis_Click"
 End Sub
 
-Private Sub mnuRenameProfile_Click()
-On Error GoTo ERROR_HANDLER
-
-    If (Not lstProfiles.SelectedItem Is Nothing) Then
-        ' TODO: impl rename profile (Name currfoldername As newname)
-        ' use name dialog?
-    End If
-    
-    Exit Sub
-ERROR_HANDLER:
-    ErrorHandler Err.Number, OBJECT_NAME, "mnuRenameProfile_Click"
-End Sub
-
-' TODO: this function has no button! change UI to include rename button?
 Private Sub cmdRenameProfile_Click()
 On Error GoTo ERROR_HANDLER
 
     If (Not lstProfiles.SelectedItem Is Nothing) Then
-        ' TODO: impl rename profile (Name currfoldername As newname)
-        ' use name dialog?
+        If (modLauncher.ProfileExists(lstProfiles.SelectedItem.Text)) Then
+            frmNameDialog.Show
+            frmNameDialog.setWindowData "Rename Profile", "Enter the name you want to rename the profile to.", ProfileOption.RENAME_PROFILE
+            frmNameDialog.setOldProfileInfo lstProfiles.SelectedItem.Text, lstProfiles.SelectedItem.Index
+        End If
     End If
     
     Exit Sub
@@ -585,4 +583,19 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
 ERROR_HANDLER:
     ErrorHandler Err.Number, OBJECT_NAME, "chkAutoClose_Click"
+End Sub
+
+Public Sub renameProfileInList(ByVal newName As String, ByVal Index As Integer)
+On Error GoTo ERROR_HANDLER:
+    Dim Item As ListItem
+    
+    Set Item = lstProfiles.ListItems.Item(Index)
+    
+    If (Not Item Is Nothing) Then
+        Item.Text = newName
+    End If
+    
+    Exit Sub
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "renameProfileInList"
 End Sub
