@@ -3470,8 +3470,8 @@ Private Sub ListviewTabs_Click(PreviousTab As Integer)
             Select Case ListviewTabs.Tab
                 Case LVW_BUTTON_CHANNEL:
                     If LenB(g_Channel.Name) = 0 Then
-                        .Caption = BotVars.Gateway
-                        .ToolTipText = StringFormat("Currently online on {0}.", BotVars.Gateway)
+                        .Caption = IIf(LenB(BotVars.Gateway) = 0, BotVars.Server, BotVars.Gateway)
+                        .ToolTipText = StringFormat("Currently online on {0}.", .Caption)
                     Else
                         .Caption = StringFormat("{0} ({1})", g_Channel.Name, g_Channel.Users.Count)
                         .ToolTipText = StringFormat("Currently in {2} channel {0} ({1}).", _
