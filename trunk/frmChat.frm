@@ -7402,10 +7402,6 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
         Call modProxySupport.ProxyRecvPacket(sckBNet, ProxyConnInfo(stBNCS), ReceiveBuffer(stBNCS))
     Else
         g_ConnectionAlive = True
-        If AutoReconnectActive Then
-            AutoReconnectActive = False
-            AutoReconnectTry = 0
-        End If
         
         If tmrParseBNCS.Enabled = False Then
             tmrParseBNCS.Enabled = True

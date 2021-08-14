@@ -428,8 +428,12 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
     End If
     
     g_Online = True
-    
     ConnectionTickCount = modDateTime.GetTickCountMS()
+    
+    If AutoReconnectActive Then
+        AutoReconnectActive = False
+        AutoReconnectTry = 0
+    End If
     
     ' in case this wasn't set before
     ds.EnteredChatFirstTime = True
