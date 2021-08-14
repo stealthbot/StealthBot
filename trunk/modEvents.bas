@@ -384,7 +384,7 @@ Public Sub Event_LeftChatEnvironment()
     
     frmChat.ClearChannel
     
-    SetTitle GetCurrentUsername & ", online on " & BotVars.Gateway
+    SetTitle GetCurrentUsername & ", online on " & IIf(LenB(BotVars.Gateway) = 0, BotVars.Server, BotVars.Gateway)
     
     Call frmChat.InitListviewTabs
     
@@ -489,8 +489,8 @@ Public Sub Event_LoggedOnAs(Username As String, Statstring As String, AccountNam
     End With
     
     RequestSystemKeys reqInternal
-    If (LenB(BotVars.Gateway) > 0) Then
-        ' PvPGN: we already have our gateway, we're logged on
+    If (LenB(g_Channel.Name) > 0) Then
+        ' PvPGN: we're already logged in and in a channel
         SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
         
         Call InsertDummyQueueEntry
@@ -645,8 +645,8 @@ Public Sub Event_ChannelJoinError(ByVal EventID As Integer, ByVal ChannelName As
 
     'frmChat.AddChat g_Color.ErrorMessageText, Message
     
-    If (LenB(BotVars.Gateway) = 0) Then
-        ' continue gateway discovery
+    If (LenB(BotVars.Gateway) = 0) And (LenB(BotVars.LastChannel) = 0) Then
+        ' haven't joined a channel yet - continue gateway discovery
         SEND_SID_CHATCOMMAND "/whoami"
     Else
         ChannelCreateOption = Config.AutoCreateChannels
@@ -772,8 +772,8 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         'End With
     End If
 
-    ' what is our current gateway name?
-    If (LenB(BotVars.Gateway) = 0) Then
+    ' If we don't know our gateway and we're not in a channel, maybe we're about to find out?
+    If (LenB(BotVars.Gateway) = 0) And (LenB(g_Channel.Name) = 0) Then
         If (StrComp(Left$(Message, Len(MSG_WHOIS_1)), MSG_WHOIS_1, vbBinaryCompare) = 0) And (InStr(1, Message, MSG_WHOIS_2, _
                 vbBinaryCompare) > 0) Then
 
@@ -785,7 +785,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
 
                 BotVars.Gateway = Mid$(Message, i + 1)
 
-                SetTitle GetCurrentUsername & ", online on " & BotVars.Gateway
+                SetTitle GetCurrentUsername & ", online on " & IIf(LenB(BotVars.Gateway) = 0, BotVars.Server, BotVars.Gateway)
 
                 Call DoChannelJoinHome
 
