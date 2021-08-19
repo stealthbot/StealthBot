@@ -795,8 +795,11 @@ Private Sub ParseStarCraft()
         LadderRating = Val(Values(0))
         LadderRank = Val(Values(1))
         Wins = Val(Values(2))
+        
         lngIsSpawn = Val(Values(3))
         IsSpawn = CBool(lngIsSpawn)
+        
+        HighLadderRating = Val(Values(5))
         
         If (UBound(Values) >= 8) Then
             Icon = CStr(Values(8))
@@ -928,11 +931,8 @@ Private Function StarCraft_ToString() As String
         lRating = LadderRating()
         buf = _
             StringFormat(" ({0} win{1}{2})", _
-                lWins, _
-                IIf(lWins <> 1, "s", vbNullString), _
-                IIf(lRating, ", with a rating of ", vbNullString), _
-                IIf(lRating, lRating, vbNullString), _
-                IIf(lRating, " on the ladder", vbNullString))
+                lWins, IIf(lWins <> 1, "s", vbNullString), _
+                IIf(lRating, StringFormat(", with a ladder rating of {0}", lRating), vbNullString))
         
         If (IsSpawn()) Then
             buf = buf & " (spawn)"
