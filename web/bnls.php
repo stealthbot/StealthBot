@@ -1,6 +1,6 @@
 <?php
 // Dynamically retrieve the list of online BNLS servers from BNETDocs:
-$url = 'https://bnetdocs.org/servers.json?type_id=4&status=1';
+$url = 'https://bnetdocs.org/servers.json?type_id=20&status=1';
 
 header('Content-Type: text/plain;charset=utf-8');
 
