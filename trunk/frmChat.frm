@@ -5660,13 +5660,15 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 ' trim any vbCr or vbLf (\r or \n character) from the start and end
                 TrimStart = 1
                 TrimLength = Len(Value)
-                Do While (Mid$(Value, TrimStart, 1) = vbCr Or Mid$(Value, TrimStart, 1) = vbLf) And TrimStart < TrimLength
-                    TrimStart = TrimStart + 1
-                Loop
-                Do While (Mid$(Value, TrimLength - 1, 1) = vbCr Or Mid$(Value, TrimLength - 1, 1) = vbLf) And TrimLength > TrimStart
-                    TrimLength = TrimLength - 1
-                Loop
-                Value = Mid$(Value, TrimStart, TrimLength - TrimStart + 1)
+                If TrimLength > 0 Then
+                    Do While (Mid$(Value, TrimStart, 1) = vbCr Or Mid$(Value, TrimStart, 1) = vbLf) And TrimStart < TrimLength
+                        TrimStart = TrimStart + 1
+                    Loop
+                    Do While (Mid$(Value, TrimLength - 1, 1) = vbCr Or Mid$(Value, TrimLength - 1, 1) = vbLf) And TrimLength > TrimStart
+                        TrimLength = TrimLength - 1
+                    Loop
+                    Value = Mid$(Value, TrimStart, TrimLength - TrimStart + 1)
+                End If
 
                 ' still linebreaks? multiline paste
                 If (InStr(1, Value, vbLf, vbTextCompare) <> 0) Then
