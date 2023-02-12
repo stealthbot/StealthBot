@@ -49,7 +49,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
 
     If (g_Channel.IsSilent) Then
         Set UserObj = New clsUserObj
-
+    
         With UserObj
             .Statstring = Message
             .Name = Username
@@ -57,7 +57,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         
         g_Channel.Users.Add UserObj
         If Config.VoidView Then
-            frmChat.AddName UserObj
+            frmChat.AddName UserObj, , True
         End If
     Else
         UserIndex = g_Channel.GetUserIndexEx(CleanUsername(Username))

@@ -3638,9 +3638,9 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, 
     If Button = vbRightButton Then
         If Not (lvChannel.SelectedItem Is Nothing) Then
             aInx = lvChannel.SelectedItem.Index
-            
-            If aInx > 0 Then
-                With g_Channel.PriorityUsers(aInx)
+                
+            If (aInx > 0 And aInx <= lvChannel.ListItems.Count) Then
+                With g_Channel.GetUserEx(lvChannel.ListItems(m_lCurItemIndex).Tag)
                     sProd = .Game
                     UserIsW3 = (sProd = PRODUCT_W3XP Or sProd = PRODUCT_WAR3)
                     Select Case sProd
@@ -3729,6 +3729,77 @@ Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, x As Singl
     End If
 End Sub
 
+Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+    Dim aInx         As Integer
+    Dim bIsOn        As Boolean
+    Dim MyRank       As Long
+    Dim TheirRank    As Long
+    Dim CanMoveUp    As Boolean
+    Dim CanMoveDown  As Boolean
+    Dim CanRemove    As Boolean
+    Dim CanMakeChief As Boolean
+    Dim CanDisband   As Boolean
+    Dim IsSelf       As Boolean
+    Dim CanLeave     As Boolean
+    Dim IsPubGateway As Boolean
+    Dim Gateway      As String
+    
+    If (lvClanList.SelectedItem Is Nothing) Then
+        Exit Sub
+    End If
+
+    If Button = vbRightButton Then
+        If Not (lvClanList.SelectedItem Is Nothing) Then
+            aInx = lvClanList.SelectedItem.Index
+            
+            If aInx > 0 Then
+                MyRank = g_Clan.Self.Rank
+                With g_Clan.GetUser(GetClanSelectedUser)
+                    TheirRank = .Rank
+                    IsSelf = StrComp(g_Clan.Self.Name, .Name, vbBinaryCompare) = 0
+
+                    CanMoveUp = Not IsSelf And (MyRank > (TheirRank + 1)) And (TheirRank > 0)
+                    CanMoveDown = Not IsSelf And (MyRank > TheirRank) And (TheirRank > 1)
+                    CanRemove = Not IsSelf And (CanMoveUp Or CanMoveDown)
+                    CanMakeChief = Not IsSelf And (MyRank = 4) And (TheirRank > 1)
+                    CanLeave = IsSelf And (MyRank > 0 And MyRank < 4)
+                    CanDisband = IsSelf And (MyRank = 4)
+
+                    bIsOn = .IsOnline
+
+                    Gateway = GetUserNamespace(.Name)
+                    Select Case Gateway
+                        Case "Azeroth", "Lordaeron", "Northrend", "Kalimdor"
+                            IsPubGateway = True
+                    End Select
+
+                    mnuPopClanWhisper.Enabled = bIsOn
+                    
+                    mnuPopClanPromote.Enabled = CanMoveUp
+                    mnuPopClanDemote.Enabled = CanMoveDown
+                    mnuPopClanRemove.Enabled = CanRemove
+                    mnuPopClanLeave.Enabled = CanLeave
+                    mnuPopClanDisband.Enabled = CanDisband
+                    mnuPopClanMakeChief.Enabled = CanMakeChief
+
+                    mnuPopClanPromote.Visible = Not IsSelf
+                    mnuPopClanDemote.Visible = Not IsSelf
+                    mnuPopClanRemove.Visible = Not IsSelf
+                    mnuPopClanLeave.Visible = IsSelf And (MyRank <> 4)
+                    mnuPopClanDisband.Visible = IsSelf And (MyRank = 4)
+                    mnuPopClanMakeChief.Visible = Not IsSelf And (MyRank = 4)
+
+                    mnuPopClanWebProfile.Enabled = IsPubGateway
+                End With
+            End If
+        End If
+        
+        mnuPopClanList.Tag = lvClanList.SelectedItem.Text 'Record which user is selected at time of right-clicking. - FrOzeN
+        
+        PopupMenu mnuPopClanList
+    End If
+End Sub
+
 Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim lvhti As LVHITTESTINFO
     Dim lItemIndex As Long
@@ -3744,51 +3815,27 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single
     If m_lCurItemIndex <> lItemIndex Then
         m_lCurItemIndex = lItemIndex
         
-        If m_lCurItemIndex = 0 Then   ' no item under the mouse pointer
-            ListToolTip.Destroy
-        Else
-            'UserAccess = GetCumulativeAccess(lvChannel.ListItems(m_lCurItemIndex).text, "USER")
-        
+        If (m_lCurItemIndex > 0 And m_lCurItemIndex <= lvChannel.ListItems.Count) Then
             ListToolTip.Title = _
                 "Information for " & lvChannel.ListItems(m_lCurItemIndex).Text
-                
-            'If (UserAccess.Name <> vbNullString) Then
-            '    sTemp = sTemp & "["
-            '
-            '    If (UserAccess.Access > 0) Then
-            '        sTemp = sTemp & "rank: " & UserAccess.Access
-            '    End If
-            '
-            '    If ((UserAccess.Flags <> "%") And (UserAccess.Flags <> vbNullString)) Then
-            '        If (UserAccess.Access > 0) Then
-            '            sTemp = sTemp & ", "
-            '        End If
-            '
-            '        sTemp = sTemp & "flags: " & UserAccess.Flags
-            '    End If
-            '
-            '    sTemp = sTemp & "]" & vbCrLf
-            'End If
-                
             
-            'lItemIndex = g_Channel.GetUserIndex(lvChannel.ListItems(m_lCurItemIndex).Text)
+            With g_Channel.GetUserEx(lvChannel.ListItems(m_lCurItemIndex).Tag)
+                'ParseStatstring .Statstring, sOutBuf, Clan
+        
+                'sTemp = sTemp & vbCrLf
+                sTemp = sTemp & "Ping at logon: " & Format$(.Ping, "#,##0") & "ms" & vbCrLf
+                sTemp = sTemp & "Flags: " & GetFlagDescription(.Flags, True) & vbCrLf
+                sTemp = sTemp & vbCrLf
+                sTemp = sTemp & .Stats.ToString
             
-            If (m_lCurItemIndex > 0 And m_lCurItemIndex <= g_Channel.PriorityUsers.Count) Then
-                With g_Channel.PriorityUsers(m_lCurItemIndex)
-                    'ParseStatstring .Statstring, sOutBuf, Clan
+                ListToolTip.TipText = sTemp
+                
+            End With
             
-                    'sTemp = sTemp & vbCrLf
-                    sTemp = sTemp & "Ping at logon: " & Format$(.Ping, "#,##0") & "ms" & vbCrLf
-                    sTemp = sTemp & "Flags: " & GetFlagDescription(.Flags, True) & vbCrLf
-                    sTemp = sTemp & vbCrLf
-                    sTemp = sTemp & .Stats.ToString
-                
-                    ListToolTip.TipText = sTemp
-                    
-                End With
-                
-                Call ListToolTip.Create(lvChannel.hWnd, CLng(x), CLng(y))
-            End If
+            Call ListToolTip.Create(lvChannel.hWnd, CLng(x), CLng(y))
+        Else
+            ' no or invalid item index
+            ListToolTip.Destroy
         End If
     End If
 End Sub
@@ -8074,7 +8121,7 @@ Public Function IsPriorityUser(ByVal Flags As Long) As Boolean
     IsPriorityUser = IsPriorityUser Or ((Flags And USER_SPEAKER) = USER_SPEAKER)
 End Function
 
-Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal OldPosition As Integer = 0)
+Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal OldPosition As Integer = 0, Optional ByVal IsSilent As Boolean = False)
     #If (COMPILE_DEBUG <> 1) Then
         On Error GoTo ERROR_HANDLER
     #End If
@@ -8126,6 +8173,7 @@ Public Sub AddName(ByVal UserObj As clsUserObj, Optional ByVal OldPosition As In
         Set OtherUser = Nothing
     Next i
     If Position > lvChannel.ListItems.Count + 1 Then Position = lvChannel.ListItems.Count + 1
+    If IsSilent Then Position = lvChannel.ListItems.Count + 1
     
     'Debug.Print UserObj.Name & " WEIGHT: " & Weight & " POSITION: " & Position
     
@@ -8354,77 +8402,6 @@ Private Function GetClanSelectedUser() As String
         End If
     End With
 End Function
-
-Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
-    Dim aInx         As Integer
-    Dim bIsOn        As Boolean
-    Dim MyRank       As Long
-    Dim TheirRank    As Long
-    Dim CanMoveUp    As Boolean
-    Dim CanMoveDown  As Boolean
-    Dim CanRemove    As Boolean
-    Dim CanMakeChief As Boolean
-    Dim CanDisband   As Boolean
-    Dim IsSelf       As Boolean
-    Dim CanLeave     As Boolean
-    Dim IsPubGateway As Boolean
-    Dim Gateway      As String
-    
-    If (lvClanList.SelectedItem Is Nothing) Then
-        Exit Sub
-    End If
-
-    If Button = vbRightButton Then
-        If Not (lvClanList.SelectedItem Is Nothing) Then
-            aInx = lvClanList.SelectedItem.Index
-            
-            If aInx > 0 Then
-                MyRank = g_Clan.Self.Rank
-                With g_Clan.GetUser(GetClanSelectedUser)
-                    TheirRank = .Rank
-                    IsSelf = StrComp(g_Clan.Self.Name, .Name, vbBinaryCompare) = 0
-
-                    CanMoveUp = Not IsSelf And (MyRank > (TheirRank + 1)) And (TheirRank > 0)
-                    CanMoveDown = Not IsSelf And (MyRank > TheirRank) And (TheirRank > 1)
-                    CanRemove = Not IsSelf And (CanMoveUp Or CanMoveDown)
-                    CanMakeChief = Not IsSelf And (MyRank = 4) And (TheirRank > 1)
-                    CanLeave = IsSelf And (MyRank > 0 And MyRank < 4)
-                    CanDisband = IsSelf And (MyRank = 4)
-
-                    bIsOn = .IsOnline
-
-                    Gateway = GetUserNamespace(.Name)
-                    Select Case Gateway
-                        Case "Azeroth", "Lordaeron", "Northrend", "Kalimdor"
-                            IsPubGateway = True
-                    End Select
-
-                    mnuPopClanWhisper.Enabled = bIsOn
-                    
-                    mnuPopClanPromote.Enabled = CanMoveUp
-                    mnuPopClanDemote.Enabled = CanMoveDown
-                    mnuPopClanRemove.Enabled = CanRemove
-                    mnuPopClanLeave.Enabled = CanLeave
-                    mnuPopClanDisband.Enabled = CanDisband
-                    mnuPopClanMakeChief.Enabled = CanMakeChief
-
-                    mnuPopClanPromote.Visible = Not IsSelf
-                    mnuPopClanDemote.Visible = Not IsSelf
-                    mnuPopClanRemove.Visible = Not IsSelf
-                    mnuPopClanLeave.Visible = IsSelf And (MyRank <> 4)
-                    mnuPopClanDisband.Visible = IsSelf And (MyRank = 4)
-                    mnuPopClanMakeChief.Visible = Not IsSelf And (MyRank = 4)
-
-                    mnuPopClanWebProfile.Enabled = IsPubGateway
-                End With
-            End If
-        End If
-        
-        mnuPopClanList.Tag = lvClanList.SelectedItem.Text 'Record which user is selected at time of right-clicking. - FrOzeN
-        
-        PopupMenu mnuPopClanList
-    End If
-End Sub
 
 Public Sub DoConnect()
     If ((sckBNLS.State <> sckClosed) Or (sckBNet.State <> sckClosed) Or (AutoReconnectActive)) Then
