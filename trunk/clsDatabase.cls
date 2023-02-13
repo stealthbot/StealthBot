@@ -587,7 +587,7 @@ Friend Function GetUserAccess(ByVal sUsername As String) As udtUserAccess
     End If
     
     ' Find the user in the channel
-    Set oChannelUser = g_Channel.GetUser(sUsername)
+    Set oChannelUser = g_Channel.GetUser(sUsername, , False)
     
     ' Check dynamic groups
     If cDynamicGroups.Count > 0 Then

@@ -164,16 +164,27 @@ Public Property Get Peons() As Collection
 End Property
 
 ' alias for GetUser()
-Public Function GetMember(ByVal Username As String) As clsClanMemberObj
-    Set GetMember = GetUser(Username)
+Public Function GetMember(ByVal Username As String, Optional ByVal CanBeNumeric As Boolean = True) As clsClanMemberObj
+    Set GetMember = GetUser(Username, CanBeNumeric)
 End Function
 
-Public Function GetUser(ByVal Username As String) As clsClanMemberObj
+Public Function GetUser(ByVal Username As String, Optional ByVal CanBeNumeric As Boolean = True) As clsClanMemberObj
+
     Dim Index As Integer
-    
-    If (StrictIsNumeric(Username)) Then
+    Dim ValueIsIndex As Boolean
+
+    ValueIsIndex = False
+    If (CanBeNumeric = True) And (StrictIsNumeric(Username)) Then
+        On Error Resume Next
         Index = CInt(Val(Username))
-    Else
+        If ((Index >= 1) And (Index <= Members.Count)) Then
+            ValueIsIndex = True
+        End If
+        Err.Clear
+        On Error GoTo 0
+    End If
+
+    If (ValueIsIndex = False) Then
         Index = GetUserIndex(Username)
     End If
     
@@ -182,6 +193,7 @@ Public Function GetUser(ByVal Username As String) As clsClanMemberObj
     Else
         Set GetUser = New clsClanMemberObj
     End If
+
 End Function
 
 ' alias for GetUserIndex()
@@ -204,16 +216,27 @@ Public Function GetUserIndex(ByVal Username As String) As Integer
 End Function
 
 ' alias for GetUserEx()
-Public Function GetMemberEx(ByVal Username As String) As clsClanMemberObj
-    Set GetMemberEx = GetUserEx(Username)
+Public Function GetMemberEx(ByVal Username As String, Optional ByVal CanBeNumeric As Boolean = True) As clsClanMemberObj
+    Set GetMemberEx = GetUserEx(Username, CanBeNumeric)
 End Function
 
-Public Function GetUserEx(ByVal Username As String) As clsClanMemberObj
+Public Function GetUserEx(ByVal Username As String, Optional ByVal CanBeNumeric As Boolean = True) As clsClanMemberObj
+
     Dim Index As Integer
-    
-    If (StrictIsNumeric(Username)) Then
+    Dim ValueIsIndex As Boolean
+
+    ValueIsIndex = False
+    If (CanBeNumeric = True) And (StrictIsNumeric(Username)) Then
+        On Error Resume Next
         Index = CInt(Val(Username))
-    Else
+        If ((Index >= 1) And (Index <= Members.Count)) Then
+            ValueIsIndex = True
+        End If
+        Err.Clear
+        On Error GoTo 0
+    End If
+
+    If (ValueIsIndex = False) Then
         Index = GetUserIndexEx(Username)
     End If
     
@@ -222,6 +245,7 @@ Public Function GetUserEx(ByVal Username As String) As clsClanMemberObj
     Else
         Set GetUserEx = New clsClanMemberObj
     End If
+
 End Function
 
 ' alias for GetUserIndexEx

@@ -258,13 +258,23 @@ Public Property Get Self() As clsUserObj
 
 End Property
 
-Public Function GetUserEx(ByVal AccountName As String, Optional ByVal SearchLimit As Integer = 0) As clsUserObj
+Public Function GetUserEx(ByVal AccountName As String, Optional ByVal SearchLimit As Integer = 0, Optional ByVal CanBeNumeric As Boolean = True) As clsUserObj
 
     Dim Index As Integer
+    Dim ValueIsIndex As Boolean
     
-    If (StrictIsNumeric(AccountName)) Then
+    ValueIsIndex = False
+    If (CanBeNumeric = True) And (StrictIsNumeric(AccountName)) Then
+        On Error Resume Next
         Index = CInt(Val(AccountName))
-    Else
+        If ((Index >= 1) And (Index <= Users.Count)) Then
+            ValueIsIndex = True
+        End If
+        Err.Clear
+        On Error GoTo 0
+    End If
+
+    If (ValueIsIndex = False) Then
         Index = GetUserIndexEx(AccountName, SearchLimit)
     End If
     
@@ -299,16 +309,23 @@ Public Function GetUserIndexEx(ByVal AccountName As String, Optional ByVal Searc
 
 End Function
 
-Public Function GetUser(ByVal Username As String, Optional ByVal SearchLimit As Integer = 0) As clsUserObj
+Public Function GetUser(ByVal Username As String, Optional ByVal SearchLimit As Integer = 0, Optional ByVal CanBeNumeric As Boolean = True) As clsUserObj
 
     Dim Index As Integer
+    Dim ValueIsIndex As Boolean
     
-    If (StrictIsNumeric(Username) And (Len(Username) <= 4)) Then
+    ValueIsIndex = False
+    If (CanBeNumeric = True) And (StrictIsNumeric(Username)) Then
+        On Error Resume Next
         Index = CInt(Val(Username))
-        If (Index > Users.Count) Then
-            Index = GetUserIndex(Username, SearchLimit)
+        If ((Index >= 1) And (Index <= Users.Count)) Then
+            ValueIsIndex = True
         End If
-    Else
+        Err.Clear
+        On Error GoTo 0
+    End If
+
+    If (ValueIsIndex = False) Then
         Index = GetUserIndex(Username, SearchLimit)
     End If
     

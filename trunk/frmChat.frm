@@ -2973,7 +2973,7 @@ Private Sub ClanHandler_GetMemberInfo(ByVal Cookie As Long, ByVal Result As enuC
 
     If (g_Clan.InClan And StrComp(g_Clan.Name, ClanTag, vbTextCompare) = 0) Then
         g_Clan.FullName = ClanName
-        Set Member = g_Clan.GetMember(Username)
+        Set Member = g_Clan.GetMember(Username, False)
         If Not Member Is Nothing Then
             Member.JoinTime = JoinDate
             Member.Rank = Rank
@@ -3640,7 +3640,7 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, 
             aInx = lvChannel.SelectedItem.Index
                 
             If (aInx > 0 And aInx <= lvChannel.ListItems.Count) Then
-                With g_Channel.GetUserEx(lvChannel.ListItems(m_lCurItemIndex).Tag)
+                With g_Channel.GetUserEx(lvChannel.ListItems(m_lCurItemIndex).Tag, , False)
                     sProd = .Game
                     UserIsW3 = (sProd = PRODUCT_W3XP Or sProd = PRODUCT_WAR3)
                     Select Case sProd
@@ -3754,7 +3754,7 @@ Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single,
             
             If aInx > 0 Then
                 MyRank = g_Clan.Self.Rank
-                With g_Clan.GetUser(GetClanSelectedUser)
+                With g_Clan.GetMember(GetClanSelectedUser, False)
                     TheirRank = .Rank
                     IsSelf = StrComp(g_Clan.Self.Name, .Name, vbBinaryCompare) = 0
 
@@ -3819,7 +3819,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single
             ListToolTip.Title = _
                 "Information for " & lvChannel.ListItems(m_lCurItemIndex).Text
             
-            With g_Channel.GetUserEx(lvChannel.ListItems(m_lCurItemIndex).Tag)
+            With g_Channel.GetUserEx(lvChannel.ListItems(m_lCurItemIndex).Tag, , False)
                 'ParseStatstring .Statstring, sOutBuf, Clan
         
                 'sTemp = sTemp & vbCrLf

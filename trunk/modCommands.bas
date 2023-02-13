@@ -598,7 +598,7 @@ Public Function ConvertUsernameD2(ByVal Username As String, ByVal RealUsername A
             Name = Mid$(Username, Index + 1)
             
             ' get D2 character title, if available
-            If UserObj Is Nothing Then Set UserObj = g_Channel.GetUserEx(RealUsername)
+            If UserObj Is Nothing Then Set UserObj = g_Channel.GetUserEx(RealUsername, , False)
             Title = UserObj.Stats.CharacterTitle
             If (LenB(Title) > 0) Then Title = Title & " "
             
@@ -616,7 +616,7 @@ Public Function ConvertUsernameD2(ByVal Username As String, ByVal RealUsername A
                 Name = Username
                 
                 ' get D2 character name and title, if available
-                If UserObj Is Nothing Then Set UserObj = g_Channel.GetUserEx(RealUsername)
+                If UserObj Is Nothing Then Set UserObj = g_Channel.GetUserEx(RealUsername, , False)
                 Title = UserObj.Stats.CharacterTitle
                 If (LenB(Title) > 0) Then Title = Title & " "
                 Char = UserObj.Stats.CharacterName

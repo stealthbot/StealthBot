@@ -675,7 +675,7 @@ Public Sub OnTagCheck(Command As clsCommandObj)
     Set cGroups = Database.GetDynamicGroups()
     
     ' Is the user in the channel?
-    Set oUser = g_Channel.GetUser(sName)
+    Set oUser = g_Channel.GetUser(sName, , False)
     If Len(oUser.Name) > 0 Then
         sName = oUser.Name
     End If
