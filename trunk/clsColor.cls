@@ -29,6 +29,7 @@ Private m_ChannelListSelf As Long
 Private m_ChannelListIdle As Long
 Private m_ChannelListSquelched As Long
 Private m_ChannelListOps As Long
+Private m_ChannelListAdmin As Long
 
 ' Chat RTB
 Private m_RTBBack As Long
@@ -37,6 +38,7 @@ Private m_SendBoxesText As Long
 Private m_TalkBotUsername As Long
 Private m_TalkUsernameNormal As Long
 Private m_TalkUsernameOp As Long
+Private m_TalkUsernameAdmin As Long
 Private m_TalkNormalText As Long
 Private m_Carats As Long
 Private m_InformationText As Long
@@ -692,6 +694,15 @@ Public Property Let ChannelListOps(ByVal lValue As Long)
     m_ChannelListOps = lValue
 End Property
 
+Public Property Get ChannelListAdmin() As Long
+    ChannelListAdmin = m_ChannelListAdmin
+End Property
+
+Public Property Let ChannelListAdmin(ByVal lValue As Long)
+    m_ChannelListAdmin = lValue
+End Property
+
+
 
 '----------------------------
 '    SECTION: ChatUI
@@ -745,6 +756,14 @@ End Property
 
 Public Property Let TalkUsernameOp(ByVal lValue As Long)
     m_TalkUsernameOp = lValue
+End Property
+
+Public Property Get TalkUsernameAdmin() As Long
+    TalkUsernameAdmin = m_TalkUsernameAdmin
+End Property
+
+Public Property Let TalkUsernameAdmin(ByVal lValue As Long)
+    m_TalkUsernameAdmin = lValue
 End Property
 
 Public Property Get TalkNormalText() As Long
@@ -899,6 +918,7 @@ Public Sub List()
     frmChat.AddChat ChannelListIdle, StringFormat("ChannelListIdle{0}{0}({1})", vbTab, ToHex(ChannelListIdle))
     frmChat.AddChat ChannelListSquelched, StringFormat("ChannelListSquelched{0}{0}({1})", vbTab, ToHex(ChannelListSquelched))
     frmChat.AddChat ChannelListOps, StringFormat("ChannelListOps{0}{0}({1})", vbTab, ToHex(ChannelListOps))
+    frmChat.AddChat ChannelListAdmin, StringFormat("ChannelListAdmin{0}{0}({1})", vbTab, ToHex(ChannelListAdmin))
 
     frmChat.AddChat SendBoxesBack, StringFormat("SendBoxesBack{0}{0}({1})", vbTab, ToHex(SendBoxesBack))
     frmChat.AddChat SendBoxesText, StringFormat("SendBoxesText{0}{0}({1})", vbTab, ToHex(SendBoxesText))
@@ -908,6 +928,7 @@ Public Sub List()
     frmChat.AddChat TalkBotUsername, StringFormat("TalkBotUsername{0}{0}({1})", vbTab, ToHex(TalkBotUsername))
     frmChat.AddChat TalkUsernameNormal, StringFormat("TalkUsernameNormal{0}{0}({1})", vbTab, ToHex(TalkUsernameNormal))
     frmChat.AddChat TalkUsernameOp, StringFormat("TalkUsernameOp{0}{0}({1})", vbTab, ToHex(TalkUsernameOp))
+    frmChat.AddChat TalkUsernameAdmin, StringFormat("TalkUsernameAdmin{0}{0}({1})", vbTab, ToHex(TalkUsernameAdmin))
     frmChat.AddChat TalkNormalText, StringFormat("TalkNormalText{0}{0}({1})", vbTab, ToHex(TalkNormalText))
 
     frmChat.AddChat Carats, StringFormat("Carats{0}{0}({1})", vbTab, ToHex(Carats))
@@ -967,6 +988,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteEntry SECTION_CHANNELLIST, "Idle", m_ChannelListIdle
     WriteEntry SECTION_CHANNELLIST, "Squelched", m_ChannelListSquelched
     WriteEntry SECTION_CHANNELLIST, "Operator", m_ChannelListOps
+    WriteEntry SECTION_CHANNELLIST, "Admin", m_ChannelListAdmin
 
     WriteEntry SECTION_CHATUI, "SendBoxBackground", m_SendBoxesBack
     WriteEntry SECTION_CHATUI, "SendBoxText", m_SendBoxesText
@@ -976,6 +998,7 @@ Public Sub Save(Optional ByVal sFilePath As String = vbNullString)
     WriteEntry SECTION_CHATUI, "BotUsername", m_TalkBotUsername
     WriteEntry SECTION_CHATUI, "NormalUsername", m_TalkUsernameNormal
     WriteEntry SECTION_CHATUI, "OperatorUsername", m_TalkUsernameOp
+    WriteEntry SECTION_CHATUI, "AdminUsername", m_TalkUsernameAdmin
     WriteEntry SECTION_CHATUI, "NormalText", m_TalkNormalText
 
     WriteEntry SECTION_CHATUI, "Carats", m_Carats
@@ -1009,6 +1032,7 @@ Private Sub LoadDefaults()
     m_ChannelListIdle = &HBBBBBB
     m_ChannelListSquelched = &H99
     m_ChannelListOps = &HDDDDDD
+    m_ChannelListAdmin = &HCC9900
     
     m_SendBoxesBack = vbBlack
     m_SendBoxesText = vbWhite
@@ -1018,6 +1042,7 @@ Private Sub LoadDefaults()
     m_TalkBotUsername = vbCyan
     m_TalkUsernameNormal = vbYellow
     m_TalkUsernameOp = vbWhite
+    m_TalkUsernameAdmin = &HFF6961
     m_TalkNormalText = vbWhite
     
     m_Carats = &HCC9900
@@ -1125,6 +1150,7 @@ Private Sub LoadINIVersion3()
     m_ChannelListIdle = ReadEntry(SECTION_CHANNELLIST, "Idle", m_ChannelListIdle)
     m_ChannelListSquelched = ReadEntry(SECTION_CHANNELLIST, "Squelched", m_ChannelListSquelched)
     m_ChannelListOps = ReadEntry(SECTION_CHANNELLIST, "Operator", m_ChannelListOps)
+    m_ChannelListAdmin = ReadEntry(SECTION_CHANNELLIST, "Admin", m_ChannelListAdmin)
 
     m_SendBoxesBack = ReadEntry(SECTION_CHATUI, "SendBoxBackground", m_SendBoxesBack)
     m_SendBoxesText = ReadEntry(SECTION_CHATUI, "SendBoxText", m_SendBoxesText)
@@ -1134,6 +1160,7 @@ Private Sub LoadINIVersion3()
     m_TalkBotUsername = ReadEntry(SECTION_CHATUI, "BotUsername", m_TalkBotUsername)
     m_TalkUsernameNormal = ReadEntry(SECTION_CHATUI, "NormalUsername", m_TalkUsernameNormal)
     m_TalkUsernameOp = ReadEntry(SECTION_CHATUI, "OperatorUsername", m_TalkUsernameOp)
+    m_TalkUsernameAdmin = ReadEntry(SECTION_CHATUI, "AdminUsername", m_TalkUsernameAdmin)
     m_TalkNormalText = ReadEntry(SECTION_CHATUI, "NormalText", m_TalkNormalText)
 
     m_Carats = ReadEntry(SECTION_CHATUI, "Carats", m_Carats)

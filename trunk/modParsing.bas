@@ -1,8 +1,6 @@
 Attribute VB_Name = "modParsing"
 Option Explicit
 
-Public Const COLOR_BLUE2 = 12092001
-
 Public Function StrToHex(ByVal String1 As String, Optional ByVal NoSpaces As Boolean = False) As String
     Dim strTemp As String, strReturn As String, i As Long
     

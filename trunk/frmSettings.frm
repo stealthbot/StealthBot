@@ -5639,31 +5639,33 @@ Private Sub SaveColors(Optional sPath As String = vbNullString)
         .ChannelListIdle = mColors(5)
         .ChannelListSquelched = mColors(6)
         .ChannelListOps = mColors(7)
-        .RTBBack = mColors(8)
-        .SendBoxesBack = mColors(9)
-        .SendBoxesText = mColors(10)
+        .ChannelListAdmin = mColors(8)
+        .RTBBack = mColors(9)
+        .SendBoxesBack = mColors(10)
+        .SendBoxesText = mColors(11)
 
         ' RTB colors
-        .TalkBotUsername = mColors(11)
-        .TalkUsernameNormal = mColors(12)
-        .TalkUsernameOp = mColors(13)
-        .TalkNormalText = mColors(14)
-        .Carats = mColors(15)
-        .EmoteText = mColors(16)
-        .EmoteUsernames = mColors(17)
-        .InformationText = mColors(18)
-        .SuccessText = mColors(19)
-        .ErrorMessageText = mColors(20)
-        .TimeStamps = mColors(21)
-        .ServerInfoText = mColors(22)
-        .ConsoleText = mColors(23)
-        .JoinText = mColors(24)
-        .JoinUsername = mColors(25)
-        .JoinedChannelName = mColors(26)
-        .JoinedChannelText = mColors(27)
-        .WhisperCarats = mColors(28)
-        .WhisperText = mColors(29)
-        .WhisperUsernames = mColors(30)
+        .TalkBotUsername = mColors(12)
+        .TalkUsernameNormal = mColors(13)
+        .TalkUsernameOp = mColors(14)
+        .TalkUsernameAdmin = mColors(15)
+        .TalkNormalText = mColors(16)
+        .Carats = mColors(17)
+        .EmoteText = mColors(18)
+        .EmoteUsernames = mColors(19)
+        .InformationText = mColors(20)
+        .SuccessText = mColors(21)
+        .ErrorMessageText = mColors(22)
+        .TimeStamps = mColors(23)
+        .ServerInfoText = mColors(24)
+        .ConsoleText = mColors(25)
+        .JoinText = mColors(26)
+        .JoinUsername = mColors(27)
+        .JoinedChannelName = mColors(28)
+        .JoinedChannelText = mColors(29)
+        .WhisperCarats = mColors(30)
+        .WhisperText = mColors(31)
+        .WhisperUsernames = mColors(32)
         
         .Save sPath
     End With
@@ -6488,6 +6490,7 @@ Sub LoadColors(Optional ByRef objColors As clsColor = Nothing)
         CAdd "Channel List | Idle Users", .ChannelListIdle
         CAdd "Channel List | Squelched Users", .ChannelListSquelched
         CAdd "Channel List | Operators", .ChannelListOps
+        CAdd "Channel List | Admins", .ChannelListAdmin
         CAdd "Chat Window | Background", .RTBBack
         CAdd "Send Boxes | Background", .SendBoxesBack
         CAdd "Send Boxes | Text", .SendBoxesText
@@ -6496,6 +6499,7 @@ Sub LoadColors(Optional ByRef objColors As clsColor = Nothing)
         CAdd "Talk - Bot Username", .TalkBotUsername, 1
         CAdd "Talk - Normal Usernames", .TalkUsernameNormal, 1
         CAdd "Talk - Op Usernames", .TalkUsernameOp, 1
+        CAdd "Talk - Admin Usernames", .TalkUsernameAdmin, 1
         CAdd "Talk - Normal Text", .TalkNormalText, 1
         CAdd "Talk - Carat Color", .Carats, 1
         CAdd "Emote - Text", .EmoteText, 1

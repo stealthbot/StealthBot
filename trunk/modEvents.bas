@@ -1189,9 +1189,9 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                     
                     ' display message
                     If (Flags And USER_BLIZZREP) Then
-                        UserColor = RGB(97, 105, 255)
+                        UserColor = g_Color.TalkUsernameAdmin
                     ElseIf (Flags And USER_SYSOP) Then
-                        UserColor = RGB(97, 105, 255)
+                        UserColor = g_Color.TalkUsernameAdmin
                     ElseIf (Flags And USER_CHANNELOP) Then
                         UserColor = g_Color.TalkUsernameOp
                     Else
@@ -1446,9 +1446,9 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                 
                 ' display message
                 If (AcqFlags And USER_BLIZZREP) Or (Flags And USER_BLIZZREP) Then
-                    UserColor = RGB(97, 105, 255)
+                    UserColor = g_Color.TalkUsernameAdmin
                 ElseIf (AcqFlags And USER_SYSOP) Or (Flags And USER_SYSOP) Then
-                    UserColor = RGB(97, 105, 255)
+                    UserColor = g_Color.TalkUsernameAdmin
                 ElseIf (AcqFlags And USER_CHANNELOP) Or (Flags And USER_CHANNELOP) Then
                     UserColor = g_Color.TalkUsernameOp
                 Else
@@ -1573,9 +1573,9 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long, Optio
             
             ' display message
             If (Flags And USER_BLIZZREP) Then
-                UserColor = RGB(97, 105, 255)
+                UserColor = g_Color.TalkUsernameAdmin
             ElseIf (Flags And USER_SYSOP) Then
-                UserColor = RGB(97, 105, 255)
+                UserColor = g_Color.TalkUsernameAdmin
             ElseIf (Flags And USER_CHANNELOP) Then
                 UserColor = g_Color.TalkUsernameOp
             Else
@@ -1729,8 +1729,8 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
                 
                 If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or ((Flags And USER_SYSOP&) = _
                         USER_SYSOP&)) Then
-                    TextColor = RGB(97, 105, 255)
-                    CaratColor = RGB(97, 105, 255)
+                    TextColor = g_Color.TalkUsernameAdmin
+                    CaratColor = g_Color.TalkUsernameAdmin
                 Else
                     TextColor = g_Color.TalkNormalText
                     CaratColor = g_Color.Carats
@@ -1997,8 +1997,10 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         ' display to screen
         lCarats = g_Color.WhisperCarats
 
-        If (Flags And &H1) Then
-            lCarats = COLOR_BLUE
+
+        If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or _
+            ((Flags And USER_SYSOP&) = USER_SYSOP&)) Then
+            lCarats = g_Color.TalkUsernameAdmin
         End If
 
         If (Not (frmChat.mnuHideWhispersInrtbChat.Checked)) Then

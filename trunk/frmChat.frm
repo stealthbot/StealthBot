@@ -3941,7 +3941,7 @@ Private Sub lvClanList_MouseMove(Button As Integer, Shift As Integer, x As Singl
             Dim sTemp As String
             
             If ((lItemIndex > 0) And (g_Clan.Members.Count > 0)) Then
-                Set ClanMember = g_Clan.GetMember(lvClanList.ListItems(m_lCurItemIndex).Text)
+                Set ClanMember = g_Clan.GetMember(lvClanList.ListItems(m_lCurItemIndex).Text, False)
                 
                 If (Not ClanMember Is Nothing) Then
                     With ClanMember
@@ -8001,7 +8001,6 @@ Private Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal
     If (IsSelf) Then
         'Debug.Print "Assigned color IsSelf"
         GetNameColor = g_Color.ChannelListSelf
-        
         Exit Function
     End If
     
@@ -8009,7 +8008,6 @@ Private Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal
     If ((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
         'Debug.Print "Assigned color SQUELCH"
         GetNameColor = g_Color.ChannelListSquelched
-        
         Exit Function
     End If
     
@@ -8017,8 +8015,7 @@ Private Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal
     If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or _
         ((Flags And USER_SYSOP&) = USER_SYSOP&)) Then
        
-        GetNameColor = COLOR_BLUE
-        
+        GetNameColor = g_Color.ChannelListAdmin
         Exit Function
     End If
     
