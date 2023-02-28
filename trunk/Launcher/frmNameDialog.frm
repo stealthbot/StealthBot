@@ -2,7 +2,7 @@ VERSION 5.00
 Begin VB.Form frmNameDialog 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "Create Profile"
+   Caption         =   "Window Title"
    ClientHeight    =   1095
    ClientLeft      =   105
    ClientTop       =   495
@@ -72,7 +72,7 @@ Begin VB.Form frmNameDialog
       AutoSize        =   -1  'True
       BackColor       =   &H00000000&
       BackStyle       =   0  'Transparent
-      Caption         =   "Enter the name of the new profile below."
+      Caption         =   "[message]"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -87,7 +87,7 @@ Begin VB.Form frmNameDialog
       Left            =   120
       TabIndex        =   3
       Top             =   120
-      Width           =   2955
+      Width           =   6255
    End
    Begin VB.Line line 
       BorderColor     =   &H00FFFFFF&
@@ -108,6 +108,10 @@ Option Explicit
 Private Const OBJECT_NAME As String = "frmNameDialog"
 Private Const INVALID_CHARS As String = "\/*?"":<>|"
 
+Private m_profileOption As ProfileOption
+Private previousProfileName As String
+Private previousProfileIndex As Integer
+
 Private Sub Form_Load()
 On Error GoTo ERROR_HANDLER
     txtName.Text = vbNullString
@@ -118,11 +122,13 @@ ERROR_HANDLER:
     ErrorHandler Err.Number, OBJECT_NAME, "Form_Load"
 End Sub
 
-Private Sub cmdOK_Click()
+Private Sub cmdOk_Click()
 On Error GoTo ERROR_HANDLER
     Dim i As Integer
     Dim Text As String
     Dim Char As String * 1
+    Dim originalPath As String
+    Dim destinationPath As String
     
     Text = txtName.Text
     
@@ -139,11 +145,27 @@ On Error GoTo ERROR_HANDLER
         End If
     Next i
     
-    If (CreateProfile(Text)) Then
-        frmLauncher.ListProfile Text
-    Else
-        'MsgBox "Failed to create profile!"
-    End If
+    Select Case m_profileOption
+        Case CREATE_PROFILE
+            If (CreateProfile(Text)) Then
+                frmLauncher.ListProfile Text
+            Else
+                'MsgBox "Failed to create profile!"
+            End If
+        Case RENAME_PROFILE
+            If (ProfileExists(Text)) Then
+                MsgBox "That profile already exists!"
+                Exit Sub
+            End If
+            
+            originalPath = StringFormat("{0}\StealthBot\{1}", ReplaceEnvironmentVars("%APPDATA%"), previousProfileName)
+            destinationPath = StringFormat("{0}\StealthBot\{1}", ReplaceEnvironmentVars("%APPDATA%"), Text)
+            
+            If (CopyFolder(originalPath, destinationPath)) Then
+                KillFolder originalPath
+                frmLauncher.renameProfileInList Text, previousProfileIndex
+            End If
+    End Select
     
     Unload Me
     
@@ -161,4 +183,25 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
 ERROR_HANDLER:
     ErrorHandler Err.Number, OBJECT_NAME, "cmdCancel_Click"
+End Sub
+
+Public Sub setWindowData(ByVal title As String, ByVal message As String, ByVal po As ProfileOption)
+On Error GoTo ERROR_HANDLER
+    Me.Caption = title
+    lblText.Caption = message
+    m_profileOption = po
+
+    Exit Sub
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "setWindowData"
+End Sub
+
+Public Sub setOldProfileInfo(ByVal profileName As String, ByVal profileIndex As Integer)
+On Error GoTo ERROR_HANDLER
+    previousProfileName = profileName
+    previousProfileIndex = profileIndex
+
+    Exit Sub
+ERROR_HANDLER:
+    ErrorHandler Err.Number, OBJECT_NAME, "setOldProfileInfo"
 End Sub
